@@ -14,7 +14,7 @@
 #endif
 #endif
 
-#if defined(VMS) 
+#if defined(VMS)
 # if defined(__GNUC__)
 #  define COMPILER "GCC-VMS"
 # else
@@ -57,6 +57,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 #ifndef CLOCKS_PER_SEC
 #if defined(__TURBOC__)|defined(VMS)	/* For Borland and Vax C compilers */
@@ -82,16 +83,16 @@
 #define MAX_STRLEN 1024
 #endif
 
-/* 
-   ----------------------------------------------------------------------- 
+/*
+   -----------------------------------------------------------------------
 	   DEFINITIONS FOR COMAND LINE INPUT OF PARAMETERS
-   ----------------------------------------------------------------------- 
-                     Asking User for Parameter Input                      
-   ------------------------------------------------------------------------ 
+   -----------------------------------------------------------------------
+                     Asking User for Parameter Input
+   ------------------------------------------------------------------------
    if the desired parameter has not been entered, the user is asked
    for this with a prompt string; otherwise the same prompt string is
    printed to the screen, followed by the value read for the parameter
- -------------------------------------------------------------------------- 
+ --------------------------------------------------------------------------
 */
 
 /* Modified 02-Feb-2010 by y.hiwasaki (explicit casting) */
@@ -117,11 +118,11 @@
 #define askf(m,v) {\
    fprintf(stderr,m);\
    scanf("%f%*[^%\n]",&v);getchar();}
- 
+
 #define asklf(m,v) {\
    fprintf(stderr,m);\
    scanf("%lf%*[^%\n]",&v);getchar();}
- 
+
 #define aski(m,v) {\
    fprintf(stderr,m);\
    scanf(" %d%*[^\n]",&v);getchar();}
@@ -170,21 +171,21 @@
        C=(char)toupper((int)(argv[p][0]));			\
        fprintf(stderr,"%s%c\n",msg,C);}		\
      else askc(msg,C); }
- 
-/* 
-   -------------------------------------------------------------------------- 
+
+/*
+   --------------------------------------------------------------------------
    If the desired parameter has not been entered, a default value is
    taken; otherwise the entered value is used
-   -------------------------------------------------------------------------- 
+   --------------------------------------------------------------------------
 */
 #define FIND_PAR_C(p,msg,C,dft) \
    { C=toupper((argc>p)?argv[p][0]:dft);\
      fprintf(stderr,"%s%c\n",msg,C);}
- 
+
 #define FIND_PAR_S(p,msg,i,dft) \
    { strcpy(i,(argc>p)?argv[p]:dft);\
      fprintf(stderr,"%s%s\n",msg,i); }
- 
+
 #define FIND_PAR_L(p,msg,i,j) \
    if(argc>p) {\
      i=atol(argv[p]);\
@@ -192,7 +193,7 @@
    else {\
      i=j; \
      fprintf(stderr,"%s%ld\n",msg,i); }
- 
+
 #define FIND_PAR_I(p,msg,i,j) \
    if(argc>p) {\
      i=atoi(argv[p]);\
@@ -200,7 +201,7 @@
    else {\
      i=(int)j; \
      fprintf(stderr,"%s%d\n",msg,i); }
- 
+
 #define FIND_PAR_F(p,msg,i,j) \
    if(argc>p) {\
      i=atof(argv[p]);\
@@ -208,7 +209,7 @@
    else {\
      i=j; \
      fprintf(stderr,"%s%f\n",msg,i); }
- 
+
 #define FIND_PAR_D(p,msg,i,j) \
    if(argc>p) {\
      i=(double)atof(argv[p]);\
@@ -216,7 +217,7 @@
    else {\
      i=j; \
      fprintf(stderr,"%s%f\n",msg,i); }
- 
+
 /* GENERAL DEFINITIONS */
 
 /* -------------------------------------------- */
@@ -225,7 +226,7 @@
 #define HARAKIRI(m,code) {fprintf(stderr,m); exit((int)code);}
 /* #define KILL(f,code) {perror(f); exit((int)code);} */
 #define KILL(f,code) perror(f), exit((int)code)
- 
+
 
 /* DEFINITIONS FOR OPEN/CLOSE ISSUES */
 

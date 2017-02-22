@@ -1,5 +1,5 @@
 /*                                                           02.Feb.2010 v1.1
-  =========================================================================== 
+  ===========================================================================
 
    EID-INT.C
    ~~~~~~~~~
@@ -68,7 +68,7 @@
 #include "softbit.h"            /* Soft bit definitions and prototypes */
 
 /* ..... Include C code from another file, for EP histogram calculations */
-#include "ep-stats.c"
+#include "ep_histogram.h"
 
 /* ..... Definitions used by the program ..... */
 
@@ -339,16 +339,16 @@ int             main (argc, argv)
   switch(ep_format)
   {
   case byte:
-    read_patt = read_byte; 
+    read_patt = read_byte;
     save_patt = save_byte;
     break;
 
   case g192:
-    read_patt = read_g192; 
+    read_patt = read_g192;
     save_patt = save_g192;
     break;
 
-  default: 
+  default:
     read_patt = (ep_type==BER? read_bit_ber : read_bit_fer);
     save_patt = save_bit;
     break;
@@ -424,7 +424,7 @@ int             main (argc, argv)
   fprintf (stderr, "# Burst length ......................... : %ld\n",
 	   burst_len);
   fprintf (stderr, "# Pattern format %s....... : %s\n",
-	   ep_type == FER? "(Frame erasure) " : "(Bit error) ....", 
+	   ep_type == FER? "(Frame erasure) " : "(Bit error) ....",
 	   format_str((int)ep_format));
   if (ep_type==BER)
     fprintf (stderr, "# Frame size ............................: %ld\n",
@@ -441,7 +441,7 @@ int             main (argc, argv)
 	   ep_type==BER? "bits .." : "frames ",
 	   master_eps.disturbed, interp_eps.disturbed);
   fprintf (stderr, "# Overall %s...........: %8.3f %%\t%8.3f %%\n",
-	   ep_type==BER? "BER" : "FER", 
+	   ep_type==BER? "BER" : "FER",
 	   100.0 * master_eps.disturbed / (float)master_eps.processed,
 	   100.0 * interp_eps.disturbed / (float)interp_eps.processed);
   fprintf (stderr, "#  Error-free %s:     %8ld  \t%8ld\n",

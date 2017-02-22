@@ -3,13 +3,13 @@
 
   CALC-SNR.C
   ~~~~~~~~~~
-  
+
   Description:
   ~~~~~~~~~~~~
   Program for calculating the SNR of two files.
   Print the results on the screen, or in a BINARY file. Supposes
   `short' data format for input.
-  
+
   Usage:
   ~~~~~~
   $ SNR [-options] file1 file2 [BlkSiz [1stBlock [NoOfBlocks [output]]]]
@@ -26,9 +26,9 @@
   -blk len  .. is the block size in number of samples;
                this parameter is optional, and the default is block size
 	       of 256 samples;
-  -start sb .. define `sb' as the first block to be measured 
-               [default: first block of the file] 
-  -n nb ...... define `nb' as the number of blocks to be measured 
+  -start sb .. define `sb' as the first block to be measured
+               [default: first block of the file]
+  -n nb ...... define `nb' as the number of blocks to be measured
                [default: whole file]
   -out of .... binary output file name with binary float SEGSNR
   -q ......... quiet operation; don't print progress flag, results are
@@ -36,7 +36,7 @@
 
   Author: Simao Ferraz de Campos Neto -- CPqD/Telebras
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   27/Jan/1991 1.0 1st release
@@ -68,7 +68,7 @@
 
 #include "snr.c"
 
-/* 
+/*
   ============================================================================
 
         void display_usage (void)
@@ -159,7 +159,7 @@ int main(argc, argv)
 
 
   /* ......... GET PARAMETERS ......... */
- 
+
   /* Getting options */
   if (argc < 2)
     display_usage();
@@ -238,7 +238,7 @@ int main(argc, argv)
   FIND_PAR_L(4, "Starting Record? ..................... ", N1,N1);
   FIND_PAR_L(5, "Number of Records? ................... ", N2,N2);
 
-  /* Parse if to output a binary log file with the SEGSNR values */ 
+  /* Parse if to output a binary log file with the SEGSNR values */
   if (argc > 6)
   {
 #ifdef VMS
@@ -296,7 +296,7 @@ int main(argc, argv)
   /* Down to work */
   for (i = 0; i < N2; i++)
   {
-     if ((l = fread(a, sizeof(short), N, F1)) > 0 && 
+     if ((l = fread(a, sizeof(short), N, F1)) > 0 &&
 	 (k = fread(b, sizeof(short), N, F2)) > 0)
     {
       oper = i == 0 ? SNR_RESET : (i == N2 - 1 ? SNR_STOP : SNR_MEASURE);
@@ -341,14 +341,14 @@ int main(argc, argv)
   {
     printf("\n--------------------------------------------");
     printf("\n->Total power is   \t%f [dB]", state.total_sqr_dB);
-    printf("\n->Average power is \t%f +/- %f [dB]", 
+    printf("\n->Average power is \t%f +/- %f [dB]",
 	   state.avg_sqr, state.var_sqr);
-    printf("\n->Max/Min power:   \t%f and %f [dB]", 
+    printf("\n->Max/Min power:   \t%f and %f [dB]",
 	   state.max_sqr, state.min_sqr);
     printf("\n->Total SNR is     \t%f [dB]", state.total_snr_dB);
-    printf("\n->Average SNR is   \t%f +/- %f [dB]", 
+    printf("\n->Average SNR is   \t%f +/- %f [dB]",
 	   state.avg_snr, state.var_snr);
-    printf("\n->Max/Min seg.SNR: \t%f and %f [dB]", 
+    printf("\n->Max/Min seg.SNR: \t%f and %f [dB]",
 	   state.max_snr, state.min_snr);
     printf("\n--------------------------------------------");
     printf("\n  Total of samples \t%ld", (long) state.tot_smpno);

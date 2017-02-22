@@ -19,7 +19,7 @@
        CODING STANDARDS".
        =============================================================
 
-  DESCRIPTION : 
+  DESCRIPTION :
 	This file contains a demonstration program of a frequency response tool, using
   the functions in fft.h
 
@@ -52,7 +52,7 @@
 
 /* UGST modules */
 #include "ugstdemo.h"
-#include "ugst-utl.h"
+#include "ugst-utl.c"
 
 #ifndef max
 #define max(a,b)    (((a) > (b)) ? (a) : (b))
@@ -61,8 +61,8 @@
 static int is_little_endian()
 {
   /* Hex version of the string ABCD */
-  unsigned long tmp = 0x41424344; 
-  
+  unsigned long tmp = 0x41424344;
+
   /* compare the hex version of the 4 characters with the ascii version */
   return(strncmp("DCBA",(char *)&tmp,4));
 }
@@ -71,7 +71,7 @@ static int is_little_endian()
 static void display_usage()
 {
   P(("FREQRESP.C - Version 1.3 of 15.Feb.2010 \n\n"));
- 
+
   P((" Frequency response measure program\n"));
   P((" This program computes the average power spectrum \n"));
   P((" of two files (input and output of a codec).\n"));

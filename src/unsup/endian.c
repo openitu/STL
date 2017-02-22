@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-/* 
+/*
   ---------------------------------------------------------------------------
   Function to byte-swap n samples from short array a to short array b
 
@@ -22,9 +22,9 @@ long n;
   }
 }
 
-/* 
+/*
   ---------------------------------------------------------------------------
-  Function to convert the byte order of n `long' samples from 
+  Function to convert the byte order of n `long' samples from
   array a to array b
 
   06.Oct.97  v1.0 Created <simao.campos@comsat.com>
@@ -54,8 +54,8 @@ long n;
 int is_little_endian()
 {
   /* Hex version of the string ABCD */
-  unsigned long tmp = 0x41424344; 
-  
+  unsigned long tmp = 0x41424344;
+
   /* compare the hex version of the 4 characters with the ascii version */
   return(strncmp("ABCD",(char *)&tmp,4));
 }
@@ -108,4 +108,3 @@ void main()
 #endif
 }
 #endif
-

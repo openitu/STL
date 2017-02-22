@@ -21,10 +21,10 @@
    ~~~~~~~
 
    Simao Ferraz de Campos Neto
-   DDS/Pr11                      Tel: +55-192-39-1396                
-   CPqD/Telebras                 Fax: +55-192-53-4754                
+   DDS/Pr11                      Tel: +55-192-39-1396
+   CPqD/Telebras                 Fax: +55-192-53-4754
    13085 Campinas SP Brazil      E-mail: <tdsimao@venus.cpqd.ansp.br>
-                                       
+
    History:
    ~~~~~~~~
    08.Feb.91 v1.0 Created!
@@ -35,9 +35,10 @@
 
 #include "ugstdemo.h"
 #include <stdio.h>
+#include <unistd.h>
 
-/* 
- * Includes dependent of the Operating System 
+/*
+ * Includes dependent of the Operating System
  */
 #if defined(VMS)
 # include <stat.h>
@@ -50,9 +51,7 @@
 #define RIGHT 1
 #define LEFT -1
 
-main(argc,argv)
-int argc;
-char *argv[];
+int main(int argc, char *argv[])
 {
   char inp[MAX_STRLEN],out[MAX_STRLEN];
   short *buf;
@@ -69,13 +68,13 @@ char *argv[];
   GET_PAR_I(2, "Input file is Q.",qinp);
   GET_PAR_S(3, "Output file: ........ ", out);
   GET_PAR_I(4, "Input file is Q.",qout);
-  
-  if (qout == qinp) 
+
+  if (qout == qinp)
     HARAKIRI("Makes no sense a shift of 0 ... \n",7)
   else if (qout > qinp) dir=RIGHT;
-  else dir=LEFT; 
+  else dir=LEFT;
 
-  l= qout-qinp; 
+  l= qout-qinp;
   if (l<0) l= -l;
 
   for (shift = 1, k=0; k < l; k++) shift *=2;
@@ -84,7 +83,7 @@ char *argv[];
   if ((Fo = fopen(out,WB)) == NULL) KILL (inp,3); fo=fileno(Fo);
 
   stat(inp,&info);
-  if ((buf=(short *)malloc(info.st_size))==NULL) 
+  if ((buf=(short *)malloc(info.st_size))==NULL)
     HARAKIRI ("Can't alloc inp\n",4);
   l=info.st_size/2;
 
@@ -93,9 +92,9 @@ char *argv[];
     if (read(fi,&buf[k],512)<0) KILL (inp,5);
 
   fprintf(stderr, "shifting, ");
-  if (dir==RIGHT) 
+  if (dir==RIGHT)
     for (k=0; k<l; k++) buf[k] = (buf[k]*shift);
-  else 
+  else
     for (k=0; k<l; k++) buf[k] = (buf[k]/shift);
 
   fprintf(stderr, "and writing ... ");

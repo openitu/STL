@@ -2,8 +2,6 @@
 # G.728 Makefile
 #
 # Coder Flags
-# -DUSEFLOATS	use single-precision arithmetic
-#		for speed
 # -DUSEDOUBLES	use double-precision arithmetic
 #		to match floating-point test vectors
 #

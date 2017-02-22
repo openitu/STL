@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -32,7 +32,11 @@ Motorola Inc.
 #define VPARAMS_H
 
 /* Define floating point numbers as float */
-typedef FLOAT_TYPE FTYPE;
+#ifdef USEDOUBLES
+typedef double  FTYPE;
+#else
+typedef float   FTYPE;
+#endif
 
 /* Inclusions */
 #include <stdio.h>
@@ -43,7 +47,7 @@ typedef FLOAT_TYPE FTYPE;
 
 /* LPC parameters common to all systems*/
 #define	NP	10		/* Order of prediction filter */
-#define	SST_BEQ	80		/* Bandwidth widening factor used to smooth 
+#define	SST_BEQ	80		/* Bandwidth widening factor used to smooth
                                  * spectrum in FLATV() */
 #define	ALENPL	10		/* Amount added to frame length to get
 				 * analysis length used in FLATV() */
@@ -67,7 +71,7 @@ struct coefSet
 
 /*-------------------------------------------------------------*/
 /* System flags*/
-extern int      apply_postfilter, encode_only, decode_only, makeLog, 
+extern int      apply_postfilter, encode_only, decode_only, makeLog,
                 packedStream, performMeas;
 
 /* File pointers */
@@ -100,4 +104,3 @@ extern char     printAll, showr0k, showlag, showcode, showgsp0;
 
 #endif /* VPARAMS_H */
 /* ........................ End of file VPARAMS.H ........................ */
-

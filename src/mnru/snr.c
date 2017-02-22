@@ -19,10 +19,9 @@ typedef struct
 }               SNR_state;
 
 /* Prototypes */
-float get_SNR ARGS ((int mode, short *a, short *b, long N, long N2, 
-		     SNR_state *s));
-int get_min_max ARGS ((float *x, int n, double *min, double *max));
-
+float get_SNR (int mode, short *a, short *b, long N, long N2,
+		     SNR_state *s);
+int get_min_max (float *x, int n, double *min, double *max);
 
 /* ---------------------- Begin of get_SNR ------------------------------*/
 float           get_SNR(mode, a, b, N, N2, s)
@@ -167,5 +166,3 @@ int             get_min_max(x, n, min, max)
   return (1);
 }
 /* ---------------------- End of get_min_max ------------------------------*/
-
-

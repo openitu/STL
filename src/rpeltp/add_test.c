@@ -11,9 +11,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #ifdef VMS
-#include <unixio.h> 
+#include <unixio.h>
 #endif
 
 #define	GSM_IMPLEMENTATION
@@ -101,7 +102,7 @@ char * parse P1((buf), char * buf)
 	if ((a = strchr(buf, '='))!=NULL)
 	  *a++ = 0;
 
-	opname = s = strtek(buf, " \t("); 
+	opname = s = strtek(buf, " \t(");
 	if (!s) return (char *)0;
 
 	op1 = op2 = L_op1 = L_op2 = 0;
@@ -237,7 +238,7 @@ char *argv[];
 		if (!strcmp(c, "abs" )) {
 			do_word(    gsm_abs(op1) );
 			continue;
-		} 
+		}
 		if (!strcmp(c, "div" )) {
 			do_word(    gsm_div( op1, op2 ));
 			continue;
@@ -245,11 +246,11 @@ char *argv[];
 		if (!strcmp(c,  "norm" )) {
 			do_word(	gsm_norm(L_op1));
 			continue;
-		} 
+		}
 		if (!strcmp(c,  "<<" )) {
 			do_word(    gsm_asl( op1, op2));
 			continue;
-		} 
+		}
 		if (!strcmp(c,  ">>" )) {
 			do_word(    gsm_asr( op1, op2 ));
 			continue;

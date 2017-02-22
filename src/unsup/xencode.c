@@ -80,7 +80,7 @@
         		smaller than the file's size (in bytes).
         Options:
         ~~~~~~~~
-        -t ............ interpret the input file/pipe as ASCII, rather 
+        -t ............ interpret the input file/pipe as ASCII, rather
                         than binary (the default).
         -b ............ interpret the input file/pipe as binary (default).
 	-q ............ do not produce information text header
@@ -139,13 +139,13 @@
                        for safe encoding of text files. <tdsimao@cpqd.ansp.br>
         23.May.95 2.01 Added \n\n before %XENCODE-INFO, to avoid problems
                        with some e-mailers. <simao@ctd.comsat.com>
-        25.Sep.95 2.10 Encoded file does not have ' ' but '`' instead. 
-                       Cleaned for better compilation. Added extra header 
-                       instruction message when original file is .ZIP. Added 
-                       option for having user's email in message instead of 
+        25.Sep.95 2.10 Encoded file does not have ' ' but '`' instead.
+                       Cleaned for better compilation. Added extra header
+                       instruction message when original file is .ZIP. Added
+                       option for having user's email in message instead of
                        my email (coordinated with the makefile). Max filesizes
-                       specified in command line now reflect the size of the 
-                       output file parts, not the chuncks of the input file 
+                       specified in command line now reflect the size of the
+                       output file parts, not the chuncks of the input file
                        (an old bug corrected!) <simao@ctd.comsat.com>
         26.Feb.97 2.11 Added command line option to supress printing
 	               text header on how to uudecode, etc. <simao>
@@ -191,10 +191,6 @@
 #define WTYPE	unsigned short	/* Basic data type */
 #define B	8		/* the number of bits per char */
 
-#ifndef USER_NAME
-#define USER_NAME (char *)NULL /* "<simao@ctd.comsat.com>" OR your user name */
-#endif
-
 /* Local function prototypes */
 void display_usage ARGS((void));
 int encode      ARGS((FILE *in, FILE *out, long charno));
@@ -206,7 +202,7 @@ char           *xcode_index ARGS((register char *sp, register char c));
 int outenc      ARGS((char *p, FILE * f));
 void put_info   ARGS((FILE * out, char *ori_file, char *root, char *ext,
                   char mode, int filno));
-WTYPE updcrc    ARGS((WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab, 
+WTYPE updcrc    ARGS((WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab,
                   char swapped));
 
 /* ENC is the basic 1 character encoding function to make a char printing */
@@ -310,7 +306,7 @@ int main(argc, argv)
     strcpy(src, argv[1]);
     if (mode_is_binary)
       in = fopen(src, RB);
-    else 
+    else
       in = fopen(src, RT);
     if (in == NULL)
       KILL(src, 2);
@@ -576,7 +572,7 @@ void            put_info(out, ori_file, root, ext, mode, filno)
   fprintf(out, "NOTE2: no edition of the uuencoded files is needed.\n");
   fprintf(out, "       XDECODE will get rid of all the garbage.\n\n");
 
-  fprintf(out, "Good luck! %s\n\n", USER_NAME);
+  fprintf(out, "Good luck!\n\n");
 
   /* Print the next only if more than 1 part */
   if (filno > 1)
@@ -600,9 +596,9 @@ void            put_info(out, ori_file, root, ext, mode, filno)
 
 /*
   ---------------------------------------------------------------------------
-  WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab, 
+  WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab,
   ~~~~~~~~~~~~  char swapped);
-  
+
   Description:
   ~~~~~~~~~~~~
   Calculate, intelligently, the CRC-16 of a dataset incrementally given a
@@ -847,12 +843,12 @@ int             get_mode(fp)
 	Author:	unknown
 	~~~~~~~
 
-	Revision/Date/Author: 
-	~~~~~~~~~~~~~~~~~~~~~ 
+	Revision/Date/Author:
+	~~~~~~~~~~~~~~~~~~~~~
         19.Mar.91 v1.0 Adapted from public domain implementation
                        <tdsimao@venus.cpqd.ansp.br>
-        25.Sep.95 v1.1 Modified charno to reflect the number of bytes of the 
-                       output file, instead of the number of bytes of the 
+        25.Sep.95 v1.1 Modified charno to reflect the number of bytes of the
+                       output file, instead of the number of bytes of the
                        input file. <simao@ctd.comsat.com>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1061,7 +1057,7 @@ char           *xcode_index(sp, c)
 	~~~~~~~~~~~~~~~~~~~~~
         19.Mar.91 v1.0 1st release
         21.Jul.93 v2.0 Added removal of the path from the file name.<simao>
-        25.Sep.95 v2.1 Added smarter handling of filenames with multiple '.' 
+        25.Sep.95 v2.1 Added smarter handling of filenames with multiple '.'
                        (allowed in Unix) <simao@ctd.comsat.com>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -1103,7 +1099,7 @@ char           *get_root(root, full_name)
 #else
   /* finds last occurence of a dot */
   tmp = strrchr(tmp, '.');
-  if (tmp) 
+  if (tmp)
     *tmp = 0;
 #endif
 

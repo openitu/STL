@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -32,13 +32,12 @@ Motorola Inc.
 /* inclusions */
 #include "vparams.h"
 
-/* function declarations */
+
 /* from cunpack0_.c */
-/* void            unpack0_(); */
-/*int *wrds, int *blen, char *packed */
+void unpack0_(int *wrds, int *blen, char *packed);
 
 /* static externals */
-static int      size8000[28] = {27, 6, 5, 5, 4, 4, 3, 3, 3, 3, 2, 5, 7, 8, 
+static int      size8000[28] = {27, 6, 5, 5, 4, 4, 3, 3, 3, 3, 2, 5, 7, 8,
 				7, 7, 7, 8, 7, 7, 7, 8, 7, 7, 7, 8, 7, 7};
 
 /* ------------------------------------------------------------------------ */
@@ -47,7 +46,7 @@ long            putCodesHex(fpstream, paramP)
   int            *paramP;
 {
   unsigned int    param, code, temp;
-  int            *sizeP, *arrangeP, sizeOfTemp, size, mask, count, 
+  int            *sizeP, *arrangeP, sizeOfTemp, size, mask, count,
                  *tip1, *tip2,*eip;
 
   arrangeP = (int *) malloc(numCodes * sizeof(int));
@@ -105,28 +104,28 @@ long            putCodesHex(fpstream, paramP)
   fprintf(fpstream, "\n");
   free(arrangeP);
   return((long)numCodes);
-}				
+}
 /* .......................... end of putCodesHex() ......................... */
 
 
-/* 
- --------------------------------------------------------------------------- 
+/*
+ ---------------------------------------------------------------------------
  long putCodesBin(FILE *fpstream);
- 
+
   Description:
   Save IS54 encoded frame into a binary file.
- 
+
   Parameter:
   fpstream ... FILE pointer.
 
   Return value:
   The number of saved parameters. If shorter than IS54_FRAME_LEN, there was
   a write error.
-  
+
   History:
   02.May.94 v1.0 Created <simao@cpqd.ansp.br>
-  
- --------------------------------------------------------------------------- 
+
+ ---------------------------------------------------------------------------
 */
 #define IS54_FRAME_LEN 27
 long putCodesBin(fpstream, codePtr)
@@ -191,7 +190,7 @@ long            getCodesHex(fpcode, codePtr)
   free(packedLine);
   free(unpackedCodes);
   return(27);
-}				
+}
 #undef MAXLINE
 /* ...................... end of getCodesHex() ......................... */
 
@@ -204,14 +203,14 @@ long getCodesBin(fpcode, codePtr)
 {
   int count, gotten;
   short codes[IS54_FRAME_LEN];
-  
+
   /* Read samples from a 16-bit-samples' file */
   gotten = fread(codes, sizeof(short), IS54_FRAME_LEN, fpcode);
-  
+
   /* Convert to local representation */
   for (count=0;count<gotten;count++)
     codePtr[count] = (int)codes[count];
-    
+
   /* Return number of gotten samples */
   return(gotten);
 }

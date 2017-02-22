@@ -11,9 +11,9 @@
   input file and processes by the GSM 06.10 Full Rate speech codec,
   depending on user's option: for encoding, input must be in
   either linear, A, mu law (G711); for decoding, in GSM 06.10 76-word
-  format. The modules called have been written in Unix-C by Jutta 
-  Deneger and Carsten Borman, within the Communications and 
-  Operating Systems Research Group (KBS) of the Technishe Universitaet 
+  format. The modules called have been written in Unix-C by Jutta
+  Deneger and Carsten Borman, within the Communications and
+  Operating Systems Research Group (KBS) of the Technishe Universitaet
   Berlin. This demo program has been written by Simao F.Campos Neto,
   from CPqD/Telebras based on previous UGST demo programs, as well on
   a driving program by the RPE-LTP program.
@@ -35,7 +35,7 @@
   Usage:
   ~~~~~~
   $ rpedemo [-l|-u|-A] [-enc|-dec]  InpFile OutFile BlockSize 1stBlock
-             NoOfBlocks 
+             NoOfBlocks
   where:
    -l .......... input data for encoding and output data for decoding
                  are in linear format (DEFAULT).
@@ -45,7 +45,7 @@
                  are in u-law (G.711) format.
    -enc ........ run the only the decoder (default: run enc+dec)
    -dec ........ run the only the encoder (default: run enc+dec)
-   
+
    InpFile ..... is the name of the file to be processed;
    OutFile ..... is the name with the processed data;
    BlockSize ... is the block size, in number of samples (default = 160)
@@ -93,7 +93,7 @@
 
   20/Mar/94 v1.0 Release of 1st version of demo program
 
-  22/Feb/95 v1.1 Cleaned compilation warnings, modified for Alpha VMX/AXP 
+  22/Feb/95 v1.1 Cleaned compilation warnings, modified for Alpha VMX/AXP
                  operation (as suggested by Kirchherr, FI/DBP Telekom)
                  <simao@ctd.comsat.com>
   02/Feb/10 v1.2 Modified maximum string length to avoid buffer overruns
@@ -150,7 +150,7 @@ int main ARGS((int argc, char *argv[]));
 void display_usage()
 {
   P(("RPEDEMO: Version 1.2 of 02.Feb.2010 \n\n"));
- 
+
   P(("  Demonstration program for UGST/ITU-T RPE-LTP based on \n"));
   P(("  module implemented  in Unix-C by Jutta Deneger and Carsten \n"));
   P(("  Borman, within the Communications and Operating Systems \n"));
@@ -191,7 +191,7 @@ void display_usage()
    ***                                                                    ***
    **************************************************************************
 */
-main(argc, argv)
+int main(argc, argv)
   int             argc;
   char           *argv[];
 {
@@ -206,7 +206,7 @@ main(argc, argv)
 
   /* G.711 Compression/expansion function pointers */
   void (*compress)(), (*expand)();
-  
+
   /* File variables */
   char            FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
   FILE           *Fi, *Fo;
@@ -215,12 +215,12 @@ main(argc, argv)
 #ifdef VMS
   char            mrs[15];
 #endif
-  
+
 
   /* SETTING DEFAULT OPTIONS */
   format= LINEAR;
   run_encoder= run_decoder = 1;
-  
+
   /* GETTING OPTIONS */
 
   if (argc < 2)
@@ -237,7 +237,7 @@ main(argc, argv)
       {
 	/* Input/output (uncoded) data format is linear */
 	format = LINEAR;
-	
+
 	/* Move arg[cv] over the next valid option */
 	argv++;
 	argc--;
@@ -246,7 +246,7 @@ main(argc, argv)
       {
 	/* Input/output (uncoded) data format is A-law (G.711) */
 	format = A_LAW;
-	
+
 	/* Move arg[cv] over the next valid option */
 	argv++;
 	argc--;
@@ -255,7 +255,7 @@ main(argc, argv)
       {
 	/* Input/output (uncoded) data format is u-law (G.711) */
 	format = U_LAW;
-	
+
 	/* Move arg[cv] over the next valid option */
 	argv++;
 	argc--;
@@ -263,9 +263,9 @@ main(argc, argv)
       else if (strcmp(argv[1],"-enc")==0)
       {
 	/* Run only the encoder */
-	run_encoder = 1; 
-	run_decoder = 0; 
-	
+	run_encoder = 1;
+	run_decoder = 0;
+
 	/* Move arg[cv] over the next valid option */
 	argv++;
 	argc--;
@@ -273,9 +273,9 @@ main(argc, argv)
       else if (strcmp(argv[1],"-dec")==0)
       {
 	/* Run only the encoder */
-	run_encoder = 0; 
-	run_decoder = 1; 
-	
+	run_encoder = 0;
+	run_decoder = 1;
+
 	/* Move arg[cv] over the next valid option */
 	argv++;
 	argc--;
@@ -294,7 +294,7 @@ main(argc, argv)
   FIND_PAR_L(4, "_Starting Block: .............. ", N1, 1);
   FIND_PAR_L(5, "_No. of Blocks: ............... ", N2, 0);
 
-  
+
   /* Find staring byte in file; all are 16-bit word-aligned =>short data type */
   start_byte = sizeof(short) * (long) (--N1) * (long) N;
 
@@ -305,14 +305,14 @@ main(argc, argv)
 
     /* ... find the input file size ... */
     stat(FileIn, &st);
-    /* convert to block count, depending on whether the input file 
+    /* convert to block count, depending on whether the input file
      * is a uncoded or coded file */
-    if (run_encoder)  
+    if (run_encoder)
       N2 = (st.st_size - start_byte) / (N * sizeof(short));
     else
       N2 = (st.st_size - start_byte) / (RPE_FRAME_SIZE * sizeof(short));
   }
-  
+
   /* Choose A/u law */
   if (format == A_LAW)
   {
@@ -330,11 +330,11 @@ main(argc, argv)
  * ...... MEMORY ALLOCATION .........
  */
 #ifndef STATIC_ALLOCATION
-  if ((inp_buf = (short *) calloc(N, sizeof(short))) == NULL) 
+  if ((inp_buf = (short *) calloc(N, sizeof(short))) == NULL)
      HARAKIRI("Error in memory allocation!\n",1);
-  if ((out_buf = (short *) calloc(N, sizeof(short))) == NULL) 
+  if ((out_buf = (short *) calloc(N, sizeof(short))) == NULL)
      HARAKIRI("Error in memory allocation!\n",1);
-  if ((tmp_buf = (short *) calloc(N, sizeof(short))) == NULL) 
+  if ((tmp_buf = (short *) calloc(N, sizeof(short))) == NULL)
      HARAKIRI("Error in memory allocation!\n",1);
 #endif
 
@@ -378,46 +378,46 @@ main(argc, argv)
     {
       /* Reset sample vector */
       memset(inp_buf, (int)0, N);
-      
+
       /* Read a block of uncoded samples */
       if ((smpno = fread(inp_buf, sizeof(short), (long)N, Fi)) <= 0)
         break;
-    } 
+    }
     else
     {
       /* Reset frame vector */
       memset(rpe_frame, (int)0, (long)RPE_FRAME_SIZE);
-      
+
       /* Read a unpacked frame */
       if ((smpno = fread(rpe_frame, sizeof(short), (long)RPE_FRAME_SIZE, Fi)) <= 0)
         break;
     }
 
     /* Carry out the desired operation */
-    
+
     /* CODEC OPERATION */
     if (run_encoder && run_decoder)
     {
       /* Run both and save decoded samples */
-      
+
       /* First, expand samples, if needed */
       if (format)
       {
         memcpy(tmp_buf, inp_buf, (long)(sizeof(short) * smpno));
         expand(smpno, tmp_buf, inp_buf);
       }
-        
+
       /* Encode & decode ... */
       rpeltp_encode(rpe_enc_state, inp_buf, rpe_frame);
       rpeltp_decode(rpe_dec_state, rpe_frame, out_buf);
-      
+
       /* Compress samples, if requested */
       if (format)
       {
         memcpy(tmp_buf, out_buf, (long)(sizeof(short) * N));
         compress(N, tmp_buf, out_buf);
       }
-      
+
       /* Save samples to file */
       if (!(smpno = fwrite(out_buf, sizeof(short), (long)smpno, Fo)))
         break;
@@ -431,7 +431,7 @@ main(argc, argv)
         memcpy(tmp_buf, inp_buf, (long)(sizeof(short) * smpno));
         expand(smpno, tmp_buf, inp_buf);
       }
- 
+
       /* Run only the encoder, unpack frame and save rpe-ltp frame */
       rpeltp_encode(rpe_enc_state, inp_buf, rpe_frame);
       if (!(smpno = fwrite(rpe_frame, sizeof(short), RPE_FRAME_SIZE, Fo)))
@@ -449,11 +449,11 @@ main(argc, argv)
         memcpy(tmp_buf, out_buf, (long)(sizeof(short) * N));
         compress(N, tmp_buf, out_buf);
       }
-      
+
       /* Save the decoded samples */
       if (!(smpno = fwrite(out_buf, sizeof(short), (long)N, Fo)))
         break;
-    }    
+    }
     count +=smpno;
   }
 
@@ -462,7 +462,7 @@ main(argc, argv)
    KILL(FileIn, 6);
  else if(ferror(Fo))
    KILL(FileOut, 7);
-   
+
  /* ......... FINALIZATIONS ......... */
 
   /* Close input and output files and state */

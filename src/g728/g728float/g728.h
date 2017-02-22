@@ -46,8 +46,7 @@ extern "C" {
  */
 #ifdef USEDOUBLES
 typedef double  Float;
-#endif
-#ifdef USEFLOATS
+#else
 typedef float   Float;
 #endif
 typedef short   Short;
@@ -198,7 +197,7 @@ typedef struct g728decdata {
 	Float	ap[G728_LPCPF];	/* Short-term all-pole postfilter coeffs */
 	Float	az[G728_LPCPF];	/* Short-term all-zero postfilter coeffs */
 	Float	apf[G728_LPCPF];	/* 10th order LPC predictors */
-	Float	stpffir[G728_LPCPF];	/* Short term postfilter FIR memory */	
+	Float	stpffir[G728_LPCPF];	/* Short term postfilter FIR memory */
 	Float	stpfiir[G728_LPCPF];	/* Short term postfilter IIR memory */
 	Float	pfmem[PITCHSZ];	/* Buffer for unfiltered decoded speech */
 	Float	scalefil;
@@ -267,7 +266,7 @@ typedef struct g728vocdata {
 	Float	ap[G728_LPCPF];	/* Short-term all-pole postfilter coeffs */
 	Float	az[G728_LPCPF];	/* Short-term all-zero postfilter coeffs */
 	Float	apf[G728_LPCPF];	/* 10th order LPC predictors */
-	Float	stpffir[G728_LPCPF];	/* Short term postfilter FIR memory */	
+	Float	stpffir[G728_LPCPF];	/* Short term postfilter FIR memory */
 	Float	stpfiir[G728_LPCPF];	/* Short term postfilter IIR memory */
 	Float	pfmem[PITCHSZ];	/* Buffer for unfiltered decoded speech */
 	Float	scalefil;

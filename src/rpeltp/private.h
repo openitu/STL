@@ -56,10 +56,8 @@ struct gsm_state {
 #define	MIN_LONGWORD	((-2147483647)-1)
 #define	MAX_LONGWORD	( 2147483647)
 
-#ifdef	SASR		/* >> is a signed arithmetic shift right */
-#undef	SASR
+/* >> is a signed arithmetic shift right */
 #define	SASR(x, by)	((x) >> (by))
-#endif	/* SASR */
 
 
 #include "proto.h"
@@ -185,10 +183,10 @@ extern void Gsm_Preprocess P((
 
 extern void Gsm_Encoding P((
 		struct gsm_state * S,
-		word	* e,	
-		word	* ep,	
+		word	* e,
+		word	* ep,
 		word	* xmaxc,
-		word	* Mc,	
+		word	* Mc,
 		word	* xMc));
 
 extern void Gsm_Short_Term_Analysis_Filter P((
