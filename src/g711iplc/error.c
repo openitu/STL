@@ -41,13 +41,12 @@ HISTORY:
 #include <stdarg.h>
 #include "error.h"
 
-void WINAPIV error(char *s, ...)
-{
-        va_list ap;
+void WINAPIV error (char *s, ...) {
+  va_list ap;
 
-        va_start(ap, s);
-        vfprintf(stderr, s, ap);
-        va_end(ap);
-        fprintf(stderr, "\n");
-        exit(1);
+  va_start (ap, s);
+  vfprintf (stderr, s, ap);
+  va_end (ap);
+  fprintf (stderr, "\n");
+  exit (1);
 }

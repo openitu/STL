@@ -41,20 +41,16 @@
 
 
 /* this routine replaces the first N-1 samples of a buffer by the last N-1 samples */
-void shift(
-	short*	buff,
-	long	N
-);
+void shift (short *buff, long N);
 
 
 /* this routine convolves buffIn with IR and stores the processed data into buffRvb */
 /* alignFact is used to align the energy of the input file with an other file */
-/* the ouput is an overflow  flag, if non_zero it indicates overflow with saturation at that sample position*/ 
-long conv(
-	float	*IR,		/* impulse response buffer */
-	short	*buffIn,	/* input buffer */
-	short	*buffRvb,	/* reverberated data */
-	float	alignFact,	/* energy alignment factor */
-	long	N,			/* length of the impulse response */
-	long	L			/* length of the input buffer to process */
-);
+/* the ouput is an overflow  flag, if non_zero it indicates overflow with saturation at that sample position*/
+long conv (float *IR,           /* impulse response buffer */
+           short *buffIn,       /* input buffer */
+           short *buffRvb,      /* reverberated data */
+           float alignFact,     /* energy alignment factor */
+           long N,              /* length of the impulse response */
+           long L               /* length of the input buffer to process */
+  );

@@ -44,8 +44,7 @@ Motorola Inc.
   9.May.90 v.1.0  Created by Matt Hartman
  -------------------------------------------------------------
 */
-void            calcParams()
-{
+void calcParams () {
   F_TIME = 0.02;
   N_SUB = 4;
   W_ALPHA = 0.8;
@@ -67,4 +66,5 @@ void            calcParams()
   INBUFSIZ = F_LEN + A_LEN / 2 - S_LEN / 2;
   numCodes = 1 + NP + N_SUB * (1 + 2 + 1);
 }
+
 /* ...................... End of calcParams() ............................. */

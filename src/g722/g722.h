@@ -33,42 +33,39 @@
 #include "stl.h"
 
 /* Define type for G.722 state structure */
-typedef struct
-{
-  Word16          al[3];
-  Word16          bl[7];
-  Word16          detl;
-  Word16          dlt[7]; /* dlt[0]=dlt */
-  Word16          nbl;
-  Word16          plt[3]; /* plt[0]=plt */
-  Word16          rlt[3];
-  Word16          ah[3];
-  Word16          bh[7];
-  Word16          deth;
-  Word16          dh[7]; /* dh[0]=dh */
-  Word16          ph[3]; /* ph[0]=ph */
-  Word16          rh[3];
-  Word16          sl;
-  Word16          spl;
-  Word16          szl;
-  Word16          nbh;
-  Word16          sh;
-  Word16          sph;
-  Word16          szh;
-  Word16          qmf_tx_delayx[24];
-  Word16          qmf_rx_delayx[24];
-}          g722_state;
+typedef struct {
+  Word16 al[3];
+  Word16 bl[7];
+  Word16 detl;
+  Word16 dlt[7];                /* dlt[0]=dlt */
+  Word16 nbl;
+  Word16 plt[3];                /* plt[0]=plt */
+  Word16 rlt[3];
+  Word16 ah[3];
+  Word16 bh[7];
+  Word16 deth;
+  Word16 dh[7];                 /* dh[0]=dh */
+  Word16 ph[3];                 /* ph[0]=ph */
+  Word16 rh[3];
+  Word16 sl;
+  Word16 spl;
+  Word16 szl;
+  Word16 nbh;
+  Word16 sh;
+  Word16 sph;
+  Word16 szh;
+  Word16 qmf_tx_delayx[24];
+  Word16 qmf_rx_delayx[24];
+} g722_state;
 
 /* Include function prototypes for G722 functions */
 #include "funcg722.h"
 
 /* High-level (UGST) function prototypes for G722 functions */
-void g722_reset_encoder ARGS((g722_state *encoder));
-Word32 g722_encode ARGS((short *incode, short *code, Word32 nsmp, 
-		       g722_state *encoder));
-void g722_reset_decoder ARGS((g722_state *decoder));
-short g722_decode ARGS((short *code, short *outcode, short mode, 
-		       short nsmp, g722_state *decoder));
+void g722_reset_encoder ARGS ((g722_state * encoder));
+Word32 g722_encode ARGS ((short *incode, short *code, Word32 nsmp, g722_state * encoder));
+void g722_reset_decoder ARGS ((g722_state * decoder));
+short g722_decode ARGS ((short *code, short *outcode, short mode, short nsmp, g722_state * decoder));
 
 #endif /* G722_H */
 /* ................. End of file g722.h .................................. */

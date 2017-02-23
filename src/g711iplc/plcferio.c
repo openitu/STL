@@ -54,30 +54,29 @@ HISTORY:
  * Selelct the input routine based on the type of the file.
  * File type and input routine are from softbits.[ch] in G.191.
  */
-void readplcmask_open(readplcmask *r, char *fname)
-{
-	char	streamtype;
-	char	fileformat;
-	short	s;
+void readplcmask_open (readplcmask * r, char *fname) {
+  char streamtype;
+  char fileformat;
+  short s;
 
-	if ((r->fp = fopen(fname, "rb")) == NULL)
-		error("Can't open PLC error pattern file: %s", fname);
-	/* shouldn't need to check this by check_eid_format doesn't */
-	if (fread(&s, sizeof(short), 1, r->fp) != 1)
-		error("Error pattern file %s is too short", fname);
-	fseek(r->fp, 0L, SEEK_SET);
-	fileformat = check_eid_format(r->fp, fname, &streamtype);
-	if (fileformat == g192 || fileformat == byte) {
-		if (streamtype == BER)
-			error("File %s contains BER instead of FER", fname);
-	} else if (fileformat != compact)
-		error("File %s contains unknown error pattern format", fname);
-	if (fileformat == g192)
-		r->readfunc = read_g192;
-	else if (fileformat == byte)
-		r->readfunc = read_byte;
-	else
-		r->readfunc = read_bit_fer;
+  if ((r->fp = fopen (fname, "rb")) == NULL)
+    error ("Can't open PLC error pattern file: %s", fname);
+  /* shouldn't need to check this by check_eid_format doesn't */
+  if (fread (&s, sizeof (short), 1, r->fp) != 1)
+    error ("Error pattern file %s is too short", fname);
+  fseek (r->fp, 0L, SEEK_SET);
+  fileformat = check_eid_format (r->fp, fname, &streamtype);
+  if (fileformat == g192 || fileformat == byte) {
+    if (streamtype == BER)
+      error ("File %s contains BER instead of FER", fname);
+  } else if (fileformat != compact)
+    error ("File %s contains unknown error pattern format", fname);
+  if (fileformat == g192)
+    r->readfunc = read_g192;
+  else if (fileformat == byte)
+    r->readfunc = read_byte;
+  else
+    r->readfunc = read_bit_fer;
 }
 
 /*
@@ -85,28 +84,26 @@ void readplcmask_open(readplcmask *r, char *fname)
  * if the error pattern file is shorter than the input file, roll over
  * and start from the beginning. This is useful for uniform error patterns.
  */
-int readplcmask_erased(readplcmask *r)
-{
-	short	s;
-	short	h;
+int readplcmask_erased (readplcmask * r) {
+  short s;
+  short h;
 
-	if ((*r->readfunc)(&s, 1L, r->fp) != 1L) {
-		/* roll over at end of file */
-		fseek(r->fp, 0L, SEEK_SET);
-		if ((*r->readfunc)(&s, 1L, r->fp) != 1L)
-			error("Read on error pattern file failed");
-	}
-	if (soft2hard(&s, &h, 1L, FER) != 0L)
-		error("Unexpected input value in error pattern file");
-	return (int)h;
+  if ((*r->readfunc) (&s, 1L, r->fp) != 1L) {
+    /* roll over at end of file */
+    fseek (r->fp, 0L, SEEK_SET);
+    if ((*r->readfunc) (&s, 1L, r->fp) != 1L)
+      error ("Read on error pattern file failed");
+  }
+  if (soft2hard (&s, &h, 1L, FER) != 0L)
+    error ("Unexpected input value in error pattern file");
+  return (int) h;
 }
 
 /*
  * clear everything out in case we call something after the close
  */
-void readplcmask_close(readplcmask *r)
-{
-	fclose(r->fp);
-	r->fp = NULL;
-	r->readfunc = (long (*)(short*,long, FILE*))0;
+void readplcmask_close (readplcmask * r) {
+  fclose (r->fp);
+  r->fp = NULL;
+  r->readfunc = (long (*)(short *, long, FILE *)) 0;
 }

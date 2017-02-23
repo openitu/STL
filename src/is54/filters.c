@@ -23,36 +23,32 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
-/**/
+ /**/
 /*	filters.c -- Filter routines.*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
-/**/
+   /**/
 /*	Written by: Matt Hartman*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-/**/
+   /**/
 #include "vparams.h"
-
 /*#include "stdlib.h"*/
-
 /*--------------------------------------------------------------------------*/
 /*	inverse (analysis, all-zero) filter*/
-/**/
-void            I_DIR(inPtr, oPtr, stPtr, coefPtr, len)
-  FTYPE          *inPtr;
-  FTYPE          *oPtr;
-  FTYPE          *stPtr;
-  FTYPE          *coefPtr;
-  int             len;
+ /**/ void I_DIR (inPtr, oPtr, stPtr, coefPtr, len)
+     FTYPE *inPtr;
+     FTYPE *oPtr;
+     FTYPE *stPtr;
+     FTYPE *coefPtr;
+     int len;
 {
-  FTYPE          *cP, *iPtr, *endPtr, *freePtr;
-  int             i;
+  FTYPE *cP, *iPtr, *endPtr, *freePtr;
+  int i;
 
 /*	copy states and input into temp buffer*/
-/**/
-  freePtr = (FTYPE *) malloc((len + NP) * sizeof(FTYPE));
+   /**/ freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
   iPtr = freePtr;
   iPtr--;
   for (endPtr = stPtr + NP; stPtr < endPtr; stPtr++)
@@ -62,9 +58,7 @@ void            I_DIR(inPtr, oPtr, stPtr, coefPtr, len)
   iPtr -= len - 1;
 
 /*	perform filter*/
-/**/
-  for (endPtr = iPtr + len; iPtr < endPtr; iPtr++)
-  {
+   /**/ for (endPtr = iPtr + len; iPtr < endPtr; iPtr++) {
     *oPtr = 0.0;
     cP = coefPtr - 1;
     for (i = 1; i <= NP; i++)
@@ -74,42 +68,36 @@ void            I_DIR(inPtr, oPtr, stPtr, coefPtr, len)
   }
 
 /*	update states*/
-/**/
-  stPtr--;
+   /**/ stPtr--;
   for (endPtr = stPtr - NP; stPtr > endPtr; stPtr--)
     *stPtr = *--iPtr;
 
-  free(freePtr);
+  free (freePtr);
 }
 
 
 /*--------------------------------------------------------------------------*/
 /*	synthesis (all-pole) filter*/
-/**/
-void            DIR(inPtr, oPtr, stPtr, coefPtr, len)
-  FTYPE          *inPtr;
-  FTYPE          *oPtr;
-  FTYPE          *stPtr;
-  FTYPE          *coefPtr;
-  int             len;
+ /**/ void DIR (inPtr, oPtr, stPtr, coefPtr, len)
+     FTYPE *inPtr;
+     FTYPE *oPtr;
+     FTYPE *stPtr;
+     FTYPE *coefPtr;
+     int len;
 {
-  FTYPE          *cP, *tmpPtr, *endPtr, *freePtr;
-  int             i;
+  FTYPE *cP, *tmpPtr, *endPtr, *freePtr;
+  int i;
 
 /*	copy states into temp output buffer*/
-/**/
-  freePtr = (FTYPE *) malloc((len + NP) * sizeof(FTYPE));
+   /**/ freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
   tmpPtr = freePtr;
-  for (endPtr = stPtr + NP; stPtr < endPtr; stPtr++)
-  {
+  for (endPtr = stPtr + NP; stPtr < endPtr; stPtr++) {
     *tmpPtr = *stPtr;
     tmpPtr++;
   }
 
 /*	perform filter*/
-/**/
-  for (endPtr = tmpPtr + len; tmpPtr < endPtr; tmpPtr++)
-  {
+   /**/ for (endPtr = tmpPtr + len; tmpPtr < endPtr; tmpPtr++) {
     *tmpPtr = 0.0;
     cP = coefPtr - 1;
     for (i = 1; i <= NP; i++)
@@ -121,38 +109,33 @@ void            DIR(inPtr, oPtr, stPtr, coefPtr, len)
   }
 
 /*	update states*/
-/**/
-  stPtr--;
+   /**/ stPtr--;
   for (endPtr = stPtr - NP; stPtr > endPtr; stPtr--)
     *stPtr = *--tmpPtr;
 
-  free(freePtr);
+  free (freePtr);
 }
 
 
-void            ZI_DIR(oPtr, stPtr, coefPtr, len)
-  FTYPE          *oPtr;
-  FTYPE          *stPtr;
-  FTYPE          *coefPtr;
-  int             len;
+void ZI_DIR (oPtr, stPtr, coefPtr, len)
+     FTYPE *oPtr;
+     FTYPE *stPtr;
+     FTYPE *coefPtr;
+     int len;
 {
-  FTYPE          *cP, *tmpPtr, *endPtr, *freePtr;
-  int             i;
+  FTYPE *cP, *tmpPtr, *endPtr, *freePtr;
+  int i;
 
 /*	copy states into temp output buffer*/
-/**/
-  freePtr = (FTYPE *) malloc((len + NP) * sizeof(FTYPE));
+   /**/ freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
   tmpPtr = freePtr;
-  for (endPtr = stPtr + NP; stPtr < endPtr; stPtr++)
-  {
+  for (endPtr = stPtr + NP; stPtr < endPtr; stPtr++) {
     *tmpPtr = *stPtr;
     tmpPtr++;
   }
 
 /*	perform filter without input*/
-/**/
-  for (endPtr = tmpPtr + len; tmpPtr < endPtr; tmpPtr++)
-  {
+   /**/ for (endPtr = tmpPtr + len; tmpPtr < endPtr; tmpPtr++) {
     *tmpPtr = 0.0;
     cP = coefPtr - 1;
     for (i = 1; i <= NP; i++)
@@ -161,5 +144,5 @@ void            ZI_DIR(oPtr, stPtr, coefPtr, len)
     oPtr++;
   }
 
-  free(freePtr);
+  free (freePtr);
 }

@@ -23,43 +23,37 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
-/**/
+ /**/
 /*	v_con.c -- Constructs codebook excitation vector.*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
-/**/
+   /**/
 /*	Written by: Matt Hartman*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-/**/
+   /**/
 #include "vparams.h"
-
-void            V_CON(basisPtr, bitArray, numBasis, oPtr)
-  FTYPE          *basisPtr;
-  FTYPE          *bitArray;
-  int             numBasis;
-  FTYPE          *oPtr;
+void V_CON (basisPtr, bitArray, numBasis, oPtr)
+     FTYPE *basisPtr;
+     FTYPE *bitArray;
+     int numBasis;
+     FTYPE *oPtr;
 {
-  FTYPE          *tmpPtr, *endPtr, *endPtr2;
+  FTYPE *tmpPtr, *endPtr, *endPtr2;
 
 /*	initialize output with contribution from first basis vector*/
-/**/
-  tmpPtr = oPtr;
-  for (endPtr = tmpPtr + S_LEN; tmpPtr < endPtr; tmpPtr++)
-  {
+   /**/ tmpPtr = oPtr;
+  for (endPtr = tmpPtr + S_LEN; tmpPtr < endPtr; tmpPtr++) {
     *tmpPtr = *bitArray * *basisPtr;
     basisPtr++;
   }
 
 /*	add contributions from other vectors*/
-/**/
-  bitArray++;
-  for (endPtr = bitArray + numBasis - 1; bitArray < endPtr; bitArray++)
-  {
+   /**/ bitArray++;
+  for (endPtr = bitArray + numBasis - 1; bitArray < endPtr; bitArray++) {
     tmpPtr = oPtr;
-    for (endPtr2 = tmpPtr + S_LEN; tmpPtr < endPtr2; tmpPtr++)
-    {
+    for (endPtr2 = tmpPtr + S_LEN; tmpPtr < endPtr2; tmpPtr++) {
       *tmpPtr += *bitArray * *basisPtr;
       basisPtr++;
     }

@@ -102,39 +102,37 @@ Apr/91       1.0   First version of the G711 module
 
   ==========================================================================
 */
-void            alaw_compress(lseg, linbuf, logbuf)
-  long            lseg;
-  short          *linbuf;
-  short          *logbuf;
+void alaw_compress (lseg, linbuf, logbuf)
+     long lseg;
+     short *linbuf;
+     short *logbuf;
 {
-  short           ix, iexp;
-  long            n;
+  short ix, iexp;
+  long n;
 
-  for (n = 0; n < lseg; n++)
-  {
-    ix = linbuf[n] < 0		/* 0 <= ix < 2048 */
-      ? (~linbuf[n]) >> 4	/* 1's complement for negative values */
+  for (n = 0; n < lseg; n++) {
+    ix = linbuf[n] < 0          /* 0 <= ix < 2048 */
+      ? (~linbuf[n]) >> 4       /* 1's complement for negative values */
       : (linbuf[n]) >> 4;
 
     /* Do more, if exponent > 0 */
-    if (ix > 15)		/* exponent=0 for ix <= 15 */
-    {
-      iexp = 1;			/* first step: */
-      while (ix > 16 + 15)	/* find mantissa and exponent */
-      {
-	ix >>= 1;
-	iexp++;
+    if (ix > 15) {              /* exponent=0 for ix <= 15 */
+      iexp = 1;                 /* first step: */
+      while (ix > 16 + 15) {    /* find mantissa and exponent */
+        ix >>= 1;
+        iexp++;
       }
-      ix -= 16;			/* second step: remove leading '1' */
+      ix -= 16;                 /* second step: remove leading '1' */
 
-      ix += iexp << 4;		/* now compute encoded value */
+      ix += iexp << 4;          /* now compute encoded value */
     }
     if (linbuf[n] >= 0)
-      ix |= (0x0080);		/* add sign bit */
+      ix |= (0x0080);           /* add sign bit */
 
-    logbuf[n] = ix ^ (0x0055);	/* toggle even bits */
+    logbuf[n] = ix ^ (0x0055);  /* toggle even bits */
   }
 }
+
 /* ................... End of alaw_compress() ..................... */
 
 
@@ -161,34 +159,33 @@ void            alaw_compress(lseg, linbuf, logbuf)
 
   ============================================================================
 */
-void            alaw_expand(lseg, logbuf, linbuf)
-  long            lseg;
-  short          *linbuf;
-  short          *logbuf;
+void alaw_expand (lseg, logbuf, linbuf)
+     long lseg;
+     short *linbuf;
+     short *logbuf;
 {
-  short           ix, mant, iexp;
-  long            n;
+  short ix, mant, iexp;
+  long n;
 
-  for (n = 0; n < lseg; n++)
-  {
-    ix = logbuf[n] ^ (0x0055);	/* re-toggle toggled bits */
+  for (n = 0; n < lseg; n++) {
+    ix = logbuf[n] ^ (0x0055);  /* re-toggle toggled bits */
 
-    ix &= (0x007F);		/* remove sign bit */
-    iexp = ix >> 4;		/* extract exponent */
-    mant = ix & (0x000F);	/* now get mantissa */
+    ix &= (0x007F);             /* remove sign bit */
+    iexp = ix >> 4;             /* extract exponent */
+    mant = ix & (0x000F);       /* now get mantissa */
     if (iexp > 0)
-      mant = mant + 16;		/* add leading '1', if exponent > 0 */
+      mant = mant + 16;         /* add leading '1', if exponent > 0 */
 
-    mant = (mant << 4) + (0x0008);	/* now mantissa left justified and */
+    mant = (mant << 4) + (0x0008);      /* now mantissa left justified and */
     /* 1/2 quantization step added */
-    if (iexp > 1)		/* now left shift according exponent */
+    if (iexp > 1)               /* now left shift according exponent */
       mant = mant << (iexp - 1);
 
-    linbuf[n] = logbuf[n] > 127	/* invert, if negative sample */
-      ? mant
-      : -mant;
+    linbuf[n] = logbuf[n] > 127 /* invert, if negative sample */
+      ? mant : -mant;
   }
 }
+
 /* ................... End of alaw_expand() ..................... */
 
 
@@ -216,37 +213,35 @@ void            alaw_expand(lseg, logbuf, linbuf)
 
   ==========================================================================
 */
-void            ulaw_compress(lseg, linbuf, logbuf)
-  long            lseg;
-  short          *linbuf;
-  short          *logbuf;
+void ulaw_compress (lseg, linbuf, logbuf)
+     long lseg;
+     short *linbuf;
+     short *logbuf;
 {
-  long            n;            /* samples's count */
-  short           i;		/* aux.var. */
-  short           absno;	/* absolute value of linear (input) sample */
-  short           segno;	/* segment (Table 2/G711, column 1) */
-  short           low_nibble;	/* low  nibble of log companded sample */
-  short           high_nibble;	/* high nibble of log companded sample */
+  long n;                       /* samples's count */
+  short i;                      /* aux.var. */
+  short absno;                  /* absolute value of linear (input) sample */
+  short segno;                  /* segment (Table 2/G711, column 1) */
+  short low_nibble;             /* low nibble of log companded sample */
+  short high_nibble;            /* high nibble of log companded sample */
 
-  for (n = 0; n < lseg; n++)
-  {
+  for (n = 0; n < lseg; n++) {
     /* -------------------------------------------------------------------- */
     /* Change from 14 bit left justified to 14 bit right justified */
     /* Compute absolute value; adjust for easy processing */
     /* -------------------------------------------------------------------- */
-    absno = linbuf[n] < 0	/* compute 1's complement in case of  */
-      ? ((~linbuf[n]) >> 2) + 33/* negative samples */
-      : ((linbuf[n]) >> 2) + 33;/* NB: 33 is the difference value */
+    absno = linbuf[n] < 0       /* compute 1's complement in case of */
+      ? ((~linbuf[n]) >> 2) + 33        /* negative samples */
+      : ((linbuf[n]) >> 2) + 33;        /* NB: 33 is the difference value */
     /* between the thresholds for */
     /* A-law and u-law. */
-    if (absno > (0x1FFF))	/* limitation to "absno" < 8192 */
+    if (absno > (0x1FFF))       /* limitation to "absno" < 8192 */
       absno = (0x1FFF);
 
     /* Determination of sample's segment */
     i = absno >> 6;
     segno = 1;
-    while (i != 0)
-    {
+    while (i != 0) {
       segno++;
       i >>= 1;
     }
@@ -255,8 +250,8 @@ void            ulaw_compress(lseg, linbuf, logbuf)
     high_nibble = (0x0008) - segno;
 
     /* Mounting the low-nibble of the log PCM sample */
-    low_nibble = (absno >> segno)	/* right shift of mantissa and */
-      & (0x000F);		/* masking away leading '1' */
+    low_nibble = (absno >> segno)       /* right shift of mantissa and */
+      &(0x000F);                /* masking away leading '1' */
     low_nibble = (0x000F) - low_nibble;
 
     /* Joining the high-nibble and the low-nibble of the log PCM sample */
@@ -267,6 +262,7 @@ void            ulaw_compress(lseg, linbuf, logbuf)
       logbuf[n] = logbuf[n] | (0x0080);
   }
 }
+
 /* ................... End of ulaw_compress() ..................... */
 
 
@@ -295,37 +291,35 @@ void            ulaw_compress(lseg, linbuf, logbuf)
   ============================================================================
 */
 
-void            ulaw_expand(lseg, logbuf, linbuf)
-  long            lseg;
-  short          *logbuf;
-  short          *linbuf;
+void ulaw_expand (lseg, logbuf, linbuf)
+     long lseg;
+     short *logbuf;
+     short *linbuf;
 {
-  long            n;		/* aux.var. */
-  short           segment;	/* segment (Table 2/G711, column 1) */
-  short           mantissa;	/* low  nibble of log companded sample */
-  short           exponent;	/* high nibble of log companded sample */
-  short           sign;		/* sign of output sample */
-  short           step;
+  long n;                       /* aux.var. */
+  short segment;                /* segment (Table 2/G711, column 1) */
+  short mantissa;               /* low nibble of log companded sample */
+  short exponent;               /* high nibble of log companded sample */
+  short sign;                   /* sign of output sample */
+  short step;
 
-  for (n = 0; n < lseg; n++)
-  {
-    sign = logbuf[n] < (0x0080)	/* sign-bit = 1 for positiv values */
-      ? -1
-      : 1;
-    mantissa = ~logbuf[n];	/* 1's complement of input value */
-    exponent = (mantissa >> 4) & (0x0007);	/* extract exponent */
-    segment = exponent + 1;	/* compute segment number */
-    mantissa = mantissa & (0x000F);	/* extract mantissa */
+  for (n = 0; n < lseg; n++) {
+    sign = logbuf[n] < (0x0080) /* sign-bit = 1 for positiv values */
+      ? -1 : 1;
+    mantissa = ~logbuf[n];      /* 1's complement of input value */
+    exponent = (mantissa >> 4) & (0x0007);      /* extract exponent */
+    segment = exponent + 1;     /* compute segment number */
+    mantissa = mantissa & (0x000F);     /* extract mantissa */
 
     /* Compute Quantized Sample (14 bit left justified!) */
-    step = (4) << segment;	/* position of the LSB */
+    step = (4) << segment;      /* position of the LSB */
     /* = 1 quantization step) */
-    linbuf[n] = sign *		/* sign */
-      (((0x0080) << exponent)	/* '1', preceding the mantissa */
-       + step * mantissa	/* left shift of mantissa */
-       + step / 2		/* 1/2 quantization step */
-       - 4 * 33
-      );
+    linbuf[n] = sign *          /* sign */
+      (((0x0080) << exponent)   /* '1', preceding the mantissa */
+       +step * mantissa         /* left shift of mantissa */
+       + step / 2               /* 1/2 quantization step */
+       - 4 * 33);
   }
 }
+
 /* ................... End of ulaw_expand() ..................... */

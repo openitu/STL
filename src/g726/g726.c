@@ -199,183 +199,175 @@ Private:
 
  ----------------------------------------------------------------------------
 */
-void            G726_encode(inp_buf, out_buf, smpno, law, rate, r, state)
-  short          *inp_buf, *out_buf;
-  long            smpno;
-  char           *law;
-  short           r;
-  short           rate;
-  G726_state     *state;
+void G726_encode (inp_buf, out_buf, smpno, law, rate, r, state)
+     short *inp_buf, *out_buf;
+     long smpno;
+     char *law;
+     short r;
+     short rate;
+     G726_state *state;
 {
-  short           s;
-  short           d, i;
-  short           y;
-  short           sigpk;
-  short           sr, tr;
-  short           yu;
-  short           al, fi, dl, ap, dq, ds, se, ax, td, sl, wi;
-  short           u1, u2, u3, u4, u5, u6;
-  short           a1, a2, b1, b2, b3, b4, b5, b6;
-  short           dqln;
-  short           a1p, a2p, a1t, a2t, b1p, b2p, b3p, b4p, b5p, b6p, dq6, pk2,
-                  sr2, wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6;
-  short           dml, dln, app, dql, dms;
-  short           dqs, tdp;
-  short           sez;
-  short           yut;
-  long            yl;
+  short s;
+  short d, i;
+  short y;
+  short sigpk;
+  short sr, tr;
+  short yu;
+  short al, fi, dl, ap, dq, ds, se, ax, td, sl, wi;
+  short u1, u2, u3, u4, u5, u6;
+  short a1, a2, b1, b2, b3, b4, b5, b6;
+  short dqln;
+  short a1p, a2p, a1t, a2t, b1p, b2p, b3p, b4p, b5p, b6p, dq6, pk2, sr2, wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6;
+  short dml, dln, app, dql, dms;
+  short dqs, tdp;
+  short sez;
+  short yut;
+  long yl;
 
-  long            j;
+  long j;
 
   /* Invert even bits if A law */
-  if (*law == '1')
-  {
+  if (*law == '1') {
     for (j = 0; j < smpno; j++)
       inp_buf[j] ^= 85;
   }
 
-  /* Process all desired samples in inp_buf to out_buf; The comments about
-   * general blocks are given as in G.726, and refer to: 4.1.1 Input PCM
-   * format conversion and difference signal computation    4.1.2 Adaptive
-   * quantizer 4.1.3 Inverse adaptive quantizer 4.1.4 Quantizer scale factor
-   * adaptation 4.1.5 Adaptation speed control 4.1.6 Adaptive predictor and
-   * reconstructed signal calculator 4.1.7 Tone and transition detector 4.1.8
-   * (Only in the decoder) */
-  for (j = 0; j < smpno; j++, r = 0)
-  {
+  /* Process all desired samples in inp_buf to out_buf; The comments about general blocks are given as in G.726, and refer to: 4.1.1 Input PCM format conversion and difference signal computation 4.1.2 Adaptive quantizer 4.1.3 Inverse adaptive quantizer 4.1.4 Quantizer scale factor adaptation 4.1.5 Adaptation speed control 4.1.6 Adaptive predictor and reconstructed signal calculator 4.1.7 Tone and transition detector 4.1.8 (Only in the decoder) */
+  for (j = 0; j < smpno; j++, r = 0) {
     s = inp_buf[j];
 
     /* Process `known-state' part of 4.2.6 */
-    G726_delayd(&r, &state->sr1, &sr2);
-    G726_delayd(&r, &state->sr0, &state->sr1);
-    G726_delaya(&r, &state->a2r, &a2);
-    G726_delaya(&r, &state->a1r, &a1);
-    G726_fmult(&a2, &sr2, &wa2);
-    G726_fmult(&a1, &state->sr1, &wa1);
+    G726_delayd (&r, &state->sr1, &sr2);
+    G726_delayd (&r, &state->sr0, &state->sr1);
+    G726_delaya (&r, &state->a2r, &a2);
+    G726_delaya (&r, &state->a1r, &a1);
+    G726_fmult (&a2, &sr2, &wa2);
+    G726_fmult (&a1, &state->sr1, &wa1);
 
-    G726_delayd(&r, &state->dq5, &dq6);
-    G726_delayd(&r, &state->dq4, &state->dq5);
-    G726_delayd(&r, &state->dq3, &state->dq4);
-    G726_delayd(&r, &state->dq2, &state->dq3);
-    G726_delayd(&r, &state->dq1, &state->dq2);
-    G726_delayd(&r, &state->dq0, &state->dq1);
+    G726_delayd (&r, &state->dq5, &dq6);
+    G726_delayd (&r, &state->dq4, &state->dq5);
+    G726_delayd (&r, &state->dq3, &state->dq4);
+    G726_delayd (&r, &state->dq2, &state->dq3);
+    G726_delayd (&r, &state->dq1, &state->dq2);
+    G726_delayd (&r, &state->dq0, &state->dq1);
 
-    G726_delaya(&r, &state->b1r, &b1);
-    G726_delaya(&r, &state->b2r, &b2);
-    G726_delaya(&r, &state->b3r, &b3);
-    G726_delaya(&r, &state->b4r, &b4);
-    G726_delaya(&r, &state->b5r, &b5);
-    G726_delaya(&r, &state->b6r, &b6);
+    G726_delaya (&r, &state->b1r, &b1);
+    G726_delaya (&r, &state->b2r, &b2);
+    G726_delaya (&r, &state->b3r, &b3);
+    G726_delaya (&r, &state->b4r, &b4);
+    G726_delaya (&r, &state->b5r, &b5);
+    G726_delaya (&r, &state->b6r, &b6);
 
-    G726_fmult(&b1, &state->dq1, &wb1);
-    G726_fmult(&b2, &state->dq2, &wb2);
-    G726_fmult(&b3, &state->dq3, &wb3);
-    G726_fmult(&b4, &state->dq4, &wb4);
-    G726_fmult(&b5, &state->dq5, &wb5);
-    G726_fmult(&b6, &dq6, &wb6);
+    G726_fmult (&b1, &state->dq1, &wb1);
+    G726_fmult (&b2, &state->dq2, &wb2);
+    G726_fmult (&b3, &state->dq3, &wb3);
+    G726_fmult (&b4, &state->dq4, &wb4);
+    G726_fmult (&b5, &state->dq5, &wb5);
+    G726_fmult (&b6, &dq6, &wb6);
 
-    G726_accum(&wa1, &wa2, &wb1, &wb2, &wb3, &wb4, &wb5, &wb6, &se, &sez);
+    G726_accum (&wa1, &wa2, &wb1, &wb2, &wb3, &wb4, &wb5, &wb6, &se, &sez);
 
     /* Process 4.2.1 */
-    G726_expand(&s, law, &sl);
-    G726_subta(&sl, &se, &d);
+    G726_expand (&s, law, &sl);
+    G726_subta (&sl, &se, &d);
 
     /* Process delays and `know-state' part of 4.2.5 */
-    G726_delaya(&r, &state->dmsp, &dms);
-    G726_delaya(&r, &state->dmlp, &dml);
-    G726_delaya(&r, &state->apr, &ap);
-    G726_lima(&ap, &al);
+    G726_delaya (&r, &state->dmsp, &dms);
+    G726_delaya (&r, &state->dmlp, &dml);
+    G726_delaya (&r, &state->apr, &ap);
+    G726_lima (&ap, &al);
 
     /* Process `know-state' parts of 4.2.4 */
-    G726_delayb(&r, &state->yup, &yu);
-    G726_delayc(&r, &state->ylp, &yl);
-    G726_mix(&al, &yu, &yl, &y);
+    G726_delayb (&r, &state->yup, &yu);
+    G726_delayc (&r, &state->ylp, &yl);
+    G726_mix (&al, &yu, &yl, &y);
 
     /* Process 4.2.2 */
-    G726_log(&d, &dl, &ds);
-    G726_subtb(&dl, &y, &dln);
-    G726_quan(rate, &dln, &ds, &i);
+    G726_log (&d, &dl, &ds);
+    G726_subtb (&dl, &y, &dln);
+    G726_quan (rate, &dln, &ds, &i);
 
     /* Save ADPCM quantized sample into output buffer */
     out_buf[j] = i;
 
     /* Process 4.2.3 */
-    G726_reconst(rate, &i, &dqln, &dqs);
-    G726_adda(&dqln, &y, &dql);
-    G726_antilog(&dql, &dqs, &dq);
+    G726_reconst (rate, &i, &dqln, &dqs);
+    G726_adda (&dqln, &y, &dql);
+    G726_antilog (&dql, &dqs, &dq);
 
     /* Part of 4.2.5 */
-    G726_functf(rate, &i, &fi);
-    G726_filta(&fi, &dms, &state->dmsp);
-    G726_filtb(&fi, &dml, &state->dmlp);
+    G726_functf (rate, &i, &fi);
+    G726_filta (&fi, &dms, &state->dmsp);
+    G726_filtb (&fi, &dml, &state->dmlp);
 
     /* Remaining part of 4.2.4 */
-    G726_functw(rate, &i, &wi);
-    G726_filtd(&wi, &y, &yut);
-    G726_limb(&yut, &state->yup);
-    G726_filte(&state->yup, &yl, &state->ylp);
+    G726_functw (rate, &i, &wi);
+    G726_filtd (&wi, &y, &yut);
+    G726_limb (&yut, &state->yup);
+    G726_filte (&state->yup, &yl, &state->ylp);
 
     /* Process `known-state' part of 4.2.7 */
-    G726_delaya(&r, &state->tdr, &td);
-    G726_trans(&td, &yl, &dq, &tr);
+    G726_delaya (&r, &state->tdr, &td);
+    G726_trans (&td, &yl, &dq, &tr);
 
     /* More `known-state' parts of 4.2.6: update of `pk's */
-    G726_delaya(&r, &state->pk1, &pk2);
-    G726_delaya(&r, &state->pk0, &state->pk1);
-    G726_addc(&dq, &sez, &state->pk0, &sigpk);
+    G726_delaya (&r, &state->pk1, &pk2);
+    G726_delaya (&r, &state->pk0, &state->pk1);
+    G726_addc (&dq, &sez, &state->pk0, &sigpk);
 
     /* 4.2.6: find sr0 */
-    G726_addb(&dq, &se, &sr);
-    G726_floatb(&sr, &state->sr0);
+    G726_addb (&dq, &se, &sr);
+    G726_floatb (&sr, &state->sr0);
 
     /* 4.2.6: find dq0 */
-    G726_floata(&dq, &state->dq0);
+    G726_floata (&dq, &state->dq0);
 
     /* 4.2.6: prepar a2(r) */
-    G726_upa2(&state->pk0, &state->pk1, &pk2, &a2, &a1, &sigpk, &a2t);
-    G726_limc(&a2t, &a2p);
-    G726_trigb(&tr, &a2p, &state->a2r);
+    G726_upa2 (&state->pk0, &state->pk1, &pk2, &a2, &a1, &sigpk, &a2t);
+    G726_limc (&a2t, &a2p);
+    G726_trigb (&tr, &a2p, &state->a2r);
 
     /* 4.2.6: prepar a1(r) */
-    G726_upa1(&state->pk0, &state->pk1, &a1, &sigpk, &a1t);
-    G726_limd(&a1t, &a2p, &a1p);
-    G726_trigb(&tr, &a1p, &state->a1r);
+    G726_upa1 (&state->pk0, &state->pk1, &a1, &sigpk, &a1t);
+    G726_limd (&a1t, &a2p, &a1p);
+    G726_trigb (&tr, &a1p, &state->a1r);
 
     /* Remaining of 4.2.7 */
-    G726_tone(&a2p, &tdp);
-    G726_trigb(&tr, &tdp, &state->tdr);
+    G726_tone (&a2p, &tdp);
+    G726_trigb (&tr, &tdp, &state->tdr);
 
     /* Remaining of 4.2.5 */
-    G726_subtc(&state->dmsp, &state->dmlp, &tdp, &y, &ax);
-    G726_filtc(&ax, &ap, &app);
-    G726_triga(&tr, &app, &state->apr);
+    G726_subtc (&state->dmsp, &state->dmlp, &tdp, &y, &ax);
+    G726_filtc (&ax, &ap, &app);
+    G726_triga (&tr, &app, &state->apr);
 
     /* Remaining of 4.2.6: update of all `b's */
-    G726_xor(&state->dq1, &dq, &u1);	/* Here, b1 */
-    G726_upb(rate, &u1, &b1, &dq, &b1p);
-    G726_trigb(&tr, &b1p, &state->b1r);
+    G726_xor (&state->dq1, &dq, &u1);   /* Here, b1 */
+    G726_upb (rate, &u1, &b1, &dq, &b1p);
+    G726_trigb (&tr, &b1p, &state->b1r);
 
-    G726_xor(&state->dq2, &dq, &u2);	/* Here, b2 */
-    G726_upb(rate, &u2, &b2, &dq, &b2p);
-    G726_trigb(&tr, &b2p, &state->b2r);
+    G726_xor (&state->dq2, &dq, &u2);   /* Here, b2 */
+    G726_upb (rate, &u2, &b2, &dq, &b2p);
+    G726_trigb (&tr, &b2p, &state->b2r);
 
-    G726_xor(&state->dq3, &dq, &u3);	/* Here, b3 */
-    G726_upb(rate, &u3, &b3, &dq, &b3p);
-    G726_trigb(&tr, &b3p, &state->b3r);
+    G726_xor (&state->dq3, &dq, &u3);   /* Here, b3 */
+    G726_upb (rate, &u3, &b3, &dq, &b3p);
+    G726_trigb (&tr, &b3p, &state->b3r);
 
-    G726_xor(&state->dq4, &dq, &u4);	/* Here, b4 */
-    G726_upb(rate, &u4, &b4, &dq, &b4p);
-    G726_trigb(&tr, &b4p, &state->b4r);
+    G726_xor (&state->dq4, &dq, &u4);   /* Here, b4 */
+    G726_upb (rate, &u4, &b4, &dq, &b4p);
+    G726_trigb (&tr, &b4p, &state->b4r);
 
-    G726_xor(&state->dq5, &dq, &u5);	/* Here, b5 */
-    G726_upb(rate, &u5, &b5, &dq, &b5p);
-    G726_trigb(&tr, &b5p, &state->b5r);
+    G726_xor (&state->dq5, &dq, &u5);   /* Here, b5 */
+    G726_upb (rate, &u5, &b5, &dq, &b5p);
+    G726_trigb (&tr, &b5p, &state->b5r);
 
-    G726_xor(&dq6, &dq, &u6);	/* At last, b6 */
-    G726_upb(rate, &u6, &b6, &dq, &b6p);
-    G726_trigb(&tr, &b6p, &state->b6r);
+    G726_xor (&dq6, &dq, &u6);  /* At last, b6 */
+    G726_upb (rate, &u6, &b6, &dq, &b6p);
+    G726_trigb (&tr, &b6p, &state->b6r);
   }
 }
+
 /* ........................ end of G726_encode() ....................... */
 
 
@@ -416,184 +408,175 @@ void            G726_encode(inp_buf, out_buf, smpno, law, rate, r, state)
 
  ----------------------------------------------------------------------------
 */
-void            G726_decode(inp_buf, out_buf, smpno, law, rate, r, state)
-  short          *inp_buf, *out_buf;
-  long            smpno;
-  char           *law;
-  short           r;
-  short           rate;
-  G726_state     *state;
+void G726_decode (inp_buf, out_buf, smpno, law, rate, r, state)
+     short *inp_buf, *out_buf;
+     long smpno;
+     char *law;
+     short r;
+     short rate;
+     G726_state *state;
 {
-  short           i;
-  short           y;
-  short           sigpk;
-  short           sr, tr;
-  short           sp, dlnx, dsx, sd, slx, dlx, dx;	/* these are unique to
-							 * the decoder */
-  long            yl;
-  short           yu;
-  short           al, fi, ap, dq, se, ax, td, wi;
-  short           u1, u2, u3, u4, u5, u6;
-  short           a1, a2, b1, b2, b3, b4, b5, b6;
-  short           dqln;
-  short           a1p, a2p, a1t, a2t, b1p, b2p, b3p, b4p, b5p, b6p, dq6, pk2,
-                  sr2, wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6;
-  short           dml, app, dql, dms;
-  short           dqs, tdp;
-  short           sez;
-  short           yut;
-  long            j;
+  short i;
+  short y;
+  short sigpk;
+  short sr, tr;
+  short sp, dlnx, dsx, sd, slx, dlx, dx;        /* these are unique to the decoder */
+  long yl;
+  short yu;
+  short al, fi, ap, dq, se, ax, td, wi;
+  short u1, u2, u3, u4, u5, u6;
+  short a1, a2, b1, b2, b3, b4, b5, b6;
+  short dqln;
+  short a1p, a2p, a1t, a2t, b1p, b2p, b3p, b4p, b5p, b6p, dq6, pk2, sr2, wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6;
+  short dml, app, dql, dms;
+  short dqs, tdp;
+  short sez;
+  short yut;
+  long j;
 
-  /* Process all desired samples in inp_buf to out_buf; The comments about
-   * general blocks are given as in G.726, and refer to: 4.1.1 Input PCM
-   * format conversion and difference signal computation    4.1.2 Adaptive
-   * quantizer 4.1.3 Inverse adaptive quantizer 4.1.4 Quantizer scale factor
-   * adaptation 4.1.5 Adaptation speed control 4.1.6 Adaptive predictor and
-   * reconstructed signal calculator 4.1.7 Tone and transition detector 4.1.8
-   * Output PCM format conversion and synchronous coding adjustment */
-  for (j = 0; j < smpno; j++, r = 0)
-  {
+  /* Process all desired samples in inp_buf to out_buf; The comments about general blocks are given as in G.726, and refer to: 4.1.1 Input PCM format conversion and difference signal computation 4.1.2 Adaptive quantizer 4.1.3 Inverse adaptive quantizer 4.1.4 Quantizer scale factor adaptation 4.1.5 Adaptation speed control 4.1.6 Adaptive predictor and reconstructed signal calculator 4.1.7 Tone and transition detector 4.1.8 Output PCM format conversion and synchronous coding adjustment */
+  for (j = 0; j < smpno; j++, r = 0) {
     /* Process `known-state' part of 4.2.6 */
-    G726_delayd(&r, &state->sr1, &sr2);
-    G726_delayd(&r, &state->sr0, &state->sr1);
-    G726_delaya(&r, &state->a2r, &a2);
-    G726_delaya(&r, &state->a1r, &a1);
-    G726_fmult(&a2, &sr2, &wa2);
-    G726_fmult(&a1, &state->sr1, &wa1);
+    G726_delayd (&r, &state->sr1, &sr2);
+    G726_delayd (&r, &state->sr0, &state->sr1);
+    G726_delaya (&r, &state->a2r, &a2);
+    G726_delaya (&r, &state->a1r, &a1);
+    G726_fmult (&a2, &sr2, &wa2);
+    G726_fmult (&a1, &state->sr1, &wa1);
 
-    G726_delayd(&r, &state->dq5, &dq6);
-    G726_delayd(&r, &state->dq4, &state->dq5);
-    G726_delayd(&r, &state->dq3, &state->dq4);
-    G726_delayd(&r, &state->dq2, &state->dq3);
-    G726_delayd(&r, &state->dq1, &state->dq2);
-    G726_delayd(&r, &state->dq0, &state->dq1);
+    G726_delayd (&r, &state->dq5, &dq6);
+    G726_delayd (&r, &state->dq4, &state->dq5);
+    G726_delayd (&r, &state->dq3, &state->dq4);
+    G726_delayd (&r, &state->dq2, &state->dq3);
+    G726_delayd (&r, &state->dq1, &state->dq2);
+    G726_delayd (&r, &state->dq0, &state->dq1);
 
-    G726_delaya(&r, &state->b1r, &b1);
-    G726_delaya(&r, &state->b2r, &b2);
-    G726_delaya(&r, &state->b3r, &b3);
-    G726_delaya(&r, &state->b4r, &b4);
-    G726_delaya(&r, &state->b5r, &b5);
-    G726_delaya(&r, &state->b6r, &b6);
+    G726_delaya (&r, &state->b1r, &b1);
+    G726_delaya (&r, &state->b2r, &b2);
+    G726_delaya (&r, &state->b3r, &b3);
+    G726_delaya (&r, &state->b4r, &b4);
+    G726_delaya (&r, &state->b5r, &b5);
+    G726_delaya (&r, &state->b6r, &b6);
 
-    G726_fmult(&b1, &state->dq1, &wb1);
-    G726_fmult(&b2, &state->dq2, &wb2);
-    G726_fmult(&b3, &state->dq3, &wb3);
-    G726_fmult(&b4, &state->dq4, &wb4);
-    G726_fmult(&b5, &state->dq5, &wb5);
-    G726_fmult(&b6, &dq6, &wb6);
+    G726_fmult (&b1, &state->dq1, &wb1);
+    G726_fmult (&b2, &state->dq2, &wb2);
+    G726_fmult (&b3, &state->dq3, &wb3);
+    G726_fmult (&b4, &state->dq4, &wb4);
+    G726_fmult (&b5, &state->dq5, &wb5);
+    G726_fmult (&b6, &dq6, &wb6);
 
-    G726_accum(&wa1, &wa2, &wb1, &wb2, &wb3, &wb4, &wb5, &wb6, &se, &sez);
+    G726_accum (&wa1, &wa2, &wb1, &wb2, &wb3, &wb4, &wb5, &wb6, &se, &sez);
 
     /* Process delays and `know-state' part of 4.2.5 */
-    G726_delaya(&r, &state->dmsp, &dms);
-    G726_delaya(&r, &state->dmlp, &dml);
-    G726_delaya(&r, &state->apr, &ap);
-    G726_lima(&ap, &al);
+    G726_delaya (&r, &state->dmsp, &dms);
+    G726_delaya (&r, &state->dmlp, &dml);
+    G726_delaya (&r, &state->apr, &ap);
+    G726_lima (&ap, &al);
 
     /* Process `know-state' parts of 4.2.4 */
-    G726_delayb(&r, &state->yup, &yu);
-    G726_delayc(&r, &state->ylp, &yl);
-    G726_mix(&al, &yu, &yl, &y);
+    G726_delayb (&r, &state->yup, &yu);
+    G726_delayc (&r, &state->ylp, &yl);
+    G726_mix (&al, &yu, &yl, &y);
 
     /* Retrieve ADPCM sample from input buffer */
     i = inp_buf[j];
 
     /* Process 4.2.3 */
-    G726_reconst(rate, &i, &dqln, &dqs);
-    G726_adda(&dqln, &y, &dql);
-    G726_antilog(&dql, &dqs, &dq);
+    G726_reconst (rate, &i, &dqln, &dqs);
+    G726_adda (&dqln, &y, &dql);
+    G726_antilog (&dql, &dqs, &dq);
 
     /* Process `known-state' part of 4.2.7 */
-    G726_delaya(&r, &state->tdr, &td);
-    G726_trans(&td, &yl, &dq, &tr);
+    G726_delaya (&r, &state->tdr, &td);
+    G726_trans (&td, &yl, &dq, &tr);
 
     /* Part of 4.2.5 */
-    G726_functf(rate, &i, &fi);
-    G726_filta(&fi, &dms, &state->dmsp);
-    G726_filtb(&fi, &dml, &state->dmlp);
+    G726_functf (rate, &i, &fi);
+    G726_filta (&fi, &dms, &state->dmsp);
+    G726_filtb (&fi, &dml, &state->dmlp);
 
     /* Remaining part of 4.2.4 */
-    G726_functw(rate, &i, &wi);
-    G726_filtd(&wi, &y, &yut);
-    G726_limb(&yut, &state->yup);
-    G726_filte(&state->yup, &yl, &state->ylp);
+    G726_functw (rate, &i, &wi);
+    G726_filtd (&wi, &y, &yut);
+    G726_limb (&yut, &state->yup);
+    G726_filte (&state->yup, &yl, &state->ylp);
 
     /* More `known-state' parts of 4.2.6: update of `pk's */
-    G726_delaya(&r, &state->pk1, &pk2);
-    G726_delaya(&r, &state->pk0, &state->pk1);
-    G726_addc(&dq, &sez, &state->pk0, &sigpk);
+    G726_delaya (&r, &state->pk1, &pk2);
+    G726_delaya (&r, &state->pk0, &state->pk1);
+    G726_addc (&dq, &sez, &state->pk0, &sigpk);
 
     /* 4.2.6: find sr0 */
-    G726_addb(&dq, &se, &sr);
-    G726_floatb(&sr, &state->sr0);
+    G726_addb (&dq, &se, &sr);
+    G726_floatb (&sr, &state->sr0);
 
     /* 4.2.6: find dq0 */
-    G726_floata(&dq, &state->dq0);
+    G726_floata (&dq, &state->dq0);
 
     /* Process 4.2.8 */
-    G726_compress(&sr, law, &sp);
-    G726_expand(&sp, law, &slx);
-    G726_subta(&slx, &se, &dx);
-    G726_log(&dx, &dlx, &dsx);
-    G726_subtb(&dlx, &y, &dlnx);
-    G726_sync(rate, &i, &sp, &dlnx, &dsx, law, &sd);
+    G726_compress (&sr, law, &sp);
+    G726_expand (&sp, law, &slx);
+    G726_subta (&slx, &se, &dx);
+    G726_log (&dx, &dlx, &dsx);
+    G726_subtb (&dlx, &y, &dlnx);
+    G726_sync (rate, &i, &sp, &dlnx, &dsx, law, &sd);
 
     /* Save output PCM word in output buffer */
     out_buf[j] = sd;
 
     /* 4.2.6: prepar a2(r) */
-    G726_upa2(&state->pk0, &state->pk1, &pk2, &a2, &a1, &sigpk, &a2t);
-    G726_limc(&a2t, &a2p);
-    G726_trigb(&tr, &a2p, &state->a2r);
+    G726_upa2 (&state->pk0, &state->pk1, &pk2, &a2, &a1, &sigpk, &a2t);
+    G726_limc (&a2t, &a2p);
+    G726_trigb (&tr, &a2p, &state->a2r);
 
     /* 4.2.6: prepar a1(r) */
-    G726_upa1(&state->pk0, &state->pk1, &a1, &sigpk, &a1t);
-    G726_limd(&a1t, &a2p, &a1p);
-    G726_trigb(&tr, &a1p, &state->a1r);
+    G726_upa1 (&state->pk0, &state->pk1, &a1, &sigpk, &a1t);
+    G726_limd (&a1t, &a2p, &a1p);
+    G726_trigb (&tr, &a1p, &state->a1r);
 
     /* Remaining of 4.2.7 */
-    G726_tone(&a2p, &tdp);
-    G726_trigb(&tr, &tdp, &state->tdr);
+    G726_tone (&a2p, &tdp);
+    G726_trigb (&tr, &tdp, &state->tdr);
 
     /* Remaining of 4.2.5 */
-    G726_subtc(&state->dmsp, &state->dmlp, &tdp, &y, &ax);
-    G726_filtc(&ax, &ap, &app);
-    G726_triga(&tr, &app, &state->apr);
+    G726_subtc (&state->dmsp, &state->dmlp, &tdp, &y, &ax);
+    G726_filtc (&ax, &ap, &app);
+    G726_triga (&tr, &app, &state->apr);
 
     /* Remaining of 4.2.6: update of all `b's */
-    G726_xor(&state->dq1, &dq, &u1);	/* Here, b1 */
-    G726_upb(rate, &u1, &b1, &dq, &b1p);
-    G726_trigb(&tr, &b1p, &state->b1r);
+    G726_xor (&state->dq1, &dq, &u1);   /* Here, b1 */
+    G726_upb (rate, &u1, &b1, &dq, &b1p);
+    G726_trigb (&tr, &b1p, &state->b1r);
 
-    G726_xor(&state->dq2, &dq, &u2);	/* Here, b2 */
-    G726_upb(rate, &u2, &b2, &dq, &b2p);
-    G726_trigb(&tr, &b2p, &state->b2r);
+    G726_xor (&state->dq2, &dq, &u2);   /* Here, b2 */
+    G726_upb (rate, &u2, &b2, &dq, &b2p);
+    G726_trigb (&tr, &b2p, &state->b2r);
 
-    G726_xor(&state->dq3, &dq, &u3);	/* Here, b3 */
-    G726_upb(rate, &u3, &b3, &dq, &b3p);
-    G726_trigb(&tr, &b3p, &state->b3r);
+    G726_xor (&state->dq3, &dq, &u3);   /* Here, b3 */
+    G726_upb (rate, &u3, &b3, &dq, &b3p);
+    G726_trigb (&tr, &b3p, &state->b3r);
 
-    G726_xor(&state->dq4, &dq, &u4);	/* Here, b4 */
-    G726_upb(rate, &u4, &b4, &dq, &b4p);
-    G726_trigb(&tr, &b4p, &state->b4r);
+    G726_xor (&state->dq4, &dq, &u4);   /* Here, b4 */
+    G726_upb (rate, &u4, &b4, &dq, &b4p);
+    G726_trigb (&tr, &b4p, &state->b4r);
 
-    G726_xor(&state->dq5, &dq, &u5);	/* Here, b5 */
-    G726_upb(rate, &u5, &b5, &dq, &b5p);
-    G726_trigb(&tr, &b5p, &state->b5r);
+    G726_xor (&state->dq5, &dq, &u5);   /* Here, b5 */
+    G726_upb (rate, &u5, &b5, &dq, &b5p);
+    G726_trigb (&tr, &b5p, &state->b5r);
 
-    G726_xor(&dq6, &dq, &u6);	/* At last, b6 */
-    G726_upb(rate, &u6, &b6, &dq, &b6p);
-    G726_trigb(&tr, &b6p, &state->b6r);
+    G726_xor (&dq6, &dq, &u6);  /* At last, b6 */
+    G726_upb (rate, &u6, &b6, &dq, &b6p);
+    G726_trigb (&tr, &b6p, &state->b6r);
   }
 
   /* Invert even bits if A law */
-  if (*law == '1')
-  {
+  if (*law == '1') {
     for (j = 0; j < smpno; j++)
       out_buf[j] ^= 85;
   }
 
 }
+
 /* ...................... end of G726_decode() ...................... */
 
 
@@ -626,53 +609,42 @@ void            G726_decode(inp_buf, out_buf, smpno, law, rate, r, state)
 
  ----------------------------------------------------------------------
 */
-void            G726_expand(s, law, sl)
-  short          *s;
-  char           *law;
-  short          *sl;
+void G726_expand (s, law, sl)
+     short *s;
+     char *law;
+     short *sl;
 {
-  long            mant, iexp;
-  short           s1, ss, sig, ssm, ssq, sss;
+  long mant, iexp;
+  short s1, ss, sig, ssm, ssq, sss;
 
   s1 = *s;
 
-  if (*law == '1')
-  {
+  if (*law == '1') {
     /* Invert sign bit */
     s1 ^= 128;
-    if (s1 >= 128)
-    {
+    if (s1 >= 128) {
       s1 += -128;
       sig = 4096;
-    }
-    else
-    {
+    } else {
       sig = 0;
 
     }
     iexp = s1 / 16;
 
     mant = s1 - (iexp << 4);
-    ss = (iexp == 0) ?
-      ((mant << 1) + 1 + sig) :
-      ((1 << (iexp - 1)) * ((mant << 1) + 33) + sig);
+    ss = (iexp == 0) ? ((mant << 1) + 1 + sig) : ((1 << (iexp - 1)) * ((mant << 1) + 33) + sig);
 
     sss = ss / 4096;
     ssm = ss & 4095;
     ssq = ssm << 1;
-  }
-  else
-  {
+  } else {
     /* Invert sign bit */
     s1 ^= 128;
-    if (s1 >= 128)
-    {
+    if (s1 >= 128) {
       s1 += -128;
       s1 ^= 127;
       sig = 8192;
-    }
-    else
-    {
+    } else {
       sig = 0;
       s1 ^= 127;
     }
@@ -680,9 +652,7 @@ void            G726_expand(s, law, sl)
 
     mant = s1 - (iexp << 4);
 
-    ss = (iexp == 0) ?
-      ((mant << 1) + sig) :
-      ((1 << iexp) * ((mant << 1) + 33) - 33 + sig);
+    ss = (iexp == 0) ? ((mant << 1) + sig) : ((1 << iexp) * ((mant << 1) + 33) - 33 + sig);
 
     sss = ss / 8192;
     ssq = ss & 8191;
@@ -691,6 +661,7 @@ void            G726_expand(s, law, sl)
   *sl = (sss == 0) ? ssq : ((16384 - ssq) & 16383);
 
 }
+
 /* ...................... end of G726_expand() ...................... */
 
 
@@ -726,12 +697,12 @@ void            G726_expand(s, law, sl)
 
  ----------------------------------------------------------------------
 */
-void            G726_subta(sl, se, d)
-  short          *sl, *se, *d;
+void G726_subta (sl, se, d)
+     short *sl, *se, *d;
 {
-  long            se1;
-  long            sl1, sei, sli;
-  short           ses, sls;
+  long se1;
+  long sl1, sei, sli;
+  short ses, sls;
 
   sls = (*sl >> 13);
 
@@ -750,6 +721,7 @@ void            G726_subta(sl, se, d)
   *d = (short) ((sli + 65536 - sei) & 65535);
 
 }
+
 /* ......................... end of G726_subta() ......................... */
 
 
@@ -776,12 +748,12 @@ void            G726_subta(sl, se, d)
 
   --------------------------------------------------------------------------
 */
-void            G726_log(d, dl, ds)
-  short          *d, *dl, *ds;
+void G726_log (d, dl, ds)
+     short *d, *dl, *ds;
 {
-  long            mant;
-  long            d1;
-  long            dqm, exp_;
+  long mant;
+  long d1;
+  long dqm, exp_;
 
   *ds = (*d >> 15);
 
@@ -829,6 +801,7 @@ void            G726_log(d, dl, ds)
   *dl = (short) ((exp_ << 7) + mant);
 
 }
+
 /* ........................ end of G726_log() ....................... */
 
 
@@ -863,12 +836,11 @@ void            G726_log(d, dl, ds)
 
  ----------------------------------------------------------------------
 */
-void            G726_quan(rate, dln, ds, i)
-  short          *dln, *ds, *i;
-  short           rate;
+void G726_quan (rate, dln, ds, i)
+     short *dln, *ds, *i;
+     short rate;
 {
-  if (rate == 4)
-  {
+  if (rate == 4) {
     if (*dln >= 3972)
       *i = 1;
     else if (*dln >= 2048)
@@ -894,11 +866,10 @@ void            G726_quan(rate, dln, ds, i)
 
     if (*i == 0)
       *i = 15;
-  }				/* ......... end of 32 kbit part ........... */
+  }
 
-
-  else if (rate == 3)
-  {
+  /* ......... end of 32 kbit part ........... */
+  else if (rate == 3) {
     if (*dln >= 2048)
       *i = 7;
     else if (*dln >= 331)
@@ -916,10 +887,9 @@ void            G726_quan(rate, dln, ds, i)
 
     if (*i == 0)
       *i = 7;
-  }				/* ......... end of 24 kbit part ........... */
-
-  else if (rate == 2)
-  {
+  }
+  /* ......... end of 24 kbit part ........... */
+  else if (rate == 2) {
     if (*dln >= 2048)
       *i = 0;
     else if (*dln >= 261)
@@ -930,10 +900,9 @@ void            G726_quan(rate, dln, ds, i)
     /* Adjust for sign */
     if (*ds)
       *i = 3 - *i;
-  }				/* ......... end of 16 kbit part ........... */
-
-  else
-  {
+  }
+  /* ......... end of 16 kbit part ........... */
+  else {
     if (*dln >= 4080)
       *i = 2;
     else if (*dln >= 3974)
@@ -975,9 +944,10 @@ void            G726_quan(rate, dln, ds, i)
     if (*i == 0)
       *i = 31;
 
-  }				/* ......... end of 40 kbit part ........... */
+  }                             /* ......... end of 40 kbit part ........... */
 
 }
+
 /* ........................ end of G726_quan() ........................ */
 
 
@@ -1012,12 +982,13 @@ void            G726_quan(rate, dln, ds, i)
 
  ----------------------------------------------------------------------
 */
-void            G726_subtb(dl, y, dln)
-  short          *dl, *y, *dln;
+void G726_subtb (dl, y, dln)
+     short *dl, *y, *dln;
 {
   *dln = (*dl + 4096 - (*y >> 2)) & 4095;
 
 }
+
 /* ........................ end of G726_subtb() ........................ */
 
 
@@ -1052,12 +1023,13 @@ void            G726_subtb(dl, y, dln)
 
  ----------------------------------------------------------------------
 */
-void            G726_adda(dqln, y, dql)
-  short          *dqln, *y, *dql;
+void G726_adda (dqln, y, dql)
+     short *dqln, *y, *dql;
 {
   *dql = (*dqln + (*y >> 2)) & 4095;
 
 }
+
 /* ....................... end of G726_adda() ....................... */
 
 
@@ -1091,11 +1063,11 @@ void            G726_adda(dqln, y, dql)
 
  ----------------------------------------------------------------------
 */
-void            G726_antilog(dql, dqs, dq)
-  short          *dql, *dqs, *dq;
+void G726_antilog (dql, dqs, dq)
+     short *dql, *dqs, *dq;
 {
-  long            dqmag;
-  long            ds, dmn, dex, dqt;
+  long dqmag;
+  long ds, dmn, dex, dqt;
 
   /* Extract 4-bit exponent */
   ds = (*dql >> 11);
@@ -1112,6 +1084,7 @@ void            G726_antilog(dql, dqs, dq)
   /* Attach sign bit to signed mag. word */
   *dq = (short) (*dqs << 15) + dqmag;
 }
+
 /* ..................... end of G726_antilog() ..................... */
 
 
@@ -1145,67 +1118,62 @@ void            G726_antilog(dql, dqs, dq)
 
  ----------------------------------------------------------------------
 */
-void            G726_reconst(rate, i, dqln, dqs)
-  short          *i, *dqln, *dqs;
-  short           rate;
+void G726_reconst (rate, i, dqln, dqs)
+     short *i, *dqln, *dqs;
+     short rate;
 {
-  if (rate == 4)
-  {
+  if (rate == 4) {
     /* Initialized data */
-    static short    tab[16] = {2048, 4, 135, 213, 273, 323, 373, 425,
-    425, 373, 323, 273, 213, 135, 4, 2048};
+    static short tab[16] = { 2048, 4, 135, 213, 273, 323, 373, 425,
+      425, 373, 323, 273, 213, 135, 4, 2048
+    };
 
     /* Extract sign */
     *dqs = (*i >> 3);
 
     /* Table look-up */
     *dqln = tab[*i];
-  }				/* ............... end of 32 kbit part
-				 * ................. */
-
-  else if (rate == 3)
-  {
+  }
+  /* ............... end of 32 kbit part * ................. */
+  else if (rate == 3) {
     /* Initialized data */
-    static short    tab[8] = {2048, 135, 273, 373, 373, 273, 135, 2048};
+    static short tab[8] = { 2048, 135, 273, 373, 373, 273, 135, 2048 };
 
     *dqs = (*i >> 2);
 
     /* Table look-up */
     *dqln = tab[*i];
 
-  }				/* ............... end of 24 kbit part
-				 * ................. */
+  }
 
-
-  else if (rate == 2)
-  {
+  /* ............... end of 24 kbit part * ................. */
+  else if (rate == 2) {
     /* Initialized data */
-    static short    tab[4] = {116, 365, 365, 116};
+    static short tab[4] = { 116, 365, 365, 116 };
 
     *dqs = (*i >> 1);
 
     /* Table look-up */
     *dqln = tab[*i];
 
-  }				/* ............... end of 16 kbit part
-				 * ................. */
-  else
-  {
+  } /* ............... end of 16 kbit part * ................. */
+  else {
     /* Initialized data */
-    static short    tab[32] = {2048, 4030, 28, 104, 169, 224, 274, 318, 358, 395, 429,
+    static short tab[32] = { 2048, 4030, 28, 104, 169, 224, 274, 318, 358, 395, 429,
       459, 488, 514, 539, 566, 566, 539, 514, 488, 459, 429, 395, 358, 318, 274, 224,
-    169, 104, 28, 4030, 2048};
+      169, 104, 28, 4030, 2048
+    };
 
     *dqs = (*i >> 4);
 
     /* Table look-up */
     *dqln = tab[*i];
 
-  }				/* ................ end of 40 kbit part
-				 * ................... */
+  }                             /* ................ end of 40 kbit part ................... */
 
 
 }
+
 /* ....................... end of G726_reconst() ....................... */
 
 
@@ -1238,12 +1206,13 @@ void            G726_reconst(rate, i, dqln, dqs)
 
  ----------------------------------------------------------------------
 */
-void            G726_delaya(r, x, y)
-  short          *r, *x, *y;
+void G726_delaya (r, x, y)
+     short *r, *x, *y;
 {
   *y = (*r == 0) ? *x : 0;
 
 }
+
 /* ....................... end of G726_delaya() ....................... */
 
 
@@ -1276,12 +1245,13 @@ void            G726_delaya(r, x, y)
 
  ----------------------------------------------------------------------
 */
-void            G726_delayb(r, x, y)
-  short          *r, *x, *y;
+void G726_delayb (r, x, y)
+     short *r, *x, *y;
 {
   *y = (*r == 0) ? *x : 544;
 
 }
+
 /* ....................... end of G726_delayb() ....................... */
 
 
@@ -1314,13 +1284,14 @@ void            G726_delayb(r, x, y)
 
  ----------------------------------------------------------------------
 */
-void            G726_delayc(r, x, y)
-  short          *r;
-  long           *x, *y;
+void G726_delayc (r, x, y)
+     short *r;
+     long *x, *y;
 {
   *y = (*r == 0) ? *x : 34816;
 
 }
+
 /* ....................... end of G726_delayc() ....................... */
 
 
@@ -1353,12 +1324,13 @@ void            G726_delayc(r, x, y)
 
  ----------------------------------------------------------------------
 */
-void            G726_delayd(r, x, y)
-  short          *r, *x, *y;
+void G726_delayd (r, x, y)
+     short *r, *x, *y;
 {
   *y = (*r == 0) ? *x : 32;
 
 }
+
 /* ....................... end of G726_delayd() ....................... */
 
 
@@ -1391,12 +1363,12 @@ void            G726_delayd(r, x, y)
 
  ----------------------------------------------------------------------
 */
-void            G726_filtd(wi, y, yut)
-  short          *wi, *y, *yut;
+void G726_filtd (wi, y, yut)
+     short *wi, *y, *yut;
 {
-  long            difs, difsx;
-  long            y1;
-  long            wi1, dif;
+  long difs, difsx;
+  long y1;
+  long wi1, dif;
 
   /* Compute difference */
   wi1 = *wi;
@@ -1410,6 +1382,7 @@ void            G726_filtd(wi, y, yut)
   *yut = (short) ((y1 + difsx) & 8191);
 
 }
+
 /* ....................... end of G726_filte() ....................... */
 
 
@@ -1443,12 +1416,12 @@ void            G726_filtd(wi, y, yut)
 
  ----------------------------------------------------------------------
 */
-void            G726_filte(yup, yl, ylp)
-  short          *yup;
-  long           *yl, *ylp;
+void G726_filte (yup, yl, ylp)
+     short *yup;
+     long *yl, *ylp;
 {
-  long            difs, difsx;
-  long            dif, dif1, yup1;
+  long difs, difsx;
+  long dif, dif1, yup1;
 
   /* Compute difference */
   yup1 = *yup;
@@ -1462,6 +1435,7 @@ void            G726_filte(yup, yl, ylp)
   *ylp = (*yl + difsx) & 524287;
 
 }
+
 /* ....................... end of G726_filte() ....................... */
 
 
@@ -1495,15 +1469,14 @@ void            G726_filte(yup, yl, ylp)
 
  ----------------------------------------------------------------------
 */
-void            G726_functw(rate, i, wi)
-  short          *i, *wi;
-  short           rate;
+void G726_functw (rate, i, wi)
+     short *i, *wi;
+     short rate;
 {
-  if (rate == 4)
-  {
+  if (rate == 4) {
     /* Initialized data */
-    static short    tab[8] = {4084, 18, 41, 64, 112, 198, 355, 1122};
-    short           im, is;
+    static short tab[8] = { 4084, 18, 41, 64, 112, 198, 355, 1122 };
+    short im, is;
 
     is = (*i >> 3);
 
@@ -1513,19 +1486,17 @@ void            G726_functw(rate, i, wi)
     *wi = tab[im];
 
 
-  }				/* ................. end of 32 kbit part
-				 * .............. */
+  }
 
 
 
 
-
-  else if (rate == 3)
-  {
+  /* ................. end of 32 kbit part * .............. */
+  else if (rate == 3) {
 
     /* Initialized data */
-    static short    tab[4] = {4092, 30, 137, 582};
-    short           im, is;
+    static short tab[4] = { 4092, 30, 137, 582 };
+    short im, is;
 
 
     is = (*i >> 2);
@@ -1536,18 +1507,16 @@ void            G726_functw(rate, i, wi)
 
 
 
-  }				/* ................. end of 24 kbit part
-				 * .............. */
+  }
 
 
 
 
-
-  else if (rate == 2)
-  {
+  /* ................. end of 24 kbit part * .............. */
+  else if (rate == 2) {
     /* Initialized data */
-    static short    tab[2] = {4074, 439};
-    short           im, is;
+    static short tab[2] = { 4074, 439 };
+    short im, is;
 
 
     is = (*i >> 1);
@@ -1556,28 +1525,27 @@ void            G726_functw(rate, i, wi)
 
     *wi = tab[im];
 
-  }				/* ................. end of 16 kbit part
-				 * .............. */
+  }
 
 
 
 
-
-  else
-  {
+  /* ................. end of 16 kbit part * .............. */
+  else {
     /* Initialized data */
-    static short    tab[16] = {14, 14, 24, 39, 40, 41, 58, 100, 141, 179, 219, 280, 358,
-    440, 529, 696};
-    short           im, is;
+    static short tab[16] = { 14, 14, 24, 39, 40, 41, 58, 100, 141, 179, 219, 280, 358,
+      440, 529, 696
+    };
+    short im, is;
 
     is = (*i >> 4);
 
     im = (is == 0) ? (*i & 15) : ((31 - *i) & 15);
 
     *wi = tab[im];
-  }				/* ................. end of 40 kbit part
-				 * .............. */
+  }                             /* ................. end of 40 kbit part .............. */
 }
+
 /* ....................... end of G726_functw() ....................... */
 
 
@@ -1610,22 +1578,23 @@ void            G726_functw(rate, i, wi)
 
  ----------------------------------------------------------------------
 */
-void            G726_limb(yut, yup)
-  short          *yut, *yup;
+void G726_limb (yut, yup)
+     short *yut, *yup;
 {
-  short           gell, geul;
+  short gell, geul;
 
   geul = ((*yut + 11264) & 16383) >> 13;
   gell = ((*yut + 15840) & 16383) >> 13;
 
   if (gell == 1)
-    *yup = 544;			/* Lower limit is 1.06 */
+    *yup = 544;                 /* Lower limit is 1.06 */
   else if (geul == 0)
-    *yup = 5120;		/* Upper limit is 10.0 */
+    *yup = 5120;                /* Upper limit is 10.0 */
   else
     *yup = *yut;
 
 }
+
 /* ....................... end of G726_limb() ....................... */
 
 
@@ -1660,14 +1629,14 @@ void            G726_limb(yut, yup)
 
  ----------------------------------------------------------------------
 */
-void            G726_mix(al, yu, yl, y)
-  short          *al, *yu;
-  long           *yl;
-  short          *y;
+void G726_mix (al, yu, yl, y)
+     short *al, *yu;
+     long *yl;
+     short *y;
 {
-  long            difm, difs, prod;
-  long            prodm, al1;
-  long            yu1, dif;
+  long difm, difs, prod;
+  long prodm, al1;
+  long yu1, dif;
 
   /* Preamble */
   al1 = *al;
@@ -1689,6 +1658,7 @@ void            G726_mix(al, yu, yl, y)
   *y = (short) (((*yl >> 6) + prod) & 8191);
 
 }
+
 /* ....................... end of G726_mix() ....................... */
 
 
@@ -1721,11 +1691,11 @@ void            G726_mix(al, yu, yl, y)
 
  ----------------------------------------------------------------------
 */
-void            G726_filta(fi, dms, dmsp)
-  short          *fi, *dms, *dmsp;
+void G726_filta (fi, dms, dmsp)
+     short *fi, *dms, *dmsp;
 {
-  short           difs, difsx;
-  short           dif;
+  short difs, difsx;
+  short dif;
 
   /* Compute difference */
   dif = ((*fi << 9) + 8192 - *dms) & 8191;
@@ -1737,6 +1707,7 @@ void            G726_filta(fi, dms, dmsp)
   *dmsp = (difsx + *dms) & 4095;
 
 }
+
 /* ....................... end of G726_filta() ....................... */
 
 
@@ -1769,12 +1740,12 @@ void            G726_filta(fi, dms, dmsp)
 
  ----------------------------------------------------------------------
 */
-void            G726_filtb(fi, dml, dmlp)
-  short          *fi, *dml, *dmlp;
+void G726_filtb (fi, dml, dmlp)
+     short *fi, *dml, *dmlp;
 {
-  long            difs, difsx;
-  long            fi1;
-  long            dif, dml1;
+  long difs, difsx;
+  long fi1;
+  long dif, dml1;
 
   /* Preamble */
   fi1 = *fi;
@@ -1790,6 +1761,7 @@ void            G726_filtb(fi, dml, dmlp)
   *dmlp = (short) ((difsx + dml1) & 16383);
 
 }
+
 /* ....................... end of G726_filtb() ....................... */
 
 
@@ -1822,11 +1794,11 @@ void            G726_filtb(fi, dml, dmlp)
 
  ----------------------------------------------------------------------
 */
-void            G726_filtc(ax, ap, app)
-  short          *ax, *ap, *app;
+void G726_filtc (ax, ap, app)
+     short *ax, *ap, *app;
 {
-  short           difs, difsx;
-  short           dif;
+  short difs, difsx;
+  short dif;
 
   /* Compute difference */
   dif = ((*ax << 9) + 2048 - *ap) & 2047;
@@ -1838,6 +1810,7 @@ void            G726_filtc(ax, ap, app)
   *app = (difsx + *ap) & 1023;
 
 }
+
 /* .................... end of G726_filtc() .................... */
 
 
@@ -1870,30 +1843,27 @@ void            G726_filtc(ax, ap, app)
 
  ----------------------------------------------------------------------
 */
-void            G726_functf(rate, i, fi)
-  short          *i, *fi;
-  short           rate;
+void G726_functf (rate, i, fi)
+     short *i, *fi;
+     short rate;
 
 {
-  short           im, is;
+  short im, is;
 
-  if (rate == 4)
-  {
+  if (rate == 4) {
     /* Initialized data */
-    static short    tab[8] = {0, 0, 0, 1, 1, 1, 3, 7};
+    static short tab[8] = { 0, 0, 0, 1, 1, 1, 3, 7 };
 
     is = (*i >> 3);
 
     im = (is == 0) ? (*i & 7) : ((15 - *i) & 7);
 
     *fi = tab[im];
-  }				/* ................ end of 32 kbit part
-				 * ................. */
-
-  else if (rate == 3)
-  {
+  }
+  /* ................ end of 32 kbit part * ................. */
+  else if (rate == 3) {
     /* Initialized data */
-    static short    tab[4] = {0, 1, 2, 7};
+    static short tab[4] = { 0, 1, 2, 7 };
 
     is = (*i >> 2);
 
@@ -1901,12 +1871,10 @@ void            G726_functf(rate, i, fi)
 
     *fi = tab[im];
 
-  }				/* ................ end of 24 kbit part
-				 * ................. */
-  else if (rate == 2)
-  {
+  } /* ................ end of 24 kbit part * ................. */
+  else if (rate == 2) {
     /* Initialized data */
-    static short    tab[2] = {0, 7};
+    static short tab[2] = { 0, 7 };
 
 
     is = (*i >> 1);
@@ -1915,13 +1883,11 @@ void            G726_functf(rate, i, fi)
 
     *fi = tab[im];
 
-  }				/* ................ end of 16 kbit part
-				 * ................. */
-
-  else
-  {
+  }
+  /* ................ end of 16 kbit part * ................. */
+  else {
     /* Initialized data */
-    static short    tab[16] = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 3, 4, 5, 6, 6};
+    static short tab[16] = { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 3, 4, 5, 6, 6 };
 
 
     is = (*i >> 4);
@@ -1930,9 +1896,9 @@ void            G726_functf(rate, i, fi)
 
     *fi = tab[im];
 
-  }				/* ................ end of 40 kbit part
-				 * ................. */
+  }                             /* ................ end of 40 kbit part ................. */
 }
+
 /* ...................... end of G726_functf() ...................... */
 
 
@@ -1965,12 +1931,13 @@ void            G726_functf(rate, i, fi)
 
  ----------------------------------------------------------------------
 */
-void            G726_lima(ap, al)
-  short          *ap, *al;
+void G726_lima (ap, al)
+     short *ap, *al;
 {
   *al = (*ap >= 256) ? 64 : (*ap >> 2);
 
 }
+
 /* ....................... end of G726_lima() ....................... */
 
 
@@ -2005,11 +1972,11 @@ void            G726_lima(ap, al)
 
  ----------------------------------------------------------------------
 */
-void            G726_subtc(dmsp, dmlp, tdp, y, ax)
-  short          *dmsp, *dmlp, *tdp, *y, *ax;
+void G726_subtc (dmsp, dmlp, tdp, y, ax)
+     short *dmsp, *dmlp, *tdp, *y, *ax;
 {
-  long            difm, difs, dthr, dmlp1, dmsp1;
-  long            dif;
+  long difm, difs, dthr, dmlp1, dmsp1;
+  long dif;
 
   /* Preamble */
   dmsp1 = *dmsp;
@@ -2029,6 +1996,7 @@ void            G726_subtc(dmsp, dmlp, tdp, y, ax)
   *ax = (*y >= 1536 && difm < dthr && *tdp == 0) ? 0 : 1;
 
 }
+
 /* ....................... end of G726_subtc() ....................... */
 
 
@@ -2061,12 +2029,13 @@ void            G726_subtc(dmsp, dmlp, tdp, y, ax)
 
  ----------------------------------------------------------------------
 */
-void            G726_triga(tr, app, apr)
-  short          *tr, *app, *apr;
+void G726_triga (tr, app, apr)
+     short *tr, *app, *apr;
 {
   *apr = (*tr == 0) ? (*app) : 256;
 
 }
+
 /* ....................... end of G726_triga() ....................... */
 
 
@@ -2102,11 +2071,11 @@ void            G726_triga(tr, app, apr)
 
  ----------------------------------------------------------------------
 */
-void            G726_accum(wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6, se, sez)
-  short          *wa1, *wa2, *wb1, *wb2, *wb3, *wb4, *wb5, *wb6, *se, *sez;
+void G726_accum (wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6, se, sez)
+     short *wa1, *wa2, *wb1, *wb2, *wb3, *wb4, *wb5, *wb6, *se, *sez;
 {
-  unsigned long   sezi;
-  unsigned long   wa11, wa21, wb11, wb21, wb31, wb41, wb51, wb61, sei;
+  unsigned long sezi;
+  unsigned long wa11, wa21, wb11, wb21, wb31, wb41, wb51, wb61, sei;
 
   /* Preamble */
   wa11 = *wa1;
@@ -2120,7 +2089,7 @@ void            G726_accum(wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6, se, sez)
 
   /* Sum of partial signal estimate */
   sezi = (((((((((wb11 + wb21) & 65535) + wb31) & 65535)
-	      + wb41) & 65535) + wb51) & 65535) + wb61) & 65535;
+              + wb41) & 65535) + wb51) & 65535) + wb61) & 65535;
 
   /* Complete sum for signal estimate */
   sei = (((sezi + wa21) & 65535) + wa11) & 65535;
@@ -2129,6 +2098,7 @@ void            G726_accum(wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6, se, sez)
   *se = (short) (sei >> 1);
 
 }
+
 /* ....................... end of G726_accum() ....................... */
 
 
@@ -2162,12 +2132,12 @@ void            G726_accum(wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6, se, sez)
 
   ----------------------------------------------------------------------
 */
-void            G726_addb(dq, se, sr)
-  short          *dq, *se, *sr;
+void G726_addb (dq, se, sr)
+     short *dq, *se, *sr;
 {
-  unsigned long   dq1, se1;
-  unsigned long   dqi, sei;
-  short           dqs, ses;
+  unsigned long dq1, se1;
+  unsigned long dqi, sei;
+  short dqs, ses;
 
   /* Preamble */
   dq1 = *dq & 65535;
@@ -2187,6 +2157,7 @@ void            G726_addb(dq, se, sr)
   *sr = (short) ((dqi + sei) & 65535);
 
 }
+
 /* ....................... end of G726_addb() ....................... */
 
 
@@ -2220,15 +2191,15 @@ void            G726_addb(dq, se, sr)
 
  ----------------------------------------------------------------------
 */
-void            G726_addc(dq, sez, pk0, sigpk)
-  short          *dq, *sez, *pk0, *sigpk;
+void G726_addc (dq, sez, pk0, sigpk)
+     short *dq, *sez, *pk0, *sigpk;
 {
-  unsigned long   sezi;
-  short           sezs;
-  unsigned long   dqsez, dq1;
-  unsigned long   dqi;
-  short           dqs;
-  unsigned long   sez1;
+  unsigned long sezi;
+  short sezs;
+  unsigned long dqsez, dq1;
+  unsigned long dqi;
+  short dqs;
+  unsigned long sez1;
 
   /* Preamble */
   dq1 = *dq & 65535;
@@ -2251,6 +2222,7 @@ void            G726_addc(dq, sez, pk0, sigpk)
   *sigpk = (dqsez == 0) ? 1 : 0;
 
 }
+
 /* ....................... end of G726_addc() ....................... */
 
 
@@ -2283,12 +2255,12 @@ void            G726_addc(dq, sez, pk0, sigpk)
 
  ----------------------------------------------------------------------
 */
-void            G726_floata(dq, dq0)
-  short          *dq, *dq0;
+void G726_floata (dq, dq0)
+     short *dq, *dq0;
 {
-  long            mant;
-  long            mag, exp_;
-  long            dqs;
+  long mant;
+  long mag, exp_;
+  long dqs;
 
   dqs = (*dq >> 15) & 1;
 
@@ -2335,6 +2307,7 @@ void            G726_floata(dq, dq0)
   *dq0 = (short) ((dqs << 10) + (exp_ << 6) + mant);
 
 }
+
 /* ....................... end of G726_floata() ....................... */
 
 
@@ -2367,11 +2340,11 @@ void            G726_floata(dq, dq0)
 
  ----------------------------------------------------------------------
 */
-void            G726_floatb(sr, sr0)
-  short          *sr, *sr0;
+void G726_floatb (sr, sr0)
+     short *sr, *sr0;
 {
-  long            mant;
-  long            mag, exp_, srr, srs;
+  long mant;
+  long mag, exp_, srr, srs;
 
   /* Preamble */
   srr = *sr & 65535;
@@ -2423,6 +2396,7 @@ void            G726_floatb(sr, sr0)
   *sr0 = (short) ((srs << 10) + (exp_ << 6) + mant);
 
 }
+
 /* ....................... end of G726_floatb() ....................... */
 
 
@@ -2457,12 +2431,12 @@ void            G726_floatb(sr, sr0)
 
  ----------------------------------------------------------------------
 */
-void            G726_fmult(An, SRn, WAn)
-  short          *An, *SRn, *WAn;
+void G726_fmult (An, SRn, WAn)
+     short *An, *SRn, *WAn;
 {
-  long            anmag, anexp, wanmag, anmant;
-  long            wanexp, srnexp, an, ans, wanmant, srnmant;
-  long            wan, wans, srns, srn1;
+  long anmag, anexp, wanmag, anmant;
+  long wanexp, srnexp, an, ans, wanmant, srnmant;
+  long wan, wans, srns, srn1;
 
   /* Preamble */
   an = *An & 65535;
@@ -2519,9 +2493,7 @@ void            G726_fmult(An, SRn, WAn)
   wanmant = ((srnmant * anmant) + 48) >> 4;
 
   /* Convert floating point to magnitude */
-  wanmag = (wanexp <= 26) ?
-    (wanmant << 7) >> (26 - wanexp) :
-    ((wanmant << 7) << (wanexp - 26)) & 32767;
+  wanmag = (wanexp <= 26) ? (wanmant << 7) >> (26 - wanexp) : ((wanmant << 7) << (wanexp - 26)) & 32767;
 
   /* Convert mag. to 2's complement */
   wan = (wans == 0) ? wanmag : ((65536 - wanmag) & 65535);
@@ -2529,6 +2501,7 @@ void            G726_fmult(An, SRn, WAn)
   *WAn = (short) wan;
 
 }
+
 /* ....................... end of G726_fmult() ....................... */
 
 
@@ -2562,15 +2535,15 @@ void            G726_fmult(An, SRn, WAn)
  ----------------------------------------------------------------------
 */
 
-void            G726_limc(a2t, a2p)
-  short          *a2t, *a2p;
+void G726_limc (a2t, a2p)
+     short *a2t, *a2p;
 {
-  long            a2p1, a2t1, a2ll, a2ul;
+  long a2p1, a2t1, a2ll, a2ul;
 
   a2t1 = *a2t & 65535;
 
-  a2ul = 12288;			/* Upper limit of +.75 */
-  a2ll = 53248;			/* Lower limit of -.75 */
+  a2ul = 12288;                 /* Upper limit of +.75 */
+  a2ll = 53248;                 /* Lower limit of -.75 */
 
   if (a2t1 >= 32768 && a2t1 <= a2ll)
     a2p1 = a2ll;
@@ -2582,6 +2555,7 @@ void            G726_limc(a2t, a2p)
   *a2p = (short) a2p1;
 
 }
+
 /* ....................... end of G726_limc() ....................... */
 
 
@@ -2614,10 +2588,10 @@ void            G726_limc(a2t, a2p)
 
  ----------------------------------------------------------------------
 */
-void            G726_limd(a1t, a2p, a1p)
-  short          *a1t, *a2p, *a1p;
+void G726_limd (a1t, a2p, a1p)
+     short *a1t, *a2p, *a1p;
 {
-  long            a1p1, a2p1, a1t1, ome, a1ll, a1ul;
+  long a1p1, a2p1, a1t1, ome, a1ll, a1ul;
 
   /* Preamble */
   a1t1 = *a1t & 65535;
@@ -2642,6 +2616,7 @@ void            G726_limd(a1t, a2p, a1p)
   *a1p = (short) a1p1;
 
 }
+
 /* ....................... end of G726_limd() ....................... */
 
 
@@ -2674,12 +2649,13 @@ void            G726_limd(a1t, a2p, a1p)
 
  ----------------------------------------------------------------------
 */
-void            G726_trigb(tr, ap, ar)
-  short          *tr, *ap, *ar;
+void G726_trigb (tr, ap, ar)
+     short *tr, *ap, *ar;
 {
   *ar = (*tr == 0) ? *ap : 0;
 
 }
+
 /* ....................... end of G726_trigb() ....................... */
 
 
@@ -2712,13 +2688,13 @@ void            G726_trigb(tr, ap, ar)
 
  ----------------------------------------------------------------------
 */
-void            G726_upa1(pk0, pk1, a1, sigpk, a1t)
-  short          *pk0, *pk1, *a1, *sigpk, *a1t;
+void G726_upa1 (pk0, pk1, a1, sigpk, a1t)
+     short *pk0, *pk1, *a1, *sigpk, *a1t;
 {
-  long            a11, a1s, ua1;
-  long            ash;
-  short           pks;
-  long            uga1, ula1;
+  long a11, a1s, ua1;
+  long ash;
+  short pks;
+  long uga1, ula1;
 
   /* Preamble */
   a11 = *a1 & 65535;
@@ -2739,6 +2715,7 @@ void            G726_upa1(pk0, pk1, a1, sigpk, a1t)
   *a1t = (short) ((a11 + ua1) & 65535);
 
 }
+
 /* ....................... end of G726_upa1() ....................... */
 
 
@@ -2771,15 +2748,15 @@ void            G726_upa1(pk0, pk1, a1, sigpk, a1t)
 
  ----------------------------------------------------------------------
 */
-void            G726_upa2(pk0, pk1, pk2, a2, a1, sigpk, a2t)
-  short          *pk0, *pk1, *pk2, *a2, *a1, *sigpk, *a2t;
+void G726_upa2 (pk0, pk1, pk2, a2, a1, sigpk, a2t)
+     short *pk0, *pk1, *pk2, *a2, *a1, *sigpk, *a2t;
 {
-  long            uga2a, uga2b, uga2s;
-  long            a11, a21, fa, fa1;
-  short           a1s, a2s;
-  long            ua2;
-  long            uga2, ula2;
-  short           pks1, pks2;
+  long uga2a, uga2b, uga2s;
+  long a11, a21, fa, fa1;
+  short a1s, a2s;
+  long ua2;
+  long uga2, ula2;
+  short pks1, pks2;
 
   /* Preamble */
   a11 = *a1 & 65535;
@@ -2805,19 +2782,18 @@ void            G726_upa2(pk0, pk1, pk2, a2, a1, sigpk, a2t)
   uga2b = (uga2a + fa) & 131071;
   uga2s = (uga2b >> 16);
 
-  uga2 = (*sigpk == 1) ? 0 :
-    ((uga2s) ? ((uga2b >> 7) + 64512) : (uga2b >> 7));
+  uga2 = (*sigpk == 1) ? 0 : ((uga2s) ? ((uga2b >> 7) + 64512) : (uga2b >> 7));
 
   a2s = (*a2 >> 15);
 
-  ula2 = (a2s == 0) ? (65536 - (a21 >> 7)) & 65535 :
-    (65536 - ((a21 >> 7) + 65024)) & 65535;
+  ula2 = (a2s == 0) ? (65536 - (a21 >> 7)) & 65535 : (65536 - ((a21 >> 7) + 65024)) & 65535;
 
   /* Compute update */
   ua2 = (uga2 + ula2) & 65535;
   *a2t = (short) ((a21 + ua2) & 65535);
 
 }
+
 /* ....................... end of G726_upa2() ....................... */
 
 
@@ -2850,27 +2826,24 @@ void            G726_upa2(pk0, pk1, pk2, a2, a1, sigpk, a2t)
 
  ----------------------------------------------------------------------
 */
-void            G726_upb(rate, u, b, dq, bp)
-  short          *u, *b, *dq, *bp;
-  short           rate;
+void G726_upb (rate, u, b, dq, bp)
+     short *u, *b, *dq, *bp;
+     short rate;
 {
-  short           dqmag;
-  long            bb, bs, ub;
-  long            ugb, ulb;
-  short           param;
-  short           leak;
+  short dqmag;
+  long bb, bs, ub;
+  long ugb, ulb;
+  short param;
+  short leak;
 
   /* Preamble */
   bb = *b & 65535;
 
   dqmag = *dq & 32767;
-  if (rate != 5)
-  {
+  if (rate != 5) {
     leak = 8;
     param = 65280;
-  }
-  else
-  {
+  } else {
     leak = 9;
     param = 65408;
   }
@@ -2881,9 +2854,7 @@ void            G726_upb(rate, u, b, dq, bp)
 
   /* Leak factor is (1/256 or 1/512 for 40 kbit/s) */
 
-  ulb = (bs == 0) ?
-    ((65536 - (bb >> leak)) & 65535) :
-    ((65536 - ((bb >> leak) + param)) & 65535);
+  ulb = (bs == 0) ? ((65536 - (bb >> leak)) & 65535) : ((65536 - ((bb >> leak) + param)) & 65535);
 
   /* Compute update */
   ub = (ugb + ulb) & 65535;
@@ -2892,6 +2863,7 @@ void            G726_upb(rate, u, b, dq, bp)
   *bp = (short) ((bb + ub) & 65535);
 
 }
+
 /* ....................... end of G726_upb() ....................... */
 
 
@@ -2926,11 +2898,11 @@ void            G726_upb(rate, u, b, dq, bp)
 
  ----------------------------------------------------------------------
 */
-void            G726_xor(dqn, dq, u)
-  short          *dqn, *dq, *u;
+void G726_xor (dqn, dq, u)
+     short *dqn, *dq, *u;
 {
-  short           dqns;
-  short           dqs;
+  short dqns;
+  short dqs;
 
   dqs = (*dq >> 15) & 1;
 
@@ -2939,6 +2911,7 @@ void            G726_xor(dqn, dq, u)
   *u = (dqs ^ dqns);
 
 }
+
 /* ....................... end of G726_xor() ....................... */
 
 
@@ -2971,16 +2944,17 @@ void            G726_xor(dqn, dq, u)
 
  ----------------------------------------------------------------------
 */
-void            G726_tone(a2p, tdp)
-  short          *a2p, *tdp;
+void G726_tone (a2p, tdp)
+     short *a2p, *tdp;
 {
-  long            a2p1;
+  long a2p1;
 
   a2p1 = *a2p & 65535;
 
   *tdp = (a2p1 >= 32768 && a2p1 < 53760) ? 1 : 0;
 
 }
+
 /* ....................... end of G726_tone() ....................... */
 
 
@@ -3013,17 +2987,17 @@ void            G726_tone(a2p, tdp)
 
  ----------------------------------------------------------------------
 */
-void            G726_trans(td, yl, dq, tr)
-  short          *td;
-  long           *yl;
-  short          *dq, *tr;
+void G726_trans (td, yl, dq, tr)
+     short *td;
+     long *yl;
+     short *dq, *tr;
 {
-  short           dqmag;
-  long            dqthr;
-  short           ylint;
-  long            dqmag1;
-  short           ylfrac;
-  long            thr1, thr2;
+  short dqmag;
+  long dqthr;
+  short ylint;
+  long dqmag1;
+  short ylfrac;
+  long thr1, thr2;
 
   dqmag = *dq & 32767;
 
@@ -3042,6 +3016,7 @@ void            G726_trans(td, yl, dq, tr)
   *tr = (dqmag1 > dqthr && *td == 1) ? 1 : 0;
 
 }
+
 /* ....................... end of G726_trans() ....................... */
 
 
@@ -3077,17 +3052,17 @@ void            G726_trans(td, yl, dq, tr)
 			Verified by <simao.campos@labs.comsat.com>
  ----------------------------------------------------------------------
 */
-void            G726_compress(sr, law, sp)
-  short          *sr;
-  char           *law;
-  short          *sp;
+void G726_compress (sr, law, sp)
+     short *sr;
+     char *law;
+     short *sp;
 {
-  short           imag, iesp, ofst;
-  short           ofst1;
-  long            i;
-  long            im;
-  short           is;
-  long            srr;
+  short imag, iesp, ofst;
+  short ofst1;
+  long i;
+  long im;
+  short is;
+  long srr;
 
   is = (*sr >> 15);
   srr = (*sr & 65535);
@@ -3096,11 +3071,10 @@ void            G726_compress(sr, law, sp)
   im = (is == 0) ? srr : ((65536 - srr) & 32767);
 
   /* Compress ... */
-  if (*law == '1')
-  {
+  if (*law == '1') {
 
     /* Next line added by J.Patel to fix a with test vector ri40fa.o */
-    im = ( *sr == -32768) ? 2 : im; /* *** */
+    im = (*sr == -32768) ? 2 : im;      /* *** */
 
     imag = (is == 0) ? (im >> 1) : ((im + 1) >> 1);
 
@@ -3112,8 +3086,7 @@ void            G726_compress(sr, law, sp)
       imag = 4095;
 
     iesp = 7;
-    for (i = 1; i <= 7; ++i)
-    {
+    for (i = 1; i <= 7; ++i) {
       imag += imag;
       if (imag >= 4096)
         break;
@@ -3127,9 +3100,7 @@ void            G726_compress(sr, law, sp)
 
     /* Sign bit inversion */
     *sp ^= 128;
-  }
-  else
-  {
+  } else {
     imag = im;
 
     if (imag > 8158)
@@ -3139,10 +3110,8 @@ void            G726_compress(sr, law, sp)
     iesp = 0;
     ofst = 31;
 
-    if (imag > ofst)
-    {
-      for (iesp = 1; iesp <= 8; ++iesp)
-      {
+    if (imag > ofst) {
+      for (iesp = 1; iesp <= 8; ++iesp) {
         ofst1 = ofst;
         ofst += (1 << (iesp + 5));
         if (imag <= ofst)
@@ -3161,6 +3130,7 @@ void            G726_compress(sr, law, sp)
   }
 
 }
+
 /* ....................... end of G726_compress()....................... */
 
 
@@ -3194,16 +3164,15 @@ void            G726_compress(sr, law, sp)
 
  ----------------------------------------------------------------------
 */
-void            G726_sync(rate, i, sp, dlnx, dsx, law, sd)
-  short          *i, *sp, *dlnx, *dsx;
-  char           *law;
-  short          *sd;
-  short           rate;
+void G726_sync (rate, i, sp, dlnx, dsx, law, sd)
+     short *i, *sp, *dlnx, *dsx;
+     char *law;
+     short *sd;
+     short rate;
 {
-  short           mask, id, im, is, ss;
+  short mask, id, im, is, ss;
 
-  if (rate == 4)
-  {
+  if (rate == 4) {
     is = (*i >> 3);
 
     im = (is == 0) ? (*i + 8) : (*i & 7);
@@ -3234,10 +3203,8 @@ void            G726_sync(rate, i, sp, dlnx, dsx, law, sd)
 
     if (id == 8)
       id = 7;
-  }				/* ............... end of 32 kbit part
-				 * ................. */
-  else if (rate == 3)
-  {
+  } /* ............... end of 32 kbit part * ................. */
+  else if (rate == 3) {
     is = (*i >> 2);
 
     im = (is == 0) ? (*i + 4) : (*i & 3);
@@ -3260,10 +3227,8 @@ void            G726_sync(rate, i, sp, dlnx, dsx, law, sd)
 
     if (id == 4)
       id = 3;
-  }				/* ............... end of 24 kbit part
-				 * ................. */
-  else if (rate == 2)
-  {
+  } /* ............... end of 24 kbit part * ................. */
+  else if (rate == 2) {
     is = (*i >> 1);
 
     im = (is == 0) ? (*i + 2) : (*i & 1);
@@ -3279,10 +3244,8 @@ void            G726_sync(rate, i, sp, dlnx, dsx, law, sd)
     if (*dsx)
       id = 3 - id;
 
-  }				/* ............... end of 16 kbit part
-				 * ................. */
-  else
-  {
+  } /* ............... end of 16 kbit part * ................. */
+  else {
     is = (*i >> 4);
 
     im = (is == 0) ? (*i + 16) : (*i & 15);
@@ -3330,16 +3293,14 @@ void            G726_sync(rate, i, sp, dlnx, dsx, law, sd)
     if (id == 16)
       id = 15;
 
-  }				/* ............... end of 40 kbit part
-				 * ................. */
+  }                             /* ............... end of 40 kbit part ................. */
 
   /* Choose sd as sp, sp+ or sp- */
 
   ss = (*sp & 128) >> 7;
   mask = (*sp & 127);
 
-  if (*law == '1')		/* ......... A-law */
-  {
+  if (*law == '1') {            /* ......... A-law */
     if (id > im && ss == 1 && mask == 0)
       ss = 0;
     else if (id > im && ss == 1 && mask != 0)
@@ -3352,15 +3313,11 @@ void            G726_sync(rate, i, sp, dlnx, dsx, law, sd)
       ss = 1;
     else if (id < im && ss == 0 && mask != 0)
       mask--;
-  }
-  else
-  {				/* ......... u-law */
-    if (id > im && ss == 1 && mask == 127)
-    {
+  } else {                      /* ......... u-law */
+    if (id > im && ss == 1 && mask == 127) {
       ss = 0;
       mask--;
-    }
-    else if (id > im && ss == 1 && mask != 127)
+    } else if (id > im && ss == 1 && mask != 127)
       mask++;
     else if (id > im && ss == 0 && mask != 0)
       mask--;
@@ -3375,6 +3332,7 @@ void            G726_sync(rate, i, sp, dlnx, dsx, law, sd)
   *sd = mask + (ss << 7);
 
 }
+
 /* ........................ end of G726_sync() ........................  */
 
 /* ************************* END OF G726.C ************************* */

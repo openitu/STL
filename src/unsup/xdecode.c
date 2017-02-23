@@ -137,7 +137,7 @@
 #define XDECODE 220
 
 /* General includes */
-#include "ugstdemo.h"		/* UGST demo macros - the 1st include */
+#include "ugstdemo.h"           /* UGST demo macros - the 1st include */
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>              /* for tolower() */
@@ -150,7 +150,7 @@
 #elif defined(MSDOS)
 #include <sys\types.h>
 #include <sys\stat.h>
-#else				/* Unix */
+#else /* Unix */
 #include <pwd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -171,19 +171,18 @@
 #define NO	0
 
 /* Defines for CRC routine */
-#define W       16		/* CRC width */
-#define WTYPE	unsigned short	/* Basic data type */
-#define B	8		/* the number of bits per char */
+#define W       16              /* CRC width */
+#define WTYPE	unsigned short  /* Basic data type */
+#define B	8               /* the number of bits per char */
 
 /* Local function prototypes */
-char *get_header ARGS((FILE *fp, char *buffer, int max_len));
-char *translate_destination ARGS((char *dest));
-int decode      ARGS((FILE * in, FILE * out));
-int fr          ARGS((FILE * fd, char *buf, int cnt));
-char *xd_index     ARGS((register char *sp, register char c));
-int outdec      ARGS((char *p, FILE *f, int n));
-WTYPE updcrc    ARGS((WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab, 
-                char swapped));
+char *get_header ARGS ((FILE * fp, char *buffer, int max_len));
+char *translate_destination ARGS ((char *dest));
+int decode ARGS ((FILE * in, FILE * out));
+int fr ARGS ((FILE * fd, char *buf, int cnt));
+char *xd_index ARGS ((register char *sp, register char c));
+int outdec ARGS ((char *p, FILE * f, int n));
+WTYPE updcrc ARGS ((WTYPE icrc, unsigned char *icp, int icnt, WTYPE * crctab, char swapped));
 
 
 /* DEC is the basic 1 character decoding function to un-make a char printing */
@@ -195,8 +194,8 @@ WTYPE updcrc    ARGS((WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab,
 #define get_xmodem_crc(crc,buf,n) updcrc(crc, buf, n, crctab_xmodem, 1)
 
 /* Global variables related to crc calculations */
-WTYPE           crc_a = 0, crc_c = 0, crc_x = 0;
-int             init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
+WTYPE crc_a = 0, crc_c = 0, crc_x = 0;
+int init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
 
 /* 
   --------------------------------------------------------------------------
@@ -210,111 +209,98 @@ int             init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
   --------------------------------------------------------------------------
 */
 #define P(x) printf x
-void display_usage()
-{
-  P(("XDECODE.C - Version %1.2f of 4/Mar/1997 \n\n",(float)XDECODE/100.0));
- 
-  P((" Program to decode (a) file(s) that follows the de-facto\n"));
-  P((" standard of the public-domain program uuencode.c. It is also\n"));
-  P((" capable of automatically reconstucting a file that has been broken\n"));
-  P((" using the program xencode.c.\n"));
-  P(("\n"));
-  P((" Usage:\n"));
-  P(("  $ xdecode [-options] [InpFile]\n"));
-  P((" where:\n"));
-  P((" InpFile ... is the name of the file to be decoded; if not\n"));
-  P(("             specified, stdin is assumed;\n"));
-  P((" Options:\n"));
-  P(("  -t         forces the output file mode to \"text\" (non-binary)\n"));
-  P(("  -b         output file mode is forced to binary [Default]\n"));
-  P(("  -C path    create the output file using the given path\n"));
+void display_usage () {
+  P (("XDECODE.C - Version %1.2f of 4/Mar/1997 \n\n", (float) XDECODE / 100.0));
+
+  P ((" Program to decode (a) file(s) that follows the de-facto\n"));
+  P ((" standard of the public-domain program uuencode.c. It is also\n"));
+  P ((" capable of automatically reconstucting a file that has been broken\n"));
+  P ((" using the program xencode.c.\n"));
+  P (("\n"));
+  P ((" Usage:\n"));
+  P (("  $ xdecode [-options] [InpFile]\n"));
+  P ((" where:\n"));
+  P ((" InpFile ... is the name of the file to be decoded; if not\n"));
+  P (("             specified, stdin is assumed;\n"));
+  P ((" Options:\n"));
+  P (("  -t         forces the output file mode to \"text\" (non-binary)\n"));
+  P (("  -b         output file mode is forced to binary [Default]\n"));
+  P (("  -C path    create the output file using the given path\n"));
 
   /* Quit program */
-  exit(-128);
+  exit (-128);
 }
+
 #undef P
 /* .................... End of display_usage() .................... */
 
 
 /* ************************ Begin of main() ************************* */
-int main(argc, argv)
-  int             argc;
-  char           *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
-  FILE           *in, *out;
-  int             mode, status, version;
-  int             more_to_decode = YES, first_time = YES, input_is_file = YES;
-  char            dest[200], this_file[128], next_file[128];
-  char            buf[80], mode_is_binary, crc_present = 1, bad_crc = 0;
-  char           *path;
-  char           *get_header(), *translate_destination();
-  unsigned long   o_crc_a, o_crc_c, o_crc_x;	/* CRC saved in xenc'd file */
+  FILE *in, *out;
+  int mode, status, version;
+  int more_to_decode = YES, first_time = YES, input_is_file = YES;
+  char dest[200], this_file[128], next_file[128];
+  char buf[80], mode_is_binary, crc_present = 1, bad_crc = 0;
+  char *path;
+  char *get_header (), *translate_destination ();
+  unsigned long o_crc_a, o_crc_c, o_crc_x;      /* CRC saved in xenc'd file */
 #ifdef VMS
-  static char     mrs[15] = "mrs=512";	/* for correct mrs in VMS environment */
+  static char mrs[15] = "mrs=512";      /* for correct mrs in VMS environment */
 #endif
 
   /* Initializations */
-  mode_is_binary = 1;		/* set mode as binary, as default */
-  path=0;                       /* Set default path to a NULL pointer */
+  mode_is_binary = 1;           /* set mode as binary, as default */
+  path = 0;                     /* Set default path to a NULL pointer */
 
   /* Check is 1st par. is an option */
   /* Check if 1st par. is an option */
-  while (argc > 1 && argv[1][0] == '-' && strlen(argv[1]) > 1)
-    if (strcmp(argv[1], "-t") == 0)
-    {
+  while (argc > 1 && argv[1][0] == '-' && strlen (argv[1]) > 1)
+    if (strcmp (argv[1], "-t") == 0) {
       /* set mode as text */
       mode_is_binary = 0;
 
-	/* Move argv over the option to the next argument */
+      /* Move argv over the option to the next argument */
       argc--;
       argv++;
-    }
-    else if (strcmp(argv[1], "-b") == 0)
-    {
+    } else if (strcmp (argv[1], "-b") == 0) {
       /* set mode as binary */
       mode_is_binary = 1;
 
       /* Move argv over the option to the next argument */
       argv++;
       argc--;
-    }
-    else if (strcmp(argv[1], "-C") == 0)
-    {
+    } else if (strcmp (argv[1], "-C") == 0) {
       /* Create destination file in another directory */
       path = argv[2];
 
       /* Move argv over the option to the next argument */
-      argv+=2;
-      argc-=2;
-    }
-    else if (strcmp(argv[1], "-?") == 0 || strstr(argv[1], "-help"))
-    {
+      argv += 2;
+      argc -= 2;
+    } else if (strcmp (argv[1], "-?") == 0 || strstr (argv[1], "-help")) {
       /* Print help */
-      display_usage();
-    }
-    else
-    {
-      fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-	      argv[1]);
-      display_usage();
+      display_usage ();
+    } else {
+      fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+      display_usage ();
     }
 
 
   /* Gets/checks optional input arg */
-  if (argc > 1)
-  {
-    strcpy(next_file, argv[1]);
+  if (argc > 1) {
+    strcpy (next_file, argv[1]);
     argc--;
-  }
-  else
-  {
+  } else {
     in = stdin;
     input_is_file = NO;
   }
 
   /* Warns wrong usage */
   if (argc != 1)
-    HARAKIRI("Usage: xdecode [-{t,b}] [infile]\n", -1);
+    HARAKIRI ("Usage: xdecode [-{t,b}] [infile]\n", -1);
 
   /* Initialize crc calculations */
   crc_a = init_crc_a;
@@ -322,167 +308,146 @@ int main(argc, argv)
   crc_x = init_crc_x;
 
   /* Gets down to work! */
-  while (more_to_decode)
-  {
+  while (more_to_decode) {
     /* update next file name to be treated */
     if (more_to_decode)
-      strcpy(this_file, next_file);
+      strcpy (this_file, next_file);
 
     /* Open input file */
-    if (input_is_file)		/* ... i.e., if not the std. input */
-    {
-      if ((in = fopen(this_file, "r")) == NULL)
-	KILL(this_file, 2);
+    if (input_is_file) {        /* ... i.e., if not the std. input */
+      if ((in = fopen (this_file, "r")) == NULL)
+        KILL (this_file, 2);
     }
 
     /* Search for header line */
-    if (get_header(in, buf, sizeof(buf)) == NULL)
-      HARAKIRI("No begin line\n", 5);
+    if (get_header (in, buf, sizeof (buf)) == NULL)
+      HARAKIRI ("No begin line\n", 5);
 
     /* Get header information: mode and name of file */
-    sscanf(buf, "begin %o %s %s", &mode, dest, next_file);
+    sscanf (buf, "begin %o %s %s", &mode, dest, next_file);
 
     /* Check whether is last file */
-    if (strcmp(next_file, this_file) == 0)
+    if (strcmp (next_file, this_file) == 0)
       more_to_decode = NO;
 
     /* Handles ~user/file format */
-    if (dest[0] == '~')
-    {
-      if (translate_destination(dest) == NULL)
-	HARAKIRI("Illegal ~user or no such user \n", 4);
+    if (dest[0] == '~') {
+      if (translate_destination (dest) == NULL)
+        HARAKIRI ("Illegal ~user or no such user \n", 4);
     }
 
     /* Creates output file, only ... */
-    if (first_time)
-    {
+    if (first_time) {
       /* Set flag */
       first_time = NO;
 
       /* Add path as prefix, if needed */
-      if (path)
-      {
-	char *tmp;
-	tmp = (char *)calloc(sizeof(char), strlen(dest)+strlen(path)+2);
-	strcpy(tmp, path);
-	if (path[strlen(path)-1]!='/')
-	  strcat(tmp,"/");
-	strcat(tmp,dest);
-	strcpy(dest,tmp);
+      if (path) {
+        char *tmp;
+        tmp = (char *) calloc (sizeof (char), strlen (dest) + strlen (path) + 2);
+        strcpy (tmp, path);
+        if (path[strlen (path) - 1] != '/')
+          strcat (tmp, "/");
+        strcat (tmp, dest);
+        strcpy (dest, tmp);
       }
 
       /* Go on */
-      if (strcmp(dest, ""))
-      {
-	if (mode_is_binary)
-	{
-	  if ((out = fopen(dest, WB)) == NULL)
-	    KILL(dest, 3);
-	  fprintf(stderr, "Output mode is BINARY\n");
-	}
-	else
-	{
-	  if ((out = fopen(dest, WT)) == NULL)
-	    KILL(dest, 3);
-	  fprintf(stderr, "Output mode is TEXT\n");
-	}
-      }
-      else
-	out = stdout;		/* if dest has no name, assumes stdout */
+      if (strcmp (dest, "")) {
+        if (mode_is_binary) {
+          if ((out = fopen (dest, WB)) == NULL)
+            KILL (dest, 3);
+          fprintf (stderr, "Output mode is BINARY\n");
+        } else {
+          if ((out = fopen (dest, WT)) == NULL)
+            KILL (dest, 3);
+          fprintf (stderr, "Output mode is TEXT\n");
+        }
+      } else
+        out = stdout;           /* if dest has no name, assumes stdout */
 
 #if !defined(VMS)
       /* .. and set mode for binary file, as the original was */
-      if (chmod(dest, mode))
-      {
-	fprintf(stderr, " -> Error changing mode of file");
-	fprintf(stderr, " %s ... continuing anyway\n", dest);
+      if (chmod (dest, mode)) {
+        fprintf (stderr, " -> Error changing mode of file");
+        fprintf (stderr, " %s ... continuing anyway\n", dest);
       }
-#endif				/* !VMS */
-      fprintf(stderr, " Mounting decoded file %s from ", dest);
+#endif /* !VMS */
+      fprintf (stderr, " Mounting decoded file %s from ", dest);
     }
 
     /* decodes the present file; report any bugs/problems */
-    fprintf(stderr, "%s%c", this_file, more_to_decode ? '+' : '.');
-    if ((status = decode(in, out)) != 1)
-    {
-      switch (status)
-      {
+    fprintf (stderr, "%s%c", this_file, more_to_decode ? '+' : '.');
+    if ((status = decode (in, out)) != 1) {
+      switch (status) {
       case 0:
-	HARAKIRI("Short file\n", 7);
-	break;
+        HARAKIRI ("Short file\n", 7);
+        break;
       case -1:
-	HARAKIRI("Error reading file\n", 7);
-	break;
+        HARAKIRI ("Error reading file\n", 7);
+        break;
       case 2:
-	fprintf(stderr, "[*Transmission bug %d happened in file %s; %s",
-		status, this_file, "Probably fixed*]");
-	break;
+        fprintf (stderr, "[*Transmission bug %d happened in file %s; %s", status, this_file, "Probably fixed*]");
+        break;
       default:
-	fprintf(stderr, "[*Unknown bug %d happened in file %s; %s",
-		status, this_file, "NOT fixed*]");
-	break;
+        fprintf (stderr, "[*Unknown bug %d happened in file %s; %s", status, this_file, "NOT fixed*]");
+        break;
       }
     }
 
     /* Look for end line */
-    if (fgets(buf, sizeof buf, in) == NULL || strcmp(buf, "end\n"))
-      HARAKIRI("No end line\n", 6);
+    if (fgets (buf, sizeof buf, in) == NULL || strcmp (buf, "end\n"))
+      HARAKIRI ("No end line\n", 6);
 
     /* Read original CRCs */
-    if ((status = fscanf(in, "%%XENCODE-CRC: %d CCITT %lx ARC %lx XMODEM %lx",
-			 &version, &o_crc_c, &o_crc_a, &o_crc_x)) == 4)
-    {
+    if ((status = fscanf (in, "%%XENCODE-CRC: %d CCITT %lx ARC %lx XMODEM %lx", &version, &o_crc_c, &o_crc_a, &o_crc_x)) == 4) {
       bad_crc = 0;
       /* Check if incremental CRC found in file matches the calculated one */
       if (o_crc_c != crc_c)
-	bad_crc += 01;
+        bad_crc += 01;
       if (o_crc_a != crc_a)
-	bad_crc += 02;
+        bad_crc += 02;
       if (o_crc_x != crc_x)
-	bad_crc += 04;
+        bad_crc += 04;
 
-      if (bad_crc)
-      {
-	fprintf(stderr, "[*** Bad CRC %o for file %s ***]",
-		bad_crc, this_file);
+      if (bad_crc) {
+        fprintf (stderr, "[*** Bad CRC %o for file %s ***]", bad_crc, this_file);
       }
-    }
-    else
+    } else
       crc_present = 0;
 
     /* close present file */
-    fclose(in);
+    fclose (in);
   }
 
   /* Skip a line on screen */
-  fprintf(stderr, "\n");
+  fprintf (stderr, "\n");
 
   /* Display warnings */
-  if (!crc_present)
-  {
+  if (!crc_present) {
     /* Warn if versions differ */
     if (version > XDECODE)
-      fprintf(stderr, "%%XDECODE-WARN: x{en,de}code version numbers mismatch!\n");
+      fprintf (stderr, "%%XDECODE-WARN: x{en,de}code version numbers mismatch!\n");
 
     /* Warn if original CRC not present */
-    fprintf(stderr, "%%XDECODE-WARN: CRC info of original file not found!\n");
+    fprintf (stderr, "%%XDECODE-WARN: CRC info of original file not found!\n");
   }
 
   /* Print calculated CRCs */
-  fprintf(stderr, "%%XDECODE-INFO: CRCs calculated for this file are:\n");
-  fprintf(stderr, "%%XDECODE-CRC:  CCITT %4X ARC %4X XMODEM %4X",
-	  crc_c, crc_a, crc_x);
+  fprintf (stderr, "%%XDECODE-INFO: CRCs calculated for this file are:\n");
+  fprintf (stderr, "%%XDECODE-CRC:  CCITT %4X ARC %4X XMODEM %4X", crc_c, crc_a, crc_x);
 
   /* Closes output file */
-  fclose(out);
+  fclose (out);
 
   /* And exits! */
-  fprintf(stderr, "\n-> Done !\n");
+  fprintf (stderr, "\n-> Done !\n");
 
 #ifndef VMS
   return (0);
 #endif
 }
+
 /* ........................... end of main() ........................... */
 
 
@@ -536,7 +501,7 @@ int main(argc, argv)
 */
 
 /* Table for CCITT CRCs */
-static WTYPE    crctab_ccitt[1 << B] = {
+static WTYPE crctab_ccitt[1 << B] = {
   0x0, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
   0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
   0x1231, 0x210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
@@ -572,7 +537,7 @@ static WTYPE    crctab_ccitt[1 << B] = {
 };
 
 /* Table for xmodem CRCs */
-static WTYPE    crctab_xmodem[1 << B] = {
+static WTYPE crctab_xmodem[1 << B] = {
   0x0, 0x17ce, 0xfdf, 0x1811, 0x1fbe, 0x870, 0x1061, 0x7af,
   0x1f3f, 0x8f1, 0x10e0, 0x72e, 0x81, 0x174f, 0xf5e, 0x1890,
   0x1e3d, 0x9f3, 0x11e2, 0x62c, 0x183, 0x164d, 0xe5c, 0x1992,
@@ -608,7 +573,7 @@ static WTYPE    crctab_xmodem[1 << B] = {
 };
 
 /* Table for ARC CRCs */
-static WTYPE    crctab_arc[1 << B] = {
+static WTYPE crctab_arc[1 << B] = {
   0x0, 0xc0c1, 0xc181, 0x140, 0xc301, 0x3c0, 0x280, 0xc241,
   0xc601, 0x6c0, 0x780, 0xc741, 0x500, 0xc5c1, 0xc481, 0x440,
   0xcc01, 0xcc0, 0xd80, 0xcd41, 0xf00, 0xcfc1, 0xce81, 0xe40,
@@ -644,30 +609,27 @@ static WTYPE    crctab_arc[1 << B] = {
 };
 
 /* -------------- Begin of function updcrc() ---------------------- */
-WTYPE
-updcrc(icrc, icp, icnt, crctab, swapped)
-  WTYPE           icrc, *crctab;
-  unsigned char  *icp;
-  int             icnt;
-  char            swapped;
+WTYPE updcrc (icrc, icp, icnt, crctab, swapped)
+     WTYPE icrc, *crctab;
+     unsigned char *icp;
+     int icnt;
+     char swapped;
 {
-  register WTYPE  crc = icrc;
+  register WTYPE crc = icrc;
   register unsigned char *cp = icp;
-  register int    cnt = icnt;
+  register int cnt = icnt;
 
   if (swapped)
-    while (cnt--)
-    {
+    while (cnt--) {
       crc = (crc >> B) ^ crctab[(crc & ((1 << B) - 1)) ^ *cp++];
-    }
-  else
-    while (cnt--)
-    {
+  } else
+    while (cnt--) {
       crc = (crc << B) ^ crctab[(crc >> (W - B)) ^ *cp++];
     }
 
   return (crc);
 }
+
 /* .......................... End of updcrc() ............................ */
 
 
@@ -707,16 +669,15 @@ updcrc(icrc, icp, icnt, crctab, swapped)
 	~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-char           *get_header(fp, buffer, max_len)
-  FILE           *fp;
-  char           *buffer;
-  int             max_len;
+char *get_header (fp, buffer, max_len)
+     FILE *fp;
+     char *buffer;
+     int max_len;
 {
-  for (;;)
-  {
-    if (fgets(buffer, max_len, fp) == NULL)
+  for (;;) {
+    if (fgets (buffer, max_len, fp) == NULL)
       return (NULL);
-    if (strncmp(buffer, "begin ", 6) == 0)
+    if (strncmp (buffer, "begin ", 6) == 0)
       break;
   }
   return (buffer);
@@ -750,32 +711,32 @@ char           *get_header(fp, buffer, max_len)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-char           *translate_destination(dest)
-  char           *dest;
+char *translate_destination (dest)
+     char *dest;
 {
 #ifndef MSDOS
 #ifndef VMS
-  char           *sl;
-  struct passwd  *getpwnam();
-  struct passwd  *user;
-  char            dnbuf[100];
+  char *sl;
+  struct passwd *getpwnam ();
+  struct passwd *user;
+  char dnbuf[100];
 
 
-  sl = xd_index(dest, '/');
+  sl = xd_index (dest, '/');
   if (sl == NULL)
     return (NULL);
 
   *sl++ = 0;
-  user = getpwnam(dest + 1);
+  user = getpwnam (dest + 1);
   if (user == NULL)
     return (NULL);
 
-  strcpy(dnbuf, user->pw_dir);
-  strcat(dnbuf, "/");
-  strcat(dnbuf, sl);
-  strcpy(dest, dnbuf);
-#endif				/* VMS */
-#endif				/* MSDOS */
+  strcpy (dnbuf, user->pw_dir);
+  strcat (dnbuf, "/");
+  strcat (dnbuf, sl);
+  strcpy (dest, dnbuf);
+#endif /* VMS */
+#endif /* MSDOS */
 
   return (dest);
 }
@@ -823,27 +784,25 @@ char           *translate_destination(dest)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-int decode(in, out)
-  FILE           *in;
-  FILE           *out;
+int decode (in, out)
+     FILE *in;
+     FILE *out;
 {
-  char            buf[80];
-  char           *bp;
-  int             n, i, expected;
+  char buf[80];
+  char *bp;
+  int n, i, expected;
   static unsigned long lineno;
-  int             out_code = 1;
+  int out_code = 1;
 
-  for (;; ++lineno)
-  {
+  for (;; ++lineno) {
     /* for each input line */
-    if (fgets(buf, sizeof buf, in) == NULL)
-    {				/* An error occurred */
-      if (feof(in))
-	return (0);
+    if (fgets (buf, sizeof buf, in) == NULL) {  /* An error occurred */
+      if (feof (in))
+        return (0);
       else
-	return (-1);
+        return (-1);
     }
-    n = DEC(buf[0]);
+    n = DEC (buf[0]);
 
     /* Break if no chars to read */
     if ((n <= 0) || (buf[0] == '\n'))
@@ -851,14 +810,13 @@ int decode(in, out)
 
     /* Calculate expected # of chars and pad if necessary */
     expected = ((n + 2) / 3) << 2;
-    for (i = strlen(buf) - 1; i <= expected; i++)
+    for (i = strlen (buf) - 1; i <= expected; i++)
       buf[i] = ' ';
 
     /* Move pointer to start of data */
     bp = &buf[1];
-    while (n > 0)
-    {
-      outdec(bp, out, n);
+    while (n > 0) {
+      outdec (bp, out, n);
       bp += 4;
       n -= 3;
     }
@@ -897,32 +855,32 @@ int decode(in, out)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-int             outdec(p, f, n)
-  char           *p;
-  FILE           *f;
-  int             n;
+int outdec (p, f, n)
+     char *p;
+     FILE *f;
+     int n;
 {
-  char            c[3];
+  char c[3];
 
   /* Decode chars */
-  c[0] = DEC(*p) << 2 | DEC(p[1]) >> 4;
-  c[1] = DEC(p[1]) << 4 | DEC(p[2]) >> 2;
-  c[2] = DEC(p[2]) << 6 | DEC(p[3]);
+  c[0] = DEC (*p) << 2 | DEC (p[1]) >> 4;
+  c[1] = DEC (p[1]) << 4 | DEC (p[2]) >> 2;
+  c[2] = DEC (p[2]) << 6 | DEC (p[3]);
 
   /* Save decoded bytes on file */
   if (n >= 1)
-    putc(c[0], f);
+    putc (c[0], f);
   if (n >= 2)
-    putc(c[1], f);
+    putc (c[1], f);
   if (n >= 3)
-    putc(c[2], f);
+    putc (c[2], f);
 
   /* Update CRCs */
   if (n > 3)
     n = 3;
-  crc_a = get_arc_crc(crc_a, (unsigned char *) c, n);
-  crc_c = get_ccitt_crc(crc_c, (unsigned char *) c, n);
-  crc_x = get_xmodem_crc(crc_x, (unsigned char *) c, n);
+  crc_a = get_arc_crc (crc_a, (unsigned char *) c, n);
+  crc_c = get_ccitt_crc (crc_c, (unsigned char *) c, n);
+  crc_x = get_xmodem_crc (crc_x, (unsigned char *) c, n);
 
   /* Return OK */
   return 0;
@@ -952,16 +910,15 @@ int             outdec(p, f, n)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-int             fr(fd, buf, cnt)
-  FILE           *fd;
-  char           *buf;
-  int             cnt;
+int fr (fd, buf, cnt)
+     FILE *fd;
+     char *buf;
+     int cnt;
 {
-  int             c, i;
+  int c, i;
 
-  for (i = 0; i < cnt; i++)
-  {
-    c = getc(fd);
+  for (i = 0; i < cnt; i++) {
+    c = getc (fd);
     if (c == EOF)
       return (i);
     buf[i] = c;
@@ -996,15 +953,15 @@ int             fr(fd, buf, cnt)
 #undef NULL
 #endif
 #define NULL    0
-char           *xd_index(sp, c)
-  register char  *sp;
-  register char   c;
+char *xd_index (sp, c)
+     register char *sp;
+     register char c;
 {
-  do
-  {
+  do {
     if (*sp == c)
       return (sp);
   } while (*sp++);
   return (NULL);
 }
+
 /* ....................... End of xd_index() ................................ */

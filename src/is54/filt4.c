@@ -44,44 +44,42 @@ Motorola Inc.
  ??.???.?? v.10 Created by Matt Hartman
  -------------------------------------------------------------
 */
-void            FILT4(inPtr, len)
-  FTYPE          *inPtr;
-  int             len;
+void FILT4 (inPtr, len)
+     FTYPE *inPtr;
+     int len;
 {
   /* coefs of HPF */
-  static double   b[5] = {0.898025036, -3.59010601, 5.38416243,
-                          -3.59010601, 0.898024917};   /* numerator */
-  static double   a[5] = {1.0, -3.78284979, 5.37379122, -3.39733505,
-                          0.806448996};                /* denominator */
+  static double b[5] = { 0.898025036, -3.59010601, 5.38416243,
+    -3.59010601, 0.898024917
+  };                            /* numerator */
+  static double a[5] = { 1.0, -3.78284979, 5.37379122, -3.39733505,
+    0.806448996
+  };                            /* denominator */
 
-  static double   x[4] = {0.0, 0.0, 0.0, 0.0};	/* numerator state */
-  static double   y[4] = {0.0, 0.0, 0.0, 0.0};	/* denominator state */
+  static double x[4] = { 0.0, 0.0, 0.0, 0.0 };  /* numerator state */
+  static double y[4] = { 0.0, 0.0, 0.0, 0.0 };  /* denominator state */
 
-  double         *endPtr, *iPtr, *oPtr, *tp1, *tp2;
-  int             i, j;
+  double *endPtr, *iPtr, *oPtr, *tp1, *tp2;
+  int i, j;
 
-  tp1 = (double *) malloc((len + 4) * sizeof(double));	/* temp buffers */
-  tp2 = (double *) malloc((len + 4) * sizeof(double));
+  tp1 = (double *) malloc ((len + 4) * sizeof (double));        /* temp buffers */
+  tp2 = (double *) malloc ((len + 4) * sizeof (double));
   iPtr = tp1;
   oPtr = tp2;
 
- /* Copy speech and states to temp buffers*/
-  for (i = 0; i < len + 4; i++)
-  {
-    if (i < 4)
-    {
+  /* Copy speech and states to temp buffers */
+  for (i = 0; i < len + 4; i++) {
+    if (i < 4) {
       *(iPtr + i) = *(x + i);
       *(oPtr + i) = *(y + i);
-    }
-    else
+    } else
       *(iPtr + i) = *(inPtr + i - 4);
   }
 
- /* Perform filter on temp speech buffer*/
+  /* Perform filter on temp speech buffer */
   iPtr += 4;
   oPtr += 4;
-  for (endPtr = oPtr + len; oPtr < endPtr; oPtr++)
-  {
+  for (endPtr = oPtr + len; oPtr < endPtr; oPtr++) {
     *oPtr = *b * *iPtr;
     for (j = 1; j <= 4; j++)
       *oPtr += *(b + j) * *(iPtr - j) - *(a + j) * *(oPtr - j);
@@ -90,12 +88,11 @@ void            FILT4(inPtr, len)
     iPtr++;
   }
 
- /* Save states*/
-  for (i = 3; i >= 0; i--)
-  {
+  /* Save states */
+  for (i = 3; i >= 0; i--) {
     *(x + i) = *--iPtr;
     *(y + i) = *--oPtr;
   }
-  free(tp1);
-  free(tp2);
+  free (tp1);
+  free (tp2);
 }

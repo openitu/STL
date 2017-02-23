@@ -42,33 +42,31 @@
 #include <math.h>
 
 /* This routine exports the input buffer to an ASCII file */
-void exportASCII(
-				float* buff1,		/* buffer containing the power spectrum of a first file */
-				float* buff2,		/* buffer containing the power spectrum of a second file */
-				long   fs,			/* sampling frequency of the input files */
-				int    NFFT,		/* number of coefficents of the fourier transform */
-				char*  fileName		/* name of the ASCII ouput file */
-				)
-{
-	FILE* fp;
-	int i;
+void exportASCII (float *buff1, /* buffer containing the power spectrum of a first file */
+                  float *buff2, /* buffer containing the power spectrum of a second file */
+                  long fs,      /* sampling frequency of the input files */
+                  int NFFT,     /* number of coefficents of the fourier transform */
+                  char *fileName        /* name of the ASCII ouput file */
+  ) {
+  FILE *fp;
+  int i;
 
-	fp=fopen(fileName,"wb");
-	if(fp==NULL) {
-		fprintf(stderr,"Error opening output ASCII file!");
-		exit(-1);
-	}
-	fprintf(fp,"                   +------------------------------------------+\n");
-	fprintf(fp,"                   |  Average Amplitude Spectra (in dB)       |\n");
-	fprintf(fp,"+------------------+------------------------------------------+\n");
-	fprintf(fp,"| frequencies (Hz) | Input of the codec | Output of the codec |\n");
-	fprintf(fp,"+------------------+------------------------------------------+\n");
-	
-	for(i=0; i<NFFT/2; i++) {
-	  fprintf(fp,"|      %5d       |       %3.2f       |        %3.2f       |\n", (int)(i*fs/NFFT), 10*log10(buff1[i]), 10*log10(buff2[i]));
-	}
-	fprintf(fp,"+------------------+------------------------------------------+\n");
-	
-	fclose(fp);
+  fp = fopen (fileName, "wb");
+  if (fp == NULL) {
+    fprintf (stderr, "Error opening output ASCII file!");
+    exit (-1);
+  }
+  fprintf (fp, "                   +------------------------------------------+\n");
+  fprintf (fp, "                   |  Average Amplitude Spectra (in dB)       |\n");
+  fprintf (fp, "+------------------+------------------------------------------+\n");
+  fprintf (fp, "| frequencies (Hz) | Input of the codec | Output of the codec |\n");
+  fprintf (fp, "+------------------+------------------------------------------+\n");
+
+  for (i = 0; i < NFFT / 2; i++) {
+    fprintf (fp, "|      %5d       |       %3.2f       |        %3.2f       |\n", (int) (i * fs / NFFT), 10 * log10 (buff1[i]), 10 * log10 (buff2[i]));
+  }
+  fprintf (fp, "+------------------+------------------------------------------+\n");
+
+  fclose (fp);
 
 }

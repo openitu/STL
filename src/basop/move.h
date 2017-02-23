@@ -31,9 +31,9 @@ extern int currCounter;
 #endif /* ifdef WMOPS */
 
 
-static __inline void move16( void) {
+static __inline void move16 (void) {
 #if WMOPS
-    multiCounter[currCounter].move16++;
+  multiCounter[currCounter].move16++;
 #endif /* ifdef WMOPS */
 }
 
@@ -42,9 +42,9 @@ static __inline void move16( void) {
 
 
 
-static __inline void move32( void) {
+static __inline void move32 (void) {
 #if WMOPS
-    multiCounter[currCounter].move32++;
+  multiCounter[currCounter].move32++;
 #endif /* ifdef WMOPS */
 }
 
@@ -53,23 +53,23 @@ static __inline void move32( void) {
 
 
 
-static __inline void test( void) {
+static __inline void test (void) {
 #if WMOPS
-    multiCounter[currCounter].Test++;
+  multiCounter[currCounter].Test++;
 #endif /* ifdef WMOPS */
 }
 
 
-static __inline void logic16( void) {
+static __inline void logic16 (void) {
 #if WMOPS
-    multiCounter[currCounter].Logic16++;
+  multiCounter[currCounter].Logic16++;
 #endif /* ifdef WMOPS */
 }
 
 
-static __inline void logic32( void) {
+static __inline void logic32 (void) {
 #if WMOPS
-    multiCounter[currCounter].Logic32++;
+  multiCounter[currCounter].Logic32++;
 #endif /* ifdef WMOPS */
 }
 

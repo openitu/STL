@@ -17,22 +17,20 @@
 #include "g728fp.h"
 
 /* zero input response of the weighting filter.  Block 10 of g728 */
-void g728fp_zirwf(
-	Float	*awz,		/* weighting filter all-zero coefficients */
-	Float	*awp,		/* weighting filter all-pole coefficients */
-	Statelpc *s,		/* zero-input response vector of LPC filter */
-	Float	*zirwiir)	/* memory, all-pole part of weighting filter */
-{
-	int i, j;
-	Nshift ir;
-	Float stmp[LPCW + IDIM];
+void g728fp_zirwf (Float * awz, /* weighting filter all-zero coefficients */
+                   Float * awp, /* weighting filter all-pole coefficients */
+                   Statelpc * s,        /* zero-input response vector of LPC filter */
+                   Float * zirwiir) {   /* memory, all-pole part of weighting filter */
+  int i, j;
+  Nshift ir;
+  Float stmp[LPCW + IDIM];
 
-	/* Convert statelpc to Q_SPEECH */
-	for (j = 0, i = 0; i < 3; i++, j += IDIM) {
-		if ((ir = s[i].q - Q_SPEECH) >= 0)
-			g728fp_vrshiftf(s[i].data, &stmp[j], ir, IDIM);
-		else
-			g728fp_vlshiftf(s[i].data, &stmp[j], -ir, IDIM);
-	}
-	g728fp_wfilter(awz, awp, stmp, zirwiir);	/* weighting filter */
+  /* Convert statelpc to Q_SPEECH */
+  for (j = 0, i = 0; i < 3; i++, j += IDIM) {
+    if ((ir = s[i].q - Q_SPEECH) >= 0)
+      g728fp_vrshiftf (s[i].data, &stmp[j], ir, IDIM);
+    else
+      g728fp_vlshiftf (s[i].data, &stmp[j], -ir, IDIM);
+  }
+  g728fp_wfilter (awz, awp, stmp, zirwiir);     /* weighting filter */
 }

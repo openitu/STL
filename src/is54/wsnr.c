@@ -23,50 +23,43 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
-/**/
+ /**/
 /*	weightedSnr.c -- Computes weighted segmental and total SNR.*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
-/**/
+   /**/
 /*	Written by: Matt Hartman*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-/**/
+   /**/
 #include "vparams.h"
-
 #include <math.h>
 /*#include "stdlib.h"*/
-
 /*	static externals*/
-/**/
-static FTYPE    sEngTotal, weEngTotal, eEngTotal, sumwSegSnr, sumSegSnr;
-static int      numSegs;
+ /**/ static FTYPE sEngTotal, weEngTotal, eEngTotal, sumwSegSnr, sumSegSnr;
+static int numSegs;
 
 
 /*----------------------------------------*/
 /*	snr and weighted prediction gains*/
-/**/
-void            runningSnr(speech, syn, wSpeech, wsyn)
-  FTYPE          *speech;
-  FTYPE          *syn;
-  FTYPE          *wSpeech;
-  FTYPE          *wsyn;
+ /**/ void runningSnr (speech, syn, wSpeech, wsyn)
+     FTYPE *speech;
+     FTYPE *syn;
+     FTYPE *wSpeech;
+     FTYPE *wsyn;
 {
-  FTYPE           sEng, weEng, eEng, temp, *tfp1, *tfp2, *tfp3, *tfp4,
-                 *efp;
+  FTYPE sEng, weEng, eEng, temp, *tfp1, *tfp2, *tfp3, *tfp4, *efp;
 
 /*	update subframe energies*/
-/**/
-  sEng = 0.0;
+   /**/ sEng = 0.0;
   weEng = 0.0;
   eEng = 0.0;
   tfp1 = speech;
   tfp2 = wSpeech;
   tfp3 = wsyn;
   tfp4 = syn;
-  for (efp = tfp1 + S_LEN; tfp1 < efp; tfp1++, tfp2++, tfp3++, tfp4++)
-  {
+  for (efp = tfp1 + S_LEN; tfp1 < efp; tfp1++, tfp2++, tfp3++, tfp4++) {
     sEng += *tfp1 * *tfp1;
     temp = *tfp1 - *tfp4;
     eEng += temp * temp;
@@ -77,28 +70,22 @@ void            runningSnr(speech, syn, wSpeech, wsyn)
   sEngTotal += sEng;
   weEngTotal += weEng;
   eEngTotal += eEng;
-  if (sEng > 0.0)
-  {
-    sumwSegSnr += 10.0 * log10(sEng / weEng);
-    sumSegSnr += 10.0 * log10(sEng / eEng);
+  if (sEng > 0.0) {
+    sumwSegSnr += 10.0 * log10 (sEng / weEng);
+    sumSegSnr += 10.0 * log10 (sEng / eEng);
     numSegs++;
   }
-}				/* end of runningSnr */
+}                               /* end of runningSnr */
 
 
 /*------------------------------------------------*/
 /*	print final results*/
-/**/
-void            printSnr(fplog)
-FILE *fplog;
+ /**/ void printSnr (fplog)
+     FILE *fplog;
 {
-  fprintf(fplog, "\nNUMBER OF FRAMES IN SNR COMPUTATION: %d\n", numSegs);
-  fprintf(fplog, "\nAVG WEIGHTED SEG SNR          -> %8.5f\n",
-	  sumwSegSnr / numSegs);
-  fprintf(fplog, "TOTAL WEIGHTED SNR            -> %8.5f\n",
-	  10.0 * log10(sEngTotal / weEngTotal));
-  fprintf(fplog, "AVG SEG SNR                   -> %8.5f\n", 
-  	  sumSegSnr / numSegs);
-  fprintf(fplog, "TOTAL SNR                     -> %8.5f\n",
-	  10.0 * log10(sEngTotal / eEngTotal));
+  fprintf (fplog, "\nNUMBER OF FRAMES IN SNR COMPUTATION: %d\n", numSegs);
+  fprintf (fplog, "\nAVG WEIGHTED SEG SNR          -> %8.5f\n", sumwSegSnr / numSegs);
+  fprintf (fplog, "TOTAL WEIGHTED SNR            -> %8.5f\n", 10.0 * log10 (sEngTotal / weEngTotal));
+  fprintf (fplog, "AVG SEG SNR                   -> %8.5f\n", sumSegSnr / numSegs);
+  fprintf (fplog, "TOTAL SNR                     -> %8.5f\n", 10.0 * log10 (sEngTotal / eEngTotal));
 }

@@ -64,12 +64,12 @@
   ===========================================================================
 */
 /* ..... Generic include files ..... */
-#include "ugstdemo.h"		/* general UGST definitions */
-#include <stdio.h>		/* Standard I/O Definitions */
+#include "ugstdemo.h"           /* general UGST definitions */
+#include <stdio.h>              /* Standard I/O Definitions */
 #include <math.h>
 #include <stdlib.h>
-#include <string.h>		/* memset */
-#include <ctype.h>		/* toupper */
+#include <string.h>             /* memset */
+#include <ctype.h>              /* toupper */
 
 /* ..... OS-specific include files ..... */
 #if defined (unix) && !defined(MSDOS)
@@ -77,9 +77,9 @@
                                       for DJGPP, because "unix" is defined,
 				      even it being MSDOS! */
 #if defined(__ALPHA)
-#include <unistd.h>		/* for SEEK_... definitions used by fseek() */
+#include <unistd.h>             /* for SEEK_... definitions used by fseek() */
 #else
-#include <sys/unistd.h>		/* for SEEK_... definitions used by fseek() */
+#include <sys/unistd.h>         /* for SEEK_... definitions used by fseek() */
 #endif
 #endif
 
@@ -114,19 +114,20 @@
    13.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long read_g192(patt, n, F)
-short *patt;
-long n;
-FILE *F;
+long read_g192 (patt, n, F)
+     short *patt;
+     long n;
+     FILE *F;
 {
   long i;
 
   /* Read words from file */
-  i=fread(patt, sizeof(short), n, F);
+  i = fread (patt, sizeof (short), n, F);
 
   /* Return no.of samples read or error */
-  return(ferror(F)? -1l : i);
+  return (ferror (F) ? -1l : i);
 }
+
 /* ....................... End of read_g192() ....................... */
 
 
@@ -137,13 +138,14 @@ FILE *F;
   function.
   -------------------------------------------------------------------------
  */
-long read_bit_ber(patt, n, F)
-short *patt;
-long n;
-FILE *F;
+long read_bit_ber (patt, n, F)
+     short *patt;
+     long n;
+     FILE *F;
 {
-  return(read_bit(patt, n, F, BER));
+  return (read_bit (patt, n, F, BER));
 }
+
 /* ....................... End of read_bit_ber() ....................... */
 
 
@@ -154,13 +156,14 @@ FILE *F;
   function.
   -------------------------------------------------------------------------
  */
-long read_bit_fer(patt, n, F)
-short *patt;
-long n;
-FILE *F;
+long read_bit_fer (patt, n, F)
+     short *patt;
+     long n;
+     FILE *F;
 {
-  return(read_bit(patt, n, F, FER));
+  return (read_bit (patt, n, F, FER));
 }
+
 /* ....................... End of read_bit_fer() ....................... */
 
 
@@ -195,78 +198,73 @@ FILE *F;
    15.Aug.97  v.1.0  Created.
    ------------------------------------------------------------------------- 
 */
-long read_bit(patt, n, F, type)
-short *patt;
-long n;
-FILE *F;
-char type;
+long read_bit (patt, n, F, type)
+     short *patt;
+     long n;
+     FILE *F;
+     char type;
 {
   char *bits;
   short *p = patt;
   long bitno, j, k, nbytes, rbytes, ret_val;
 
   /* Skip function if no samples are to be read */
-  if (n==0)
-    return(0);
+  if (n == 0)
+    return (0);
 
   /* Calculate number of bytes necessary in the compact bitstream */
-  if (n%8)
-  {
-    fprintf(stderr, "The number of errors is not byte-aligned. \n");
-    fprintf(stderr, "Zero insertion is supposed!\n");
+  if (n % 8) {
+    fprintf (stderr, "The number of errors is not byte-aligned. \n");
+    fprintf (stderr, "Zero insertion is supposed!\n");
   }
-  nbytes= (long)(ceil(n/8.0));
+  nbytes = (long) (ceil (n / 8.0));
 
   /* Allocate memory */
-  if ((bits = (char *)calloc(nbytes, sizeof(char)))==NULL)
+  if ((bits = (char *) calloc (nbytes, sizeof (char))) == NULL)
     HARAKIRI ("Cannot allocate memory to read compact binary bitstream\n", 6);
 
   /* Reset memory to zero */
-  memset(patt, 0, sizeof(short) * n);
+  memset (patt, 0, sizeof (short) * n);
 
   /* Read words from file; return on error */
-  rbytes = fread(bits, sizeof(char), nbytes, F);
+  rbytes = fread (bits, sizeof (char), nbytes, F);
 
   /* Perform action according to returned no. of items */
-  if (ferror(F))
+  if (ferror (F))
     ret_val = -1l;
-  /*
-  else if (feof(F))
-    ret_val = 0;
-    */
-  else
-  {
+  /* 
+     else if (feof(F)) ret_val = 0; */
+  else {
     /* Convert compact bit oriented data to byte-oriented data */
-    for (p = patt, bitno=j=0; j<rbytes; j++)
-    {
+    for (p = patt, bitno = j = 0; j < rbytes; j++) {
       /* Get first bit */
       *p++ = bits[j] & 0x0001;
-      bitno++; /* One bit less to go! */
+      bitno++;                  /* One bit less to go! */
 
       /* "Expand" bits into hard bit words ... */
-      for (k=1; k<8 && bitno<n; k++, bitno++)
-	*p++ = (bits[j]>>k) & 0x0001;
+      for (k = 1; k < 8 && bitno < n; k++, bitno++)
+        *p++ = (bits[j] >> k) & 0x0001;
     }
 
     /* Convert hard bits to soft bits, frame sync or frame erasure */
-    switch(type)
-    {
+    switch (type) {
     case BER:
-      for (p = patt, j=0; j<bitno; j++, p++)
-	*p = (*p)? 0x0081 : 0x007F;
+      for (p = patt, j = 0; j < bitno; j++, p++)
+        *p = (*p) ? 0x0081 : 0x007F;
       break;
     case FER:
-      for (p = patt, j=0; j<bitno; j++, p++)
-	*p = (*p)? 0x6B20 : 0x6B21;
+      for (p = patt, j = 0; j < bitno; j++, p++)
+        *p = (*p) ? 0x6B20 : 0x6B21;
       break;
     }
     ret_val = bitno;
   }
 
   /* Free memory and quit */
-  free(bits);
-  return(ret_val);
+  free (bits);
+  return (ret_val);
 }
+
 /* ....................... End of read_bit() ....................... */
 
 
@@ -306,48 +304,47 @@ char type;
    15.Aug.97  v.1.0  Created.
    ------------------------------------------------------------------------- 
 */
-long read_byte(patt, n, F)
-short *patt;
-long n;
-FILE *F;
+long read_byte (patt, n, F)
+     short *patt;
+     long n;
+     FILE *F;
 {
   char *byte;
   long i;
   unsigned char register tmp;
 
   /* Skip function if no samples are to be read */
-  if (n==0)
-    return(0);
+  if (n == 0)
+    return (0);
 
   /* Allocate memory */
-  if ((byte = (char *)calloc(n, sizeof(char)))==NULL)
+  if ((byte = (char *) calloc (n, sizeof (char))) == NULL)
     HARAKIRI ("Cannot allocate memory to read data as byte bitstream\n", 6);
-  
+
   /* Read words from file */
-  i = fread(byte, sizeof(char), n, F);
-  if (i<n)
-  {
+  i = fread (byte, sizeof (char), n, F);
+  if (i < n) {
     /* the read operation returned less samples than expected */
-    if (i<=0)
-      return(i); /* Error or EOF */
+    if (i <= 0)
+      return (i);               /* Error or EOF */
     else
-      n = i;     /* Frame is shorter than expected */
+      n = i;                    /* Frame is shorter than expected */
   }
 
   /* Convert byte-oriented data to word16-oriented data */
-  for (i=0; i<n; i++)
-  {
+  for (i = 0; i < n; i++) {
     tmp = byte[i];
-    if (tmp == 0x20 || tmp == 0x21) /* It is a frame sync/erasure word */
+    if (tmp == 0x20 || tmp == 0x21)     /* It is a frame sync/erasure word */
       patt[i] = 0x6B00 | tmp;
     else
       patt[i] = tmp;
   }
 
   /* Free memory and quit */
-  free(byte);
-  return(n);
+  free (byte);
+  return (n);
 }
+
 /* ....................... End of read_byte() ....................... */
 
 
@@ -380,15 +377,16 @@ FILE *F;
 
   -------------------------------------------------------------------------
 */
-long save_g192(patt, n, F)
-short *patt;
-long n;
-FILE *F;
+long save_g192 (patt, n, F)
+     short *patt;
+     long n;
+     FILE *F;
 {
-  long i;  
-  i=fwrite(patt, sizeof(short), n, F);
-  return(i<n ? -1l : n);
+  long i;
+  i = fwrite (patt, sizeof (short), n, F);
+  return (i < n ? -1l : n);
 }
+
 /* ....................... End of save_g192() ....................... */
 
 
@@ -421,10 +419,10 @@ FILE *F;
   -------------------------------------------------------------------------
 */
 #define IS_ONE(x)  ((x) && G192_ONE)
-long save_bit(patt, n, F)
-short *patt;
-long n;
-FILE *F;
+long save_bit (patt, n, F)
+     short *patt;
+     long n;
+     FILE *F;
 {
   char *bits;
   short one, *p = patt;
@@ -432,61 +430,58 @@ FILE *F;
   char register tmp;
 
   /* Skip function if no samples are to be read */
-  if (n==0)
-    return(0);
+  if (n == 0)
+    return (0);
 
   /* Calculate number of bytes necessary in the compact bitstream */
-  if (n%8)
-  {
-    fprintf(stderr, "The number of errors is not byte-aligned. \n");
-    fprintf(stderr, "Zero insertion will be used and need to be \n");
-    fprintf(stderr, "accounted for by the error-insertion program!\n");
+  if (n % 8) {
+    fprintf (stderr, "The number of errors is not byte-aligned. \n");
+    fprintf (stderr, "Zero insertion will be used and need to be \n");
+    fprintf (stderr, "accounted for by the error-insertion program!\n");
   }
-  nbytes= (long)(ceil(n/8.0));
+  nbytes = (long) (ceil (n / 8.0));
 
   /* Allocate memory */
-  if ((bits = (char *)calloc(nbytes, sizeof(char)))==NULL)
+  if ((bits = (char *) calloc (nbytes, sizeof (char))) == NULL)
     HARAKIRI ("Cannot allocate memory to save compact binary bitstream\n", 6);
-  
+
   /* Reset memory to zero */
-  memset(bits, 0, nbytes);
+  memset (bits, 0, nbytes);
 
   /* Scan to determine whether it is a bit error or a frame erasure array */
-  switch(*p)
-  {
+  switch (*p) {
   case G192_ZERO:
-  case G192_ONE: /* Bit error */
+  case G192_ONE:               /* Bit error */
     one = G192_ONE;
     break;
   case G192_SYNC:
-  case G192_FER: /* Frame erasure */
+  case G192_FER:               /* Frame erasure */
     one = G192_FER;
     break;
   }
 
   /* Convert byte-oriented to compact bit oriented data */
-  for (i=j=0; j<nbytes; j++)
-  {
+  for (i = j = 0; j < nbytes; j++) {
     /* Get 1st bit ... */
-    tmp = (*p++==one) ? 1 : 0;
- 
+    tmp = (*p++ == one) ? 1 : 0;
+
     /* Compact all the other bits ... */
-    for (k=1; k<8 && i<n; k++, i++)
-    {
-      tmp += (unsigned char)( ( (*p++) == one ? 1 : 0) << k);
+    for (k = 1; k < 8 && i < n; k++, i++) {
+      tmp += (unsigned char) (((*p++) == one ? 1 : 0) << k);
     }
- 
+
     /* Save word as short */
     bits[j] = tmp;
   }
 
   /* Save words to file */
-  i = fwrite(bits, sizeof(char), nbytes, F);
+  i = fwrite (bits, sizeof (char), nbytes, F);
 
   /* Free memory and quit */
-  free(bits);
-  return(n<i ? -1l : n);
+  free (bits);
+  return (n < i ? -1l : n);
 }
+
 /* ....................... End of save_bit() ....................... */
 
 
@@ -525,34 +520,35 @@ FILE *F;
   15.Aug.97  v.1.0  Created.
   ------------------------------------------------------------------------- 
 */
-long save_byte(patt, n, F)
-short *patt;
-long n;
-FILE *F;
+long save_byte (patt, n, F)
+     short *patt;
+     long n;
+     FILE *F;
 {
   char *byte;
   long i;
 
   /* Skip function if no samples are to be read */
-  if (n==0)
-    return(0);
+  if (n == 0)
+    return (0);
 
   /* Allocate memory */
-  if ((byte = (char *)calloc(n, sizeof(char)))==NULL)
+  if ((byte = (char *) calloc (n, sizeof (char))) == NULL)
     HARAKIRI ("Cannot allocate memory to save data as byte bitstream\n", 6);
-  
+
   /* Convert word16-oriented data to byte-oriented data */
   /* NO compliance verification is performed, for performance reasons */
-  for (i=0; i<n; i++)
-    byte[i] = (unsigned char)(patt[i] & 0x00FF);
+  for (i = 0; i < n; i++)
+    byte[i] = (unsigned char) (patt[i] & 0x00FF);
 
   /* Save words to file */
-  i = fwrite(byte, sizeof(char), n, F);
+  i = fwrite (byte, sizeof (char), n, F);
 
   /* Free memory and quit */
-  free(byte);
-  return(n<i ? -1l : n);
+  free (byte);
+  return (n < i ? -1l : n);
 }
+
 /* ....................... End of save_byte() ....................... */
 
 
@@ -580,11 +576,10 @@ FILE *F;
   21.Aug.97  v1.00 created
   ---------------------------------------------------------------------------
 */
-char *format_str(fmt)
-int fmt;
+char *format_str (fmt)
+     int fmt;
 {
-  switch(fmt)
-  {
+  switch (fmt) {
   case byte:
     return "byte";
     break;
@@ -597,7 +592,8 @@ int fmt;
   }
   return "";
 }
-/* ....................... End of format_str() ....................... */ 
+
+/* ....................... End of format_str() ....................... */
 
 
 /*
@@ -624,11 +620,10 @@ int fmt;
   21.Aug.97  v1.00 created
   ---------------------------------------------------------------------------
 */
-char *type_str(type)
-int type;
+char *type_str (type)
+     int type;
 {
-  switch(type)
-  {
+  switch (type) {
   case BER:
     return "BER";
     break;
@@ -638,7 +633,8 @@ int type;
   }
   return "";
 }
-/* ....................... End of type_str() ....................... */ 
+
+/* ....................... End of type_str() ....................... */
 
 
 /*
@@ -670,30 +666,29 @@ int type;
 					(v.1.0: "unsigned" only). <Cyril Guillaume & Stephane Ragot -- stephane.ragot@rd.francetelecom.com>
   -------------------------------------------------------------------------- 
 */
-char check_eid_format(F, file, type)
-FILE *F;
-char *file;
-char *type;
+char check_eid_format (F, file, type)
+     FILE *F;
+     char *file;
+     char *type;
 {
   short word;
   char ret_val;
-  unsigned long tmp =0x41424344; /* Hex version of the string ABCD */
+  unsigned long tmp = 0x41424344;       /* Hex version of the string ABCD */
   int little_endian;
 
   /* Find whether the OS is big- or little-endian */
-  little_endian = strncmp("ABCD", (char *)&tmp, 4);
+  little_endian = strncmp ("ABCD", (char *) &tmp, 4);
 
   /* Get a 16-bit word from the file */
-  fread(&word, sizeof(short), 1, F);
+  fread (&word, sizeof (short), 1, F);
 
   /* Use some heuristics to determine what type of file is this */
-  switch((unsigned short)word)
-  {
+  switch ((unsigned short) word) {
   case 0x7F7F:
   case 0x7F81:
   case 0x8181:
   case 0x817F:
-    /* Byte-oriented G.192 bitstream */ 
+    /* Byte-oriented G.192 bitstream */
     *type = BER;
     ret_val = byte;
     break;
@@ -726,36 +721,32 @@ char *type;
   case 0x216B:
   case 0x206B:
     /* G.192 format that needs to be byte-swapped */
-    fprintf(stderr, "File %s needs to be byte-swapped! Aborted.\n", file);
-    exit(8);
+    fprintf (stderr, "File %s needs to be byte-swapped! Aborted.\n", file);
+    exit (8);
 
   default:
     /* Assuming it is compact bit mode */
-   *type = nil; /* Not possible to infer type for binary format! */
+    *type = nil;                /* Not possible to infer type for binary format! */
     ret_val = compact;
   }
 
-  /* Final check to see if the input bitstream is a byte-oriented G.192
-     bitstream.
-     In this case, the first byte is 0x2n (n=0..F) and the
-     second byte must be the frame length in a BIG ENDIAN
-     system, and vice-versa in a little-endian system*/
+  /* Final check to see if the input bitstream is a byte-oriented G.192 bitstream. In this case, the first byte is 0x2n (n=0..F) and the second byte must be the frame length in a BIG ENDIAN system, and vice-versa in a little-endian system */
   if (little_endian)
     word = ((word >> 8) & 0xFF) | ((word << 8));
 /*
   if ((little_endian && (((unsigned)word & 0xF0)==0x20)) ||
       (((unsigned)word>>8) & 0xF0) == 0x20)
 */
-  if (*type==nil && (((unsigned)word>>8) & 0xF0) == 0x20)
-  {
-     *type = FER;
-     ret_val = byte;
+  if (*type == nil && (((unsigned) word >> 8) & 0xF0) == 0x20) {
+    *type = FER;
+    ret_val = byte;
   }
 
   /* Rewind file & and return format identifier */
-  fseek(F, 0l, SEEK_SET);
-  return(ret_val);
+  fseek (F, 0l, SEEK_SET);
+  return (ret_val);
 }
+
 /* ...................... End of check_eid_format() ...................... */
 
 
@@ -771,42 +762,40 @@ char *type;
   
   ---------------------------------------------------------------------------
 */
-long soft2hard(soft, hard, n, type)
-short *soft, *hard;
-long n;
-char type;
+long soft2hard (soft, hard, n, type)
+     short *soft, *hard;
+     long n;
+     char type;
 {
   long i, unexpected = 0;
   short register tmp;
 
-  switch(type)
-  {
+  switch (type) {
   case BER:
-    for (i=0; i<n; i++)
-    {
+    for (i = 0; i < n; i++) {
       tmp = *soft++;
-      if (tmp==G192_ONE)
-	*hard++=1;
-      else if (tmp==G192_ZERO)
-	*hard++=0;
+      if (tmp == G192_ONE)
+        *hard++ = 1;
+      else if (tmp == G192_ZERO)
+        *hard++ = 0;
       else
-	unexpected++;
+        unexpected++;
     }
     break;
   case FER:
-    for (i=0; i<n; i++)
-    {
+    for (i = 0; i < n; i++) {
       tmp = *soft++;
-      if (tmp==G192_FER)
-	*hard++=1;
-      else if ((tmp>>4) == 0x06B2)
-	*hard++=0;
+      if (tmp == G192_FER)
+        *hard++ = 1;
+      else if ((tmp >> 4) == 0x06B2)
+        *hard++ = 0;
       else
-	unexpected++;
+        unexpected++;
     }
     break;
   }
 
-  return(unexpected);
+  return (unexpected);
 }
+
 /* ...................... End of soft2hard() ...................... */

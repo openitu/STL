@@ -51,8 +51,8 @@
 */
 
 /* OS definition */
-#ifdef __MSDOS__  /* definition for automatic compil. under TurboC v2.0 */
-# define MSDOS	  /* this is already defined for Microsoft C 5.1 */
+#ifdef __MSDOS__                /* definition for automatic compil. under TurboC v2.0 */
+#define MSDOS                   /* this is already defined for Microsoft C 5.1 */
 #endif
 
 
@@ -63,16 +63,16 @@
 
 
 /* Specific includes */
-#if defined(MSDOS)	/* for MSDOS */
-#  include <fcntl.h>
-#  include <io.h>
-#  include <sys\stat.h>
-#elif defined(VMS)  	/* for VMS */
-#  include <perror.h>
-#  include <file.h>
-#  include <stat.h>
-#else			/* for OTHER OS, in special UNIX */
-#  include <sys/stat.h>
+#if defined(MSDOS)              /* for MSDOS */
+#include <fcntl.h>
+#include <io.h>
+#include <sys\stat.h>
+#elif defined(VMS)              /* for VMS */
+#include <perror.h>
+#include <file.h>
+#include <stat.h>
+#else /* for OTHER OS, in special UNIX */
+#include <sys/stat.h>
 #endif
 
 
@@ -106,20 +106,20 @@
  *     Simao 07.Mar.94
  * --------------------------------------------------------------------------
  */
-short short_check_sum(s_data, n)
-short *s_data;
-long n;
+short short_check_sum (s_data, n)
+     short *s_data;
+     long n;
 {
   float csum = 0;
   long i;
-  
+
   /* Add samples */
-  while(n) 
+  while (n)
     csum += s_data[--n];
-    
+
   /* return mod as a short */
-  csum = fmod(csum,255.0);
-  return ((short)csum);
+  csum = fmod (csum, 255.0);
+  return ((short) csum);
 }
 
 
@@ -130,97 +130,90 @@ long n;
  * --------------------------------------------------------------------------
  */
 #define FP(x) printf(x)
-void display_usage()
-{
-  FP("Version 1.01 of 23/Nov/1993 \n");
- 
-  FP(" CVT_H_B.C:\n");
-  FP(" Program to convert ITU-T test sequences in hexa formats to\n");
-  FP(" word oriented binary files. Each line is supposed to have 32 valid\n");
-  FP(" samples (16 bit, or a word), or 64 hexa characters, either upper or\n");
-  FP(" lower case. In the last line is expected one word (2 hexa chars)\n");
-  FP(" in hexadecimal representation as the checksum of all the samples of\n");
-  FP(" the file modulus 255 (sum mod 255).\n");
-  FP("\n");
-  FP(" Usage:\n");
-  FP(" $ cvt_h_b [-r] hex-in bin-out\n");
-  FP(" where:\n");
-  FP("  hex-in          is the (input) hexadecimal file's name\n");
-  FP("  bin-out         is the (output) binary file's name\n\n");
+void display_usage () {
+  FP ("Version 1.01 of 23/Nov/1993 \n");
 
-  FP(" Options\n");
-  FP("  -q              Don't print progress indicator on the screen\n");
-  FP("  -r              is an optional parameter; if specified as r or R,\n");
-  FP("                  even-bit reversal of all samples is accomplished \n");
-  FP("                  before saving the file. Default is NOT invert.\n");
-  FP("\n");
+  FP (" CVT_H_B.C:\n");
+  FP (" Program to convert ITU-T test sequences in hexa formats to\n");
+  FP (" word oriented binary files. Each line is supposed to have 32 valid\n");
+  FP (" samples (16 bit, or a word), or 64 hexa characters, either upper or\n");
+  FP (" lower case. In the last line is expected one word (2 hexa chars)\n");
+  FP (" in hexadecimal representation as the checksum of all the samples of\n");
+  FP (" the file modulus 255 (sum mod 255).\n");
+  FP ("\n");
+  FP (" Usage:\n");
+  FP (" $ cvt_h_b [-r] hex-in bin-out\n");
+  FP (" where:\n");
+  FP ("  hex-in          is the (input) hexadecimal file's name\n");
+  FP ("  bin-out         is the (output) binary file's name\n\n");
+
+  FP (" Options\n");
+  FP ("  -q              Don't print progress indicator on the screen\n");
+  FP ("  -r              is an optional parameter; if specified as r or R,\n");
+  FP ("                  even-bit reversal of all samples is accomplished \n");
+  FP ("                  before saving the file. Default is NOT invert.\n");
+  FP ("\n");
 
   /* Quit program */
-  exit(-128);
+  exit (-128);
 }
+
 #undef FP
 /* ....................... end of display_usage() ...........................*/
 
 
 /*============================== */
-main(argc,argv)
-int argc;
-char *argv[];
+main (argc, argv)
+     int argc;
+     char *argv[];
 /*============================== */
 {
   char line[200], *lp;
   char inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
-  int inp, out, itmp, count=0;
-  float check_sum=0;
-  short scheck_sum=0;
+  int inp, out, itmp, count = 0;
+  float check_sum = 0;
+  short scheck_sum = 0;
   short chk;
-  short *bin,*tmp;
-  long leng,i,smpno=0,lineno=0;
+  short *bin, *tmp;
+  long leng, i, smpno = 0, lineno = 0;
   int lastline_len = 0;
 
-  FILE *Fi,*Fo;
+  FILE *Fi, *Fo;
   struct stat st;
   int invert_even_bits = NO, quiet = NO;
 
-  static char     funny[8] =  {'\\','-','/','|','\\','-','/','|'};
+  static char funny[8] = { '\\', '-', '/', '|', '\\', '-', '/', '|' };
 
 
   /* GETTING OPTIONS */
 
   if (argc < 2)
-    display_usage();
-  else
-  {
+    display_usage ();
+  else {
     while (argc > 1 && argv[1][0] == '-')
-      if (strcmp(argv[1],"-r")==0)
-      {
-	/* Reverse even bits */
-	invert_even_bits = YES;
-	
-	/* Move argv over the option to the next argument */
-	argv++;
+      if (strcmp (argv[1], "-r") == 0) {
+        /* Reverse even bits */
+        invert_even_bits = YES;
 
-	/* Update argc */
-	argc--;
-      }
-      else if (strcmp(argv[1],"-q")==0)
-      {
-	/* Don't print funny chars */
-	quiet = YES;
-	
-	/* Move argv over the option to the next argument */
-	argv++;
-	argc--;
-      }
-      else
-      {
-	fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-		argv[1]);
-	display_usage();
+        /* Move argv over the option to the next argument */
+        argv++;
+
+        /* Update argc */
+        argc--;
+      } else if (strcmp (argv[1], "-q") == 0) {
+        /* Don't print funny chars */
+        quiet = YES;
+
+        /* Move argv over the option to the next argument */
+        argv++;
+        argc--;
+      } else {
+        fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+        display_usage ();
       }
   }
 
-  
+
 
   /* WELCOME! */
 
@@ -230,25 +223,26 @@ char *argv[];
 
   /* GETTING PARAMETERS */
 
-  GET_PAR_S(argc, argv, 1, "_Input (ITU-T HEX) file: ....... ", inpfil);
-  GET_PAR_S(argc, argv, 2, "_Output (`short') file: ........ ", outfil);
+  GET_PAR_S (argc, argv, 1, "_Input (ITU-T HEX) file: ....... ", inpfil);
+  GET_PAR_S (argc, argv, 2, "_Output (`short') file: ........ ", outfil);
 
 
   /* OPEN FILES */
 
-  if ((Fi=fopen(inpfil,"r"))==NULL) KILL(inpfil,2);
-  if ((Fo=fopen(outfil,WB))==NULL) KILL(outfil,3);
-  out=fileno(Fo);
+  if ((Fi = fopen (inpfil, "r")) == NULL)
+    KILL (inpfil, 2);
+  if ((Fo = fopen (outfil, WB)) == NULL)
+    KILL (outfil, 3);
+  out = fileno (Fo);
 
   /* FIND FILE SIZE AND ALLOC MEMORY FOR BINARY BUFFER */
 
-  stat(inpfil,&st);
-  if ((bin = (short *)malloc(st.st_size))==(short *)NULL)
-  {
-    fprintf(stderr,"\n Can't allocate memory for output buffer");
-    exit(4);
+  stat (inpfil, &st);
+  if ((bin = (short *) malloc (st.st_size)) == (short *) NULL) {
+    fprintf (stderr, "\n Can't allocate memory for output buffer");
+    exit (4);
   }
-  tmp=bin;
+  tmp = bin;
 
 
   /* INFOS */
@@ -259,102 +253,96 @@ char *argv[];
   /* CONVERSION PART */
 
   /* FIND NUMBER OF LINES IN FILE */
-  while(fgets(line,(int)200,Fi)!=NULL)
+  while (fgets (line, (int) 200, Fi) != NULL)
     lineno++;
-  rewind(Fi);
-  lastline_len = strlen(line);
-  if (line[lastline_len-1]='\n') 
-    lastline_len--; 
-  
+  rewind (Fi);
+  lastline_len = strlen (line);
+  if (line[lastline_len - 1] = '\n')
+    lastline_len--;
+
   /* READ ALL CHARS FOR THE FILE */
-  while(fgets(line,(int)200,Fi)!=NULL)
-  {
+  while (fgets (line, (int) 200, Fi) != NULL) {
     /* Print `working' flag */
-    if (!quiet) 
-     fprintf(stderr, "%c\r", funny[count % 8]);
+    if (!quiet)
+      fprintf (stderr, "%c\r", funny[count % 8]);
 
     /* Update line counter */
     count++;
-    
+
     /* Remove CR from line end */
-    leng = strlen(line);
-    if (line[leng-1] == '\n')
+    leng = strlen (line);
+    if (line[leng - 1] == '\n')
       line[--leng] = '\0';
 
     /* Convert line */
-    switch(leng)
-    {
-      case 64:
-	for (lp=line, i=0;i<leng;i+=2, lp+=2)
-	{
-	  sscanf(lp,"%2hx",tmp);
-	  tmp++; smpno++;
-	}
-	break;
+    switch (leng) {
+    case 64:
+      for (lp = line, i = 0; i < leng; i += 2, lp += 2) {
+        sscanf (lp, "%2hx", tmp);
+        tmp++;
+        smpno++;
+      }
+      break;
 
-      case 2: 
-        /* Check whether the last line */
-        if (count != lineno)
-        {
-          /* If not, it's a regular sample */
-          sscanf(lp,"%2hx",tmp);
-	  tmp++; smpno++;
-        }
-        else
-        {
-          /* value is check-sum */
-	  sscanf(line,"%2hx",&chk);
-	}
-	break;
+    case 2:
+      /* Check whether the last line */
+      if (count != lineno) {
+        /* If not, it's a regular sample */
+        sscanf (lp, "%2hx", tmp);
+        tmp++;
+        smpno++;
+      } else {
+        /* value is check-sum */
+        sscanf (line, "%2hx", &chk);
+      }
+      break;
 
-      default:   /* for old (red-book) test sequences: initialization */
-	for (i=0;i<leng-2;i+=2)
-	{
-	  sscanf(&line[i],"%2hx",tmp);
-	  tmp++; smpno++;
-	}
+    default:                   /* for old (red-book) test sequences: initialization */
+      for (i = 0; i < leng - 2; i += 2) {
+        sscanf (&line[i], "%2hx", tmp);
+        tmp++;
+        smpno++;
+      }
 
-        /* Check sum for old files ... */
-	sscanf(&line[i],"%2hx",&chk);
-	break;
+      /* Check sum for old files ... */
+      sscanf (&line[i], "%2hx", &chk);
+      break;
 
     }
   }
 
   /* CALCULATE CHECK-SUMS */
-  scheck_sum = short_check_sum(bin, smpno);
-  fprintf(stderr, "Check-sum is: %d (calculated) %d (read)\n",
-                  scheck_sum, chk);
-  if (chk != scheck_sum)
-  {
-    fprintf(stderr, "\n Checksum Failed! (%d != %d)\n", chk, scheck_sum);
-    exit(5);
+  scheck_sum = short_check_sum (bin, smpno);
+  fprintf (stderr, "Check-sum is: %d (calculated) %d (read)\n", scheck_sum, chk);
+  if (chk != scheck_sum) {
+    fprintf (stderr, "\n Checksum Failed! (%d != %d)\n", chk, scheck_sum);
+    exit (5);
   }
 
 
   /* INVERT EVEN BITS, IF IT IS THE CASE */
 
-  if (invert_even_bits)
-  {
-    fprintf(stderr, "\r  Inverting even bits, as requested\t\t");
-    for (i=0; i<(tmp-bin)/2; i++) bin[i] ^= 0x55;
+  if (invert_even_bits) {
+    fprintf (stderr, "\r  Inverting even bits, as requested\t\t");
+    for (i = 0; i < (tmp - bin) / 2; i++)
+      bin[i] ^= 0x55;
   }
 
 
   /* SAVE TO FILE */
 
-  for (i=0;i<smpno;i+=256)
-  {
-    if (write(out,&bin[i],512)!=512) KILL(outfil,6);
+  for (i = 0; i < smpno; i += 256) {
+    if (write (out, &bin[i], 512) != 512)
+      KILL (outfil, 6);
   }
 
 
   /* EXITING */
 
-  fprintf(stderr, "\rDone: %d samples converted!\n",smpno);
-  fclose(Fi); fclose(Fo);
+  fprintf (stderr, "\rDone: %d samples converted!\n", smpno);
+  fclose (Fi);
+  fclose (Fo);
 #ifndef VMS
-  exit(0);
+  exit (0);
 #endif
 }
-

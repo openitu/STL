@@ -17,26 +17,24 @@
 #include "g728fp.h"
 
 /* normalize the target vector */
-void g728fp_normtarv(
-	Gain	*gain,		/* linear gain */
-	Statelpc *target)	/* target vector, Q2 */
-{
-	int k;
-	Long igaininv;
-	Nshift nlsgaininv;
-	Float gaininv;
+void g728fp_normtarv (Gain * gain,      /* linear gain */
+                      Statelpc * target) {      /* target vector, Q2 */
+  int k;
+  Long igaininv;
+  Nshift nlsgaininv;
+  Float gaininv;
 
-	/* 1/gain */
-	g728fp_divide(16384, 14, (Long)gain->data, gain->q, &igaininv, &nlsgaininv);
-	/*
-	 * a shift of 15 is used rather than 16 since the result of a multiply
-	 * will never exceed 31 bits (except for the special case -32768*-32768
-	 * and this never happens here since gain is positive.
-	 */
-	gaininv = igaininv;
-	for (k = 0; k < IDIM; k++)
-		 target->data[k] = (Short)((Long)(gaininv*target->data[k])>>15);
-	target->q += nlsgaininv - 15;		/* update Q of target */
-	/* renormalize */
-	target->q += g728fp_vnormalizef(target->data, target->data, 16, IDIM);
+  /* 1/gain */
+  g728fp_divide (16384, 14, (Long) gain->data, gain->q, &igaininv, &nlsgaininv);
+  /* 
+   * a shift of 15 is used rather than 16 since the result of a multiply
+   * will never exceed 31 bits (except for the special case -32768*-32768
+   * and this never happens here since gain is positive.
+   */
+  gaininv = igaininv;
+  for (k = 0; k < IDIM; k++)
+    target->data[k] = (Short) ((Long) (gaininv * target->data[k]) >> 15);
+  target->q += nlsgaininv - 15; /* update Q of target */
+  /* renormalize */
+  target->q += g728fp_vnormalizef (target->data, target->data, 16, IDIM);
 }

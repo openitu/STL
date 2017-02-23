@@ -23,29 +23,27 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
-/**/
+ /**/
 /*	b_con.c -- Constructs bit array.*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
-/**/
+   /**/
 /*	Written by: Matt Hartman*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-/**/
+   /**/
 #include "vparams.h"
-
-void            B_CON(codeWord, numBits, bitArray)
-  int             codeWord;
-  int             numBits;
-  FTYPE          *bitArray;
+void B_CON (codeWord, numBits, bitArray)
+     int codeWord;
+     int numBits;
+     FTYPE *bitArray;
 {
-  int             mask;
-  FTYPE          *endPtr;
+  int mask;
+  FTYPE *endPtr;
 
   mask = 0x1;
-  for (endPtr = bitArray + numBits; bitArray < endPtr; bitArray++)
-  {
+  for (endPtr = bitArray + numBits; bitArray < endPtr; bitArray++) {
     if (codeWord & mask)
       *bitArray = 1.0;
     else

@@ -144,75 +144,73 @@
 */
 
 /* ......... Includes ......... */
-#include <stdio.h>		/* Standard I/O Definitions */
+#include <stdio.h>              /* Standard I/O Definitions */
 #include <ctype.h>              /* for toupper() */
-#include <string.h> /* for strcmp(), strcpy(), strlen() */
-#include "ugstdemo.h"		/* general UGST definitions */
-#include "eid.h"		/* EID functions */
+#include <string.h>             /* for strcmp(), strcpy(), strlen() */
+#include "ugstdemo.h"           /* general UGST definitions */
+#include "eid.h"                /* EID functions */
 
 
 /* .. Local function prototypes for saving/retrieving EID states in file .. */
-void display_usage ARGS((void));
-long save_EID_to_file ARGS((SCD_EID *EID, char *EIDfile, double ber,
-			    double gamma));
-SCD_EID *recall_eid_from_file ARGS((char *EIDfile, double *ber,
-				    double *gamma));
-long READ_L ARGS((FILE *fp, long n, long *longary));
-long READ_lf ARGS((FILE *fp, long n, double *doubleary));
-long READ_c ARGS((FILE *fp, long n, char *chr));
+void display_usage ARGS ((void));
+long save_EID_to_file ARGS ((SCD_EID * EID, char *EIDfile, double ber, double gamma));
+SCD_EID *recall_eid_from_file ARGS ((char *EIDfile, double *ber, double *gamma));
+long READ_L ARGS ((FILE * fp, long n, long *longary));
+long READ_lf ARGS ((FILE * fp, long n, double *doubleary));
+long READ_c ARGS ((FILE * fp, long n, char *chr));
 
 /* Local definitions */
 #define SYNC_WORD (short)0x6B21
 #ifdef STL92
-#define OVERHEAD 1 /* Overhead is sync word */
+#define OVERHEAD 1              /* Overhead is sync word */
 #else
-#define OVERHEAD 2 /* Overhead is sync word and length word*/
+#define OVERHEAD 2              /* Overhead is sync word and length word */
 #endif
 
 
 /* ------------------------------------------------------------------------ */
 /*                               Main Program                               */
 /* ------------------------------------------------------------------------ */
-int main(argc, argv)
-  int             argc;
-  char           *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
-  SCD_EID        *BEReid;	/* pointer to EID-structure */
-  SCD_EID        *FEReid;	/* pointer to EID-structure */
-  char            BERfile[MAX_STRLEN]; /* file for saving bit error EID */
-  char            FERfile[MAX_STRLEN]; /* file for saving bit error EID */
-  char            ifile[MAX_STRLEN], ofile[MAX_STRLEN];
-  FILE           *ifilptr, *ofilptr;
+  SCD_EID *BEReid;              /* pointer to EID-structure */
+  SCD_EID *FEReid;              /* pointer to EID-structure */
+  char BERfile[MAX_STRLEN];     /* file for saving bit error EID */
+  char FERfile[MAX_STRLEN];     /* file for saving bit error EID */
+  char ifile[MAX_STRLEN], ofile[MAX_STRLEN];
+  FILE *ifilptr, *ofilptr;
 
-  static int      EOF_detected = 0;
-  double          FER;		 /* frame erasure rate */
-  double          BER;		 /* bit error rate */
-  double          BER_gamma, FER_gamma;	/* burst factors */
+  static int EOF_detected = 0;
+  double FER;                   /* frame erasure rate */
+  double BER;                   /* bit error rate */
+  double BER_gamma, FER_gamma;  /* burst factors */
 
-  long            lseg;		 /* length of one transmitted frame */
-  double          ber1, fer1;	 /* returns values from BER_generator */
-  double          ersfrms;	 /* total distorted frames */
-  double          prcfrms;	 /* number of processed frames */
-  double          dstbits;	 /* total distorted bits */
-  double          prcbits;	 /* number of processed bits */
+  long lseg;                    /* length of one transmitted frame */
+  double ber1, fer1;            /* returns values from BER_generator */
+  double ersfrms;               /* total distorted frames */
+  double prcfrms;               /* number of processed frames */
+  double dstbits;               /* total distorted bits */
+  double prcbits;               /* number of processed bits */
 
-  short          *xbuff, *ybuff; /* pointer to bit-buffer */
-  short          *EPbuff;	 /* pointer to bit-buffer */
-  short           SYNCword, i;
+  short *xbuff, *ybuff;         /* pointer to bit-buffer */
+  short *EPbuff;                /* pointer to bit-buffer */
+  short SYNCword, i;
 
-  long            smpno;	 /* samples read from file */
-  char            quiet=0;
-  clock_t         t1, t2;
-  double          t;
+  long smpno;                   /* samples read from file */
+  char quiet = 0;
+  clock_t t1, t2;
+  double t;
 
 #if defined(VMS)
-  char            mrs[15]="mrs=512"; /* mrs definition for VMS */
+  char mrs[15] = "mrs=512";     /* mrs definition for VMS */
 #endif
 
 #ifdef PORT_TEST
-    extern int PORTABILITY_TEST_OPERATION;
-    if (PORTABILITY_TEST_OPERATION)
-      fprintf(stderr, "WARNING! %s: compiled for PORTABILITY tests!\n\a", argv[0]);
+  extern int PORTABILITY_TEST_OPERATION;
+  if (PORTABILITY_TEST_OPERATION)
+    fprintf (stderr, "WARNING! %s: compiled for PORTABILITY tests!\n\a", argv[0]);
 #endif
 
 
@@ -221,138 +219,102 @@ int main(argc, argv)
   t1 = 0;
 
 
- /* ......... DISPLAY INFOS ......... */
-  printf("\n ** Error Insertion Device Demo Program - 02/Feb/2010 v3.3 **\n");
+  /* ......... DISPLAY INFOS ......... */
+  printf ("\n ** Error Insertion Device Demo Program - 02/Feb/2010 v3.3 **\n");
 
 
   /* ......... GET PARAMETERS ......... */
 
   /* Check options */
   if (argc < 2)
-    display_usage();
-  else
-  {
+    display_usage ();
+  else {
     while (argc > 1 && argv[1][0] == '-')
-      if (strcmp(argv[1],"-q")==0)
-      {
-	/* Define resolution */
-	quiet = 1;
+      if (strcmp (argv[1], "-q") == 0) {
+        /* Define resolution */
+        quiet = 1;
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc --;
-	argv ++;
-      }
-      else if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "-?") == 0)
-      {
-	/* Display help */
-	display_usage();
-      }
-      else
-      {
-	fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-		argv[1]);
-	display_usage();
+        /* Move arg{c,v} over the option to the next argument */
+        argc--;
+        argv++;
+      } else if (strcmp (argv[1], "-h") == 0 || strcmp (argv[1], "-?") == 0) {
+        /* Display help */
+        display_usage ();
+      } else {
+        fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+        display_usage ();
       }
   }
 
   /* Get first parameter, open file and test for sync word and length */
 
-  GET_PAR_S(1, "_File with input bitstream: ................ ", ifile);
-  if ((ifilptr = fopen(ifile, RB)) == NULL)
-    HARAKIRI("    Could not open input file", 1);
+  GET_PAR_S (1, "_File with input bitstream: ................ ", ifile);
+  if ((ifilptr = fopen (ifile, RB)) == NULL)
+    HARAKIRI ("    Could not open input file", 1);
 
   /* Check if first word in bit-stream file is a SYNC word */
-  smpno = fread(&SYNCword, sizeof(SYNCword),1,ifilptr);
+  smpno = fread (&SYNCword, sizeof (SYNCword), 1, ifilptr);
   if (SYNCword != SYNC_WORD)
-    HARAKIRI("    First word on input file not the SYNC-word (0x6B21)", 1);
+    HARAKIRI ("    First word on input file not the SYNC-word (0x6B21)", 1);
 
   /* Now find the number of bits per frame, lseg */
-  for (lseg = -OVERHEAD, i = 0; i != SYNC_WORD; lseg++)
-  {
-    if ((smpno = fread(&i, sizeof(short),1,ifilptr)) == 0)
-      HARAKIRI("    No next SYNC-word found on input file", 1);
+  for (lseg = -OVERHEAD, i = 0; i != SYNC_WORD; lseg++) {
+    if ((smpno = fread (&i, sizeof (short), 1, ifilptr)) == 0)
+      HARAKIRI ("    No next SYNC-word found on input file", 1);
   }
 
   /* move file pointer back to begin */
-  fseek(ifilptr, 0L, 0);
+  fseek (ifilptr, 0L, 0);
 
 
   /* ... Continue with other parameters ... */
 
-  GET_PAR_S(2, "_File for disturbed bitstream: ............. ", ofile);
-  if ((ofilptr = fopen(ofile, WB)) == NULL)
-    HARAKIRI("    Could not create output file", 1);
+  GET_PAR_S (2, "_File for disturbed bitstream: ............. ", ofile);
+  if ((ofilptr = fopen (ofile, WB)) == NULL)
+    HARAKIRI ("    Could not create output file", 1);
 
   /* Ask for file with EID-States for INSERTING BIT ERRORS */
-  GET_PAR_S(3, "_File with EID-states for bit errors: ...... ", BERfile);
+  GET_PAR_S (3, "_File with EID-states for bit errors: ...... ", BERfile);
 
   /* ... and file with EID-States for FRAME ERASURE MODULE */
-  GET_PAR_S(4, "_File with EID-states for frame erasure: ... ", FERfile);
+  GET_PAR_S (4, "_File with EID-states for frame erasure: ... ", FERfile);
 
-  /* ---------------------------------------------------------------------- 
-   * Try to open file with EID-States for INSERTING BIT ERRORS. If failed
-   * (file does not exist), the user is asked to enter bit error rate and
-   * burst factor. If the file exists, the BIT ERROR INSERTION module
-   * continues with last states, stored on file (bit error rate and gamma are
-   * defined by the states, stored on that file.   
-   * ---------------------------------------------------------------------- */
-  BEReid = recall_eid_from_file(&BERfile[0], &BER, &BER_gamma);
-  if (BEReid == (SCD_EID *) 0)
-  {
-    fprintf(stderr, "%s%s%c",
-	    "!!! File with EID-states (bit error insertion)",
-	    " does not exist: created one!\n", 7);
-    GET_PAR_D(5, "__bit error rate     (0.0 ... 0.50): ....... ", BER);
-    GET_PAR_D(6, "__burst factor       (0.0 ... 0.99): ....... ", BER_gamma);
+  /* ---------------------------------------------------------------------- Try to open file with EID-States for INSERTING BIT ERRORS. If failed (file does not exist), the user is asked to enter bit error rate and burst factor. If the file exists, the BIT ERROR INSERTION module continues with last states, stored on file (bit error rate and gamma are defined by the states, stored on that file. ---------------------------------------------------------------------- */
+  BEReid = recall_eid_from_file (&BERfile[0], &BER, &BER_gamma);
+  if (BEReid == (SCD_EID *) 0) {
+    fprintf (stderr, "%s%s%c", "!!! File with EID-states (bit error insertion)", " does not exist: created one!\n", 7);
+    GET_PAR_D (5, "__bit error rate     (0.0 ... 0.50): ....... ", BER);
+    GET_PAR_D (6, "__burst factor       (0.0 ... 0.99): ....... ", BER_gamma);
 
     /* Setup a new EID */
-    if ((BEReid = open_eid(BER, BER_gamma)) == (SCD_EID *) 0)
-      HARAKIRI("    Could not create EID for bit errors!?", 1);
-    i = 7;			/* next parameter number */
-  }
-  else
-  {
-    i = 5;			/* next parameter number */
-    fprintf(stderr,
-	    "__bit error rate on BER-file: .............. %f\n", BER);
-    fprintf(stderr,
-	    "__burst factor BER_gamma: .................. %f\n", BER_gamma);
+    if ((BEReid = open_eid (BER, BER_gamma)) == (SCD_EID *) 0)
+      HARAKIRI ("    Could not create EID for bit errors!?", 1);
+    i = 7;                      /* next parameter number */
+  } else {
+    i = 5;                      /* next parameter number */
+    fprintf (stderr, "__bit error rate on BER-file: .............. %f\n", BER);
+    fprintf (stderr, "__burst factor BER_gamma: .................. %f\n", BER_gamma);
   }
 
 
-  /* ----------------------------------------------------------------------
-   * Find to open file with EID-States for FRAME ERASURE MODULE. If failed
-   * (file does not exist), the user is asked to enter frame erasure rate and
-   * burst factor. If the file exists, the FRAME ERASURE MODULE continues
-   * with last states, stored on file (frame erasure rate and gamma are
-   * defined by the states, stored on that file.
-   * ---------------------------------------------------------------------- */
-  FEReid = recall_eid_from_file(&FERfile[0], &FER, &FER_gamma);
-  if (FEReid == (SCD_EID *) 0)
-  {
-    fprintf(stderr, "%s%s%c", "!!! File with EID-states (frame ",
-	    "erasure) does not exist: created one!\n", 7);
-    GET_PAR_D(i, "__Frame erasure rate (0.0 ... 0.50): ....... ", FER);
-    if (FER != 0.0)
-    {
-      GET_PAR_D(i + 1, "__Burst factor       (0.0 ... 0.99): ....... ", 
-                       FER_gamma);
+  /* ---------------------------------------------------------------------- Find to open file with EID-States for FRAME ERASURE MODULE. If failed (file does not exist), the user is asked to enter frame erasure rate and burst factor. If the file exists, the FRAME ERASURE MODULE continues with last states, stored on file (frame erasure rate and gamma are defined by the states, stored on that file. ---------------------------------------------------------------------- */
+  FEReid = recall_eid_from_file (&FERfile[0], &FER, &FER_gamma);
+  if (FEReid == (SCD_EID *) 0) {
+    fprintf (stderr, "%s%s%c", "!!! File with EID-states (frame ", "erasure) does not exist: created one!\n", 7);
+    GET_PAR_D (i, "__Frame erasure rate (0.0 ... 0.50): ....... ", FER);
+    if (FER != 0.0) {
+      GET_PAR_D (i + 1, "__Burst factor       (0.0 ... 0.99): ....... ", FER_gamma);
 
       /* Initialize EID (frame erasure) */
-      FEReid = open_eid(FER, FER_gamma); /* Open EID for frame erasure */
-                                         /* gamma=0 ==> random err.sequence */
+      FEReid = open_eid (FER, FER_gamma);       /* Open EID for frame erasure */
+      /* gamma=0 ==> random err.sequence */
       if (FEReid == (SCD_EID *) 0)
-	HARAKIRI("    Could not create EID for frame erasure module!?", 1);
-    }
-    else
-      printf("   FRAME ERASURE MODULE switched off\n");
-  }
-  else
-  {
-    fprintf(stderr, "__Frame erasure rate on FER-file: .......... %f\n", 
-                    FER);
-    fprintf(stderr, "__Burst factor FER_gamma: .................. %f\n", 
-                    FER_gamma);
+        HARAKIRI ("    Could not create EID for frame erasure module!?", 1);
+    } else
+      printf ("   FRAME ERASURE MODULE switched off\n");
+  } else {
+    fprintf (stderr, "__Frame erasure rate on FER-file: .......... %f\n", FER);
+    fprintf (stderr, "__Burst factor FER_gamma: .................. %f\n", FER_gamma);
   }
 
 
@@ -360,21 +322,21 @@ int main(argc, argv)
   * ......... Allocate memory for I/O-buffer .........
   */
 
-  printf("_Bit-frame length found on input file: ..... %ld\n", lseg);
+  printf ("_Bit-frame length found on input file: ..... %ld\n", lseg);
 
   /* Buffer for data from input file: */
-  xbuff = (short *) malloc((OVERHEAD + lseg) * sizeof(short));
+  xbuff = (short *) malloc ((OVERHEAD + lseg) * sizeof (short));
   if (xbuff == (short *) 0)
-    HARAKIRI("    Could not allocate memory for input bitstream buffer", 1);
+    HARAKIRI ("    Could not allocate memory for input bitstream buffer", 1);
 
   /* Buffer for output bitstream: */
-  ybuff = (short *) malloc((OVERHEAD + lseg) * sizeof(short));
+  ybuff = (short *) malloc ((OVERHEAD + lseg) * sizeof (short));
   if (ybuff == (short *) 0)
-    HARAKIRI("    Could not allocate memory for output bitstream buffer", 1);
+    HARAKIRI ("    Could not allocate memory for output bitstream buffer", 1);
 
   /* Buffer for storing the error pattern: */
-  if ((EPbuff = (short *) malloc((lseg) * sizeof(short))) == (short *) 0)
-    HARAKIRI("    Could not allocate memory for error pattern buffer", 1);
+  if ((EPbuff = (short *) malloc ((lseg) * sizeof (short))) == (short *) 0)
+    HARAKIRI ("    Could not allocate memory for error pattern buffer", 1);
 
 
 /*
@@ -382,101 +344,90 @@ int main(argc, argv)
   */
 
   /* initialize counters to compute bit error and frame erasure rates */
-  ersfrms = 0.0;		/* number of erased frames */
-  prcfrms = 0.0;		/* number of processed frames */
-  dstbits = 0.0;		/* number of distorted bits */
-  prcbits = 0.0;		/* number of processed bits */
+  ersfrms = 0.0;                /* number of erased frames */
+  prcfrms = 0.0;                /* number of processed frames */
+  dstbits = 0.0;                /* number of distorted bits */
+  prcbits = 0.0;                /* number of processed bits */
 
   /* Read input soft bitstream frames of lenght lseg+OVERHEAD from file */
-  /*  while ((smpno=fread(xbuff, sizeof(short), (lseg+OVERHEAD)/sizeof(short),
-		      ifilptr)) == (lseg + OVERHEAD)/sizeof(short))
-  */
-  while ((smpno=fread(xbuff, sizeof(short), (lseg+OVERHEAD),
-		      ifilptr)) == (lseg + OVERHEAD))  
-  {
-    if (xbuff[0] == SYNCword && EOF_detected == 0)
-    {
+  /* while ((smpno=fread(xbuff, sizeof(short), (lseg+OVERHEAD)/sizeof(short), ifilptr)) == (lseg + OVERHEAD)/sizeof(short)) */
+  while ((smpno = fread (xbuff, sizeof (short), (lseg + OVERHEAD), ifilptr)) == (lseg + OVERHEAD)) {
+    if (xbuff[0] == SYNCword && EOF_detected == 0) {
       /* Start measuring CPU-time for this round */
-      t1 = clock();
+      t1 = clock ();
 
       /* Generate error pattern ('hard'-bits) */
-      ber1 = BER_generator(BEReid, lseg, EPbuff);
-      dstbits += ber1;		/* count number of disturbed bits */
-      prcbits += (double) lseg;	/* count number of processed bits */
+      ber1 = BER_generator (BEReid, lseg, EPbuff);
+      dstbits += ber1;          /* count number of disturbed bits */
+      prcbits += (double) lseg; /* count number of processed bits */
 
       /* Modify input bitstream according to the stored error pattern */
-      BER_insertion(lseg + OVERHEAD, xbuff, ybuff, EPbuff);
+      BER_insertion (lseg + OVERHEAD, xbuff, ybuff, EPbuff);
 
       /* Apply frame erasure module if requested */
-      if (FER != 0.0)
-      {
-	/* Subject bitstream to frame erasure ... */
-	fer1 = FER_module(FEReid, lseg + OVERHEAD, ybuff, xbuff);
-	ersfrms += fer1;	/* count number of erased frames */
-	prcfrms += (double) 1;	/* count number of processed frames */
-      }
-      else
-      {
-	/* Copy processed bitstream without subjecting to frame erasure ... */
-	for (i = 0; i < lseg + OVERHEAD; i++)
-	  xbuff[i] = ybuff[i];
+      if (FER != 0.0) {
+        /* Subject bitstream to frame erasure ... */
+        fer1 = FER_module (FEReid, lseg + OVERHEAD, ybuff, xbuff);
+        ersfrms += fer1;        /* count number of erased frames */
+        prcfrms += (double) 1;  /* count number of processed frames */
+      } else {
+        /* Copy processed bitstream without subjecting to frame erasure ... */
+        for (i = 0; i < lseg + OVERHEAD; i++)
+          xbuff[i] = ybuff[i];
       }
 
       /* Get partial timimg */
-      t2 = clock();
+      t2 = clock ();
       t += (t2 - t1) / (double) CLOCKS_PER_SEC;
 
       /* and write disturbed bits to output file */
-      smpno = fwrite(xbuff, sizeof(short), (lseg + OVERHEAD), ofilptr);
+      smpno = fwrite (xbuff, sizeof (short), (lseg + OVERHEAD), ofilptr);
 
       /* Print frame info */
-      if (!quiet) 
-        fprintf(stderr, "\r%.0f bits processed", prcbits);
-    }
-    else
+      if (!quiet)
+        fprintf (stderr, "\r%.0f bits processed", prcbits);
+    } else
       EOF_detected = 1;
   }
 
   if (EOF_detected == 1)
-    printf("   --- end of file detected (no SYNCword match) ---\n");
-  printf("\n");
+    printf ("   --- end of file detected (no SYNCword match) ---\n");
+  printf ("\n");
 
 /*
    * ......... Print time and message with measured bit error rate .........
    */
 
- /* Print frame info */
- if (quiet) 
-    fprintf(stderr, "\r%.0f bits processed", prcbits);
+  /* Print frame info */
+  if (quiet)
+    fprintf (stderr, "\r%.0f bits processed", prcbits);
 
-  printf("CPU-time %f sec\r\n\n", t);
+  printf ("CPU-time %f sec\r\n\n", t);
 
-  if (prcbits > 0)
-  {
-    printf("measured bit error rate    : %f\n", dstbits / prcbits);
-    printf("  (%.0f of %.0f bits distorted)\n", dstbits, prcbits);
+  if (prcbits > 0) {
+    printf ("measured bit error rate    : %f\n", dstbits / prcbits);
+    printf ("  (%.0f of %.0f bits distorted)\n", dstbits, prcbits);
   }
 
-  if (prcfrms > 0)
-  {
-    printf("measured frame erasure rate: %f\n", ersfrms / prcfrms);
-    printf("  (%.0f of %.0f frames erased) \n", ersfrms, prcfrms);
+  if (prcfrms > 0) {
+    printf ("measured frame erasure rate: %f\n", ersfrms / prcfrms);
+    printf ("  (%.0f of %.0f frames erased) \n", ersfrms, prcfrms);
   }
 
 /*
   * ...... Save EID-status to file for bit error and frame erasure EIDs ......
   */
 
-  /* NB: the following file I/O is a user defined routine, so this function
-   * is located within this DEMO file -- see below */
-  save_EID_to_file(BEReid, &BERfile[0], BER, BER_gamma);
+  /* NB: the following file I/O is a user defined routine, so this function is located within this DEMO file -- see below */
+  save_EID_to_file (BEReid, &BERfile[0], BER, BER_gamma);
   if (FER != 0.0)
-    save_EID_to_file(FEReid, &FERfile[0], FER, FER_gamma);
+    save_EID_to_file (FEReid, &FERfile[0], FER, FER_gamma);
 
-#ifndef VMS			/* return value to OS if not VMS */
+#ifndef VMS                     /* return value to OS if not VMS */
   return 0;
 #endif
 }
+
 /* .......................... End of main() .......................... */
 
 
@@ -504,9 +455,8 @@ int main(argc, argv)
  ============================================================================
 */
 #define P(x) printf x
-void            display_usage()
-{
-  char            prompt;
+void display_usage () {
+  char prompt;
 
   /* Choose a nice prompt */
 #if defined(VMS)
@@ -520,29 +470,26 @@ void            display_usage()
   P (("eiddemo.c Version 3.3 of 02.Feb.2010\n"));
 
   /* Print the proper usage */
-  P(("  Usage: %c %s%s", prompt,
-	          "EID ifile ofile BERfile FERfile ",
-                  "[ BER BER_gamma FER FER_gamma]\n\n"));
+  P (("  Usage: %c %s%s", prompt, "EID ifile ofile BERfile FERfile ", "[ BER BER_gamma FER FER_gamma]\n\n"));
 
-  P(("\tifile      : binary file with  input bitstream\n"));
-  P(("\tofile      : binary file with output bitstream\n"));
-  P(("%s%s", "\tBERfile    : File, containing the EID-status ",
-	                  "for bit error rate \n"));
-  P(("%s%s", "\tFERfile    : File, containing the EID-status ",
-	                  "for frame erasure module\n"));
-  P(("\tBER        : bit error rate (0.0 ... 0.50)\n"));
-  P(("\tBER_gamma  : burst factor   (0.0 ... 0.99)\n"));
-  P(("\t\t         =0.00 --> errors are totally random\n"));
-  P(("\t\t         =0.50 --> errors are slightly bursty\n"));
-  P(("\t\t         =0.99 --> errors are totally bursty\n"));
-  P(("\tFER        : frame erasure rate (0.0 ... 0.5)\n"));
-  P(("\tFER_gamma  : burst factor   (0.0 ... 0.99)\n"));
-  P(("\t\t         =0.00 --> erasures are totally random\n"));
-  P(("\t\t         =0.50 --> errsures are slightly bursty\n"));
-  P(("\t\t         =0.99 --> errsures are totally bursty\n\n"));
+  P (("\tifile      : binary file with  input bitstream\n"));
+  P (("\tofile      : binary file with output bitstream\n"));
+  P (("%s%s", "\tBERfile    : File, containing the EID-status ", "for bit error rate \n"));
+  P (("%s%s", "\tFERfile    : File, containing the EID-status ", "for frame erasure module\n"));
+  P (("\tBER        : bit error rate (0.0 ... 0.50)\n"));
+  P (("\tBER_gamma  : burst factor   (0.0 ... 0.99)\n"));
+  P (("\t\t         =0.00 --> errors are totally random\n"));
+  P (("\t\t         =0.50 --> errors are slightly bursty\n"));
+  P (("\t\t         =0.99 --> errors are totally bursty\n"));
+  P (("\tFER        : frame erasure rate (0.0 ... 0.5)\n"));
+  P (("\tFER_gamma  : burst factor   (0.0 ... 0.99)\n"));
+  P (("\t\t         =0.00 --> erasures are totally random\n"));
+  P (("\t\t         =0.50 --> errsures are slightly bursty\n"));
+  P (("\t\t         =0.99 --> errsures are totally bursty\n\n"));
 
-  exit(1);
+  exit (1);
 }
+
 /* .................. End of display_usage() ....................... */
 
 
@@ -592,50 +539,47 @@ void            display_usage()
 
   ===========================================================================
 */
-long            save_EID_to_file(EID, EIDfile, BER, GAMMA)
-  SCD_EID        *EID;
-  char           *EIDfile;
-  double          BER, GAMMA;
+long save_EID_to_file (EID, EIDfile, BER, GAMMA)
+     SCD_EID *EID;
+     char *EIDfile;
+     double BER, GAMMA;
 {
-  FILE           *EIDfileptr;
+  FILE *EIDfileptr;
 
   /* open specified ASCII file for "overwriting": */
-  EIDfileptr = fopen(EIDfile, RWT);
+  EIDfileptr = fopen (EIDfile, RWT);
 
   /* If failed, create new file: */
-  if (EIDfileptr == NULL)
-  {
-    if ((EIDfileptr = fopen(EIDfile, WT)) == NULL)
+  if (EIDfileptr == NULL) {
+    if ((EIDfileptr = fopen (EIDfile, WT)) == NULL)
       return (0L);
   }
 
   /* otherwise: set filepointer to beginning of file for overwriting */
-    else
-    {
-      fseek(EIDfileptr, 0L, 0);
-    }
+  else {
+    fseek (EIDfileptr, 0L, 0);
+  }
 
-  /* Since the selected bit error rate and burst factor cannot be seen from
-   * the transition matrix, these values are also stored in file (only for
-   * documentation purposes). */
-  fprintf(EIDfileptr, "BER           = %f\n", BER);
-  fprintf(EIDfileptr, "GAMMA         = %f\n", GAMMA);
+  /* Since the selected bit error rate and burst factor cannot be seen from the transition matrix, these values are also stored in file (only for documentation purposes). */
+  fprintf (EIDfileptr, "BER           = %f\n", BER);
+  fprintf (EIDfileptr, "GAMMA         = %f\n", GAMMA);
 
   /* current state of random generator: */
-  fprintf(EIDfileptr, "RAN-seed      = 0x%08lx\n", get_RAN_seed(EID));
+  fprintf (EIDfileptr, "RAN-seed      = 0x%08lx\n", get_RAN_seed (EID));
 
   /* current state of GEC-model: */
-  fprintf(EIDfileptr, "Current State = %c\n", get_GEC_current_state(EID));
+  fprintf (EIDfileptr, "Current State = %c\n", get_GEC_current_state (EID));
 
   /* Save contents of Transition Matrix: */
-  fprintf(EIDfileptr, "GOOD->GOOD    = %f\n", get_GEC_matrix(EID, 'G', 'G'));
-  fprintf(EIDfileptr, "GOOD->BAD     = %f\n", get_GEC_matrix(EID, 'G', 'B'));
-  fprintf(EIDfileptr, "BAD ->GOOD    = %f\n", get_GEC_matrix(EID, 'B', 'G'));
-  fprintf(EIDfileptr, "BAD ->BAD     = %f\n", get_GEC_matrix(EID, 'B', 'B'));
+  fprintf (EIDfileptr, "GOOD->GOOD    = %f\n", get_GEC_matrix (EID, 'G', 'G'));
+  fprintf (EIDfileptr, "GOOD->BAD     = %f\n", get_GEC_matrix (EID, 'G', 'B'));
+  fprintf (EIDfileptr, "BAD ->GOOD    = %f\n", get_GEC_matrix (EID, 'B', 'G'));
+  fprintf (EIDfileptr, "BAD ->BAD     = %f\n", get_GEC_matrix (EID, 'B', 'B'));
 
-  fclose(EIDfileptr);
+  fclose (EIDfileptr);
   return (1L);
 }
+
 /* ....................... End of save_EID_to_file() ....................... */
 
 
@@ -676,59 +620,60 @@ long            save_EID_to_file(EID, EIDfile, BER, GAMMA)
 
  ============================================================================
 */
-SCD_EID        *recall_eid_from_file(EIDfile, ber, gamma)
-  char           *EIDfile;
-  double         *ber;
-  double         *gamma;
+SCD_EID *recall_eid_from_file (EIDfile, ber, gamma)
+     char *EIDfile;
+     double *ber;
+     double *gamma;
 {
-  SCD_EID        *EID;
-  FILE           *EIDfileptr;
-  char            chr;
-  double          thr;
-  long            seed;
+  SCD_EID *EID;
+  FILE *EIDfileptr;
+  char chr;
+  double thr;
+  long seed;
 
 
   /* Open ASCII file with EID states */
-  if ((EIDfileptr = fopen(EIDfile, RT)) == NULL)
+  if ((EIDfileptr = fopen (EIDfile, RT)) == NULL)
     return ((SCD_EID *) 0);
 
   /* Load channel model parameters ber and gamma */
-  READ_lf(EIDfileptr, 1L, ber);
-  READ_lf(EIDfileptr, 1L, gamma);
+  READ_lf (EIDfileptr, 1L, ber);
+  READ_lf (EIDfileptr, 1L, gamma);
 
   /* Now open EID with default values and update states afterwards from file */
-  if ((EID = open_eid(*ber, *gamma)) == (SCD_EID *) 0)
+  if ((EID = open_eid (*ber, *gamma)) == (SCD_EID *) 0)
     return ((SCD_EID *) 0);
 
   /* update EID-struct from file: seed for random generator */
-  READ_L(EIDfileptr, 1L, &seed);
-  set_RAN_seed(EID, (unsigned long) seed);	/* store into struct */
+  READ_L (EIDfileptr, 1L, &seed);
+  set_RAN_seed (EID, (unsigned long) seed);     /* store into struct */
 
   /* update EID-struct from file: current state */
-  READ_c(EIDfileptr, 1L, &chr);
-  set_GEC_current_state(EID, chr);
+  READ_c (EIDfileptr, 1L, &chr);
+  set_GEC_current_state (EID, chr);
 
   /* update EID-struct from file: threshold GOOD->GOOD */
-  READ_lf(EIDfileptr, 1L, &thr);
-  set_GEC_matrix(EID, thr, 'G', 'G');
+  READ_lf (EIDfileptr, 1L, &thr);
+  set_GEC_matrix (EID, thr, 'G', 'G');
 
   /* update EID-struct from file: threshold GOOD->BAD */
-  READ_lf(EIDfileptr, 1L, &thr);
-  set_GEC_matrix(EID, thr, 'G', 'B');
+  READ_lf (EIDfileptr, 1L, &thr);
+  set_GEC_matrix (EID, thr, 'G', 'B');
 
   /* update EID-struct from file: threshold BAD ->GOOD */
-  READ_lf(EIDfileptr, 1L, &thr);
-  set_GEC_matrix(EID, thr, 'B', 'G');
+  READ_lf (EIDfileptr, 1L, &thr);
+  set_GEC_matrix (EID, thr, 'B', 'G');
 
   /* update EID-struct from file: threshold BAD ->BAD */
-  READ_lf(EIDfileptr, 1L, &thr);
-  set_GEC_matrix(EID, thr, 'B', 'B');
+  READ_lf (EIDfileptr, 1L, &thr);
+  set_GEC_matrix (EID, thr, 'B', 'B');
 
 
   /* Finalizations */
-  fclose(EIDfileptr);
+  fclose (EIDfileptr);
   return (EID);
 }
+
 /* ..................... End of recall_eid_from_file() ..................... */
 
 
@@ -756,40 +701,35 @@ SCD_EID        *recall_eid_from_file(EIDfile, ber, gamma)
 
  ============================================================================
 */
-long
-                READ_L(fp, n, longary)
-  FILE           *fp;
-  long            n;
-  long           *longary;
+long READ_L (fp, n, longary)
+     FILE *fp;
+     long n;
+     long *longary;
 {
-  long            i, ic;
-  char            c;
-  char            ch[16];
+  long i, ic;
+  char c;
+  char ch[16];
 
 
-  while ((c = getc(fp)) != '=');
-  for (i = 0; i < n; i++)
-  {
-    while (((c = getc(fp)) == 32) || (c == 9));
+  while ((c = getc (fp)) != '=');
+  for (i = 0; i < n; i++) {
+    while (((c = getc (fp)) == 32) || (c == 9));
 
     ic = 0;
-    while ((c != 32) && (c != 9) && (c != '\n') && (ic < 15))
-    {
+    while ((c != 32) && (c != 9) && (c != '\n') && (ic < 15)) {
       ch[ic++] = c;
-      c = getc(fp);
+      c = getc (fp);
     }
     ch[ic] = (char) 0;
-    if ((ch[0] == '0') && (toupper((int)ch[1]) == 'X'))
-    {
-      sscanf(&ch[2], "%lx", &longary[i]);
-    }
-    else
-    {
-      sscanf(ch, "%ld", &longary[i]);
+    if ((ch[0] == '0') && (toupper ((int) ch[1]) == 'X')) {
+      sscanf (&ch[2], "%lx", &longary[i]);
+    } else {
+      sscanf (ch, "%ld", &longary[i]);
     }
   }
   return (n);
 }
+
 /* ....................... End of READ_L() ....................... */
 
 
@@ -817,33 +757,31 @@ long
 
  ============================================================================
 */
-long
-                READ_lf(fp, n, doubleary)
-  FILE           *fp;
-  long            n;
-  double         *doubleary;
+long READ_lf (fp, n, doubleary)
+     FILE *fp;
+     long n;
+     double *doubleary;
 {
-  long            i, ic;
-  char            c;
-  char            ch[64];
+  long i, ic;
+  char c;
+  char ch[64];
 
 
-  while ((c = getc(fp)) != '=');
-  for (i = 0; i < n; i++)
-  {
-    while (((c = getc(fp)) == 32) || (c == 9));
+  while ((c = getc (fp)) != '=');
+  for (i = 0; i < n; i++) {
+    while (((c = getc (fp)) == 32) || (c == 9));
 
     ic = 0;
-    while ((c != 32) && (c != 9) && (c != '\n') && (ic < 63))
-    {
+    while ((c != 32) && (c != 9) && (c != '\n') && (ic < 63)) {
       ch[ic++] = c;
-      c = getc(fp);
+      c = getc (fp);
     }
     ch[ic] = (char) 0;
-    sscanf(ch, "%lf", &doubleary[i]);
+    sscanf (ch, "%lf", &doubleary[i]);
   }
   return (n);
 }
+
 /* ....................... End of READ_lf() ....................... */
 
 
@@ -871,23 +809,22 @@ long
 
  ============================================================================
 */
-long
-                READ_c(fp, n, chr)
-  FILE           *fp;
-  long            n;
-  char           *chr;
+long READ_c (fp, n, chr)
+     FILE *fp;
+     long n;
+     char *chr;
 {
-  long            i;
-  char            c;
+  long i;
+  char c;
 
 
-  while ((c = getc(fp)) != '=');
-  for (i = 0; i < n; i++)
-  {
-    while (((c = getc(fp)) == 32) || (c == 9));
+  while ((c = getc (fp)) != '=');
+  for (i = 0; i < n; i++) {
+    while (((c = getc (fp)) == 32) || (c == 9));
     *chr = c;
-    while ((c = getc(fp)) != '\n');
+    while ((c = getc (fp)) != '\n');
   }
   return (n);
 }
+
 /* ....................... End of READ_c() ....................... */

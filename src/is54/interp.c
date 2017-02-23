@@ -32,18 +32,15 @@ Motorola Inc.
 #include <math.h>
 #include "vparams.h"
 
-int             ATORC();   /* from paramConv.c*/
-                /*FTYPE *a, FTYPE *k*/
-void            I_MOV();    /* from here*/
-                /*struct coefSet defSet, int numSets, FTYPE rq0*/
-FTYPE           RES_ENG();
-                /*FTYPE rq0, FTYPE *k*/
+int ATORC ();                   /* from paramConv.c */
+                /* FTYPE *a, FTYPE *k */
+void I_MOV ();                  /* from here */
+                /* struct coefSet defSet, int numSets, FTYPE rq0 */
+FTYPE RES_ENG ();
+                /* FTYPE rq0, FTYPE *k */
 
-static FTYPE   *aPtr;		/* points (in I_CBUFF) to the beginning of
-				 * the interpolated direct-form coefs for 
-				 * the current subframe */
-static FTYPE   *rsPtr;		/* points (in rsBuf) to the next spot to be
-				 * filled by an rs value */
+static FTYPE *aPtr;             /* points (in I_CBUFF) to the beginning of the interpolated direct-form coefs for the current subframe */
+static FTYPE *rsPtr;            /* points (in rsBuf) to the next spot to be filled by an rs value */
 
 
 
@@ -51,34 +48,30 @@ static FTYPE   *rsPtr;		/* points (in rsBuf) to the next spot to be
  *      INTERPOLATE interpolates between coef sets based on the subframe
  *	index.
  */
-int             INTERPOLATE(defCoefs, numSets, oCoefs, i, rq0)
-  struct coefSet  defCoefs;
-  int             numSets;
-  struct coefSet  oCoefs;
-  int             i;
-  FTYPE           rq0;
+int INTERPOLATE (defCoefs, numSets, oCoefs, i, rq0)
+     struct coefSet defCoefs;
+     int numSets;
+     struct coefSet oCoefs;
+     int i;
+     FTYPE rq0;
 {
-  static FTYPE   *intCoefPtr;	/* points (in I_CBUFF) to the next spot for */
+  static FTYPE *intCoefPtr;     /* points (in I_CBUFF) to the next spot for */
   /* an interpolated coef */
-  FTYPE           defPct;	/* percentage that defCoefs contribute to */
+  FTYPE defPct;                 /* percentage that defCoefs contribute to */
   /* interpolated coefficients */
-  FTYPE           oPct;		/* percentage that oCoefs contribute to
-				 * interpolated */
+  FTYPE oPct;                   /* percentage that oCoefs contribute to interpolated */
   /* coefficients */
-  FTYPE          *defPtr;	/* points to the direct-form coefficients in
-				 * the */
+  FTYPE *defPtr;                /* points to the direct-form coefficients in the */
   /* default set */
-  FTYPE          *oPtr;		/* points to the direct-form coefficients in
-				 * the */
+  FTYPE *oPtr;                  /* points to the direct-form coefficients in the */
   /* other set */
-  FTYPE          *kPtr;		/* points to buffer that gets k's from
-				 * atorc() */
-  int             unstableFlag;	/* set if interpolated coefs yield unstable */
+  FTYPE *kPtr;                  /* points to buffer that gets k's from atorc() */
+  int unstableFlag;             /* set if interpolated coefs yield unstable */
   /* filter */
 
-  FTYPE          *endPtr, fTmp;
+  FTYPE *endPtr, fTmp;
 
-  kPtr = (FTYPE *) malloc(NP * sizeof(FTYPE));
+  kPtr = (FTYPE *) malloc (NP * sizeof (FTYPE));
 
 /*	get interpolation percentages to use from last and current coefs*/
   fTmp = (FTYPE) (i + 1) / (FTYPE) N_SUB;
@@ -86,8 +79,7 @@ int             INTERPOLATE(defCoefs, numSets, oCoefs, i, rq0)
   oPct = 1.0 - defPct;
 
 /*	interpolate coef sets*/
-  if (i == 0)
-  {
+  if (i == 0) {
     intCoefPtr = I_CBUFF;
     aPtr = I_CBUFF;
     rsPtr = RS_BUFF;
@@ -95,8 +87,7 @@ int             INTERPOLATE(defCoefs, numSets, oCoefs, i, rq0)
 
   defPtr = defCoefs.a;
   oPtr = oCoefs.a;
-  for (endPtr = defPtr + numSets * NP; defPtr < endPtr; defPtr++)
-  {
+  for (endPtr = defPtr + numSets * NP; defPtr < endPtr; defPtr++) {
     *intCoefPtr = *defPtr * defPct + *oPtr * oPct;
     intCoefPtr++;
     oPtr++;
@@ -106,30 +97,29 @@ int             INTERPOLATE(defCoefs, numSets, oCoefs, i, rq0)
 /*	(i.e., the last or current set) and calculate residual estimate*/
 /*	based on that set.  If stable, calculate residual based on*/
 /*	interpolated set.*/
-  if ((unstableFlag = ATORC(aPtr, kPtr)) == 1)
-    I_MOV(defCoefs, numSets, rq0);
-  else
-  {
-    *rsPtr = RES_ENG(rq0, kPtr);
+  if ((unstableFlag = ATORC (aPtr, kPtr)) == 1)
+    I_MOV (defCoefs, numSets, rq0);
+  else {
+    *rsPtr = RES_ENG (rq0, kPtr);
     rsPtr += 2;
   }
   aPtr += numSets * NP;
-  free(kPtr);
+  free (kPtr);
   return unstableFlag;
 }
 
 
 /*	I_MOV moves a set of coefs into the I_CBUFF buffer and calculates*/
 /*	an RS value based on that set*/
-void            I_MOV(defSet, numSets, rq0)
-  struct coefSet  defSet;
-  int             numSets;
-  FTYPE           rq0;
+void I_MOV (defSet, numSets, rq0)
+     struct coefSet defSet;
+     int numSets;
+     FTYPE rq0;
 {
-  FTYPE          *tmpPtr, *tmpPtr2, *endPtr;
+  FTYPE *tmpPtr, *tmpPtr2, *endPtr;
 
 /*	calculate residual estimate*/
-  *rsPtr = RES_ENG(rq0, defSet.k);
+  *rsPtr = RES_ENG (rq0, defSet.k);
   rsPtr += 2;
 
 /*	move default coef set to interpolated set buffer.*/
@@ -141,21 +131,19 @@ void            I_MOV(defSet, numSets, rq0)
 
 
 /*	RES_ENG calculates a residual energy estimate*/
-FTYPE           RES_ENG(rq0, k)
-  FTYPE           rq0;
-  FTYPE          *k;
+FTYPE RES_ENG (rq0, k)
+     FTYPE rq0;
+     FTYPE *k;
 {
-  FTYPE          *endPtr /* , tmp = 1.0 */, ftmp;
-  double tmp=1.0;
+  FTYPE *endPtr /* , tmp = 1.0 */ , ftmp;
+  double tmp = 1.0;
 
 /*	perform canonic product, take square root, multiply by rq0*/
   for (endPtr = k + NP; k < endPtr; k++)
     tmp *= 1.0 - *k * *k;
   ftmp = tmp;
-  assert(tmp>=0);
-  tmp = sqrt(tmp);
+  assert (tmp >= 0);
+  tmp = sqrt (tmp);
   tmp *= rq0;
-  return (FTYPE)tmp;
+  return (FTYPE) tmp;
 }
-
-

@@ -20,18 +20,17 @@
 extern "C" {
 #endif
 
-#ifdef _WIN32 	/* Windows 95, 98 or NT */
+#ifdef _WIN32                   /* Windows 95, 98 or NT */
 #ifndef WINAPIV
 #define WINAPIV __cdecl
 #endif
-#else		/* Unix, Linux */
+#else                           /* Unix, Linux */
 #define WINAPIV
 #endif
 
-void WINAPIV error(char *s, ...);
+  void WINAPIV error (char *s, ...);
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif  /* __ERROR_H__ */
+#endif                          /* __ERROR_H__ */

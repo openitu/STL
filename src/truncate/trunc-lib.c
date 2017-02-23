@@ -36,18 +36,17 @@
 */
 
 /* Routine to truncate a frame */
-void trunca(syncWord, outFrameLgth, inpFrame, outFrame)
-short syncWord;		/* Synchronisation word */
-short outFrameLgth;	/* Length of the output frame */
-short* inpFrame;	/* input frame */
-short* outFrame;	/* output frame */
+void trunca (syncWord, outFrameLgth, inpFrame, outFrame)
+     short syncWord;            /* Synchronisation word */
+     short outFrameLgth;        /* Length of the output frame */
+     short *inpFrame;           /* input frame */
+     short *outFrame;           /* output frame */
 {
-	int i;
+  int i;
 
-	outFrame[0]=syncWord;
-	outFrame[1]=outFrameLgth;
-	for(i=0; i<outFrameLgth; i++)
-	{
-		outFrame[i+2]=inpFrame[i];
-	}
+  outFrame[0] = syncWord;
+  outFrame[1] = outFrameLgth;
+  for (i = 0; i < outFrameLgth; i++) {
+    outFrame[i + 2] = inpFrame[i];
+  }
 }

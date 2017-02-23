@@ -23,34 +23,31 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
-/**/
+ /**/
 /*	rs_rr.c -- Computes sqrt(RS/R(x,x)).*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
-/**/
+   /**/
 /*	Written by: Matt Hartman*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-/**/
+   /**/
 #include "vparams.h"
-
 #include <math.h>
-
-FTYPE           RS_RR(vecPtr, rs)
-  FTYPE          *vecPtr;
-  FTYPE           rs;
+  FTYPE RS_RR (vecPtr, rs)
+     FTYPE *vecPtr;
+     FTYPE rs;
 {
-  FTYPE          *endPtr, Rxx = 0.0;
+  FTYPE *endPtr, Rxx = 0.0;
 
 /*	compute energy in excitation vector*/
-/**/
-  for (endPtr = vecPtr + S_LEN; vecPtr < endPtr; vecPtr++)
+   /**/ for (endPtr = vecPtr + S_LEN; vecPtr < endPtr; vecPtr++)
     Rxx += *vecPtr * *vecPtr;
 
 /* return (rs / sqrt(Rxx)); */
   if (Rxx > 1.e-10)
-    return (rs / sqrt(Rxx));
+    return (rs / sqrt (Rxx));
   else
     return (0.0);
 }

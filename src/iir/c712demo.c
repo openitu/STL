@@ -101,18 +101,18 @@
  * ......... INCLUDES .........
  */
 
-#include <stdio.h>		  /* UNIX Standard I/O Definitions */
-#include <stdlib.h>		  /* atoi() */
-#include "ugstdemo.h"		  /* private defines for user interface */
-#include "ugst-utl.h"		  /* conversion from float -> short */
-#include "iirflt.h"		  /* G.712 IIR filtering functions */
+#include <stdio.h>              /* UNIX Standard I/O Definitions */
+#include <stdlib.h>             /* atoi() */
+#include "ugstdemo.h"           /* private defines for user interface */
+#include "ugst-utl.h"           /* conversion from float -> short */
+#include "iirflt.h"             /* G.712 IIR filtering functions */
 
 /*
  * ......... Definitions for this test program .........
  */
 
-#define LSEG0    256	/* default segment length for segment-wise filtering */
-#define LSEGMAX 2048	/* max. number of samples to be proc. */
+#define LSEG0    256            /* default segment length for segment-wise filtering */
+#define LSEGMAX 2048            /* max. number of samples to be proc. */
 
 
 /*
@@ -141,33 +141,33 @@
  ============================================================================
 */
 #define P(x) printf x
-void display_usage()
-{
-  P(("C712DEMO.C - Version 1.1 of 02.Feb.2010 \n\n"));
- 
-  P((" Example program for testing the correct implementation of theIIR\n"));
-  P((" G.712 filtering without rate change using the IIR-G.712 module.\n"));
-  P((" Input signal must be at 8kHz; output signal will be at 8kHz\n"));
-  P(("\n"));
-  P((" Usage:\n"));
-  P((" ~~~~~~\n"));
-  P((" $ IIRDEMO ! ---> HELP text is printed to screen\n"));
-  P((" or\n"));
-  P((" $ IIRDEMO [-options] ifile ofile [lseg]\n"));
-  P((" where:\n"));
-  P((" ifile: .. INPUT  FILE with short data (binary files)\n"));
-  P((" ofile: .. OUTPUT FILE with short data (binary files)\n"));
-  P((" lseg: ... number of samples per processing block\n"));
-  P(("           (default is LSEG0=256)\n"));
-  P(("\n"));
-  P((" Options:\n"));
-  P((" ~~~~~~~~\n"));
-  P((" -skip no ... don't save to file the 1st `no' processed samples \n"));
-  P((" -lseg l .... set as `l' the number of samples per processing block\n"));
+void display_usage () {
+  P (("C712DEMO.C - Version 1.1 of 02.Feb.2010 \n\n"));
+
+  P ((" Example program for testing the correct implementation of theIIR\n"));
+  P ((" G.712 filtering without rate change using the IIR-G.712 module.\n"));
+  P ((" Input signal must be at 8kHz; output signal will be at 8kHz\n"));
+  P (("\n"));
+  P ((" Usage:\n"));
+  P ((" ~~~~~~\n"));
+  P ((" $ IIRDEMO ! ---> HELP text is printed to screen\n"));
+  P ((" or\n"));
+  P ((" $ IIRDEMO [-options] ifile ofile [lseg]\n"));
+  P ((" where:\n"));
+  P ((" ifile: .. INPUT  FILE with short data (binary files)\n"));
+  P ((" ofile: .. OUTPUT FILE with short data (binary files)\n"));
+  P ((" lseg: ... number of samples per processing block\n"));
+  P (("           (default is LSEG0=256)\n"));
+  P (("\n"));
+  P ((" Options:\n"));
+  P ((" ~~~~~~~~\n"));
+  P ((" -skip no ... don't save to file the 1st `no' processed samples \n"));
+  P ((" -lseg l .... set as `l' the number of samples per processing block\n"));
 
   /* Quit program */
-  exit(-128);
+  exit (-128);
 }
+
 #undef P
 /* ...................... End of display_usage() ........................... */
 
@@ -184,38 +184,37 @@ void display_usage()
  **************************************************************************
  **************************************************************************
 */
-int main(argc, argv)
-  int             argc;
-  char           *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
 /*
  * ......... Define symbols of type  CASCADE_IIR for each filter .........
  */
-  CASCADE_IIR        *typ1_ptr;
+  CASCADE_IIR *typ1_ptr;
 
   /* ......... signal arrays ......... */
-  short           sh_buff[8 * LSEGMAX];	/* 16-bit buffer */
-  float           fl_buff[LSEGMAX];	/* float buffer */
-  float           buff1[2 * LSEGMAX];	/* output of 1. filter */
+  short sh_buff[8 * LSEGMAX];   /* 16-bit buffer */
+  float fl_buff[LSEGMAX];       /* float buffer */
+  float buff1[2 * LSEGMAX];     /* output of 1. filter */
 
   /* ......... File related variables ......... */
-  char            inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
-  FILE           *inpfilptr, *outfilptr;
+  char inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
+  FILE *inpfilptr, *outfilptr;
 #if defined(VMS)
-  static char     mrs[15] = "mrs=";
+  static char mrs[15] = "mrs=";
 #endif
 
   /* ......... other auxiliary variables ......... */
-  clock_t         t1, t2;	  /* aux. for CPU-time measurement */
-  long            lseg=LSEG0, lsegx, lseg1;
-  long            noverflows1 = 0;
-  long            nsam = 0;
-  long skip=0;
+  clock_t t1, t2;               /* aux. for CPU-time measurement */
+  long lseg = LSEG0, lsegx, lseg1;
+  long noverflows1 = 0;
+  long nsam = 0;
+  long skip = 0;
 
   /* ......... PRINT INFOS ......... */
 
-  printf("%s%s", "*** V1.1 DEMO-Program: G.712 Up/Down Sampling ",
-                 "Filter, with IIR - 30-Sep-1994 ***\n");
+  printf ("%s%s", "*** V1.1 DEMO-Program: G.712 Up/Down Sampling ", "Filter, with IIR - 30-Sep-1994 ***\n");
 
 /*
  * ......... PARAMETERS FOR PROCESSING .........
@@ -224,66 +223,55 @@ int main(argc, argv)
   /* GETTING OPTIONS */
 
   if (argc < 2)
-    display_usage();
-  else
-  {
+    display_usage ();
+  else {
     while (argc > 1 && argv[1][0] == '-')
-      if (strcmp(argv[1], "-skip") == 0)
-      {
-	/* No reset */
-	skip = atoi(argv[2]);
+      if (strcmp (argv[1], "-skip") == 0) {
+        /* No reset */
+        skip = atoi (argv[2]);
 
-	/* Update argc/argv to next valid option/argument */
-	argv+=2;
-	argc-=2;
-      }
-      else if (strcmp(argv[1], "-len") == 0)
-      {
-	lseg = atoi(argv[2]);
-	/* If max.seg.length is exceeded, display warning */
-	if (lseg > LSEGMAX)
-	{
-	  lseg = LSEGMAX;
-	  fprintf(stderr, "Warning! lseg limited to max of %ld\n", lseg);
-	}
+        /* Update argc/argv to next valid option/argument */
+        argv += 2;
+        argc -= 2;
+      } else if (strcmp (argv[1], "-len") == 0) {
+        lseg = atoi (argv[2]);
+        /* If max.seg.length is exceeded, display warning */
+        if (lseg > LSEGMAX) {
+          lseg = LSEGMAX;
+          fprintf (stderr, "Warning! lseg limited to max of %ld\n", lseg);
+        }
 
-	/* Update argc/argv to next valid option/argument */
-	argv+=2;
-	argc-=2;
-      }
-      else if (strcmp(argv[1], "-?") == 0 || strcmp(argv[1], "-help") == 0)
-      {
-	/* Print help */
-	display_usage();
-      }
-      else
-      {
-	fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-		argv[1]);
-	display_usage();
+        /* Update argc/argv to next valid option/argument */
+        argv += 2;
+        argc -= 2;
+      } else if (strcmp (argv[1], "-?") == 0 || strcmp (argv[1], "-help") == 0) {
+        /* Print help */
+        display_usage ();
+      } else {
+        fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+        display_usage ();
       }
   }
 
 
   /* ......... GETTING PARAMETERS ......... */
 #ifdef VMS
-  sprintf(&mrs[4], "%d", 2 * 256);/* mrs definition for VMS */
+  sprintf (&mrs[4], "%d", 2 * 256);     /* mrs definition for VMS */
 #endif
 
-  GET_PAR_S(1, "_BIN-File to be processed: ............... ", inpfil);
-  if ((inpfilptr = fopen(inpfil, RB)) == NULL)
-    HARAKIRI("\n   Error opening input file", 1);
+  GET_PAR_S (1, "_BIN-File to be processed: ............... ", inpfil);
+  if ((inpfilptr = fopen (inpfil, RB)) == NULL)
+    HARAKIRI ("\n   Error opening input file", 1);
 
-  GET_PAR_S(2, "_BIN-Output File: ........................ ", outfil);
-  if ((outfilptr = fopen(outfil, WB)) == NULL)
-    HARAKIRI("\n   Error opening output file", 1);
+  GET_PAR_S (2, "_BIN-Output File: ........................ ", outfil);
+  if ((outfilptr = fopen (outfil, WB)) == NULL)
+    HARAKIRI ("\n   Error opening output file", 1);
 
-  FIND_PAR_L(3, "_Segment Length for Filtering: ........... ", lseg, lseg);
-  if (lseg > LSEGMAX)
-  {
+  FIND_PAR_L (3, "_Segment Length for Filtering: ........... ", lseg, lseg);
+  if (lseg > LSEGMAX) {
     /* If max.seg.length is exceeded, display warning */
     lseg = LSEGMAX;
-    fprintf(stderr, "Warning! lseg limited to max of %ld\n", lseg);
+    fprintf (stderr, "Warning! lseg limited to max of %ld\n", lseg);
   }
 
 
@@ -291,8 +279,8 @@ int main(argc, argv)
    * ... INITIALIZE SELECTED IIR-STRUCTURE FOR UP-/DOWNSAMPLING ...
    */
 
-  if ((typ1_ptr = iir_G712_8khz_init()) == 0)
-    HARAKIRI("Filter 1: initialization failure iir_G712_8khz()", 1);
+  if ((typ1_ptr = iir_G712_8khz_init ()) == 0)
+    HARAKIRI ("Filter 1: initialization failure iir_G712_8khz()", 1);
 
 
 /*
@@ -300,37 +288,34 @@ int main(argc, argv)
    */
 
   /* measure CPU-time */
-  t1 = clock();
+  t1 = clock ();
 
   lsegx = lseg;
-  while (lsegx == lseg)
-  {
+  while (lsegx == lseg) {
     /* Read input buffer */
-    lsegx = fread(sh_buff, sizeof(short), lseg, inpfilptr);
+    lsegx = fread (sh_buff, sizeof (short), lseg, inpfilptr);
 
     /* convert short data to float in normalized range */
-    sh2fl_16bit(lsegx, sh_buff, fl_buff, 1);
+    sh2fl_16bit (lsegx, sh_buff, fl_buff, 1);
 
 
     /* IIR filtering */
-    lseg1 =			  /* Returned: number of output samples */
-	cascade_iir_kernel(		  /* cascade form IIR filter */
-		      lsegx,	  /* In   : number of input samples */
-		      fl_buff,	  /* In   : array with input samples */
-		      typ1_ptr,	  /* InOut: pointer to IIR struct */
-		      buff1	  /* Out  : array with output samples */
-	);
+    lseg1 =                     /* Returned: number of output samples */
+      cascade_iir_kernel (      /* cascade form IIR filter */
+                           lsegx,       /* In : number of input samples */
+                           fl_buff,     /* In : array with input samples */
+                           typ1_ptr,    /* InOut: pointer to IIR struct */
+                           buff1        /* Out : array with output samples */
+      );
 
     /* Convert to integer for testing overflows -- do not save! */
-    noverflows1 += fl2sh_16bit(lseg1, buff1, sh_buff, (int) 0);
+    noverflows1 += fl2sh_16bit (lseg1, buff1, sh_buff, (int) 0);
 
     /* Skip samples if requested */
-    if (lseg1 > skip)
-    {
+    if (lseg1 > skip) {
       /* Write samples to output file */
-      nsam += fwrite(&sh_buff[skip], sizeof(short), (lseg1-skip), outfilptr);
-    }
-    else
+      nsam += fwrite (&sh_buff[skip], sizeof (short), (lseg1 - skip), outfilptr);
+    } else
       skip -= lseg1;
   }
 
@@ -340,28 +325,27 @@ int main(argc, argv)
    */
 
   /* Print time statistics - Include file I/O! */
-  t2 = clock();
-  printf("\nDONE: %f sec CPU-time for %ld generated samples\n",
-	 (t2 - t1) / (double) CLOCKS_PER_SEC, nsam);
+  t2 = clock ();
+  printf ("\nDONE: %f sec CPU-time for %ld generated samples\n", (t2 - t1) / (double) CLOCKS_PER_SEC, nsam);
 
   /* Print overflow statistics */
   if (noverflows1 == 0)
-    printf("\t # NO overflows occurred\n");
-  else
-  {
-    printf("\t # Overflow in %ld samples\n", noverflows1);
+    printf ("\t # NO overflows occurred\n");
+  else {
+    printf ("\t # Overflow in %ld samples\n", noverflows1);
   }
 
   /* Release memory allocated to IIR structures */
   if (typ1_ptr != (CASCADE_IIR *) NULL)
-    cascade_iir_free(typ1_ptr);
+    cascade_iir_free (typ1_ptr);
 
   /* Close files */
-  fclose(outfilptr);
-  fclose(inpfilptr);
+  fclose (outfilptr);
+  fclose (inpfilptr);
 
 #ifndef VMS
   return 0;
 #endif
 }
+
 /* ......................... End of main() ......................... */

@@ -56,7 +56,7 @@ rpeltp_decode ......... Entry-level function for the decoding algorithm.
 
 ============================================================================
 */
-#include <stdio.h> /* For NULL */
+#include <stdio.h>              /* For NULL */
 #include "private.h"
 #include "gsm.h"
 #include "rpeltp.h"
@@ -142,21 +142,20 @@ rpeltp_decode ......... Entry-level function for the decoding algorithm.
 
   ------------------------------------------------------------------------
 */
-gsm rpeltp_init()
-{
+gsm rpeltp_init () {
   gsm rpe_state;
-  int	gsm_compliant = 0;
+  int gsm_compliant = 0;
 
   /* Initializa state variable */
-  if (!(rpe_state = gsm_create())) 
-    return((gsm)(NULL));
-   
-  /* The gsm_{en,de}code() routines may operate on a compliant mode, or
-   * in a non-compliant, faster mode - here we use the complyant one */
-  (void)gsm_option(rpe_state, GSM_OPT_FAST, &gsm_compliant);
+  if (!(rpe_state = gsm_create ()))
+    return ((gsm) (NULL));
 
-  return(rpe_state);
+  /* The gsm_{en,de}code() routines may operate on a compliant mode, or in a non-compliant, faster mode - here we use the complyant one */
+  (void) gsm_option (rpe_state, GSM_OPT_FAST, &gsm_compliant);
+
+  return (rpe_state);
 }
+
 /* ................... End of rpeltp_init() ......................... */
 
 
@@ -207,15 +206,15 @@ gsm rpeltp_init()
 
   ------------------------------------------------------------------------
 */
-void rpeltp_encode(rpe_state, inp_buf, rpe_frame)
-gsm rpe_state;
-short *inp_buf, *rpe_frame;
+void rpeltp_encode (rpe_state, inp_buf, rpe_frame)
+     gsm rpe_state;
+     short *inp_buf, *rpe_frame;
 {
-    gsm_frame rpe_packed_frame;
-    
-    /* Run both and save decoded samples */
-    gsm_encode(rpe_state, inp_buf, rpe_packed_frame);
-    gsm_explode(rpe_state, rpe_packed_frame, rpe_frame);
+  gsm_frame rpe_packed_frame;
+
+  /* Run both and save decoded samples */
+  gsm_encode (rpe_state, inp_buf, rpe_packed_frame);
+  gsm_explode (rpe_state, rpe_packed_frame, rpe_frame);
 }
 
 /* ................... End of rpeltp_encode() ......................... */
@@ -265,16 +264,17 @@ short *inp_buf, *rpe_frame;
 
   ------------------------------------------------------------------------
 */
-void rpeltp_decode(rpe_state, rpe_frame, out_buf)
-gsm rpe_state;
-short *out_buf, *rpe_frame;
+void rpeltp_decode (rpe_state, rpe_frame, out_buf)
+     gsm rpe_state;
+     short *out_buf, *rpe_frame;
 {
-    gsm_frame rpe_packed_frame;
+  gsm_frame rpe_packed_frame;
 
-    /* Pack frame, run only the decoder and save the decoded samples */
-    gsm_implode(rpe_state, rpe_frame, rpe_packed_frame);
-    gsm_decode(rpe_state, rpe_packed_frame, out_buf);
+  /* Pack frame, run only the decoder and save the decoded samples */
+  gsm_implode (rpe_state, rpe_frame, rpe_packed_frame);
+  gsm_decode (rpe_state, rpe_packed_frame, out_buf);
 }
+
 /* ................... End of rpeltp_decode() ......................... */
 
 /* -------------------------- END OF RPELTP.C ------------------------ */

@@ -75,16 +75,16 @@ HISTORY:
 
 /* General includes */
 #include <math.h>
-#include <stdlib.h> /* for calloc(), free() */
-#include <string.h> /* for memset() */
+#include <stdlib.h>             /* for calloc(), free() */
+#include <string.h>             /* for memset() */
 
-#ifndef STL92_RNG /* Uses the new Random Number Generator */
+#ifndef STL92_RNG               /* Uses the new Random Number Generator */
 #define random_MNRU new_random_MNRU
 
 /* Local function prototypes */
-float new_random_MNRU ARGS((char *mode, new_RANDOM_state *r, long seed));
-float ran_vax ARGS((void));
-unsigned long ran16_32c ARGS((void));
+float new_random_MNRU ARGS ((char *mode, new_RANDOM_state * r, long seed));
+float ran_vax ARGS ((void));
+unsigned long ran16_32c ARGS ((void));
 
 /*
   =============================================================================
@@ -125,67 +125,64 @@ unsigned long ran16_32c ARGS((void));
 
 =============================================================================
 */
-#define S1    -8.0      /* s1 = my - 4 * sigma (=-8.0 for gaussian noise) */
-#define S2     8.0      /* s2 = my + 4 * sigma (= 8.0 for gaussian noise) */
-#define DIF    16.0     /* s2 - s1                                        */
-#define MO     8.0      /* mo = 2 * (sigma)^2  (= 8.0 for gaussian noise) */
+#define S1    -8.0              /* s1 = my - 4 * sigma (=-8.0 for gaussian noise) */
+#define S2     8.0              /* s2 = my + 4 * sigma (= 8.0 for gaussian noise) */
+#define DIF    16.0             /* s2 - s1 */
+#define MO     8.0              /* mo = 2 * (sigma)^2 (= 8.0 for gaussian noise) */
 #define BIT15  32767.0
-#define TABLE_SIZE 8192 /* 2^13 */
+#define TABLE_SIZE 8192         /* 2^13 */
 #define ITER_NO 8
-#define FACTOR 8  /* = 65536(max.no returned by ran16_32c) div.by TABLE_SIZE */
-float           new_random_MNRU(mode, r, seed)
-  char           *mode;
-  RANDOM_state   *r;
-  long           seed;
+#define FACTOR 8                /* = 65536(max.no returned by ran16_32c) div.by TABLE_SIZE */
+float new_random_MNRU (mode, r, seed)
+     char *mode;
+     RANDOM_state *r;
+     long seed;
 {
 
-  long    i;
-  double  z1;            /* white random number   -8...8          */
-                         /* weighted with a gaussian distribution */
-  double  z2;            /* white random number    0...1          */
-  double  phi;           /* gauss curve                           */
+  long i;
+  double z1;                    /* white random number -8...8 */
+  /* weighted with a gaussian distribution */
+  double z2;                    /* white random number 0...1 */
+  double phi;                   /* gauss curve */
 
-  extern float ran_vax();
-  extern unsigned long ran16_32c();
+  extern float ran_vax ();
+  extern unsigned long ran16_32c ();
 
   long index;
 
   /* *** RUN INITIALIZATION SEQUENCE *** */
-  if (*mode == RANDOM_RESET)	/* then reset sequence */
-  {
+  if (*mode == RANDOM_RESET) {  /* then reset sequence */
     /* Toogle mode from reset to run */
     *mode = RANDOM_RUN;
 
     /* Allocate memory for gaussian table */
-    r->gauss = (float *)calloc(TABLE_SIZE, sizeof(float));
+    r->gauss = (float *) calloc (TABLE_SIZE, sizeof (float));
 
     /* Generate gaussian random number table */
-    for(i=0L; i<TABLE_SIZE; i++)
-    {
+    for (i = 0L; i < TABLE_SIZE; i++) {
       /* Interact until find gaussian sample */
-      do
-      {
-	z1 = S1 + DIF*(double)ran_vax();
-	phi= exp( -(z1)*(z1)/MO);
-	z2 = (double)ran_vax();
-      } while(z2 > phi);
+      do {
+        z1 = S1 + DIF * (double) ran_vax ();
+        phi = exp (-(z1) * (z1) / MO);
+        z2 = (double) ran_vax ();
+      } while (z2 > phi);
 
       /* Save gaussian-distributed sample in table */
-      r->gauss[i] = (float)z1;
+      r->gauss[i] = (float) z1;
     }
   }
 
-  /* ***  REAL GENERATOR (after initialization) ***/
-  for (z1=0, i=0;i<ITER_NO;i++) 
-  {
-    index = ran16_32c()/FACTOR;
+  /* *** REAL GENERATOR (after initialization) ** */
+  for (z1 = 0, i = 0; i < ITER_NO; i++) {
+    index = ran16_32c () / FACTOR;
     z1 += r->gauss[index];
   }
-  z1 /= 2; /* provisional */
+  z1 /= 2;                      /* provisional */
 
   /* Return gaussian sample */
-  return ((float)z1);
+  return ((float) z1);
 }
+
 #undef TABLE_SIZE
 #undef BIT15
 #undef MO
@@ -231,24 +228,23 @@ float           new_random_MNRU(mode, r, seed)
 #define CONST         69069
 #define INIT          314159265L
 #define BIT32         4294967296.0
-float ran_vax()
-{
-  static unsigned long  seed, buffer;
-  static float          ran;
-  static short          firsttime=0;
+float ran_vax () {
+  static unsigned long seed, buffer;
+  static float ran;
+  static short firsttime = 0;
 
-  if(firsttime == 0)
-  {
-  	firsttime = 1;
-  	seed      = INIT;
+  if (firsttime == 0) {
+    firsttime = 1;
+    seed = INIT;
   }
 
-  seed    = seed * CONST + 1;         /* includes the mod 2**32 operation  */
-  buffer  = seed & 0xFFFFFF00;        /* mask the first 24 bit             */
-  ran     = (float)buffer / BIT32;    /* and divide by 2**32 to get random */
+  seed = seed * CONST + 1;      /* includes the mod 2**32 operation */
+  buffer = seed & 0xFFFFFF00;   /* mask the first 24 bit */
+  ran = (float) buffer / BIT32; /* and divide by 2**32 to get random */
 
-  return(ran);
+  return (ran);
 }
+
 /*  ......................... End of ran_vax() ............................ */
 
 
@@ -286,21 +282,21 @@ float ran_vax()
 */
 #define BIT24	16777216.0
 #define BIT8    256.0
-unsigned long ran16_32c()
-{
-  static float   seed = 12345.0;
-  double         buffer1, buffer2;
-  long           seedl;
-  unsigned long  result;
+unsigned long ran16_32c () {
+  static float seed = 12345.0;
+  double buffer1, buffer2;
+  long seedl;
+  unsigned long result;
 
   buffer1 = ((253.0 * seed) + 1.0);
-  buffer2 = (buffer1/BIT24) ;
-  seedl   = ((long)buffer2) & 0x00FFFFFFL;
-  seed    = buffer1 = buffer1 - (float)seedl * BIT24;
-  result  = buffer1 / BIT8;
+  buffer2 = (buffer1 / BIT24);
+  seedl = ((long) buffer2) & 0x00FFFFFFL;
+  seed = buffer1 = buffer1 - (float) seedl *BIT24;
+  result = buffer1 / BIT8;
 
   return result;
 }
+
 #undef BIT8
 #undef BIT24
 /*  .................... End of ran16_32c() ....................... */
@@ -310,7 +306,7 @@ unsigned long ran16_32c()
 #define random_MNRU ori_random_MNRU
 
 /* Local function prototypes */
-float ori_random_MNRU ARGS((char *mode, ori_RANDOM_state *r, long seed));
+float ori_random_MNRU ARGS ((char *mode, ori_RANDOM_state * r, long seed));
 
 /*
   ===========================================================================
@@ -367,22 +363,21 @@ float ori_random_MNRU ARGS((char *mode, ori_RANDOM_state *r, long seed));
 #define FAC (1.0/MBIG)
 #define ITER_NO 47
 
-float           ori_random_MNRU(mode, r, seed)
-  char           *mode;
-  RANDOM_state   *r;
-  long           seed;
+float ori_random_MNRU (mode, r, seed)
+     char *mode;
+     RANDOM_state *r;
+     long seed;
 {
-  long            mj, mk;
-  long            i, ii, k, iter;
-  float           tmp;
+  long mj, mk;
+  long i, ii, k, iter;
+  float tmp;
 
 
 /*
  *   RESET OF RANDOM SEQUENCE
  */
 
-  if (*mode == RANDOM_RESET)	/* then reset sequence */
-  {
+  if (*mode == RANDOM_RESET) {  /* then reset sequence */
     /* Toogle mode from reset to run */
     *mode = RANDOM_RUN;
 
@@ -392,30 +387,27 @@ float           ori_random_MNRU(mode, r, seed)
     r->ma[55] = mj;
     mk = 1;
 
-    /* Now initialize the rest of the table ma with numbers that are not
-     * specially random, in a slightly random order */
-    for (i = 1; i <= 54; i++)
-    {
+    /* Now initialize the rest of the table ma with numbers that are not specially random, in a slightly random order */
+    for (i = 1; i <= 54; i++) {
       ii = (21 * i) % 55;
       r->ma[ii] = mk;
       mk = mj - mk;
       if (mk < MZ)
-	mk += MBIG;
+        mk += MBIG;
       mj = r->ma[ii];
     }
 
     /* Warming-up the generator */
     for (k = 1; k <= 4; k++)
-      for (i = 1; i <= 55; i++)
-      {
-	r->ma[i] -= r->ma[1 + (i + 30) % 55];
-	if (r->ma[i] < MZ)
-	  r->ma[i] += MBIG;
+      for (i = 1; i <= 55; i++) {
+        r->ma[i] -= r->ma[1 + (i + 30) % 55];
+        if (r->ma[i] < MZ)
+          r->ma[i] += MBIG;
       }
 
     /* Prepar indices for 1st.generated number */
     r->inext = 0;
-    r->inextp = 31;		/* The constant 31 is special; see [1] */
+    r->inextp = 31;             /* The constant 31 is special; see [1] */
     r->idum = 1;
   }
 
@@ -425,8 +417,7 @@ float           ori_random_MNRU(mode, r, seed)
  */
 
   /* Accumulate samples to make an approxiamtion of the 'central limit' */
-  for (tmp = 0, iter = 0; iter < ITER_NO; iter++)
-  {
+  for (tmp = 0, iter = 0; iter < ITER_NO; iter++) {
     /* Increment inext,inextp (mod 55) */
     if (++r->inext == 56)
       r->inext = 1;
@@ -543,31 +534,30 @@ float           ori_random_MNRU(mode, r, seed)
 #define NOISE_GAIN 0.3793
 #endif
 
-double         *MNRU_process(operation, s, input, output, n, seed, mode, Q)
-  char            operation, mode;
-  MNRU_state     *s;
-  float          *input, *output;
-  long            n, seed;
-  double          Q;
+double *MNRU_process (operation, s, input, output, n, seed, mode, Q)
+     char operation, mode;
+     MNRU_state *s;
+     float *input, *output;
+     long n, seed;
+     double Q;
 {
-  long            count, i;
-  double          noise, tmp;
+  long count, i;
+  double noise, tmp;
   register double inp_smp, out_tmp, out_flt;
 
 
-  /*
+  /* 
    *    ..... RESET PORTION .....
    */
 
   /* Check if is START of operation: reset state and allocate memory buffer */
-  if (operation == MNRU_START)
-  {
+  if (operation == MNRU_START) {
 
     /* Reset clip counter */
     s->clip = 0;
 
     /* Allocate memory for sample's buffer */
-   if ((s->vet = (double *) calloc(n, sizeof(double))) == DNULL)
+    if ((s->vet = (double *) calloc (n, sizeof (double))) == DNULL)
       return ((double *) DNULL);
 
     /* Seed for random number generation */
@@ -578,13 +568,13 @@ double         *MNRU_process(operation, s, input, output, n, seed, mode, Q)
       s->signal_gain = 1.000;
     else if (mode == SIGNAL_ONLY)
       s->signal_gain = 1.000;
-    else			/* (mode == NOISE_ONLY) */
+    else                        /* (mode == NOISE_ONLY) */
       s->signal_gain = 0.000;
 
     /* Gain for noise path */
     if (mode == MOD_NOISE || mode == NOISE_ONLY)
-      s->noise_gain = NOISE_GAIN * pow(10.0, (-0.05 * Q));
-    else			/* (mode == SIGNAL_ONLY) */
+      s->noise_gain = NOISE_GAIN * pow (10.0, (-0.05 * Q));
+    else                        /* (mode == SIGNAL_ONLY) */
       s->noise_gain = 0;
 
     /* Flag for random sequence initialization */
@@ -592,39 +582,50 @@ double         *MNRU_process(operation, s, input, output, n, seed, mode, Q)
 
     /* Initialization of the output low-pass filter */
     /* Cleanup memory */
-    memset(s->DLY, '\0', sizeof(s->DLY));
+    memset (s->DLY, '\0', sizeof (s->DLY));
 
 #ifdef NBMNRU_MASK_ONLY
     /* Load numerator coefficients */
-    s->A[0][0]= 0.758717518025; s->A[0][1]= 1.50771485802; s->A[0][2]= 0.758717518025;
-    s->A[1][0]= 0.758717518025; s->A[1][1]= 1.46756552150; s->A[1][2]= 0.758717518025;
+    s->A[0][0] = 0.758717518025;
+    s->A[0][1] = 1.50771485802;
+    s->A[0][2] = 0.758717518025;
+    s->A[1][0] = 0.758717518025;
+    s->A[1][1] = 1.46756552150;
+    s->A[1][2] = 0.758717518025;
 
     /* Load denominator coefficients */
-    s->B[0][0]= 1.16833932919; s->B[0][1]= 0.400250061172;
-    s->B[1][0]= 1.66492368687; s->B[1][1]= 0.850653444434;
+    s->B[0][0] = 1.16833932919;
+    s->B[0][1] = 0.400250061172;
+    s->B[1][0] = 1.66492368687;
+    s->B[1][1] = 0.850653444434;
 #else
     /* Load numerator coefficients */
-    s->A[0][0]= 0.775841885724; s->A[0][1]= 1.54552788762; s->A[0][2]= 0.775841885724;
-    s->A[1][0]= 0.775841885724; s->A[1][1]= 1.51915539326; s->A[1][2]= 0.775841885724;
+    s->A[0][0] = 0.775841885724;
+    s->A[0][1] = 1.54552788762;
+    s->A[0][2] = 0.775841885724;
+    s->A[1][0] = 0.775841885724;
+    s->A[1][1] = 1.51915539326;
+    s->A[1][2] = 0.775841885724;
 
     /* Load denominator coefficients */
-    s->B[0][0]= 1.23307153957; s->B[0][1]= 0.430807372835;
-    s->B[1][0]= 1.71128410940; s->B[1][1]= 0.859087959597;
+    s->B[0][0] = 1.23307153957;
+    s->B[0][1] = 0.430807372835;
+    s->B[1][0] = 1.71128410940;
+    s->B[1][1] = 0.859087959597;
 #endif
 
     /* Initialization of the input DC-removal filter */
     s->last_xk = s->last_yk = 0;
   }
 
-  /*
+  /* 
    *    ..... REAL MNRU WORK .....
    */
 
   /* Initialize memory */
-  memset(s->vet, '\0', n * sizeof(double));
+  memset (s->vet, '\0', n * sizeof (double));
 
-  for (count = 0; count < n; count++)
-  {
+  for (count = 0; count < n; count++) {
     /* Copy sample to local variable */
     inp_smp = *input++;
 
@@ -640,52 +641,50 @@ double         *MNRU_process(operation, s, input, output, n, seed, mode, Q)
     /* Overwrite DC-removed version of the input signal */
     inp_smp = tmp;
 #endif
-    
+
     /* Random number generation */
     if (mode == SIGNAL_ONLY)
       noise = 0;
-    else
-    {
-      noise = (double) random_MNRU(&s->rnd_mode, &s->rnd_state, s->seed);
-      noise *= s->noise_gain * inp_smp;	/* noise modulated by input sample */
-      if (noise>1.00 || noise <-1.00) s->clip++; /* clip counter */
+    else {
+      noise = (double) random_MNRU (&s->rnd_mode, &s->rnd_state, s->seed);
+      noise *= s->noise_gain * inp_smp; /* noise modulated by input sample */
+      if (noise > 1.00 || noise < -1.00)
+        s->clip++;              /* clip counter */
     }
 
     /* Addition of signal and modulated noise */
-    out_tmp  = noise + inp_smp * s->signal_gain;
+    out_tmp = noise + inp_smp * s->signal_gain;
 
 #ifdef NO_OUT_FILTER
     out_flt = out_tmp;
 #else
     /* Filter output sample by each stage of the low-pass IIR filter */
-    for (i=0; i<MNRU_STAGE_OUT_FLT; i++)
-    {
-        out_flt = out_tmp * s->A[i][0] + s->DLY[i][1];
-        s->DLY[i][1] = out_tmp * s->A[i][1] - out_flt * s->B[i][0] + 
-	               s->DLY[i][0];
-        s->DLY[i][0] = out_tmp * s->A[i][2] - out_flt * s->B[i][1];
+    for (i = 0; i < MNRU_STAGE_OUT_FLT; i++) {
+      out_flt = out_tmp * s->A[i][0] + s->DLY[i][1];
+      s->DLY[i][1] = out_tmp * s->A[i][1] - out_flt * s->B[i][0] + s->DLY[i][0];
+      s->DLY[i][0] = out_tmp * s->A[i][2] - out_flt * s->B[i][1];
 
-        out_tmp = out_flt;  /* output becomes input for next stage */
+      out_tmp = out_flt;        /* output becomes input for next stage */
     }
 #endif
 
     /* Copy noise-modulated speech sample to output vector */
-    *output++  = out_flt;
+    *output++ = out_flt;
   }
 
   /* Check if is end of operation THEN release memory buffer */
-  if (operation == MNRU_STOP)
-  {
-    free(s->rnd_state.gauss);
-    free(s->vet);
+  if (operation == MNRU_STOP) {
+    free (s->rnd_state.gauss);
+    free (s->vet);
     s->vet = (double *) DNULL;
   }
 
   /* Return address of vet: if NULL, nothing is allocated */
   return ((double *) s->vet);
 }
+
 #undef NOISE_GAIN
-#undef DNULL 
+#undef DNULL
 #undef ALPHA
 
 /*  .................... End of MNRU_process() ....................... */

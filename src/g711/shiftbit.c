@@ -41,66 +41,79 @@
  * Includes dependent of the Operating System
  */
 #if defined(VMS)
-# include <stat.h>
+#include <stat.h>
 #elif defined (MSDOS)
-# include <sys\stat.h>
+#include <sys\stat.h>
 #else
-# include <sys/stat.h>
+#include <sys/stat.h>
 #endif
 
 #define RIGHT 1
 #define LEFT -1
 
-int main(int argc, char *argv[])
-{
-  char inp[MAX_STRLEN],out[MAX_STRLEN];
+int main (int argc, char *argv[]) {
+  char inp[MAX_STRLEN], out[MAX_STRLEN];
   short *buf;
-  int qinp,qout,shift,dir;
+  int qinp, qout, shift, dir;
   FILE *Fi, *Fo;
-  int fi,fo;
+  int fi, fo;
 #ifdef VMS
-  char mrs[15]="mrs=512";
+  char mrs[15] = "mrs=512";
 #endif
   struct stat info;
-  long l,k;
+  long l, k;
 
-  GET_PAR_S(1, "Input file: ......... ", inp);
-  GET_PAR_I(2, "Input file is Q.",qinp);
-  GET_PAR_S(3, "Output file: ........ ", out);
-  GET_PAR_I(4, "Input file is Q.",qout);
+  GET_PAR_S (1, "Input file: ......... ", inp);
+  GET_PAR_I (2, "Input file is Q.", qinp);
+  GET_PAR_S (3, "Output file: ........ ", out);
+  GET_PAR_I (4, "Input file is Q.", qout);
 
   if (qout == qinp)
-    HARAKIRI("Makes no sense a shift of 0 ... \n",7)
-  else if (qout > qinp) dir=RIGHT;
-  else dir=LEFT;
-
-  l= qout-qinp;
-  if (l<0) l= -l;
-
-  for (shift = 1, k=0; k < l; k++) shift *=2;
-
-  if ((Fi = fopen(inp,RB)) == NULL) KILL (inp,2); fi=fileno(Fi);
-  if ((Fo = fopen(out,WB)) == NULL) KILL (inp,3); fo=fileno(Fo);
-
-  stat(inp,&info);
-  if ((buf=(short *)malloc(info.st_size))==NULL)
-    HARAKIRI ("Can't alloc inp\n",4);
-  l=info.st_size/2;
-
-  fprintf(stderr, "%s: Reading, ",inp);
-  for (k=0; k<l; k+=256)
-    if (read(fi,&buf[k],512)<0) KILL (inp,5);
-
-  fprintf(stderr, "shifting, ");
-  if (dir==RIGHT)
-    for (k=0; k<l; k++) buf[k] = (buf[k]*shift);
+    HARAKIRI ("Makes no sense a shift of 0 ... \n", 7)
+      else
+  if (qout > qinp)
+    dir = RIGHT;
   else
-    for (k=0; k<l; k++) buf[k] = (buf[k]/shift);
+    dir = LEFT;
 
-  fprintf(stderr, "and writing ... ");
-  for (k=0; k<l; k+=256)
-    if (write(fo,&buf[k],512)<=0) KILL (inp,6);
+  l = qout - qinp;
+  if (l < 0)
+    l = -l;
 
-  fprintf(stderr, "Done!\n");
-  fclose(Fi); fclose(Fo);
+  for (shift = 1, k = 0; k < l; k++)
+    shift *= 2;
+
+  if ((Fi = fopen (inp, RB)) == NULL)
+    KILL (inp, 2);
+  fi = fileno (Fi);
+  if ((Fo = fopen (out, WB)) == NULL)
+    KILL (inp, 3);
+  fo = fileno (Fo);
+
+  stat (inp, &info);
+  if ((buf = (short *) malloc (info.st_size)) == NULL)
+    HARAKIRI ("Can't alloc inp\n", 4);
+  l = info.st_size / 2;
+
+  fprintf (stderr, "%s: Reading, ", inp);
+  for (k = 0; k < l; k += 256)
+    if (read (fi, &buf[k], 512) < 0)
+      KILL (inp, 5);
+
+  fprintf (stderr, "shifting, ");
+  if (dir == RIGHT)
+    for (k = 0; k < l; k++)
+      buf[k] = (buf[k] * shift);
+  else
+    for (k = 0; k < l; k++)
+      buf[k] = (buf[k] / shift);
+
+  fprintf (stderr, "and writing ... ");
+  for (k = 0; k < l; k += 256)
+    if (write (fo, &buf[k], 512) <= 0)
+      KILL (inp, 6);
+
+  fprintf (stderr, "Done!\n");
+  fclose (Fi);
+  fclose (Fo);
 }

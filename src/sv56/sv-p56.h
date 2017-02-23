@@ -39,30 +39,28 @@
 #endif
 
 /* State for speech voltmeter function */
-typedef struct
-{
-  float           f;            /* sampling frequency, in Hz */
-  unsigned long   a[15];        /* activity count */
-  double          c[15];        /* threshold level; 15 is the no.of thres. */
-  unsigned long   hang[15];     /* hangover count */
-  unsigned long   n;            /* number of samples read since last reset */
-  double          s;            /* sum of all samples since last reset */
-  double          sq;           /* squared sum of samples since last reset */
-  double          p;            /* intermediate quantities */
-  double          q;            /* envelope */
-  double          max;          /* max absolute value found since last reset */
-  double          refdB;        /* 0 dB reference point, in [dB] */
-  double          rmsdB;        /* rms value found since last reset */
-  double          maxP, maxN;   /* maximum pos/neg.values since last reset */
-  double          DClevel;      /* average level since last reset */
-  double          ActivityFactor; /* Activity factor since last reset */
-}               SVP56_state;
+typedef struct {
+  float f;                      /* sampling frequency, in Hz */
+  unsigned long a[15];          /* activity count */
+  double c[15];                 /* threshold level; 15 is the no.of thres. */
+  unsigned long hang[15];       /* hangover count */
+  unsigned long n;              /* number of samples read since last reset */
+  double s;                     /* sum of all samples since last reset */
+  double sq;                    /* squared sum of samples since last reset */
+  double p;                     /* intermediate quantities */
+  double q;                     /* envelope */
+  double max;                   /* max absolute value found since last reset */
+  double refdB;                 /* 0 dB reference point, in [dB] */
+  double rmsdB;                 /* rms value found since last reset */
+  double maxP, maxN;            /* maximum pos/neg.values since last reset */
+  double DClevel;               /* average level since last reset */
+  double ActivityFactor;        /* Activity factor since last reset */
+} SVP56_state;
 
 /* Speech voltmeter prototypes */
-double bin_interp ARGS((double upcount, double lwcount, double upthr, 
-			double lwthr, double Margin, double tol));
-void init_speech_voltmeter ARGS((SVP56_state *state, double sampl_freq));
-double speech_voltmeter ARGS((float *buffer, long smpno, SVP56_state *state));
+double bin_interp ARGS ((double upcount, double lwcount, double upthr, double lwthr, double Margin, double tol));
+void init_speech_voltmeter ARGS ((SVP56_state * state, double sampl_freq));
+double speech_voltmeter ARGS ((float *buffer, long smpno, SVP56_state * state));
 
 
 /* Definitions for getting statistics from a `SVP56_state' variable */

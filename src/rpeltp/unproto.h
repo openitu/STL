@@ -6,7 +6,7 @@
 
 /*$Header: /home/kbs/jutta/src/gsm/gsm-1.0/inc/RCS/unproto.h,v 1.1 1992/10/28 00:11:08 jutta Exp $*/
 
-#ifdef	PROTO_H		/* sic */
+#ifdef	PROTO_H                 /* sic */
 #undef	PROTO_H
 
 #undef	P
@@ -20,4 +20,4 @@
 #undef	P7
 #undef	P8
 
-#endif	/* PROTO_H */
+#endif /* PROTO_H */

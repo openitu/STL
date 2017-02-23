@@ -23,30 +23,28 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
-/**/
+ /**/
 /*	p_ex.c -- Generation of pitch excitation vector from ltp state.*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
-/**/
+   /**/
 /*	Written by: Matt Hartman*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-/**/
+   /**/
 #include "vparams.h"
-
-void            P_EX(oPtr, psPtr, lag)
-  FTYPE          *oPtr;
-  FTYPE          *psPtr;
-  int             lag;
+void P_EX (oPtr, psPtr, lag)
+     FTYPE *oPtr;
+     FTYPE *psPtr;
+     int lag;
 {
-  FTYPE          *tmpPtr, *savePtr, *savePtr2, *endPtr;
+  FTYPE *tmpPtr, *savePtr, *savePtr2, *endPtr;
 
-  savePtr = psPtr + LMAX;	/* savePtr set past end of LTP state */
-  tmpPtr = savePtr - lag;	/* tmpPtr set to pickoff point */
-  savePtr2 = tmpPtr;		/* savePtr2 set to pickoff point */
-  for (endPtr = oPtr + S_LEN; oPtr < endPtr; oPtr++)
-  {
+  savePtr = psPtr + LMAX;       /* savePtr set past end of LTP state */
+  tmpPtr = savePtr - lag;       /* tmpPtr set to pickoff point */
+  savePtr2 = tmpPtr;            /* savePtr2 set to pickoff point */
+  for (endPtr = oPtr + S_LEN; oPtr < endPtr; oPtr++) {
     *oPtr = *tmpPtr;
     tmpPtr++;
     if (tmpPtr == savePtr)

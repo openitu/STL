@@ -109,31 +109,31 @@ extern int currCounter;
  *                the range 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-Word16 lshl( Word16 var1, Word16 var2) {
-   Word16 var_out=0;
+Word16 lshl (Word16 var1, Word16 var2) {
+  Word16 var_out = 0;
 
-   if( var2 < 0) {
-      var2 = -var2;
-      var_out = lshr( var1, var2);
+  if (var2 < 0) {
+    var2 = -var2;
+    var_out = lshr (var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].lshr--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].lshr--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      if( var2 == 0 || var1 == 0) {
-         var_out = var1;
-      } else if( var2 >= 16) {
-         var_out = 0;
-      } else {
-         var_out = var1 << var2;
-      }
-   }
-   #if (WMOPS)
-   multiCounter[currCounter].lshl++;
-   #endif /* ifdef WMOPS */
+  } else {
+    if (var2 == 0 || var1 == 0) {
+      var_out = var1;
+    } else if (var2 >= 16) {
+      var_out = 0;
+    } else {
+      var_out = var1 << var2;
+    }
+  }
+#if (WMOPS)
+  multiCounter[currCounter].lshl++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 /*****************************************************************************
@@ -168,33 +168,33 @@ Word16 lshl( Word16 var1, Word16 var2) {
  *                the range 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-Word16 lshr( Word16 var1, Word16 var2) {
-   Word16 var_out;
+Word16 lshr (Word16 var1, Word16 var2) {
+  Word16 var_out;
 
-   if( var2 < 0) {
-      var2 = -var2;
-      var_out = lshl( var1, var2);
+  if (var2 < 0) {
+    var2 = -var2;
+    var_out = lshl (var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].lshl--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].lshl--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      if( var2 == 0 || var1 == 0) {
-         var_out = var1;
-      } else if( var2 >= 16) {
-         var_out = 0;
-      } else {
-         var_out = var1 >> 1;
-         var_out = var_out & 0x7fff;
-         var_out =  var_out >> ( var2-1);
-      }
-   }
-   #if (WMOPS)
-   multiCounter[currCounter].lshr++;
-   #endif /* ifdef WMOPS */
+  } else {
+    if (var2 == 0 || var1 == 0) {
+      var_out = var1;
+    } else if (var2 >= 16) {
+      var_out = 0;
+    } else {
+      var_out = var1 >> 1;
+      var_out = var_out & 0x7fff;
+      var_out = var_out >> (var2 - 1);
+    }
+  }
+#if (WMOPS)
+  multiCounter[currCounter].lshr++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -230,31 +230,31 @@ Word16 lshr( Word16 var1, Word16 var2) {
  *                the range 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-Word32 L_lshl( Word32 L_var1, Word16 var2) {
-   Word32 L_var_out=0;
+Word32 L_lshl (Word32 L_var1, Word16 var2) {
+  Word32 L_var_out = 0;
 
-   if( var2 < 0) {
-      var2 = -var2;
-      L_var_out = L_lshr( L_var1, var2);
+  if (var2 < 0) {
+    var2 = -var2;
+    L_var_out = L_lshr (L_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L_lshr--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L_lshr--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      if( var2 == 0 || L_var1 == 0) {
-         L_var_out = L_var1;
-      } else if( var2 >= 32) {
-         L_var_out = 0;
-      } else {
-         L_var_out = L_var1 << var2;
-      }
-   }
-   #if (WMOPS)
-   multiCounter[currCounter].L_lshl++;
-   #endif /* ifdef WMOPS */
+  } else {
+    if (var2 == 0 || L_var1 == 0) {
+      L_var_out = L_var1;
+    } else if (var2 >= 32) {
+      L_var_out = 0;
+    } else {
+      L_var_out = L_var1 << var2;
+    }
+  }
+#if (WMOPS)
+  multiCounter[currCounter].L_lshl++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 
@@ -290,33 +290,33 @@ Word32 L_lshl( Word32 L_var1, Word16 var2) {
  *                the range 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-Word32 L_lshr( Word32 L_var1, Word16 var2) {
-   Word32   L_var_out;
+Word32 L_lshr (Word32 L_var1, Word16 var2) {
+  Word32 L_var_out;
 
-   if( var2 < 0) {
-      var2 = -var2;
-      L_var_out = L_lshl( L_var1, var2);
+  if (var2 < 0) {
+    var2 = -var2;
+    L_var_out = L_lshl (L_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L_lshl--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L_lshl--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      if( var2 == 0 || L_var1 == 0) {
-         L_var_out = L_var1;
-      } else if( var2 >= 32) {
-         L_var_out = 0;
-      } else {
-         L_var_out = L_var1 >> 1;
-         L_var_out = L_var_out & 0x7fffffff;
-         L_var_out =  L_var_out >> (var2 - 1);
-      }
-   }
-   #if (WMOPS)
-   multiCounter[currCounter].L_lshr++;
-   #endif /* ifdef WMOPS */
+  } else {
+    if (var2 == 0 || L_var1 == 0) {
+      L_var_out = L_var1;
+    } else if (var2 >= 32) {
+      L_var_out = 0;
+    } else {
+      L_var_out = L_var1 >> 1;
+      L_var_out = L_var_out & 0x7fffffff;
+      L_var_out = L_var_out >> (var2 - 1);
+    }
+  }
+#if (WMOPS)
+  multiCounter[currCounter].L_lshr++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 
@@ -349,30 +349,30 @@ Word32 L_lshr( Word32 L_var1, Word16 var2) {
  *                the range : 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-Word16 shl_r( Word16 var1, Word16 var2){
-   Word16 var_out;
+Word16 shl_r (Word16 var1, Word16 var2) {
+  Word16 var_out;
 
-   if( var2 >= 0) {
-      var_out = shl( var1, var2);
+  if (var2 >= 0) {
+    var_out = shl (var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].shl--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].shl--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      var2 = -var2;
-      var_out = shr_r( var1, var2);
+  } else {
+    var2 = -var2;
+    var_out = shr_r (var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].shr_r--;
-      #endif /* ifdef WMOPS */
-   }
+#if (WMOPS)
+    multiCounter[currCounter].shr_r--;
+#endif /* ifdef WMOPS */
+  }
 
-   #if (WMOPS)
-   multiCounter[currCounter].shl_r++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].shl_r++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -405,30 +405,30 @@ Word16 shl_r( Word16 var1, Word16 var2){
  *                the range : 0x8000 0000 <= var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-Word32 L_shl_r( Word32 L_var1, Word16 var2) {
-   Word32 var_out;
+Word32 L_shl_r (Word32 L_var1, Word16 var2) {
+  Word32 var_out;
 
-   if( var2 >= 0) {
-      var_out = L_shl( L_var1, var2);
+  if (var2 >= 0) {
+    var_out = L_shl (L_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L_shl--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L_shl--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      var2 = -var2;
-      var_out = L_shr_r( L_var1, var2);
+  } else {
+    var2 = -var2;
+    var_out = L_shr_r (L_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L_shr_r--;
-      #endif /* ifdef WMOPS */
-   }
+#if (WMOPS)
+    multiCounter[currCounter].L_shr_r--;
+#endif /* ifdef WMOPS */
+  }
 
-   #if (WMOPS)
-   multiCounter[currCounter].L_shl_r++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L_shl_r++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -462,22 +462,21 @@ Word32 L_shl_r( Word32 L_var1, Word16 var2) {
  *                the range : 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-Word16 rotr( Word16 var1, Word16 var2, Word16 *var3) {
-   Word16 var_out;
+Word16 rotr (Word16 var1, Word16 var2, Word16 * var3) {
+  Word16 var_out;
 
-   *var3 = s_and( var1, 0x1);
-   var_out = s_or( lshr( var1, 1),
-                   lshl( var2, 15));
+  *var3 = s_and (var1, 0x1);
+  var_out = s_or (lshr (var1, 1), lshl (var2, 15));
 
-   #if (WMOPS)
-   multiCounter[currCounter].s_and--;
-   multiCounter[currCounter].lshl--;
-   multiCounter[currCounter].lshr--;
-   multiCounter[currCounter].s_or--;
-   multiCounter[currCounter].rotr++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].s_and--;
+  multiCounter[currCounter].lshl--;
+  multiCounter[currCounter].lshr--;
+  multiCounter[currCounter].s_or--;
+  multiCounter[currCounter].rotr++;
+#endif /* ifdef WMOPS */
 
-  return( var_out);
+  return (var_out);
 }
 
 
@@ -511,23 +510,22 @@ Word16 rotr( Word16 var1, Word16 var2, Word16 *var3) {
  *                the range : 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-Word16 rotl( Word16 var1, Word16 var2, Word16 *var3) {
-   Word16 var_out;
+Word16 rotl (Word16 var1, Word16 var2, Word16 * var3) {
+  Word16 var_out;
 
-   *var3 = lshr( var1, 15);
+  *var3 = lshr (var1, 15);
 
-   var_out = s_or( lshl( var1, 1),
-                   s_and( var2, 0x1));
+  var_out = s_or (lshl (var1, 1), s_and (var2, 0x1));
 
-   #if (WMOPS)
-   multiCounter[currCounter].lshr--;
-   multiCounter[currCounter].s_and--;
-   multiCounter[currCounter].lshl--;
-   multiCounter[currCounter].s_or--;
-   multiCounter[currCounter].rotl++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].lshr--;
+  multiCounter[currCounter].s_and--;
+  multiCounter[currCounter].lshl--;
+  multiCounter[currCounter].s_or--;
+  multiCounter[currCounter].rotl++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -561,25 +559,24 @@ Word16 rotl( Word16 var1, Word16 var2, Word16 *var3) {
  *                the range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-Word32 L_rotr( Word32 L_var1, Word16 var2, Word16 *var3) {
-   Word32 L_var_out;
+Word32 L_rotr (Word32 L_var1, Word16 var2, Word16 * var3) {
+  Word32 L_var_out;
 
-   *var3 = s_and( extract_l( L_var1), 0x1);
+  *var3 = s_and (extract_l (L_var1), 0x1);
 
-   L_var_out = L_or( L_lshr( L_var1, 1),
-                     L_lshl( L_deposit_l( var2), 31));
+  L_var_out = L_or (L_lshr (L_var1, 1), L_lshl (L_deposit_l (var2), 31));
 
-   #if (WMOPS)
-   multiCounter[currCounter].extract_l--;
-   multiCounter[currCounter].s_and--;
-   multiCounter[currCounter].L_deposit_l--;
-   multiCounter[currCounter].L_lshl--;
-   multiCounter[currCounter].L_lshr--;
-   multiCounter[currCounter].L_or--;
-   multiCounter[currCounter].L_rotr++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].extract_l--;
+  multiCounter[currCounter].s_and--;
+  multiCounter[currCounter].L_deposit_l--;
+  multiCounter[currCounter].L_lshl--;
+  multiCounter[currCounter].L_lshr--;
+  multiCounter[currCounter].L_or--;
+  multiCounter[currCounter].L_rotr++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 
@@ -613,25 +610,24 @@ Word32 L_rotr( Word32 L_var1, Word16 var2, Word16 *var3) {
  *                the range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-Word32 L_rotl( Word32 L_var1, Word16 var2, Word16 *var3) {
-   Word32 L_var_out;
+Word32 L_rotl (Word32 L_var1, Word16 var2, Word16 * var3) {
+  Word32 L_var_out;
 
-   *var3 = extract_l( L_lshr( L_var1, 31));
+  *var3 = extract_l (L_lshr (L_var1, 31));
 
-   L_var_out = L_or( L_lshl( L_var1, 1),
-                     L_deposit_l( s_and( var2, 0x1)));
+  L_var_out = L_or (L_lshl (L_var1, 1), L_deposit_l (s_and (var2, 0x1)));
 
-   #if (WMOPS)
-   multiCounter[currCounter].L_lshr--;
-   multiCounter[currCounter].extract_l--;
-   multiCounter[currCounter].s_and--;
-   multiCounter[currCounter].L_deposit_l--;
-   multiCounter[currCounter].L_lshl--;
-   multiCounter[currCounter].L_or--;
-   multiCounter[currCounter].L_rotl++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L_lshr--;
+  multiCounter[currCounter].extract_l--;
+  multiCounter[currCounter].s_and--;
+  multiCounter[currCounter].L_deposit_l--;
+  multiCounter[currCounter].L_lshl--;
+  multiCounter[currCounter].L_or--;
+  multiCounter[currCounter].L_rotl++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 

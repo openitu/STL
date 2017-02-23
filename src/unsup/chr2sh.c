@@ -29,47 +29,42 @@
 #include <string.h>
 #include "ugstdemo.h"
 
-int main(argc,argv)
-int argc;
-char *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
-  FILE *Fchr,*Fsh;
+  FILE *Fchr, *Fsh;
   unsigned short sh;
 
   /* Check arguments */
-  if (argc!=3)
-    HARAKIRI("Usage is chr2sh chrfile shfile\n",1);
+  if (argc != 3)
+    HARAKIRI ("Usage is chr2sh chrfile shfile\n", 1);
 
   /* Open files */
-  if (strcmp(argv[1],"-"))
-  {
-    if ((Fchr=fopen(argv[1],RB))==NULL)
-      KILL(argv[1],2);
-  }
-  else
+  if (strcmp (argv[1], "-")) {
+    if ((Fchr = fopen (argv[1], RB)) == NULL)
+      KILL (argv[1], 2);
+  } else
     Fchr = stdin;
 
-  if (strcmp(argv[2],"-"))
-  {
-    if ((Fsh=fopen(argv[2],WB))==NULL)
-      KILL(argv[2],2);
-  }
-  else
+  if (strcmp (argv[2], "-")) {
+    if ((Fsh = fopen (argv[2], WB)) == NULL)
+      KILL (argv[2], 2);
+  } else
     Fsh = stdout;
 
   /* Copy char input to short output as unsigned */
-  while (1)
-  {
-    sh=fgetc(Fchr);
-    if (feof(Fchr))
+  while (1) {
+    sh = fgetc (Fchr);
+    if (feof (Fchr))
       break;
-    fwrite(&sh, sizeof(sh), 1, Fsh);
+    fwrite (&sh, sizeof (sh), 1, Fsh);
   }
 
   /* Close and quit */
-  fclose(Fchr);
-  fclose(Fsh);
+  fclose (Fchr);
+  fclose (Fsh);
 #ifndef VMS
-  return(0);
+  return (0);
 #endif
 }

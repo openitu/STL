@@ -132,7 +132,7 @@
 #if defined(VMS)
 #include <unixio.h>
 #include <stat.h>
-#else				/* Unix/DOS */
+#else /* Unix/DOS */
 #include <sys/stat.h>
 #endif
 
@@ -163,55 +163,53 @@
  10.Mar.95 v1.0 Created <simao@ctd.comsat.com>
  -------------------------------------------------------------------------
 */
-int parse_rate(str, rate)
-char *str;
-short **rate;
+int parse_rate (str, rate)
+     char *str;
+     short **rate;
 {
-  char *s=str;
-  int count=1, i;
+  char *s = str;
+  int count = 1, i;
 
-  if(str==NULL)
-   return 0;  
-  
-  while((s=strchr(s,'-'))!=NULL)
-  { 
+  if (str == NULL)
+    return 0;
+
+  while ((s = strchr (s, '-')) != NULL) {
     s++;
     count++;
   }
 
   /* Allocates memory for the necessary number of rates */
-  *rate = (short *)calloc(sizeof(short), count);
-  if (*rate==NULL) 
-    return(-1);
+  *rate = (short *) calloc (sizeof (short), count);
+  if (*rate == NULL)
+    return (-1);
 
   /* Save rates in the array */
-  for(s=strtok(str,"-"), i=0; i<count; i++)
-  {
+  for (s = strtok (str, "-"), i = 0; i < count; i++) {
     /* Convert to short & save */
-    (*rate)[i] = atoi(s);
+    (*rate)[i] = atoi (s);
 
     /* Classification of rate - return 0 if invalid rate was specified */
-    if ((*rate)[i] > 5)
-    {
+    if ((*rate)[i] > 5) {
       if ((*rate)[i] == 40)
-	(*rate)[i] = 5;
+        (*rate)[i] = 5;
       else if ((*rate)[i] == 32)
-	(*rate)[i] = 4;
+        (*rate)[i] = 4;
       else if ((*rate)[i] == 24)
-	(*rate)[i] = 3;
+        (*rate)[i] = 3;
       else if ((*rate)[i] == 16)
-	(*rate)[i] = 2;
+        (*rate)[i] = 2;
       else
-	return(0);
+        return (0);
     }
 
     /* Update s to the next valid rate number */
-    s = strtok(NULL,"-");
+    s = strtok (NULL, "-");
   }
 
   /* Return the number of rates */
-  return(count);
+  return (count);
 }
+
 /* .................... End of parse_rate() ........................... */
 
 
@@ -228,63 +226,63 @@ short **rate;
  -------------------------------------------------------------------------
 */
 #define P(x) printf x
-void display_usage()
-{
-  P(("Version 1.3 of 21/Mar/2000 \n\n"));
- 
-  P(("  VBR-G726.C \n"));
-  P(("  Demonstration program for UGST/ITU-T G.726 module using the variable\n"));
-  P(("  bit rate feature. This version accepts either linear or G.711 A/u-law\n"));
-  P(("  input. Since this implementation of the G.726 requires G.711 compressed\n"));
-  P(("  samples, linear samples are converted to G.711 format before being\n"));
-  P(("  processed. Therefore, the same ammount of quantization distortion should\n"));
-  P(("  be expect either way.\n"));
-  P(("  Input data is supposed to be aligned at word boundaries, i.e.,\n"));
-  P(("  organized in 16-bit words, following the operating system normal\n"));
-  P(("  organization (low-byte first for VMS and DOS; high byte first for most\n"));
-  P(("  Unix systems). Linear samples are supposed to be 16-bit right-adjusted. \n"));
-  P(("  G711 compressed data is supposed to be in the 8 LEAST\n"));
-  P(("  significant bits of the word and the ADPCM data is in the LEAST 5\n"));
-  P(("  bits. Both are without sign extension.\n"));
-  P(("  \n"));
-  P(("  Output data will be generated in the same format as decribed above for\n"));
-  P(("  the input data.\n"));
-  P(("  \n"));
-  P(("  Usage:\n"));
-  P(("  VBR-G726 [-options] InpFile OutFile \n"));
-  P(("             [FrameSize [1stBlock [NoOfBlocks [Reset]]]]\n"));
-  P(("  where:\n"));
-  P(("  InpFile     is the name of the file to be processed;\n"));
-  P(("  OutFile     is the name with the processed data;\n"));
-  P(("  FrameSize   is the frame size, in number of samples; the bitrate \n"));
-  P(("              will only change in the boundaries of a frame \n"));
-  P(("              [default: 16 samples]\n"));
-  P(("  1stBlock    is the number of the first block of the input file\n"));
-  P(("              to be processed [default: 1st block]\n"));
-  P(("  NoOfBlocks  is the number of blocks to be processed, starting on\n"));
-  P(("              block \"1stBlock\" [default: all blocks]\n"));
-  P(("\n"));
-  P(("  Options:\n"));
-  P(("  -law #      the letters A or a for G.711 A-law, letter u for \n"));
-  P(("              G.711 u-law, or letter l for linear. If linear is\n"));
-  P(("              chosen, A-law is used to compress/expand samples to/from\n"));
-  P(("              the G.726 routines. Default is A-law.\n"));
-  P(("  -rate #     is the bit-rate (in kbit/s): 40, 32, 24 or 16 (in kbit/s); \n"));
-  P(("              or a combination of them using dashes (e.g. 32-24 or\n"));
-  P(("              16-24-32). Default is 32 kbit/s.\n"));
-  P(("  -frame #    Number of samples per frame for switching bit rates.\n"));
-  P(("              Default is 16 samples (or 2ms) \n"));
-  P(("  -enc        run only the G.726 encoder on the samples \n"));
-  P(("              [default: run encoder and decoder]\n"));
-  P(("  -dec        run only the G.726 decoder on the samples \n"));
-  P(("              [default: run encoder and decoder]\n"));
-  P(("  -noreset    don't apply reset to the encoder/decoder\n"));
-  P(("  -?/-help    print help message\n"));
-  P(("\n"));
+void display_usage () {
+  P (("Version 1.3 of 21/Mar/2000 \n\n"));
+
+  P (("  VBR-G726.C \n"));
+  P (("  Demonstration program for UGST/ITU-T G.726 module using the variable\n"));
+  P (("  bit rate feature. This version accepts either linear or G.711 A/u-law\n"));
+  P (("  input. Since this implementation of the G.726 requires G.711 compressed\n"));
+  P (("  samples, linear samples are converted to G.711 format before being\n"));
+  P (("  processed. Therefore, the same ammount of quantization distortion should\n"));
+  P (("  be expect either way.\n"));
+  P (("  Input data is supposed to be aligned at word boundaries, i.e.,\n"));
+  P (("  organized in 16-bit words, following the operating system normal\n"));
+  P (("  organization (low-byte first for VMS and DOS; high byte first for most\n"));
+  P (("  Unix systems). Linear samples are supposed to be 16-bit right-adjusted. \n"));
+  P (("  G711 compressed data is supposed to be in the 8 LEAST\n"));
+  P (("  significant bits of the word and the ADPCM data is in the LEAST 5\n"));
+  P (("  bits. Both are without sign extension.\n"));
+  P (("  \n"));
+  P (("  Output data will be generated in the same format as decribed above for\n"));
+  P (("  the input data.\n"));
+  P (("  \n"));
+  P (("  Usage:\n"));
+  P (("  VBR-G726 [-options] InpFile OutFile \n"));
+  P (("             [FrameSize [1stBlock [NoOfBlocks [Reset]]]]\n"));
+  P (("  where:\n"));
+  P (("  InpFile     is the name of the file to be processed;\n"));
+  P (("  OutFile     is the name with the processed data;\n"));
+  P (("  FrameSize   is the frame size, in number of samples; the bitrate \n"));
+  P (("              will only change in the boundaries of a frame \n"));
+  P (("              [default: 16 samples]\n"));
+  P (("  1stBlock    is the number of the first block of the input file\n"));
+  P (("              to be processed [default: 1st block]\n"));
+  P (("  NoOfBlocks  is the number of blocks to be processed, starting on\n"));
+  P (("              block \"1stBlock\" [default: all blocks]\n"));
+  P (("\n"));
+  P (("  Options:\n"));
+  P (("  -law #      the letters A or a for G.711 A-law, letter u for \n"));
+  P (("              G.711 u-law, or letter l for linear. If linear is\n"));
+  P (("              chosen, A-law is used to compress/expand samples to/from\n"));
+  P (("              the G.726 routines. Default is A-law.\n"));
+  P (("  -rate #     is the bit-rate (in kbit/s): 40, 32, 24 or 16 (in kbit/s); \n"));
+  P (("              or a combination of them using dashes (e.g. 32-24 or\n"));
+  P (("              16-24-32). Default is 32 kbit/s.\n"));
+  P (("  -frame #    Number of samples per frame for switching bit rates.\n"));
+  P (("              Default is 16 samples (or 2ms) \n"));
+  P (("  -enc        run only the G.726 encoder on the samples \n"));
+  P (("              [default: run encoder and decoder]\n"));
+  P (("  -dec        run only the G.726 decoder on the samples \n"));
+  P (("              [default: run encoder and decoder]\n"));
+  P (("  -noreset    don't apply reset to the encoder/decoder\n"));
+  P (("  -?/-help    print help message\n"));
+  P (("\n"));
 
   /* Quit program */
-  exit(-128);
+  exit (-128);
 }
+
 #undef P
 /* .................... End of display_usage() ........................... */
 
@@ -297,27 +295,27 @@ void display_usage()
    ***                                                                    ***
    **************************************************************************
 */
-int main(argc, argv)
-  int             argc;
-  char           *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
-  G726_state      encoder_state, decoder_state;
-  long            N = 16, N1 = 1, N2 = 0, cur_blk, smpno;
-  short           *tmp_buf, *inp_buf, *out_buf, reset=1;
-  short           inp_type, out_type, *rate=0;
-  char            encode = 1, decode = 1, law[4] = "A", def_rate[]="32";
-  int             rateno=1, rate_idx;
+  G726_state encoder_state, decoder_state;
+  long N = 16, N1 = 1, N2 = 0, cur_blk, smpno;
+  short *tmp_buf, *inp_buf, *out_buf, reset = 1;
+  short inp_type, out_type, *rate = 0;
+  char encode = 1, decode = 1, law[4] = "A", def_rate[] = "32";
+  int rateno = 1, rate_idx;
 
   /* General-purpose, progress indication */
-  static char     quiet=0, funny[9] = "|/-\\|/-\\";
+  static char quiet = 0, funny[9] = "|/-\\|/-\\";
 
 /* File variables */
-  char            FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
-  FILE           *Fi, *Fo;
-  int             inp, out;
-  long            start_byte;
+  char FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
+  FILE *Fi, *Fo;
+  int inp, out;
+  long start_byte;
 #ifdef VMS
-  char            mrs[15];
+  char mrs[15];
 #endif
 
 /*
@@ -327,184 +325,156 @@ int main(argc, argv)
   /* GETTING OPTIONS */
 
   if (argc < 2)
-    display_usage();
-  else
-  {
+    display_usage ();
+  else {
     while (argc > 1 && argv[1][0] == '-')
-      if (strcmp(argv[1], "-noreset") == 0)
-      {
-	/* No reset */
-	reset = 0;
+      if (strcmp (argv[1], "-noreset") == 0) {
+        /* No reset */
+        reset = 0;
 
-	/* Update argc/argv to next valid option/argument */
-	argv++;
-	argc--;
-      }
-      else if (strcmp(argv[1], "-enc") == 0)
-      {
-	/* Encoder-only operation */
-	encode = 1;
-	decode = 0;
+        /* Update argc/argv to next valid option/argument */
+        argv++;
+        argc--;
+      } else if (strcmp (argv[1], "-enc") == 0) {
+        /* Encoder-only operation */
+        encode = 1;
+        decode = 0;
 
-	/* Move argv over the option to the next argument */
-	argv++;
-	argc--;
-      }
-      else if (strcmp(argv[1], "-dec") == 0)
-      {
-	/*Decoder-only operation */
-	encode = 0;
-	decode = 1;
+        /* Move argv over the option to the next argument */
+        argv++;
+        argc--;
+      } else if (strcmp (argv[1], "-dec") == 0) {
+        /* Decoder-only operation */
+        encode = 0;
+        decode = 1;
 
-	/* Move argv over the option to the next argument */
-	argv++;
-	argc--;
-      }
-      else if (strcmp(argv[1], "-law") == 0)
-      {
-	/* Define law for operation: A, u, or linear */
-	switch (toupper((int)argv[2][0]))
-	{
-	case 'A':
-	  law[0] = '1';
-	  break;
-	case 'U':
-	  law[0] = '0';
-	  break;
-	case 'L':
-	  law[0] = '2';
-	  break;
-	default:
-	  HARAKIRI(" Invalid law (A or u)! Aborted...\n", 7);
-	}
-
-	/* Move argv over the option to the next argument */
-	argv+=2;
-	argc-=2;
-      }
-      else if (strcmp(argv[1], "-frame") == 0)
-      {
-	/* Define Frame size for rate change during operation */
-        N = atoi(argv[2]);
-
-	/* Move argv over the option to the next argument */
-	argv+=2;
-	argc-=2;
-      }
-      else if (strcmp(argv[1], "-rate") == 0)
-      {
-	/*Define rate(s) for operation */
-        rateno = parse_rate(argv[2], &rate);
-	if (rateno==0)
-	{
-	  fprintf(stderr, "Invalid bitrate list: %s\n", argv[2]);
-	  exit(9);
+        /* Move argv over the option to the next argument */
+        argv++;
+        argc--;
+      } else if (strcmp (argv[1], "-law") == 0) {
+        /* Define law for operation: A, u, or linear */
+        switch (toupper ((int) argv[2][0])) {
+        case 'A':
+          law[0] = '1';
+          break;
+        case 'U':
+          law[0] = '0';
+          break;
+        case 'L':
+          law[0] = '2';
+          break;
+        default:
+          HARAKIRI (" Invalid law (A or u)! Aborted...\n", 7);
         }
-	/* Move argv over the option to the next argument */
-	argv+=2;
-	argc-=2;
-      }
-      else if (strcmp(argv[1], "-q") == 0)
-      {
-	/* Don't print progress indicator */
-	quiet = 1;
 
-	/* Move argv over the option to the next argument */
-	argv++;
-	argc--;
-      }
-      else if (strcmp(argv[1], "-?") == 0 || strcmp(argv[1], "-help") == 0)
-      {
-	/* Print help */
-	display_usage();
-      }
-      else
-      {
-	fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-		argv[1]);
-	display_usage();
+        /* Move argv over the option to the next argument */
+        argv += 2;
+        argc -= 2;
+      } else if (strcmp (argv[1], "-frame") == 0) {
+        /* Define Frame size for rate change during operation */
+        N = atoi (argv[2]);
+
+        /* Move argv over the option to the next argument */
+        argv += 2;
+        argc -= 2;
+      } else if (strcmp (argv[1], "-rate") == 0) {
+        /* Define rate(s) for operation */
+        rateno = parse_rate (argv[2], &rate);
+        if (rateno == 0) {
+          fprintf (stderr, "Invalid bitrate list: %s\n", argv[2]);
+          exit (9);
+        }
+        /* Move argv over the option to the next argument */
+        argv += 2;
+        argc -= 2;
+      } else if (strcmp (argv[1], "-q") == 0) {
+        /* Don't print progress indicator */
+        quiet = 1;
+
+        /* Move argv over the option to the next argument */
+        argv++;
+        argc--;
+      } else if (strcmp (argv[1], "-?") == 0 || strcmp (argv[1], "-help") == 0) {
+        /* Print help */
+        display_usage ();
+      } else {
+        fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+        display_usage ();
       }
   }
 
   /* Now get regular parameters */
-  GET_PAR_S(1, "_Input File: .................. ", FileIn);
-  GET_PAR_S(2, "_Output File: ................. ", FileOut);
-  FIND_PAR_L(3, "_Block Size: .................. ", N, N);
-  FIND_PAR_L(4, "_Starting Block: .............. ", N1, N1);
-  FIND_PAR_L(5, "_No. of Blocks: ............... ", N2, N2);
+  GET_PAR_S (1, "_Input File: .................. ", FileIn);
+  GET_PAR_S (2, "_Output File: ................. ", FileOut);
+  FIND_PAR_L (3, "_Block Size: .................. ", N, N);
+  FIND_PAR_L (4, "_Starting Block: .............. ", N1, N1);
+  FIND_PAR_L (5, "_No. of Blocks: ............... ", N2, N2);
 
   /* Uses default rate if none is given */
   if (rate == 0)
-    rateno = parse_rate(def_rate, &rate);
+    rateno = parse_rate (def_rate, &rate);
 
   /* Inform user of the compading law used: 0->u, 1->A, 2->linear */
-  fprintf(stderr, "Using %s\n",
-	  law[0] == '1'? "A-law" : ( law[0] == '0' ? "u-law" : "linear PCM"));
+  fprintf (stderr, "Using %s\n", law[0] == '1' ? "A-law" : (law[0] == '0' ? "u-law" : "linear PCM"));
 
   /* Find starting byte in file */
-  start_byte = sizeof(short) * (long) (--N1) * (long) N;
+  start_byte = sizeof (short) * (long) (--N1) * (long) N;
 
   /* Check if is to process the whole file */
-  if (N2 == 0)
-  {
-    struct stat     st;
+  if (N2 == 0) {
+    struct stat st;
 
     /* ... find the input file size ... */
-    stat(FileIn, &st);
-    N2 = ceil((st.st_size - start_byte) / (double)(N * sizeof(short)));
+    stat (FileIn, &st);
+    N2 = ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
   }
 
   /* Define correct data I/O types */
-  if (encode && decode) 
-  {  
-    inp_type = out_type = (law[0] == '2'? IS_LIN : IS_LOG);
-  }
-  else if (encode)     
-  {
-    inp_type = law[0] == '2'? IS_LIN : IS_LOG;
+  if (encode && decode) {
+    inp_type = out_type = (law[0] == '2' ? IS_LIN : IS_LOG);
+  } else if (encode) {
+    inp_type = law[0] == '2' ? IS_LIN : IS_LOG;
     out_type = IS_ADPCM;
-  }
-  else     
-  {
+  } else {
     inp_type = IS_ADPCM;
-    out_type = law[0] == '2'? IS_LIN : IS_LOG;
+    out_type = law[0] == '2' ? IS_LIN : IS_LOG;
   }
 
   /* Force law to be used *by the ADPCM* to A-law, if input is linear */
-  if (law[0]=='2')
-    law[0]='1';
+  if (law[0] == '2')
+    law[0] = '1';
 
 /*
  * ...... MEMORY ALLOCATION .........
  */
 
-  if ((inp_buf = (short *) calloc(N, sizeof(short))) == NULL) 
-     HARAKIRI("Error in memory allocation!\n",1);
-  if ((out_buf = (short *) calloc(N, sizeof(short))) == NULL) 
-     HARAKIRI("Error in memory allocation!\n",1);
-  if ((tmp_buf = (short *) calloc(N, sizeof(short))) == NULL) 
-     HARAKIRI("Error in memory allocation!\n",1);
+  if ((inp_buf = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Error in memory allocation!\n", 1);
+  if ((out_buf = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Error in memory allocation!\n", 1);
+  if ((tmp_buf = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Error in memory allocation!\n", 1);
 
 /*
  * ......... FILE PREPARATION .........
  */
 
   /* Opening input file; abort if there's any problem */
-  if ((Fi = fopen(FileIn, "rb")) == NULL)
-    KILL(FileIn, 2);
-  inp = fileno(Fi);
+  if ((Fi = fopen (FileIn, "rb")) == NULL)
+    KILL (FileIn, 2);
+  inp = fileno (Fi);
 
   /* Creates output file */
 #ifdef VMS
-  sprintf(mrs, "mrs=%d", 512);
+  sprintf (mrs, "mrs=%d", 512);
 #endif
-  if ((Fo = fopen(FileOut, WB)) == NULL)
-    KILL(FileOut, 3);
-  out = fileno(Fo);
+  if ((Fo = fopen (FileOut, WB)) == NULL)
+    KILL (FileOut, 3);
+  out = fileno (Fo);
 
   /* Move pointer to 1st block of interest */
-  if (fseek(Fi, start_byte, 0) < 0l)
-    KILL(FileIn, 4);
+  if (fseek (Fi, start_byte, 0) < 0l)
+    KILL (FileIn, 4);
 
 /*
  * ......... PROCESSING ACCORDING TO ITU-T G.726 .........
@@ -512,64 +482,56 @@ int main(argc, argv)
   /* Reset VBR counters */
   rate_idx = 0;
 
-  for (cur_blk = 0; cur_blk < N2; cur_blk++)
-  {
+  for (cur_blk = 0; cur_blk < N2; cur_blk++) {
     /* Set the proper rate index */
     rate_idx = cur_blk % rateno;
 
     /* Print progress flag */
     if (!quiet)
 #ifdef DISPLAY_CURRENT_RATE
-      fprintf(stderr, "%d-", 8 * rate[rate_idx]);
+      fprintf (stderr, "%d-", 8 * rate[rate_idx]);
 #else
-      fprintf(stderr, "%c\r", funny[cur_blk % 8]);
+      fprintf (stderr, "%c\r", funny[cur_blk % 8]);
 #endif
 
     /* Read a block of samples */
-    if ((smpno = fread(inp_buf, sizeof(short), N, Fi)) < 0)
-      KILL(FileIn, 5);
+    if ((smpno = fread (inp_buf, sizeof (short), N, Fi)) < 0)
+      KILL (FileIn, 5);
 
     /* Compress linear input samples */
-    if (inp_type == IS_LIN)
-    {
+    if (inp_type == IS_LIN) {
       /* Compress using A-law */
-      alaw_compress(smpno, inp_buf, tmp_buf);
+      alaw_compress (smpno, inp_buf, tmp_buf);
 
       /* copy temporary buffer over input buffer */
-      memcpy(inp_buf, tmp_buf, sizeof(short) * smpno);
+      memcpy (inp_buf, tmp_buf, sizeof (short) * smpno);
     }
 
     /* Check if reset is needed */
     reset = (reset == 1 && cur_blk == 0) ? 1 : 0;
 
     /* Carry out the desired operation */
-    if (encode && ! decode)
-      G726_encode(inp_buf, out_buf, smpno, law, 
-		  rate[rate_idx], reset, &encoder_state);
+    if (encode && !decode)
+      G726_encode (inp_buf, out_buf, smpno, law, rate[rate_idx], reset, &encoder_state);
     else if (decode && !encode)
-      G726_decode(inp_buf, out_buf, smpno, law, 
-		  rate[rate_idx], reset, &decoder_state);
-    else if (encode && decode)
-    {
-      G726_encode(inp_buf, tmp_buf, smpno, law, 
-		  rate[rate_idx], reset, &encoder_state);
-      G726_decode(tmp_buf, out_buf, smpno, law, 
-		  rate[rate_idx], reset, &decoder_state);
+      G726_decode (inp_buf, out_buf, smpno, law, rate[rate_idx], reset, &decoder_state);
+    else if (encode && decode) {
+      G726_encode (inp_buf, tmp_buf, smpno, law, rate[rate_idx], reset, &encoder_state);
+      G726_decode (tmp_buf, out_buf, smpno, law, rate[rate_idx], reset, &decoder_state);
     }
 
     /* Expand linear input samples */
-    if (out_type == IS_LIN)
-    {
+    if (out_type == IS_LIN) {
       /* Compress using A-law */
-      alaw_expand(smpno, out_buf, tmp_buf);
+      alaw_expand (smpno, out_buf, tmp_buf);
 
       /* copy temporary buffer over input buffer */
-      memcpy(out_buf, tmp_buf, sizeof(short) * smpno);
+      memcpy (out_buf, tmp_buf, sizeof (short) * smpno);
     }
 
     /* Write ADPCM output word */
-    if ((smpno = fwrite(out_buf, sizeof(short), smpno, Fo)) < 0)
-      KILL(FileOut, 6);
+    if ((smpno = fwrite (out_buf, sizeof (short), smpno, Fo)) < 0)
+      KILL (FileOut, 6);
   }
 
 /*
@@ -577,18 +539,19 @@ int main(argc, argv)
  */
 
   /* Free allocated memory */
-  free(tmp_buf);
-  free(out_buf);
-  free(inp_buf);
-  free(rate);
+  free (tmp_buf);
+  free (out_buf);
+  free (inp_buf);
+  free (rate);
 
   /* Close input and output files */
-  fclose(Fi);
-  fclose(Fo);
+  fclose (Fi);
+  fclose (Fo);
 
   /* Exit with success for non-vms systems */
 #ifndef VMS
   return (0);
 #endif
 }
+
 /* ............................. end of main() ............................. */

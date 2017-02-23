@@ -41,66 +41,59 @@
 
 
 /* this routine replaces the first N-1 samples of a buffer by the last N-1 samples */
-void shift(short* buff, long N)
-{
-	long k;
+void shift (short *buff, long N) {
+  long k;
 
-	for(k=0; k<N-1; k++)
-	{
-		buff[k]=buff[k+N];
-	}
+  for (k = 0; k < N - 1; k++) {
+    buff[k] = buff[k + N];
+  }
 }
 
 
 /* this routine convolves buffIn with IR and stores the processed data into buffRvb */
 /* alignFact is used to align the energy of the input file with an other file */
 /* the ouput sat_warning is used to provide a warning of there is 16 bit saturation, 
-  a positive value indicates position of overflow */ 
-long conv(float* IR, short* buffIn, short* buffRvb, float alignFact, long N, long L)
-{
-	long k,j;
-	float tmpRvb;
-    long sat_warning;
-   
-    sat_warning=-1;
-	for(k=0; k<L; k++) {
-		tmpRvb=0;
-		for(j=0;j<N; j++)
-		{
-			tmpRvb+=buffIn[N-1+k-j]*IR[j];
-		}     
-        tmpRvb=(float)(alignFact*tmpRvb + 0.5); /* +0.5 : rounding for the 'short' truncation */
+  a positive value indicates position of overflow */
+long conv (float *IR, short *buffIn, short *buffRvb, float alignFact, long N, long L) {
+  long k, j;
+  float tmpRvb;
+  long sat_warning;
 
-        /* perform 16 bit saturation */
-        if( tmpRvb < -32768.0 ){ 
-          buffRvb[k] = -32768;
-          sat_warning=k;
-        } else{
-            if( tmpRvb > 32767.0 ){ 
-              buffRvb[k]=32767;
-              sat_warning=k; 
-            } else {
-              buffRvb[k]=(short)tmpRvb;   
-            }
-        }
+  sat_warning = -1;
+  for (k = 0; k < L; k++) {
+    tmpRvb = 0;
+    for (j = 0; j < N; j++) {
+      tmpRvb += buffIn[N - 1 + k - j] * IR[j];
     }
-    return sat_warning;
+    tmpRvb = (float) (alignFact * tmpRvb + 0.5);        /* +0.5 : rounding for the 'short' truncation */
+
+    /* perform 16 bit saturation */
+    if (tmpRvb < -32768.0) {
+      buffRvb[k] = -32768;
+      sat_warning = k;
+    } else {
+      if (tmpRvb > 32767.0) {
+        buffRvb[k] = 32767;
+        sat_warning = k;
+      } else {
+        buffRvb[k] = (short) tmpRvb;
+      }
+    }
+  }
+  return sat_warning;
 }
 
 /* this routine convolves buffIn with IR and stores the processed data into buffRvb */
 /* alignFact is used to align the energy of the input file with an other file */
-void conv_old(float* IR, short* buffIn, short* buffRvb, float alignFact, long N, long L)
-{
-	long k,j;
-	float tmpRvb;
+void conv_old (float *IR, short *buffIn, short *buffRvb, float alignFact, long N, long L) {
+  long k, j;
+  float tmpRvb;
 
-	for(k=0; k<L; k++) {
-		tmpRvb=0;
-		for(j=0;j<N; j++)
-		{
-			tmpRvb+=buffIn[N-1+k-j]*IR[j];
-		}
-		buffRvb[k]=(short) (alignFact*tmpRvb + 0.5);  /* +0.5 : rounding during the 'short' truncation */
-	}
+  for (k = 0; k < L; k++) {
+    tmpRvb = 0;
+    for (j = 0; j < N; j++) {
+      tmpRvb += buffIn[N - 1 + k - j] * IR[j];
+    }
+    buffRvb[k] = (short) (alignFact * tmpRvb + 0.5);    /* +0.5 : rounding during the 'short' truncation */
+  }
 }
-

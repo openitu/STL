@@ -71,26 +71,25 @@ HISTORY:
  */
 #include <stdio.h>
 #ifndef VMS
-#include <stdlib.h>		/* General utility definitions */
+#include <stdlib.h>             /* General utility definitions */
 #endif
 
-#include "firflt.h"		/* Global definitions for FIR-FIR filter */
+#include "firflt.h"             /* Global definitions for FIR-FIR filter */
 
 
 /*
  * ......... Local function prototypes .........
  */
 
-void fill_lp_2_to_1 ARGS((float *h0[], long *lenh0));
-void fill_lp_3_to_1 ARGS((float **h0, long *lenh0));
-void fill_flat_band_pass ARGS((float **h0, long *lenh0));
+void fill_lp_2_to_1 ARGS ((float *h0[], long *lenh0));
+void fill_lp_3_to_1 ARGS ((float **h0, long *lenh0));
+void fill_flat_band_pass ARGS ((float **h0, long *lenh0));
 
 
 /* 
  * ..... Private function prototypes defined in other sub-unit ..... 
  */
-extern SCD_FIR *fir_initialization ARGS((long lenh0, float h0[], double gain, 
-                                                 long idwnup, int hswitch));
+extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
 
 /*
@@ -126,24 +125,23 @@ extern SCD_FIR *fir_initialization ARGS((long lenh0, float h0[], double gain,
 
  ============================================================================
 */
-SCD_FIR        *hq_down_2_to_1_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *hq_down_2_to_1_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_lp_2_to_1(&h0, &lenh0);
+  fill_lp_2_to_1 (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       1.0,	/* In: gain factor for FIR-coeffic. */
-		       2l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling kernel */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              1.0,      /* In: gain factor for FIR-coeffic. */
+                              2l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling kernel */
     );
 }
+
 /* ..................... End of hq_down_2_to_1_init() ..................... */
 
 
@@ -176,24 +174,23 @@ SCD_FIR        *hq_down_2_to_1_init()
 
  ============================================================================
 */
-SCD_FIR        *hq_up_1_to_2_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *hq_up_1_to_2_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_lp_2_to_1(&h0, &lenh0);
+  fill_lp_2_to_1 (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       2.0,	/* In: gain factor for FIR-coeffic. */
-		       2l,	/* In: Up-sampling factor */
-		       'U'	/* In: Switch to upsampling procedure */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              2.0,      /* In: gain factor for FIR-coeffic. */
+                              2l,       /* In: Up-sampling factor */
+                              'U'       /* In: Switch to upsampling procedure */
     );
 }
+
 /* ..................... End of hq_up_1_to_2_init() ..................... */
 
 
@@ -226,24 +223,23 @@ SCD_FIR        *hq_up_1_to_2_init()
 
  ============================================================================
 */
-SCD_FIR        *hq_down_3_to_1_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *hq_down_3_to_1_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_lp_3_to_1(&h0, &lenh0);
+  fill_lp_3_to_1 (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       1.0,	/* In: gain factor for FIR-coeffic. */
-		       3l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              1.0,      /* In: gain factor for FIR-coeffic. */
+                              3l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
     );
 }
+
 /* .................... End of hq_down_3_to_1_init() ..................... */
 
 
@@ -276,24 +272,23 @@ SCD_FIR        *hq_down_3_to_1_init()
 
  ============================================================================
 */
-SCD_FIR        *hq_up_1_to_3_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *hq_up_1_to_3_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_lp_3_to_1(&h0, &lenh0);
+  fill_lp_3_to_1 (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       3.0,	/* In: gain factor for FIR-coeffic. */
-		       3l,	/* In: Up-sampling factor */
-		       'U'	/* In: switch to upsampling procedure */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              3.0,      /* In: gain factor for FIR-coeffic. */
+                              3l,       /* In: Up-sampling factor */
+                              'U'       /* In: switch to upsampling procedure */
     );
 }
+
 /* ...................... End of hq_up_1_to_3_init() ...................... */
 
 
@@ -332,11 +327,11 @@ SCD_FIR        *hq_up_1_to_3_init()
 #define f24 (float)0x00800000
 #define lenh02 118
 
-void            fill_lp_2_to_1(h0, lenh0)
-  float          *h0[];
-  long           *lenh0;
+void fill_lp_2_to_1 (h0, lenh0)
+     float *h0[];
+     long *lenh0;
 {
-  static float    h02[lenh02] = {
+  static float h02[lenh02] = {
     1584. / f24, 805. / f24, -4192. / f24, -8985. / f24,
     -5987. / f24, 2583. / f24, 4657. / f24, -3035. / f24,
     -7004. / f24, 1542. / f24, 8969. / f24, 567. / f24,
@@ -366,12 +361,14 @@ void            fill_lp_2_to_1(h0, lenh0)
     -3757. / f24, -10924. / f24, 567. / f24, 8969. / f24,
     1542. / f24, -7004. / f24, -3035. / f24, 4657. / f24,
     2583. / f24, -5987. / f24, -8985. / f24, -4192. / f24,
-  805. / f24, 1584. / f24};
+    805. / f24, 1584. / f24
+  };
 
 
-  *lenh0 = lenh02;		/* store 'number of coefficients' */
-  *h0 = h02;			/* store pointer to h02[]-array */
+  *lenh0 = lenh02;              /* store 'number of coefficients' */
+  *h0 = h02;                    /* store pointer to h02[]-array */
 }
+
 #undef f24
 #undef lenh02
 /* ....................... End of fill_lp_2_to_1() ....................... */
@@ -413,11 +410,11 @@ void            fill_lp_2_to_1(h0, lenh0)
 #define f24 (float)0x00800000
 #define lenh03 168
 
-void            fill_lp_3_to_1(h0, lenh0)
-  float         **h0;
-  long           *lenh0;
+void fill_lp_3_to_1 (h0, lenh0)
+     float **h0;
+     long *lenh0;
 {
-  static float    h03[lenh03] = {
+  static float h03[lenh03] = {
     877. / f24, 3745. / f24, 6479. / f24, 8447. / f24, 7307. / f24,
     3099. / f24, -2223. / f24, -5302. / f24, -3991. / f24, 766. / f24,
     5168. / f24, 5362. / f24, 731. / f24, -5140. / f24, -7094. / f24,
@@ -451,12 +448,14 @@ void            fill_lp_3_to_1(h0, lenh0)
     8861. / f24, 4611. / f24, -2830. / f24, -7094. / f24, -5140. / f24,
     731. / f24, 5362. / f24, 5168. / f24, 766. / f24, -3991. / f24,
     -5302. / f24, -2223. / f24, 3099. / f24, 7307. / f24, 8447. / f24,
-  6479. / f24, 3745. / f24, 877. / f24};
+    6479. / f24, 3745. / f24, 877. / f24
+  };
 
 
-  *lenh0 = lenh03;		/* store 'number of coefficients' */
-  *h0 = h03;			/* store pointer to h02[]-array */
+  *lenh0 = lenh03;              /* store 'number of coefficients' */
+  *h0 = h03;                    /* store pointer to h02[]-array */
 }
+
 #undef lenh03
 #undef f24
 /* ........................ End of fill_lp_3_to_1() ........................ */
@@ -524,13 +523,12 @@ void            fill_lp_3_to_1(h0, lenh0)
 #define f16 32768.
 #define FLAT_BAND_PASS_LEN 168
 
-void            fill_flat_band_pass(h0, lenh0)
-  float         **h0;
-  long           *lenh0;
+void fill_flat_band_pass (h0, lenh0)
+     float **h0;
+     long *lenh0;
 {
 
-  static float    flat_coef[FLAT_BAND_PASS_LEN] =
-  {
+  static float flat_coef[FLAT_BAND_PASS_LEN] = {
     -43. / f16, -168. / f16, -156. / f16, -90. / f16, -1. / f16,
     -7. / f16, -78. / f16, -107. / f16, -55. / f16, -13. / f16,
     -55. / f16, -120. / f16, -108. / f16, -39. / f16, -31. / f16,
@@ -567,9 +565,10 @@ void            fill_flat_band_pass(h0, lenh0)
     -156. / f16, -168. / f16, -43. / f16
   };
 
-  *lenh0 = FLAT_BAND_PASS_LEN;	/* store 'number of coefficients' */
-  *h0 = flat_coef;		/* store pointer to []-array */
+  *lenh0 = FLAT_BAND_PASS_LEN;  /* store 'number of coefficients' */
+  *h0 = flat_coef;              /* store pointer to []-array */
 }
+
 #undef f16
 #undef FLAT_BAND_PASS_LEN
 /* .................... End of fill_flat_band_pass() .................... */
@@ -603,24 +602,23 @@ void            fill_flat_band_pass(h0, lenh0)
 
  ============================================================================
 */
-SCD_FIR        *linear_phase_pb_2_to_1_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *linear_phase_pb_2_to_1_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_flat_band_pass(&h0, &lenh0);
+  fill_flat_band_pass (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       1.0,	/* In: gain factor for FIR-coeffic. */
-		       2l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-fil. */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              1.0,      /* In: gain factor for FIR-coeffic. */
+                              2l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-fil. */
 }
+
 /* ............... End of linear_phase_pb_2_to_1_init() ............... */
 
 
@@ -652,24 +650,23 @@ SCD_FIR        *linear_phase_pb_2_to_1_init()
 
  ============================================================================
 */
-SCD_FIR        *linear_phase_pb_1_to_2_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *linear_phase_pb_1_to_2_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_flat_band_pass(&h0, &lenh0);
+  fill_flat_band_pass (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       2.0,	/* In: gain factor for FIR-coeffic. */
-		       2l,	/* In: Down-sampling factor */
-		       'U'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-fil. */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              2.0,      /* In: gain factor for FIR-coeffic. */
+                              2l,       /* In: Down-sampling factor */
+                              'U'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-fil. */
 }
+
 /* ................ End of linear_phase_pb_1_to_2_init() ................ */
 
 /* ************************************************************************ */
@@ -708,24 +705,23 @@ SCD_FIR        *linear_phase_pb_1_to_2_init()
 
  ============================================================================
 */
-SCD_FIR        *linear_phase_pb_1_to_1_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *linear_phase_pb_1_to_1_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_flat_band_pass(&h0, &lenh0);
+  fill_flat_band_pass (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       1.0,	/* In: gain factor for FIR-coeffic. */
-		       1l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-fil.) */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              1.0,      /* In: gain factor for FIR-coeffic. */
+                              1l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-fil.) */
 }
+
 /* ................ End of linear_phase_pb_1_to_1_init() ................ */
 
 

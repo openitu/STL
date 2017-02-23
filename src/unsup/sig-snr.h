@@ -36,36 +36,29 @@
 #define EPS 10E-20
 #define SQRT(x) sqrt((double)(x)+EPS)
 #define LOG10(x) log10((double)(x)+EPS)
-#define power2dBov(x) (10*LOG10(x)-20*LOG10(32768.0)) /* for integer numbers */
-#define norm_power2dBov(x) (10*LOG10(x))            /* for +-1 norm'd signals*/
-#define amplitude2dBov(x) (20*LOG10(x/32768.0))     /* for integer numbers */
-#define norm_amplitude2dBov(x) (20*LOG10(x))        /* for +-1 norm'd signals*/
+#define power2dBov(x) (10*LOG10(x)-20*LOG10(32768.0))   /* for integer numbers */
+#define norm_power2dBov(x) (10*LOG10(x))        /* for +-1 norm'd signals */
+#define amplitude2dBov(x) (20*LOG10(x/32768.0)) /* for integer numbers */
+#define norm_amplitude2dBov(x) (20*LOG10(x))    /* for +-1 norm'd signals */
 
 /* Define type for level structure */
-typedef struct
-{
-  double          power;
-  double          dc;
-  double          rms_dc;
-  double          rms_ac;
-  double          n;
-  double          variance;
-}
-level_t;
+typedef struct {
+  double power;
+  double dc;
+  double rms_dc;
+  double rms_ac;
+  double n;
+  double variance;
+} level_t;
 
 /* sig-snr.c */
-double get_min ARGS((double min, double *samples, long count,
-		     double not_under));
-double get_max ARGS((double max, double *samples, long count,
-		     double not_above));
-double get_dc_rms_level ARGS((short *buf, long smpno));
-double get_ac_rms_level ARGS((short *buf, long smpno));
-double d_average ARGS((double *buf, long smpno));
-void get_all_levels ARGS((short *buf, long smpno, level_t *level, int reset));
-double get_snr_levels ARGS((double *seg_pwr, double dB_thres,
-			    double dB_margin, long n, double *tot_SNR,
-			    double *pwr_above, double *pwr_below,
-			    long *n_a, long *n_b));
+double get_min ARGS ((double min, double *samples, long count, double not_under));
+double get_max ARGS ((double max, double *samples, long count, double not_above));
+double get_dc_rms_level ARGS ((short *buf, long smpno));
+double get_ac_rms_level ARGS ((short *buf, long smpno));
+double d_average ARGS ((double *buf, long smpno));
+void get_all_levels ARGS ((short *buf, long smpno, level_t * level, int reset));
+double get_snr_levels ARGS ((double *seg_pwr, double dB_thres, double dB_margin, long n, double *tot_SNR, double *pwr_above, double *pwr_below, long *n_a, long *n_b));
 
 #endif /* SIG_SNR_DEFINED */
 /* ......................... End of sig-snr.h ......................... */

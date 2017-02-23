@@ -21,31 +21,28 @@
  *	routine is structured so the recursion can be started in one call and
  *	continued in the next call. Returns 1 if successful, 0 otherwise.
  */
-int g728_durbin(
-	Float	*r,		/* autocorrelation coefficients */
-	int	i,		/* order of filter already done */
-	int	order,		/* order of filter */
-	Float	*a,		/* filter coefficients of this frame */
-	Float	*rc0,		/* first reflection coefficient */
-	Float	*re)		/* residual energy */
-{
-	Float	t, rc;
-	int	j, k;
+int g728_durbin (Float * r,     /* autocorrelation coefficients */
+                 int i,         /* order of filter already done */
+                 int order,     /* order of filter */
+                 Float * a,     /* filter coefficients of this frame */
+                 Float * rc0,   /* first reflection coefficient */
+                 Float * re) {  /* residual energy */
+  Float t, rc;
+  int j, k;
 
-	if (i == 0)
-		*re = r[0];
-	for ( ; i < order && *re > (Float)0.; i++) {
-		t = r[i + 1] + g728_vrdotp(a, &r[1], i);
-		a[i] = rc = -t / *re;		/* reflection coeff. */
-		if (i == 0)			
-			*rc0 = rc;		/* save rc[0] for postfilter */
-		*re += rc * t;
-		for (j = 0, k = i - 1; j <= k; j++, k--) {
-			t = a[j] + rc * a[k];
-			a[k] += rc * a[j];
-			a[j] = t;
-		}
-	}
-	return *re > (Float)0. ? 1 : 0;	/* test if ill-conditioned */
+  if (i == 0)
+    *re = r[0];
+  for (; i < order && *re > (Float) 0.; i++) {
+    t = r[i + 1] + g728_vrdotp (a, &r[1], i);
+    a[i] = rc = -t / *re;       /* reflection coeff. */
+    if (i == 0)
+      *rc0 = rc;                /* save rc[0] for postfilter */
+    *re += rc * t;
+    for (j = 0, k = i - 1; j <= k; j++, k--) {
+      t = a[j] + rc * a[k];
+      a[k] += rc * a[j];
+      a[j] = t;
+    }
+  }
+  return *re > (Float) 0. ? 1 : 0;      /* test if ill-conditioned */
 }
-

@@ -32,36 +32,35 @@
 #define FLC_SCALEFAC 1.1F
 
 /* opcodes - this list must match the names in flc.c */
-enum flc_fields
-{
-   FLC_NOP = 0,
-   FLC_ADD,
-   FLC_MULT,
-   FLC_MAC,
-   FLC_MOVE,
-   FLC_STORE,
-   FLC_LOGIC,
-   FLC_SHIFT,
-   FLC_BRANCH,
-   FLC_DIV,
-   FLC_SQRT,
-   FLC_TRANS,                   /* transcendal fn (sin. cos) */
-   FLC_FUNC,
-   FLC_LOOP,
-   FLC_INDIRECT,                /* indirect ref */
-   FLC_PTR_INIT,
-   FLC_MISC,                    /* For all other ops (eg. ABS) - weight 1 mem, 1 op */
-   FLC_TEST,                    /* For extra conditionnal test (used in conjunction with BRANCH) */
-   FLC_POWER,                   /* pow, 1.0/x, e^n */
-   FLC_LOG,                     /* log2, log10, Ln */
-   FLC_OPEND
+enum flc_fields {
+  FLC_NOP = 0,
+  FLC_ADD,
+  FLC_MULT,
+  FLC_MAC,
+  FLC_MOVE,
+  FLC_STORE,
+  FLC_LOGIC,
+  FLC_SHIFT,
+  FLC_BRANCH,
+  FLC_DIV,
+  FLC_SQRT,
+  FLC_TRANS,                    /* transcendal fn (sin. cos) */
+  FLC_FUNC,
+  FLC_LOOP,
+  FLC_INDIRECT,                 /* indirect ref */
+  FLC_PTR_INIT,
+  FLC_MISC,                     /* For all other ops (eg. ABS) - weight 1 mem, 1 op */
+  FLC_TEST,                     /* For extra conditionnal test (used in conjunction with BRANCH) */
+  FLC_POWER,                    /* pow, 1.0/x, e^n */
+  FLC_LOG,                      /* log2, log10, Ln */
+  FLC_OPEND
 };
 
 #ifndef DONT_COUNT
 
 /* the most important fn */
-void FLC_ops(int op, int count);
-void FLC_mem(int op, int count);
+void FLC_ops (int op, int count);
+void FLC_mem (int op, int count);
 
 #define _FLC(o,c)  {static int f=0; FLC_ops((o),(c)); if (!f) {f=1;FLC_mem((o),(c));}}
 #define ADD(c)          _FLC( FLC_ADD,      (c) )
@@ -93,38 +92,38 @@ void FLC_mem(int op, int count);
 
 #else
 
-#define ADD(c)      
-#define MULT(c)     
-#define MAC(c)      
-#define MOVE(c)     
-#define STORE(c)    
-#define LOGIC(c)    
-#define SHIFT(c)    
-#define BRANCH(c)   
-#define DIV(c)      
-#define SQRT(c)       
-#define TRANS(c)    
-#define POWER(c)    
-#define LOG(c)      
-#define FUNC(c)     
-#define LOOP(c)     
-#define INDIRECT(c) 
-#define PTR_INIT(c) 
-#define MISC(c)     
-#define TEST(c)     
+#define ADD(c)
+#define MULT(c)
+#define MAC(c)
+#define MOVE(c)
+#define STORE(c)
+#define LOGIC(c)
+#define SHIFT(c)
+#define BRANCH(c)
+#define DIV(c)
+#define SQRT(c)
+#define TRANS(c)
+#define POWER(c)
+#define LOG(c)
+#define FUNC(c)
+#define LOOP(c)
+#define INDIRECT(c)
+#define PTR_INIT(c)
+#define MISC(c)
+#define TEST(c)
 
-#define DADD(c) 
-#define DMULT(c) 
-#define DMOVE(c)     
-#define DDIV(c)     
+#define DADD(c)
+#define DMULT(c)
+#define DMOVE(c)
+#define DDIV(c)
 
 #endif
 
 /* external function prototypes */
-void FLC_init();
-void FLC_end();
-void FLC_sub_start(char *name);
-void FLC_sub_end();
-void FLC_frame_update();
+void FLC_init ();
+void FLC_end ();
+void FLC_sub_start (char *name);
+void FLC_sub_end ();
+void FLC_frame_update ();
 
 #endif

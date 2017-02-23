@@ -147,13 +147,13 @@
                    size. <simao.campos@labs.comsat.com>
   02.Feb.2010 v3.3 Modified maximum string length (y.hiwasaki)
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-#include "ugstdemo.h"		/* UGST defines for demo programs */
+#include "ugstdemo.h"           /* UGST defines for demo programs */
 
 /* Include general headers */
-#include <stdio.h>		/* UNIX Standard I/O Definitions */
-#include <ctype.h>		/* Character Type Classification */
-#include <string.h>		/* String handling functions */
-#include <stdlib.h>		/* General utility definitions */
+#include <stdio.h>              /* UNIX Standard I/O Definitions */
+#include <ctype.h>              /* Character Type Classification */
+#include <string.h>             /* String handling functions */
+#include <stdlib.h>             /* General utility definitions */
 #include <math.h>
 
 /* Include OS dependent headers */
@@ -179,42 +179,42 @@
   --------------------------------------------------------------------------
 */
 #define FP(x) fprintf(stderr, x)
-void            display_usage()
-{
-  FP("\n  G711DEMO.C   --- Version v3.3 of 02.Feb.2010 \n");
-  FP("\n");
-  FP("  Description:\n");
-  FP("  ~~~~~~~~~~~~\n");
-  FP("  Example-program for converting from linear samples to A/u law log\n");
-  FP("  compression and vice-versa, according to ITU-T Rec.G711.\n");
-  FP("\n");
-  FP("  Usage:\n");
-  FP("  ~~~~~~\n");
-  FP("  $ G711 [-r] Law Transf InpFile OutFile BlkSize 1stBlock NoOfBlocks\n");
-  FP("\n");
-  FP("  where:\n");
-  FP("  Law	   is the law desired (either A or u)\n");
-  FP("  Transf	   is the desired convertion on the input file:\n");
-  FP("	             [lili], linear to linear: lin -> (A/u)log -> lin\n");
-  FP("               [lilo], linear to (A/u)-log\n");
-  FP("               [loli], (A/u) log to linear\n");
-  FP("  InpFile	   is the name of the file to be processed;\n");
-  FP("  OutFile	   is the name with the compressed/expanded data;\n");
-  FP("  BlkSize    is number of samples per block [256];\n");
-  FP("  1stBlock   is the number of the first block of the input file\n");
-  FP("		   to be processed [1].\n");
-  FP("  NoOfBlocks is the number of blocks to be processed, starting on\n");
-  FP("		   block `1stBlock'. Default is til end-of-file.\n");
-  FP("\n");
-  FP("  Options:\n");
-  FP("  -?         displays this message.\n");
-  FP("  -r         disables even-bit swap by A-law encoding and decoding.\n");
-  FP("  -skip      is the number of samples to skip.\n");
-  FP("\n");
+void display_usage () {
+  FP ("\n  G711DEMO.C   --- Version v3.3 of 02.Feb.2010 \n");
+  FP ("\n");
+  FP ("  Description:\n");
+  FP ("  ~~~~~~~~~~~~\n");
+  FP ("  Example-program for converting from linear samples to A/u law log\n");
+  FP ("  compression and vice-versa, according to ITU-T Rec.G711.\n");
+  FP ("\n");
+  FP ("  Usage:\n");
+  FP ("  ~~~~~~\n");
+  FP ("  $ G711 [-r] Law Transf InpFile OutFile BlkSize 1stBlock NoOfBlocks\n");
+  FP ("\n");
+  FP ("  where:\n");
+  FP ("  Law	   is the law desired (either A or u)\n");
+  FP ("  Transf	   is the desired convertion on the input file:\n");
+  FP ("	             [lili], linear to linear: lin -> (A/u)log -> lin\n");
+  FP ("               [lilo], linear to (A/u)-log\n");
+  FP ("               [loli], (A/u) log to linear\n");
+  FP ("  InpFile	   is the name of the file to be processed;\n");
+  FP ("  OutFile	   is the name with the compressed/expanded data;\n");
+  FP ("  BlkSize    is number of samples per block [256];\n");
+  FP ("  1stBlock   is the number of the first block of the input file\n");
+  FP ("		   to be processed [1].\n");
+  FP ("  NoOfBlocks is the number of blocks to be processed, starting on\n");
+  FP ("		   block `1stBlock'. Default is til end-of-file.\n");
+  FP ("\n");
+  FP ("  Options:\n");
+  FP ("  -?         displays this message.\n");
+  FP ("  -r         disables even-bit swap by A-law encoding and decoding.\n");
+  FP ("  -skip      is the number of samples to skip.\n");
+  FP ("\n");
 
   /* Quit program */
-  exit(1);
+  exit (1);
 }
+
 #undef FP
 /* ..................... End of display_usage() .......................... */
 
@@ -227,197 +227,182 @@ void            display_usage()
    ***                                                                    ***
    **************************************************************************
 */
-int main(argc, argv)
-  int             argc;
-  char           *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
-  long            i, N, N1, N2, smpno, tot_smpno, cur_blk;
-  short          *lin_buff;	/* linear input samples */
-  short          *log_buff;	/* compressed data */
-  short          *lon_buff;	/* quantized output samples */
-  char            inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
-  FILE           *Fi, *Fo;
-  int             inp, out;
-  char            law[MAX_STRLEN], lilo[MAX_STRLEN];
-  short           inp_type, out_type;
-  char            revert_even_bits = 1;
-  clock_t         t1, t2;	/* aux. for CPU-time measurement */
+  long i, N, N1, N2, smpno, tot_smpno, cur_blk;
+  short *lin_buff;              /* linear input samples */
+  short *log_buff;              /* compressed data */
+  short *lon_buff;              /* quantized output samples */
+  char inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
+  FILE *Fi, *Fo;
+  int inp, out;
+  char law[MAX_STRLEN], lilo[MAX_STRLEN];
+  short inp_type, out_type;
+  char revert_even_bits = 1;
+  clock_t t1, t2;               /* aux. for CPU-time measurement */
 #ifdef VMS
-  char            mrs[15];	/* for correct mrs in VMS environment */
+  char mrs[15];                 /* for correct mrs in VMS environment */
 #endif
-  long            start_byte, skip = 0;
+  long start_byte, skip = 0;
 
 /*
  * GETTING PARAMETERS
  */
   /* Get options */
   if (argc < 2)
-    display_usage();
-  else
-  {
+    display_usage ();
+  else {
     while (argc > 1 && argv[1][0] == '-')
-      if (argv[1][1] == 'r')
-      {
-	/* Disable revertion of even bits */
-	revert_even_bits = 0;
+      if (argv[1][1] == 'r') {
+        /* Disable revertion of even bits */
+        revert_even_bits = 0;
 
-	/* Move argv over the option to the 1st mandatory argument */
-	argv++;
+        /* Move argv over the option to the 1st mandatory argument */
+        argv++;
 
-	/* Update argc */
-	argc--;
-      }
-      else if (strcmp(argv[1], "-skip") == 0)
-      {
-	/* Get skip length */
-	skip = atol(argv[2]);
+        /* Update argc */
+        argc--;
+      } else if (strcmp (argv[1], "-skip") == 0) {
+        /* Get skip length */
+        skip = atol (argv[2]);
 
-	/* Check bounds */
-	if (skip < 0)
-	{
-	  fprintf(stderr, "Skip has to be > 0!\n");
-	  exit(10);
-	}
+        /* Check bounds */
+        if (skip < 0) {
+          fprintf (stderr, "Skip has to be > 0!\n");
+          exit (10);
+        }
 
-	/* Move argv over the option to the next argument */
-	argv += 2;
+        /* Move argv over the option to the next argument */
+        argv += 2;
 
-	/* Update argc */
-	argc -= 2;
-      }
-      else if (argv[1][1] == '?')
-      {
-	/* Display intructions */
-	display_usage();
-      }
-      else
-      {
-	fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-		argv[1]);
-	display_usage();
+        /* Update argc */
+        argc -= 2;
+      } else if (argv[1][1] == '?') {
+        /* Display intructions */
+        display_usage ();
+      } else {
+        fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+        display_usage ();
       }
   }
 
 
   /* Get parameters */
-  GET_PAR_S(1, "_Law (A, u): ................. ", law);
-  GET_PAR_S(2, "_Transf (lili,lilo,loli): .... ", lilo);
-  GET_PAR_S(3, "_File to be converted: ....... ", inpfil);
-  GET_PAR_S(4, "_Output File: ................ ", outfil);
-  FIND_PAR_L(5, "_Block Length: ............... ", N, 256);
-  FIND_PAR_L(6, "_Start Block: ................ ", N1, 1);
-  FIND_PAR_L(7, "_No. of Blocks: .............. ", N2, 0);
+  GET_PAR_S (1, "_Law (A, u): ................. ", law);
+  GET_PAR_S (2, "_Transf (lili,lilo,loli): .... ", lilo);
+  GET_PAR_S (3, "_File to be converted: ....... ", inpfil);
+  GET_PAR_S (4, "_Output File: ................ ", outfil);
+  FIND_PAR_L (5, "_Block Length: ............... ", N, 256);
+  FIND_PAR_L (6, "_Start Block: ................ ", N1, 1);
+  FIND_PAR_L (7, "_No. of Blocks: .............. ", N2, 0);
 
 
   /* ......... SOME INITIALIZATIONS ......... */
   --N1;
 
   /* Classification of the conversion desired */
-  inp_type = toupper(lilo[1]) == 'O' ? IS_LOG : IS_LIN;
-  out_type = toupper(lilo[3]) == 'O' ? IS_LOG : IS_LIN;
+  inp_type = toupper (lilo[1]) == 'O' ? IS_LOG : IS_LIN;
+  out_type = toupper (lilo[3]) == 'O' ? IS_LOG : IS_LIN;
   if ((out_type == IS_LOG) && (inp_type == IS_LOG))
-    HARAKIRI("log. to log. makes no sense! Aborted...\n", 8);
+    HARAKIRI ("log. to log. makes no sense! Aborted...\n", 8);
 
   /* Classification of law */
-  law[0] = toupper(law[0]);
+  law[0] = toupper (law[0]);
   if ((law[0] != (char) 'A') && (law[0] != (char) 'U'))
-    HARAKIRI(" Invalid law!\n", 7);
+    HARAKIRI (" Invalid law!\n", 7);
 
   /* .......... ALLOCATION OF BUFFERS .......... */
 
-  if ((lin_buff = (short *) calloc(N, sizeof(short))) == NULL)
-    HARAKIRI("Can't allocate memory for input buffer\n", 10);
+  if ((lin_buff = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Can't allocate memory for input buffer\n", 10);
 
-  if ((log_buff = (short *) calloc(N, sizeof(short))) == NULL)
-    HARAKIRI("Can't allocate memory for output buffer\n", 10);
+  if ((log_buff = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Can't allocate memory for output buffer\n", 10);
 
-  if ((lon_buff = (short *) calloc(N, sizeof(short))) == NULL)
-    HARAKIRI("Can't allocate memory for temporary buffer\n", 10);
+  if ((lon_buff = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Can't allocate memory for temporary buffer\n", 10);
 
 
   /* .......... FILE OPERATIONS .......... */
 
 #ifdef VMS
-  sprintf(mrs, "mrs=%d", 2 * N);
+  sprintf (mrs, "mrs=%d", 2 * N);
 #endif
 
   /* Open input file */
-  if ((Fi = fopen(inpfil, RB)) == NULL)
-    KILL(inpfil, 2);
-  inp = fileno(Fi);
+  if ((Fi = fopen (inpfil, RB)) == NULL)
+    KILL (inpfil, 2);
+  inp = fileno (Fi);
 
   /* Open (create) output file */
-  if ((Fo = fopen(outfil, WB)) == NULL)
-    KILL(outfil, 3);
-  out = fileno(Fo);
+  if ((Fo = fopen (outfil, WB)) == NULL)
+    KILL (outfil, 3);
+  out = fileno (Fo);
 
   /* Define starting byte in file */
-  start_byte = (N1 * N + skip) * sizeof(short);
+  start_byte = (N1 * N + skip) * sizeof (short);
 
   /* ... and move file's pointer to 1st desired block */
-  if (fseek(Fi, (N1 * N + skip) * sizeof(short), 0) < 0l)
-    KILL(inpfil, 4);
+  if (fseek (Fi, (N1 * N + skip) * sizeof (short), 0) < 0l)
+    KILL (inpfil, 4);
 
   /* Check whether is to process til end-of-file */
-  if (N2 == 0)
-  {
-    struct stat     st;
+  if (N2 == 0) {
+    struct stat st;
     /* ... hey, need to skip the delayed samples! ... */
-    stat(inpfil, &st);
-    N2 = ceil((st.st_size - start_byte) / (double)(N * sizeof(short)));
+    stat (inpfil, &st);
+    N2 = ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
   }
 
 
 /*
  * ......... COMPRESSION/EXPANSION .........
  */
-  t1 = clock();			/* measure CPU-time */
+  t1 = clock ();                /* measure CPU-time */
   tot_smpno = 0;
 
-  switch (law[0])
-  {
+  switch (law[0]) {
     /* ......... Process A-law rule ......... */
   case 'A':
 
     /* Input: LINEAR | Output: LOG */
     if (inp_type == IS_LIN && out_type == IS_LOG)
-      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno)
-      {
-	if ((smpno = fread(lin_buff, sizeof(short), N, Fi)) < 0)
-	  KILL(inpfil, 5);
-	alaw_compress(smpno, lin_buff, log_buff);
-	if (!revert_even_bits)
-	  for (i = 0; i < smpno; i++)
-	    log_buff[i] ^= 0x0055;
+      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
+        if ((smpno = fread (lin_buff, sizeof (short), N, Fi)) < 0)
+          KILL (inpfil, 5);
+        alaw_compress (smpno, lin_buff, log_buff);
+        if (!revert_even_bits)
+          for (i = 0; i < smpno; i++)
+            log_buff[i] ^= 0x0055;
 
-	if ((smpno = fwrite(log_buff, sizeof(short), smpno, Fo)) < 0)
-	  KILL(outfil, 6);
+        if ((smpno = fwrite (log_buff, sizeof (short), smpno, Fo)) < 0)
+          KILL (outfil, 6);
       }
 
     /* Input: LINEAR | Output: LINEAR */
     else if (inp_type == IS_LIN && out_type == IS_LIN)
-      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno)
-      {
-	if ((smpno = fread(lin_buff, sizeof(short), N, Fi)) < 0)
-	  KILL(inpfil, 5);
-	alaw_compress(smpno, lin_buff, log_buff);
-	alaw_expand(smpno, log_buff, lon_buff);
-	if ((smpno = fwrite(lon_buff, sizeof(short), smpno, Fo)) < 0)
-	  KILL(outfil, 6);
+      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
+        if ((smpno = fread (lin_buff, sizeof (short), N, Fi)) < 0)
+          KILL (inpfil, 5);
+        alaw_compress (smpno, lin_buff, log_buff);
+        alaw_expand (smpno, log_buff, lon_buff);
+        if ((smpno = fwrite (lon_buff, sizeof (short), smpno, Fo)) < 0)
+          KILL (outfil, 6);
       }
 
     /* Input: LOG | Output: LINEAR */
     else if (inp_type == IS_LOG)
-      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno)
-      {
-	if ((smpno = fread(log_buff, sizeof(short), N, Fi)) < 0)
-	  KILL(inpfil, 5);
-	if (!revert_even_bits)
-	  for (i = 0; i < smpno; i++)
-	    log_buff[i] ^= 0x0055;
-	alaw_expand(smpno, log_buff, lon_buff);
-	if ((smpno = fwrite(lon_buff, sizeof(short), smpno, Fo)) < 0)
-	  KILL(outfil, 6);
+      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
+        if ((smpno = fread (log_buff, sizeof (short), N, Fi)) < 0)
+          KILL (inpfil, 5);
+        if (!revert_even_bits)
+          for (i = 0; i < smpno; i++)
+            log_buff[i] ^= 0x0055;
+        alaw_expand (smpno, log_buff, lon_buff);
+        if ((smpno = fwrite (lon_buff, sizeof (short), smpno, Fo)) < 0)
+          KILL (outfil, 6);
       }
     break;
 
@@ -426,30 +411,27 @@ int main(argc, argv)
   case 'U':
     /* Input: LINEAR | Output: LOG */
     if (inp_type == IS_LIN && out_type == IS_LOG)
-      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno)
-      {
-	smpno = fread(lin_buff, sizeof(short), N, Fi);
-	ulaw_compress(smpno, lin_buff, log_buff);
-	smpno = fwrite(log_buff, sizeof(short), smpno, Fo);
+      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
+        smpno = fread (lin_buff, sizeof (short), N, Fi);
+        ulaw_compress (smpno, lin_buff, log_buff);
+        smpno = fwrite (log_buff, sizeof (short), smpno, Fo);
       }
 
     /* Input: LINEAR | Output: LINEAR */
     else if (inp_type == IS_LIN && out_type == IS_LIN)
-      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno)
-      {
-	smpno = fread(lin_buff, sizeof(short), N, Fi);
-	ulaw_compress(smpno, lin_buff, log_buff);
-	ulaw_expand(smpno, log_buff, lon_buff);
-	smpno = fwrite(lon_buff, sizeof(short), smpno, Fo);
+      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
+        smpno = fread (lin_buff, sizeof (short), N, Fi);
+        ulaw_compress (smpno, lin_buff, log_buff);
+        ulaw_expand (smpno, log_buff, lon_buff);
+        smpno = fwrite (lon_buff, sizeof (short), smpno, Fo);
       }
 
     /* Input: LOG | Output: LINEAR */
     else if (inp_type == IS_LOG)
-      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno)
-      {
-	smpno = fread(log_buff, sizeof(short), N, Fi);
-	ulaw_expand(smpno, log_buff, lon_buff);
-	smpno = fwrite(lon_buff, sizeof(short), smpno, Fo);
+      for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
+        smpno = fread (log_buff, sizeof (short), N, Fi);
+        ulaw_expand (smpno, log_buff, lon_buff);
+        smpno = fwrite (lon_buff, sizeof (short), smpno, Fo);
       }
     break;
   }
@@ -457,13 +439,11 @@ int main(argc, argv)
 
   /* ......... FINALIZATIONS ......... */
 
-  t2 = clock();
-  printf("Speed: %f sec CPU-time for %ld processed samples\n",
-	 (t2 - t1) / (double) CLOCKS_PER_SEC,
-	 tot_smpno);
+  t2 = clock ();
+  printf ("Speed: %f sec CPU-time for %ld processed samples\n", (t2 - t1) / (double) CLOCKS_PER_SEC, tot_smpno);
 
-  fclose(Fi);
-  fclose(Fo);
+  fclose (Fi);
+  fclose (Fo);
 #ifndef VMS
   return (0);
 #endif

@@ -16,54 +16,49 @@
  * herein.
  */
 
-void g728_zero(Float *b, int n)
-{
-	int i;
+void g728_zero (Float * b, int n) {
+  int i;
 
-	for (i = 0; i < n; i++)
-		b[i] = (Float)0.;
+  for (i = 0; i < n; i++)
+    b[i] = (Float) 0.;
 }
 
 /* copy from beginning to end */
-void g728_cpy(Float *x, int n, Float *y)
-{
-	int i;
+void g728_cpy (Float * x, int n, Float * y) {
+  int i;
 
-	for (i = 0; i < n; i++)
-		y[i] = x[i];
+  for (i = 0; i < n; i++)
+    y[i] = x[i];
 }
 
 /* copy from end to beginning */
-void g728_rcpy(Float *x, int n, Float *y)
-{
-	int i;
+void g728_rcpy (Float * x, int n, Float * y) {
+  int i;
 
-	for (i = n - 1; i >= 0; i--)
-		y[i] = x[i];
+  for (i = n - 1; i >= 0; i--)
+    y[i] = x[i];
 }
 
 /*  convert Short to Float */
-void g728_cpyi2r(Short *x, int n, Float *y)
-{
-	int i;
+void g728_cpyi2r (Short * x, int n, Float * y) {
+  int i;
 
-	for (i = 0; i < n; i++)
-		y[i] = x[i];
+  for (i = 0; i < n; i++)
+    y[i] = x[i];
 }
 
 /*  convert Float to Short with rounding and saturation */
-void g728_cpyr2i(Float *x, int n, Short *y)
-{
-	int i;
+void g728_cpyr2i (Float * x, int n, Short * y) {
+  int i;
 
-	for (i = 0; i < n; i++) {
-		if (x[i] > 32767.)
-			y[i] = 32767;
-		else if (x[i] < -32768.)
-			y[i] = -32768;
-		else if (x[i] > 0.)
-			y[i] = (Short)(x[i] + 0.5);
-		else
-			y[i] = (Short)(x[i] - 0.5);
-	}
+  for (i = 0; i < n; i++) {
+    if (x[i] > 32767.)
+      y[i] = 32767;
+    else if (x[i] < -32768.)
+      y[i] = -32768;
+    else if (x[i] > 0.)
+      y[i] = (Short) (x[i] + 0.5);
+    else
+      y[i] = (Short) (x[i] - 0.5);
+  }
 }

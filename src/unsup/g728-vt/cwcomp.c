@@ -25,71 +25,66 @@
 #include <stdio.h>
 
 
-int             main(argc, argv)
-  int             argc;
-  char           *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
   /* Local variables */
-  static long     ferr, nerr, n;
-  static long     first;
-  static char     infil1[80], infil2[80];
-  static long     cw1, cw2, eof;
+  static long ferr, nerr, n;
+  static long first;
+  static char infil1[80], infil2[80];
+  static long cw1, cw2, eof;
   short buf1[256], buf2[256];
-  long            i1, i2, samples, codeno;
-  FILE           *f1, *f2;
+  long i1, i2, samples, codeno;
+  FILE *f1, *f2;
 
 
   /* User communication */
-  GET_PAR_S(1, "_Reference codewords file name: ", infil1);
-  GET_PAR_S(2, "_Test codewords file name: ", infil2);
+  GET_PAR_S (1, "_Reference codewords file name: ", infil1);
+  GET_PAR_S (2, "_Test codewords file name: ", infil2);
 
   /* Initialize files */
-  if ((f1 = fopen(infil1, RB)) == NULL)
-    KILL(infil1, 2);
-  if ((f2 = fopen(infil2, RB)) == NULL)
-    KILL(infil2, 3);
+  if ((f1 = fopen (infil1, RB)) == NULL)
+    KILL (infil1, 2);
+  if ((f2 = fopen (infil2, RB)) == NULL)
+    KILL (infil2, 3);
   n = 1;
   nerr = 0;
   first = 1;
 
-  while ((i1 = fread(buf1, sizeof(short), (size_t) 256, f1))>0 &&
-	 (i2 = fread(buf2, sizeof(short), (size_t) 256, f2))>0)
-  {
+  while ((i1 = fread (buf1, sizeof (short), (size_t) 256, f1)) > 0 && (i2 = fread (buf2, sizeof (short), (size_t) 256, f2)) > 0) {
     /* Get the number of samples read in this data buffer */
-    samples = (i1 <= i2)? i1 : i2;
-    
-    for (codeno = 0; codeno < samples; ++codeno)
-    {
+    samples = (i1 <= i2) ? i1 : i2;
+
+    for (codeno = 0; codeno < samples; ++codeno) {
       /* Copy codewords to variables */
       cw1 = (long) buf1[codeno];
       cw2 = (long) buf2[codeno];
 
-      if (cw1 != cw2)
-      {
-	++nerr;
-	if (first == 1)
-	{
-	  first = 0;
-	  ferr = n;
-	}
+      if (cw1 != cw2) {
+        ++nerr;
+        if (first == 1) {
+          first = 0;
+          ferr = n;
+        }
       }
       ++n;
     }
   }
 
-  printf("%12ld codewords compared\n", n - 1);
-  printf("%12ld different codewords found\n", nerr);
+  printf ("%12ld codewords compared\n", n - 1);
+  printf ("%12ld different codewords found\n", nerr);
 
-  if (first == 0)
-  {
-    printf("First error position: %ld\n", ferr);
+  if (first == 0) {
+    printf ("First error position: %ld\n", ferr);
   }
 
   /* Finalizations */
-  fclose(f1);
-  fclose(f2);
+  fclose (f1);
+  fclose (f2);
 #ifndef VMS
   return (0);
 #endif
 }
+
 /* ....................... End of main() ................................ */

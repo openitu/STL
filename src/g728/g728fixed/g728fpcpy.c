@@ -17,26 +17,23 @@
 #include "g728fp.h"
 #include <string.h>
 
-void g728fp_copyf(Float *f, Float *t, int n)
-{
-	int i;
+void g728fp_copyf (Float * f, Float * t, int n) {
+  int i;
 
-	for (i = 0; i < n; i++)
-		t[i] = f[i];
+  for (i = 0; i < n; i++)
+    t[i] = f[i];
 }
 
-void g728fp_rcopyf(Float *f, Float *t, int n)
-{
-	int i;
+void g728fp_rcopyf (Float * f, Float * t, int n) {
+  int i;
 
-	for (i = n - 1; i >= 0; i--)
-		t[i] = f[i];
+  for (i = n - 1; i >= 0; i--)
+    t[i] = f[i];
 }
 
-void g728fp_zerof(Float *x, int n)
-{
-	int i;
+void g728fp_zerof (Float * x, int n) {
+  int i;
 
-	for (i = 0; i < n; i++)
-		x[i] = 0.;
+  for (i = 0; i < n; i++)
+    x[i] = 0.;
 }

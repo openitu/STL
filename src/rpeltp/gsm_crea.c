@@ -11,7 +11,7 @@
 #include	<string.h>
 #else
 #	include "proto.h"
-	extern char	* memset P((char *, int, int));
+extern char *memset P ((char *, int, int));
 #endif
 #include <stdio.h>
 
@@ -19,25 +19,24 @@
 #include "gsm.h"
 #include "proto.h"
 
-gsm gsm_create P0()
-{
-	gsm  r;
+gsm gsm_create P0 () {
+  gsm r;
 
 #ifdef	USE_TABLE_MUL
 
-	static int mul_init = 0;
-	if (!mul_init) {
-		mul_init = 1;
-		init_umul_table();
-	}
-
+  static int mul_init = 0;
+  if (!mul_init) {
+    mul_init = 1;
+    init_umul_table ();
+  }
 #endif
 
-	r = (gsm)malloc(sizeof(struct gsm_state));
-	if (!r) return r;
+  r = (gsm) malloc (sizeof (struct gsm_state));
+  if (!r)
+    return r;
 
-	memset((char *)r, 0, sizeof(*r));
-	r->nrp = 40;
+  memset ((char *) r, 0, sizeof (*r));
+  r->nrp = 40;
 
-	return r;
+  return r;
 }

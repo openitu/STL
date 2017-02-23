@@ -29,55 +29,49 @@
 #include <string.h>
 #include "ugstdemo.h"
 
-int main(argc,argv)
-int argc;
-char *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
-  FILE *Fchr,*Fsh;
+  FILE *Fchr, *Fsh;
   unsigned short sh;
-  register long MSB_set=0;
+  register long MSB_set = 0;
 
   /* Check arguments */
-  if (argc!=3)
-    HARAKIRI("Usage is sh2chr shfile chrfile\n",1);
+  if (argc != 3)
+    HARAKIRI ("Usage is sh2chr shfile chrfile\n", 1);
 
   /* Open files */
-  if (strcmp(argv[1],"-"))
-  {
-    if ((Fsh=fopen(argv[1],RB))==NULL)
-      KILL(argv[1],2);
-  }
-  else
+  if (strcmp (argv[1], "-")) {
+    if ((Fsh = fopen (argv[1], RB)) == NULL)
+      KILL (argv[1], 2);
+  } else
     Fsh = stdin;
 
-  if (strcmp(argv[2],"-"))
-  {
-    if ((Fchr=fopen(argv[2],WB))==NULL)
-      KILL(argv[2],2);
-  }
-  else
+  if (strcmp (argv[2], "-")) {
+    if ((Fchr = fopen (argv[2], WB)) == NULL)
+      KILL (argv[2], 2);
+  } else
     Fchr = stdout;
 
   /* Copy char input to short output as unsigned */
-  while (1)
-  {
-    fread(&sh, sizeof(sh), 1, Fsh);
-    if (feof(Fsh))
+  while (1) {
+    fread (&sh, sizeof (sh), 1, Fsh);
+    if (feof (Fsh))
       break;
-    if (sh&0xFF00)
+    if (sh & 0xFF00)
       MSB_set++;
-    sh=fputc((int)(sh&0x00FF), Fchr);
+    sh = fputc ((int) (sh & 0x00FF), Fchr);
   }
 
   /* Warn if non-zero MSB were found */
   if (MSB_set)
-    fprintf(stderr, "WARNING! %ld non-zero MSB samples found in file %s\n", 
-	    (long int)MSB_set, argv[1]);
+    fprintf (stderr, "WARNING! %ld non-zero MSB samples found in file %s\n", (long int) MSB_set, argv[1]);
 
   /* Close and quit */
-  fclose(Fsh);
-  fclose(Fchr);
+  fclose (Fsh);
+  fclose (Fchr);
 #ifndef VMS
-  return(0);
+  return (0);
 #endif
 }

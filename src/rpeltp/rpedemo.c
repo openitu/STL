@@ -112,7 +112,7 @@
 
 #if defined(VMS)
 #include <stat.h>
-#else				/* Unix/DOS */
+#else /* Unix/DOS */
 #include <sys/stat.h>
 #endif
 
@@ -125,13 +125,13 @@
 #include "g711.h"
 
 /* ..... Local definitions ..... */
-#define LINEAR 0 /* binary: 00 */
-#define U_LAW 1  /* binary: 01 */
-#define A_LAW 3  /* binary: 11 */
+#define LINEAR 0                /* binary: 00 */
+#define U_LAW 1                 /* binary: 01 */
+#define A_LAW 3                 /* binary: 11 */
 
 /* ..... Local function prototypes ..... */
-void display_usage ARGS((void));
-int main ARGS((int argc, char *argv[]));
+void display_usage ARGS ((void));
+int main ARGS ((int argc, char *argv[]));
 
 
 /*
@@ -147,40 +147,40 @@ int main ARGS((int argc, char *argv[]));
  -------------------------------------------------------------------------
 */
 #define P(x) printf x
-void display_usage()
-{
-  P(("RPEDEMO: Version 1.2 of 02.Feb.2010 \n\n"));
+void display_usage () {
+  P (("RPEDEMO: Version 1.2 of 02.Feb.2010 \n\n"));
 
-  P(("  Demonstration program for UGST/ITU-T RPE-LTP based on \n"));
-  P(("  module implemented  in Unix-C by Jutta Deneger and Carsten \n"));
-  P(("  Borman, within the Communications and Operating Systems \n"));
-  P(("  Research Group (KBS) of the Technishe Universitaet Berlin.\n"));
-  P(("  This demo program has been written by Simao F.Campos Neto\n"));
-  P(("\n"));
-  P(("  Usage:\n"));
-  P(("  $ rpedemo [-l|-u|-A] [-enc|-dec]  InpFile OutFile BlockSize 1stBlock\n"));
-  P(("             NoOfBlocks \n"));
-  P(("  where:\n"));
-  P(("   -l .......... input data for encoding and output data for decoding\n"));
-  P(("                 are in linear format (DEFAULT).\n"));
-  P(("   -A .......... input data for encoding and output data for decoding\n"));
-  P(("                 are in A-law (G.711) format.\n"));
-  P(("   -u .......... input data for encoding and output data for decoding\n"));
-  P(("                 are in u-law (G.711) format.\n"));
-  P(("   -enc ........ run the only the decoder (default: run enc+dec)\n"));
-  P(("   -dec ........ run the only the encoder (default: run enc+dec)\n"));
-  P(("\n"));
-  P(("   InpFile ..... is the name of the file to be processed;\n"));
-  P(("   OutFile ..... is the name with the processed data;\n"));
-  P(("   BlockSize ... is the block size, in number of samples (default = 160)\n"));
-  P(("   1stBlock .... is the number of the first block of the input file\n"));
-  P(("                 to be processed;\n"));
-  P(("   NoOfBlocks .. is the number of blocks to be processed, starting on\n"));
-  P(("                 block \"1stBlock\"\n"));
+  P (("  Demonstration program for UGST/ITU-T RPE-LTP based on \n"));
+  P (("  module implemented  in Unix-C by Jutta Deneger and Carsten \n"));
+  P (("  Borman, within the Communications and Operating Systems \n"));
+  P (("  Research Group (KBS) of the Technishe Universitaet Berlin.\n"));
+  P (("  This demo program has been written by Simao F.Campos Neto\n"));
+  P (("\n"));
+  P (("  Usage:\n"));
+  P (("  $ rpedemo [-l|-u|-A] [-enc|-dec]  InpFile OutFile BlockSize 1stBlock\n"));
+  P (("             NoOfBlocks \n"));
+  P (("  where:\n"));
+  P (("   -l .......... input data for encoding and output data for decoding\n"));
+  P (("                 are in linear format (DEFAULT).\n"));
+  P (("   -A .......... input data for encoding and output data for decoding\n"));
+  P (("                 are in A-law (G.711) format.\n"));
+  P (("   -u .......... input data for encoding and output data for decoding\n"));
+  P (("                 are in u-law (G.711) format.\n"));
+  P (("   -enc ........ run the only the decoder (default: run enc+dec)\n"));
+  P (("   -dec ........ run the only the encoder (default: run enc+dec)\n"));
+  P (("\n"));
+  P (("   InpFile ..... is the name of the file to be processed;\n"));
+  P (("   OutFile ..... is the name with the processed data;\n"));
+  P (("   BlockSize ... is the block size, in number of samples (default = 160)\n"));
+  P (("   1stBlock .... is the number of the first block of the input file\n"));
+  P (("                 to be processed;\n"));
+  P (("   NoOfBlocks .. is the number of blocks to be processed, starting on\n"));
+  P (("                 block \"1stBlock\"\n"));
 
   /* Quit program */
-  exit(-128);
+  exit (-128);
 }
+
 #undef P
 
 /*
@@ -191,136 +191,116 @@ void display_usage()
    ***                                                                    ***
    **************************************************************************
 */
-int main(argc, argv)
-  int             argc;
-  char           *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
-  gsm  rpe_enc_state, rpe_dec_state;
-  gsm_signal      rpe_frame[RPE_FRAME_SIZE];
-  long            N = 256, N1 = 1, N2 = 0, cur_blk, smpno, count = 0;
+  gsm rpe_enc_state, rpe_dec_state;
+  gsm_signal rpe_frame[RPE_FRAME_SIZE];
+  long N = 256, N1 = 1, N2 = 0, cur_blk, smpno, count = 0;
 #ifdef STATIC_ALLOCATION
-  short           tmp_buf[256], inp_buf[256], out_buf[256];
+  short tmp_buf[256], inp_buf[256], out_buf[256];
 #else
-  short           *tmp_buf, *inp_buf, *out_buf;
+  short *tmp_buf, *inp_buf, *out_buf;
 #endif
 
   /* G.711 Compression/expansion function pointers */
-  void (*compress)(), (*expand)();
+  void (*compress) (), (*expand) ();
 
   /* File variables */
-  char            FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
-  FILE           *Fi, *Fo;
-  long            start_byte;
-  char            format, run_encoder, run_decoder;
+  char FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
+  FILE *Fi, *Fo;
+  long start_byte;
+  char format, run_encoder, run_decoder;
 #ifdef VMS
-  char            mrs[15];
+  char mrs[15];
 #endif
 
 
   /* SETTING DEFAULT OPTIONS */
-  format= LINEAR;
-  run_encoder= run_decoder = 1;
+  format = LINEAR;
+  run_encoder = run_decoder = 1;
 
   /* GETTING OPTIONS */
 
   if (argc < 2)
-    display_usage();
-  else
-  {
+    display_usage ();
+  else {
     while (argc > 1 && argv[1][0] == '-')
-      if (strcmp(argv[1],"-")==0)
-      {
-	/* Oops, stop processing options! */
+      if (strcmp (argv[1], "-") == 0) {
+        /* Oops, stop processing options! */
         break;
-      }
-      else if (strcmp(argv[1],"-l")==0)
-      {
-	/* Input/output (uncoded) data format is linear */
-	format = LINEAR;
+      } else if (strcmp (argv[1], "-l") == 0) {
+        /* Input/output (uncoded) data format is linear */
+        format = LINEAR;
 
-	/* Move arg[cv] over the next valid option */
-	argv++;
-	argc--;
-      }
-      else if (strcmp(argv[1],"-A")==0 || strcmp(argv[1],"-a")==0)
-      {
-	/* Input/output (uncoded) data format is A-law (G.711) */
-	format = A_LAW;
+        /* Move arg[cv] over the next valid option */
+        argv++;
+        argc--;
+      } else if (strcmp (argv[1], "-A") == 0 || strcmp (argv[1], "-a") == 0) {
+        /* Input/output (uncoded) data format is A-law (G.711) */
+        format = A_LAW;
 
-	/* Move arg[cv] over the next valid option */
-	argv++;
-	argc--;
-      }
-      else if (strcmp(argv[1],"-u")==0)
-      {
-	/* Input/output (uncoded) data format is u-law (G.711) */
-	format = U_LAW;
+        /* Move arg[cv] over the next valid option */
+        argv++;
+        argc--;
+      } else if (strcmp (argv[1], "-u") == 0) {
+        /* Input/output (uncoded) data format is u-law (G.711) */
+        format = U_LAW;
 
-	/* Move arg[cv] over the next valid option */
-	argv++;
-	argc--;
-      }
-      else if (strcmp(argv[1],"-enc")==0)
-      {
-	/* Run only the encoder */
-	run_encoder = 1;
-	run_decoder = 0;
+        /* Move arg[cv] over the next valid option */
+        argv++;
+        argc--;
+      } else if (strcmp (argv[1], "-enc") == 0) {
+        /* Run only the encoder */
+        run_encoder = 1;
+        run_decoder = 0;
 
-	/* Move arg[cv] over the next valid option */
-	argv++;
-	argc--;
-      }
-      else if (strcmp(argv[1],"-dec")==0)
-      {
-	/* Run only the encoder */
-	run_encoder = 0;
-	run_decoder = 1;
+        /* Move arg[cv] over the next valid option */
+        argv++;
+        argc--;
+      } else if (strcmp (argv[1], "-dec") == 0) {
+        /* Run only the encoder */
+        run_encoder = 0;
+        run_decoder = 1;
 
-	/* Move arg[cv] over the next valid option */
-	argv++;
-	argc--;
-      }
-      else
-      {
-	fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-		argv[1]);
-	display_usage();
+        /* Move arg[cv] over the next valid option */
+        argv++;
+        argc--;
+      } else {
+        fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+        display_usage ();
       }
   }
 
-  GET_PAR_S(1, "_Input File: .................. ", FileIn);
-  GET_PAR_S(2, "_Output File: ................. ", FileOut);
-  FIND_PAR_L(3, "_Block Size: .................. ", N, RPE_WIND_SIZE);
-  FIND_PAR_L(4, "_Starting Block: .............. ", N1, 1);
-  FIND_PAR_L(5, "_No. of Blocks: ............... ", N2, 0);
+  GET_PAR_S (1, "_Input File: .................. ", FileIn);
+  GET_PAR_S (2, "_Output File: ................. ", FileOut);
+  FIND_PAR_L (3, "_Block Size: .................. ", N, RPE_WIND_SIZE);
+  FIND_PAR_L (4, "_Starting Block: .............. ", N1, 1);
+  FIND_PAR_L (5, "_No. of Blocks: ............... ", N2, 0);
 
 
   /* Find staring byte in file; all are 16-bit word-aligned =>short data type */
-  start_byte = sizeof(short) * (long) (--N1) * (long) N;
+  start_byte = sizeof (short) * (long) (--N1) * (long) N;
 
   /* Check if is to process the whole file */
-  if (N2 == 0)
-  {
-    struct stat     st;
+  if (N2 == 0) {
+    struct stat st;
 
     /* ... find the input file size ... */
-    stat(FileIn, &st);
-    /* convert to block count, depending on whether the input file
-     * is a uncoded or coded file */
+    stat (FileIn, &st);
+    /* convert to block count, depending on whether the input file is a uncoded or coded file */
     if (run_encoder)
-      N2 = (st.st_size - start_byte) / (N * sizeof(short));
+      N2 = (st.st_size - start_byte) / (N * sizeof (short));
     else
-      N2 = (st.st_size - start_byte) / (RPE_FRAME_SIZE * sizeof(short));
+      N2 = (st.st_size - start_byte) / (RPE_FRAME_SIZE * sizeof (short));
   }
 
   /* Choose A/u law */
-  if (format == A_LAW)
-  {
+  if (format == A_LAW) {
     expand = alaw_expand;
     compress = alaw_compress;
-  }
-  else if (format== U_LAW)
-  {
+  } else if (format == U_LAW) {
     expand = ulaw_expand;
     compress = ulaw_compress;
   }
@@ -330,12 +310,12 @@ int main(argc, argv)
  * ...... MEMORY ALLOCATION .........
  */
 #ifndef STATIC_ALLOCATION
-  if ((inp_buf = (short *) calloc(N, sizeof(short))) == NULL)
-     HARAKIRI("Error in memory allocation!\n",1);
-  if ((out_buf = (short *) calloc(N, sizeof(short))) == NULL)
-     HARAKIRI("Error in memory allocation!\n",1);
-  if ((tmp_buf = (short *) calloc(N, sizeof(short))) == NULL)
-     HARAKIRI("Error in memory allocation!\n",1);
+  if ((inp_buf = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Error in memory allocation!\n", 1);
+  if ((out_buf = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Error in memory allocation!\n", 1);
+  if ((tmp_buf = (short *) calloc (N, sizeof (short))) == NULL)
+    HARAKIRI ("Error in memory allocation!\n", 1);
 #endif
 
 
@@ -345,135 +325,125 @@ int main(argc, argv)
 
   /* Define stuff for VMS binary, fixed-record files */
 #ifdef VMS
-  sprintf(mrs, "mrs=%d", 512);
+  sprintf (mrs, "mrs=%d", 512);
 #endif
 
   /* Opening input/output files; abort if there's any problem */
-  if ((Fi = fopen(FileIn, RB)) == NULL)
-    KILL(FileIn, 2);
+  if ((Fi = fopen (FileIn, RB)) == NULL)
+    KILL (FileIn, 2);
 
-  if ((Fo = fopen(FileOut, WB)) == NULL)
-    KILL(FileOut, 3);
+  if ((Fo = fopen (FileOut, WB)) == NULL)
+    KILL (FileOut, 3);
 
   /* Move pointer to 1st block of interest */
-  if (fseek(Fi, start_byte, 0) < 0l)
-    KILL(FileIn, 4);
+  if (fseek (Fi, start_byte, 0) < 0l)
+    KILL (FileIn, 4);
 
- /* ......... CREATE AND INIT GSM OBJECT (STATE VARIABLE) ......... */
- if (!(rpe_enc_state = rpeltp_init()))
-    HARAKIRI("Error creating state variable for encoder\n", 5);
- if (!(rpe_dec_state = rpeltp_init()))
-    HARAKIRI("Error creating state variable for encoder\n", 5);
+  /* ......... CREATE AND INIT GSM OBJECT (STATE VARIABLE) ......... */
+  if (!(rpe_enc_state = rpeltp_init ()))
+    HARAKIRI ("Error creating state variable for encoder\n", 5);
+  if (!(rpe_dec_state = rpeltp_init ()))
+    HARAKIRI ("Error creating state variable for encoder\n", 5);
 
 
- /* ......... PROCESSING ACCORDING TO GSM 06.10 RPE-LTP CODEC ......... */
+  /* ......... PROCESSING ACCORDING TO GSM 06.10 RPE-LTP CODEC ......... */
 
-  for (cur_blk = 0; cur_blk < N2; cur_blk++)
-  {
+  for (cur_blk = 0; cur_blk < N2; cur_blk++) {
     /* Reset output sample vector */
-    memset(out_buf, (int)0, N);
+    memset (out_buf, (int) 0, N);
 
     /* Read a block of samples */
-    if (run_encoder)
-    {
+    if (run_encoder) {
       /* Reset sample vector */
-      memset(inp_buf, (int)0, N);
+      memset (inp_buf, (int) 0, N);
 
       /* Read a block of uncoded samples */
-      if ((smpno = fread(inp_buf, sizeof(short), (long)N, Fi)) <= 0)
+      if ((smpno = fread (inp_buf, sizeof (short), (long) N, Fi)) <= 0)
         break;
-    }
-    else
-    {
+    } else {
       /* Reset frame vector */
-      memset(rpe_frame, (int)0, (long)RPE_FRAME_SIZE);
+      memset (rpe_frame, (int) 0, (long) RPE_FRAME_SIZE);
 
       /* Read a unpacked frame */
-      if ((smpno = fread(rpe_frame, sizeof(short), (long)RPE_FRAME_SIZE, Fi)) <= 0)
+      if ((smpno = fread (rpe_frame, sizeof (short), (long) RPE_FRAME_SIZE, Fi)) <= 0)
         break;
     }
 
     /* Carry out the desired operation */
 
     /* CODEC OPERATION */
-    if (run_encoder && run_decoder)
-    {
+    if (run_encoder && run_decoder) {
       /* Run both and save decoded samples */
 
       /* First, expand samples, if needed */
-      if (format)
-      {
-        memcpy(tmp_buf, inp_buf, (long)(sizeof(short) * smpno));
-        expand(smpno, tmp_buf, inp_buf);
+      if (format) {
+        memcpy (tmp_buf, inp_buf, (long) (sizeof (short) * smpno));
+        expand (smpno, tmp_buf, inp_buf);
       }
 
       /* Encode & decode ... */
-      rpeltp_encode(rpe_enc_state, inp_buf, rpe_frame);
-      rpeltp_decode(rpe_dec_state, rpe_frame, out_buf);
+      rpeltp_encode (rpe_enc_state, inp_buf, rpe_frame);
+      rpeltp_decode (rpe_dec_state, rpe_frame, out_buf);
 
       /* Compress samples, if requested */
-      if (format)
-      {
-        memcpy(tmp_buf, out_buf, (long)(sizeof(short) * N));
-        compress(N, tmp_buf, out_buf);
+      if (format) {
+        memcpy (tmp_buf, out_buf, (long) (sizeof (short) * N));
+        compress (N, tmp_buf, out_buf);
       }
 
       /* Save samples to file */
-      if (!(smpno = fwrite(out_buf, sizeof(short), (long)smpno, Fo)))
+      if (!(smpno = fwrite (out_buf, sizeof (short), (long) smpno, Fo)))
         break;
     }
     /* ENCODER-ONLY OPERATION */
-    else if (run_encoder)
-    {
+    else if (run_encoder) {
       /* First, expand samples, if needed */
-      if (format)
-      {
-        memcpy(tmp_buf, inp_buf, (long)(sizeof(short) * smpno));
-        expand(smpno, tmp_buf, inp_buf);
+      if (format) {
+        memcpy (tmp_buf, inp_buf, (long) (sizeof (short) * smpno));
+        expand (smpno, tmp_buf, inp_buf);
       }
 
       /* Run only the encoder, unpack frame and save rpe-ltp frame */
-      rpeltp_encode(rpe_enc_state, inp_buf, rpe_frame);
-      if (!(smpno = fwrite(rpe_frame, sizeof(short), RPE_FRAME_SIZE, Fo)))
+      rpeltp_encode (rpe_enc_state, inp_buf, rpe_frame);
+      if (!(smpno = fwrite (rpe_frame, sizeof (short), RPE_FRAME_SIZE, Fo)))
         break;
     }
     /* DECODER-ONLY OPERATION */
-    else
-    {
+    else {
       /* Decode frame */
-      rpeltp_decode(rpe_dec_state, rpe_frame, out_buf);
+      rpeltp_decode (rpe_dec_state, rpe_frame, out_buf);
 
       /* Compress samples, if requested */
-      if (format)
-      {
-        memcpy(tmp_buf, out_buf, (long)(sizeof(short) * N));
-        compress(N, tmp_buf, out_buf);
+      if (format) {
+        memcpy (tmp_buf, out_buf, (long) (sizeof (short) * N));
+        compress (N, tmp_buf, out_buf);
       }
 
       /* Save the decoded samples */
-      if (!(smpno = fwrite(out_buf, sizeof(short), (long)N, Fo)))
+      if (!(smpno = fwrite (out_buf, sizeof (short), (long) N, Fo)))
         break;
     }
-    count +=smpno;
+    count += smpno;
   }
 
- /* Check for errors */
- if (ferror(Fi))
-   KILL(FileIn, 6);
- else if(ferror(Fo))
-   KILL(FileOut, 7);
+  /* Check for errors */
+  if (ferror (Fi))
+    KILL (FileIn, 6);
+  else if (ferror (Fo))
+    KILL (FileOut, 7);
 
- /* ......... FINALIZATIONS ......... */
+  /* ......... FINALIZATIONS ......... */
 
   /* Close input and output files and state */
-  fclose(Fi);
-  fclose(Fo);
-  rpeltp_delete(rpe_enc_state);
-  rpeltp_delete(rpe_dec_state);
+  fclose (Fi);
+  fclose (Fo);
+  rpeltp_delete (rpe_enc_state);
+  rpeltp_delete (rpe_dec_state);
 
   /* Exit with success for non-vms systems */
 #ifndef VMS
   return (0);
 #endif
 }
+
 /* ............................. end of main() ............................. */

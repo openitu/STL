@@ -41,10 +41,9 @@
 */
 
 /* This routine exports the input buffer to an ASCII file */
-void exportASCII(
-				float* buff1,		/* buffer containing the power spectrum of a first file */
-				float* buff2,		/* buffer containing the power spectrum of a second file */
-				long   fs,			/* sampling frequency of the input files */
-				int    nNFFT,		/* number of coefficents of the fourier transform */
-				char*  fileName		/* name of the ASCII ouput file */
-);
+void exportASCII (float *buff1, /* buffer containing the power spectrum of a first file */
+                  float *buff2, /* buffer containing the power spectrum of a second file */
+                  long fs,      /* sampling frequency of the input files */
+                  int nNFFT,    /* number of coefficents of the fourier transform */
+                  char *fileName        /* name of the ASCII ouput file */
+  );

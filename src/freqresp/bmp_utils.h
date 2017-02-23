@@ -35,8 +35,6 @@
 
 */
 
-void sav_bmp (int width, int height,char* image,char * bmpFileName, int little_endian);
+void sav_bmp (int width, int height, char *image, char *bmpFileName, int little_endian);
 
-void draw_linesdB(char* image, float* avg1PowSp, int lgth, int im_wdth, int im_hght, int border, float absMax, float absMin, float ordMax, float ordMin,int n);
-
-
+void draw_linesdB (char *image, float *avg1PowSp, int lgth, int im_wdth, int im_hght, int border, float absMax, float absMin, float ordMax, float ordMin, int n);

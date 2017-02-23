@@ -38,20 +38,19 @@ HISTORY:
 
 /* General includes */
 #ifndef VMS
-#include <stdlib.h>		  /* General utility definitions */
+#include <stdlib.h>             /* General utility definitions */
 #endif
-#include <stdio.h>		  /* UNIX Standard I/O Definitions */
-#include <math.h>		  /* RTL Math Function Declarations */
+#include <stdio.h>              /* UNIX Standard I/O Definitions */
+#include <math.h>               /* RTL Math Function Declarations */
 
 /* This module's prototypes */
 #include "iirflt.h"
 
 /* Local function prototypes */
-void fill_casc_iir_lp_3_to_1 ARGS((float ***a_cof, float ***b_cof, long *nblocks));
+void fill_casc_iir_lp_3_to_1 ARGS ((float ***a_cof, float ***b_cof, long *nblocks));
 
 /* External function prototypes - code in in iir-lib.c */
-extern CASCADE_IIR *cascade_iir_init ARGS((long nblocks, float (*a)[2], 
-			 float (*b)[2], double gain, long idown, int hswitch));
+extern CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (*b)[2], double gain, long idown, int hswitch));
 
 
 /*
@@ -95,46 +94,44 @@ extern CASCADE_IIR *cascade_iir_init ARGS((long nblocks, float (*a)[2],
 
  ============================================================================
 */
-void            fill_casc_iir_lp_3_to_1_ravi2(a_cof, b_cof, nblocks)
-  float        ***a_cof;
-  float        ***b_cof;
-  long           *nblocks;
+void fill_casc_iir_lp_3_to_1_ravi2 (a_cof, b_cof, nblocks)
+     float ***a_cof;
+     float ***b_cof;
+     long *nblocks;
 {
-#define nblocks_3_1        12	  /* number of 2'nd order blocks */
+#define nblocks_3_1        12   /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
-  static float a_iir_3_1[nblocks_3_1][2] = 
-                           { /*       z-1 ,      z-2 */
-			     {-1, 0},
-			     {-1.78633, 1},
-			     {-1.27455, 1},
-			     {-0.697086, 1},
-			     {-0.195802, 1},
-			     {0.191821, 1.00008},
-			     {0.476488, 1.00072},
-			     {0.684385, 0.99976},
-			     {0.814775, 0.993167},
-			     {1.01303, 1.00853},
-			     {0.955143, 1.03644},
-			     {0.980876, 0.98494},
-			   };
+  static float a_iir_3_1[nblocks_3_1][2] = {    /* z-1 , z-2 */
+    {-1, 0},
+    {-1.78633, 1},
+    {-1.27455, 1},
+    {-0.697086, 1},
+    {-0.195802, 1},
+    {0.191821, 1.00008},
+    {0.476488, 1.00072},
+    {0.684385, 0.99976},
+    {0.814775, 0.993167},
+    {1.01303, 1.00853},
+    {0.955143, 1.03644},
+    {0.980876, 0.98494},
+  };
 
   /* Denominator coefficients */
-  static float  b_iir_3_1[nblocks_3_1][2] =
-                           { /*  T[L]3   ,      T[L]4 */
-			     {-14.5254, 0},
-			     {-4.13681, 39.6786},
-			     {-0.128857, 12.0835},
-			     {0.751788, 5.96406},
-			     {1.07085, 1.38994},
-			     {1.0612, 3.72064},
-			     {1.08917, 1.05086},
-			     {1.14703, 2.0356},
-			     {1.22446, 2.71153},
-			     {1.24262, 1.03462},
-			     {1.46873, 1.38843},
-			     {1.49368, 1.94557},
-                           };
+  static float b_iir_3_1[nblocks_3_1][2] = {    /* T[L]3 , T[L]4 */
+    {-14.5254, 0},
+    {-4.13681, 39.6786},
+    {-0.128857, 12.0835},
+    {0.751788, 5.96406},
+    {1.07085, 1.38994},
+    {1.0612, 3.72064},
+    {1.08917, 1.05086},
+    {1.14703, 2.0356},
+    {1.22446, 2.71153},
+    {1.24262, 1.03462},
+    {1.46873, 1.38843},
+    {1.49368, 1.94557},
+  };
 
 #define gain_ravi2 4.0774e-06
 
@@ -142,92 +139,91 @@ void            fill_casc_iir_lp_3_to_1_ravi2(a_cof, b_cof, nblocks)
   *a_cof = (float **) a_iir_3_1;
   *b_cof = (float **) b_iir_3_1;
 }
+
 #undef nblocks_3_1
 
-void            fill_casc_iir_lp_3_to_1_ravi1(a_cof, b_cof, nblocks)
-  float        ***a_cof;
-  float        ***b_cof;
-  long           *nblocks;
+void fill_casc_iir_lp_3_to_1_ravi1 (a_cof, b_cof, nblocks)
+     float ***a_cof;
+     float ***b_cof;
+     long *nblocks;
 {
-#define nblocks_3_1        12	  /* number of 2'nd order blocks */
+#define nblocks_3_1        12   /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
-  static float a_iir_3_1[nblocks_3_1][2] = 
-                           { /*       z-1 ,      z-2 */
-			     {-1, 0},
-			     {-1.78633, 0.999999},
-			     {-1.27455, 0.999999},
-			     {-0.697086, 1},
-			     {-0.195802, 1},
-			     {0.191806, 0.999921},
-			     {0.476144, 0.999278},
-			     {0.684549, 1.00024},
-			     {0.820381, 1.00688},
-			     {1.00447, 0.991547},
-			     {0.921565, 0.964845},
-			     {0.995874, 1.01529},
-			   };
+  static float a_iir_3_1[nblocks_3_1][2] = {    /* z-1 , z-2 */
+    {-1, 0},
+    {-1.78633, 0.999999},
+    {-1.27455, 0.999999},
+    {-0.697086, 1},
+    {-0.195802, 1},
+    {0.191806, 0.999921},
+    {0.476144, 0.999278},
+    {0.684549, 1.00024},
+    {0.820381, 1.00688},
+    {1.00447, 0.991547},
+    {0.921565, 0.964845},
+    {0.995874, 1.01529},
+  };
 
   /* Denominator coefficients */
-  static float  b_iir_3_1[nblocks_3_1][2] =
-                           { /*  T[L]3   ,      T[L]4 */
-			     {-14.5254, 0},
-			     {-0.104258, 0.0252025},
-			     {-0.0106639, 0.0827577},
-			     {0.126053, 0.167671},
-			     {0.770429, 0.719456},
-			     {0.28522, 0.268771},
-			     {1.03645, 0.951598},
-			     {0.563482, 0.491255},
-			     {0.451575, 0.368796},
-			     {1.20104, 0.966538},
-			     {1.05783, 0.720236},
-			     {0.767732, 0.513987}
-                           };
+  static float b_iir_3_1[nblocks_3_1][2] = {    /* T[L]3 , T[L]4 */
+    {-14.5254, 0},
+    {-0.104258, 0.0252025},
+    {-0.0106639, 0.0827577},
+    {0.126053, 0.167671},
+    {0.770429, 0.719456},
+    {0.28522, 0.268771},
+    {1.03645, 0.951598},
+    {0.563482, 0.491255},
+    {0.451575, 0.368796},
+    {1.20104, 0.966538},
+    {1.05783, 0.720236},
+    {0.767732, 0.513987}
+  };
 
 
   *nblocks = nblocks_3_1;
   *a_cof = (float **) a_iir_3_1;
   *b_cof = (float **) b_iir_3_1;
 }
+
 #undef nblocks_3_1
 
-void            fill_casc_iir_lp_3_to_1(a_cof, b_cof, nblocks)
-  float        ***a_cof;
-  float        ***b_cof;
-  long           *nblocks;
+void fill_casc_iir_lp_3_to_1 (a_cof, b_cof, nblocks)
+     float ***a_cof;
+     float ***b_cof;
+     long *nblocks;
 {
-#define nblocks_3_1        7	  /* number of 2'nd order blocks */
+#define nblocks_3_1        7    /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
-  static float a_iir_3_1[nblocks_3_1][2] = 
-                           {  /*       z-1 ,      z-2 */
-			     {  1.00000000000,  0.00000000000 },
-			     { -1.08311748126,  1.00000000000 },
-			     { -1.04805345999,  1.00000000000 },
-			     { -0.956974481706, 1.00000000000 },
-			     {  0.859312578283, 1.00000000000 },
-			     { -0.748981579387, 1.00000000000 },
-			     { -0.261004187144, 1.00000000000 }
-			   };
+  static float a_iir_3_1[nblocks_3_1][2] = {    /* z-1 , z-2 */
+    {1.00000000000, 0.00000000000},
+    {-1.08311748126, 1.00000000000},
+    {-1.04805345999, 1.00000000000},
+    {-0.956974481706, 1.00000000000},
+    {0.859312578283, 1.00000000000},
+    {-0.748981579387, 1.00000000000},
+    {-0.261004187144, 1.00000000000}
+  };
 
   /* Denominator coefficients */
-  static float  b_iir_3_1[nblocks_3_1][2] =
-                           { /*       z-1 ,      z-2 */
-			     { -0.741393933361, 0.000000000000 },
-			     { -1.44635266594,  0.599869375555 },
-			     { -1.36536866685,  0.711998423234 },
-			     { -1.28688150301,  0.822500869328 },
-			     { -1.23342027831,  0.902175203027 },
-			     { -1.20604048405,  0.952767955206 },
-			     { -1.20077042454,  0.986028477813 }
-                          };
+  static float b_iir_3_1[nblocks_3_1][2] = {    /* z-1 , z-2 */
+    {-0.741393933361, 0.000000000000},
+    {-1.44635266594, 0.599869375555},
+    {-1.36536866685, 0.711998423234},
+    {-1.28688150301, 0.822500869328},
+    {-1.23342027831, 0.902175203027},
+    {-1.20604048405, 0.952767955206},
+    {-1.20077042454, 0.986028477813}
+  };
 
 
   *nblocks = nblocks_3_1;
   *a_cof = (float **) a_iir_3_1;
   *b_cof = (float **) b_iir_3_1;
 }
+
 #undef nblocks_3_1
 /* ..................... End of fill_casc_iir_lp_3_to_1() ..................... */
 
@@ -261,24 +257,24 @@ void            fill_casc_iir_lp_3_to_1(a_cof, b_cof, nblocks)
 
  ============================================================================
 */
-CASCADE_IIR        *iir_casc_lp_3_to_1_init()
-{
-  float         **a_cof, **b_cof; /* pointer to numerator/denominator */
-  long            nblocks;	  /* number of 2'nd order blocks */
+CASCADE_IIR *iir_casc_lp_3_to_1_init () {
+  float **a_cof, **b_cof;       /* pointer to numerator/denominator */
+  long nblocks;                 /* number of 2'nd order blocks */
 
 
-  fill_casc_iir_lp_3_to_1	      /* get pointer to filter-coefficients */
+  fill_casc_iir_lp_3_to_1       /* get pointer to filter-coefficients */
     (&a_cof, &b_cof, &nblocks);
 
-  return cascade_iir_init(	  /* Returns: pointer to CASCADE_IIR-struct */
-			 nblocks, /* In: number of 2'nd order blocks */
-			 (float (*)[2]) a_cof,  /* Numerator. coef. */
-			 (float (*)[2]) b_cof,	/* Denom. coef. */
-			 2.552013334E-04,    /* In: gain factor for filter */
-			 (long) 3,           /* In: Down-sampling factor */
-			 'D');	             /* In: call down-sampl. routine */
+  return cascade_iir_init (     /* Returns: pointer to CASCADE_IIR-struct */
+                            nblocks,    /* In: number of 2'nd order blocks */
+                            (float (*)[2]) a_cof,       /* Numerator. coef. */
+                            (float (*)[2]) b_cof,       /* Denom. coef. */
+                            2.552013334E-04,    /* In: gain factor for filter */
+                            (long) 3,   /* In: Down-sampling factor */
+                            'D');       /* In: call down-sampl. routine */
 
 }
+
 /* ................... End of iir_casc_lp_3_to_1_init() ................... */
 
 
@@ -311,24 +307,24 @@ CASCADE_IIR        *iir_casc_lp_3_to_1_init()
 
  ============================================================================
 */
-CASCADE_IIR        *iir_casc_lp_1_to_3_init()
-{
-  float         **a_cof, **b_cof; /* pointer to numerator/denominator */
-  long            nblocks;	  /* number of 2'nd order blocks */
+CASCADE_IIR *iir_casc_lp_1_to_3_init () {
+  float **a_cof, **b_cof;       /* pointer to numerator/denominator */
+  long nblocks;                 /* number of 2'nd order blocks */
 
 
-  fill_casc_iir_lp_3_to_1	      /* get pointer to filter-coefficients */
+  fill_casc_iir_lp_3_to_1       /* get pointer to filter-coefficients */
     (&a_cof, &b_cof, &nblocks);
 
-  return cascade_iir_init(	  /* Returns: pointer to CASCADE_IIR-struct */
-			 nblocks, /* In: number of 2'nd order blocks */
-			 (float (*)[2]) a_cof,  /* Numerator. coef. */
-			 (float (*)[2]) b_cof,	/* Denom. coef. */
-			 3. * 2.552013334E-04, /* In: gain factor for filter */
-			 (long) 3,/* In: Up-sampling factor */
-			 'U');	  /* -> call up-sampling routine */
+  return cascade_iir_init (     /* Returns: pointer to CASCADE_IIR-struct */
+                            nblocks,    /* In: number of 2'nd order blocks */
+                            (float (*)[2]) a_cof,       /* Numerator. coef. */
+                            (float (*)[2]) b_cof,       /* Denom. coef. */
+                            3. * 2.552013334E-04,       /* In: gain factor for filter */
+                            (long) 3,   /* In: Up-sampling factor */
+                            'U');       /* -> call up-sampling routine */
 
 }
+
 /* ................... End of iir_casc_lp_1_to_3_init() ................... */
 
 

@@ -38,8 +38,8 @@
 */
 
 /* OS definition */
-#if defined(__MSDOS__) && !defined(MSDOS) /* def. for autom. compil.,TurboC */
-# define MSDOS	  /* this is already defined for Microsoft C 5.1 */
+#if defined(__MSDOS__) && !defined(MSDOS)       /* def. for autom. compil.,TurboC */
+#define MSDOS                   /* this is already defined for Microsoft C 5.1 */
 #endif
 
 
@@ -56,13 +56,12 @@
 #define NO  0
 
 /* Defines for CRC routine */
-#define W       16		/* CRC width */
-#define WTYPE	unsigned short	/* Basic data type */
-#define B	8		/* the number of bits per char */
+#define W       16              /* CRC width */
+#define WTYPE	unsigned short  /* Basic data type */
+#define B	8               /* the number of bits per char */
 
 /* Local function prototypes */
-WTYPE updcrc    ARGS((WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab, 
-                char swapped));
+WTYPE updcrc ARGS ((WTYPE icrc, unsigned char *icp, int icnt, WTYPE * crctab, char swapped));
 
 /* Macros related to crc calculations */
 #define get_ccitt_crc(crc,buf,n)  updcrc(crc, buf, n, crctab_ccitt, 0)
@@ -70,8 +69,8 @@ WTYPE updcrc    ARGS((WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab,
 #define get_xmodem_crc(crc,buf,n) updcrc(crc, buf, n, crctab_xmodem, 1)
 
 /* Global variables related to crc calculations */
-WTYPE           crc_a = 0, crc_c = 0, crc_x = 0;
-int             init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
+WTYPE crc_a = 0, crc_c = 0, crc_x = 0;
+int init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
 
 
 /* 
@@ -81,29 +80,28 @@ int             init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
  * --------------------------------------------------------------------------
  */
 
-double get_sum(samples, count)
-short *samples;
-long count;
+double get_sum (samples, count)
+     short *samples;
+     long count;
 {
   double sum = 0;
-  
-  while(count>0)
+
+  while (count > 0)
     sum += samples[--count];
-  return(sum);
+  return (sum);
 }
 
-double get_square(samples, count)
-short *samples;
-long count;
+double get_square (samples, count)
+     short *samples;
+     long count;
 {
   double sum = 0, tmp;
-  
-  while(count>0)
-  {
+
+  while (count > 0) {
     tmp = samples[--count];
     sum += tmp * tmp;
   }
-  return(sum);
+  return (sum);
 }
 
 /* 
@@ -112,18 +110,17 @@ long count;
   'max' as a default, or as the so-far found, maximum value.
   --------------------------------------------------------------------------
 */
-double get_max(max, samples, count)
-double max;
-short *samples;
-long count;
+double get_max (max, samples, count)
+     double max;
+     short *samples;
+     long count;
 {
   double tmp;
-   
-  while(count>0)
-  {
+
+  while (count > 0) {
     count--;
     tmp = samples[count];
-    max = tmp>max? tmp : max;
+    max = tmp > max ? tmp : max;
   }
   return max;
 }
@@ -134,28 +131,28 @@ long count;
   'min' as a default, or as the so-far found, minimum value.
   --------------------------------------------------------------------------
 */
-double get_min(min, samples, count)
-double min;
-short *samples;
-long count;
+double get_min (min, samples, count)
+     double min;
+     short *samples;
+     long count;
 {
   double tmp;
-   
-  while(count>0)
-  {
+
+  while (count > 0) {
     count--;
     tmp = samples[count];
-    min = tmp<min? tmp : min;
+    min = tmp < min ? tmp : min;
   }
   return min;
 }
 
-double get_var(rms_x, avg_x, count)
-double rms_x, avg_x;
-long count;
+double get_var (rms_x, avg_x, count)
+     double rms_x, avg_x;
+     long count;
 {
- return ((rms_x - avg_x * avg_x / (double)count) / (double)count);
+  return ((rms_x - avg_x * avg_x / (double) count) / (double) count);
 }
+
 /* ....................... end of get_...() ...........................*/
 
 
@@ -208,7 +205,7 @@ long count;
 */
 
 /* Table for CCITT CRCs */
-static WTYPE    crctab_ccitt[1 << B] = {
+static WTYPE crctab_ccitt[1 << B] = {
   0x0, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
   0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
   0x1231, 0x210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
@@ -244,7 +241,7 @@ static WTYPE    crctab_ccitt[1 << B] = {
 };
 
 /* Table for xmodem CRCs */
-static WTYPE    crctab_xmodem[1 << B] = {
+static WTYPE crctab_xmodem[1 << B] = {
   0x0, 0x17ce, 0xfdf, 0x1811, 0x1fbe, 0x870, 0x1061, 0x7af,
   0x1f3f, 0x8f1, 0x10e0, 0x72e, 0x81, 0x174f, 0xf5e, 0x1890,
   0x1e3d, 0x9f3, 0x11e2, 0x62c, 0x183, 0x164d, 0xe5c, 0x1992,
@@ -280,7 +277,7 @@ static WTYPE    crctab_xmodem[1 << B] = {
 };
 
 /* Table for ARC CRCs */
-static WTYPE    crctab_arc[1 << B] = {
+static WTYPE crctab_arc[1 << B] = {
   0x0, 0xc0c1, 0xc181, 0x140, 0xc301, 0x3c0, 0x280, 0xc241,
   0xc601, 0x6c0, 0x780, 0xc741, 0x500, 0xc5c1, 0xc481, 0x440,
   0xcc01, 0xcc0, 0xd80, 0xcd41, 0xf00, 0xcfc1, 0xce81, 0xe40,
@@ -316,30 +313,27 @@ static WTYPE    crctab_arc[1 << B] = {
 };
 
 /* -------------- Begin of function updcrc() ---------------------- */
-WTYPE
-updcrc(icrc, icp, icnt, crctab, swapped)
-  WTYPE           icrc, *crctab;
-  unsigned char  *icp;
-  int             icnt;
-  char            swapped;
+WTYPE updcrc (icrc, icp, icnt, crctab, swapped)
+     WTYPE icrc, *crctab;
+     unsigned char *icp;
+     int icnt;
+     char swapped;
 {
-  register WTYPE  crc = icrc;
+  register WTYPE crc = icrc;
   register unsigned char *cp = icp;
-  register int    cnt = icnt;
+  register int cnt = icnt;
 
   if (swapped)
-    while (cnt--)
-    {
+    while (cnt--) {
       crc = (crc >> B) ^ crctab[(crc & ((1 << B) - 1)) ^ *cp++];
-    }
-  else
-    while (cnt--)
-    {
+  } else
+    while (cnt--) {
       crc = (crc << B) ^ crctab[(crc >> (W - B)) ^ *cp++];
     }
 
   return (crc);
 }
+
 /* .......................... End of updcrc() ............................ */
 
 
@@ -350,49 +344,49 @@ updcrc(icrc, icp, icnt, crctab, swapped)
  * --------------------------------------------------------------------------
  */
 #define P(x) printf x
-void display_usage()
-{
-  P(("MEASURE Version 1.0 of 10/Mar/1994 \n\n"));
+void display_usage () {
+  P (("MEASURE Version 1.0 of 10/Mar/1994 \n\n"));
 
-  P((" Program to calculate the max, min, and average values for a file.\n"));
-  P((" Usage:\n"));
-  P(("  $ measure file \n"));
-  P(("  where:\n"));
-  P(("  file          is the name of the file to measured\n"));
-  P(("\n"));
-  P((" Options:\n"));
-  P((" ~~~~~~~~\n"));
-  P((" -h or -?      show program usage\n"));
-  P((" -blk size     change the number of samples per block [default 256]\n"));
-  P((" -skip n       number of blocks to skip [default: none]\n"));
-  P((" -crc          also calculate crc for files\n"));
-  P((" -hex          carry-out hex dump\n"));
-  P(("\n"));
+  P ((" Program to calculate the max, min, and average values for a file.\n"));
+  P ((" Usage:\n"));
+  P (("  $ measure file \n"));
+  P (("  where:\n"));
+  P (("  file          is the name of the file to measured\n"));
+  P (("\n"));
+  P ((" Options:\n"));
+  P ((" ~~~~~~~~\n"));
+  P ((" -h or -?      show program usage\n"));
+  P ((" -blk size     change the number of samples per block [default 256]\n"));
+  P ((" -skip n       number of blocks to skip [default: none]\n"));
+  P ((" -crc          also calculate crc for files\n"));
+  P ((" -hex          carry-out hex dump\n"));
+  P (("\n"));
 
   /* Quit program */
-  exit(-128);
+  exit (-128);
 }
+
 #undef P
 /* ....................... end of display_usage() ...........................*/
 
 
 /*============================== */
-int main(argc,argv)
-int argc;
-char *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 /*============================== */
 {
   char display_crc = 0, print_hex = 0;
   char inpfil[50];
-  long count,skip=0;
+  long count, skip = 0;
   unsigned short us_max, us_min;
-  long smpno,blk;
+  long smpno, blk;
   short *samples;
 #ifdef VMS
-  static char     mrs[15] = "mrs=512";	/* for correct mrs, VMS environment */
+  static char mrs[15] = "mrs=512";      /* for correct mrs, VMS environment */
 #endif
 
-  double  avg_x, rms_x, stddev_x, max_x, min_x;
+  double avg_x, rms_x, stddev_x, max_x, min_x;
 
   FILE *Fi;
 
@@ -404,145 +398,122 @@ char *argv[];
 
   /* GETTING OPTIONS */
 
-    while (argc > 1 && argv[1][0] == '-')
-      if (strcmp(argv[1],"-?")==0 || strcmp(argv[1],"-h")==0 )
-      {
-	/* Display usage */
-	display_usage();
-      }
-      else if (strcmp(argv[1],"-blk")==0)
-      {
-        /* Change block size for averages */
-	blk = atol(argv[2]);
-	argc -= 2;
-	argv += 2;
-      }
-      else if (strcmp(argv[1],"-skip")==0)
-      {
-        /* Define number of blocks (defined by blk) to skip */
-	skip = atol(argv[2]);
-	argc -= 2;
-	argv += 2;
-      }
-      else if (strcmp(argv[1],"-crc")==0)
-      {
-        /* Change block size for averages */
-	display_crc = 1;
-	argc--;
-	argv++;
-      }
-      else if (strcmp(argv[1],"-hex")==0)
-      {
-        /* Change block size for averages */
-	print_hex = 1;
-	argc--;
-	argv++;
-      }
-      else if (strcmp(argv[1],"-")==0)
-      {
-	break;
-      }
-      else
-      {
-	fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-		argv[1]);
-	display_usage();
-      }
+  while (argc > 1 && argv[1][0] == '-')
+    if (strcmp (argv[1], "-?") == 0 || strcmp (argv[1], "-h") == 0) {
+      /* Display usage */
+      display_usage ();
+    } else if (strcmp (argv[1], "-blk") == 0) {
+      /* Change block size for averages */
+      blk = atol (argv[2]);
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-skip") == 0) {
+      /* Define number of blocks (defined by blk) to skip */
+      skip = atol (argv[2]);
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-crc") == 0) {
+      /* Change block size for averages */
+      display_crc = 1;
+      argc--;
+      argv++;
+    } else if (strcmp (argv[1], "-hex") == 0) {
+      /* Change block size for averages */
+      print_hex = 1;
+      argc--;
+      argv++;
+    } else if (strcmp (argv[1], "-") == 0) {
+      break;
+    } else {
+      fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+      display_usage ();
+    }
 
   /* REPEAT FOR ALL FILES IN THE COMMAND LINE */
-  while(argc>1)
-  {
+  while (argc > 1) {
     /* Get new file name and update argument line pointer/counter */
-    strcpy(inpfil, argv[1]);
+    strcpy (inpfil, argv[1]);
     argv++;
     argc--;
-    
+
     /* Reset statistics */
-    avg_x = rms_x = 0; 
+    avg_x = rms_x = 0;
     smpno = 0;
-    max_x = -1E38; 
-    min_x =  1E38;
+    max_x = -1E38;
+    min_x = 1E38;
 
     /* Initialize crc calculations */
     crc_a = init_crc_a;
     crc_c = init_crc_c;
     crc_x = init_crc_x;
-    
+
     /* Open files */
-    if (strcmp(inpfil,"-") == 0)
+    if (strcmp (inpfil, "-") == 0)
       Fi = stdin;
-    else
-      if ((Fi=fopen(inpfil,RB))==NULL) KILL(inpfil,2);
+    else if ((Fi = fopen (inpfil, RB)) == NULL)
+      KILL (inpfil, 2);
 
     /* Move onto start */
-    fseek(Fi, skip * blk * sizeof(short), 0);
+    fseek (Fi, skip * blk * sizeof (short), 0);
 
     /* Allocate memory */
-    samples = (short *) calloc(blk, sizeof(short));
+    samples = (short *) calloc (blk, sizeof (short));
     if (!samples)
-      HARAKIRI("Cannot allocate memory - aborted\n", 1);
-    
+      HARAKIRI ("Cannot allocate memory - aborted\n", 1);
+
     /* Find statistics */
-    while((count = fread(samples, sizeof(short), blk, Fi))!=0)
-    {
+    while ((count = fread (samples, sizeof (short), blk, Fi)) != 0) {
       /* Update statistics */
-      avg_x += get_sum(samples, count);
-      rms_x += get_square(samples, count);
-      max_x = get_max(max_x, samples, count);
-      min_x = get_min(min_x, samples, count);
-    
+      avg_x += get_sum (samples, count);
+      rms_x += get_square (samples, count);
+      max_x = get_max (max_x, samples, count);
+      min_x = get_min (min_x, samples, count);
+
       /* Get CRCs on demand */
-      if (display_crc)
-      {
-	crc_a = get_arc_crc(crc_a, (char *)samples, 2 * count);
-	crc_c = get_ccitt_crc(crc_c, (char *)samples, 2 * count);
-	crc_x = get_xmodem_crc(crc_x, (char *)samples, 2 * count);
+      if (display_crc) {
+        crc_a = get_arc_crc (crc_a, (char *) samples, 2 * count);
+        crc_c = get_ccitt_crc (crc_c, (char *) samples, 2 * count);
+        crc_x = get_xmodem_crc (crc_x, (char *) samples, 2 * count);
       }
-    
+
       /* Update sample counter */
-      smpno+= count;
+      smpno += count;
     }
 
     /* Check if empty file */
-    if (smpno==0)
-    {
-      printf("Samples:     0 Min: ------ Max: ----- DC: ------- AC: -------");
+    if (smpno == 0) {
+      printf ("Samples:     0 Min: ------ Max: ----- DC: ------- AC: -------");
       if (display_crc)
-	printf(" CRC:[ ---- CCITT ---- ARC ---- XMODEM]");
-      printf("\t%s\n", inpfil);
+        printf (" CRC:[ ---- CCITT ---- ARC ---- XMODEM]");
+      printf ("\t%s\n", inpfil);
       continue;
     }
 
     /* Final adjustements do statistics */
-    stddev_x = sqrt(get_var(rms_x, avg_x, smpno));
-    avg_x /= (double)smpno;
-    rms_x = sqrt(rms_x/(double)smpno);
+    stddev_x = sqrt (get_var (rms_x, avg_x, smpno));
+    avg_x /= (double) smpno;
+    rms_x = sqrt (rms_x / (double) smpno);
 
     /* Print results */
-    if (print_hex)
-    {
-      us_max = (unsigned short)max_x;
-      us_min = (unsigned short)min_x;
-      printf("Samples: %5ld Min: %04X Max: %04X ", 
-	     smpno, us_min, us_max);
-    }
-    else
-      printf("Samples: %5ld Min: %5.0f Max: %05.0f ", 
-	     smpno, min_x, max_x);
+    if (print_hex) {
+      us_max = (unsigned short) max_x;
+      us_min = (unsigned short) min_x;
+      printf ("Samples: %5ld Min: %04X Max: %04X ", smpno, us_min, us_max);
+    } else
+      printf ("Samples: %5ld Min: %5.0f Max: %05.0f ", smpno, min_x, max_x);
 
-    printf("DC: %7.2f AC: %7.2f", avg_x, stddev_x);
+    printf ("DC: %7.2f AC: %7.2f", avg_x, stddev_x);
     if (display_crc)
-      printf(" CRC:[ %04X CCITT %04X ARC %04X XMODEM]", crc_c, crc_a, crc_x);
-    printf("\t%s\n", inpfil);
+      printf (" CRC:[ %04X CCITT %04X ARC %04X XMODEM]", crc_c, crc_a, crc_x);
+    printf ("\t%s\n", inpfil);
 
     /* Close file */
-    fclose(Fi);
+    fclose (Fi);
   }
-  
+
   /* EXITING */
-  free(samples);
+  free (samples);
 #ifndef VMS
-  exit(0);
+  exit (0);
 #endif
 }
-

@@ -7,62 +7,56 @@
 #include <math.h>
 #include "ugstdemo.h"
 
-short           round(x)
-  double          x;
+short round (x)
+     double x;
 {
   return (short) (x + 0.5 * ((x > 0) ? 1 : -1));
 }
 
 /* Common Block Declarations */
-struct
-{
-  double          wnc;
-}               global_;
+struct {
+  double wnc;
+} global_;
 
 #define global_1 global_
 
-struct
-{
-  double          wg[34], rhog, lambdg[10], dltmin, dltmax, doffst, ws[105], rhos,
-                  lambds[50], ymin, ymax, codebk[5][1024], dcstat[290];
-}               decod_;
+struct {
+  double wg[34], rhog, lambdg[10], dltmin, dltmax, doffst, ws[105], rhos, lambds[50], ymin, ymax, codebk[5][1024], dcstat[290];
+} decod_;
 
 #define decod_1 decod_
 
-struct
-{
-  long            ifailg, ifails;
-  double          deltaw[34], rdelta[11], sigma, e[5], yw[105], ry[51];
-}               decmon_;
+struct {
+  long ifailg, ifails;
+  double deltaw[34], rdelta[11], sigma, e[5], yw[105], ry[51];
+} decmon_;
 
 #define decmon_1 decmon_
 
-struct
-{
-  double          wp[60], rhop, gamma1[10], gamma2[10], dmstat[143];
-}               dist_;
+struct {
+  double wp[60], rhop, gamma1[10], gamma2[10], dmstat[143];
+} dist_;
 
 #define dist_1 dist_
 
-struct
-{
-  long            ifailp;
-  double          xw[60], rx[11], q[11];
-}               dismon_;
+struct {
+  long ifailp;
+  double xw[60], rx[11], q[11];
+} dismon_;
 
 #define dismon_1 dismon_
 
 /* Table of constant values */
 
-static double   c_b5 = .90625;
-static double   c_b9 = .98828125;
-static double   c_b43 = .9;
-static double   c_b47 = .6;
-static long     c__0 = 0;
-static long     c__1 = 1;
-static long     c__10 = 10;
-static double   c_b282 = 10.;
-static long     c__50 = 50;
+static double c_b5 = .90625;
+static double c_b9 = .98828125;
+static double c_b43 = .9;
+static double c_b47 = .6;
+static long c__0 = 0;
+static long c__1 = 1;
+static long c__10 = 10;
+static double c_b282 = 10.;
+static long c__50 = 50;
 
 /* File:            LDCSUB.FOR */
 /* Last modified:   January 6, 1992 */
@@ -85,17 +79,17 @@ static long     c__50 = 50;
 
 
 /* Reset decoder and distance measure states, assign constants */
-int             reset_(n)
-  long           *n;
+int reset_ (n)
+     long *n;
 {
   /* System generated locals */
-  long            i_1, i_2, i_3;
-  double          d_1;
+  long i_1, i_2, i_3;
+  double d_1;
 
   /* Builtin functions */
-  long            s_rnge();
-  double          pow_di();
-  long            i_dnnt();
+  long s_rnge ();
+  double pow_di ();
+  long i_dnnt ();
 
   /* Local variables */
 #define ag ((double *)&decod_1 + 5372)
@@ -113,12 +107,12 @@ int             reset_(n)
 #define ybufp ((double *)&dist_1 + 103)
 #define yp ((double *)&dist_1 + 118)
 
-  extern void     cbook_();
-  extern void     hybwg_();
-  extern void     hybwp_(), hybws_();
-  static double   g[8];
-  static double   shape[640];
-  static long     i, j, m;
+  extern void cbook_ ();
+  extern void hybwg_ ();
+  extern void hybwp_ (), hybws_ ();
+  static double g[8];
+  static double shape[640];
+  static long i, j, m;
 
 
   /* Constants */
@@ -126,19 +120,17 @@ int             reset_(n)
 
   /* Decoder parameters */
   *n = 0;
-  for (i = 1; i <= 10; ++i)
-  {
-    d_1 = pow(c_b5, (double) i) * (double) 16384.;
-    decod_1.lambdg[i - 1] = (double) round(d_1) / (double) 16384.;
+  for (i = 1; i <= 10; ++i) {
+    d_1 = pow (c_b5, (double) i) * (double) 16384.;
+    decod_1.lambdg[i - 1] = (double) round (d_1) / (double) 16384.;
   }
 
   decod_1.dltmin = (double) 0.;
   decod_1.dltmax = (double) 60.;
   decod_1.doffst = (double) 32.;
-  for (i = 1; i <= 50; ++i)
-  {
-    d_1 = pow(c_b9, (double) i) * (double) 16384.;
-    decod_1.lambds[i - 1] = (double) round(d_1) / (double) 16384.;
+  for (i = 1; i <= 50; ++i) {
+    d_1 = pow (c_b9, (double) i) * (double) 16384.;
+    decod_1.lambds[i - 1] = (double) round (d_1) / (double) 16384.;
   }
 
   decod_1.ymin = (double) -4095.;
@@ -147,8 +139,8 @@ int             reset_(n)
   decod_1.rhos = (double) .75;
 
   /* ...codebook */
-  hybws_(decod_1.ws);
-  hybwg_(decod_1.wg);
+  hybws_ (decod_1.ws);
+  hybwg_ (decod_1.wg);
   g[0] = (double) .515625;
   g[1] = g[0] * 7 / (double) 4.;
   g[2] = g[1] * 7 / (double) 4.;
@@ -157,16 +149,13 @@ int             reset_(n)
   g[5] = -g[1];
   g[6] = -g[2];
   g[7] = -g[3];
-  cbook_(shape);
-  for (m = 0; m <= 4; ++m)
-  {
-    for (i = 0; i <= 7; ++i)
-    {
-      for (j = 0; j <= 127; ++j)
-      {
-	i_1 = (8 * j) + i;
-	i_2 = (5 * j) + m;
-	decod_1.codebk[m][i_1] = g[i] * shape[i_2];
+  cbook_ (shape);
+  for (m = 0; m <= 4; ++m) {
+    for (i = 0; i <= 7; ++i) {
+      for (j = 0; j <= 127; ++j) {
+        i_1 = (8 * j) + i;
+        i_2 = (5 * j) + m;
+        decod_1.codebk[m][i_1] = g[i] * shape[i_2];
       }
     }
 
@@ -174,97 +163,82 @@ int             reset_(n)
     /* ...gain predictor */
   }
   /* ...special treatment of initial values to get correct start-up */
-  for (i = -34; i <= -1; ++i)
-  {
+  for (i = -34; i <= -1; ++i) {
     dltbuf[(i_1 = i + 34)] = (double) 0.;
   }
   dltbuf[33] = -decod_1.doffst;
   dltbuf[32] = -decod_1.doffst;
   dltbuf[31] = -decod_1.doffst;
-  for (i = -10; i <= -1; ++i)
-  {
+  for (i = -10; i <= -1; ++i) {
     delta[(i_1 = i + 10)] = -decod_1.doffst;
   }
-  for (i = 0; i <= 10; ++i)
-  {
+  for (i = 0; i <= 10; ++i) {
     rdexp[i] = (double) 0.;
   }
   ag[0] = (double) 1.;
   ag[1] = (double) -1.;
 
   /* ...synthesis filter */
-  for (i = 2; i <= 10; ++i)
-  {
+  for (i = 2; i <= 10; ++i) {
     ag[i] = (double) 0.;
   }
 
-  for (i = 0; i <= 50; ++i)
-  {
+  for (i = 0; i <= 50; ++i) {
     ryexp[i] = (double) 0.;
   }
 
   as[0] = (double) 1.;
 
-  for (i = 1; i <= 50; ++i)
-  {
+  for (i = 1; i <= 50; ++i) {
     as[i] = (double) 0.;
   }
 
   /* Perceptual filter parameters */
   /* Constants */
-  for (i = -115; i <= 4; ++i)
-  {
+  for (i = -115; i <= 4; ++i) {
     ybuf[(i_1 = i + 115)] = (double) 0.;
   }
 
-  for (i = 1; i <= 10; ++i)
-  {
-    d_1 = pow(c_b43, (double) i) * (double) 16384.;
-    dist_1.gamma1[(i_1 = i - 1)] = (double) i_dnnt(&d_1) / (double) 16384.;
+  for (i = 1; i <= 10; ++i) {
+    d_1 = pow (c_b43, (double) i) * (double) 16384.;
+    dist_1.gamma1[(i_1 = i - 1)] = (double) i_dnnt (&d_1) / (double) 16384.;
   }
 
-  for (i = 1; i <= 10; ++i)
-  {
-    d_1 = pow(c_b47, (double) i) * (double) 16384.;
-    dist_1.gamma2[(i_1 = i - 1)] = (double) round(d_1) / (double) 16384.;
+  for (i = 1; i <= 10; ++i) {
+    d_1 = pow (c_b47, (double) i) * (double) 16384.;
+    dist_1.gamma2[(i_1 = i - 1)] = (double) round (d_1) / (double) 16384.;
   }
 
   /* State variables */
   /* ...Perceptual filter */
   dist_1.rhop = (double) .5;
-  hybwp_(dist_1.wp);
-  for (i = -60; i <= 4; ++i)
-  {
+  hybwp_ (dist_1.wp);
+  for (i = -60; i <= 4; ++i) {
     xbuf[(i_1 = i + 60)] = (double) 0.;
   }
-  for (i = 0; i <= 10; ++i)
-  {
+  for (i = 0; i <= 10; ++i) {
     rxexp[i] = (double) 0.;
   }
-  for (i = -10; i <= -1; ++i)
-  {
+  for (i = -10; i <= -1; ++i) {
     xp[(i_1 = i + 10)] = (double) 0.;
   }
-  for (i = -10; i <= -1; ++i)
-  {
+  for (i = -10; i <= -1; ++i) {
     ybufp[(i_1 = i + 10)] = (double) 0.;
   }
-  for (i = -10; i <= -1; ++i)
-  {
+  for (i = -10; i <= -1; ++i) {
     yp[(i_1 = i + 10)] = (double) 0.;
   }
   q1[0] = (double) 1.;
-  for (i = 1; i <= 10; ++i)
-  {
+  for (i = 1; i <= 10; ++i) {
     q1[i] = (double) 0.;
   }
   q2[0] = (double) 1.;
-  for (i = 1; i <= 10; ++i)
-  {
+  for (i = 1; i <= 10; ++i) {
     q2[i] = (double) 0.;
   }
   /* Version 03.10.91 / Ftj */
 }
+
 #undef dltbuf
 #undef xp
 #undef yp
@@ -284,13 +258,13 @@ int             reset_(n)
 
 /* LDCELP encoder */
 /* Version 03.10.91 / Ftj */
-int             encode_(n, x, c)
-  long           *n;
-  double         *x;
-  long           *c;
+int encode_ (n, x, c)
+     long *n;
+     double *x;
+     long *c;
 {
   /* System generated locals */
-  long            i_1, i_2;
+  long i_1, i_2;
 
   /* Local variables */
 #define ag ((double *)&decod_1 + 5372)
@@ -307,53 +281,48 @@ int             encode_(n, x, c)
 #define ybuf ((double *)&decod_1 + 5496)
 #define ybufp ((double *)&dist_1 + 103)
 #define yp ((double *)&dist_1 + 118)
-  extern int      decode_();
-  extern int      pwfilt_();
-  static double   di;
-  static double   dmin_;
-  static double   savdec[290], yi[5];
-  static double   savdis[143];
-  static long     ci;
-  static long     i;
+  extern int decode_ ();
+  extern int pwfilt_ ();
+  static double di;
+  static double dmin_;
+  static double savdec[290], yi[5];
+  static double savdis[143];
+  static long ci;
+  static long i;
 
   /* Save decoder and distance measure state */
-  for (i = 0; i <= 289; ++i)
-  {
+  for (i = 0; i <= 289; ++i) {
     savdec[i] = decod_1.dcstat[i];
   }
 
-  for (i = 0; i <= 142; ++i)
-  {
+  for (i = 0; i <= 142; ++i) {
     savdis[i] = dist_1.dmstat[i];
   }
 
   /* Search for best codeword */
   dmin_ = (double) 1e30;
-  for (ci = 0; ci <= 1023; ++ci)
-  {
-    decode_(n, &ci, yi, &c__0);
-    pwfilt_(n, x, yi, &di);
-    if (di <= dmin_)
-    {
+  for (ci = 0; ci <= 1023; ++ci) {
+    decode_ (n, &ci, yi, &c__0);
+    pwfilt_ (n, x, yi, &di);
+    if (di <= dmin_) {
       dmin_ = di;
       *c = ci;
     }
 
     /* Recall saved states */
-    for (i = 0; i <= 289; ++i)
-    {
+    for (i = 0; i <= 289; ++i) {
       decod_1.dcstat[i] = savdec[i];
     }
-    for (i = 0; i <= 142; ++i)
-    {
+    for (i = 0; i <= 142; ++i) {
       dist_1.dmstat[i] = savdis[i];
     }
   }
 
   /* Pass chosen codeword through decoder and dist.measure to update state */
-  decode_(n, c, yi, &c__1);
-  pwfilt_(n, x, yi, &di);
+  decode_ (n, c, yi, &c__1);
+  pwfilt_ (n, x, yi, &di);
 }
+
 #undef dltbuf
 #undef xp
 #undef yp
@@ -373,17 +342,17 @@ int             encode_(n, x, c)
 
 /* Find distance measure D for a given codeword C and input vector X */
 /* Version 21.11.91 / Ftj */
-int             distm_(n, x, c, d)
-  long           *n;
-  double         *x;
-  long           *c;
-  double         *d;
+int distm_ (n, x, c, d)
+     long *n;
+     double *x;
+     long *c;
+     double *d;
 {
   /* System generated locals */
-  long            i_1, i_2;
+  long i_1, i_2;
 
   /* Builtin functions */
-  long            s_rnge();
+  long s_rnge ();
 
   /* Local variables */
 #define ag ((double *)&decod_1 + 5372)
@@ -400,42 +369,39 @@ int             distm_(n, x, c, d)
 #define ybuf ((double *)&decod_1 + 5496)
 #define ybufp ((double *)&dist_1 + 103)
 #define yp ((double *)&dist_1 + 118)
-  extern int      decode_();
-  extern int      pwfilt_();
-  static double   dum;
-  static double   savdec[290];
-  static double   savdis[143];
-  static double   y[5];
-  static long     i;
+  extern int decode_ ();
+  extern int pwfilt_ ();
+  static double dum;
+  static double savdec[290];
+  static double savdis[143];
+  static double y[5];
+  static long i;
 
   /* Save decoder and distance measure state */
-  for (i = 0; i <= 289; ++i)
-  {
+  for (i = 0; i <= 289; ++i) {
     savdec[i] = decod_1.dcstat[i];
   }
-  for (i = 0; i <= 142; ++i)
-  {
+  for (i = 0; i <= 142; ++i) {
     savdis[i] = dist_1.dmstat[i];
   }
 
   /* Compute distance measure */
-  decode_(n, c, y, &c__0);
-  pwfilt_(n, x, y, d);
+  decode_ (n, c, y, &c__0);
+  pwfilt_ (n, x, y, d);
 
   /* Recall saved states */
-  for (i = 0; i <= 289; ++i)
-  {
+  for (i = 0; i <= 289; ++i) {
     decod_1.dcstat[i] = savdec[i];
   }
-  for (i = 0; i <= 142; ++i)
-  {
+  for (i = 0; i <= 142; ++i) {
     dist_1.dmstat[i] = savdis[i];
   }
 
   /* Update decoder and weighting filter state */
-  decode_(n, c, y, &c__1);
-  pwfilt_(n, x, y, &dum);
+  decode_ (n, c, y, &c__1);
+  pwfilt_ (n, x, y, &dum);
 }
+
 #undef dltbuf
 #undef xp
 #undef yp
@@ -455,13 +421,13 @@ int             distm_(n, x, c, d)
 
 /* Compute perceptually weighted distance D between vectors X(n) and Y(n) */
 /* Version 18.11.91 / Ftj */
-int             pwfilt_(n, x, y, d)
-  long           *n;
-  double         *x, *y, *d;
+int pwfilt_ (n, x, y, d)
+     long *n;
+     double *x, *y, *d;
 {
   /* System generated locals */
-  long            i_1, i_2, i_3, i_4;
-  double          d_1;
+  long i_1, i_2, i_3, i_4;
+  double d_1;
 
   /* Local variables */
 #define ag ((double *)&decod_1 + 5372)
@@ -478,134 +444,106 @@ int             pwfilt_(n, x, y, d)
 #define ybuf ((double *)&decod_1 + 5496)
 #define ybufp ((double *)&dist_1 + 103)
 #define yp ((double *)&dist_1 + 118)
-  extern int      durbin_();
-  static double   rc[50];
-  static double   sum;
-  static long     i, j, k, m;
+  extern int durbin_ ();
+  static double rc[50];
+  static double sum;
+  static long i, j, k, m;
 
-  for (j = 0; j <= 4; ++j)
-  {
+  for (j = 0; j <= 4; ++j) {
     xbuf[(i_1 = j + 60)] = x[(i_2 = j)];
   }
-  for (j = 0; j <= 4; ++j)
-  {
+  for (j = 0; j <= 4; ++j) {
     ybufp[(i_1 = j + 10)] = y[(i_2 = j)];
   }
 
   /* If n=4k+2 for any long k then update perceptual filter: */
-  if (*n % 4 == 2)
-  {
-    for (i = 1; i <= 60; ++i)
-    {
+  if (*n % 4 == 2) {
+    for (i = 1; i <= 60; ++i) {
       i_3 = -i + 60;
       dismon_1.xw[i - 1] = dist_1.wp[i - 1] * xbuf[i_3];
     }
-    for (k = 0; k <= 10; ++k)
-    {
+    for (k = 0; k <= 10; ++k) {
       sum = (double) 0.;
-      for (i = 31; i <= 50; ++i)
-      {
-	sum += dismon_1.xw[(i_1 = i - 1)] * dismon_1.xw[(i_2 = i + k - 1)];
+      for (i = 31; i <= 50; ++i) {
+        sum += dismon_1.xw[(i_1 = i - 1)] * dismon_1.xw[(i_2 = i + k - 1)];
       }
       rxexp[k] = dist_1.rhop * rxexp[k] + sum;
     }
 
-    for (k = 0; k <= 10; ++k)
-    {
+    for (k = 0; k <= 10; ++k) {
       sum = (double) 0.;
-      for (i = 1; i <= 30; ++i)
-      {
-	sum += dismon_1.xw[i - 1] * dismon_1.xw[i + k - 1];
+      for (i = 1; i <= 30; ++i) {
+        sum += dismon_1.xw[i - 1] * dismon_1.xw[i + k - 1];
       }
       dismon_1.rx[k] = rxexp[k] + sum;
     }
     dismon_1.rx[0] = global_1.wnc * dismon_1.rx[0];
-    if (dismon_1.rx[10] == 0.)
-    {
+    if (dismon_1.rx[10] == 0.) {
       dismon_1.ifailp = 3;
+    } else {
+      durbin_ (dismon_1.rx, &c__10, dismon_1.q, rc, &dismon_1.ifailp);
     }
-    else
-    {
-      durbin_(dismon_1.rx, &c__10, dismon_1.q, rc, &dismon_1.ifailp);
-    }
-    if (dismon_1.ifailp == 0)
-    {
-      for (k = 1; k <= 10; ++k)
-      {
-	q1[k] = dismon_1.q[k] * dist_1.gamma1[k - 1];
+    if (dismon_1.ifailp == 0) {
+      for (k = 1; k <= 10; ++k) {
+        q1[k] = dismon_1.q[k] * dist_1.gamma1[k - 1];
       }
-      for (k = 1; k <= 10; ++k)
-      {
-	q2[k] = dismon_1.q[k] * dist_1.gamma2[k - 1];
+      for (k = 1; k <= 10; ++k) {
+        q2[k] = dismon_1.q[k] * dist_1.gamma2[k - 1];
       }
     }
   }
 
   /* Filter input signal through weighting filter: */
-  for (m = 0; m <= 4; ++m)
-  {
+  for (m = 0; m <= 4; ++m) {
     xp[(i_1 = m + 10)] = xbuf[(i_2 = m + 60)];
-    for (k = 1; k <= 10; ++k)
-    {
-      xp[(i_1 = m + 10)] = xp[(i_2 = m + 10)] +
-	q1[k] * xbuf[(i_4 = m - k + 60)];
+    for (k = 1; k <= 10; ++k) {
+      xp[(i_1 = m + 10)] = xp[(i_2 = m + 10)] + q1[k] * xbuf[(i_4 = m - k + 60)];
     }
 
-    for (k = 1; k <= 10; ++k)
-    {
-      xp[(i_1 = m + 10)] = xp[(i_2 = m + 10)] -
-	q2[(i_3 = k)] * xp[(i_4 = m - k + 10)];
+    for (k = 1; k <= 10; ++k) {
+      xp[(i_1 = m + 10)] = xp[(i_2 = m + 10)] - q2[(i_3 = k)] * xp[(i_4 = m - k + 10)];
     }
   }
 
   /* Filter output signal through weighting filter */
-  for (m = 0; m <= 4; ++m)
-  {
+  for (m = 0; m <= 4; ++m) {
     yp[(i_1 = m + 10)] = ybufp[(i_2 = m + 10)];
-    for (k = 1; k <= 10; ++k)
-    {
-      yp[(i_1 = m + 10)] = yp[(i_2 = m + 10)] +
-	q1[(i_3 = k)] * ybufp[(i_4 = m - k + 10)];
+    for (k = 1; k <= 10; ++k) {
+      yp[(i_1 = m + 10)] = yp[(i_2 = m + 10)] + q1[(i_3 = k)] * ybufp[(i_4 = m - k + 10)];
     }
 
-    for (k = 1; k <= 10; ++k)
-    {
-      yp[(i_1 = m + 10)] = yp[(i_2 = m + 10)] -
-	q2[(i_3 = k)] * yp[(i_4 = m - k + 10)];
+    for (k = 1; k <= 10; ++k) {
+      yp[(i_1 = m + 10)] = yp[(i_2 = m + 10)] - q2[(i_3 = k)] * yp[(i_4 = m - k + 10)];
     }
   }
 
   /* Compute rms of weighted error signal: */
   *d = (double) 0.;
-  for (j = 0; j <= 4; ++j)
-  {
+  for (j = 0; j <= 4; ++j) {
     /* Computing 2nd power */
     d_1 = yp[(i_1 = j + 10)] - xp[(i_2 = j + 10)];
     *d += d_1 * d_1;
   }
 
   /* Update state: */
-  *d = sqrt(*d / 5);
-  for (m = -60; m <= -1; ++m)
-  {
+  *d = sqrt (*d / 5);
+  for (m = -60; m <= -1; ++m) {
     xbuf[(i_1 = m + 60)] = xbuf[(i_2 = m + 65)];
   }
 
-  for (m = -10; m <= -1; ++m)
-  {
+  for (m = -10; m <= -1; ++m) {
     ybufp[(i_1 = m + 10)] = ybufp[(i_2 = m + 15)];
   }
 
-  for (m = -10; m <= -1; ++m)
-  {
+  for (m = -10; m <= -1; ++m) {
     xp[(i_1 = m + 10)] = xp[(i_2 = m + 15)];
   }
 
-  for (m = -10; m <= -1; ++m)
-  {
+  for (m = -10; m <= -1; ++m) {
     yp[(i_1 = m + 10)] = yp[(i_2 = m + 15)];
   }
 }
+
 #undef dltbuf
 #undef xp
 #undef yp
@@ -625,19 +563,19 @@ int             pwfilt_(n, x, y, d)
 
 /* LDCELP decoder */
 /* Version 29.11.91 / Ftj */
-int             decode_(n, c, y, mode)
-  long           *n, *c;
-  double         *y;
-  long           *mode;
+int decode_ (n, c, y, mode)
+     long *n, *c;
+     double *y;
+     long *mode;
 {
   /* System generated locals */
-  long            i_1, i_2, i_3, i_4;
-  double          d_1;
+  long i_1, i_2, i_3, i_4;
+  double d_1;
 
   /* Builtin functions */
-  int             s_stop();
-  long            s_rnge();
-  double          pow_dd(), d_lg10();
+  int s_stop ();
+  long s_rnge ();
+  double pow_dd (), d_lg10 ();
 
   /* Local variables */
 #define ag ((double *)&decod_1 + 5372)
@@ -654,192 +592,152 @@ int             decode_(n, c, y, mode)
 #define ybuf ((double *)&decod_1 + 5496)
 #define ybufp ((double *)&dist_1 + 103)
 #define yp ((double *)&dist_1 + 118)
-  extern int      durbin_();
-  static double   rc[50];
-  static double   tmp;
-  static long     i, j, k, m;
+  extern int durbin_ ();
+  static double rc[50];
+  static double tmp;
+  static long i, j, k, m;
 
   /* Test if valid code file */
-  if (*c > 1023 || *c < 0)
-  {
-    fprintf(stderr, "Illegal codeword encountered\n");
-    exit(-1);
+  if (*c > 1023 || *c < 0) {
+    fprintf (stderr, "Illegal codeword encountered\n");
+    exit (-1);
   }
-  if (*n % 4 == 1)
-  {
-    for (i = 1; i <= 34; ++i)
-    {
-      decmon_1.deltaw[(i_1 = i - 1)] = decod_1.wg[(i_2 = i - 1)] *
-	dltbuf[(i_3 = -i + 34)];
+  if (*n % 4 == 1) {
+    for (i = 1; i <= 34; ++i) {
+      decmon_1.deltaw[(i_1 = i - 1)] = decod_1.wg[(i_2 = i - 1)] * dltbuf[(i_3 = -i + 34)];
     }
 
-    for (k = 0; k <= 10; ++k)
-    {
+    for (k = 0; k <= 10; ++k) {
       tmp = (double) 0.;
-      for (i = 21; i <= 24; ++i)
-      {
-	tmp += decmon_1.deltaw[i - 1] * decmon_1.deltaw[i + k - 1];
+      for (i = 21; i <= 24; ++i) {
+        tmp += decmon_1.deltaw[i - 1] * decmon_1.deltaw[i + k - 1];
       }
       rdexp[k] = decod_1.rhog * rdexp[k] + tmp;
     }
 
-    for (k = 0; k <= 10; ++k)
-    {
+    for (k = 0; k <= 10; ++k) {
       tmp = (double) 0.;
-      for (i = 1; i <= 20; ++i)
-      {
-	tmp += decmon_1.deltaw[i - 1] * decmon_1.deltaw[i + k - 1];
+      for (i = 1; i <= 20; ++i) {
+        tmp += decmon_1.deltaw[i - 1] * decmon_1.deltaw[i + k - 1];
       }
       decmon_1.rdelta[k] = rdexp[k] + tmp;
     }
 
     decmon_1.rdelta[0] = global_1.wnc * decmon_1.rdelta[0];
-    if (decmon_1.rdelta[10] == 0.)
-    {
+    if (decmon_1.rdelta[10] == 0.) {
       decmon_1.ifailg = 3;
+    } else {
+      durbin_ (decmon_1.rdelta, &c__10, ag, rc, &decmon_1.ifailg);
     }
-    else
-    {
-      durbin_(decmon_1.rdelta, &c__10, ag, rc, &decmon_1.ifailg);
-    }
-    if (decmon_1.ifailg == 0)
-    {
-      for (k = 1; k <= 10; ++k)
-      {
-	ag[k] = ag[k] * decod_1.lambdg[k - 1];
+    if (decmon_1.ifailg == 0) {
+      for (k = 1; k <= 10; ++k) {
+        ag[k] = ag[k] * decod_1.lambdg[k - 1];
       }
     }
   }
 
   /* Perform logarithmic gain prediction and excitation vector computation: */
   tmp = decod_1.doffst;
-  for (k = 1; k <= 10; ++k)
-  {
+  for (k = 1; k <= 10; ++k) {
     tmp -= ag[k] * delta[-k + 10];
   }
-  if (tmp < decod_1.dltmin)
-  {
+  if (tmp < decod_1.dltmin) {
     tmp = decod_1.dltmin;
   }
-  if (tmp > decod_1.dltmax)
-  {
+  if (tmp > decod_1.dltmax) {
     tmp = decod_1.dltmax;
   }
   tmp /= (double) 20.;
-  decmon_1.sigma = pow((double) 10., tmp);
+  decmon_1.sigma = pow ((double) 10., tmp);
 
-  for (j = 0; j <= 4; ++j)
-  {
+  for (j = 0; j <= 4; ++j) {
     decmon_1.e[j] = decmon_1.sigma * decod_1.codebk[j][*c];
   }
   tmp = (double) 0.;
-  for (j = 0; j <= 4; ++j)
-  {
+  for (j = 0; j <= 4; ++j) {
     /* Computing 2nd power */
     d_1 = decmon_1.e[j];
     tmp += d_1 * d_1;
   }
   tmp /= 5;
-  if (tmp < 1.)
-  {
+  if (tmp < 1.) {
     tmp = (double) 1.;
   }
 
   /* If n=4k+2 for any long k then update synthesis filter: */
-  delta[10] = log10(tmp) * 10 - decod_1.doffst;
-  if (*n % 4 == 2)
-  {
-    for (i = 1; i <= 105; ++i)
-    {
-      decmon_1.yw[(i_1 = i - 1)] = decod_1.ws[(i_2 = i - 1)] *
-	ybuf[(i_3 = -10 - i + 115)];
+  delta[10] = log10 (tmp) * 10 - decod_1.doffst;
+  if (*n % 4 == 2) {
+    for (i = 1; i <= 105; ++i) {
+      decmon_1.yw[(i_1 = i - 1)] = decod_1.ws[(i_2 = i - 1)] * ybuf[(i_3 = -10 - i + 115)];
     }
-    for (k = 0; k <= 50; ++k)
-    {
+    for (k = 0; k <= 50; ++k) {
       tmp = (double) 0.;
-      for (i = 36; i <= 55; ++i)
-      {
-	tmp += decmon_1.yw[i - 1] * decmon_1.yw[i + k - 1];
+      for (i = 36; i <= 55; ++i) {
+        tmp += decmon_1.yw[i - 1] * decmon_1.yw[i + k - 1];
       }
       ryexp[k] = decod_1.rhos * ryexp[k] + tmp;
     }
 
-    for (k = 0; k <= 50; ++k)
-    {
+    for (k = 0; k <= 50; ++k) {
       tmp = (double) 0.;
-      for (i = 1; i <= 35; ++i)
-      {
-	tmp += decmon_1.yw[i - 1] * decmon_1.yw[i + k - 1];
+      for (i = 1; i <= 35; ++i) {
+        tmp += decmon_1.yw[i - 1] * decmon_1.yw[i + k - 1];
       }
       decmon_1.ry[k] = ryexp[k] + tmp;
     }
 
     decmon_1.ry[0] = global_1.wnc * decmon_1.ry[0];
-    if (decmon_1.ry[50] == 0.)
-    {
+    if (decmon_1.ry[50] == 0.) {
       decmon_1.ifails = 3;
+    } else {
+      durbin_ (decmon_1.ry, &c__50, as, rc, &decmon_1.ifails);
     }
-    else
-    {
-      durbin_(decmon_1.ry, &c__50, as, rc, &decmon_1.ifails);
-    }
-    if (decmon_1.ifails == 0)
-    {
-      for (k = 1; k <= 50; ++k)
-      {
-	as[k] *= decod_1.lambds[k - 1];
+    if (decmon_1.ifails == 0) {
+      for (k = 1; k <= 50; ++k) {
+        as[k] *= decod_1.lambds[k - 1];
       }
     }
   }
 
   /* Perform synthesis filtering: */
-  for (m = 0; m <= 4; ++m)
-  {
+  for (m = 0; m <= 4; ++m) {
     ybuf[(i_1 = m + 115)] = decmon_1.e[m];
-    for (k = 1; k <= 50; ++k)
-    {
+    for (k = 1; k <= 50; ++k) {
       ybuf[m + 115] = ybuf[(i_2 = m + 115)] - as[k] * ybuf[m - k + 115];
     }
   }
 
   /* Limit output signal when not in codebook search mode: */
-  if (*mode == 1)
-  {
-    for (m = 0; m <= 4; ++m)
-    {
-      if (ybuf[m + 115] < decod_1.ymin)
-      {
-	ybuf[m + 115] = decod_1.ymin;
+  if (*mode == 1) {
+    for (m = 0; m <= 4; ++m) {
+      if (ybuf[m + 115] < decod_1.ymin) {
+        ybuf[m + 115] = decod_1.ymin;
       }
-      if (ybuf[m + 115] > decod_1.ymax)
-      {
-	ybuf[m + 115] = decod_1.ymax;
+      if (ybuf[m + 115] > decod_1.ymax) {
+        ybuf[m + 115] = decod_1.ymax;
       }
     }
   }
 
-  for (j = 0; j <= 4; ++j)
-  {
+  for (j = 0; j <= 4; ++j) {
     y[j] = ybuf[j + 115];
   }
 
   /* Update signal buffers: */
-  for (m = -115; m <= -1; ++m)
-  {
+  for (m = -115; m <= -1; ++m) {
     ybuf[m + 115] = ybuf[m + 120];
   }
 
-  for (m = -10; m <= -1; ++m)
-  {
+  for (m = -10; m <= -1; ++m) {
     delta[m + 10] = delta[m + 11];
   }
 
   dltbuf[34] = delta[10];
-  for (m = -34; m <= -1; ++m)
-  {
+  for (m = -34; m <= -1; ++m) {
     dltbuf[m + 34] = dltbuf[m + 35];
   }
 }
+
 #undef dltbuf
 #undef xp
 #undef yp
@@ -858,52 +756,51 @@ int             decode_(n, c, y, mode)
 
 
 /* Version: 21.11.91 / Ftj */
-int             pstflt_(nvect, sx, sy)
-  long           *nvect;
-  double         *sx, *sy;
+int pstflt_ (nvect, sx, sy)
+     long *nvect;
+     double *sx, *sy;
 {
   /* System generated locals */
-  long            i_1, i_2, i_3, i_4, i_5;
-  double          d_1;
+  long i_1, i_2, i_3, i_4, i_5;
+  double d_1;
 
   /* Builtin functions */
-  long            s_rnge();
-  double          pow_di();
-  long            i_dnnt();
+  long s_rnge ();
+  double pow_di ();
+  long i_dnnt ();
 
   /* Local variables */
-  static long     idim;
-  static double   cmax;
-  static long     kmax;
-  static double   ptap, temp[5], ybuf[110];
-  static long     itmp;
-  static double   rhos, b, d[240];
-  static long     i, j, k, m, n;
-  static double   scale;
-  static long     kpmin, kpmax;
-  static double   ppfth, tapth, tiltf, stlpf[3];
-  static long     kptmp;
-  extern void     hybws_();
-  static long     m1, m2, nfrsz;
-  static double   tiltz, ryexp[51];
-  static long     npwsz;
-  static double   agcfac, al[3], bl[4], ap[11], gl, rc[10], sd[245];
-  static long     ip, kp;
-  static double   az[11], scalfl;
-  static long     ifails;
-  static double   ws[105], ry[51];
-  static long     kpdlta;
-  static double   yw[105], spfpcf;
-  extern int      durbin_();
-  static double   ppfzcf, cormax, spfzcf, stlpci[10], sumfil, sunfil, sppcfv[10];
-  static long     icount;
-  static double   stpfir[10], stpiir[10], spzcfv[10];
-  static long     kp1;
-  static double   dec[60], apf[11], tap, wnc, spf[5], tmp, sum, tap1;
+  static long idim;
+  static double cmax;
+  static long kmax;
+  static double ptap, temp[5], ybuf[110];
+  static long itmp;
+  static double rhos, b, d[240];
+  static long i, j, k, m, n;
+  static double scale;
+  static long kpmin, kpmax;
+  static double ppfth, tapth, tiltf, stlpf[3];
+  static long kptmp;
+  extern void hybws_ ();
+  static long m1, m2, nfrsz;
+  static double tiltz, ryexp[51];
+  static long npwsz;
+  static double agcfac, al[3], bl[4], ap[11], gl, rc[10], sd[245];
+  static long ip, kp;
+  static double az[11], scalfl;
+  static long ifails;
+  static double ws[105], ry[51];
+  static long kpdlta;
+  static double yw[105], spfpcf;
+  extern int durbin_ ();
+  static double ppfzcf, cormax, spfzcf, stlpci[10], sumfil, sunfil, sppcfv[10];
+  static long icount;
+  static double stpfir[10], stpiir[10], spzcfv[10];
+  static long kp1;
+  static double dec[60], apf[11], tap, wnc, spf[5], tmp, sum, tap1;
 
   /* Preprocessing */
-  if (*nvect == 0)
-  {
+  if (*nvect == 0) {
     /* ...reset constant values */
     agcfac = (double) .99;
     idim = 5;
@@ -924,18 +821,15 @@ int             pstflt_(nvect, sx, sy)
     al[2] = (double) -.614109218;
     ap[0] = (double) 1.;
     az[0] = (double) 1.;
-    for (i = 1; i < 11; ++i)
-    {
+    for (i = 1; i < 11; ++i) {
       ap[i] = az[i] = (double) 0.;
     }
 
-    for (i = -34; i <= 25; ++i)
-    {
+    for (i = -34; i <= 25; ++i) {
       dec[i + 34] = (double) 0.;
     }
 
-    for (i = -139; i <= 100; ++i)
-    {
+    for (i = -139; i <= 100; ++i) {
       d[i + 139] = (double) 0.;
     }
 
@@ -946,12 +840,10 @@ int             pstflt_(nvect, sx, sy)
     ip = 85;
     kp1 = 50;
     scalfl = (double) 1.;
-    for (i = 0; i < 3; ++i)
-    {
+    for (i = 0; i < 3; ++i) {
       stlpf[i] = (double) 0.;
     }
-    for (i = 0; i < 10; ++i)
-    {
+    for (i = 0; i < 10; ++i) {
       stlpci[i] = stpfir[i] = stpiir[i] = (double) 0.;
     }
 
@@ -959,74 +851,61 @@ int             pstflt_(nvect, sx, sy)
     gl = (double) 1.;
     wnc = (double) 1.00390625;
     rhos = (double) .75;
-    hybws_(ws);
-    for (i = 0; i <= 50; ++i)
-    {
+    hybws_ (ws);
+    for (i = 0; i <= 50; ++i) {
       ryexp[i] = (double) 0.;
     }
-    for (i = -105; i <= 4; ++i)
-    {
+    for (i = -105; i <= 4; ++i) {
       ybuf[i + 105] = (double) 0.;
     }
-    for (i = 1; i <= 10; ++i)
-    {
-      d_1 = pow(spfpcf, (double) i) * 16384;
-      sppcfv[i - 1] = (double) round(d_1) / (double) 16384.;
-      d_1 = pow(spfzcf, (double) i) * 16384;
-      spzcfv[i - 1] = (double) round(d_1) / (double) 16384.;
+    for (i = 1; i <= 10; ++i) {
+      d_1 = pow (spfpcf, (double) i) * 16384;
+      sppcfv[i - 1] = (double) round (d_1) / (double) 16384.;
+      d_1 = pow (spfzcf, (double) i) * 16384;
+      spzcfv[i - 1] = (double) round (d_1) / (double) 16384.;
     }
   }
 
   /* ...update 10'th order LPC coefficients at first vector in frame */
-  if (*nvect % 4 == 0)
-  {
-    for (i = 1; i <= 105; ++i)
-    {
+  if (*nvect % 4 == 0) {
+    for (i = 1; i <= 105; ++i) {
       yw[i - 1] = ws[i - 1] * ybuf[-i + 105];
     }
 
-    for (k = 0; k <= 50; ++k)
-    {
+    for (k = 0; k <= 50; ++k) {
       tmp = (double) 0.;
-      for (i = 36; i <= 55; ++i)
-      {
-	tmp += yw[i - 1] * yw[i + k - 1];
+      for (i = 36; i <= 55; ++i) {
+        tmp += yw[i - 1] * yw[i + k - 1];
       }
       ryexp[k] = rhos * ryexp[k] + tmp;
     }
 
-    for (k = 0; k <= 50; ++k)
-    {
+    for (k = 0; k <= 50; ++k) {
       tmp = (double) 0.;
-      for (i = 1; i <= 35; ++i)
-      {
-	tmp += yw[i - 1] * yw[i + k - 1];
+      for (i = 1; i <= 35; ++i) {
+        tmp += yw[i - 1] * yw[i + k - 1];
       }
       ry[k] = ryexp[k] + tmp;
     }
     ry[0] = wnc * ry[0];
 
-    if (ry[50] != 0.)
-    {
-      durbin_(ry, &c__10, apf, rc, &ifails);
+    if (ry[50] != 0.) {
+      durbin_ (ry, &c__10, apf, rc, &ifails);
     }
   }
 
   /* ...update decoded signal buffer */
-  for (k = 0; k <= 4; ++k)
-  {
+  for (k = 0; k <= 4; ++k) {
     ybuf[k + 105] = sx[k];
   }
 
-  for (m = -105; m <= -1; ++m)
-  {
+  for (m = -105; m <= -1; ++m) {
     ybuf[m + 105] = ybuf[m + 110];
   }
 
   /* ...transfer input vector */
   i_1 = idim;
-  for (k = 1; k <= i_1; ++k)
-  {
+  for (k = 1; k <= i_1; ++k) {
     sd[k + 239] = sx[k - 1];
   }
 
@@ -1036,17 +915,14 @@ int             pstflt_(nvect, sx, sy)
   icount = *nvect % 4 + 1;
 
   /* check & update IP */
-  if (ip == npwsz)
-  {
+  if (ip == npwsz) {
     ip = npwsz - nfrsz;
   }
   i_1 = idim;
-  for (k = 1; k <= i_1; ++k)
-  {
+  for (k = 1; k <= i_1; ++k) {
     itmp = ip + k;
     d[itmp + 13] = sd[k + 239];
-    for (j = 10; j >= 2; --j)
-    {
+    for (j = 10; j >= 2; --j) {
       /* FIR filtering. */
       d[itmp + 139] = d[itmp + 139] + stlpci[j - 1] * apf[j];
       /* Memory shift. */
@@ -1065,19 +941,15 @@ int             pstflt_(nvect, sx, sy)
   ip += idim;
 
   /* lowpass filtering & 4:1 downsampling. */
-  if (icount == 3)
-  {
+  if (icount == 3) {
     i_1 = npwsz;
-    for (k = npwsz - nfrsz + 1; k <= i_1; ++k)
-    {
+    for (k = npwsz - nfrsz + 1; k <= i_1; ++k) {
       /* IIR filter */
       tmp = d[k + 139] - stlpf[0] * al[0] - stlpf[1] * al[1] - stlpf[2] * al[2];
-      if (k % 4 == 0)
-      {
-	/* do FIR filtering only if needed. */
-	n = k / 4;
-	dec[n + 34] = tmp * bl[0] + stlpf[0] * bl[1] +
-	  stlpf[1] * bl[2] + stlpf[2] * bl[3];
+      if (k % 4 == 0) {
+        /* do FIR filtering only if needed. */
+        n = k / 4;
+        dec[n + 34] = tmp * bl[0] + stlpf[0] * bl[1] + stlpf[1] * bl[2] + stlpf[2] * bl[3];
       }
 
       /* shift lowpass filter memory. */
@@ -1091,27 +963,23 @@ int             pstflt_(nvect, sx, sy)
     m2 = kpmax / 4;
     cormax = (double) -1e30;
     i_1 = m2;
-    for (j = m1; j <= i_1; ++j)
-    {
+    for (j = m1; j <= i_1; ++j) {
       tmp = 0.;
       i_2 = npwsz / 4;
       /* tmp = correlation in decimated domain */
-      for (n = 1; n <= i_2; ++n)
-      {
-	tmp += dec[n + 34] * dec[n - j + 34];
+      for (n = 1; n <= i_2; ++n) {
+        tmp += dec[n + 34] * dec[n - j + 34];
       }
       /* find maximum correlation and the corresponding lag. */
-      if (tmp > cormax)
-      {
-	cormax = tmp;
-	kmax = j;
+      if (tmp > cormax) {
+        cormax = tmp;
+        kmax = j;
       }
     }
 
     /* shift decimated LPC residual buffer. */
     i_1 = (npwsz - nfrsz) / 4;
-    for (n = -m2 + 1; n <= i_1; ++n)
-    {
+    for (n = -m2 + 1; n <= i_1; ++n) {
       dec[n + 34] = dec[n + 39];
     }
 
@@ -1120,34 +988,29 @@ int             pstflt_(nvect, sx, sy)
     m2 = (kmax << 2) + 3;
 
     /* check whether M1 out of range. */
-    if (m1 < kpmin)
-    {
+    if (m1 < kpmin) {
       m1 = kpmin;
     }
 
     /* check whether M2 out of range. */
-    if (m2 > kpmax)
-    {
+    if (m2 > kpmax) {
       m2 = kpmax;
     }
 
     /* correlation in undecimated domain. */
     cormax = (double) -1e30;
     i_1 = m2;
-    for (j = m1; j <= i_1; ++j)
-    {
+    for (j = m1; j <= i_1; ++j) {
       tmp = (double) 0.;
       i_2 = npwsz;
-      for (k = 1; k <= i_2; ++k)
-      {
-	tmp += d[k] * d[k - j + 139];
+      for (k = 1; k <= i_2; ++k) {
+        tmp += d[k] * d[k - j + 139];
       }
-      if (tmp > cormax)
-      {
-	/* find maximum correlation and */
-	cormax = tmp;
-	/* the corresponding lag. */
-	kp = j;
+      if (tmp > cormax) {
+        /* find maximum correlation and */
+        cormax = tmp;
+        /* the corresponding lag. */
+        kp = j;
       }
     }
 
@@ -1158,133 +1021,106 @@ int             pstflt_(nvect, sx, sy)
     m2 = kp1 + kpdlta;
 
     /* KP can't be a multiple pitch if true. */
-    if (kp < m2 + 1)
-    {
+    if (kp < m2 + 1) {
       goto L115;
     }
 
     /* check whether M1 out of range. */
-    if (m1 < kpmin)
-    {
+    if (m1 < kpmin) {
       m1 = kpmin;
     }
 
     /* check whether M2 out of range. */
-    if (m2 > kpmax)
-    {
+    if (m2 > kpmax) {
       m2 = kpmax;
     }
 
     cmax = (double) -1e30;
     i_1 = m2;
-    for (j = m1; j <= i_1; ++j)
-    {
+    for (j = m1; j <= i_1; ++j) {
       tmp = (double) 0.;
       i_2 = npwsz;
-      for (k = 1; k <= i_2; ++k)
-      {
-	/* correlation in undecimated domain. */
-	tmp += d[k + 139] * d[k - j + 139];
+      for (k = 1; k <= i_2; ++k) {
+        /* correlation in undecimated domain. */
+        tmp += d[k + 139] * d[k - j + 139];
       }
-      if (tmp > cmax)
-      {
-	/* find maximum correlation and the corresponding lag. */
-	cmax = tmp;
-	kptmp = j;
+      if (tmp > cmax) {
+        /* find maximum correlation and the corresponding lag. */
+        cmax = tmp;
+        kptmp = j;
       }
     }
 
     /* start computing the tap weights */
     sum = tmp = (double) 0.;
     i_1 = npwsz;
-    for (k = 1; k <= i_1; ++k)
-    {
+    for (k = 1; k <= i_1; ++k) {
       sum += d[k - kp + 139] * d[k - kp + 139];
       tmp += d[k - kptmp + 139] * d[k - kptmp + 139];
     }
-    if (sum == 0.)
-    {
+    if (sum == 0.) {
       tap = 0.;
-    }
-    else
-    {
+    } else {
       tap = cormax / sum;
     }
-    if (tmp == 0.)
-    {
+    if (tmp == 0.) {
       tap1 = 0.;
-    }
-    else
-    {
+    } else {
       tap1 = cmax / tmp;
     }
 
     /* clamp TAP between 0 and 1 */
-    if (tap > 1.)
-    {
+    if (tap > 1.) {
       tap = 1.;
     }
-    if (tap < 0.)
-    {
+    if (tap < 0.) {
       tap = 0.;
     }
 
     /* clamp TAP1 between 0 and 1 */
-    if (tap1 > 1.)
-    {
+    if (tap1 > 1.) {
       tap1 = 1.;
     }
 
     /* Replace KP with fundamental pitch if TAP1 is large enough. */
-    if (tap1 < 0.)
-    {
+    if (tap1 < 0.) {
       tap1 = 0.;
     }
-    if (tap1 > tapth * tap)
-    {
+    if (tap1 > tapth * tap) {
       kp = kptmp;
     }
 
-L115:
+  L115:
     /* update pitch period of previous frame */
     kp1 = kp;
     i_1 = npwsz - nfrsz;
 
     /* shift the LPC residual buffer */
-    for (k = -kpmax + 1; k <= i_1; ++k)
-    {
+    for (k = -kpmax + 1; k <= i_1; ++k) {
       d[k + 139] = d[k + nfrsz + 139];
     }
 
-    /* Calculate the optimal tap weight of the single-tap pitch predictor of
-     * the decoded speech. */
+    /* Calculate the optimal tap weight of the single-tap pitch predictor of the decoded speech. */
     sum = (double) 0.;
     tmp = (double) 0.;
-    for (k = -npwsz + 1; k <= 0; ++k)
-    {
+    for (k = -npwsz + 1; k <= 0; ++k) {
       sum += sd[k - kp + 239] * sd[k - kp + 239];
       tmp += sd[k + 239] * sd[k - kp + 239];
     }
-    if (sum == 0.)
-    {
+    if (sum == 0.) {
       ptap = 0.;
-    }
-    else
-    {
-      /* Calculate the coefficient $b$ and the scaling factor $g sub l$ of
-       * the long-term postfilter. */
+    } else {
+      /* Calculate the coefficient $b$ and the scaling factor $g sub l$ of the long-term postfilter. */
       ptap = tmp / sum;
     }
 
     /* clamp PTAP at 1. */
-    if (ptap > 1.)
-    {
+    if (ptap > 1.) {
       ptap = (double) 1.;
     }
 
     /* turn off pitch postfilter if PTAP smaller than threshold. */
-    if (ptap < ppfth)
-    {
+    if (ptap < ppfth) {
       ptap = (double) 0.;
     }
     b = ppfzcf * ptap;
@@ -1292,10 +1128,8 @@ L115:
   }
 
   /* Calculate the coefficients of the short-term postfilter. */
-  if (icount == 1)
-  {
-    for (i = 2; i <= 11; ++i)
-    {
+  if (icount == 1) {
+    for (i = 2; i <= 11; ++i) {
       /* scale denominator coeff. */
       ap[i - 1] = sppcfv[i - 2] * apf[i - 1];
 
@@ -1309,25 +1143,21 @@ L115:
 
   /* Perform filtering operation of the long-term postfilter. */
   i_1 = idim;
-  for (k = 1; k <= i_1; ++k)
-  {
+  for (k = 1; k <= i_1; ++k) {
     /* long-term postfiltering. */
     temp[k - 1] = gl * (sd[k + 239] + b * sd[k - kp + 239]);
   }
 
   /* shift decoded speech buffer. */
-  for (k = -npwsz - kpmax + 1; k <= 0; ++k)
-  {
+  for (k = -npwsz - kpmax + 1; k <= 0; ++k) {
     sd[k + 239] = sd[k + idim + 239];
   }
 
   /* Perform filtering operation of the short-term postfilter. */
   i_1 = idim;
-  for (k = 1; k <= i_1; ++k)
-  {
+  for (k = 1; k <= i_1; ++k) {
     tmp = temp[k - 1];
-    for (j = 10; j >= 2; --j)
-    {
+    for (j = 10; j >= 2; --j) {
       /* All-zero part of the filter. */
       temp[k - 1] += stpfir[j - 1] * az[j];
       stpfir[j - 1] = stpfir[j - 2];
@@ -1338,8 +1168,7 @@ L115:
     stpfir[0] = tmp;
 
     /* All-pole part of the filter. */
-    for (j = 10; j >= 2; --j)
-    {
+    for (j = 10; j >= 2; --j) {
       temp[k - 1] -= stpiir[j - 1] * ap[j];
       stpiir[j - 1] = stpiir[j - 2];
     }
@@ -1356,31 +1185,27 @@ L115:
   /* decoded speech vector. */
   sunfil = (double) 0.;
   i_1 = idim;
-  for (k = 1; k <= i_1; ++k)
-  {
-    sunfil + = fabs(sd[k + 239]);
+  for (k = 1; k <= i_1; ++k) {
+    sunfil + = fabs (sd[k + 239]);
   }
 
   /* Calculate the sum of absolute values of the components of the */
   /* short-term postfilter output vector. */
   sumfil = (double) 0.;
   i_1 = idim;
-  for (k = 1; k <= i_1; ++k)
-  {
-    sumfil += fabs(temp[k - 1]);
+  for (k = 1; k <= i_1; ++k) {
+    sumfil += fabs (temp[k - 1]);
   }
 
   /* Calculate the overall scaling factor of the postfilter */
   /* Lowpass filter the once-a-vector scaling factor and use the filtered */
   /* scaling factor to scale the short-term postfilter output vector. */
   scale = (double) 1.;
-  if (sumfil > 1.)
-  {
+  if (sumfil > 1.) {
     scale = sunfil / sumfil;
   }
   i_1 = idim;
-  for (k = 1; k <= i_1; ++k)
-  {
+  for (k = 1; k <= i_1; ++k) {
     /* lowpass filtering */
     scalfl = agcfac * scalfl + (1 - agcfac) * scale;
 
@@ -1390,40 +1215,38 @@ L115:
 
   /* Postprocessing */
   /* ...transfer output vector */
-  for (k = 1; k <= 5; ++k)
-  {
+  for (k = 1; k <= 5; ++k) {
     sy[k - 1] = spf[k - 1];
   }
 }
+
 /* ......................... End of pstflt() ......................... */
 
 
-int             durbin_(r, n, a, rc, ifail)
-  double         *r;
-  long           *n;
-  double         *a, *rc;
-  long           *ifail;
+int durbin_ (r, n, a, rc, ifail)
+     double *r;
+     long *n;
+     double *a, *rc;
+     long *ifail;
 {
   /* System generated locals */
-  long            i_1, i_2;
+  long i_1, i_2;
 
   /* Local variables */
-  static double   abuf[100];
-  static long     minc, i;
-  static double   alpha;
-  static long     n1, ib, mh;
-  static double   at;
-  static long     ip;
-  static double   sum;
+  static double abuf[100];
+  static long minc, i;
+  static double alpha;
+  static long n1, ib, mh;
+  static double at;
+  static long ip;
+  static double sum;
 
   *ifail = 0;
   i_1 = *n + 1;
-  for (i = 0; i < i_1; ++i)
-  {
+  for (i = 0; i < i_1; ++i) {
     abuf[i] = a[i];
   }
-  if (r[0] <= 0.)
-  {
+  if (r[0] <= 0.) {
     *ifail = 1;
     goto L99;
   }
@@ -1431,26 +1254,22 @@ int             durbin_(r, n, a, rc, ifail)
   a[0] = (double) 1.;
   a[1] = rc[0];
   alpha = r[0] + r[1] * rc[0];
-  if (alpha <= 0.)
-  {
+  if (alpha <= 0.) {
     *ifail = 2;
     goto L99;
   }
   i_1 = *n;
-  for (minc = 2; minc <= i_1; ++minc)
-  {
+  for (minc = 2; minc <= i_1; ++minc) {
     sum = (double) 0.;
     i_2 = minc;
-    for (ip = 1; ip <= i_2; ++ip)
-    {
+    for (ip = 1; ip <= i_2; ++ip) {
       n1 = minc - ip + 2;
       sum += r[n1 - 1] * a[ip - 1];
     }
     rc[minc - 1] = -(sum / alpha);
     mh = minc / 2 + 1;
     i_2 = mh;
-    for (ip = 2; ip <= i_2; ++ip)
-    {
+    for (ip = 2; ip <= i_2; ++ip) {
       ib = minc - ip + 2;
       at = a[ip - 1] + rc[minc - 1] * a[ib - 1];
       a[ib - 1] += rc[minc - 1] * a[ip - 1];
@@ -1458,8 +1277,7 @@ int             durbin_(r, n, a, rc, ifail)
     }
     a[minc] = rc[minc - 1];
     alpha += rc[minc - 1] * sum;
-    if (alpha <= 0.)
-    {
+    if (alpha <= 0.) {
       *ifail = 2;
       goto L99;
     }
@@ -1469,22 +1287,22 @@ int             durbin_(r, n, a, rc, ifail)
 L99:
   /* Keep wheighting filter coefficients in case of ill-conditioning */
   i_1 = *n + 1;
-  for (i = 0; i < i_1; ++i)
-  {
+  for (i = 0; i < i_1; ++i) {
     a[i] = abuf[i];
   }
   return (*ifail);
   /* Version: 03.10.91 / Ftj */
 }
+
 /* ........................ End of durbin() ............................. */
 
 
-void            hybws_(ws)
-  double         *ws;
+void hybws_ (ws)
+     double *ws;
 {
   /* Initialized data */
 
-  static long     iws[105] = {1565, 3127, 4681, 6225, 7755, 9266, 10757, 12223,
+  static long iws[105] = { 1565, 3127, 4681, 6225, 7755, 9266, 10757, 12223,
     13661, 15068, 16441, 17776, 19071, 20322, 21526, 22682, 23786, 24835, 25828,
     26761, 27634, 28444, 29188, 29866, 30476, 31016, 31486, 31884, 32208, 32460,
     32637, 32739, 32767, 32721, 32599, 32403, 32171, 31940, 31711, 31484, 31259,
@@ -1493,73 +1311,78 @@ void            hybws_(ws)
     26493, 26303, 26114, 25927, 25742, 25557, 25374, 25192, 25012, 24832, 24654,
     24478, 24302, 24128, 23955, 23784, 23613, 23444, 23276, 23109, 22943, 22779,
     22616, 22454, 22293, 22133, 21974, 21817, 21661, 21505, 21351, 21198, 21046,
-  20896, 20746, 20597, 20450, 20303, 20157, 20013, 19870, 19727};
+    20896, 20746, 20597, 20450, 20303, 20157, 20013, 19870, 19727
+  };
 
   /* System generated locals */
-  long            i_1, i_2;
+  long i_1, i_2;
 
   /* Builtin functions */
-  long            s_rnge();
+  long s_rnge ();
 
   /* Local variables */
-  static long     i;
+  static long i;
 
-  for (i = 0; i < 105; ++i)
-  {
+  for (i = 0; i < 105; ++i) {
     ws[i] = iws[i] / (double) 32768.;
   }
   /* Version: 03.10.91 / Ftj */
 }
+
 /* ............................ End of hybws() .......................... */
 
 
-void            hybwg_(wg)
-  double         *wg;
+void hybwg_ (wg)
+     double *wg;
 {
   /* Version: 03.10.91 / Ftj */
   /* Initialized data */
-  static long     iwg[34] = {3026, 6025, 8973, 11845, 14615, 17261, 19759, 22088,
+  static long iwg[34] = { 3026, 6025, 8973, 11845, 14615, 17261, 19759, 22088,
     24228, 26162, 27872, 29344, 30565, 31525, 32216, 32631, 32767, 32625, 32203,
     31506, 30540, 29461, 28420, 27416, 26448, 25514, 24613, 23743, 22905, 22096,
-  21315, 20562, 19836, 19135};
+    21315, 20562, 19836, 19135
+  };
 
   /* Local variables */
-  static long     i;
+  static long i;
 
   for (i = 0; i < 34; ++i)
     wg[i] = (double) iwg[i] / (double) 32768.;
 }
+
 /* .......................... End of hybwg() .............................. */
 
 
-void            hybwp_(wp)
-  double         *wp;
+void hybwp_ (wp)
+     double *wp;
 {
   /* Version: 03.10.91 / Ftj */
   /* Initialized data */
 
-  static short    iwp[60] = {1957, 3908, 5845, 7760, 9648, 11502, 13314, 15079,
+  static short iwp[60] = { 1957, 3908, 5845, 7760, 9648, 11502, 13314, 15079,
     16790, 18441, 20026, 21540, 22976, 24331, 25599, 26775, 27856, 28837, 29715,
     30487, 31150, 31702, 32141, 32464, 32672, 32763, 32738, 32595, 32336, 31961,
     31472, 30931, 30400, 29878, 29365, 28860, 28364, 27877, 27398, 26927, 26465,
     26010, 25563, 25124, 24693, 24268, 23851, 23442, 23039, 22643, 22254, 21872,
-  21496, 21127, 20764, 20407, 20057, 19712, 19373, 19041};
+    21496, 21127, 20764, 20407, 20057, 19712, 19373, 19041
+  };
 
   /* Local variables */
-  static int      i;
+  static int i;
 
   for (i = 0; i < 60; ++i)
     wp[i] = (double) iwp[i] / (double) 32768.;
 }
+
 /* .......................... End of hybwp() ............................... */
 
 
-void            cbook_(y)
-  double         *y;
+void cbook_ (y)
+     double *y;
 {
   /* Initialized data */
 
-  static short    iy[640] = {668, -2950, -1254, -1790, -2553, -5032, -4577, -1045,
+  static short iy[640] = { 668, -2950, -1254, -1790, -2553, -5032, -4577, -1045,
     2908, 3318, -2819, -2677, -948, -2825, -4450, -6679, -340, 1482, -1276, 1262,
     -562, -6757, 1281, 179, -1274, -2512, -7130, -4925, 6913, 2411, -2478, -156,
     4683, -3873, 0, -8208, 2140, -478, -2785, 533, 1889, 2759, 1381, -6955, -5913,
@@ -1612,12 +1435,14 @@ void            cbook_(y)
     4367, 1006, -1252, -1466, -1383, 3852, 1579, -77, 2064, 868, 5109, 2919, -202,
     359, -509, 3650, 3206, 2303, 1693, 1296, 2905, -3907, 229, -1196, -2332, 5977,
     -3585, 805, 3825, -3138, 3746, -606, 53, -269, -3301, 606, 2018, -1316, 4064,
-  398};
+    398
+  };
 
   /* Local variables */
-  int             i;
+  int i;
 
   for (i = 0; i < 640; ++i)
     y[i] = (double) iy[i] / (double) 2048.;
 }
+
 /* ........................... End of cbook() ........................... */

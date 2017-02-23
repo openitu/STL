@@ -47,29 +47,26 @@
 #define pi 3.141592654
 
 /* This routine generate a hanning window */
-void genHanning(
-				int n,			/* number of coeffients of the hanning window */
-				float* hanning	/* buffer containing the coefficients of the hanning window */
-);
+void genHanning (int n,         /* number of coeffients of the hanning window */
+                 float *hanning /* buffer containing the coefficients of the hanning window */
+  );
 
 #ifndef TUNED_FFT
 /* This routine computes the positive part of the spectrum, using Real Discrete Fourier Transform */
-void rdft(
-		  int m,		/* number of coefficients of the fourier transform */
-		  float *x1,	/* input real signal */
-		  float *x2,	/* output real part of the DFT */
-		  float *y2		/* output imaginary part of the DFT */
-);
+void rdft (int m,               /* number of coefficients of the fourier transform */
+           float *x1,           /* input real signal */
+           float *x2,           /* output real part of the DFT */
+           float *y2            /* output imaginary part of the DFT */
+  );
 
 
 /* This routine compute the power spectrum of the DFT of a signal */
-void powSpect(
-			  float* real,		/* input buffer containing the real part of the DFT */
-			  float* imag,		/* input buffer containing the imaginary part of the DFT */
-			  float* pws,		/* output buffer containing the power spectrum */
-			  int n				/* length of the input buffers */
-);
+void powSpect (float *real,     /* input buffer containing the real part of the DFT */
+               float *imag,     /* input buffer containing the imaginary part of the DFT */
+               float *pws,      /* output buffer containing the power spectrum */
+               int n            /* length of the input buffers */
+  );
 
 #else
-void powSpect(int m,float *x1, float *x2);
+void powSpect (int m, float *x1, float *x2);
 #endif

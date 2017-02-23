@@ -38,9 +38,8 @@
 
 
 /* Routine to truncate a frame */
-void trunca(
-	short syncWord,		/* Synchronisation word */
-	short outFrameLgth,	/* Length of the output frame */
-	short* inpFrame,	/* input frame */
-	short* outFrame	/* output frame */
-);
+void trunca (short syncWord,    /* Synchronisation word */
+             short outFrameLgth,        /* Length of the output frame */
+             short *inpFrame,   /* input frame */
+             short *outFrame    /* output frame */
+  );

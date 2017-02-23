@@ -137,11 +137,11 @@ HISTORY:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-double          bin_interp(upcount, lwcount, upthr, lwthr, Margin, tol)
-  double          upcount, lwcount, upthr, lwthr, Margin, tol;
+double bin_interp (upcount, lwcount, upthr, lwthr, Margin, tol)
+     double upcount, lwcount, upthr, lwthr, Margin, tol;
 {
-  double          midcount, midthr, diff;
-  register long   iterno;
+  double midcount, midthr, diff;
+  register long iterno;
 
   /* Consistency check */
   if (tol < 0.)
@@ -149,9 +149,9 @@ double          bin_interp(upcount, lwcount, upthr, lwthr, Margin, tol)
 
   /* Check if extreme counts are not already the true active value */
   iterno = 1;
-  if ((diff = fabs((upcount - upthr) - Margin)) < tol)
+  if ((diff = fabs ((upcount - upthr) - Margin)) < tol)
     return upcount;
-  if ((diff = fabs((lwcount - lwthr) - Margin)) < tol)
+  if ((diff = fabs ((lwcount - lwthr) - Margin)) < tol)
     return lwcount;
 
   /* Initialize first middle for given (initial) bounds */
@@ -159,34 +159,29 @@ double          bin_interp(upcount, lwcount, upthr, lwthr, Margin, tol)
   midthr = (upthr + lwthr) / 2.0;
 
   /* Repeats loop until `diff' falls inside the tolerance (-tol<=diff<=tol) */
-  while ((diff = (midcount - midthr) - Margin, fabs(diff)) > tol)
-  {
-    /* if tolerance is not met up to 20 iteractions, then relax the 
-       tolerance by 10 % */
-    if (++iterno>20) 
-      tol *= 1.1; 
+  while ((diff = (midcount - midthr) - Margin, fabs (diff)) > tol) {
+    /* if tolerance is not met up to 20 iteractions, then relax the tolerance by 10 % */
+    if (++iterno > 20)
+      tol *= 1.1;
 
-    if (diff > tol)             /* then new bounds are ... */
-    {
-      midcount = (upcount + midcount) / 2.0; /* upper and middle activities */
-      midthr = (upthr + midthr) / 2.0;	     /* ... and thresholds */
-	  lwcount = midcount;
-	  lwthr = midthr;
-    }
-    else if (diff < -tol)	/* then new bounds are ... */
-    {
-      midcount = (midcount + lwcount) / 2.0; /* middle and lower activities */
-      midthr = (midthr + lwthr) / 2.0;       /* ... and thresholds */
-	  upcount = midcount;
-	  upthr = midthr;
+    if (diff > tol) {           /* then new bounds are ... */
+      midcount = (upcount + midcount) / 2.0;    /* upper and middle activities */
+      midthr = (upthr + midthr) / 2.0;  /* ... and thresholds */
+      lwcount = midcount;
+      lwthr = midthr;
+    } else if (diff < -tol) {   /* then new bounds are ... */
+      midcount = (midcount + lwcount) / 2.0;    /* middle and lower activities */
+      midthr = (midthr + lwthr) / 2.0;  /* ... and thresholds */
+      upcount = midcount;
+      upthr = midthr;
     }
   }
 
-  /* Since the tolerance has been satisfied, midcount is selected 
-   * as the interpolated value with a tol [dB] tolerance. */
+  /* Since the tolerance has been satisfied, midcount is selected as the interpolated value with a tol [dB] tolerance. */
 
   return (midcount);
 }
+
 /* ....................... End of bin_interp() .......................... */
 
 
@@ -225,47 +220,47 @@ double          bin_interp(upcount, lwcount, upthr, lwthr, Margin, tol)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-#define T        0.03	/* in [s] */
-#define H        0.20	/* in [s] */
-#define M        15.9	/* in [dB] */
-#define THRES_NO 15     /* number of thresholds in the speech voltmeter */
+#define T        0.03           /* in [s] */
+#define H        0.20           /* in [s] */
+#define M        15.9           /* in [dB] */
+#define THRES_NO 15             /* number of thresholds in the speech voltmeter */
 
-void            init_speech_voltmeter(state, sampl_freq)
-  SVP56_state    *state;
-  double          sampl_freq;
+void init_speech_voltmeter (state, sampl_freq)
+     SVP56_state *state;
+     double sampl_freq;
 {
-  double          x;
-  long            I, j;
+  double x;
+  long I, j;
 
 
   /* First initializations */
   state->f = sampl_freq;
-  I = floor(H * state->f + 0.5);
+  I = floor (H * state->f + 0.5);
 
   /* Inicialization of threshold vector */
-    for (x = 0.5, j = 1; j <= THRES_NO; j++, x /= 2.0)
-      state->c[THRES_NO - j] = x;
+  for (x = 0.5, j = 1; j <= THRES_NO; j++, x /= 2.0)
+    state->c[THRES_NO - j] = x;
 
   /* Inicialization of activity and hangover count vectors */
-    for (j = 0; j < THRES_NO; j++)
-    {
-      state->a[j] = 0;
-      state->hang[j] = I;
-    }
+  for (j = 0; j < THRES_NO; j++) {
+    state->a[j] = 0;
+    state->hang[j] = I;
+  }
 
-    /* Inicialization for the quantities used in the two P.56's processes */
-    state->s = state->sq = state->n = state->p = state->q = 0;
+  /* Inicialization for the quantities used in the two P.56's processes */
+  state->s = state->sq = state->n = state->p = state->q = 0;
 
-    /* Inicialization of other quantities referring to state variables */
-    state->max = 0;
-    state->maxP = -32768.;
-    state->maxN = 32767.;
+  /* Inicialization of other quantities referring to state variables */
+  state->max = 0;
+  state->maxP = -32768.;
+  state->maxN = 32767.;
 
-    /* Defining the 0 dB reference level in terms of normalized values */
-    state->refdB = 0 /* dBov */;
+  /* Defining the 0 dB reference level in terms of normalized values */
+  state->refdB = 0 /* dBov */ ;
 
 }
-#undef THRES_NO 
+
+#undef THRES_NO
 /* .................. End of init_speech_voltmeter() ..................... */
 
 
@@ -348,36 +343,35 @@ void            init_speech_voltmeter(state, sampl_freq)
                                 VMS and gcc on PC. <simao@ctd.comsat.com>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-#define T        0.03	/* in [s] */
-#define H        0.20	/* in [s] */
-#define M        15.9	/* in [dB] */
-#define THRES_NO 15     /* number of thresholds in the speech voltmeter */
+#define T        0.03           /* in [s] */
+#define H        0.20           /* in [s] */
+#define M        15.9           /* in [dB] */
+#define THRES_NO 15             /* number of thresholds in the speech voltmeter */
 
 /* Hooked to eliminate sigularity with log(0.0) (happens w/all-0 data blocks */
 #define MIN_LOG_OFFSET 1.0e-20
 
-double          speech_voltmeter(buffer, smpno, state)
-  float          *buffer;
-  long            smpno;
-  SVP56_state    *state;
+double speech_voltmeter (buffer, smpno, state)
+     float *buffer;
+     long smpno;
+     SVP56_state *state;
 {
-  int             I, j;
-  long            k;
-  double          g, x, AdB, CdB, AmdB, CmdB, ActiveSpeechLevel;
-  double          LongTermLevel, Delta[15];
+  int I, j;
+  long k;
+  double g, x, AdB, CdB, AmdB, CmdB, ActiveSpeechLevel;
+  double LongTermLevel, Delta[15];
 
 
   /* Some initializations */
-  I = floor(H * state->f + 0.5);
-  g = exp(-1.0 / (state->f * T));
+  I = floor (H * state->f + 0.5);
+  g = exp (-1.0 / (state->f * T));
 
   /* Calculates statistics for all given data points */
-  for (k = 0; k < smpno; k++)
-  {
+  for (k = 0; k < smpno; k++) {
     x = (double) buffer[k];
     /* Compares the sample with the max. already found for the file */
-    if (fabs(x) > state->max)
-      state->max = fabs(x);
+    if (fabs (x) > state->max)
+      state->max = fabs (x);
     /* Check for the max. pos. value */
     if (x > state->maxP)
       state->maxP = x;
@@ -395,60 +389,53 @@ double          speech_voltmeter(buffer, smpno, state)
     state->q = g * (state->q) + (1 - g) * (state->p);
 
     /* Applies threshold to the envelope q */
-    for (j = 0; j < THRES_NO; j++)
-    {
-      if ((state->q) >= state->c[j])
-      {
-	state->a[j]++;
-	state->hang[j] = 0;
+    for (j = 0; j < THRES_NO; j++) {
+      if ((state->q) >= state->c[j]) {
+        state->a[j]++;
+        state->hang[j] = 0;
       }
-      if (((state->q) < state->c[j]) && (state->hang[j] < I))
-      {
-	state->a[j]++;
-	state->hang[j] += 1;
+      if (((state->q) < state->c[j]) && (state->hang[j] < I)) {
+        state->a[j]++;
+        state->hang[j] += 1;
       }
-   /* if (((state->q)<state->c[j])&&(state->hang[j]=I)), do nothing */
-    }		   /* [j] */
-  }		   /* [k] */
+      /* if (((state->q)<state->c[j])&&(state->hang[j]=I)), do nothing */
+    }                           /* [j] */
+  }                             /* [k] */
 
   /* Computes the statistics */
   state->DClevel = (state->s) / (state->n);
-  LongTermLevel = 10 * log10((state->sq) / (state->n) + MIN_LOG_OFFSET);
+  LongTermLevel = 10 * log10 ((state->sq) / (state->n) + MIN_LOG_OFFSET);
   state->rmsdB = LongTermLevel - state->refdB;
   state->ActivityFactor = 0;
   ActiveSpeechLevel = -100.0;
 
   /* Test the lower active counter; if 0, is silence */
-  if (state->a[0] == 0) 
-    return(ActiveSpeechLevel);
+  if (state->a[0] == 0)
+    return (ActiveSpeechLevel);
   else
-    AdB = 10 * log10(((state->sq) / state->a[0]) + MIN_LOG_OFFSET);
+    AdB = 10 * log10 (((state->sq) / state->a[0]) + MIN_LOG_OFFSET);
 
   /* Test if the lower act.counter is below the margin: if yes, is silence */
-  CdB = 20 * log10((double) state->c[0]);
-  if (AdB - CdB < M) 
-    return(ActiveSpeechLevel);
+  CdB = 20 * log10 ((double) state->c[0]);
+  if (AdB - CdB < M)
+    return (ActiveSpeechLevel);
 
-  /* Proceed serially for steps 2 and up -- this is the most common case*/
-  for (j = 1; j < THRES_NO; j++)
-  {
-    if (state->a[j] != 0)
-    {
-      AdB = 10 * log10(((state->sq) / state->a[j]) + MIN_LOG_OFFSET);
-      CdB = 20 * log10(((double) state->c[j]) + MIN_LOG_OFFSET);
+  /* Proceed serially for steps 2 and up -- this is the most common case */
+  for (j = 1; j < THRES_NO; j++) {
+    if (state->a[j] != 0) {
+      AdB = 10 * log10 (((state->sq) / state->a[j]) + MIN_LOG_OFFSET);
+      CdB = 20 * log10 (((double) state->c[j]) + MIN_LOG_OFFSET);
       Delta[j] = AdB - CdB;
-      if (Delta[j] <= M)	/* then interpolates to find the active */
-	/* level and the activity factor and exits */
-      {
-	/* AmdB is AdB for j-1, CmdB is CdB for j-1 */
-	AmdB = 10 * log10(((state->sq) / state->a[j - 1]) + MIN_LOG_OFFSET);
-	CmdB = 20 * log10(((double) state->c[j - 1] + MIN_LOG_OFFSET));
+      if (Delta[j] <= M) {      /* then interpolates to find the active */
+        /* level and the activity factor and exits */
+        /* AmdB is AdB for j-1, CmdB is CdB for j-1 */
+        AmdB = 10 * log10 (((state->sq) / state->a[j - 1]) + MIN_LOG_OFFSET);
+        CmdB = 20 * log10 (((double) state->c[j - 1] + MIN_LOG_OFFSET));
 
-	ActiveSpeechLevel = bin_interp(AdB, AmdB, CdB, CmdB, M, 0.5 /* dB */ );
+        ActiveSpeechLevel = bin_interp (AdB, AmdB, CdB, CmdB, M, 0.5 /* dB */ );
 
-	state->ActivityFactor =
-	  pow(10.0, ((LongTermLevel - ActiveSpeechLevel) / 10));
-	ActiveSpeechLevel -= (state->refdB);
+        state->ActivityFactor = pow (10.0, ((LongTermLevel - ActiveSpeechLevel) / 10));
+        ActiveSpeechLevel -= (state->refdB);
         break;
       }
     }
@@ -456,9 +443,10 @@ double          speech_voltmeter(buffer, smpno, state)
 
   return (ActiveSpeechLevel);
 }
+
 #undef MIN_LOG_OFFSET
 #undef M
 #undef H
 #undef T
-#undef THRES_NO 
+#undef THRES_NO
 /* .................... End of speech_voltmeter() ........................ */

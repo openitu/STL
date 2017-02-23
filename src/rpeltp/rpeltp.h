@@ -19,9 +19,9 @@
 #define RPE_WIND_SIZE 160L
 
 /* Function prototypes */
-gsm rpeltp_init ARGS((void));
-void rpeltp_encode ARGS((gsm rpe_state, short *inp_buf, short *rpe_frame));
-void rpeltp_decode ARGS((gsm rpe_state, short *rpe_frame, short *out_buf));
+gsm rpeltp_init ARGS ((void));
+void rpeltp_encode ARGS ((gsm rpe_state, short *inp_buf, short *rpe_frame));
+void rpeltp_decode ARGS ((gsm rpe_state, short *rpe_frame, short *out_buf));
 
 /* Alias-function definition */
 #define rpeltp_delete gsm_destroy

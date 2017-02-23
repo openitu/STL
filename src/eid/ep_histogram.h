@@ -11,28 +11,27 @@
 
 /* Local type definitions */
 typedef struct {
-  long burst_len;  /* Maximum burst leng.that will be individually observed */
-  long *hist;      /* EP histogram array */
-  long count;      /* Count number of occurences */
-  long in_event;   /* Flags to indicate if in a burst event */
-  long unexpected; /* Number of unexpected conversions */
-  char first_time; /* Flag for general initializations */
-  short *ep;       /* Buffer for hard-bit version of error pattern */
-  long processed, disturbed;  /* No. of processed/disturbed bits */
-  float event_distance; /* Sum of error/erasure event distances */
-  float event_distance_sq; /* Squared sum of error/erasure event distances */
-  long min_distance; /* Minimum distance between events */
-  long max_distance; /* Maximum distance between events */
-  long event_started; /* Starting point of error/erasure event */
-  long last_event; /* Position of last error/erasure event */
-  long event_no;   /* Number of error/erasure events */
+  long burst_len;               /* Maximum burst leng.that will be individually observed */
+  long *hist;                   /* EP histogram array */
+  long count;                   /* Count number of occurences */
+  long in_event;                /* Flags to indicate if in a burst event */
+  long unexpected;              /* Number of unexpected conversions */
+  char first_time;              /* Flag for general initializations */
+  short *ep;                    /* Buffer for hard-bit version of error pattern */
+  long processed, disturbed;    /* No. of processed/disturbed bits */
+  float event_distance;         /* Sum of error/erasure event distances */
+  float event_distance_sq;      /* Squared sum of error/erasure event distances */
+  long min_distance;            /* Minimum distance between events */
+  long max_distance;            /* Maximum distance between events */
+  long event_started;           /* Starting point of error/erasure event */
+  long last_event;              /* Position of last error/erasure event */
+  long event_no;                /* Number of error/erasure events */
 } ep_histogram_state;
 
 /* Local function prototypes */
-int init_ep_histogram ARGS((ep_histogram_state *state, long burst_len));
-long compute_ep_histogram ARGS((short *pattern, long items, int ep_type,
-				ep_histogram_state *state, int reset));
-void free_ep_histogram ARGS((ep_histogram_state *state));
+int init_ep_histogram ARGS ((ep_histogram_state * state, long burst_len));
+long compute_ep_histogram ARGS ((short *pattern, long items, int ep_type, ep_histogram_state * state, int reset));
+void free_ep_histogram ARGS ((ep_histogram_state * state));
 
 /*
   ---------------------------------------------------------------------------
@@ -61,41 +60,42 @@ void free_ep_histogram ARGS((ep_histogram_state *state));
 
   ---------------------------------------------------------------------------
 */
-int init_ep_histogram(state, burst_len)
-ep_histogram_state *state;
-long burst_len;
+int init_ep_histogram (state, burst_len)
+     ep_histogram_state *state;
+     long burst_len;
 {
   long i;
 
   /* Reset some variables */
-  state->in_event=0;
-  state->first_time=1;
-  state->ep=0;
+  state->in_event = 0;
+  state->first_time = 1;
+  state->ep = 0;
   state->burst_len = burst_len;
-  state->min_distance=2147483647;
-  state->max_distance=0;
-  state->event_distance=0.0;
-  state->event_distance_sq=0.0;
-  state->event_started=0;
-  state->event_no=0;
-  state->unexpected=0;
-  state->processed=0;
-  state->disturbed=0;
-  state->count=0;
-  state->last_event=0;
+  state->min_distance = 2147483647;
+  state->max_distance = 0;
+  state->event_distance = 0.0;
+  state->event_distance_sq = 0.0;
+  state->event_started = 0;
+  state->event_no = 0;
+  state->unexpected = 0;
+  state->processed = 0;
+  state->disturbed = 0;
+  state->count = 0;
+  state->last_event = 0;
 
   /* Allocate memory for histograms */
-  state->hist = (long *)calloc(burst_len+2, sizeof(long));
+  state->hist = (long *) calloc (burst_len + 2, sizeof (long));
   if (state->hist == NULL)
-    return(-1);
+    return (-1);
 
   /* Reset values in histogram */
-  for (i=0; i<=burst_len+1; i++)
+  for (i = 0; i <= burst_len + 1; i++)
     state->hist[i] = 0;
 
   /* Return OK */
- return(0);
+  return (0);
 }
+
 /* ..................... End of init_ep_histogram() ..................... */
 
 
@@ -122,11 +122,12 @@ long burst_len;
 
   ---------------------------------------------------------------------------
 */
-void free_ep_histogram(state)
-ep_histogram_state *state;
+void free_ep_histogram (state)
+     ep_histogram_state *state;
 {
-  free(state->hist);
+  free (state->hist);
 }
+
 /* ..................... End of free_ep_histogram() ..................... */
 
 
@@ -183,32 +184,30 @@ ep_histogram_state *state;
 
   ---------------------------------------------------------------------------
 */
-long compute_ep_histogram(pattern, items, ep_type, s, reset)
-short *pattern;
-long items;
-char ep_type, reset;
-ep_histogram_state *s;
+long compute_ep_histogram (pattern, items, ep_type, s, reset)
+     short *pattern;
+     long items;
+     char ep_type, reset;
+     ep_histogram_state *s;
 {
   long i;
   long this_event;
   float delta;
 
   /* Initial reset */
-  if (reset || s->first_time || items == 0)
-  {
+  if (reset || s->first_time || items == 0) {
     /* Free temporary storage if previously allocated */
     if (s->ep)
-      free(s->ep);
+      free (s->ep);
 
     /* Allocate memory for temporary buffer */
-    if (s->ep==NULL && items!=0)
-      if ((s->ep = (short *)calloc(items, sizeof(short))) == NULL)
-	HARAKIRI("Can't allocate memory for counter. Aborted.\n",6);
+    if (s->ep == NULL && items != 0)
+      if ((s->ep = (short *) calloc (items, sizeof (short))) == NULL)
+        HARAKIRI ("Can't allocate memory for counter. Aborted.\n", 6);
 
     /* Flush possible error counts from last block, update counters */
-    if (s->in_event)
-    {
-      s->hist[s->count <= s->burst_len? s->count : s->burst_len+1]++;
+    if (s->in_event) {
+      s->hist[s->count <= s->burst_len ? s->count : s->burst_len + 1]++;
       s->disturbed += s->count;
       s->count = 0;
       s->in_event = 0;
@@ -218,10 +217,9 @@ ep_histogram_state *s;
     }
 
     /* Reset error event counter array */
-    if (reset || s->first_time)
-    {
-      for (i=0; i<=s->burst_len+1; i++)
-	s->hist[i] = 0;
+    if (reset || s->first_time) {
+      for (i = 0; i <= s->burst_len + 1; i++)
+        s->hist[i] = 0;
       s->processed = s->disturbed = 0;
     }
 
@@ -230,50 +228,43 @@ ep_histogram_state *s;
   }
 
   /* Stop if no items to be processed */
-  if (items==0)
-    return(0);
+  if (items == 0)
+    return (0);
 
   /* Update counter */
   s->processed += items;
 
   /* Convert EP to hardbit notation */
-  s->unexpected += soft2hard(pattern, s->ep, items, ep_type);
+  s->unexpected += soft2hard (pattern, s->ep, items, ep_type);
 
   /* Search for errors/erasures */
-  for (i=0; i<items; i++)
-  {
-    if (s->ep[i])
-    {
+  for (i = 0; i < items; i++) {
+    if (s->ep[i]) {
       s->count++;
-      if (!s->in_event)
-      {
+      if (!s->in_event) {
         s->event_started = s->processed - items + i;
-        delta=s->event_started - s->last_event;
+        delta = s->event_started - s->last_event;
         if (delta > s->max_distance)
           s->max_distance = delta;
         if (delta < s->min_distance)
           s->min_distance = delta;
-        s->event_distance+= delta;
-        s->event_distance_sq+= delta * delta ;
+        s->event_distance += delta;
+        s->event_distance_sq += delta * delta;
 #ifdef DEBUG
-        fprintf(stderr, "Event at bit/frame: %ld\n", s->event_started);
+        fprintf (stderr, "Event at bit/frame: %ld\n", s->event_started);
 #endif
       }
       s->in_event = 1;
-    }
-    else
-    {
-      /* No longer in an error/erasure event. Flush the info to the EP
-	 counter array, update disturb.counter and reset variables/flags */
-      if (s->in_event)
-      {
-        this_event = (s->count <= s->burst_len)? s->count : s->burst_len+1;
-	s->hist[this_event]++;
-	s->disturbed += s->count;
-	s->count = 0;
-	s->in_event = 0;
+    } else {
+      /* No longer in an error/erasure event. Flush the info to the EP counter array, update disturb.counter and reset variables/flags */
+      if (s->in_event) {
+        this_event = (s->count <= s->burst_len) ? s->count : s->burst_len + 1;
+        s->hist[this_event]++;
+        s->disturbed += s->count;
+        s->count = 0;
+        s->in_event = 0;
 
-	s->event_no++;
+        s->event_no++;
         s->last_event = s->event_started;
       }
     }
@@ -285,6 +276,7 @@ ep_histogram_state *s;
   /* Return number of unexpected values */
   return (s->unexpected);
 }
+
 /* ...................... End of compute_ep_histogram() ................... */
 
 
@@ -295,33 +287,31 @@ ep_histogram_state *s;
             pattern type)
   limit ... max number of items to process
 */
-long get_max_items(file, format, start, limit)
-char *file;
-char format;
-long start, limit;
+long get_max_items (file, format, start, limit)
+     char *file;
+     char format;
+     long start, limit;
 {
   struct stat fileinfo;
   long bytes, max_items;
 
-  stat(file, &fileinfo);
-  switch(format)
-  {
+  stat (file, &fileinfo);
+  switch (format) {
   case g192:
-    bytes = fileinfo.st_size - start*2;
+    bytes = fileinfo.st_size - start * 2;
     break;
   case byte:
     bytes = fileinfo.st_size - start;
     break;
   case compact:
-    bytes = fileinfo.st_size - start/8;
+    bytes = fileinfo.st_size - start / 8;
     break;
   }
 
 
-  switch(format)
-  {
+  switch (format) {
   case g192:
-    max_items = bytes/2;
+    max_items = bytes / 2;
     break;
   case byte:
     max_items = bytes;
@@ -330,9 +320,10 @@ long start, limit;
     max_items = bytes * 8;
     break;
   }
-  if (limit>0 && max_items > limit)
+  if (limit > 0 && max_items > limit)
     max_items = limit;
 
   return (max_items);
 }
+
 /* ......................... End of get_max_items() ....................... */

@@ -53,78 +53,77 @@ File Formats:\n\
 	mask.out	G.192 erasure pattern file\
 ";
 
-static FILE	*ferasefp;
-static int	frameerased(int *r);
-static char	*fefileopen(char *name);
+static FILE *ferasefp;
+static int frameerased (int *r);
+static char *fefileopen (char *name);
 
-int WINAPIV main(int argc, char *argv[])
-{
-	short		s;
-	char		c;
-	int		dostats = 0;	/* if set print out erasure stats */
-	int		g192byte = 0;	/* byte G.192 foramt */
-	int		nframes;	/* processed frame count */
-	int		nerased;	/* erased frame count */
-	int		erased;
-	char		*err, *arg;
-	FILE		*fo;		/* output file */
+int WINAPIV main (int argc, char *argv[]) {
+  short s;
+  char c;
+  int dostats = 0;              /* if set print out erasure stats */
+  int g192byte = 0;             /* byte G.192 foramt */
+  int nframes;                  /* processed frame count */
+  int nerased;                  /* erased frame count */
+  int erased;
+  char *err, *arg;
+  FILE *fo;                     /* output file */
 
-	argc--; argv++;
-	while (argc > 1 && argv[0][0] == '-') {
-		arg = argv[0];
-		if (!strcmp("-b", arg))
-			g192byte = 1;
-		else if (!strcmp("-stats", arg))
-			dostats = 1;
-		else
-			error(usage);
-		argc--; argv++;
-	}
-	if (argc != 2)
-		error(usage);
-	if ((err = fefileopen(argv[0])) != 0)	/* frame erasure mask file */
-		error(err);
-	if ((fo = fopen(argv[1], "wb")) == NULL)	/* output file */
-		error("Can't open output file: %s", argv[2]);
-	nframes = nerased = 0;
-	while (frameerased(&erased)) {
-		nframes++;
-		if (erased) {
-			nerased++;
-		}
-		if (g192byte) {
-			c = erased ? BYTE_FER : BYTE_SYNC;
-			fputc(c, fo);
-		} else {
-			s = erased ? G192_FER : G192_SYNC;
-			fwrite(&s, sizeof(short), 1, fo);
-		}
-	}
-	if (dostats && nframes)
-		printf("%d of %d frames erased = %.2f%%\n", nerased, nframes,
-			(double)nerased / nframes * 100.);
-	fclose(fo);
-	fclose(ferasefp);
-	return 0;
+  argc--;
+  argv++;
+  while (argc > 1 && argv[0][0] == '-') {
+    arg = argv[0];
+    if (!strcmp ("-b", arg))
+      g192byte = 1;
+    else if (!strcmp ("-stats", arg))
+      dostats = 1;
+    else
+      error (usage);
+    argc--;
+    argv++;
+  }
+  if (argc != 2)
+    error (usage);
+  if ((err = fefileopen (argv[0])) != 0)        /* frame erasure mask file */
+    error (err);
+  if ((fo = fopen (argv[1], "wb")) == NULL)     /* output file */
+    error ("Can't open output file: %s", argv[2]);
+  nframes = nerased = 0;
+  while (frameerased (&erased)) {
+    nframes++;
+    if (erased) {
+      nerased++;
+    }
+    if (g192byte) {
+      c = erased ? BYTE_FER : BYTE_SYNC;
+      fputc (c, fo);
+    } else {
+      s = erased ? G192_FER : G192_SYNC;
+      fwrite (&s, sizeof (short), 1, fo);
+    }
+  }
+  if (dostats && nframes)
+    printf ("%d of %d frames erased = %.2f%%\n", nerased, nframes, (double) nerased / nframes * 100.);
+  fclose (fo);
+  fclose (ferasefp);
+  return 0;
 }
 
-static char *fefileopen(char *name)
-{
-	int	c;
-	char	*err;
+static char *fefileopen (char *name) {
+  int c;
+  char *err;
 
-	if ((ferasefp = fopen(name, "rb")) == NULL)
-		err = "Can't open Frame Erasure Mask file";
-	else {
-		err = 0;
-		c = getc(ferasefp);
-		if (c != '0' && c != '1') {
-			err = "Not a valid Frame Erasure Mask file";
-			fclose(ferasefp);
-		} else
-			fseek(ferasefp, 0, SEEK_SET);
-	}
-	return err;
+  if ((ferasefp = fopen (name, "rb")) == NULL)
+    err = "Can't open Frame Erasure Mask file";
+  else {
+    err = 0;
+    c = getc (ferasefp);
+    if (c != '0' && c != '1') {
+      err = "Not a valid Frame Erasure Mask file";
+      fclose (ferasefp);
+    } else
+      fseek (ferasefp, 0, SEEK_SET);
+  }
+  return err;
 }
 
 /*
@@ -137,29 +136,28 @@ static char *fefileopen(char *name)
  * A uniform 10% loss file with 20msec erasures looks like:
  *	00000000000000000011\n
  */
-static int frameerased(int *r)
-{
-	int	i, c;
+static int frameerased (int *r) {
+  int i, c;
 
-	for (i = 0; i < 4; i++) {
-		c = getc(ferasefp);
-		switch (c) {
-		case EOF:
-			return 0;
-		case '\r':
-		case '\n':
-			break;
-		case '0':
-			*r = 0;
-			return 1;
-		case '1':
-			*r = 1;
-			return 1;
-		default:
-			error("Non 0/1 in Frame Erasure file");
-			break;	/* never reached */
-		}
-	}
-	error("Frame Erasure file contains illegal data");
-	return 0;	/* never reached */			
+  for (i = 0; i < 4; i++) {
+    c = getc (ferasefp);
+    switch (c) {
+    case EOF:
+      return 0;
+    case '\r':
+    case '\n':
+      break;
+    case '0':
+      *r = 0;
+      return 1;
+    case '1':
+      *r = 1;
+      return 1;
+    default:
+      error ("Non 0/1 in Frame Erasure file");
+      break;                    /* never reached */
+    }
+  }
+  error ("Frame Erasure file contains illegal data");
+  return 0;                     /* never reached */
 }

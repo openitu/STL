@@ -161,8 +161,8 @@ typedef double Float;
  ********* define complex type
  */
 typedef struct {
-  Float r;  /* real      part */
-  Float i;  /* imaginary part */
+  Float r;                      /* real part */
+  Float i;                      /* imaginary part */
 } CPX;
 
 /*

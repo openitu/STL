@@ -42,15 +42,13 @@
 /* 
  * ... Local function prototypes for saving/retrieving EID states in file ...
  */
-long save_EID_to_file ARGS((SCD_EID *EID, char *EIDfile, double ber,
-			    double gamma));
-long save_burst_eid_to_file ARGS((BURST_EID *burst_eid, char *state_file));
-SCD_EID *recall_eid_from_file ARGS((char *EIDfile, double *ber,
-			    double *gamma));
-BURST_EID *recall_burst_eid_from_file ARGS((char *state_file, long index));
-long READ_L ARGS((FILE *fp, long n, long *longary));
-long READ_lf ARGS((FILE *fp, long n, double *doubleary));
-long READ_c ARGS((FILE *fp, long n, char *chr));
+long save_EID_to_file ARGS ((SCD_EID * EID, char *EIDfile, double ber, double gamma));
+long save_burst_eid_to_file ARGS ((BURST_EID * burst_eid, char *state_file));
+SCD_EID *recall_eid_from_file ARGS ((char *EIDfile, double *ber, double *gamma));
+BURST_EID *recall_burst_eid_from_file ARGS ((char *state_file, long index));
+long READ_L ARGS ((FILE * fp, long n, long *longary));
+long READ_lf ARGS ((FILE * fp, long n, double *doubleary));
+long READ_c ARGS ((FILE * fp, long n, char *chr));
 
 #endif
 /* ........................... End of EID.H ........................... */

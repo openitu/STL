@@ -33,11 +33,9 @@
 #define _TYPEDEF_H "$Id $"
 
 
-/* #undef ORIGINAL_TYPEDEF_H */ /* Undefine to get the "new" version *
-                                 * of typedef.h (see typedefs.h).    */
+                                                               /* #undef ORIGINAL_TYPEDEF_H *//* Undefine to get the "new" version * of typedef.h (see typedefs.h).  */
 
-#define ORIGINAL_TYPEDEF_H      /* Define to get "original" version  *
-                                 * of typedef.h (this file).         */
+#define ORIGINAL_TYPEDEF_H      /* Define to get "original" version * of typedef.h (this file).  */
 
 
 
@@ -86,7 +84,7 @@ typedef int Flag;
 #endif
 
 
-#else /* ifdef ORIGINAL_TYPEDEF_H */ /* not original typedef.h */
+#else   /* ifdef ORIGINAL_TYPEDEF_H */                               /* not original typedef.h */
 
 
 

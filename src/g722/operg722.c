@@ -55,17 +55,17 @@ ORIGINAL BY:
 #endif
 
 /* Local function prototypes */
-Word16 sature ARGS((Word32 L_var1));
-Word16 extract_l ARGS((Word32 L_var1));
-Word16 add ARGS((Word16 var1, Word16 var2));
-Word16 sub ARGS((Word16 var1, Word16 var2));
-Word16 shl ARGS((Word16 var1, Word16 var2));
-Word16 shr ARGS((Word16 var1, Word16 var2));
-Word16 mult ARGS((Word16 var1, Word16 var2));
-Word16 negate ARGS((Word16 var1));
-Word32 L_add ARGS((Word32 L_var1, Word32 L_var2));
-Word32 L_shr ARGS((Word32 L_var1, Word16 var2));
-Word32 L_shl ARGS((Word32 L_var1, Word16 var2));
+Word16 sature ARGS ((Word32 L_var1));
+Word16 extract_l ARGS ((Word32 L_var1));
+Word16 add ARGS ((Word16 var1, Word16 var2));
+Word16 sub ARGS ((Word16 var1, Word16 var2));
+Word16 shl ARGS ((Word16 var1, Word16 var2));
+Word16 shr ARGS ((Word16 var1, Word16 var2));
+Word16 mult ARGS ((Word16 var1, Word16 var2));
+Word16 negate ARGS ((Word16 var1));
+Word32 L_add ARGS ((Word32 L_var1, Word32 L_var2));
+Word32 L_shr ARGS ((Word32 L_var1, Word16 var2));
+Word32 L_shl ARGS ((Word32 L_var1, Word16 var2));
 
 
 /*___________________________________________________________________________
@@ -93,29 +93,23 @@ Word32 L_shl ARGS((Word32 L_var1, Word16 var2));
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-Word16 
-sature (L_var1)
-Word32 L_var1;
+Word16 sature (L_var1)
+     Word32 L_var1;
 {
-  Word16          var_out;
+  Word16 var_out;
 
-  if (L_var1 > 0X00007fffL)
-  {
+  if (L_var1 > 0X00007fffL) {
     var_out = MAX_16;
-  }
-  else
-  {
-    if (L_var1 < (Word32) 0xffff8000L)
-    {
+  } else {
+    if (L_var1 < (Word32) 0xffff8000L) {
       var_out = MIN_16;
-    }
-    else
-    {
+    } else {
       var_out = extract_l (L_var1);
     }
   }
   return (var_out);
 }
+
 /* ....................... end of sature() ............................ */
 
 /*___________________________________________________________________________
@@ -146,15 +140,15 @@ Word32 L_var1;
  |___________________________________________________________________________|
  */
 
-Word16 
-extract_l (L_var1)
-Word32 L_var1;
+Word16 extract_l (L_var1)
+     Word32 L_var1;
 {
-  Word16          var_out;
+  Word16 var_out;
 
   var_out = (Word16) L_var1;
   return (var_out);
 }
+
 /* ....................... end of extract_l() ............................ */
 
 
@@ -192,18 +186,18 @@ Word32 L_var1;
  |___________________________________________________________________________|
  */
 
-Word16 
-add (var1, var2)
-Word16 var1;
-Word16 var2;
+Word16 add (var1, var2)
+     Word16 var1;
+     Word16 var2;
 {
-  Word16          var_out;
-  Word32          L_somme;
+  Word16 var_out;
+  Word32 L_somme;
 
   L_somme = (Word32) var1 + (Word32) var2;
   var_out = sature (L_somme);
   return (var_out);
 }
+
 /* ....................... end of add() ............................ */
 
 
@@ -241,18 +235,18 @@ Word16 var2;
  |___________________________________________________________________________|
  */
 
-Word16 
-sub (var1, var2)
-Word16 var1;
-Word16 var2;
+Word16 sub (var1, var2)
+     Word16 var1;
+     Word16 var2;
 {
-  Word16          var_out;
-  Word32          L_diff;
+  Word16 var_out;
+  Word32 L_diff;
 
   L_diff = (Word32) var1 - (Word32) var2;
   var_out = sature (L_diff);
   return (var_out);
 }
+
 /* ....................... end of sub() ............................ */
 
 
@@ -291,34 +285,27 @@ Word16 var2;
  |___________________________________________________________________________|
  */
 
-Word16 
-shl (var1, var2)
-Word16 var1;
-Word16 var2;
+Word16 shl (var1, var2)
+     Word16 var1;
+     Word16 var2;
 {
-  Word16          var_out;
-  Word32          L_result;
+  Word16 var_out;
+  Word32 L_result;
 
-  if (var2 < 0)
-  {
+  if (var2 < 0) {
     var_out = shr (var1, -var2);
-  }
-  else
-  {
+  } else {
     L_result = (Word32) var1 *((Word32) 1 << var2);
-    if (((var2 > 15) && (var1 != 0)) ||
-	(L_result != (Word32) ((Word16) L_result)))
-    {
+    if (((var2 > 15) && (var1 != 0)) || (L_result != (Word32) ((Word16) L_result))) {
       var_out = (var1 > 0) ? MAX_16 : MIN_16;
-    }
-    else
-    {
+    } else {
       var_out = extract_l (L_result);
     }
   }
 
   return (var_out);
 }
+
 /* ....................... end of shl() ............................ */
 
 
@@ -357,38 +344,29 @@ Word16 var2;
  |___________________________________________________________________________|
  */
 
-Word16 
-shr (var1, var2)
-Word16 var1;
-Word16 var2;
+Word16 shr (var1, var2)
+     Word16 var1;
+     Word16 var2;
 {
-  Word16          var_out;
+  Word16 var_out;
 
-  if (var2 < 0)
-  {
+  if (var2 < 0) {
     var_out = shl (var1, -var2);
-  }
-  else
-  {
-    if (var2 >= 15)
-    {
+  } else {
+    if (var2 >= 15) {
       var_out = (var1 < (Word16) 0) ? (Word16) - 1 : (Word16) 0;
-    }
-    else
-    {
-      if (var1 < 0)
-      {
-	var_out = ~((~var1) >> var2);
-      }
-      else
-      {
-	var_out = var1 >> var2;
+    } else {
+      if (var1 < 0) {
+        var_out = ~((~var1) >> var2);
+      } else {
+        var_out = var1 >> var2;
       }
     }
   }
 
   return (var_out);
 }
+
 /* ....................... end of shr() ............................ */
 
 
@@ -427,25 +405,24 @@ Word16 var2;
  |___________________________________________________________________________|
  */
 
-Word16 
-mult (var1, var2)
-Word16 var1;
-Word16 var2;
+Word16 mult (var1, var2)
+     Word16 var1;
+     Word16 var2;
 {
-  Word16          var_out;
-  Word32          L_produit;
+  Word16 var_out;
+  Word32 L_produit;
 
   L_produit = (Word32) var1 *(Word32) var2;
 
   L_produit = (L_produit & (Word32) 0xffff8000L) >> 15;
 
-  if (L_produit & (Word32) 0x00010000L)
-  {
+  if (L_produit & (Word32) 0x00010000L) {
     L_produit |= (Word32) 0xffff0000L;
   }
   var_out = sature (L_produit);
   return (var_out);
 }
+
 /* ....................... end of mult() ............................ */
 
 
@@ -478,15 +455,15 @@ Word16 var2;
  |___________________________________________________________________________|
  */
 
-Word16 
-negate (var1)
-Word16 var1;
+Word16 negate (var1)
+     Word16 var1;
 {
-  Word16          var_out;
+  Word16 var_out;
 
   var_out = (var1 == MIN_16) ? MAX_16 : -var1;
   return (var_out);
 }
+
 /* ....................... end of negate() ............................ */
 
 
@@ -522,24 +499,22 @@ Word16 var1;
  |___________________________________________________________________________|
  */
 
-Word32 
-L_add (L_var1, L_var2)
-Word32 L_var1;
-Word32 L_var2;
+Word32 L_add (L_var1, L_var2)
+     Word32 L_var1;
+     Word32 L_var2;
 {
-  Word32          L_var_out;
+  Word32 L_var_out;
 
   L_var_out = L_var1 + L_var2;
 
-  if (((L_var1 ^ L_var2) & MIN_32) == 0L)
-  {
-    if ((L_var_out ^ L_var1) & MIN_32)
-    {
+  if (((L_var1 ^ L_var2) & MIN_32) == 0L) {
+    if ((L_var_out ^ L_var1) & MIN_32) {
       L_var_out = (L_var1 < 0L) ? MIN_32 : MAX_32;
     }
   }
   return (L_var_out);
 }
+
 /* ....................... end of L_add() ............................ */
 
 
@@ -577,37 +552,28 @@ Word32 L_var2;
  |___________________________________________________________________________|
  */
 
-Word32 
-L_shr (L_var1, var2)
-Word32 L_var1;
-Word16 var2;
+Word32 L_shr (L_var1, var2)
+     Word32 L_var1;
+     Word16 var2;
 {
-  Word32          L_var_out;
+  Word32 L_var_out;
 
-  if (var2 < (Word16) 0)
-  {
+  if (var2 < (Word16) 0) {
     L_var_out = L_shl (L_var1, -var2);
-  }
-  else
-  {
-    if (var2 >= (Word16) 31)
-    {
+  } else {
+    if (var2 >= (Word16) 31) {
       L_var_out = (L_var1 < 0L) ? -1L : 0L;
-    }
-    else
-    {
-      if (L_var1 < 0L)
-      {
-	L_var_out = ~((~L_var1) >> var2);
-      }
-      else
-      {
-	L_var_out = L_var1 >> var2;
+    } else {
+      if (L_var1 < 0L) {
+        L_var_out = ~((~L_var1) >> var2);
+      } else {
+        L_var_out = L_var1 >> var2;
       }
     }
   }
   return (L_var_out);
 }
+
 /* ....................... end of L_shr() ............................ */
 
 
@@ -645,33 +611,24 @@ Word16 var2;
  |___________________________________________________________________________|
  */
 
-Word32 
-L_shl (L_var1, var2)
-Word32 L_var1;
-Word16 var2;
+Word32 L_shl (L_var1, var2)
+     Word32 L_var1;
+     Word16 var2;
 {
-  Word32          L_var_out = 0L;
+  Word32 L_var_out = 0L;
 
-  if (var2 <= (Word16) 0)
-  {
+  if (var2 <= (Word16) 0) {
     L_var_out = L_shr (L_var1, -var2);
-  }
-  else
-  {
-    for (; var2 > (Word16) 0; var2--)
-    {
-      if (L_var1 > (Word32) 0X3fffffffL)
-      {
-	L_var_out = MAX_32;
-	break;
-      }
-      else
-      {
-	if (L_var1 < (Word32) 0xc0000000L)
-	{
-	  L_var_out = MIN_32;
-	  break;
-	}
+  } else {
+    for (; var2 > (Word16) 0; var2--) {
+      if (L_var1 > (Word32) 0X3fffffffL) {
+        L_var_out = MAX_32;
+        break;
+      } else {
+        if (L_var1 < (Word32) 0xc0000000L) {
+          L_var_out = MIN_32;
+          break;
+        }
       }
       L_var1 *= 2L;
       L_var_out = L_var1;
@@ -679,5 +636,5 @@ Word16 var2;
   }
   return (L_var_out);
 }
-/* ....................... end of L_shl() ............................ */
 
+/* ....................... end of L_shl() ............................ */

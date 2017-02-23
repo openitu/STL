@@ -17,24 +17,22 @@
 #include "g728fp.h"
 
 /* Weighting filter - filter memory is input + output */
-void g728fp_wfilter(Float *b, Float *a, Float *bmem, Float *amem)
-{
-	int	i;
-	Float	t;
-	Float	fac;
-	Long	l;
-	
-	fac = (1 << Q_FILTERCOEFF);
-	bmem += IDIM - 1;
-	for (i = 0; i < IDIM; i++, bmem--) {
-		t = bmem[0] * fac +
-		    g728fp_vdotpf(b, &bmem[1], LPCW) - g728fp_vdotpf(a, amem, LPCW);
-		g728fp_rcopyf(amem, &amem[1], LPCW - 1);
-		l = (Long)t >> Q_FILTERCOEFF;
-		if (l > 32767)
-			l = 32767;
-		else if (l < -32768)
-			l = -32768;
-		amem[0] = l;
-	}
+void g728fp_wfilter (Float * b, Float * a, Float * bmem, Float * amem) {
+  int i;
+  Float t;
+  Float fac;
+  Long l;
+
+  fac = (1 << Q_FILTERCOEFF);
+  bmem += IDIM - 1;
+  for (i = 0; i < IDIM; i++, bmem--) {
+    t = bmem[0] * fac + g728fp_vdotpf (b, &bmem[1], LPCW) - g728fp_vdotpf (a, amem, LPCW);
+    g728fp_rcopyf (amem, &amem[1], LPCW - 1);
+    l = (Long) t >> Q_FILTERCOEFF;
+    if (l > 32767)
+      l = 32767;
+    else if (l < -32768)
+      l = -32768;
+    amem[0] = l;
+  }
 }

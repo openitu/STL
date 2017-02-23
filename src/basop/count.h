@@ -59,11 +59,11 @@
 
 #ifndef _COUNT_H
 #define _COUNT_H "$Id$"
-#define WMOPS 1		    /* enable WMOPS profiling features  */
-/* #undef WMOPS	*/		/* disable WMOPS profiling features */
+#define WMOPS 1                 /* enable WMOPS profiling features */
+                                                  /* #undef WMOPS *//* disable WMOPS profiling features */
 #define MAXCOUNTERS (256)
 
-int getCounterId( char *objectName);
+int getCounterId (char *objectName);
 /*
  * Create a counter group, the "objectname" will be used when printing
  * statistics for this counter group.
@@ -72,25 +72,25 @@ int getCounterId( char *objectName);
  */
 
 
-int readCounterId();
+int readCounterId ();
 /*
  * Returns the current CounterId.
  */
 
 
-void setCounter( int counterId);
+void setCounter (int counterId);
 /*
  * Defines which counter group to use, default is zero.
  */
 
 
-char *readCounterIdName();
+char *readCounterIdName ();
 /*
  * Returns the current CounterId name.
  */
 
 
-void incrementNbTimeObjectIsCalled( int counterId);
+void incrementNbTimeObjectIsCalled (int counterId);
 /*
  * This function enables to increment by 1 a counter
  * tracking the number of times the application enters a groups of functions.
@@ -100,26 +100,26 @@ void incrementNbTimeObjectIsCalled( int counterId);
  */
 
 
-void ClearNbTimeObjectsAreCalled();
+void ClearNbTimeObjectsAreCalled ();
 /*
  * This function enables to clear to 0 all the counters enabling to
  * track the number of times the application enters any groups of functions.
  */
 
 
-void Init_WMOPS_counter( void);
+void Init_WMOPS_counter (void);
 /*
  * Initiates the current counter group.
  */
 
 
-void Reset_WMOPS_counter( void);
+void Reset_WMOPS_counter (void);
 /*
  * Resets the current counter group.
  */
 
 
-void WMOPS_output ( Word16 notPrintWorstWorstCase);
+void WMOPS_output (Word16 notPrintWorstWorstCase);
 /*
  * Prints the statistics to the screen, if the argument is non zero
  * the statistics for worst worst case will not be printed. This is typically
@@ -127,7 +127,7 @@ void WMOPS_output ( Word16 notPrintWorstWorstCase);
  *
  */
 
-void WMOPS_output_avg (Word16 dtx_mode, Word32 *tot_wm, Word16 *num_frames);
+void WMOPS_output_avg (Word16 dtx_mode, Word32 * tot_wm, Word16 * num_frames);
 /*
  * same as WMOPS_output + returns the total wmops counter and the number of frames 
  * to support the computation of global average.
@@ -135,7 +135,7 @@ void WMOPS_output_avg (Word16 dtx_mode, Word32 *tot_wm, Word16 *num_frames);
  */
 
 
-Word32 fwc( void);
+Word32 fwc (void);
 /*
  * worst worst case counter.
  *
@@ -147,7 +147,7 @@ Word32 fwc( void);
  * The WMOPS_output function add together all parts and presents the sum.
  */
 
-void setFrameRate(int samplingFreq, int frameLength);
+void setFrameRate (int samplingFreq, int frameLength);
 /*
  * This function can overwrite the value of the frameRate variable that is 
  * initialized by the FRAME_RATE constant.
@@ -178,7 +178,7 @@ void setFrameRate(int samplingFreq, int frameLength);
 */
 
 
-#define FRAME_RATE	(0.0001F) /*in this version frame_rate can be overwriten online by the new setFrameRate function */
+#define FRAME_RATE	(0.0001F)       /* in this version frame_rate can be overwriten online by the new setFrameRate function */
 /* FRAME_RATE of 0.000025 is corresponding to 40ms frame.*/
 /* FRAME_RATE of 0.00005 is corresponding to 20ms frame.*/
 /* FRAME_RATE of 0.0001 is corresponding to 10ms frame.*/
@@ -189,139 +189,137 @@ void setFrameRate(int samplingFreq, int frameLength);
 
 
 /* Global counter variable for calculation of complexity weight */
-typedef struct
-{
-    UWord32 add;             /* Complexity Weight of 1 */
-    UWord32 sub;             /* Complexity Weight of 1 */
-    UWord32 abs_s;           /* Complexity Weight of 1 */
-    UWord32 shl;             /* Complexity Weight of 1 */
-    UWord32 shr;             /* Complexity Weight of 1 */
+typedef struct {
+  UWord32 add;                  /* Complexity Weight of 1 */
+  UWord32 sub;                  /* Complexity Weight of 1 */
+  UWord32 abs_s;                /* Complexity Weight of 1 */
+  UWord32 shl;                  /* Complexity Weight of 1 */
+  UWord32 shr;                  /* Complexity Weight of 1 */
 
-    UWord32 extract_h;       /* Complexity Weight of 1 */
-    UWord32 extract_l;       /* Complexity Weight of 1 */
-    UWord32 mult;            /* Complexity Weight of 1 */
-    UWord32 L_mult;          /* Complexity Weight of 1 */
-    UWord32 negate;          /* Complexity Weight of 1 */
+  UWord32 extract_h;            /* Complexity Weight of 1 */
+  UWord32 extract_l;            /* Complexity Weight of 1 */
+  UWord32 mult;                 /* Complexity Weight of 1 */
+  UWord32 L_mult;               /* Complexity Weight of 1 */
+  UWord32 negate;               /* Complexity Weight of 1 */
 
-    UWord32 round;           /* Complexity Weight of 1 */
-    UWord32 L_mac;           /* Complexity Weight of 1 */
-    UWord32 L_msu;           /* Complexity Weight of 1 */
-    UWord32 L_macNs;         /* Complexity Weight of 1 */
-    UWord32 L_msuNs;         /* Complexity Weight of 1 */
+  UWord32 round;                /* Complexity Weight of 1 */
+  UWord32 L_mac;                /* Complexity Weight of 1 */
+  UWord32 L_msu;                /* Complexity Weight of 1 */
+  UWord32 L_macNs;              /* Complexity Weight of 1 */
+  UWord32 L_msuNs;              /* Complexity Weight of 1 */
 
-    UWord32 L_add;           /* Complexity Weight of 1 */
-    UWord32 L_sub;           /* Complexity Weight of 1 */
-    UWord32 L_add_c;         /* Complexity Weight of 2 */
-    UWord32 L_sub_c;         /* Complexity Weight of 2 */
-    UWord32 L_negate;        /* Complexity Weight of 1 */
+  UWord32 L_add;                /* Complexity Weight of 1 */
+  UWord32 L_sub;                /* Complexity Weight of 1 */
+  UWord32 L_add_c;              /* Complexity Weight of 2 */
+  UWord32 L_sub_c;              /* Complexity Weight of 2 */
+  UWord32 L_negate;             /* Complexity Weight of 1 */
 
-    UWord32 L_shl;           /* Complexity Weight of 1 */
-    UWord32 L_shr;           /* Complexity Weight of 1 */
-    UWord32 mult_r;          /* Complexity Weight of 1 */
-    UWord32 shr_r;           /* Complexity Weight of 3 */
-    UWord32 mac_r;           /* Complexity Weight of 1 */
+  UWord32 L_shl;                /* Complexity Weight of 1 */
+  UWord32 L_shr;                /* Complexity Weight of 1 */
+  UWord32 mult_r;               /* Complexity Weight of 1 */
+  UWord32 shr_r;                /* Complexity Weight of 3 */
+  UWord32 mac_r;                /* Complexity Weight of 1 */
 
-    UWord32 msu_r;           /* Complexity Weight of 1 */
-    UWord32 L_deposit_h;     /* Complexity Weight of 1 */
-    UWord32 L_deposit_l;     /* Complexity Weight of 1 */
-    UWord32 L_shr_r;         /* Complexity Weight of 3 */
-    UWord32 L_abs;           /* Complexity Weight of 1 */
+  UWord32 msu_r;                /* Complexity Weight of 1 */
+  UWord32 L_deposit_h;          /* Complexity Weight of 1 */
+  UWord32 L_deposit_l;          /* Complexity Weight of 1 */
+  UWord32 L_shr_r;              /* Complexity Weight of 3 */
+  UWord32 L_abs;                /* Complexity Weight of 1 */
 
-    UWord32 L_sat;           /* Complexity Weight of 4 */
-    UWord32 norm_s;          /* Complexity Weight of 1 */
-    UWord32 div_s;           /* Complexity Weight of 18 */
-    UWord32 norm_l;          /* Complexity Weight of 1 */
-    UWord32 move16;          /* Complexity Weight of 1 */
+  UWord32 L_sat;                /* Complexity Weight of 4 */
+  UWord32 norm_s;               /* Complexity Weight of 1 */
+  UWord32 div_s;                /* Complexity Weight of 18 */
+  UWord32 norm_l;               /* Complexity Weight of 1 */
+  UWord32 move16;               /* Complexity Weight of 1 */
 
-    UWord32 move32;          /* Complexity Weight of 2 */
-    UWord32 Logic16;         /* Complexity Weight of 1 */
-    UWord32 Logic32;         /* Complexity Weight of 2 */
-    UWord32 Test;            /* Complexity Weight of 2 */
-    UWord32 s_max;           /* Complexity Weight of 1 */
+  UWord32 move32;               /* Complexity Weight of 2 */
+  UWord32 Logic16;              /* Complexity Weight of 1 */
+  UWord32 Logic32;              /* Complexity Weight of 2 */
+  UWord32 Test;                 /* Complexity Weight of 2 */
+  UWord32 s_max;                /* Complexity Weight of 1 */
 
-    UWord32 s_min;           /* Complexity Weight of 1 */
-    UWord32 L_max;           /* Complexity Weight of 1 */
-    UWord32 L_min;           /* Complexity Weight of 1 */
-    UWord32 L40_max;         /* Complexity Weight of 1 */
-    UWord32 L40_min;         /* Complexity Weight of 1 */
+  UWord32 s_min;                /* Complexity Weight of 1 */
+  UWord32 L_max;                /* Complexity Weight of 1 */
+  UWord32 L_min;                /* Complexity Weight of 1 */
+  UWord32 L40_max;              /* Complexity Weight of 1 */
+  UWord32 L40_min;              /* Complexity Weight of 1 */
 
-    UWord32 shl_r;           /* Complexity Weight of 3 */
-    UWord32 L_shl_r;         /* Complexity Weight of 3 */
-    UWord32 L40_shr_r;       /* Complexity Weight of 3 */
-    UWord32 L40_shl_r;       /* Complexity Weight of 3 */
-    UWord32 norm_L40;        /* Complexity Weight of 1 */
+  UWord32 shl_r;                /* Complexity Weight of 3 */
+  UWord32 L_shl_r;              /* Complexity Weight of 3 */
+  UWord32 L40_shr_r;            /* Complexity Weight of 3 */
+  UWord32 L40_shl_r;            /* Complexity Weight of 3 */
+  UWord32 norm_L40;             /* Complexity Weight of 1 */
 
-    UWord32 L40_shl;         /* Complexity Weight of 1 */
-    UWord32 L40_shr;         /* Complexity Weight of 1 */
-    UWord32 L40_negate;      /* Complexity Weight of 1 */
-    UWord32 L40_add;         /* Complexity Weight of 1 */
-    UWord32 L40_sub;         /* Complexity Weight of 1 */
+  UWord32 L40_shl;              /* Complexity Weight of 1 */
+  UWord32 L40_shr;              /* Complexity Weight of 1 */
+  UWord32 L40_negate;           /* Complexity Weight of 1 */
+  UWord32 L40_add;              /* Complexity Weight of 1 */
+  UWord32 L40_sub;              /* Complexity Weight of 1 */
 
-    UWord32 L40_abs;         /* Complexity Weight of 1 */
-    UWord32 L40_mult;        /* Complexity Weight of 1 */
-    UWord32 L40_mac;         /* Complexity Weight of 1 */
-    UWord32 mac_r40;         /* Complexity Weight of 2 */
+  UWord32 L40_abs;              /* Complexity Weight of 1 */
+  UWord32 L40_mult;             /* Complexity Weight of 1 */
+  UWord32 L40_mac;              /* Complexity Weight of 1 */
+  UWord32 mac_r40;              /* Complexity Weight of 2 */
 
-    UWord32 L40_msu;         /* Complexity Weight of 1 */
-    UWord32 msu_r40;         /* Complexity Weight of 2 */
-    UWord32 Mpy_32_16_ss;    /* Complexity Weight of 2 */
-    UWord32 Mpy_32_32_ss;    /* Complexity Weight of 4 */
-    UWord32 L_mult0;         /* Complexity Weight of 1 */
+  UWord32 L40_msu;              /* Complexity Weight of 1 */
+  UWord32 msu_r40;              /* Complexity Weight of 2 */
+  UWord32 Mpy_32_16_ss;         /* Complexity Weight of 2 */
+  UWord32 Mpy_32_32_ss;         /* Complexity Weight of 4 */
+  UWord32 L_mult0;              /* Complexity Weight of 1 */
 
-    UWord32 L_mac0;          /* Complexity Weight of 1 */
-    UWord32 L_msu0;          /* Complexity Weight of 1 */
-    UWord32 lshl;            /* Complexity Weight of 1 */ 
-    UWord32 lshr;            /* Complexity Weight of 1 */
-    UWord32 L_lshl;          /* Complexity Weight of 1 */ 
+  UWord32 L_mac0;               /* Complexity Weight of 1 */
+  UWord32 L_msu0;               /* Complexity Weight of 1 */
+  UWord32 lshl;                 /* Complexity Weight of 1 */
+  UWord32 lshr;                 /* Complexity Weight of 1 */
+  UWord32 L_lshl;               /* Complexity Weight of 1 */
 
-    UWord32 L_lshr;          /* Complexity Weight of 1 */
-    UWord32 L40_lshl;        /* Complexity Weight of 1 */
-    UWord32 L40_lshr;        /* Complexity Weight of 1 */
-    UWord32 s_and;           /* Complexity Weight of 1 */
-    UWord32 s_or;            /* Complexity Weight of 1 */
+  UWord32 L_lshr;               /* Complexity Weight of 1 */
+  UWord32 L40_lshl;             /* Complexity Weight of 1 */
+  UWord32 L40_lshr;             /* Complexity Weight of 1 */
+  UWord32 s_and;                /* Complexity Weight of 1 */
+  UWord32 s_or;                 /* Complexity Weight of 1 */
 
-    UWord32 s_xor;           /* Complexity Weight of 1 */
-    UWord32 L_and;           /* Complexity Weight of 1 */
-    UWord32 L_or;            /* Complexity Weight of 1 */
-    UWord32 L_xor;           /* Complexity Weight of 1 */
-    UWord32 rotl;            /* Complexity Weight of 3 */
+  UWord32 s_xor;                /* Complexity Weight of 1 */
+  UWord32 L_and;                /* Complexity Weight of 1 */
+  UWord32 L_or;                 /* Complexity Weight of 1 */
+  UWord32 L_xor;                /* Complexity Weight of 1 */
+  UWord32 rotl;                 /* Complexity Weight of 3 */
 
-    UWord32 rotr;            /* Complexity Weight of 3 */
-    UWord32 L_rotl;          /* Complexity Weight of 3 */
-    UWord32 L_rotr;          /* Complexity Weight of 3 */
-    UWord32 L40_set;         /* Complexity Weight of 3 */
-    UWord32 L40_deposit_h;   /* Complexity Weight of 1 */
+  UWord32 rotr;                 /* Complexity Weight of 3 */
+  UWord32 L_rotl;               /* Complexity Weight of 3 */
+  UWord32 L_rotr;               /* Complexity Weight of 3 */
+  UWord32 L40_set;              /* Complexity Weight of 3 */
+  UWord32 L40_deposit_h;        /* Complexity Weight of 1 */
 
-    UWord32 L40_deposit_l;   /* Complexity Weight of 1 */
-    UWord32 L40_deposit32;   /* Complexity Weight of 1 */
-    UWord32 Extract40_H;     /* Complexity Weight of 1 */
-    UWord32 Extract40_L;     /* Complexity Weight of 1 */
-    UWord32 L_Extract40;     /* Complexity Weight of 1 */
+  UWord32 L40_deposit_l;        /* Complexity Weight of 1 */
+  UWord32 L40_deposit32;        /* Complexity Weight of 1 */
+  UWord32 Extract40_H;          /* Complexity Weight of 1 */
+  UWord32 Extract40_L;          /* Complexity Weight of 1 */
+  UWord32 L_Extract40;          /* Complexity Weight of 1 */
 
-    UWord32 L40_round;       /* Complexity Weight of 1 */
-    UWord32 L_saturate40;    /* Complexity Weight of 1 */
-    UWord32 round40;         /* Complexity Weight of 1 */
-    UWord32 If;              /* Complexity Weight of 4 */
-    UWord32 Goto;            /* Complexity Weight of 4 */
+  UWord32 L40_round;            /* Complexity Weight of 1 */
+  UWord32 L_saturate40;         /* Complexity Weight of 1 */
+  UWord32 round40;              /* Complexity Weight of 1 */
+  UWord32 If;                   /* Complexity Weight of 4 */
+  UWord32 Goto;                 /* Complexity Weight of 4 */
 
-    UWord32 Break;           /* Complexity Weight of 4 */
-    UWord32 Switch;          /* Complexity Weight of 8 */
-    UWord32 For;             /* Complexity Weight of 3 */
-    UWord32 While;           /* Complexity Weight of 4 */
-    UWord32 Continue;        /* Complexity Weight of 4 */
+  UWord32 Break;                /* Complexity Weight of 4 */
+  UWord32 Switch;               /* Complexity Weight of 8 */
+  UWord32 For;                  /* Complexity Weight of 3 */
+  UWord32 While;                /* Complexity Weight of 4 */
+  UWord32 Continue;             /* Complexity Weight of 4 */
 
-    UWord32 L_mls;           /* Complexity Weight of 6 */
-    UWord32 div_l;           /* Complexity Weight of 32 */
-    UWord32 i_mult;          /* Complexity Weight of 3 */
-}
-BASIC_OP;
+  UWord32 L_mls;                /* Complexity Weight of 6 */
+  UWord32 div_l;                /* Complexity Weight of 32 */
+  UWord32 i_mult;               /* Complexity Weight of 3 */
+} BASIC_OP;
 
 
-Word32 TotalWeightedOperation( void);
-Word32 DeltaWeightedOperation( void);
+Word32 TotalWeightedOperation (void);
+Word32 DeltaWeightedOperation (void);
 
 
-void generic_WMOPS_output ( Word16 notPrintWorstWorstCase, char *test_file_name);
+void generic_WMOPS_output (Word16 notPrintWorstWorstCase, char *test_file_name);
 /*
  * This function enable to append :
  * - to WMOPS_DATA_FILENAME file, the WMOPS information related
@@ -354,44 +352,46 @@ void generic_WMOPS_output ( Word16 notPrintWorstWorstCase, char *test_file_name)
  * to init_OBJECT if these operations is not to be included in the statistics.
  */
 
-int main(){ 
- int spe1Id,spe2Id,cheId;
- 
- /* initiate counters and objects */
- spe1Id=getCounterId("Spe 5k8"); 
- setCounter(spe1Id); 
- Init_WMOPS_counter (); 
- init_spe1(...);
- 
- spe2Id=getCounterId("Spe 12k2"); 
- setCounter(spe2Id); 
- Init_WMOPS_counter (); 
- init_spe2(...);
- 
- cheId=getCounterId("Channel encoder"); 
- setCounter(cheId); 
- Init_WMOPS_counter (); 
- init_che(...); 
- ... 
- while(data){ 
-    test();             /* Note this call to test(); */
-    if(useSpe1)
-        setCounter(spe1Id); 
-    else 
-        setCounter(spe2Id); 
-    Reset_WMOPS_counter();
-    speEncode(...);
-    WMOPS_output(0);    /* Normal routine for displaying WMOPS info */
-    
-    setCounter(cheId); 
-    Reset_WMOPS_counter();
-    preChannelInter(...); fwc(); /* Note the call to fwc() for each part*/
-    convolve(...); fwc();        /* of the channel encoder. */
-    interleave(...); fwc();
-    WMOPS_output(0);    /* Normal routine for displaying WMOPS info */
- }
+int main () {
+  int spe1Id, spe2Id, cheId;
+
+  /* initiate counters and objects */
+  spe1Id = getCounterId ("Spe 5k8");
+  setCounter (spe1Id);
+  Init_WMOPS_counter ();
+  init_spe1 ( ...);
+
+  spe2Id = getCounterId ("Spe 12k2");
+  setCounter (spe2Id);
+  Init_WMOPS_counter ();
+  init_spe2 ( ...);
+
+  cheId = getCounterId ("Channel encoder");
+  setCounter (cheId);
+  Init_WMOPS_counter ();
+  init_che ( ...);
+  ... while (data) {
+    test ();                    /* Note this call to test(); */
+    if (useSpe1)
+      setCounter (spe1Id);
+    else
+      setCounter (spe2Id);
+    Reset_WMOPS_counter ();
+    speEncode ( ...);
+    WMOPS_output (0);           /* Normal routine for displaying WMOPS info */
+
+    setCounter (cheId);
+    Reset_WMOPS_counter ();
+    preChannelInter ( ...);
+    fwc ();                     /* Note the call to fwc() for each part */
+    convolve ( ...);
+    fwc ();                     /* of the channel encoder. */
+    interleave ( ...);
+    fwc ();
+    WMOPS_output (0);           /* Normal routine for displaying WMOPS info */
+  }
 }
-#endif /* #if 0*/
+#endif /* #if 0 */
 
 
 #endif /* _COUNT_H */

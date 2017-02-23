@@ -17,30 +17,27 @@
 #include "g728fp.h"
 
 /* LPC inverse filter. Block 81 of G728 */
-void g728fp_lpcinv(
-	Float	*apf,		/* 10th order LPC coefficients, Q14 */
-	Float	*st,		/* Un-postfiltered decoded speech, Q2 */
-	Float	*stlpci,
-	Float	*resid)		/* Residual buffer pointer, Q1 */
-{
-	int	j, k;
-	Long	l, l2;
-	Float	a0;
-	Float	mfac;
+void g728fp_lpcinv (Float * apf,        /* 10th order LPC coefficients, Q14 */
+                    Float * st, /* Un-postfiltered decoded speech, Q2 */
+                    Float * stlpci, Float * resid) {    /* Residual buffer pointer, Q1 */
+  int j, k;
+  Long l, l2;
+  Float a0;
+  Float mfac;
 
-	mfac = 1 << 13;
-	for (k = IDIM - 1; k >= 0; k--) {
-		a0 = st[k] * mfac;
-		for (j = LPCPF - 1; j > 0; j--) {
-			a0 += stlpci[j] * apf[j];
-			stlpci[j] = stlpci[j - 1];
-		}
-		a0 += stlpci[0] * apf[0];
- 		a0 *= 4.;
-		stlpci[0] = st[k];
-		SAT32(a0);
-		l = (Long)a0;
-		ROUND(l, l2);
-		resid[k] = l2;
-	}
+  mfac = 1 << 13;
+  for (k = IDIM - 1; k >= 0; k--) {
+    a0 = st[k] * mfac;
+    for (j = LPCPF - 1; j > 0; j--) {
+      a0 += stlpci[j] * apf[j];
+      stlpci[j] = stlpci[j - 1];
+    }
+    a0 += stlpci[0] * apf[0];
+    a0 *= 4.;
+    stlpci[0] = st[k];
+    SAT32 (a0);
+    l = (Long) a0;
+    ROUND (l, l2);
+    resid[k] = l2;
+  }
 }

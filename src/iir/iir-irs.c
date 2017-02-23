@@ -38,20 +38,19 @@ HISTORY:
 
 /* General includes */
 #ifndef VMS
-#include <stdlib.h>		  /* General utility definitions */
+#include <stdlib.h>             /* General utility definitions */
 #endif
-#include <stdio.h>		  /* UNIX Standard I/O Definitions */
-#include <math.h>		  /* RTL Math Function Declarations */
+#include <stdio.h>              /* UNIX Standard I/O Definitions */
+#include <math.h>               /* RTL Math Function Declarations */
 
 /* This module's prototypes */
 #include "iirflt.h"
 
 /* Local function prototypes */
-void fill_iir_irs_8khz ARGS((float ***a_cof, float ***b_cof, long *nblocks));
+void fill_iir_irs_8khz ARGS ((float ***a_cof, float ***b_cof, long *nblocks));
 
 /* External function prototypes - code in in iir-lib.c */
-extern CASCADE_IIR *cascade_iir_init ARGS((long nblocks, float (*a)[2], 
-			 float (*b)[2], double gain, long idown, int hswitch));
+extern CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (*b)[2], double gain, long idown, int hswitch));
 
 
 /*
@@ -86,44 +85,43 @@ extern CASCADE_IIR *cascade_iir_init ARGS((long nblocks, float (*a)[2],
 
  ============================================================================
 */
-void            fill_iir_irs_8khz(a_cof, b_cof, nblocks)
-  float        ***a_cof;
-  float        ***b_cof;
-  long           *nblocks;
+void fill_iir_irs_8khz (a_cof, b_cof, nblocks)
+     float ***a_cof;
+     float ***b_cof;
+     long *nblocks;
 {
-#define nblocks_8khz        8	  /* number of 2'nd order blocks */
+#define nblocks_8khz        8   /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
-  static float a_irs_8khz[nblocks_8khz][2] = 
-                           { /*       T[L]1   ,      T[L]2 */
-			     { 0.181181010E+01, -0.278533980E+01},
-			     {-0.341588540E+01,  0.241742110E+01},
-			     { 0.106290280E+01,  0.637687860E+00},
-			     {-0.114114690E+02,  0.105993240E+02},
-			     { 0.533929010E+01,  0.431985380E+01},
-			     {-0.174458730E+01, -0.110326430E+02},
-			     { 0.122531430E-01, -0.102518530E+01},
-			     {-0.288089440E-01, -0.995417300E+00}
-			   };
+  static float a_irs_8khz[nblocks_8khz][2] = {  /* T[L]1 , T[L]2 */
+    {0.181181010E+01, -0.278533980E+01},
+    {-0.341588540E+01, 0.241742110E+01},
+    {0.106290280E+01, 0.637687860E+00},
+    {-0.114114690E+02, 0.105993240E+02},
+    {0.533929010E+01, 0.431985380E+01},
+    {-0.174458730E+01, -0.110326430E+02},
+    {0.122531430E-01, -0.102518530E+01},
+    {-0.288089440E-01, -0.995417300E+00}
+  };
 
   /* Denominator coefficients */
-  static float  b_irs_8khz[nblocks_8khz][2] =
-                           { /*  T[L]3   ,      T[L]4 */
-			     { 0.117483180E+00, -0.315495510E-01},
-			     {-0.176085970E+01,  0.803684710E+00},
-			     { 0.736577630E+00,  0.447875650E+00},
-			     {-0.110519770E+01,  0.425873550E+00},
-			     { 0.154399700E+01,  0.761976480E+00},
-			     {-0.189045870E+01,  0.910008010E+00},
-			     { 0.806640680E+00,  0.132415190E+00},
-			     { 0.105510470E+01,  0.522127990E+00}
-                           };
+  static float b_irs_8khz[nblocks_8khz][2] = {  /* T[L]3 , T[L]4 */
+    {0.117483180E+00, -0.315495510E-01},
+    {-0.176085970E+01, 0.803684710E+00},
+    {0.736577630E+00, 0.447875650E+00},
+    {-0.110519770E+01, 0.425873550E+00},
+    {0.154399700E+01, 0.761976480E+00},
+    {-0.189045870E+01, 0.910008010E+00},
+    {0.806640680E+00, 0.132415190E+00},
+    {0.105510470E+01, 0.522127990E+00}
+  };
 
 
   *nblocks = nblocks_8khz;
   *a_cof = (float **) a_irs_8khz;
   *b_cof = (float **) b_irs_8khz;
 }
+
 #undef nblocks_8khz
 /* ..................... End of fill_iir_irs_8khz() ...................... */
 
@@ -157,26 +155,24 @@ void            fill_iir_irs_8khz(a_cof, b_cof, nblocks)
 
  ============================================================================
 */
-CASCADE_IIR        *iir_irs_8khz_init()
-{
-  float         **a_cof, **b_cof; /* pointer to numerator/denominator */
-  long            nblocks;	  /* number of 2'nd order blocks */
+CASCADE_IIR *iir_irs_8khz_init () {
+  float **a_cof, **b_cof;       /* pointer to numerator/denominator */
+  long nblocks;                 /* number of 2'nd order blocks */
 
 
-  fill_iir_irs_8khz		  /* get pointer to filter-coefficients */
+  fill_iir_irs_8khz             /* get pointer to filter-coefficients */
     (&a_cof, &b_cof, &nblocks);
 
-  return cascade_iir_init(	  /* Returns: pointer to CASCADE_IIR-struct */
-			 nblocks, /* In: number of 2'nd order blocks */
-			 (float (*)[2]) a_cof,	/* In: 24-bit repres. of
-						 * numer. coef. */
-			 (float (*)[2]) b_cof,	/* In: 24-bit repres. of
-						 * denom. coef. */
-			 1.05133050E-04,  /* In: gain factor for filter */
-			 (long) 1,/* In: Down-sampling factor */
-			 'D');	  /* -> call down-sampling routine */
+  return cascade_iir_init (     /* Returns: pointer to CASCADE_IIR-struct */
+                            nblocks,    /* In: number of 2'nd order blocks */
+                            (float (*)[2]) a_cof,       /* In: 24-bit repres. of numer. coef. */
+                            (float (*)[2]) b_cof,       /* In: 24-bit repres. of denom. coef. */
+                            1.05133050E-04,     /* In: gain factor for filter */
+                            (long) 1,   /* In: Down-sampling factor */
+                            'D');       /* -> call down-sampling routine */
 
 }
+
 /* ...................... End of iir_irs_8khz_init() ...................... */
 
 

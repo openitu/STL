@@ -58,58 +58,52 @@
 /*************************************/
 /* Test of the G.722 coder algorithm */
 /*************************************/
-int             main (argc, argv)
-int argc; 
-char *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
 
 /* declarations locales */
 /************************/
 
-  Word16          xl, inl, inh, xh, il, ih, incode;
-  Word16          rs, codeC, code;
-  g722_state      encoder;
-  FILE           *xmt, *cod;
-  int             read1;
-  long            iter;
+  Word16 xl, inl, inh, xh, il, ih, incode;
+  Word16 rs, codeC, code;
+  g722_state encoder;
+  FILE *xmt, *cod;
+  int read1;
+  long iter;
 
   /* debut du code executable */
-	/****************************/
+        /****************************/
 
-  if (argc != 3)
-  {
+  if (argc != 3) {
     printf ("\n Bad use of TSTCG722");
     printf ("\n USE: TSTG722 fichx.XMT fichy.COD ... EXIT");
     exit (0);
   }
 
-  if ((xmt = fopen (argv[1], "r+b")) == NULL)
-  {
+  if ((xmt = fopen (argv[1], "r+b")) == NULL) {
     printf ("TSTG722 ne peut pas ouvrir %s \n", argv[1]);
     exit (0);
   }
 
-  if ((cod = fopen (argv[2], "r+b")) == NULL)
-  {
+  if ((cod = fopen (argv[2], "r+b")) == NULL) {
     printf ("TSTG722 ne peut pas ouvrir %s \n", argv[2]);
     exit (0);
   }
 
 
 
-  printf ("\n\n  BEGINING OF PROCESSING INPUT FILE %s : REFERENCE %s \n",
-	  argv[1], argv[2]);
+  printf ("\n\n  BEGINING OF PROCESSING INPUT FILE %s : REFERENCE %s \n", argv[1], argv[2]);
 
   xl = xh = rs = 1;
   il = lsbcod (xl, rs, &encoder);
   ih = hsbcod (xl, rs, &encoder);
   iter = 0L;
 
-  while ((read1 = fread (&incode, sizeof (Word16), 1, xmt)) == 1)
-  {
+  while ((read1 = fread (&incode, sizeof (Word16), 1, xmt)) == 1) {
 
-    if (read1 != 1)
-    {
+    if (read1 != 1) {
       printf ("\n Error read file XMT");
       exit (0);
     }
@@ -125,37 +119,31 @@ char *argv[];
     il = lsbcod (xl, rs, &encoder);
     ih = hsbcod (xh, rs, &encoder);
 
-    if (rs == 1)
-    {
+    if (rs == 1) {
       codeC = 1;
-    }
-    else
-    {
+    } else {
       codeC = (((ih << 6) + il) << 8) & 0xFF00;
     }
 
 
     /* lecture du code de reference */
-		/********************************/
+                /********************************/
 
-    if (fread (&code, sizeof (Word16), 1, cod) != 1)
-    {
+    if (fread (&code, sizeof (Word16), 1, cod) != 1) {
       printf ("\n Error Read File COD");
       exit (0);
     }
 
     /* comparaison avec le code de reference */
-		/*****************************************/
+                /*****************************************/
 
-    if (code != codeC)
-    {
+    if (code != codeC) {
       printf ("\nError iter=%ld C = %04X  REF = %04X  ", iter, codeC, code);
     }
 
     iter++;
 
-    if (iter % 512L == 0L)
-    {
+    if (iter % 512L == 0L) {
       printf ("\r OK ITERATION %ld ", iter);
     }
   }

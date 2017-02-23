@@ -58,20 +58,19 @@ HISTORY:
 
 /* General includes */
 #ifndef VMS
-#include <stdlib.h>		  /* General utility definitions */
+#include <stdlib.h>             /* General utility definitions */
 #endif
-#include <stdio.h>		  /* UNIX Standard I/O Definitions */
-#include <math.h>		  /* RTL Math Function Declarations */
+#include <stdio.h>              /* UNIX Standard I/O Definitions */
+#include <math.h>               /* RTL Math Function Declarations */
 
 /* This module's prototypes */
 #include "iirflt.h"
 
 /* Local function prototypes */
-void fill_iir_dc_removal ARGS((float **a_cof, float **b_cof, long *zerono, long *poleno));
+void fill_iir_dc_removal ARGS ((float **a_cof, float **b_cof, long *zerono, long *poleno));
 
 /* External function prototypes - code in in iir-lib.c */
-extern DIRECT_IIR *direct_iir_init ARGS((long zerono, long poleno, float *a, 
-			 float *b, double gain, long idown, int hswitch));
+extern DIRECT_IIR *direct_iir_init ARGS ((long zerono, long poleno, float *a, float *b, double gain, long idown, int hswitch));
 
 #ifdef UNDER_HEAVY_CONSTRUCTION
 /*
@@ -123,31 +122,29 @@ extern DIRECT_IIR *direct_iir_init ARGS((long zerono, long poleno, float *a,
  ============================================================================
 */
 void fill_iir_lp_3_to_1 (a_cof, b_cof, zerono, poleno)
-  float        **a_cof;
-  float        **b_cof;
-  long           *zerono, *poleno;
+     float **a_cof;
+     float **b_cof;
+     long *zerono, *poleno;
 {
-#define POLENO        24	  /* number of poles in direct form */
-#define ZERONO        24	  /* number of zeroes in direct form */
+#define POLENO        24        /* number of poles in direct form */
+#define ZERONO        24        /* number of zeroes in direct form */
 
   /* Numerator coefficients (zeroes) */
-  static float a_lp_3_1[ZERONO] = 
-  { 5.4968171e-04,-6.8272329e-05, 3.1475655e-03, 1.2150722e-03,
-    8.6479028e-03, 7.2179878e-03, 1.7002962e-02, 1.8660073e-02, 
-    2.7400730e-02, 3.1055931e-02, 3.6173885e-02, 3.8048666e-02, 
-    3.8048666e-02, 3.6173885e-02, 3.1055931e-02, 2.7400730e-02, 
-    1.8660073e-02, 1.7002962e-02, 7.2179878e-03, 8.6479028e-03, 
-    1.2150722e-03, 3.1475655e-03,-6.8272329e-05, 5.4968171e-04
+  static float a_lp_3_1[ZERONO] = { 5.4968171e-04, -6.8272329e-05, 3.1475655e-03, 1.2150722e-03,
+    8.6479028e-03, 7.2179878e-03, 1.7002962e-02, 1.8660073e-02,
+    2.7400730e-02, 3.1055931e-02, 3.6173885e-02, 3.8048666e-02,
+    3.8048666e-02, 3.6173885e-02, 3.1055931e-02, 2.7400730e-02,
+    1.8660073e-02, 1.7002962e-02, 7.2179878e-03, 8.6479028e-03,
+    1.2150722e-03, 3.1475655e-03, -6.8272329e-05, 5.4968171e-04
   };
 
   /* Denominator coefficients (poles) */
-  static float  b_lp_3_1[POLENO] =
-  { 1.0000000e+00,-6.0756172e+00, 2.1006057e+01,-5.0217794e+01, 
-    9.2038231e+01,-1.3508820e+02, 1.6398570e+02,-1.6740764e+02, 
-    1.4576856e+02,-1.0897157e+02, 7.0403019e+01,-3.9334337e+01, 
-    1.9053915e+01,-7.9633036e+00, 2.8739011e+00,-8.8310070e-01, 
-    2.3220561e-01,-5.0145585e-02, 9.2944661e-03,-1.2334147e-03, 
-    1.7203837e-04,-3.8684472e-06, 2.3653695e-06, 2.8700440e-07
+  static float b_lp_3_1[POLENO] = { 1.0000000e+00, -6.0756172e+00, 2.1006057e+01, -5.0217794e+01,
+    9.2038231e+01, -1.3508820e+02, 1.6398570e+02, -1.6740764e+02,
+    1.4576856e+02, -1.0897157e+02, 7.0403019e+01, -3.9334337e+01,
+    1.9053915e+01, -7.9633036e+00, 2.8739011e+00, -8.8310070e-01,
+    2.3220561e-01, -5.0145585e-02, 9.2944661e-03, -1.2334147e-03,
+    1.7203837e-04, -3.8684472e-06, 2.3653695e-06, 2.8700440e-07
   };
 
 
@@ -156,6 +153,7 @@ void fill_iir_lp_3_to_1 (a_cof, b_cof, zerono, poleno)
   *a_cof = (float *) a_lp_3_1;
   *b_cof = (float *) b_lp_3_1;
 }
+
 #undef POLENO
 #undef ZERONO
 /* ..................... End of fill_iir_lp_3_to_1() ...................... */
@@ -190,25 +188,25 @@ void fill_iir_lp_3_to_1 (a_cof, b_cof, zerono, poleno)
 
  ============================================================================
 */
-DIRECT_IIR        *iir_down_3_to_1_init()
-{
-  float         *a_cof, *b_cof; /* pointer to numerator/denominator */
-  long            poleno;	  /* number of poles */
-  long            zerono;	  /* number of zeroes */
+DIRECT_IIR *iir_down_3_to_1_init () {
+  float *a_cof, *b_cof;         /* pointer to numerator/denominator */
+  long poleno;                  /* number of poles */
+  long zerono;                  /* number of zeroes */
 
 
-  fill_iir_lp_3_to_1		  /* get pointer to filter-coefficients */
+  fill_iir_lp_3_to_1            /* get pointer to filter-coefficients */
     (&a_cof, &b_cof, &zerono, &poleno);
 
-  return direct_iir_init(	  /* Returns: pointer to DIRECT_IIR-struct */
-			 zerono, /* In: number of zeroes */
-			 poleno, /* In: number of poles */
-			 (float *) a_cof,	/* Zeroes */
-			 (float *) b_cof,	/* Poles */
-			 1.0,                   /* In: gain for filter */
-			 (long) 3,   /* In: Down-sampling factor */
-			 'D');	     /* In: call down-sampling routine */
+  return direct_iir_init (      /* Returns: pointer to DIRECT_IIR-struct */
+                           zerono,      /* In: number of zeroes */
+                           poleno,      /* In: number of poles */
+                           (float *) a_cof,     /* Zeroes */
+                           (float *) b_cof,     /* Poles */
+                           1.0, /* In: gain for filter */
+                           (long) 3,    /* In: Down-sampling factor */
+                           'D');        /* In: call down-sampling routine */
 }
+
 /* ................... End of iir_down_3_to_1_init() ................... */
 
 
@@ -240,25 +238,25 @@ DIRECT_IIR        *iir_down_3_to_1_init()
 
  ============================================================================
 */
-DIRECT_IIR        *iir_up_1_to_3_init()
-{
-  float         *a_cof, *b_cof; /* pointer to numerator/denominator */
-  long            poleno;	  /* number of poles */
-  long            zerono;	  /* number of zeroes */
+DIRECT_IIR *iir_up_1_to_3_init () {
+  float *a_cof, *b_cof;         /* pointer to numerator/denominator */
+  long poleno;                  /* number of poles */
+  long zerono;                  /* number of zeroes */
 
 
-  fill_iir_lp_3_to_1		  /* get pointer to filter-coefficients */
+  fill_iir_lp_3_to_1            /* get pointer to filter-coefficients */
     (&a_cof, &b_cof, &zerono, &poleno);
 
-  return direct_iir_init(	  /* Returns: pointer to DIRECT_IIR-struct */
-			 zerono, /* In: number of zeroes */
-			 poleno, /* In: number of poles */
-			 (float *) a_cof,	/* Zeroes */
-			 (float *) b_cof,	/* Poles */
-			 1.0,                   /* In: gain for filter */
-			 (long) 3,   /* In: Down-sampling factor */
-			 'U');	     /* In: call up-sampling routine */
+  return direct_iir_init (      /* Returns: pointer to DIRECT_IIR-struct */
+                           zerono,      /* In: number of zeroes */
+                           poleno,      /* In: number of poles */
+                           (float *) a_cof,     /* Zeroes */
+                           (float *) b_cof,     /* Poles */
+                           1.0, /* In: gain for filter */
+                           (long) 3,    /* In: Down-sampling factor */
+                           'U');        /* In: call up-sampling routine */
 }
+
 /* ................... End of iir_up_1_to_3_init() ................... */
 
 #endif /* UNDER_HEAVY_CONSTRUCTION */
@@ -307,25 +305,26 @@ DIRECT_IIR        *iir_up_1_to_3_init()
  ============================================================================
 */
 void fill_iir_dc_removal (a_cof, b_cof, zerono, poleno)
-  float        **a_cof;
-  float        **b_cof;
-  long           *zerono, *poleno;
+     float **a_cof;
+     float **b_cof;
+     long *zerono, *poleno;
 {
-#define POLENO        2	  /* number of poles in direct form + 1 */
-#define ZERONO        2	  /* number of zeroes in direct form + 1 */
+#define POLENO        2         /* number of poles in direct form + 1 */
+#define ZERONO        2         /* number of zeroes in direct form + 1 */
 
   /* Numerator coefficients (zeroes) */
-  static float a_dc[ZERONO] = {1, -1};
+  static float a_dc[ZERONO] = { 1, -1 };
 
 
   /* Denominator coefficients (poles) */
-  static float  b_dc[POLENO] = {1, -0.985};
+  static float b_dc[POLENO] = { 1, -0.985 };
 
   *zerono = ZERONO;
   *poleno = POLENO;
   *a_cof = (float *) a_dc;
   *b_cof = (float *) b_dc;
 }
+
 #undef POLENO
 #undef ZERONO
 /* .................... End of fill_iir_dc_removal() ..................... */
@@ -357,25 +356,25 @@ void fill_iir_dc_removal (a_cof, b_cof, zerono, poleno)
 
  ============================================================================
 */
-DIRECT_IIR        *iir_dir_dc_removal_init()
-{
-  float         *a_cof, *b_cof; /* pointer to numerator/denominator */
-  long            poleno;	  /* number of poles */
-  long            zerono;	  /* number of zeroes */
+DIRECT_IIR *iir_dir_dc_removal_init () {
+  float *a_cof, *b_cof;         /* pointer to numerator/denominator */
+  long poleno;                  /* number of poles */
+  long zerono;                  /* number of zeroes */
 
 
-  fill_iir_dc_removal		  /* get pointer to filter-coefficients */
+  fill_iir_dc_removal           /* get pointer to filter-coefficients */
     (&a_cof, &b_cof, &zerono, &poleno);
 
-  return direct_iir_init(	  /* Returns: pointer to DIRECT_IIR-struct */
-			 zerono, /* In: number of zeroes */
-			 poleno, /* In: number of poles */
-			 (float *) a_cof,	/* Zeroes */
-			 (float *) b_cof,	/* Poles */
-			 1.0,                   /* In: gain for filter */
-			 (long) 1,   /* In: Down-sampling factor */
-			 'D');	     /* In: call up-sampling routine */
+  return direct_iir_init (      /* Returns: pointer to DIRECT_IIR-struct */
+                           zerono,      /* In: number of zeroes */
+                           poleno,      /* In: number of poles */
+                           (float *) a_cof,     /* Zeroes */
+                           (float *) b_cof,     /* Poles */
+                           1.0, /* In: gain for filter */
+                           (long) 1,    /* In: Down-sampling factor */
+                           'D');        /* In: call up-sampling routine */
 }
+
 /* .................. End of iir_dir_dc_removal_init() .................. */
 
 

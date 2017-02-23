@@ -29,41 +29,33 @@ Motorola Inc.
   
   --------------------------------------------------------------------------
 */
-void            unpack0_(wrds, blen, packed)
-  int            *wrds;
-  int            *blen;
-  char           *packed;
+void unpack0_ (wrds, blen, packed)
+     int *wrds;
+     int *blen;
+     char *packed;
 {
-  int             hex, bcentcnt, bhexcnt, centcnt;
+  int hex, bcentcnt, bhexcnt, centcnt;
 
 
   bhexcnt = 0;
-  for (centcnt = 1; centcnt <= blen[0]; centcnt++)
-  {
+  for (centcnt = 1; centcnt <= blen[0]; centcnt++) {
     /* now fill new word */
-    for (wrds[centcnt] = 0, bcentcnt = blen[centcnt];
-	 bcentcnt > 0; bcentcnt--, bhexcnt--)
-    {
+    for (wrds[centcnt] = 0, bcentcnt = blen[centcnt]; bcentcnt > 0; bcentcnt--, bhexcnt--) {
       /* any bit left in input? */
-      if (bhexcnt <= 0)
-      {
-	bhexcnt = 4;
-	hex = *packed++;
-	if (hex >= 'A')
-	{
-	  hex = hex - 'A' + 10;
-	}
-	else
-	{
-	  hex -= '0';
-	}
+      if (bhexcnt <= 0) {
+        bhexcnt = 4;
+        hex = *packed++;
+        if (hex >= 'A') {
+          hex = hex - 'A' + 10;
+        } else {
+          hex -= '0';
+        }
       }
-      if (hex & 1 << bhexcnt - 1)
-      {				/* input is a one */
-	wrds[centcnt] += 1 << bcentcnt - 1;
+      if (hex & 1 << bhexcnt - 1) {     /* input is a one */
+        wrds[centcnt] += 1 << bcentcnt - 1;
       }
     }
   }
 }
-/* .......................... End of unpack0_() ......................... */
 
+/* .......................... End of unpack0_() ......................... */

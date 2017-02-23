@@ -70,11 +70,11 @@ HISTORY:
  * ......... GENERAL INCLUDES .........
  */
 
-#include <stdlib.h>		  /* General utility definitions */
-#include <math.h>		  /* RTL Math Function Declarations */
+#include <stdlib.h>             /* General utility definitions */
+#include <math.h>               /* RTL Math Function Declarations */
 
 /* Definitions for IIR filters */
-#include "iirflt.h"		  
+#include "iirflt.h"
 
 
 
@@ -82,49 +82,29 @@ HISTORY:
  * ......... Local function *smart* prototypes .........
  */
 /* Parallel-form filtering basic function prototypes */
-static long scd_parallel_form_iir_down_kernel ARGS((long lenx, float *x, 
-			 float *y, long *k0, long idown, long nblocks, 
-                         double direct_cof, double gain, float (*b)[3], 
-                         float (*c)[2], float (*T)[2]));
-static long scd_parallel_form_iir_up_kernel ARGS((long lenx, float *x, 
-			 float *y, long iup, long nblocks, double direct_cof, 
-			 double gain, float (*b)[3], float (*c)[2], 
-			 float (*T)[2]));
+static long scd_parallel_form_iir_down_kernel ARGS ((long lenx, float *x, float *y, long *k0, long idown, long nblocks, double direct_cof, double gain, float (*b)[3], float (*c)[2], float (*T)[2]));
+static long scd_parallel_form_iir_up_kernel ARGS ((long lenx, float *x, float *y, long iup, long nblocks, double direct_cof, double gain, float (*b)[3], float (*c)[2], float (*T)[2]));
 
-SCD_IIR *scd_stdpcm_init ARGS((long nblocks, float (*b)[3], float (*c)[2], 
-                         double direct_cof, double gain, long idown, 
-                         int hswitch));
+SCD_IIR *scd_stdpcm_init ARGS ((long nblocks, float (*b)[3], float (*c)[2], double direct_cof, double gain, long idown, int hswitch));
 
-long cascade_iir_kernel ARGS((long lseg, float *x_ptr, CASCADE_IIR *iir_ptr, 
-                         float *y_ptr));
+long cascade_iir_kernel ARGS ((long lseg, float *x_ptr, CASCADE_IIR * iir_ptr, float *y_ptr));
 
 /* Cascade-form filtering basic function prototypes */
-static long cascade_form_iir_down_kernel ARGS((long lenx, float *x, float *y, 
-                         long *k0, long idown, long nblocks, double gain, 
-                         float (*a)[2], float (*b)[2], float (*T)[4]));
+static long cascade_form_iir_down_kernel ARGS ((long lenx, float *x, float *y, long *k0, long idown, long nblocks, double gain, float (*a)[2], float (*b)[2], float (*T)[4]));
 
-static long cascade_form_iir_up_kernel ARGS((long lenx, float *x, float *y, 
-                         long iup, long nblocks, double gain, float (*a)[2], 
-                         float (*b)[2], float (*T)[4]));
+static long cascade_form_iir_up_kernel ARGS ((long lenx, float *x, float *y, long iup, long nblocks, double gain, float (*a)[2], float (*b)[2], float (*T)[4]));
 
-CASCADE_IIR *cascade_iir_init ARGS((long nblocks, float (*a)[2], float (*b)[2],
-                         double gain, long idown, int hswitch));
+CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (*b)[2], double gain, long idown, int hswitch));
 
 
 /* Direct-form filtering basic function prototypes */
-long direct_iir_kernel ARGS((long lseg, float *x_ptr, DIRECT_IIR *iir_ptr, 
-                         float *y_ptr));
+long direct_iir_kernel ARGS ((long lseg, float *x_ptr, DIRECT_IIR * iir_ptr, float *y_ptr));
 
-static long direct_form_iir_down_kernel ARGS((long lenx, float *x, float *y, 
-                         long *k0, long idown, long zno, long pno, 
-			 double gain, float *a, float *b, float (*T)[2]));
+static long direct_form_iir_down_kernel ARGS ((long lenx, float *x, float *y, long *k0, long idown, long zno, long pno, double gain, float *a, float *b, float (*T)[2]));
 
-static long direct_form_iir_up_kernel ARGS((long lenx, float *x, float *y, 
-                         long iup, long zno, long pno, double gain, 
-                         float *a, float *b, float (*T)[2]));
+static long direct_form_iir_up_kernel ARGS ((long lenx, float *x, float *y, long iup, long zno, long pno, double gain, float *a, float *b, float (*T)[2]));
 
-DIRECT_IIR *direct_iir_init ARGS((long zno, long pno, float *a, float *b,
-                         double gain, long idown, int hswitch));
+DIRECT_IIR *direct_iir_init ARGS ((long zno, long pno, float *a, float *b, double gain, long idown, int hswitch));
 
 
 /*
@@ -163,12 +143,13 @@ DIRECT_IIR *direct_iir_init ARGS((long zno, long pno, float *a, float *b,
 
  ============================================================================
 */
-void            stdpcm_free(iir_ptr)
-  SCD_IIR        *iir_ptr;
+void stdpcm_free (iir_ptr)
+     SCD_IIR *iir_ptr;
 {
-  free(iir_ptr->T);		  /* free state variables */
-  free(iir_ptr);		  /* free allocated struct */
+  free (iir_ptr->T);            /* free state variables */
+  free (iir_ptr);               /* free allocated struct */
 }
+
 /* ....................... End of stdpcm_free() ....................... */
 
 
@@ -204,22 +185,22 @@ void            stdpcm_free(iir_ptr)
 
  ============================================================================
 */
-void            stdpcm_reset(iir_ptr)
-  SCD_IIR        *iir_ptr;
+void stdpcm_reset (iir_ptr)
+     SCD_IIR *iir_ptr;
 {
-  long            n;
-  float           (*T_ptr)[2];
+  long n;
+  float (*T_ptr)[2];
 
 
   T_ptr = iir_ptr->T;
-  for (n = 0; n < iir_ptr->nblocks; n++)
-  {
+  for (n = 0; n < iir_ptr->nblocks; n++) {
     T_ptr[n][0] = 0.0;
     T_ptr[n][1] = 0.0;
   }
 
-  iir_ptr->k0 = iir_ptr->idown;	  /* modulo counter for down-sampling */
+  iir_ptr->k0 = iir_ptr->idown; /* modulo counter for down-sampling */
 }
+
 /* ....................... End of stdpcm_reset() ....................... */
 
 
@@ -262,37 +243,35 @@ void            stdpcm_reset(iir_ptr)
 
  ============================================================================
 */
-SCD_IIR *scd_stdpcm_init(nblocks, b, c, direct_cof, gain, idown, hswitch)
-  long            nblocks;
-  float           (*b)[3], (*c)[2];
-  double          direct_cof, gain;
-  long            idown;
-  char            hswitch;
+SCD_IIR *scd_stdpcm_init (nblocks, b, c, direct_cof, gain, idown, hswitch)
+     long nblocks;
+     float (*b)[3], (*c)[2];
+     double direct_cof, gain;
+     long idown;
+     char hswitch;
 {
-  static SCD_IIR *ptrIIR;	  /* pointer to the new struct */
-  float           fak;
-  float           (*T_ptr)[2];
-  long            n;
+  static SCD_IIR *ptrIIR;       /* pointer to the new struct */
+  float fak;
+  float (*T_ptr)[2];
+  long n;
 
 
   /* Allocate memory for a new struct */
-  if ((ptrIIR = (SCD_IIR *) malloc((long) sizeof(SCD_IIR))) == (SCD_IIR *) 0L)
-  {
+  if ((ptrIIR = (SCD_IIR *) malloc ((long) sizeof (SCD_IIR))) == (SCD_IIR *) 0L) {
     return 0;
   }
 
 
   /* Allocate memory for state variables */
-  if ((ptrIIR->T = (float (*)[2]) malloc((nblocks * 2) * sizeof(fak)))
-      == (float (*)[2]) 0)
-  {
-    free(ptrIIR);
+  if ((ptrIIR->T = (float (*)[2]) malloc ((nblocks * 2) * sizeof (fak)))
+      == (float (*)[2]) 0) {
+    free (ptrIIR);
     return 0;
   }
 
 
   /* fill coefficient sets */
-  ptrIIR->nblocks = nblocks;	  /* store number of 2'nd order blocks */
+  ptrIIR->nblocks = nblocks;    /* store number of 2'nd order blocks */
   ptrIIR->b = b;
   ptrIIR->c = c;
 
@@ -308,18 +287,18 @@ SCD_IIR *scd_stdpcm_init(nblocks, b, c, direct_cof, gain, idown, hswitch)
 
   /* Clear state variables */
   T_ptr = ptrIIR->T;
-  for (n = 0; n < nblocks; n++)
-  {
+  for (n = 0; n < nblocks; n++) {
     T_ptr[n][0] = 0.0;
     T_ptr[n][1] = 0.0;
   }
 
-  ptrIIR->k0 = idown;		  /* modulo counter for down-sampling */
+  ptrIIR->k0 = idown;           /* modulo counter for down-sampling */
 
 
   /* Exit returning pointer to struct */
   return (ptrIIR);
 }
+
 /* ....................... End of scd_stdpcm_init() ....................... */
 
 
@@ -354,63 +333,42 @@ SCD_IIR *scd_stdpcm_init(nblocks, b, c, direct_cof, gain, idown, hswitch)
 
  ============================================================================
 */
-long            stdpcm_kernel(lseg, x_ptr, iir_ptr, y_ptr)
-  long            lseg;
-  float          *x_ptr;
-  SCD_IIR        *iir_ptr;
-  float          *y_ptr;
+long stdpcm_kernel (lseg, x_ptr, iir_ptr, y_ptr)
+     long lseg;
+     float *x_ptr;
+     SCD_IIR *iir_ptr;
+     float *y_ptr;
 {
 
   if (iir_ptr->hswitch == 'U')
-    return
-      scd_parallel_form_iir_up_kernel(	/* returns number of output samples */
-				      lseg,	/* In   : length of input
-						 * signal */
-				      x_ptr,	/* In   : array with input
-						 * samples */
-				      y_ptr,	/* Out  : array with output
-						 * samples */
-				      iir_ptr->idown,	/* In  : downsampling
-							 * factor */
-				      iir_ptr->nblocks,	/* In  : number of
-							 * IIR-coefficients */
-				      iir_ptr->direct_cof,/* In: direct path
-							   * coefficient */
-				      iir_ptr->gain,	/* In  : gain factor */
-				      iir_ptr->b,	/* In  : direct path
-							 * coefficient */
-				      iir_ptr->c,	/* In  : array with
-							 * IIR-coefficients */
-				      iir_ptr->T	/* InOut: state
-							 * variables */
+    return scd_parallel_form_iir_up_kernel (    /* returns number of output samples */
+                                             lseg,      /* In : length of input signal */
+                                             x_ptr,     /* In : array with input samples */
+                                             y_ptr,     /* Out : array with output samples */
+                                             iir_ptr->idown,    /* In : downsampling factor */
+                                             iir_ptr->nblocks,  /* In : number of IIR-coefficients */
+                                             iir_ptr->direct_cof,       /* In: direct path coefficient */
+                                             iir_ptr->gain,     /* In : gain factor */
+                                             iir_ptr->b,        /* In : direct path coefficient */
+                                             iir_ptr->c,        /* In : array with IIR-coefficients */
+                                             iir_ptr->T /* InOut: state variables */
       );
   else
-    return
-      scd_parallel_form_iir_down_kernel(	/* returns number of output
-						 * samples */
-					lseg,	/* In   : length of input
-						 * signal */
-					x_ptr,	/* In   : array with input
-						 * samples */
-					y_ptr,	/* Out  : array with output
-						 * samples */
-					&(iir_ptr->k0),	/* InOut:starting index
-							 * in x-array */
-					iir_ptr->idown,	/* In   : downsampling
-							 * factor */
-					iir_ptr->nblocks,/* In   : number of
-							  * IIR-coefficients */
-					iir_ptr->direct_cof,/* In  : direct path
-							     * coefficient */
-					iir_ptr->gain,	/* In   : gain factor */
-					iir_ptr->b,	/* In   : direct path
-							 * coefficient */
-					iir_ptr->c,	/* In   : array w/
-							 * IIR-coefficients */
-					iir_ptr->T	/* InOut: state
-							 * variables */
+    return scd_parallel_form_iir_down_kernel (  /* returns number of output samples */
+                                               lseg,    /* In : length of input signal */
+                                               x_ptr,   /* In : array with input samples */
+                                               y_ptr,   /* Out : array with output samples */
+                                               &(iir_ptr->k0),  /* InOut:starting index in x-array */
+                                               iir_ptr->idown,  /* In : downsampling factor */
+                                               iir_ptr->nblocks,        /* In : number of IIR-coefficients */
+                                               iir_ptr->direct_cof,     /* In : direct path coefficient */
+                                               iir_ptr->gain,   /* In : gain factor */
+                                               iir_ptr->b,      /* In : direct path coefficient */
+                                               iir_ptr->c,      /* In : array w/ IIR-coefficients */
+                                               iir_ptr->T       /* InOut: state variables */
       );
 }
+
 /* ....................... End of stdpcm_kernel() ....................... */
 
 
@@ -458,49 +416,42 @@ long            stdpcm_kernel(lseg, x_ptr, iir_ptr, y_ptr)
 
  ============================================================================
 */
-static long     scd_parallel_form_iir_down_kernel(lenx, x, y, k0, idown, 
-                                         nblocks, direct_cof, gain, b, c, T)
-  long            lenx;
-  float          *x, *y;
-  long           *k0, idown, nblocks;
-  double          direct_cof, gain;
-  float           (*b)[3], (*c)[2], (*T)[2];
+static long scd_parallel_form_iir_down_kernel (lenx, x, y, k0, idown, nblocks, direct_cof, gain, b, c, T)
+     long lenx;
+     float *x, *y;
+     long *k0, idown, nblocks;
+     double direct_cof, gain;
+     float (*b)[3], (*c)[2], (*T)[2];
 {
-  long            kx, ky, n;
-  float           Ttmp;
+  long kx, ky, n;
+  float Ttmp;
 
 
-  ky = 0;			  /* starting index in output array (y) */
-  for (kx = 0; kx < lenx; kx++)	  /* loop over all input samples */
-  {
-    if (*k0 % idown == 0)	  /* compute output only every "idown"
-				   * samples */
-    {
-      y[ky] = direct_cof * x[kx]; /* direct path */
-      for (n = 0; n < nblocks; n++)	/* loop over all second order filter */
-      {
-	Ttmp = 2. * (x[kx] - c[n][0] * T[n][0] - c[n][1] * T[n][1]);
-	y[ky] += b[n][2] * Ttmp + b[n][1] * T[n][1] + b[n][0] * T[n][0];
-	T[n][0] = T[n][1];
-	T[n][1] = Ttmp;
+  ky = 0;                       /* starting index in output array (y) */
+  for (kx = 0; kx < lenx; kx++) {       /* loop over all input samples */
+    if (*k0 % idown == 0) {     /* compute output only every "idown" * samples */
+      y[ky] = direct_cof * x[kx];       /* direct path */
+      for (n = 0; n < nblocks; n++) {   /* loop over all second order filter */
+        Ttmp = 2. * (x[kx] - c[n][0] * T[n][0] - c[n][1] * T[n][1]);
+        y[ky] += b[n][2] * Ttmp + b[n][1] * T[n][1] + b[n][0] * T[n][0];
+        T[n][0] = T[n][1];
+        T[n][1] = Ttmp;
       }
       y[ky] *= gain;
       ky++;
-    }
-    else
-    {
-      for (n = 0; n < nblocks; n++)
-      {
-	Ttmp = 2. * (x[kx] - c[n][0] * T[n][0] - c[n][1] * T[n][1]);
-	T[n][0] = T[n][1];
-	T[n][1] = Ttmp;
+    } else {
+      for (n = 0; n < nblocks; n++) {
+        Ttmp = 2. * (x[kx] - c[n][0] * T[n][0] - c[n][1] * T[n][1]);
+        T[n][0] = T[n][1];
+        T[n][1] = Ttmp;
       }
     }
     (*k0)++;
   }
-  *k0 %= idown;			  /* avoid overflow by (*k0)++ */
+  *k0 %= idown;                 /* avoid overflow by (*k0)++ */
   return ky;
 }
+
 /* .............. End of scd_parallel_form_iir_down_kernel() .............. */
 
 
@@ -547,50 +498,43 @@ static long     scd_parallel_form_iir_down_kernel(lenx, x, y, k0, idown,
 
  ============================================================================
 */
-static long     scd_parallel_form_iir_up_kernel(lenx, x, y, iup, nblocks,
-				                  direct_cof, gain, b, c, T)
-  long            lenx;
-  float          *x, *y;
-  long            iup, nblocks;
-  double          direct_cof, gain;
-  float           (*b)[3], (*c)[2], (*T)[2];
+static long scd_parallel_form_iir_up_kernel (lenx, x, y, iup, nblocks, direct_cof, gain, b, c, T)
+     long lenx;
+     float *x, *y;
+     long iup, nblocks;
+     double direct_cof, gain;
+     float (*b)[3], (*c)[2], (*T)[2];
 {
-  long            kx, ky, n;
-  float           Ttmp;
+  long kx, ky, n;
+  float Ttmp;
 
 
-  kx = 0;			  /* starting index in input array (x) */
-  for (ky = 0; ky < iup * lenx; ky++)	/* loop over all input samples */
-  {
-    if (ky % iup == 0)		  /* compute output only every "iup" */
-    {				  /* samples by taking one input sample */
-      y[ky] = direct_cof * x[kx]; /* direct path */
-      for (n = 0; n < nblocks; n++)	/* loop over all second order filter */
-      {
-	Ttmp = 2. * (x[kx] - c[n][0] * T[n][0] - c[n][1] * T[n][1]);
-	y[ky] += b[n][2] * Ttmp + b[n][1] * T[n][1] + b[n][0] * T[n][0];
-	T[n][0] = T[n][1];
-	T[n][1] = Ttmp;
+  kx = 0;                       /* starting index in input array (x) */
+  for (ky = 0; ky < iup * lenx; ky++) { /* loop over all input samples */
+    if (ky % iup == 0) {        /* compute output only every "iup" *//* samples by taking one input sample */
+      y[ky] = direct_cof * x[kx];       /* direct path */
+      for (n = 0; n < nblocks; n++) {   /* loop over all second order filter */
+        Ttmp = 2. * (x[kx] - c[n][0] * T[n][0] - c[n][1] * T[n][1]);
+        y[ky] += b[n][2] * Ttmp + b[n][1] * T[n][1] + b[n][0] * T[n][0];
+        T[n][0] = T[n][1];
+        T[n][1] = Ttmp;
       }
       y[ky] *= gain;
       kx++;
-    }
-    else
-    {
-      y[ky] = 0.0;		  /* at other instants feed zero-valued
-				   * samples */
-      for (n = 0; n < nblocks; n++)
-      {
-	Ttmp = 2. * (0.0 - c[n][0] * T[n][0] - c[n][1] * T[n][1]);
-	y[ky] += b[n][2] * Ttmp + b[n][1] * T[n][1] + b[n][0] * T[n][0];
-	T[n][0] = T[n][1];
-	T[n][1] = Ttmp;
+    } else {
+      y[ky] = 0.0;              /* at other instants feed zero-valued samples */
+      for (n = 0; n < nblocks; n++) {
+        Ttmp = 2. * (0.0 - c[n][0] * T[n][0] - c[n][1] * T[n][1]);
+        y[ky] += b[n][2] * Ttmp + b[n][1] * T[n][1] + b[n][0] * T[n][0];
+        T[n][0] = T[n][1];
+        T[n][1] = Ttmp;
       }
       y[ky] *= gain;
     }
   }
   return ky;
 }
+
 /* ............... End of scd_parallel_form_iir_up_kernel() ............... */
 
 
@@ -630,24 +574,24 @@ static long     scd_parallel_form_iir_up_kernel(lenx, x, y, iup, nblocks,
 
  ============================================================================
 */
-void            cascade_iir_reset(iir_ptr)
-  CASCADE_IIR        *iir_ptr;
+void cascade_iir_reset (iir_ptr)
+     CASCADE_IIR *iir_ptr;
 {
-  long            n;
-  float           (*T_ptr)[4];
+  long n;
+  float (*T_ptr)[4];
 
 
   T_ptr = iir_ptr->T;
-  for (n = 0; n < iir_ptr->nblocks; n++)
-  {
+  for (n = 0; n < iir_ptr->nblocks; n++) {
     T_ptr[n][0] = 0.0;
     T_ptr[n][1] = 0.0;
     T_ptr[n][2] = 0.0;
     T_ptr[n][3] = 0.0;
   }
 
-  iir_ptr->k0 = iir_ptr->idown;	  /* modulo counter for down-sampling */
+  iir_ptr->k0 = iir_ptr->idown; /* modulo counter for down-sampling */
 }
+
 /* .................... End of cascade_iir_reset() ...................... */
 
 
@@ -683,40 +627,39 @@ void            cascade_iir_reset(iir_ptr)
 
  ============================================================================
 */
-long            cascade_iir_kernel(lseg, x_ptr, iir_ptr, y_ptr)
-  long            lseg;
-  float          *x_ptr;
-  CASCADE_IIR    *iir_ptr;
-  float          *y_ptr;
+long cascade_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
+     long lseg;
+     float *x_ptr;
+     CASCADE_IIR *iir_ptr;
+     float *y_ptr;
 {
   if (iir_ptr->hswitch == 'U')
-    return
-      cascade_form_iir_up_kernel( /* returns number of output samples */
-				  lseg,	          /* In : input signal leng. */
-				  x_ptr,	  /* In : input sample array */
-				  y_ptr,	  /* Out: outp. sample array */
-				  iir_ptr->idown, /* In : dwnsmpl.factor */
-				  iir_ptr->nblocks, /*In: no.IIR-coeffs */
-				  iir_ptr->gain,  /* In : gain factor*/
-				  iir_ptr->a,	  /* In : num.coeffs */
-				  iir_ptr->b,	  /* In : denom.coeffs */
-				  iir_ptr->T	  /* I/O: state vars */
+    return cascade_form_iir_up_kernel ( /* returns number of output samples */
+                                        lseg,   /* In : input signal leng. */
+                                        x_ptr,  /* In : input sample array */
+                                        y_ptr,  /* Out: outp. sample array */
+                                        iir_ptr->idown, /* In : dwnsmpl.factor */
+                                        iir_ptr->nblocks,       /* In: no.IIR-coeffs */
+                                        iir_ptr->gain,  /* In : gain factor */
+                                        iir_ptr->a,     /* In : num.coeffs */
+                                        iir_ptr->b,     /* In : denom.coeffs */
+                                        iir_ptr->T      /* I/O: state vars */
       );
   else
-    return
-      cascade_form_iir_down_kernel(/* returns number of output samples */
-				   lseg,	  /* In : input signal leng. */
-				   x_ptr,	  /* In : input sample array */
-				   y_ptr,	  /* Out: outp. sample array */
-				   &(iir_ptr->k0), /*I/O: start idx,x-array */
-				   iir_ptr->idown, /*In : dwnsmpl.factor */
-				   iir_ptr->nblocks, /*In:no.of IIR-coeffs */
-				   iir_ptr->gain, /* In : gain factor */
-				   iir_ptr->a,	  /* In : numerator coeffs */
-				   iir_ptr->b,	  /* In : denom.coeffs */
-				   iir_ptr->T	  /* I/O: state vars */
+    return cascade_form_iir_down_kernel (       /* returns number of output samples */
+                                          lseg, /* In : input signal leng. */
+                                          x_ptr,        /* In : input sample array */
+                                          y_ptr,        /* Out: outp. sample array */
+                                          &(iir_ptr->k0),       /* I/O: start idx,x-array */
+                                          iir_ptr->idown,       /* In : dwnsmpl.factor */
+                                          iir_ptr->nblocks,     /* In:no.of IIR-coeffs */
+                                          iir_ptr->gain,        /* In : gain factor */
+                                          iir_ptr->a,   /* In : numerator coeffs */
+                                          iir_ptr->b,   /* In : denom.coeffs */
+                                          iir_ptr->T    /* I/O: state vars */
       );
 }
+
 /* .................... End of cascade_iir_kernel() ....................... */
 
 
@@ -761,25 +704,22 @@ long            cascade_iir_kernel(lseg, x_ptr, iir_ptr, y_ptr)
 
  ============================================================================
 */
-static long     cascade_form_iir_down_kernel(lenx, x, y, k0, idown, 
-                                             nblocks, gain, a, b, T)
-  long            lenx;
-  float          *x, *y;
-  long           *k0, idown, nblocks;
-  double          gain;
-  float           (*a)[2], (*b)[2], (*T)[4];
+static long cascade_form_iir_down_kernel (lenx, x, y, k0, idown, nblocks, gain, a, b, T)
+     long lenx;
+     float *x, *y;
+     long *k0, idown, nblocks;
+     double gain;
+     float (*a)[2], (*b)[2], (*T)[4];
 {
-  long            kx, ky, n;
-  double   xj,yj;
+  long kx, ky, n;
+  double xj, yj;
 
 
-  ky = 0;			  /* starting index in output array (y) */
-  for (kx = 0; kx < lenx; kx++)	  /* loop over all input samples */
-  {
-    xj = x[kx]; /* direct path */
-    for (n = 0; n < nblocks; n++)	/* loop over all second order filter */
-    {
-      yj =  xj + a[n][0] * T[n][0] + a[n][1] * T[n][1];
+  ky = 0;                       /* starting index in output array (y) */
+  for (kx = 0; kx < lenx; kx++) {       /* loop over all input samples */
+    xj = x[kx];                 /* direct path */
+    for (n = 0; n < nblocks; n++) {     /* loop over all second order filter */
+      yj = xj + a[n][0] * T[n][0] + a[n][1] * T[n][1];
       yj -= (b[n][0] * T[n][2] + b[n][1] * T[n][3]);
 
       /* Save samples in memory */
@@ -792,18 +732,17 @@ static long     cascade_form_iir_down_kernel(lenx, x, y, k0, idown,
       xj = yj;
     }
 
-    if (*k0 % idown == 0)	  /* compute output only every "idown"
-				   * samples */
-    {
+    if (*k0 % idown == 0) {     /* compute output only every "idown" * samples */
       /* Apply gain and update y-samples' counter */
       y[ky] = yj * gain;
       ky++;
     }
     (*k0)++;
   }
-  *k0 %= idown;			  /* avoid overflow by (*k0)++ */
+  *k0 %= idown;                 /* avoid overflow by (*k0)++ */
   return ky;
 }
+
 /* .............. End of cascade_form_iir_down_kernel() .............. */
 
 
@@ -847,32 +786,27 @@ static long     cascade_form_iir_down_kernel(lenx, x, y, k0, idown,
 
  ============================================================================
 */
-static long     cascade_form_iir_up_kernel(lenx, x, y, iup, nblocks,
-					   gain, a, b, T)
-  long            lenx;
-  float          *x, *y;
-  long            iup, nblocks;
-  double          gain;
-  float           (*a)[2], (*b)[2], (*T)[4];
+static long cascade_form_iir_up_kernel (lenx, x, y, iup, nblocks, gain, a, b, T)
+     long lenx;
+     float *x, *y;
+     long iup, nblocks;
+     double gain;
+     float (*a)[2], (*b)[2], (*T)[4];
 {
-  long            kx, ky, n;
+  long kx, ky, n;
   double xj, yj;
 
-  kx = 0;			  /* starting index in input array (x) */
-  for (ky = 0; ky < iup * lenx; ky++)	/* loop over all input samples */
-  {
-    /* Compute output only every "iup" compute output only every "iup" 
-     * samples by taking one input sample direct path OR by using a 
-     * zero-valued sample */
-    if (ky % iup == 0)		  
-      xj = x[kx];                
-    else                          
+  kx = 0;                       /* starting index in input array (x) */
+  for (ky = 0; ky < iup * lenx; ky++) { /* loop over all input samples */
+    /* Compute output only every "iup" compute output only every "iup" samples by taking one input sample direct path OR by using a zero-valued sample */
+    if (ky % iup == 0)
+      xj = x[kx];
+    else
       xj = 0.;
 
     /* Filter samples through all cascade stages */
-    for (n = 0; n < nblocks; n++)    
-    {
-      yj =  xj + a[n][0] * T[n][0] + a[n][1] * T[n][1];
+    for (n = 0; n < nblocks; n++) {
+      yj = xj + a[n][0] * T[n][0] + a[n][1] * T[n][1];
       yj -= (b[n][0] * T[n][2] + b[n][1] * T[n][3]);
 
       /* Save samples in memory */
@@ -884,13 +818,15 @@ static long     cascade_form_iir_up_kernel(lenx, x, y, iup, nblocks,
       /* The yj of this stage is the xj of the next */
       xj = yj;
     }
- 
+
     /* Apply the gain and update x counter if needed */
     y[ky] = yj * gain;
-    if (ky % iup == 0) kx++;
+    if (ky % iup == 0)
+      kx++;
   }
   return ky;
 }
+
 /* ............... End of cascade_form_iir_up_kernel() ............... */
 
 
@@ -927,38 +863,36 @@ static long     cascade_form_iir_up_kernel(lenx, x, y, iup, nblocks,
 
  ============================================================================
 */
-CASCADE_IIR *cascade_iir_init(nblocks, a, b, gain, idown, hswitch)
-  long            nblocks;
-  float           (*a)[2], (*b)[2];
-  double          gain;
-  long            idown;
-  char            hswitch;
+CASCADE_IIR *cascade_iir_init (nblocks, a, b, gain, idown, hswitch)
+     long nblocks;
+     float (*a)[2], (*b)[2];
+     double gain;
+     long idown;
+     char hswitch;
 {
-  static CASCADE_IIR *ptrIIR;	  /* pointer to the new struct */
-  float           fak;
-  float           (*T_ptr)[4];
-  long            n;
+  static CASCADE_IIR *ptrIIR;   /* pointer to the new struct */
+  float fak;
+  float (*T_ptr)[4];
+  long n;
 
 
   /* Allocate memory for a new struct */
-  ptrIIR = (CASCADE_IIR *) malloc((long) sizeof(CASCADE_IIR));
-  if (ptrIIR == (CASCADE_IIR *) 0L)
-  {
+  ptrIIR = (CASCADE_IIR *) malloc ((long) sizeof (CASCADE_IIR));
+  if (ptrIIR == (CASCADE_IIR *) 0L) {
     return 0;
   }
 
 
   /* Allocate memory for state variables */
-  if ((ptrIIR->T = (float (*)[4]) malloc((nblocks * 4) * sizeof(fak)))
-      == (float (*)[4]) 0)
-  {
-    free(ptrIIR);
+  if ((ptrIIR->T = (float (*)[4]) malloc ((nblocks * 4) * sizeof (fak)))
+      == (float (*)[4]) 0) {
+    free (ptrIIR);
     return 0;
   }
 
 
   /* fill coefficient sets */
-  ptrIIR->nblocks = nblocks;	  /* store number of 2'nd order blocks */
+  ptrIIR->nblocks = nblocks;    /* store number of 2'nd order blocks */
   ptrIIR->a = a;
   ptrIIR->b = b;
 
@@ -973,20 +907,20 @@ CASCADE_IIR *cascade_iir_init(nblocks, a, b, gain, idown, hswitch)
 
   /* Clear state variables */
   T_ptr = ptrIIR->T;
-  for (n = 0; n < nblocks; n++)
-  {
+  for (n = 0; n < nblocks; n++) {
     T_ptr[n][0] = 0.0;
     T_ptr[n][1] = 0.0;
     T_ptr[n][2] = 0.0;
     T_ptr[n][3] = 0.0;
   }
 
-  ptrIIR->k0 = idown;		  /* modulo counter for down-sampling */
+  ptrIIR->k0 = idown;           /* modulo counter for down-sampling */
 
 
   /* Exit returning pointer to struct */
   return (ptrIIR);
 }
+
 /* ....................... End of cascade_iir_init() ....................... */
 
 
@@ -1021,12 +955,13 @@ CASCADE_IIR *cascade_iir_init(nblocks, a, b, gain, idown, hswitch)
 
  ============================================================================
 */
-void            cascade_iir_free(iir_ptr)
-  CASCADE_IIR        *iir_ptr;
+void cascade_iir_free (iir_ptr)
+     CASCADE_IIR *iir_ptr;
 {
-  free(iir_ptr->T);		  /* free state variables */
-  free(iir_ptr);		  /* free allocated struct */
+  free (iir_ptr->T);            /* free state variables */
+  free (iir_ptr);               /* free allocated struct */
 }
+
 /* ....................... End of cascade_iir_free() ....................... */
 
 
@@ -1063,24 +998,23 @@ void            cascade_iir_free(iir_ptr)
 
  ============================================================================
 */
-void            direct_reset(iir_ptr)
-  DIRECT_IIR        *iir_ptr;
+void direct_reset (iir_ptr)
+     DIRECT_IIR *iir_ptr;
 {
-  long            n;
-  register float  (*T_ptr)[2];
+  long n;
+  register float (*T_ptr)[2];
   long nblocks = (iir_ptr->poleno > iir_ptr->zerono)
-                     ? iir_ptr->poleno 
-                     : iir_ptr->zerono;
+    ? iir_ptr->poleno : iir_ptr->zerono;
 
   T_ptr = iir_ptr->T;
-  for (n = 0; n < nblocks; n++)
-  {
+  for (n = 0; n < nblocks; n++) {
     T_ptr[n][0] = 0.0;
     T_ptr[n][1] = 0.0;
   }
 
-  iir_ptr->k0 = iir_ptr->idown;	  /* modulo counter for down-sampling */
+  iir_ptr->k0 = iir_ptr->idown; /* modulo counter for down-sampling */
 }
+
 /* ....................... End of direct_reset() ....................... */
 
 
@@ -1116,42 +1050,41 @@ void            direct_reset(iir_ptr)
 
  ============================================================================
 */
-long            direct_iir_kernel(lseg, x_ptr, iir_ptr, y_ptr)
-  long            lseg;
-  float          *x_ptr;
-  DIRECT_IIR    *iir_ptr;
-  float          *y_ptr;
+long direct_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
+     long lseg;
+     float *x_ptr;
+     DIRECT_IIR *iir_ptr;
+     float *y_ptr;
 {
   if (iir_ptr->hswitch == 'U')
-    return
-      direct_form_iir_up_kernel( /* returns number of output samples */
-				lseg,	          /* In : input signal leng. */
-				x_ptr,	  /* In : input sample array */
-				y_ptr,	  /* Out: outp. sample array */
-				iir_ptr->idown, /* In : dwnsmpl.factor */
-				iir_ptr->zerono, /*In: no.IIR-zeroes */
-				iir_ptr->poleno, /*In: no.IIR-poles */
-				iir_ptr->gain,  /* In : gain factor*/
-				iir_ptr->a,	  /* In : num.coeffs */
-				iir_ptr->b,	  /* In : denom.coeffs */
-				iir_ptr->T	  /* I/O: state vars */
-				);
+    return direct_form_iir_up_kernel (  /* returns number of output samples */
+                                       lseg,    /* In : input signal leng. */
+                                       x_ptr,   /* In : input sample array */
+                                       y_ptr,   /* Out: outp. sample array */
+                                       iir_ptr->idown,  /* In : dwnsmpl.factor */
+                                       iir_ptr->zerono, /* In: no.IIR-zeroes */
+                                       iir_ptr->poleno, /* In: no.IIR-poles */
+                                       iir_ptr->gain,   /* In : gain factor */
+                                       iir_ptr->a,      /* In : num.coeffs */
+                                       iir_ptr->b,      /* In : denom.coeffs */
+                                       iir_ptr->T       /* I/O: state vars */
+      );
   else
-    return
-      direct_form_iir_down_kernel(/* returns number of output samples */
-				  lseg,	  /* In : input signal leng. */
-				  x_ptr,	  /* In : input sample array */
-				  y_ptr,	  /* Out: outp. sample array */
-				  &(iir_ptr->k0), /*I/O: start idx,x-array */
-				  iir_ptr->idown, /*In : dwnsmpl.factor */
-				  iir_ptr->zerono, /*In: no.IIR-zeroes */
-				  iir_ptr->poleno, /*In: no.IIR-poles */
-				  iir_ptr->gain, /* In : gain factor */
-				  iir_ptr->a,	  /* In : numerator coeffs */
-				  iir_ptr->b,	  /* In : denom.coeffs */
-				  iir_ptr->T	  /* I/O: state vars */
-				  );
+    return direct_form_iir_down_kernel (        /* returns number of output samples */
+                                         lseg,  /* In : input signal leng. */
+                                         x_ptr, /* In : input sample array */
+                                         y_ptr, /* Out: outp. sample array */
+                                         &(iir_ptr->k0),        /* I/O: start idx,x-array */
+                                         iir_ptr->idown,        /* In : dwnsmpl.factor */
+                                         iir_ptr->zerono,       /* In: no.IIR-zeroes */
+                                         iir_ptr->poleno,       /* In: no.IIR-poles */
+                                         iir_ptr->gain, /* In : gain factor */
+                                         iir_ptr->a,    /* In : numerator coeffs */
+                                         iir_ptr->b,    /* In : denom.coeffs */
+                                         iir_ptr->T     /* I/O: state vars */
+      );
 }
+
 /* .................... End of direct_iir_kernel() ....................... */
 
 
@@ -1200,51 +1133,49 @@ long            direct_iir_kernel(lseg, x_ptr, iir_ptr, y_ptr)
 
  ============================================================================
 */
-static long     direct_form_iir_down_kernel(lenx, x, y, k0, idown, 
-                                             zerono, poleno, gain, a, b, T)
-  long            lenx;
-  float          *x, *y;
-  long           *k0, idown, zerono, poleno;
-  double          gain;
-  float           *a, *b, (*T)[2];
+static long direct_form_iir_down_kernel (lenx, x, y, k0, idown, zerono, poleno, gain, a, b, T)
+     long lenx;
+     float *x, *y;
+     long *k0, idown, zerono, poleno;
+     double gain;
+     float *a, *b, (*T)[2];
 {
-  long            kx, ky, n;
-  double   yj;
+  long kx, ky, n;
+  double yj;
 
 
-  ky = 0;			  /* starting index in output array (y) */
-  for (kx = 0; kx < lenx; kx++)	  /* loop over all input samples */
-  {
+  ky = 0;                       /* starting index in output array (y) */
+  for (kx = 0; kx < lenx; kx++) {       /* loop over all input samples */
     /* Save xk in memory */
-    T[0][0] = x[kx]; 
+    T[0][0] = x[kx];
 
     /* Filter samples through numerator (zero) part */
-    for (yj=0, n = 0; n < zerono; n++)    
-      yj +=  a[n] * T[n][0];
+    for (yj = 0, n = 0; n < zerono; n++)
+      yj += a[n] * T[n][0];
 
     /* Filter samples through denominator (pole) part */
-    for (n = 1; n < poleno; n++)    
-      yj -= b[n] * T[n-1][1];
+    for (n = 1; n < poleno; n++)
+      yj -= b[n] * T[n - 1][1];
 
     /* Shift samples in memory (to the right) for next step */
-    for (n = zerono-1; n >0; n--)    
-      T[n][0] = T[n-1][0];
-    for (n = poleno-1; n >0; n--)    
-      T[n][1] = T[n-1][1];
+    for (n = zerono - 1; n > 0; n--)
+      T[n][0] = T[n - 1][0];
+    for (n = poleno - 1; n > 0; n--)
+      T[n][1] = T[n - 1][1];
     T[0][1] = yj;
 
     /* Save to output only every "idown" samples */
-    if (*k0 % idown == 0)
-    {
+    if (*k0 % idown == 0) {
       /* Apply gain and update y-samples' counter */
       y[ky] = yj * gain;
       ky++;
     }
     (*k0)++;
   }
-  *k0 %= idown;			  /* avoid overflow by (*k0)++ */
+  *k0 %= idown;                 /* avoid overflow by (*k0)++ */
   return ky;
 }
+
 /* .............. End of direct_form_iir_down_kernel() .............. */
 
 
@@ -1294,46 +1225,44 @@ static long     direct_form_iir_down_kernel(lenx, x, y, k0, idown,
 
  ============================================================================
 */
-static long     direct_form_iir_up_kernel(lenx, x, y, iup, zerono, poleno,
-					   gain, a, b, T)
-  long            lenx;
-  float          *x, *y;
-  long            iup, zerono, poleno;
-  double          gain;
-  float           *a, *b, (*T)[2];
+static long direct_form_iir_up_kernel (lenx, x, y, iup, zerono, poleno, gain, a, b, T)
+     long lenx;
+     float *x, *y;
+     long iup, zerono, poleno;
+     double gain;
+     float *a, *b, (*T)[2];
 {
-  long            kx, ky, n;
+  long kx, ky, n;
   register double yj;
 
-  kx = 0;			  /* starting index in input array (x) */
-  for (ky = 0; ky < iup * lenx; ky++)	/* loop over all input samples */
-  {
-    /* Compute output only every "iup" compute output only every "iup" 
-     * samples by taking one input sample direct path OR by using a 
-     * zero-valued sample; already save on memory array */
+  kx = 0;                       /* starting index in input array (x) */
+  for (ky = 0; ky < iup * lenx; ky++) { /* loop over all input samples */
+    /* Compute output only every "iup" compute output only every "iup" samples by taking one input sample direct path OR by using a zero-valued sample; already save on memory array */
     T[0][0] = (ky % iup == 0) ? x[kx] : 0;
 
     /* Filter samples through numerator (zero) part */
-    for (yj=0, n = 0; n < zerono; n++)    
-      yj +=  a[n] * T[n][0];
+    for (yj = 0, n = 0; n < zerono; n++)
+      yj += a[n] * T[n][0];
 
     /* Filter samples through denominator (pole) part */
-    for (n = 1; n < poleno; n++)    
-      yj -= b[n] * T[n-1][1];
+    for (n = 1; n < poleno; n++)
+      yj -= b[n] * T[n - 1][1];
 
     /* Shift samples in memory (to the right) for next step */
-    for (n = zerono-1; n >0; n--)    
-      T[n][0] = T[n-1][0];
-    for (n = poleno-1; n >0; n--)    
-      T[n][1] = T[n-1][1];
+    for (n = zerono - 1; n > 0; n--)
+      T[n][0] = T[n - 1][0];
+    for (n = poleno - 1; n > 0; n--)
+      T[n][1] = T[n - 1][1];
     T[0][1] = yj;
 
     /* Apply the gain and update x counter if needed */
     y[ky] = yj * gain;
-    if (ky % iup == 0) kx++;
+    if (ky % iup == 0)
+      kx++;
   }
   return ky;
 }
+
 /* ............... End of direct_form_iir_up_kernel() ............... */
 
 
@@ -1371,42 +1300,40 @@ static long     direct_form_iir_up_kernel(lenx, x, y, iup, zerono, poleno,
 
  ============================================================================
 */
-DIRECT_IIR *direct_iir_init(zerono, poleno, a, b, gain, idown, hswitch)
-  long            zerono, poleno;
-  float           *a, *b;
-  double          gain;
-  long            idown;
-  char            hswitch;
+DIRECT_IIR *direct_iir_init (zerono, poleno, a, b, gain, idown, hswitch)
+     long zerono, poleno;
+     float *a, *b;
+     double gain;
+     long idown;
+     char hswitch;
 {
-  static DIRECT_IIR *ptrIIR;	  /* pointer to the new struct */
-  float           fak;
-  float           (*T_ptr)[2];
-  long            n;
+  static DIRECT_IIR *ptrIIR;    /* pointer to the new struct */
+  float fak;
+  float (*T_ptr)[2];
+  long n;
   long nblocks;
 
   /* Get greater of zero and pole */
-  nblocks = zerono > poleno? zerono: poleno;
+  nblocks = zerono > poleno ? zerono : poleno;
 
   /* Allocate memory for a new struct */
-  ptrIIR = (DIRECT_IIR *) malloc((long) sizeof(DIRECT_IIR));
-  if (ptrIIR == (DIRECT_IIR *) 0L)
-  {
+  ptrIIR = (DIRECT_IIR *) malloc ((long) sizeof (DIRECT_IIR));
+  if (ptrIIR == (DIRECT_IIR *) 0L) {
     return 0;
   }
 
 
   /* Allocate memory for state variables */
-  if ((ptrIIR->T = (float (*)[2]) malloc((nblocks * 2) * sizeof(fak)))
-      == (float (*)[2]) 0)
-  {
-    free(ptrIIR);
+  if ((ptrIIR->T = (float (*)[2]) malloc ((nblocks * 2) * sizeof (fak)))
+      == (float (*)[2]) 0) {
+    free (ptrIIR);
     return 0;
   }
 
 
   /* fill coefficient sets */
-  ptrIIR->poleno = poleno;	  /* store number of poles */
-  ptrIIR->zerono = zerono;	  /* store number of zeroes */
+  ptrIIR->poleno = poleno;      /* store number of poles */
+  ptrIIR->zerono = zerono;      /* store number of zeroes */
   ptrIIR->a = a;
   ptrIIR->b = b;
 
@@ -1421,18 +1348,18 @@ DIRECT_IIR *direct_iir_init(zerono, poleno, a, b, gain, idown, hswitch)
 
   /* Clear state variables */
   T_ptr = ptrIIR->T;
-  for (n = 0; n < nblocks; n++)
-  {
-    T_ptr[n][0] = 0.0; /* Numerator memory */
-    T_ptr[n][1] = 0.0; /* Denominator memory */
+  for (n = 0; n < nblocks; n++) {
+    T_ptr[n][0] = 0.0;          /* Numerator memory */
+    T_ptr[n][1] = 0.0;          /* Denominator memory */
   }
 
-  ptrIIR->k0 = idown;		  /* modulo counter for down-sampling */
+  ptrIIR->k0 = idown;           /* modulo counter for down-sampling */
 
 
   /* Exit returning pointer to struct */
   return (ptrIIR);
 }
+
 /* ....................... End of direct_iir_init() ....................... */
 
 
@@ -1467,12 +1394,13 @@ DIRECT_IIR *direct_iir_init(zerono, poleno, a, b, gain, idown, hswitch)
 
  ============================================================================
 */
-void            direct_iir_free(iir_ptr)
-  DIRECT_IIR        *iir_ptr;
+void direct_iir_free (iir_ptr)
+     DIRECT_IIR *iir_ptr;
 {
-  free(iir_ptr->T);		  /* free state variables */
-  free(iir_ptr);		  /* free allocated struct */
+  free (iir_ptr->T);            /* free state variables */
+  free (iir_ptr);               /* free allocated struct */
 }
+
 /* ....................... End of direct_iir_free() ....................... */
 
 

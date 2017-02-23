@@ -48,19 +48,19 @@ extern int currCounter;
  *  Prototypes for enhanced 16/32 bit arithmetic operators
  *
  *****************************************************************************/
-Word16 shl_r(   Word16 var1,   Word16 var2);
-Word32 L_shl_r( Word32 L_var1, Word16 var2);
+Word16 shl_r (Word16 var1, Word16 var2);
+Word32 L_shl_r (Word32 L_var1, Word16 var2);
 
 
-Word16 lshl(    Word16 var1,   Word16 var2);
-Word16 lshr(    Word16 var1,   Word16 var2);
-Word32 L_lshl(  Word32 L_var1, Word16 var2);
-Word32 L_lshr(  Word32 L_var1, Word16 var2);
+Word16 lshl (Word16 var1, Word16 var2);
+Word16 lshr (Word16 var1, Word16 var2);
+Word32 L_lshl (Word32 L_var1, Word16 var2);
+Word32 L_lshr (Word32 L_var1, Word16 var2);
 
-Word16 rotr(    Word16 var1,   Word16 var2, Word16 *var3);
-Word16 rotl(    Word16 var1,   Word16 var2, Word16 *var3);
-Word32 L_rotr(  Word32 var1,   Word16 var2, Word16 *var3);
-Word32 L_rotl(  Word32 var1,   Word16 var2, Word16 *var3);
+Word16 rotr (Word16 var1, Word16 var2, Word16 * var3);
+Word16 rotl (Word16 var1, Word16 var2, Word16 * var3);
+Word32 L_rotr (Word32 var1, Word16 var2, Word16 * var3);
+Word32 L_rotl (Word32 var1, Word16 var2, Word16 * var3);
 
 
 
@@ -98,19 +98,19 @@ Word32 L_rotl(  Word32 var1,   Word16 var2, Word16 *var3);
  *                the range : 0x8000 <= L_var_out <= 0x7fff.
  *
  *****************************************************************************/
-static __inline Word16 s_max( Word16 var1, Word16 var2) {
-   Word16 var_out;
+static __inline Word16 s_max (Word16 var1, Word16 var2) {
+  Word16 var_out;
 
-   if( var1 >= var2)
-      var_out = var1;
-   else
-      var_out = var2;
+  if (var1 >= var2)
+    var_out = var1;
+  else
+    var_out = var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].s_max++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].s_max++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -142,19 +142,19 @@ static __inline Word16 s_max( Word16 var1, Word16 var2) {
  *                the range : 0x8000 <= var_out <= 0x7fff.
  *
  *****************************************************************************/
-static __inline Word16 s_min( Word16 var1, Word16 var2) {
-   Word16 var_out;
+static __inline Word16 s_min (Word16 var1, Word16 var2) {
+  Word16 var_out;
 
-   if( var1 <= var2)
-      var_out = var1;
-   else
-      var_out = var2;
+  if (var1 <= var2)
+    var_out = var1;
+  else
+    var_out = var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].s_min++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].s_min++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -186,19 +186,19 @@ static __inline Word16 s_min( Word16 var1, Word16 var2) {
  *                range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-static __inline Word32 L_max( Word32 L_var1, Word32 L_var2) {
-   Word32 L_var_out;
+static __inline Word32 L_max (Word32 L_var1, Word32 L_var2) {
+  Word32 L_var_out;
 
-   if( L_var1 >= L_var2)
-      L_var_out = L_var1;
-   else
-      L_var_out = L_var2;
+  if (L_var1 >= L_var2)
+    L_var_out = L_var1;
+  else
+    L_var_out = L_var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].L_max++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L_max++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 
@@ -230,19 +230,19 @@ static __inline Word32 L_max( Word32 L_var1, Word32 L_var2) {
  *                range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-static __inline Word32 L_min( Word32 L_var1, Word32 L_var2) {
-   Word32 L_var_out;
+static __inline Word32 L_min (Word32 L_var1, Word32 L_var2) {
+  Word32 L_var_out;
 
-   if( L_var1 <= L_var2)
-      L_var_out = L_var1;
-   else
-      L_var_out = L_var2;
+  if (L_var1 <= L_var2)
+    L_var_out = L_var1;
+  else
+    L_var_out = L_var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].L_min++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L_min++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 
@@ -283,16 +283,16 @@ static __inline Word32 L_min( Word32 L_var1, Word32 L_var2) {
  *                falls in the range 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-static __inline Word16 s_and( Word16 var1, Word16 var2) {
-   Word16 var_out;
+static __inline Word16 s_and (Word16 var1, Word16 var2) {
+  Word16 var_out;
 
-   var_out = var1 & var2;
+  var_out = var1 & var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].s_and++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].s_and++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -325,16 +325,16 @@ static __inline Word16 s_and( Word16 var1, Word16 var2) {
  *                falls in the range 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-static __inline Word32 L_and( Word32 L_var1, Word32 L_var2) {
-   Word32 L_var_out;
+static __inline Word32 L_and (Word32 L_var1, Word32 L_var2) {
+  Word32 L_var_out;
 
-   L_var_out = L_var1 & L_var2;
+  L_var_out = L_var1 & L_var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].L_and++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L_and++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 
@@ -367,16 +367,16 @@ static __inline Word32 L_and( Word32 L_var1, Word32 L_var2) {
  *                falls in the range 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-static __inline Word16 s_or( Word16 var1, Word16 var2) {
-   Word16 var_out;
+static __inline Word16 s_or (Word16 var1, Word16 var2) {
+  Word16 var_out;
 
-   var_out = var1 | var2;
+  var_out = var1 | var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].s_or++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].s_or++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -409,17 +409,17 @@ static __inline Word16 s_or( Word16 var1, Word16 var2) {
  *                falls in the range 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-static __inline Word32 L_or( Word32 L_var1, Word32 L_var2) {
+static __inline Word32 L_or (Word32 L_var1, Word32 L_var2) {
 
-   Word32 L_var_out;
+  Word32 L_var_out;
 
-   L_var_out = L_var1 | L_var2;
+  L_var_out = L_var1 | L_var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].L_or++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L_or++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 
@@ -452,16 +452,16 @@ static __inline Word32 L_or( Word32 L_var1, Word32 L_var2) {
  *                falls in the range 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-static __inline Word16 s_xor( Word16 var1, Word16 var2) {
-   Word16 var_out;
+static __inline Word16 s_xor (Word16 var1, Word16 var2) {
+  Word16 var_out;
 
-   var_out = var1 ^ var2;
+  var_out = var1 ^ var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].s_xor++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].s_xor++;
+#endif /* ifdef WMOPS */
 
-   return( var_out);
+  return (var_out);
 }
 
 
@@ -494,16 +494,16 @@ static __inline Word16 s_xor( Word16 var1, Word16 var2) {
  *                falls in the range 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-static __inline Word32 L_xor( Word32 L_var1, Word32 L_var2) {
-   Word32 L_var_out;
+static __inline Word32 L_xor (Word32 L_var1, Word32 L_var2) {
+  Word32 L_var_out;
 
-   L_var_out = L_var1 ^ L_var2;
+  L_var_out = L_var1 ^ L_var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].L_xor++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L_xor++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 

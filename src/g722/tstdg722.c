@@ -68,45 +68,41 @@
 /***************************************/
 /* Test of the G.722 decoder algorithm */
 /***************************************/
-int             main (argc, argv)
-int argc; 
-char *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
 
   /* declarations locales */
   /************************/
 
-  Word16          il, ih, mode, rl, rh, rs, incode;
-  FILE           *cod, *rcl, *rch;
-  int             read1;
-  long            iter, error;
-  char           *usr_mode, *c;
-  g722_state      decoder;
+  Word16 il, ih, mode, rl, rh, rs, incode;
+  FILE *cod, *rcl, *rch;
+  int read1;
+  long iter, error;
+  char *usr_mode, *c;
+  g722_state decoder;
 
   /* debut du code executable */
   /****************************/
 
-  if (argc != 4)
-  {
+  if (argc != 4) {
     printf ("\n Mauvais usage de TESTD64K");
     printf ("\n USE: TESTD64K fichx.COD fichy.RCx. fichy.RC0.. EXIT");
     exit (0);
   }
 
-  if ((cod = fopen (argv[1], "r+b")) == NULL)
-  {
+  if ((cod = fopen (argv[1], "r+b")) == NULL) {
     printf ("TESTD64K ne peut pas ouvrir %s \n", argv[1]);
     exit (0);
   }
 
-  if ((rcl = fopen (argv[2], "r+b")) == NULL)
-  {
+  if ((rcl = fopen (argv[2], "r+b")) == NULL) {
     printf ("TESTD64K ne peut pas ouvrir %s \n", argv[2]);
     exit (0);
   }
 
-  if ((rch = fopen (argv[3], "r+b")) == NULL)
-  {
+  if ((rch = fopen (argv[3], "r+b")) == NULL) {
     printf ("TESTD64K ne peut pas ouvrir %s \n", argv[3]);
     exit (0);
   }
@@ -116,14 +112,12 @@ char *argv[];
 
   /* parse directories in name */
   c = argv[2];
-  usr_mode = (char *)NULL;
-  while ((c=strpbrk(c, "]\\/"))!=NULL)
-  { 
+  usr_mode = (char *) NULL;
+  while ((c = strpbrk (c, "]\\/")) != NULL) {
     usr_mode = c++;
   }
 
-  switch (usr_mode == NULL ? argv[2][8] : *(usr_mode + 9))
-  {
+  switch (usr_mode == NULL ? argv[2][8] : *(usr_mode + 9)) {
   case '1':
     mode = 1;
     break;
@@ -150,62 +144,54 @@ char *argv[];
   printf ("\n***************************************************************");
   printf ("\n* TESTING OF THE DECODER OF ITU-T G722 WIDE BAND SPECH CODER  *");
   printf ("\n***************************************************************");
-  printf ("\n\n  BEGINING OF PROCESSING INPUT FILE %s : REF_L %s  REF_H %s\n",
-	  argv[1], argv[2], argv[3]);
+  printf ("\n\n  BEGINING OF PROCESSING INPUT FILE %s : REF_L %s  REF_H %s\n", argv[1], argv[2], argv[3]);
 
-  while ((read1 = fread (&incode, sizeof (Word16), 1, cod)) == 1)
-  {
+  while ((read1 = fread (&incode, sizeof (Word16), 1, cod)) == 1) {
 
-    if (read1 != 1)
-    {
+    if (read1 != 1) {
       printf ("\n Erreur de lecture fichier COD");
       exit (0);
     }
 
-    /* calcul du reset : !! Attention RESET ITU-T ACTIF = 1  */
-		/*********************************************************/
+    /* calcul du reset : !! Attention RESET ITU-T ACTIF = 1 */
+                /*********************************************************/
 
     rs = (incode & 1);
 
     /* cadrage des entrees */
-		/***********************/
+                /***********************/
 
-    il = (incode >> 8) & 0x003F;	/* 6 bits de code SBL */
-    ih = ((incode >> 8) >> 6) & 0x0003;		/* 2 bits de code SBH */
+    il = (incode >> 8) & 0x003F;        /* 6 bits de code SBL */
+    ih = ((incode >> 8) >> 6) & 0x0003; /* 2 bits de code SBH */
 
     /* appel des decodeurs SBL et SBH */
-		/**********************************/
+                /**********************************/
 
     rl = lsbdec (il, mode, rs, &decoder);
     rh = hsbdec (ih, rs, &decoder);
 
     /* mise en forme des codes de sortie ; si rs actif alors code = 1 */
-		/****************************************************************/
+                /****************************************************************/
 
-    if (rs == 1)
-    {
+    if (rs == 1) {
       rl = rh = 1;
-    }
-    else
-    {
-      rl = (rl << 1) & 0xFFFE;	/* decalage des sorties  */
-      rh = (rh << 1) & 0xFFFE;	/* idem bande basse      */
+    } else {
+      rl = (rl << 1) & 0xFFFE;  /* decalage des sorties */
+      rh = (rh << 1) & 0xFFFE;  /* idem bande basse */
     }
 
     /* lecture du code de reference bande basse */
-		/********************************************/
+                /********************************************/
 
-    if (fread (&incode, sizeof (Word16), 1, rcl) != 1)
-    {
+    if (fread (&incode, sizeof (Word16), 1, rcl) != 1) {
       printf ("\n Erreur de lecture fichier RCx");
       exit (0);
     }
 
     /* comparaison avec le code de reference bande basse */
-		/*****************************************************/
+                /*****************************************************/
 
-    if (incode != rl)
-    {
+    if (incode != rl) {
       printf ("\nError : sbl_C = %04X  sbh_CCITT = %04X  ", rl, incode);
       error++;
       printf ("\n ITERATION %ld", iter + 1);
@@ -214,19 +200,17 @@ char *argv[];
     }
 
     /* lecture du code de reference bande haute */
-		/********************************************/
+                /********************************************/
 
-    if (fread (&incode, sizeof (Word16), 1, rch) != 1)
-    {
+    if (fread (&incode, sizeof (Word16), 1, rch) != 1) {
       printf ("\n Erreur de lecture fichier RC0");
       exit (0);
     }
 
     /* comparaison avec le code de reference bande haute */
-		/*****************************************************/
+                /*****************************************************/
 
-    if (incode != rh)
-    {
+    if (incode != rh) {
       printf ("\nError : sbh_C = %04X  sbh_CCITT = %04X  ", rl, incode);
       error++;
       printf ("\n ITERATION %ld", iter + 1);
@@ -236,8 +220,7 @@ char *argv[];
 
     iter++;
 
-    if (iter % 512L == 0L)
-    {
+    if (iter % 512L == 0L) {
       printf ("\r OK ITERATION %ld ", iter);
     }
 
@@ -245,8 +228,7 @@ char *argv[];
   fclose (cod);
   fclose (rcl);
   fclose (rch);
-  printf ("\n\n  END OF PROCESSING INPUT FILE %s : REF_L %s  REF_H %s\n",
-	  argv[1], argv[2], argv[3]);
+  printf ("\n\n  END OF PROCESSING INPUT FILE %s : REF_L %s  REF_H %s\n", argv[1], argv[2], argv[3]);
 
 
   printf ("\n NUMBER OF ERROR(s) = %ld ", error);

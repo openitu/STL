@@ -32,10 +32,10 @@
 
 
 /* Function prototypes */
-void  alaw_compress ARGS((long lseg, short *linbuf, short *logbuf));
-void  alaw_expand ARGS((long lseg, short *logbuf, short *linbuf));
-void  ulaw_compress ARGS((long lseg, short *linbuf, short *logbuf));
-void  ulaw_expand ARGS((long lseg, short *logbuf, short *linbuf));
+void alaw_compress ARGS ((long lseg, short *linbuf, short *logbuf));
+void alaw_expand ARGS ((long lseg, short *logbuf, short *linbuf));
+void ulaw_compress ARGS ((long lseg, short *linbuf, short *logbuf));
+void ulaw_expand ARGS ((long lseg, short *logbuf, short *linbuf));
 
 /* Definitions for better user interface (?!) */
 #define IS_LIN 1

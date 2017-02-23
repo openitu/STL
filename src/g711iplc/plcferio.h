@@ -24,17 +24,16 @@ extern "C" {
 /*
  * code to read the PLC mask in the ITU-T software tools format.
  */
-typedef struct _readplcmask {
-	long	(*readfunc)(short*,long, FILE*);
-	FILE	*fp;
-} readplcmask;
+  typedef struct _readplcmask {
+    long (*readfunc) (short *, long, FILE *);
+    FILE *fp;
+  } readplcmask;
 
-void readplcmask_open(readplcmask*, char *fname);
-int readplcmask_erased(readplcmask*);
-void readplcmask_close(readplcmask*);
+  void readplcmask_open (readplcmask *, char *fname);
+  int readplcmask_erased (readplcmask *);
+  void readplcmask_close (readplcmask *);
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif  /* __READPLCMASK_H__ */
+#endif                          /* __READPLCMASK_H__ */

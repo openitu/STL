@@ -31,7 +31,7 @@
 #endif
 
 #ifdef P
-#undef	P	/* gnu stdio.h actually defines this... 	*/
+#undef	P                       /* gnu stdio.h actually defines this...  */
 #undef	P0
 #undef	P1
 #undef	P2
@@ -51,7 +51,7 @@
 #	define	P1(x, a)			(a)
 #	define	P2(x, a, b)			(a, b)
 #	define	P3(x, a, b, c)			(a, b, c)
-#	define	P4(x, a, b, c, d)		(a, b, c, d)	
+#	define	P4(x, a, b, c, d)		(a, b, c, d)
 #	define	P5(x, a, b, c, d, e)		(a, b, c, d, e)
 #	define	P6(x, a, b, c, d, e, f)		(a, b, c, d, e, f)
 #	define	P7(x, a, b, c, d, e, f, g)	(a, b, c, d, e, f, g)
@@ -71,6 +71,6 @@
 #	define	P7(x, a, b, c, d, e, f, g)	x a; b; c; d; e; f; g;
 #	define	P8(x, a, b, c, d, e, f, g, h)	x a; b; c; d; e; f; g; h;
 
-#endif  /* !NeedFunctionPrototypes */
+#endif /* !NeedFunctionPrototypes */
 
-#endif	/* PROTO_H */
+#endif /* PROTO_H */

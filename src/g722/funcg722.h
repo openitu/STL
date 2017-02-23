@@ -31,47 +31,47 @@
 #define FUNCG722_H 200
 
 #ifdef OLD_WAY
-Word16 scalel();
+Word16 scalel ();
 
-Word16 quantl();
+Word16 quantl ();
 
-void uppol2();
+void uppol2 ();
 
-void uppol1();
+void uppol1 ();
 
-void upzero();
+void upzero ();
 
-Word16 filtep();
+Word16 filtep ();
 
-Word16 filtez();
+Word16 filtez ();
 
-Word16 invqal();
+Word16 invqal ();
 
-Word16 limit();
+Word16 limit ();
 
-Word16 invqbl();
+Word16 invqbl ();
 
-Word16 invqah();
+Word16 invqah ();
 
-Word16 logsch();
+Word16 logsch ();
 
-Word16 scaleh();
+Word16 scaleh ();
 
-Word16 quanth();
+Word16 quanth ();
 
-Word16 hsbdec();
+Word16 hsbdec ();
 
-Word16 hsbcod();
+Word16 hsbcod ();
 
-Word16 lsbdec();
+Word16 lsbdec ();
 
-Word16 lsbcod();
+Word16 lsbcod ();
 
-Word16 logscl();
+Word16 logscl ();
 
-void qmf_tx();
+void qmf_tx ();
 
-void qmf_rx();
+void qmf_rx ();
 #endif
 
 /* DEFINITION FOR SMART PROTOTYPES */
@@ -84,29 +84,27 @@ void qmf_rx();
 #endif
 
 
-Word16 lsbcod ARGS((Word16 xl, Word16 rs, g722_state *s));
-Word16 hsbcod ARGS((Word16 xh, Word16 rs, g722_state *s));
-Word16 lsbdec ARGS((Word16 ilr, Word16 mode, Word16 rs, g722_state *s));
-Word16 hsbdec ARGS((Word16 ih, Word16 rs, g722_state *s));
-Word16 quantl ARGS((Word16 el, Word16 detl));
-Word16 quanth ARGS((Word16 eh, Word16 deth));
-Word16 filtep ARGS((Word16 rlt [], Word16 al []));
-Word16 filtez ARGS((Word16 dlt [], Word16 bl []));
-Word16 invqal ARGS((Word16 il, Word16 detl));
-Word16 invqbl ARGS((Word16 ilr, Word16 detl, Word16 mode));
-Word16 invqah ARGS((Word16 ih, Word16 deth));
-Word16 limit ARGS((Word16 rl));
-Word16 logsch ARGS((Word16 ih, Word16 nbh));
-Word16 logscl ARGS((Word16 il, Word16 nbl));
-Word16 scalel ARGS((Word16 nbpl));
-Word16 scaleh ARGS((Word16 nbph));
-void uppol1 ARGS((Word16 al [], Word16 plt []));
-void uppol2 ARGS((Word16 al [], Word16 plt []));
-void upzero ARGS((Word16 dlt [], Word16 bl []));
-void qmf_tx ARGS((Word16 xin0, Word16 xin1, Word16 *xl, Word16 *xh, 
-		  g722_state *s));
-void qmf_rx ARGS((Word16 rl, Word16 rh, Word16 *xout1, Word16 *xout2, 
-		  g722_state *s));
+Word16 lsbcod ARGS ((Word16 xl, Word16 rs, g722_state * s));
+Word16 hsbcod ARGS ((Word16 xh, Word16 rs, g722_state * s));
+Word16 lsbdec ARGS ((Word16 ilr, Word16 mode, Word16 rs, g722_state * s));
+Word16 hsbdec ARGS ((Word16 ih, Word16 rs, g722_state * s));
+Word16 quantl ARGS ((Word16 el, Word16 detl));
+Word16 quanth ARGS ((Word16 eh, Word16 deth));
+Word16 filtep ARGS ((Word16 rlt[], Word16 al[]));
+Word16 filtez ARGS ((Word16 dlt[], Word16 bl[]));
+Word16 invqal ARGS ((Word16 il, Word16 detl));
+Word16 invqbl ARGS ((Word16 ilr, Word16 detl, Word16 mode));
+Word16 invqah ARGS ((Word16 ih, Word16 deth));
+Word16 limit ARGS ((Word16 rl));
+Word16 logsch ARGS ((Word16 ih, Word16 nbh));
+Word16 logscl ARGS ((Word16 il, Word16 nbl));
+Word16 scalel ARGS ((Word16 nbpl));
+Word16 scaleh ARGS ((Word16 nbph));
+void uppol1 ARGS ((Word16 al[], Word16 plt[]));
+void uppol2 ARGS ((Word16 al[], Word16 plt[]));
+void upzero ARGS ((Word16 dlt[], Word16 bl[]));
+void qmf_tx ARGS ((Word16 xin0, Word16 xin1, Word16 * xl, Word16 * xh, g722_state * s));
+void qmf_rx ARGS ((Word16 rl, Word16 rh, Word16 * xout1, Word16 * xout2, g722_state * s));
 
 #endif /* FUNCG722_H */
 /* ........................ End of file funcg722.h ......................... */

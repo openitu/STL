@@ -73,21 +73,21 @@
    ========================================================================= */
 
 /* ..... Generic include files ..... */
-#include "ugstdemo.h"		/* general UGST definitions */
-#include <stdio.h>		/* Standard I/O Definitions */
+#include "ugstdemo.h"           /* general UGST definitions */
+#include <stdio.h>              /* Standard I/O Definitions */
 #include <math.h>
 #include <stdlib.h>
-#include <string.h>		/* memset */
-#include <ctype.h>		/* toupper */
+#include <string.h>             /* memset */
+#include <ctype.h>              /* toupper */
 
 /* This strange construction is necessary for DJGPP, because "unix"
                    is defined, even it being MSDOS! */
 #if defined (unix) && !defined(MSDOS)
 /*                 ^^^^^^^^^^^^^^^^^^ */
 #if defined(__ALPHA)
-#include <unistd.h>		/* for SEEK_... definitions used by fseek() */
+#include <unistd.h>             /* for SEEK_... definitions used by fseek() */
 #else
-#include <sys/unistd.h>		/* for SEEK_... definitions used by fseek() */
+#include <sys/unistd.h>         /* for SEEK_... definitions used by fseek() */
 #endif
 #endif
 
@@ -95,8 +95,8 @@
 
 /* ..... Module definition files ..... */
 #ifdef IF_NEEDED
-#include "eid.h"		/* EID functions */
-#include "eid_io.h"		/* EID I/O functions */
+#include "eid.h"                /* EID functions */
+#include "eid_io.h"             /* EID I/O functions */
 #endif
 #include "softbit.h"            /* Soft bit definitions and prototypes */
 
@@ -117,67 +117,65 @@
    --------------------------------------------------------------------------
  */
 #define P(x) printf x
-void            display_usage (level)
-int level;
+void display_usage (level)
+     int level;
 {
-  P(("ep-stats.c - Version 2.2 of 02.Feb.2010 \n\n"));
+  P (("ep-stats.c - Version 2.2 of 02.Feb.2010 \n\n"));
 
-  if (level)
-  {
-  P(("Program Description:\n"));
-  P(("~~~~~~~~~~~~~~~~~~~~\n"));
-  P(("\n"));
-  P(("This example program calculates the number of occurences of errors/\n"));
-  P(("frame erasures in a pattern file, as well as a short-term histogram\n"));
-  P(("to see the number of burst frame erasures.\n"));
-  P(("\n"));
-  P(("The file containing the error pattern will be in one of three\n"));
-  P(("possible formats: G.192 16-bit softbit format (without synchronism\n"));
-  P(("header for bit errors), byte-oriented version of the G.192 format,\n"));
-  P(("and compact, hard-bit binary (bit) mode. These are described in the\n"));
-  P(("following.\n"));
-  P(("\n"));
-  P(("The headerless G.192 serial bitstream format is as described in\n"));
-  P(("G.192, with the exceptions listed below. The main feature is that\n"));
-  P(("the softbits and frame erasure indicators are right-aligned at\n"));
-  P(("16-bit word boundaries (unsigned short): \n"));
-  P(("'0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20\n"));
-  P(("\n"));
-  P(("In the byte-oriented softbit serial bitstream, only the lower byte\n"));
-  P(("of the softbits defined in G.192 are used. Hence:\n"));
-  P(("'0'=0x7F and '1'=0x81, and good/bad frame = 0x21/0x20\n"));
-  P(("\n"));
-  P(("In the compact (bit) mode, only hard bits are present. Each byte will\n"));
-  P(("have information about eight bits or frames. The LBbs will refer to\n"));
-  P(("bits or frames that occur first in time. Here, '1' means that a bit\n"));
-  P(("is in error or that a frame should be erased, and a '0', otherwise.\n"));
-  }
-  else
-  {
-  P(("Program that calculates the number of occurences of errors/frame\n"));
-  P(("erasures in a pattern file, as well as a short-term histogram.\n"));
+  if (level) {
+    P (("Program Description:\n"));
+    P (("~~~~~~~~~~~~~~~~~~~~\n"));
+    P (("\n"));
+    P (("This example program calculates the number of occurences of errors/\n"));
+    P (("frame erasures in a pattern file, as well as a short-term histogram\n"));
+    P (("to see the number of burst frame erasures.\n"));
+    P (("\n"));
+    P (("The file containing the error pattern will be in one of three\n"));
+    P (("possible formats: G.192 16-bit softbit format (without synchronism\n"));
+    P (("header for bit errors), byte-oriented version of the G.192 format,\n"));
+    P (("and compact, hard-bit binary (bit) mode. These are described in the\n"));
+    P (("following.\n"));
+    P (("\n"));
+    P (("The headerless G.192 serial bitstream format is as described in\n"));
+    P (("G.192, with the exceptions listed below. The main feature is that\n"));
+    P (("the softbits and frame erasure indicators are right-aligned at\n"));
+    P (("16-bit word boundaries (unsigned short): \n"));
+    P (("'0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20\n"));
+    P (("\n"));
+    P (("In the byte-oriented softbit serial bitstream, only the lower byte\n"));
+    P (("of the softbits defined in G.192 are used. Hence:\n"));
+    P (("'0'=0x7F and '1'=0x81, and good/bad frame = 0x21/0x20\n"));
+    P (("\n"));
+    P (("In the compact (bit) mode, only hard bits are present. Each byte will\n"));
+    P (("have information about eight bits or frames. The LBbs will refer to\n"));
+    P (("bits or frames that occur first in time. Here, '1' means that a bit\n"));
+    P (("is in error or that a frame should be erased, and a '0', otherwise.\n"));
+  } else {
+    P (("Program that calculates the number of occurences of errors/frame\n"));
+    P (("erasures in a pattern file, as well as a short-term histogram.\n"));
   }
 
-  P(("Usage:\n"));
-  P((" ep-stats [Options] err_patt_file  burst_len\n"));
-  P(("Where:\n"));
-  P((" err_pat .... error pattern bitstream file\n"));
-  P((" burst_len .. maximum bust length to report\n"));
-  P(("\n"));
-  P(("Options:\n"));
-  P((" -frame # .... Set the frame size to #\n"));
-  P((" -start # .... First frame to start processing\n"));
-  P((" -burst max .. Define max burst length to report\n"));
-  P((" -ep format .. Format for error pattern (g192, byte, or bit)\n"));
-  P((" -ber ........ Pattern type is bit error pattern\n"));
-  P((" -fer ........ Pattern type is frame erasure pattern\n"));
-  P((" -q .......... Quiet operation\n"));
-  P((" -? .......... Displays this message\n"));
-  P((" -help ....... Displays a complete help message\n"));
+  P (("Usage:\n"));
+  P ((" ep-stats [Options] err_patt_file  burst_len\n"));
+  P (("Where:\n"));
+  P ((" err_pat .... error pattern bitstream file\n"));
+  P ((" burst_len .. maximum bust length to report\n"));
+  P (("\n"));
+  P (("Options:\n"));
+  P ((" -frame # .... Set the frame size to #\n"));
+  P ((" -start # .... First frame to start processing\n"));
+  P ((" -burst max .. Define max burst length to report\n"));
+  P ((" -ep format .. Format for error pattern (g192, byte, or bit)\n"));
+  P ((" -ber ........ Pattern type is bit error pattern\n"));
+  P ((" -fer ........ Pattern type is frame erasure pattern\n"));
+  P ((" -q .......... Quiet operation\n"));
+  P ((" -? .......... Displays this message\n"));
+  P ((" -help ....... Displays a complete help message\n"));
 
   /* Quit program */
   exit (-128);
 }
+
 #undef P
 /* .................... End of display_usage() ........................... */
 
@@ -185,37 +183,36 @@ int level;
 /* ************************************************************************* */
 /* ************************** MAIN_PROGRAM ********************************* */
 /* ************************************************************************* */
-int             main (int argc, char *argv[])
-{
+int main (int argc, char *argv[]) {
   /* Command line parameters */
-  char            ep_type = BER;      /* Type of error pattern: FER or BER */
-  char            ep_format = g192;   /* Error pattern format */
-  char            ep_file[MAX_STRLEN]; /* Error pattern file */
-  long            fr_len = EID_BUFFER_LENGTH;  /* Frame length in bits */
-  long            fr_no=0, max_items; /* Number of frames/items to process */
-  long            ep_len;             /* EP lengths */
-  long            burst_len = 10;      /* Max burst length to count */
-  long            start_item = 1;     /* Start analyzing errors from 1st one */
-  long            preamble_items=0;
+  char ep_type = BER;           /* Type of error pattern: FER or BER */
+  char ep_format = g192;        /* Error pattern format */
+  char ep_file[MAX_STRLEN];     /* Error pattern file */
+  long fr_len = EID_BUFFER_LENGTH;      /* Frame length in bits */
+  long fr_no = 0, max_items;    /* Number of frames/items to process */
+  long ep_len;                  /* EP lengths */
+  long burst_len = 10;          /* Max burst length to count */
+  long start_item = 1;          /* Start analyzing errors from 1st one */
+  long preamble_items = 0;
   /* File I/O parameter */
-  FILE           *Fep;      /* Pointer to error pattern file */
+  FILE *Fep;                    /* Pointer to error pattern file */
 
   /* Data arrays and structures */
-  short          *ep;	               /* Error pattern buffer */
+  short *ep;                    /* Error pattern buffer */
   ep_histogram_state eps;
 
   /* Aux. variables */
-  char            tmp_type;
-  long            i;
-  long            items;	       /* Samples read from file */
+  char tmp_type;
+  long i;
+  long items;                   /* Samples read from file */
 #if defined(VMS)
-  char            mrs[15] = "mrs=512";
+  char mrs[15] = "mrs=512";
 #endif
-  char            quiet = 0;
-  float           ftmp;
+  char quiet = 0;
+  float ftmp;
 
   /* Pointer to a function */
-  long            (*read_patt)() = read_g192;	/* To read error pattern */
+  long (*read_patt) () = read_g192;     /* To read error pattern */
 
 
   /* ......... GET PARAMETERS ......... */
@@ -223,109 +220,79 @@ int             main (int argc, char *argv[])
   /* Check options */
   if (argc < 2)
     display_usage (0);
-  else
-  {
+  else {
     while (argc > 1 && argv[1][0] == '-')
-      if (strcmp (argv[1], "-start") == 0)
-      {
-	/* Define starting sample/frame for error insertion */
-	start_item = atol (argv[2]);
+      if (strcmp (argv[1], "-start") == 0) {
+        /* Define starting sample/frame for error insertion */
+        start_item = atol (argv[2]);
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc -= 2;
-	argv += 2;
-      }
-      else if (strcmp (argv[1], "-frame") == 0)
-      {
-	/* Define frame size for processing */
-	fr_len = atoi(argv[2]);
+        /* Move arg{c,v} over the option to the next argument */
+        argc -= 2;
+        argv += 2;
+      } else if (strcmp (argv[1], "-frame") == 0) {
+        /* Define frame size for processing */
+        fr_len = atoi (argv[2]);
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc -= 2;
-	argv += 2;
-      }
-      else if (strcmp (argv[1], "-n") == 0)
-      {
-	/* Define number of frames to process */
-	fr_no = atoi(argv[2]);
+        /* Move arg{c,v} over the option to the next argument */
+        argc -= 2;
+        argv += 2;
+      } else if (strcmp (argv[1], "-n") == 0) {
+        /* Define number of frames to process */
+        fr_no = atoi (argv[2]);
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc -= 2;
-	argv += 2;
-      }
-      else if (strcmp (argv[1], "-burst") == 0)
-      {
-	/* Define how long to search for burst sequences */
-	/* The + 1 position will hold how many bursts longer than the
-           max specified were observed */
-	burst_len = atoi(argv[2]);
+        /* Move arg{c,v} over the option to the next argument */
+        argc -= 2;
+        argv += 2;
+      } else if (strcmp (argv[1], "-burst") == 0) {
+        /* Define how long to search for burst sequences */
+        /* The + 1 position will hold how many bursts longer than the max specified were observed */
+        burst_len = atoi (argv[2]);
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc -= 2;
-	argv += 2;
-      }
-      else if (strcmp (argv[1], "-ep") == 0)
-      {
-	/* Define error pattern format */
-	for (i=0; i<nil; i++)
-	{
-	  if (strstr(argv[2], format_str(i)))
-	    break;
-	}
-	if (i==nil)
-	{
-	  HARAKIRI("Invalid error pattern format type. Aborted\n",5);
-	}
-	else
-	  ep_format = i;
+        /* Move arg{c,v} over the option to the next argument */
+        argc -= 2;
+        argv += 2;
+      } else if (strcmp (argv[1], "-ep") == 0) {
+        /* Define error pattern format */
+        for (i = 0; i < nil; i++) {
+          if (strstr (argv[2], format_str (i)))
+            break;
+        }
+        if (i == nil) {
+          HARAKIRI ("Invalid error pattern format type. Aborted\n", 5);
+        } else
+          ep_format = i;
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc -= 2;
-	argv += 2;
-      }
-      else if (strcmp (argv[1], "-ber") == 0 || strcmp (argv[1], "-BER") == 0)
-      {
-	/* Error pattern type: BER */
-	ep_type = BER;
+        /* Move arg{c,v} over the option to the next argument */
+        argc -= 2;
+        argv += 2;
+      } else if (strcmp (argv[1], "-ber") == 0 || strcmp (argv[1], "-BER") == 0) {
+        /* Error pattern type: BER */
+        ep_type = BER;
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc--;
-	argv++;
-      }
-      else if (strcmp (argv[1], "-fer") == 0 ||
-	       strcmp (argv[1], "-FER") == 0 ||
-	       strcmp (argv[1], "-bfer") == 0 ||
-	       strcmp (argv[1], "-BFER") == 0)
-      {
-	/* Error pattern type: FER */
-	ep_type = FER;
+        /* Move arg{c,v} over the option to the next argument */
+        argc--;
+        argv++;
+      } else if (strcmp (argv[1], "-fer") == 0 || strcmp (argv[1], "-FER") == 0 || strcmp (argv[1], "-bfer") == 0 || strcmp (argv[1], "-BFER") == 0) {
+        /* Error pattern type: FER */
+        ep_type = FER;
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc--;
-	argv++;
-      }
-      else if (strcmp (argv[1], "-q") == 0)
-      {
-	/* Set quiet mode */
-	quiet = 1;
+        /* Move arg{c,v} over the option to the next argument */
+        argc--;
+        argv++;
+      } else if (strcmp (argv[1], "-q") == 0) {
+        /* Set quiet mode */
+        quiet = 1;
 
-	/* Move arg{c,v} over the option to the next argument */
-	argc--;
-	argv++;
-      }
-      else if (strcmp (argv[1], "-?") == 0)
-      {
-	display_usage(0);
-      }
-      else if (strstr(argv[1], "-help"))
-      {
-	display_usage(1);
-      }
-      else
-      {
-	fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-		 argv[1]);
-	display_usage (0);
+        /* Move arg{c,v} over the option to the next argument */
+        argc--;
+        argv++;
+      } else if (strcmp (argv[1], "-?") == 0) {
+        display_usage (0);
+      } else if (strstr (argv[1], "-help")) {
+        display_usage (1);
+      } else {
+        fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+        display_usage (0);
       }
   }
 
@@ -335,39 +302,30 @@ int             main (int argc, char *argv[])
 
 
   /* Open files */
-  if ((Fep= fopen (ep_file, RB)) == NULL)
+  if ((Fep = fopen (ep_file, RB)) == NULL)
     HARAKIRI ("Could not open error pattern file\n", 1);
 
 
   /* *** CHECK TYPE OF ERROR PATTERN *** */
 
-  /* Do preliminary inspection in the ERROR PATTERN FILE to check
-     its format (byte, bit, g192) */
-  i = check_eid_format(Fep, ep_file, &tmp_type);
+  /* Do preliminary inspection in the ERROR PATTERN FILE to check its format (byte, bit, g192) */
+  i = check_eid_format (Fep, ep_file, &tmp_type);
 
   /* Check whether the specified EP format matches with the one in the file */
-  if (i != ep_format)
-  {
+  if (i != ep_format) {
     /* The error pattern format is not the same as specified */
-    fprintf (stderr, "*** Switching error pattern format from %s to %s ***\n",
-	     format_str((int)ep_format), format_str(i));
+    fprintf (stderr, "*** Switching error pattern format from %s to %s ***\n", format_str ((int) ep_format), format_str (i));
     ep_format = i;
   }
 
   /* Check whether the specified EP type matches with the one in the file */
-  if (tmp_type != ep_type)
-  {
+  if (tmp_type != ep_type) {
     /* The error pattern type is not the same as specified */
 
-    if (ep_format == compact)
-    {
-      fprintf (stderr, "*** Cant infer error pattern type. Using %s ***\n",
-	       type_str((int)ep_type));
-    }
-    else
-    {
-      fprintf (stderr, "*** Switching error pattern type from %s to %s ***\n",
-	       type_str((int)ep_type), type_str((int)tmp_type));
+    if (ep_format == compact) {
+      fprintf (stderr, "*** Cant infer error pattern type. Using %s ***\n", type_str ((int) ep_type));
+    } else {
+      fprintf (stderr, "*** Switching error pattern type from %s to %s ***\n", type_str ((int) ep_type), type_str ((int) tmp_type));
       ep_type = tmp_type;
     }
   }
@@ -376,9 +334,7 @@ int             main (int argc, char *argv[])
   /* *** FINAL INITIALIZATIONS *** */
 
   /* Use the proper data I/O functions */
-  read_patt = ep_format==byte? read_byte
-              : (ep_format==g192? read_g192 :
-		 (ep_type==BER? read_bit_ber : read_bit_fer));
+  read_patt = ep_format == byte ? read_byte : (ep_format == g192 ? read_g192 : (ep_type == BER ? read_bit_ber : read_bit_fer));
 
   /* Define how many samples are read for each frame */
   /* Bitstream may have sync headers, which are 2 samples-long */
@@ -387,132 +343,110 @@ int             main (int argc, char *argv[])
 
   /* Allocate memory for data buffers */
   /* ... error pattern from file */
-  if ((ep = (short *)calloc(ep_len, sizeof(short))) == NULL)
-    HARAKIRI("Can't allocate memory for error pattern. Aborted.\n",6);
+  if ((ep = (short *) calloc (ep_len, sizeof (short))) == NULL)
+    HARAKIRI ("Can't allocate memory for error pattern. Aborted.\n", 6);
 
   /* Initiaize histogram state variable */
-  init_ep_histogram(&eps, burst_len);
+  init_ep_histogram (&eps, burst_len);
 
   /* Starting frame is from 0 to number_of_items-1 */
   start_item--;
 
   /* Define maximum no. of items to process */
-  max_items = get_max_items(ep_file, ep_format, start_item, fr_no);
+  max_items = get_max_items (ep_file, ep_format, start_item, fr_no);
 
-   /* *** START ACTUAL WORK *** */
+  /* *** START ACTUAL WORK *** */
 
   /* first skip the part [0-start_item] */
   /* Read preamble from EP file */
-  preamble_items=0;
-  while(preamble_items < start_item)
-  {
-      if((ep_format==byte) || (ep_format==g192)){
-        items = read_patt (ep, 1, Fep); /*one item at a time consumed, for g.192 and byte */
-      } else if ((ep_format==compact)){
-          if ((start_item%8)==0){
-            items = read_patt (ep, 8, Fep); /*8 items time consumed, for bit/compact packed fer */
-          } else {
-              fprintf(stderr,"Error: the start/preamble segment must be byte-aligned (divisble by 8), start=%ld, ( %ld%%8 != 0)\n",
-                    start_item+1, start_item);
-              KILL(ep_file, 7);
-          }
+  preamble_items = 0;
+  while (preamble_items < start_item) {
+    if ((ep_format == byte) || (ep_format == g192)) {
+      items = read_patt (ep, 1, Fep);   /* one item at a time consumed, for g.192 and byte */
+    } else if ((ep_format == compact)) {
+      if ((start_item % 8) == 0) {
+        items = read_patt (ep, 8, Fep); /* 8 items time consumed, for bit/compact packed fer */
+      } else {
+        fprintf (stderr, "Error: the start/preamble segment must be byte-aligned (divisble by 8), start=%ld, ( %ld%%8 != 0)\n", start_item + 1, start_item);
+        KILL (ep_file, 7);
       }
+    }
 
 
     /* Aborts on error */
-      if (items < 0){
-           KILL(ep_file, 7);
-       }
-       preamble_items += items;
+    if (items < 0) {
+      KILL (ep_file, 7);
+    }
+    preamble_items += items;
   }
 
-  /* now finaly analyze target part*/
-  while(1)
-  {
+  /* now finaly analyze target part */
+  while (1) {
     /* Read a block from EP file */
     items = read_patt (ep, ep_len, Fep);
 
     /* Aborts on error */
     if (items < 0)
-      KILL(ep_file, 7);
+      KILL (ep_file, 7);
 
     /* Adjusts no of items if number of processed items exceed user limit */
-    if (eps.processed+items > max_items)
-    {
+    if (eps.processed + items > max_items) {
       items = max_items - eps.processed;
     }
 
     /* Stop when reaches end-of-file or top processing */
-    if (items==0)
+    if (items == 0)
       break;
 
     /* Computes histogram */
-    compute_ep_histogram(ep, items, ep_type, &eps, 0);
+    compute_ep_histogram (ep, items, ep_type, &eps, 0);
   }
 
   /* Flushes any pending processing */
-  compute_ep_histogram(ep, items, ep_type, &eps, 0);
+  compute_ep_histogram (ep, items, ep_type, &eps, 0);
 
 
-  /* ***  PRINT SUMMARY OF OPTIONS & RESULTS ON SCREEN *** */
+  /* *** PRINT SUMMARY OF OPTIONS & RESULTS ON SCREEN *** */
 
   /* Calculate the std.dev. of the distance between events */
-  ftmp = pow(eps.event_distance,2) / eps.event_no;
-  ftmp = sqrt((eps.event_distance_sq - ftmp)/(float)(eps.event_no-1));
+  ftmp = pow (eps.event_distance, 2) / eps.event_no;
+  ftmp = sqrt ((eps.event_distance_sq - ftmp) / (float) (eps.event_no - 1));
 
   /* Print summary */
-  fprintf (stderr, "# Error pattern file ................... : %s\n",
-	   ep_file);
-  fprintf (stderr, "# Burst length ......................... : %ld\n",
-	   eps.burst_len);
-  fprintf (stderr, "# Pattern format %s....... : %s\n",
-	   ep_type == FER? "(Frame erasure) " : "(Bit error) ....",
-	   format_str((int)ep_format));
-  if (ep_type==BER)
-    fprintf (stderr, "# Frame size ............................: %ld\n",
-	     fr_len);
-  if (ep_type!=BER)
-     fprintf (stderr, "# Starting  %s...................... : %ld  \n",
-	                   "frame ", start_item+1);
+  fprintf (stderr, "# Error pattern file ................... : %s\n", ep_file);
+  fprintf (stderr, "# Burst length ......................... : %ld\n", eps.burst_len);
+  fprintf (stderr, "# Pattern format %s....... : %s\n", ep_type == FER ? "(Frame erasure) " : "(Bit error) ....", format_str ((int) ep_format));
+  if (ep_type == BER)
+    fprintf (stderr, "# Frame size ............................: %ld\n", fr_len);
+  if (ep_type != BER)
+    fprintf (stderr, "# Starting  %s...................... : %ld  \n", "frame ", start_item + 1);
 
-  fprintf (stderr, "# Processed %s..................... : %ld \n",
-	   ep_type==BER? "bits .." : "frames ", eps.processed);
-  fprintf (stderr, "# Disturbed %s..................... : %ld \n",
-	   ep_type==BER? "bits .." : "frames ", eps.disturbed);
-  fprintf (stderr, "# Overall %s............ : %f %%\n",
-	   ep_type==BER? "bit error rate ..." : "frame erasure rate",
-	   100.0 * eps.disturbed / (float)eps.processed);
-  if (eps.event_no > 0)
-  {
-    fprintf (stderr, "# Average event distance %s : %.0f +- %.0f %s\n",
-             "...............", eps.event_distance/eps.event_no, ftmp,
-             ep_type==BER? "bits" : "frames ");
-    fprintf (stderr, "# Min/Max event distance %s : %ld / %ld %s\n",
-             "...............", eps.min_distance, eps.max_distance,
-             ep_type==BER? "bits" : "frames ");
+  fprintf (stderr, "# Processed %s..................... : %ld \n", ep_type == BER ? "bits .." : "frames ", eps.processed);
+  fprintf (stderr, "# Disturbed %s..................... : %ld \n", ep_type == BER ? "bits .." : "frames ", eps.disturbed);
+  fprintf (stderr, "# Overall %s............ : %f %%\n", ep_type == BER ? "bit error rate ..." : "frame erasure rate", 100.0 * eps.disturbed / (float) eps.processed);
+  if (eps.event_no > 0) {
+    fprintf (stderr, "# Average event distance %s : %.0f +- %.0f %s\n", "...............", eps.event_distance / eps.event_no, ftmp, ep_type == BER ? "bits" : "frames ");
+    fprintf (stderr, "# Min/Max event distance %s : %ld / %ld %s\n", "...............", eps.min_distance, eps.max_distance, ep_type == BER ? "bits" : "frames ");
   }
-  fprintf (stderr, "#  Error-free %s:\t%ld\n",
-	   ep_type==BER? "bits" : "frames", eps.hist[0]);
-  fprintf(stderr, "#  Single events:\t%ld\n", eps.hist[1]);
-  for (i=2; i<=eps.burst_len; i++)
-  {
-    fprintf(stderr, "#  %ld events:    \t%ld\n", i, eps.hist[i]);
+  fprintf (stderr, "#  Error-free %s:\t%ld\n", ep_type == BER ? "bits" : "frames", eps.hist[0]);
+  fprintf (stderr, "#  Single events:\t%ld\n", eps.hist[1]);
+  for (i = 2; i <= eps.burst_len; i++) {
+    fprintf (stderr, "#  %ld events:    \t%ld\n", i, eps.hist[i]);
   }
-  fprintf(stderr, "#  >%ld events:    \t%ld\n", eps.burst_len, eps.hist[i]);
+  fprintf (stderr, "#  >%ld events:    \t%ld\n", eps.burst_len, eps.hist[i]);
   if (eps.unexpected)
-    fprintf(stderr, "#*** %ld unexpected samples found in EP file\n",
-	    eps.unexpected);
+    fprintf (stderr, "#*** %ld unexpected samples found in EP file\n", eps.unexpected);
 
   /* *** FINALIZATIONS *** */
 
   /* Free memory allocated */
-  free_ep_histogram(&eps);
-  free(ep);
+  free_ep_histogram (&eps);
+  free (ep);
 
   /* Close the output file and quit *** */
   fclose (Fep);
 
-#ifndef VMS			/* return value to OS if not VMS */
+#ifndef VMS                     /* return value to OS if not VMS */
   return 0;
 #endif
 }

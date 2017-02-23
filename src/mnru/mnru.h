@@ -33,51 +33,43 @@
 #endif
 
 /* Definition of type for random_MNRU state variables */
-typedef struct
-{
-  int             idum;
-  int             inext, inextp;
-  long            ma[56];	/* this is a special value; shall not be
-				 * changed [1],[2] */
-}               ori_RANDOM_state;
+typedef struct {
+  int idum;
+  int inext, inextp;
+  long ma[56];                  /* this is a special value; shall not be changed [1],[2] */
+} ori_RANDOM_state;
 
 /* Definition of type for random_MNRU state variables */
-typedef struct
-{
+typedef struct {
   float *gauss;
 
-}               new_RANDOM_state;
+} new_RANDOM_state;
 
 /* Definitions for the MNRU state variable */
-#define MNRU_STAGE_OUT_FLT 2         /* number of 2nd-order stages in filter */
+#define MNRU_STAGE_OUT_FLT 2    /* number of 2nd-order stages in filter */
 
 /* Definition of type for MNRU state variables */
-typedef struct
-{
+typedef struct {
   /* State variables related to the rnadom number generation */
-  long            seed, clip;
-  double          signal_gain, noise_gain;
-  double         *vet, last_xk, last_yk, last_y20k_lp;
-  RANDOM_state    rnd_state;	/* for random_MNRU() */
-  char            rnd_mode;
+  long seed, clip;
+  double signal_gain, noise_gain;
+  double *vet, last_xk, last_yk, last_y20k_lp;
+  RANDOM_state rnd_state;       /* for random_MNRU() */
+  char rnd_mode;
 
   /* State variables related to the output band-pass filtering */
-  double A[MNRU_STAGE_OUT_FLT][3];    /* numerator coefficients */
-  double B[MNRU_STAGE_OUT_FLT][2];    /* denominator coefficients */
-  double DLY[MNRU_STAGE_OUT_FLT][2];  /* delay storage elements (z-shifts) */
-}               MNRU_state;
+  double A[MNRU_STAGE_OUT_FLT][3];      /* numerator coefficients */
+  double B[MNRU_STAGE_OUT_FLT][2];      /* denominator coefficients */
+  double DLY[MNRU_STAGE_OUT_FLT][2];    /* delay storage elements (z-shifts) */
+} MNRU_state;
 
 /* Prototype for MNRU and random function(s) */
 #ifdef NO_PROMOTION
-double *MNRU_process ARGS((char operation, MNRU_state *s, float *input, 
-			   float *output, long n, long seed, char mode, 
-			   double Q));
+double *MNRU_process ARGS ((char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q));
 #else
-double *MNRU_process ARGS((int operation, MNRU_state *s, float *input, 
-			   float *output, long n, long seed, int mode, 
-			   double Q));
+double *MNRU_process ARGS ((int operation, MNRU_state * s, float *input, float *output, long n, long seed, int mode, double Q));
 #endif
-float random_MNRU ARGS((char *mode, RANDOM_state *r, long seed));
+float random_MNRU ARGS ((char *mode, RANDOM_state * r, long seed));
 
 /* Definitions for the MNRU algorithm */
 #define MOD_NOISE    1

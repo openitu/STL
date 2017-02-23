@@ -81,10 +81,10 @@ HISTORY:
  */
 #include <stdio.h>
 #ifndef VMS
-#include <stdlib.h>		/* General utility definitions */
+#include <stdlib.h>             /* General utility definitions */
 #endif
 
-#include "firflt.h"		/* Global definitions for FIR-FIR filter */
+#include "firflt.h"             /* Global definitions for FIR-FIR filter */
 
 #define F float
 
@@ -92,19 +92,18 @@ HISTORY:
  * ......... Local function prototypes .........
  */
 
-void fill_irs8khz ARGS((float **h0, long *lenh0));
-void fill_irs16khz ARGS((float **h0, long *lenh0));
-void fill_modified_irs16khz ARGS((float **h0, long *lenh0));
-void fill_modified_irs48khz ARGS((float **h0, long *lenh0));
-void fill_rx_modified_irs8khz ARGS((float **h0, long *lenh0));
-void fill_rx_modified_irs16khz ARGS((float **h0, long *lenh0));
+void fill_irs8khz ARGS ((float **h0, long *lenh0));
+void fill_irs16khz ARGS ((float **h0, long *lenh0));
+void fill_modified_irs16khz ARGS ((float **h0, long *lenh0));
+void fill_modified_irs48khz ARGS ((float **h0, long *lenh0));
+void fill_rx_modified_irs8khz ARGS ((float **h0, long *lenh0));
+void fill_rx_modified_irs16khz ARGS ((float **h0, long *lenh0));
 
 
 /* 
  * ..... Private function prototypes defined in other sub-unit ..... 
  */
-extern SCD_FIR *fir_initialization ARGS((long lenh0, float h0[], double gain, 
-                                                 long idwnup, int hswitch));
+extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
 
 /*
@@ -139,24 +138,23 @@ extern SCD_FIR *fir_initialization ARGS((long lenh0, float h0[], double gain,
 
  ============================================================================
 */
-SCD_FIR        *irs_8khz_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *irs_8khz_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_irs8khz(&h0, &lenh0);
+  fill_irs8khz (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       1.0,	/* In: gain factor for FIR-coeffic. */
-		       1l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-filter) */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              1.0,      /* In: gain factor for FIR-coeffic. */
+                              1l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-filter) */
 }
+
 /* ........................ End of irs_8khz_init() ........................ */
 
 
@@ -189,24 +187,23 @@ SCD_FIR        *irs_8khz_init()
 
  ============================================================================
 */
-SCD_FIR        *irs_16khz_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *irs_16khz_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_irs16khz(&h0, &lenh0);
+  fill_irs16khz (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       1.0,	/* In: gain factor for FIR-coeffic. */
-		       1l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-fil. */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              1.0,      /* In: gain factor for FIR-coeffic. */
+                              1l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-fil. */
 }
+
 /* ....................... End of irs_16khz_init() ....................... */
 
 
@@ -243,12 +240,12 @@ SCD_FIR        *irs_16khz_init()
 #define f24 (float)0x00800000
 #define lenh0IRS8 151
 
-void            fill_irs8khz(h0, lenh0)
-  float         **h0;
-  long           *lenh0;
+void fill_irs8khz (h0, lenh0)
+     float **h0;
+     long *lenh0;
 {
 
-  static float    h0IRS8[lenh0IRS8] = {
+  static float h0IRS8[lenh0IRS8] = {
     75478. / f24, -14206. / f24, -79415. / f24, 24725. / f24, -12018. / f24,
     -6955. / f24, 6418. / f24, -9378. / f24, 4475. / f24, -2452. / f24,
     3665. / f24, 451. / f24, 2106. / f24, 614. / f24, 4112. / f24,
@@ -279,12 +276,14 @@ void            fill_irs8khz(h0, lenh0)
     1081. / f24, 4112. / f24, 614. / f24, 2106. / f24, 451. / f24,
     3665. / f24, -2452. / f24, 4475. / f24, -9378. / f24, 6418. / f24,
     -6955. / f24, -12018. / f24, 24725. / f24, -79415. / f24, -14206. / f24,
-  75478. / f24};
+    75478. / f24
+  };
 
 
-  *lenh0 = lenh0IRS8;		/* store 'number of coefficients' */
-  *h0 = h0IRS8;			/* store pointer to h02[]-array */
+  *lenh0 = lenh0IRS8;           /* store 'number of coefficients' */
+  *h0 = h0IRS8;                 /* store pointer to h02[]-array */
 }
+
 #undef f24
 #undef lenh0IRS8
 /* ......................... End of fill_irs8khz() ......................... */
@@ -323,11 +322,11 @@ void            fill_irs8khz(h0, lenh0)
 #define f24 (float)0x00800000
 #define lenh0IRS16 209
 
-void            fill_irs16khz(h0, lenh0)
-  float         **h0;
-  long           *lenh0;
+void fill_irs16khz (h0, lenh0)
+     float **h0;
+     long *lenh0;
 {
-  static float    h0IRS16[lenh0IRS16] = {
+  static float h0IRS16[lenh0IRS16] = {
     -6550. / f24, -19590. / f24, -31126. / f24, -26048. / f24, 1228. / f24,
     34321. / f24, 45479. / f24, 24079. / f24, -8997. / f24, -22054. / f24,
     -6923. / f24, 13991. / f24, 16071. / f24, 473. / f24, -11489. / f24,
@@ -369,12 +368,14 @@ void            fill_irs16khz(h0, lenh0)
     547. / f24, 9089. / f24, 5726. / f24, -6686. / f24, -11489. / f24,
     473. / f24, 16071. / f24, 13991. / f24, -6923. / f24, -22054. / f24,
     -8997. / f24, 24079. / f24, 45479. / f24, 34321. / f24, 1228. / f24,
-  -26048. / f24, -31126. / f24, -19590. / f24, -6550. / f24};
+    -26048. / f24, -31126. / f24, -19590. / f24, -6550. / f24
+  };
 
 
-  *lenh0 = lenh0IRS16;		/* store 'number of coefficients' */
-  *h0 = h0IRS16;		/* store pointer to h02[]-array */
+  *lenh0 = lenh0IRS16;          /* store 'number of coefficients' */
+  *h0 = h0IRS16;                /* store pointer to h02[]-array */
 }
+
 #undef f24
 #undef lenh0IRS16
 /* ........................ End of fill_irs16khz() ........................ */
@@ -431,12 +432,12 @@ void            fill_irs16khz(h0, lenh0)
 #define f16 32768.
 #define MOD_IRS16_LEN 495
 
-void            fill_modified_irs16khz(h0, lenh0)
-  float         **h0;
-  long           *lenh0;
+void fill_modified_irs16khz (h0, lenh0)
+     float **h0;
+     long *lenh0;
 {
 
-  static float    mod_irs16_coef[MOD_IRS16_LEN] = {
+  static float mod_irs16_coef[MOD_IRS16_LEN] = {
     1. / f16, 1. / f16, 1. / f16, 1. / f16, 1. / f16,
     1. / f16, 1. / f16, 1. / f16, 1. / f16, 1. / f16,
     1. / f16, 1. / f16, 0. / f16, 0. / f16, 0. / f16,
@@ -538,9 +539,10 @@ void            fill_modified_irs16khz(h0, lenh0)
     1. / f16, 1. / f16, 1. / f16, 1. / f16, 1. / f16
   };
 
-  *lenh0 = MOD_IRS16_LEN;	/* store 'number of coefficients' */
-  *h0 = mod_irs16_coef;		/* store pointer to []-array */
+  *lenh0 = MOD_IRS16_LEN;       /* store 'number of coefficients' */
+  *h0 = mod_irs16_coef;         /* store pointer to []-array */
 }
+
 #undef f16
 #undef MOD_IRS16_LEN
 /* .................... End of fill_modified_irs16khz() .................... */
@@ -591,13 +593,12 @@ void            fill_modified_irs16khz(h0, lenh0)
 #define f16 32768.
 #define MOD_IRS48_LEN 513
 
-void            fill_modified_irs48khz(h0, lenh0)
-  float         **h0;
-  long           *lenh0;
+void fill_modified_irs48khz (h0, lenh0)
+     float **h0;
+     long *lenh0;
 {
 
-  static float    mod_irs48_coef[MOD_IRS48_LEN] =
-  {
+  static float mod_irs48_coef[MOD_IRS48_LEN] = {
     -2. / f16, -2. / f16, -2. / f16, -2. / f16, -2. / f16,
     -2. / f16, -2. / f16, -2. / f16, -2. / f16, -2. / f16,
     -2. / f16, -2. / f16, -2. / f16, -2. / f16, -2. / f16,
@@ -700,10 +701,11 @@ void            fill_modified_irs48khz(h0, lenh0)
     -2. / f16, -2. / f16, -2. / f16, -2. / f16, -2. / f16,
     -2. / f16, -2. / f16, -2. / f16, -2. / f16, -2. / f16,
     -2. / f16, -2. / f16, -2. / f16, -2. / f16, -2. / f16,
-    -2. / f16, -2. / f16, -2. / f16 };
+    -2. / f16, -2. / f16, -2. / f16
+  };
 
-  *lenh0 = MOD_IRS48_LEN;	/* store 'number of coefficients' */
-  *h0 = mod_irs48_coef;		/* store pointer to []-array */
+  *lenh0 = MOD_IRS48_LEN;       /* store 'number of coefficients' */
+  *h0 = mod_irs48_coef;         /* store pointer to []-array */
 }
 
 #undef f16
@@ -741,24 +743,23 @@ void            fill_modified_irs48khz(h0, lenh0)
 
  ============================================================================
 */
-SCD_FIR        *mod_irs_16khz_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *mod_irs_16khz_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_modified_irs16khz(&h0, &lenh0);
+  fill_modified_irs16khz (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       -1.0,	/* In: gain factor for FIR-coeffic. */
-		       1l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-fil. */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              -1.0,     /* In: gain factor for FIR-coeffic. */
+                              1l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-fil. */
 }
+
 /* ..................... End of mod_irs_16khz_init() ...................... */
 
 
@@ -792,24 +793,23 @@ SCD_FIR        *mod_irs_16khz_init()
 
  ============================================================================
 */
-SCD_FIR        *mod_irs_48khz_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *mod_irs_48khz_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_modified_irs48khz(&h0, &lenh0);
+  fill_modified_irs48khz (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       -1.0,	/* In: gain factor for FIR-coeffic. */
-		       1l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-fil. */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              -1.0,     /* In: gain factor for FIR-coeffic. */
+                              1l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-fil. */
 }
+
 /* ..................... End of mod_irs_48khz_init() ..................... */
 
 
@@ -867,66 +867,67 @@ SCD_FIR        *mod_irs_48khz_init()
 */
 #define RX_MOD_IRS16_LEN 148
 
-void            fill_rx_modified_irs16khz(h0, lenh0)
-  float         **h0;
-  long           *lenh0;
+void fill_rx_modified_irs16khz (h0, lenh0)
+     float **h0;
+     long *lenh0;
 {
-  static float    rx_mod_irs16_coef[RX_MOD_IRS16_LEN] = {
-  (F)-7.58608110527E-05, (F)-7.45618878900E-05, (F)3.52397043534E-05, 
-  (F) 6.59225768920E-05, (F)-8.37107055674E-05, (F)-1.58207551398E-04, 
-  (F) 5.62956743818E-05, (F) 2.56970258294E-04, (F) 6.77430584711E-05, 
-  (F)-2.00030886248E-04, (F) 4.44851821251E-05, (F) 5.53472241382E-04, 
-  (F) 4.86998632219E-04, (F)-6.69370487084E-05, (F)-7.70833910586E-06, 
-  (F) 8.59767144900E-04, (F) 1.20365948004E-03, (F) 4.07633497495E-04, 
-  (F)-4.83212337795E-05, (F) 1.00774295131E-03, (F) 2.08612468009E-03, 
-  (F) 1.33872917862E-03, (F) 5.34656421714E-05, (F) 8.17449939198E-04, 
-  (F) 2.80029955459E-03, (F) 2.66869275784E-03, (F) 4.77016237903E-04, 
-  (F) 1.93215167531E-04, (F) 2.85267934554E-03, (F) 4.05666481945E-03, 
-  (F) 1.35463805644E-03, (F)-7.86614339958E-04, (F) 1.73439319417E-03, 
-  (F) 4.84337106579E-03, (F) 2.62691593615E-03, (F)-1.84049759260E-03, 
-  (F)-8.61605387770E-04, (F) 4.14629655378E-03, (F) 3.90122545031E-03, 
-  (F)-2.55570237462E-03, (F)-4.82171288139E-03, (F) 1.09982019304E-03, 
-  (F) 4.38664353426E-03, (F)-2.56328316368E-03, (F)-9.48298074862E-03, 
-  (F)-4.80499625396E-03, (F) 2.96737931365E-03, (F)-1.76891938392E-03, 
-  (F)-1.36665825591E-02, (F)-1.33800532867E-02, (F)-1.57198138490E-03, 
-  (F)-5.58846793879E-04, (F)-1.58836781884E-02, (F)-2.35150240749E-02, 
-  (F)-1.02340330877E-02, (F) 9.03664564506E-05, (F)-1.46306631671E-02, 
-  (F)-3.31327842943E-02, (F)-2.35700471003E-02, (F)-1.41610250658E-03, 
-  (F)-8.56157183619E-03, (F)-3.92227490974E-02, (F)-4.18423596350E-02, 
-  (F)-7.52821834806E-03, (F) 4.01084684374E-03, (F)-3.72587785679E-02, 
-  (F)-6.66875462216E-02, (F)-2.37070509946E-02, (F) 2.91713227025E-02, 
-  (F)-1.47859922355E-02, (F)-1.14322570124E-01, (F)-8.49657112273E-02, 
-  (F) 1.47105639110E-01, (F) 3.90180668520E-01, (F) 3.90180668520E-01, 
-  (F) 1.47105639110E-01, (F)-8.49657112273E-02, (F)-1.14322570124E-01, 
-  (F)-1.47859922355E-02, (F) 2.91713227025E-02, (F)-2.37070509946E-02, 
-  (F)-6.66875462216E-02, (F)-3.72587785679E-02, (F) 4.01084684374E-03, 
-  (F)-7.52821834806E-03, (F)-4.18423596350E-02, (F)-3.92227490974E-02, 
-  (F)-8.56157183619E-03, (F)-1.41610250658E-03, (F)-2.35700471003E-02, 
-  (F)-3.31327842943E-02, (F)-1.46306631671E-02, (F) 9.03664564506E-05, 
-  (F)-1.02340330877E-02, (F)-2.35150240749E-02, (F)-1.58836781884E-02, 
-  (F)-5.58846793879E-04, (F)-1.57198138490E-03, (F)-1.33800532867E-02, 
-  (F)-1.36665825591E-02, (F)-1.76891938392E-03, (F) 2.96737931365E-03, 
-  (F)-4.80499625396E-03, (F)-9.48298074862E-03, (F)-2.56328316368E-03, 
-  (F) 4.38664353426E-03, (F) 1.09982019304E-03, (F)-4.82171288139E-03, 
-  (F)-2.55570237462E-03, (F) 3.90122545031E-03, (F) 4.14629655378E-03, 
-  (F)-8.61605387770E-04, (F)-1.84049759260E-03, (F) 2.62691593615E-03, 
-  (F) 4.84337106579E-03, (F) 1.73439319417E-03, (F)-7.86614339958E-04, 
-  (F) 1.35463805644E-03, (F) 4.05666481945E-03, (F) 2.85267934554E-03, 
-  (F) 1.93215167531E-04, (F) 4.77016237903E-04, (F) 2.66869275784E-03, 
-  (F) 2.80029955459E-03, (F) 8.17449939198E-04, (F) 5.34656421714E-05, 
-  (F) 1.33872917862E-03, (F) 2.08612468009E-03, (F) 1.00774295131E-03, 
-  (F)-4.83212337795E-05, (F) 4.07633497495E-04, (F) 1.20365948004E-03, 
-  (F) 8.59767144900E-04, (F)-7.70833910586E-06, (F)-6.69370487084E-05, 
-  (F) 4.86998632219E-04, (F) 5.53472241382E-04, (F) 4.44851821251E-05, 
-  (F)-2.00030886248E-04, (F) 6.77430584711E-05, (F) 2.56970258294E-04, 
-  (F) 5.62956743818E-05, (F)-1.58207551398E-04, (F)-8.37107055674E-05, 
-  (F) 6.59225768920E-05, (F) 3.52397043534E-05, (F)-7.45618878900E-05, 
-  (F)-7.58608110527E-05
+  static float rx_mod_irs16_coef[RX_MOD_IRS16_LEN] = {
+    (F) - 7.58608110527E-05, (F) - 7.45618878900E-05, (F) 3.52397043534E-05,
+    (F) 6.59225768920E-05, (F) - 8.37107055674E-05, (F) - 1.58207551398E-04,
+    (F) 5.62956743818E-05, (F) 2.56970258294E-04, (F) 6.77430584711E-05,
+    (F) - 2.00030886248E-04, (F) 4.44851821251E-05, (F) 5.53472241382E-04,
+    (F) 4.86998632219E-04, (F) - 6.69370487084E-05, (F) - 7.70833910586E-06,
+    (F) 8.59767144900E-04, (F) 1.20365948004E-03, (F) 4.07633497495E-04,
+    (F) - 4.83212337795E-05, (F) 1.00774295131E-03, (F) 2.08612468009E-03,
+    (F) 1.33872917862E-03, (F) 5.34656421714E-05, (F) 8.17449939198E-04,
+    (F) 2.80029955459E-03, (F) 2.66869275784E-03, (F) 4.77016237903E-04,
+    (F) 1.93215167531E-04, (F) 2.85267934554E-03, (F) 4.05666481945E-03,
+    (F) 1.35463805644E-03, (F) - 7.86614339958E-04, (F) 1.73439319417E-03,
+    (F) 4.84337106579E-03, (F) 2.62691593615E-03, (F) - 1.84049759260E-03,
+    (F) - 8.61605387770E-04, (F) 4.14629655378E-03, (F) 3.90122545031E-03,
+    (F) - 2.55570237462E-03, (F) - 4.82171288139E-03, (F) 1.09982019304E-03,
+    (F) 4.38664353426E-03, (F) - 2.56328316368E-03, (F) - 9.48298074862E-03,
+    (F) - 4.80499625396E-03, (F) 2.96737931365E-03, (F) - 1.76891938392E-03,
+    (F) - 1.36665825591E-02, (F) - 1.33800532867E-02, (F) - 1.57198138490E-03,
+    (F) - 5.58846793879E-04, (F) - 1.58836781884E-02, (F) - 2.35150240749E-02,
+    (F) - 1.02340330877E-02, (F) 9.03664564506E-05, (F) - 1.46306631671E-02,
+    (F) - 3.31327842943E-02, (F) - 2.35700471003E-02, (F) - 1.41610250658E-03,
+    (F) - 8.56157183619E-03, (F) - 3.92227490974E-02, (F) - 4.18423596350E-02,
+    (F) - 7.52821834806E-03, (F) 4.01084684374E-03, (F) - 3.72587785679E-02,
+    (F) - 6.66875462216E-02, (F) - 2.37070509946E-02, (F) 2.91713227025E-02,
+    (F) - 1.47859922355E-02, (F) - 1.14322570124E-01, (F) - 8.49657112273E-02,
+    (F) 1.47105639110E-01, (F) 3.90180668520E-01, (F) 3.90180668520E-01,
+    (F) 1.47105639110E-01, (F) - 8.49657112273E-02, (F) - 1.14322570124E-01,
+    (F) - 1.47859922355E-02, (F) 2.91713227025E-02, (F) - 2.37070509946E-02,
+    (F) - 6.66875462216E-02, (F) - 3.72587785679E-02, (F) 4.01084684374E-03,
+    (F) - 7.52821834806E-03, (F) - 4.18423596350E-02, (F) - 3.92227490974E-02,
+    (F) - 8.56157183619E-03, (F) - 1.41610250658E-03, (F) - 2.35700471003E-02,
+    (F) - 3.31327842943E-02, (F) - 1.46306631671E-02, (F) 9.03664564506E-05,
+    (F) - 1.02340330877E-02, (F) - 2.35150240749E-02, (F) - 1.58836781884E-02,
+    (F) - 5.58846793879E-04, (F) - 1.57198138490E-03, (F) - 1.33800532867E-02,
+    (F) - 1.36665825591E-02, (F) - 1.76891938392E-03, (F) 2.96737931365E-03,
+    (F) - 4.80499625396E-03, (F) - 9.48298074862E-03, (F) - 2.56328316368E-03,
+    (F) 4.38664353426E-03, (F) 1.09982019304E-03, (F) - 4.82171288139E-03,
+    (F) - 2.55570237462E-03, (F) 3.90122545031E-03, (F) 4.14629655378E-03,
+    (F) - 8.61605387770E-04, (F) - 1.84049759260E-03, (F) 2.62691593615E-03,
+    (F) 4.84337106579E-03, (F) 1.73439319417E-03, (F) - 7.86614339958E-04,
+    (F) 1.35463805644E-03, (F) 4.05666481945E-03, (F) 2.85267934554E-03,
+    (F) 1.93215167531E-04, (F) 4.77016237903E-04, (F) 2.66869275784E-03,
+    (F) 2.80029955459E-03, (F) 8.17449939198E-04, (F) 5.34656421714E-05,
+    (F) 1.33872917862E-03, (F) 2.08612468009E-03, (F) 1.00774295131E-03,
+    (F) - 4.83212337795E-05, (F) 4.07633497495E-04, (F) 1.20365948004E-03,
+    (F) 8.59767144900E-04, (F) - 7.70833910586E-06, (F) - 6.69370487084E-05,
+    (F) 4.86998632219E-04, (F) 5.53472241382E-04, (F) 4.44851821251E-05,
+    (F) - 2.00030886248E-04, (F) 6.77430584711E-05, (F) 2.56970258294E-04,
+    (F) 5.62956743818E-05, (F) - 1.58207551398E-04, (F) - 8.37107055674E-05,
+    (F) 6.59225768920E-05, (F) 3.52397043534E-05, (F) - 7.45618878900E-05,
+    (F) - 7.58608110527E-05
   };
 
-  *lenh0 = RX_MOD_IRS16_LEN;	/* store 'number of coefficients' */
-  *h0 = rx_mod_irs16_coef;		/* store pointer to []-array */
+  *lenh0 = RX_MOD_IRS16_LEN;    /* store 'number of coefficients' */
+  *h0 = rx_mod_irs16_coef;      /* store pointer to []-array */
 }
+
 #undef RX_MOD_IRS16_LEN
 /* .................. End of fill_rx_modified_irs16khz() .................. */
 
@@ -962,24 +963,23 @@ void            fill_rx_modified_irs16khz(h0, lenh0)
 
   ============================================================================ 
 */
-SCD_FIR        *rx_mod_irs_16khz_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *rx_mod_irs_16khz_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_rx_modified_irs16khz(&h0, &lenh0);
+  fill_rx_modified_irs16khz (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       1.0,	/* In: gain factor for FIR-coeffic. */
-		       1l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-fil. */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              1.0,      /* In: gain factor for FIR-coeffic. */
+                              1l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-fil. */
 }
+
 /* ................... End of rx_mod_irs_16khz_init() ..................... */
 
 
@@ -1030,41 +1030,42 @@ SCD_FIR        *rx_mod_irs_16khz_init()
 */
 #define RX_MOD_IRS8_LEN 75
 
-void            fill_rx_modified_irs8khz(h0, lenh0)
-  float         **h0;
-  long           *lenh0;
+void fill_rx_modified_irs8khz (h0, lenh0)
+     float **h0;
+     long *lenh0;
 {
-  static float    rx_mod_irs8_coef[RX_MOD_IRS8_LEN] = {
-  (F)-9.29651661244e-05, (F)-5.57106193888e-05, (F) 1.03988706315e-05, 
-  (F)-1.72293166049e-04, (F) 4.47217668394e-04, (F)-3.23797104316e-04, 
-  (F) 1.30365157303e-03, (F)-3.55580623304e-04, (F) 2.45858167783e-03, 
-  (F) 2.42818204634e-05, (F) 3.51212488897e-03, (F) 1.16618521672e-03, 
-  (F) 3.83442125820e-03, (F) 3.28526605765e-03, (F) 2.76231166368e-03, 
-  (F) 6.19221988419e-03, (F)-9.82572018289e-05, (F) 9.05269882274e-03, 
-  (F)-4.57588144125e-03, (F) 1.03141841829e-02, (F)-9.78742034483e-03, 
-  (F) 7.91486895870e-03, (F)-1.42545020007e-02, (F)-2.00938098796e-04, 
-  (F)-1.63018302038e-02, (F)-1.53662101258e-02, (F)-1.46332554277e-02, 
-  (F)-3.74962856889e-02, (F)-8.88267461843e-03, (F)-6.46863884253e-02, 
-  (F) 8.76053917889e-05, (F)-9.33150000039e-02, (F) 1.02964712211e-02, 
-  (F)-1.18710939405e-01, (F) 1.91692363192e-02, (F)-1.36240288203e-01, 
-  (F) 2.43201311407e-02, (F) 8.57500000600e-01, (F) 2.43201311407e-02, 
-  (F)-1.36240288203e-01, (F) 1.91692363192e-02, (F)-1.18710939405e-01, 
-  (F) 1.02964712211e-02, (F)-9.33150000039e-02, (F) 8.76053917889e-05, 
-  (F)-6.46863884253e-02, (F)-8.88267461843e-03, (F)-3.74962856889e-02, 
-  (F)-1.46332554277e-02, (F)-1.53662101258e-02, (F)-1.63018302038e-02, 
-  (F)-2.00938098796e-04, (F)-1.42545020007e-02, (F) 7.91486895870e-03, 
-  (F)-9.78742034483e-03, (F) 1.03141841829e-02, (F)-4.57588144125e-03, 
-  (F) 9.05269882274e-03, (F)-9.82572018289e-05, (F) 6.19221988419e-03, 
-  (F) 2.76231166368e-03, (F) 3.28526605765e-03, (F) 3.83442125820e-03, 
-  (F) 1.16618521672e-03, (F) 3.51212488897e-03, (F) 2.42818204634e-05, 
-  (F) 2.45858167783e-03, (F)-3.55580623304e-04, (F) 1.30365157303e-03, 
-  (F)-3.23797104316e-04, (F) 4.47217668394e-04, (F)-1.72293166049e-04, 
-  (F) 1.03988706315e-05, (F)-5.57106193888e-05, (F)-9.29651661244e-05
+  static float rx_mod_irs8_coef[RX_MOD_IRS8_LEN] = {
+    (F) - 9.29651661244e-05, (F) - 5.57106193888e-05, (F) 1.03988706315e-05,
+    (F) - 1.72293166049e-04, (F) 4.47217668394e-04, (F) - 3.23797104316e-04,
+    (F) 1.30365157303e-03, (F) - 3.55580623304e-04, (F) 2.45858167783e-03,
+    (F) 2.42818204634e-05, (F) 3.51212488897e-03, (F) 1.16618521672e-03,
+    (F) 3.83442125820e-03, (F) 3.28526605765e-03, (F) 2.76231166368e-03,
+    (F) 6.19221988419e-03, (F) - 9.82572018289e-05, (F) 9.05269882274e-03,
+    (F) - 4.57588144125e-03, (F) 1.03141841829e-02, (F) - 9.78742034483e-03,
+    (F) 7.91486895870e-03, (F) - 1.42545020007e-02, (F) - 2.00938098796e-04,
+    (F) - 1.63018302038e-02, (F) - 1.53662101258e-02, (F) - 1.46332554277e-02,
+    (F) - 3.74962856889e-02, (F) - 8.88267461843e-03, (F) - 6.46863884253e-02,
+    (F) 8.76053917889e-05, (F) - 9.33150000039e-02, (F) 1.02964712211e-02,
+    (F) - 1.18710939405e-01, (F) 1.91692363192e-02, (F) - 1.36240288203e-01,
+    (F) 2.43201311407e-02, (F) 8.57500000600e-01, (F) 2.43201311407e-02,
+    (F) - 1.36240288203e-01, (F) 1.91692363192e-02, (F) - 1.18710939405e-01,
+    (F) 1.02964712211e-02, (F) - 9.33150000039e-02, (F) 8.76053917889e-05,
+    (F) - 6.46863884253e-02, (F) - 8.88267461843e-03, (F) - 3.74962856889e-02,
+    (F) - 1.46332554277e-02, (F) - 1.53662101258e-02, (F) - 1.63018302038e-02,
+    (F) - 2.00938098796e-04, (F) - 1.42545020007e-02, (F) 7.91486895870e-03,
+    (F) - 9.78742034483e-03, (F) 1.03141841829e-02, (F) - 4.57588144125e-03,
+    (F) 9.05269882274e-03, (F) - 9.82572018289e-05, (F) 6.19221988419e-03,
+    (F) 2.76231166368e-03, (F) 3.28526605765e-03, (F) 3.83442125820e-03,
+    (F) 1.16618521672e-03, (F) 3.51212488897e-03, (F) 2.42818204634e-05,
+    (F) 2.45858167783e-03, (F) - 3.55580623304e-04, (F) 1.30365157303e-03,
+    (F) - 3.23797104316e-04, (F) 4.47217668394e-04, (F) - 1.72293166049e-04,
+    (F) 1.03988706315e-05, (F) - 5.57106193888e-05, (F) - 9.29651661244e-05
   };
 
-  *lenh0 = RX_MOD_IRS8_LEN;	/* store 'number of coefficients' */
-  *h0 = rx_mod_irs8_coef;		/* store pointer to []-array */
+  *lenh0 = RX_MOD_IRS8_LEN;     /* store 'number of coefficients' */
+  *h0 = rx_mod_irs8_coef;       /* store pointer to []-array */
 }
+
 #undef RX_MOD_IRS8_LEN
 /* .................. End of fill_rx_modified_irs8khz() .................. */
 
@@ -1097,24 +1098,23 @@ void            fill_rx_modified_irs8khz(h0, lenh0)
 
  ============================================================================
 */
-SCD_FIR        *rx_mod_irs_8khz_init()
-{
-  float          *h0;		/* pointer to array with FIR coeff. */
-  long            lenh0;	/* number of FIR coefficients */
+SCD_FIR *rx_mod_irs_8khz_init () {
+  float *h0;                    /* pointer to array with FIR coeff. */
+  long lenh0;                   /* number of FIR coefficients */
 
 
   /* allocate array for FIR coeff. and fill with coefficients */
-  fill_rx_modified_irs8khz(&h0, &lenh0);
+  fill_rx_modified_irs8khz (&h0, &lenh0);
 
-  return
-    fir_initialization(		/* Returns: pointer to SCD_FIR-struct */
-		       lenh0,	/* In: number of FIR-coefficients */
-		       h0,	/* In: pointer to array with FIR-cof. */
-		       1.0,	/* In: gain factor for FIR-coeffic. */
-		       1l,	/* In: Down-sampling factor */
-		       'D'	/* In: switch to down-sampling proc. */
-    );				/* (works here as simple FIR-fil. */
+  return fir_initialization (   /* Returns: pointer to SCD_FIR-struct */
+                              lenh0,    /* In: number of FIR-coefficients */
+                              h0,       /* In: pointer to array with FIR-cof. */
+                              1.0,      /* In: gain factor for FIR-coeffic. */
+                              1l,       /* In: Down-sampling factor */
+                              'D'       /* In: switch to down-sampling proc. */
+    );                          /* (works here as simple FIR-fil. */
 }
+
 /* ................... End of rx_mod_irs_8khz_init() ..................... */
 
 

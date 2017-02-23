@@ -23,63 +23,54 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
-/**/
+ /**/
 /*	decorr.c -- Decorrelation of basis vectors from given vector.*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
-/**/
+   /**/
 /*	Written by: Matt Hartman*/
-/**/
+   /**/
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-/**/
+   /**/
 #include "vparams.h"
-
-void            DECORR(vecPtr, basisPtr, numBasis)
-  FTYPE          *vecPtr;
-  FTYPE          *basisPtr;
-  int             numBasis;
+void DECORR (vecPtr, basisPtr, numBasis)
+     FTYPE *vecPtr;
+     FTYPE *basisPtr;
+     int numBasis;
 {
-  FTYPE           gamma = 0.0;	/* Energy in the given vector (i.e. the
-				 * vector from */
+  FTYPE gamma = 0.0;            /* Energy in the given vector (i.e. the vector from */
   /* which the basis set will be decorrelated) */
-  FTYPE           psi;		/* Energy in the current basis vector */
-  FTYPE           proj;		/* Gamma / psi */
-  FTYPE          *bvPtr;	/* Points to the basis vector currently being */
+  FTYPE psi;                    /* Energy in the current basis vector */
+  FTYPE proj;                   /* Gamma / psi */
+  FTYPE *bvPtr;                 /* Points to the basis vector currently being */
   /* decorrelated */
 
-  FTYPE          *tmpPtr, *tmpPtr2, *endPtr, *endPtr2;
+  FTYPE *tmpPtr, *tmpPtr2, *endPtr, *endPtr2;
 
 /*	compute energy in the given vector*/
-/**/
-  tmpPtr = vecPtr;
+   /**/ tmpPtr = vecPtr;
   for (endPtr = tmpPtr + S_LEN; tmpPtr < endPtr; tmpPtr++)
     gamma += *tmpPtr * *tmpPtr;
 
 /*	decorrelate each basis vector from the given vector*/
-/**/
-  bvPtr = basisPtr;
-  for (endPtr = bvPtr + S_LEN * numBasis; bvPtr < endPtr; bvPtr += S_LEN)
-  {
+   /**/ bvPtr = basisPtr;
+  for (endPtr = bvPtr + S_LEN * numBasis; bvPtr < endPtr; bvPtr += S_LEN) {
     /* get dot-product of basis vector and given vector */
-    /**/
-    psi = 0.0;
+     /**/ psi = 0.0;
     tmpPtr = bvPtr;
     tmpPtr2 = vecPtr;
-    for (endPtr2 = tmpPtr + S_LEN; tmpPtr < endPtr2; tmpPtr++)
-    {
+    for (endPtr2 = tmpPtr + S_LEN; tmpPtr < endPtr2; tmpPtr++) {
       psi += *tmpPtr * *tmpPtr2;
       tmpPtr2++;
     }
 
     /* subtract component of basis vector that is in the direction */
     /* of the given vector */
-    /**/
-    proj = psi / gamma;
+     /**/ proj = psi / gamma;
     tmpPtr = bvPtr;
     tmpPtr2 = vecPtr;
-    for (endPtr2 = tmpPtr + S_LEN; tmpPtr < endPtr2; tmpPtr++)
-    {
+    for (endPtr2 = tmpPtr + S_LEN; tmpPtr < endPtr2; tmpPtr++) {
       *tmpPtr = *tmpPtr - proj * *tmpPtr2;
       tmpPtr2++;
     }

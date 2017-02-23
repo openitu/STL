@@ -20,39 +20,37 @@
  * 	g728fp_divide: this subroutine performs a 16-bit precision g728fp_divide operation
  * 		on two numbers in "normalized floating-point representation".
  */
-void g728fp_divide(
-	Long	num,	/* normalized numerator mantissa */
-	Nshift	numq,	/* Q of num */
-	Long	den,	/* normalized denominator mantissa */
-	Nshift	denq,	/* Q of den */
-	Long	*quo,	/* normalized quotient mantissa */
-	Nshift	*quoq)	/* Q of quo */
-{
-	Long	n, d, q;
-	int	i, isneg;
-	Nshift	qq;
+void g728fp_divide (Long num,   /* normalized numerator mantissa */
+                    Nshift numq,        /* Q of num */
+                    Long den,   /* normalized denominator mantissa */
+                    Nshift denq,        /* Q of den */
+                    Long * quo, /* normalized quotient mantissa */
+                    Nshift * quoq) {    /* Q of quo */
+  Long n, d, q;
+  int i, isneg;
+  Nshift qq;
 
-	qq = numq - denq + 14;		/* set exp */
-	isneg = num * den < 0;		/* sign */
-	n = abs(num);
-	d = abs(den);
-	if (n < d) {
-		qq++;
-		n <<= 1;		/* left shift num so q is normalized */
-	}
-	q = 0;
-	for (i = 0; i < 15; i++) {	/* binary long divison */
-		q <<= 1;		
-		if(n > d) {
-			q++;
-			n -= d;
-		}
-		n <<= 1;
-	}
-	if(n > d)			/* rounding */
-		q++;
-	if(isneg)			/* restore sign */
-		q = -q;
-	*quoq = qq;
-	*quo = q;
+  qq = numq - denq + 14;        /* set exp */
+  isneg = num * den < 0;        /* sign */
+  n = abs (num);
+  d = abs (den);
+  if (n < d) {
+    qq++;
+    n <<= 1;                    /* left shift num so q is normalized */
+  }
+  q = 0;
+  for (i = 0; i < 15; i++) {    /* binary long divison */
+    q <<= 1;
+    if (n > d) {
+      q++;
+      n -= d;
+    }
+    n <<= 1;
+  }
+  if (n > d)                    /* rounding */
+    q++;
+  if (isneg)                    /* restore sign */
+    q = -q;
+  *quoq = qq;
+  *quo = q;
 }

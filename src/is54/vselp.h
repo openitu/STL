@@ -34,78 +34,78 @@ Motorola Inc.
 
 /* Inclusions */
 #include <math.h>
-#include "vparams.h"		/* needed for struct definitions.  */
+#include "vparams.h"            /* needed for struct definitions.  */
 
 /*-------------------------------------------------------------------------*/
 /* Function declarations ...  */
 /* ... from getParams.c */
-void            getParams();
+void getParams ();
 /*FILE *fpget */
 
 /* ... from calcParams.c */
-void            calcParams();
+void calcParams ();
 
 /* ... from initTables.c */
-void            initTables();
+void initTables ();
 
 /* ... from filt4.c */
-void            FILT4();
+void FILT4 ();
 /*FTYPE *inPtr, int len */
 
 /* ... from flatv.c */
-void            FLATV();
-FTYPE           lookup();
+void FLATV ();
+FTYPE lookup ();
 /*int i */
 
 /* ... from paramConv.c */
-int             ATORC();
+int ATORC ();
 /*FTYPE *a, FTYPE *k */
-int             RCTOA();
+int RCTOA ();
 /*FTYPE *k, FTYPE *a */
 
 /* ... from interpolate.c */
-int             INTERPOLATE();
+int INTERPOLATE ();
 /*struct coefSet defCoefs,
 		int numSets,
 		struct coefSet oCoefs,
 		int i,
 		FTYPE rq0 */
 
-void            I_MOV();
+void I_MOV ();
 /*struct coefSet defSet,
 	  int numSets,
 	  FTYPE	rq0 */
 
-FTYPE           RES_ENG();
+FTYPE RES_ENG ();
 /*FTYPE rq0, FTYPE *k */
 
 /* ... from t_sub.c */
-void            T_SUB();
+void T_SUB ();
 /*int sfIndex */
 
 /* ... from putCodesEtc.c */
-long            putCodesHex();
-long            putCodesBin();
+long putCodesHex ();
+long putCodesBin ();
 /*int *paramP */
-long            getCodesHex();
-long            getCodesBin();
+long getCodesHex ();
+long getCodesBin ();
 /*int *codePtr */
-void            putCodesLog();
+void putCodesLog ();
 
 /* ... from makeCoefs.c */
-void            widen();
+void widen ();
 /*FTYPE lambda, char side */
-void            A_SST();
+void A_SST ();
 /*FTYPE *wCoefPtr, FTYPE *ssCoefPtr */
 
 /* ... from r_sub.c */
-void            R_SUB();
+void R_SUB ();
 
 /* ... from weightedSnr.c */
-void            printSnr();
+void printSnr ();
 
 /* ... from freeSpace.c */
-void            freeSpace();
+void freeSpace ();
 
 /* external definitions */
 #include "edef.i"

@@ -11,7 +11,7 @@
 #include "gsm.h"
 #include "proto.h"
 
-void gsm_destroy P1((S), gsm S)
-{
-	if (S) free((char *)S);
+void gsm_destroy P1 ((S), gsm S) {
+  if (S)
+    free ((char *) S);
 }

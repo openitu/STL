@@ -80,9 +80,9 @@ HISTORY:
  * ......... INCLUDES .........
  */
 #include <stdio.h>
-#include <stdlib.h>		/* General utility definitions */
+#include <stdlib.h>             /* General utility definitions */
 
-#include "firflt.h"		/* Global definitions for FIR-FIR filter */
+#include "firflt.h"             /* Global definitions for FIR-FIR filter */
 
 
 /*
@@ -90,15 +90,10 @@ HISTORY:
  */
 
 
-SCD_FIR *fir_initialization ARGS((long lenh0, float h0[], double gain, 
-                                                 long idwnup, int hswitch));
+SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
-static long     fir_upsampling_kernel ARGS((long lenx, float *x_ptr, 
-                      float *y_ptr, long lenh0, float *h0_ptr, float *T_ptr, 
-                      long iupfac));
-static long     fir_downsampling_kernel ARGS((long lenx, float *x_ptr, 
-                      float *y_ptr, long lenh0, float *h0_ptr, float *T_ptr, 
-                      long downfac, long *k0_ptr));
+static long fir_upsampling_kernel ARGS ((long lenx, float *x_ptr, float *y_ptr, long lenh0, float *h0_ptr, float *T_ptr, long iupfac));
+static long fir_downsampling_kernel ARGS ((long lenx, float *x_ptr, float *y_ptr, long lenh0, float *h0_ptr, float *T_ptr, long downfac, long *k0_ptr));
 
 
 /*
@@ -148,42 +143,36 @@ static long     fir_downsampling_kernel ARGS((long lenx, float *x_ptr,
 
  ============================================================================
 */
-long            hq_kernel(lseg, x_ptr, fir_ptr, y_ptr)
-  long            lseg;
-  float          *x_ptr;
-  SCD_FIR        *fir_ptr;
-  float          *y_ptr;
+long hq_kernel (lseg, x_ptr, fir_ptr, y_ptr)
+     long lseg;
+     float *x_ptr;
+     SCD_FIR *fir_ptr;
+     float *y_ptr;
 {
 
-  if (fir_ptr->hswitch == 'U')	/* call up-sampling procedure */
-    return
-      fir_upsampling_kernel(	/* returns number of output samples */
-			    lseg,	/* In   : length of input signal */
-			    x_ptr,	/* In   : array with input samples */
-			    y_ptr,	/* Out  : array with output samples */
-			    fir_ptr->lenh0,	/* In   : number of
-						 * FIR-coefficients */
-			    fir_ptr->h0,	/* In   : array with
-						 * FIR-coefficients */
-			    fir_ptr->T,	/* InOut: state variables */
-			    fir_ptr->dwn_up	/* In   : upsampling factor */
+  if (fir_ptr->hswitch == 'U')  /* call up-sampling procedure */
+    return fir_upsampling_kernel (      /* returns number of output samples */
+                                   lseg,        /* In : length of input signal */
+                                   x_ptr,       /* In : array with input samples */
+                                   y_ptr,       /* Out : array with output samples */
+                                   fir_ptr->lenh0,      /* In : number of FIR-coefficients */
+                                   fir_ptr->h0, /* In : array with FIR-coefficients */
+                                   fir_ptr->T,  /* InOut: state variables */
+                                   fir_ptr->dwn_up      /* In : upsampling factor */
       );
-  else				/* call down-sampling procedure */
-    return
-      fir_downsampling_kernel(	/* returns number of output samples */
-			      lseg,	/* In   : length of input signal */
-			      x_ptr,	/* In   : array with input samples */
-			      y_ptr,	/* Out  : array with output samples */
-			      fir_ptr->lenh0,	/* In   : number of
-						 * FIR-coefficients */
-			      fir_ptr->h0,	/* In   : array with
-						 * FIR-coefficients */
-			      fir_ptr->T,	/* InOut: state variables */
-			      fir_ptr->dwn_up,	/* In   : downsampling factor */
-			      &(fir_ptr->k0)	/* InOut: starting index in
-						 * x-array */
+  else                          /* call down-sampling procedure */
+    return fir_downsampling_kernel (    /* returns number of output samples */
+                                     lseg,      /* In : length of input signal */
+                                     x_ptr,     /* In : array with input samples */
+                                     y_ptr,     /* Out : array with output samples */
+                                     fir_ptr->lenh0,    /* In : number of FIR-coefficients */
+                                     fir_ptr->h0,       /* In : array with FIR-coefficients */
+                                     fir_ptr->T,        /* InOut: state variables */
+                                     fir_ptr->dwn_up,   /* In : downsampling factor */
+                                     &(fir_ptr->k0)     /* InOut: starting index in * x-array */
       );
 }
+
 /* .......................... End of hq_kernel() .......................... */
 
 
@@ -218,14 +207,15 @@ long            hq_kernel(lseg, x_ptr, fir_ptr, y_ptr)
 
  ============================================================================
 */
-void            hq_free(fir_ptr)
-  SCD_FIR        *fir_ptr;
+void hq_free (fir_ptr)
+     SCD_FIR *fir_ptr;
 {
 
-  free(fir_ptr->T);		/* free state variables */
-  free(fir_ptr->h0);		/* free state impulse response */
-  free(fir_ptr);		/* free allocated struct */
+  free (fir_ptr->T);            /* free state variables */
+  free (fir_ptr->h0);           /* free state impulse response */
+  free (fir_ptr);               /* free allocated struct */
 }
+
 /* .......................... End of hq_free() .......................... */
 
 
@@ -259,14 +249,15 @@ void            hq_free(fir_ptr)
 
  ============================================================================
 */
-void            hq_reset(fir_ptr)
-  SCD_FIR        *fir_ptr;
+void hq_reset (fir_ptr)
+     SCD_FIR *fir_ptr;
 {
-  long            k;
-  for (k = 0; k < fir_ptr->lenh0 - 1; k++)	/* clear delay line */
-    fir_ptr->T[k] = 0.0;	/* (= state variables) */
-  fir_ptr->k0 = 0;		/* default starting index in x-array */
+  long k;
+  for (k = 0; k < fir_ptr->lenh0 - 1; k++)      /* clear delay line */
+    fir_ptr->T[k] = 0.0;        /* (= state variables) */
+  fir_ptr->k0 = 0;              /* default starting index in x-array */
 }
+
 /* .......................... End of hq_reset() .......................... */
 
 
@@ -305,16 +296,16 @@ void            hq_reset(fir_ptr)
 
  ============================================================================
 */
-SCD_FIR *fir_initialization(lenh0, h0, gain, idwnup, hswitch)
-  long            lenh0;
-  float           h0[];
-  double          gain;
-  long            idwnup;
-  int /* char */  hswitch;
+SCD_FIR *fir_initialization (lenh0, h0, gain, idwnup, hswitch)
+     long lenh0;
+     float h0[];
+     double gain;
+     long idwnup;
+     int /* char */ hswitch;
 {
-  SCD_FIR        *ptrFIR;	/* pointer to the new struct */
-  float           fak;
-  long            k;
+  SCD_FIR *ptrFIR;              /* pointer to the new struct */
+  float fak;
+  long k;
 
 
 /*
@@ -322,23 +313,20 @@ SCD_FIR *fir_initialization(lenh0, h0, gain, idwnup, hswitch)
  */
 
   /* Allocate memory for a new struct */
-  if ((ptrFIR = (SCD_FIR *) malloc((long) sizeof(SCD_FIR))) ==(SCD_FIR *) NULL)
-  {
+  if ((ptrFIR = (SCD_FIR *) malloc ((long) sizeof (SCD_FIR))) == (SCD_FIR *) NULL) {
     return 0;
   }
 
   /* Allocate memory for delay line */
-  if ((ptrFIR->T = (float *) malloc((lenh0 - 1) * sizeof(fak))) == (float *) 0)
-  {
-    free(ptrFIR);		/* deallocate struct FIR */
+  if ((ptrFIR->T = (float *) malloc ((lenh0 - 1) * sizeof (fak))) == (float *) 0) {
+    free (ptrFIR);              /* deallocate struct FIR */
     return 0;
   }
 
   /* Allocate memory for impulse response */
-  if ((ptrFIR->h0 = (float *) malloc(lenh0 * sizeof(fak))) == (float *) 0)
-  {
-    free(ptrFIR->T);		/* deallocate delay line */
-    free(ptrFIR);		/* deallocate struct FIR */
+  if ((ptrFIR->h0 = (float *) malloc (lenh0 * sizeof (fak))) == (float *) 0) {
+    free (ptrFIR->T);           /* deallocate delay line */
+    free (ptrFIR);              /* deallocate struct FIR */
     return 0;
   }
 
@@ -349,8 +337,7 @@ SCD_FIR *fir_initialization(lenh0, h0, gain, idwnup, hswitch)
   /* Store number of FIR-coefficients */
   ptrFIR->lenh0 = lenh0;
 
-  /* Fill FIR coefficients into struct; for upsampling tasks the
-   * FIR-coefficients are multiplied by the upsampling factor 'gain' */
+  /* Fill FIR coefficients into struct; for upsampling tasks the FIR-coefficients are multiplied by the upsampling factor 'gain' */
   for (k = 0; k <= ptrFIR->lenh0 - 1; k++)
     ptrFIR->h0[k] = gain * h0[k];
 
@@ -365,14 +352,13 @@ SCD_FIR *fir_initialization(lenh0, h0, gain, idwnup, hswitch)
     ptrFIR->T[k] = 0.0;
 
   /* Store default starting index for the x-array */
-  /* NOTE: for down-sampling: if the number of input samples is not a
-   * multiple of the down-sampling factor, k0 points to the first sample in
-   * the next input segment to be processed */
+  /* NOTE: for down-sampling: if the number of input samples is not a multiple of the down-sampling factor, k0 points to the first sample in the next input segment to be processed */
   ptrFIR->k0 = 0;
 
   /* Return pointer to struct */
   return (ptrFIR);
 }
+
 /* ..................... End of fir_initialization() ..................... */
 
 
@@ -415,17 +401,17 @@ SCD_FIR *fir_initialization(lenh0, h0, gain, idwnup, hswitch)
 
  ============================================================================
 */
-static long     fir_downsampling_kernel(lenx, x, y, lenh0, h0, T, downfac, k0)
-  long            lenx;
-  float          *x;
-  float          *y;
-  long            lenh0;
-  float          *h0;
-  float          *T;
-  long            downfac;
-  long           *k0;
+static long fir_downsampling_kernel (lenx, x, y, lenh0, h0, T, downfac, k0)
+     long lenx;
+     float *x;
+     float *y;
+     long lenh0;
+     float *h0;
+     float *T;
+     long downfac;
+     long *k0;
 {
-  long            ktrans, kx, kStart, ky, kappa;	/* loop indices */
+  long ktrans, kx, kStart, ky, kappa;   /* loop indices */
 
 
 /*
@@ -433,26 +419,22 @@ static long     fir_downsampling_kernel(lenx, x, y, lenh0, h0, T, downfac, k0)
   */
 
   kStart = *k0;
-  ky = 0;			/* starting index in output array (y) */
+  ky = 0;                       /* starting index in output array (y) */
   ktrans = lenh0 - 1;
   if (ktrans > lenx - 1)
-    ktrans = lenx - 1;		/* x[*] less than h0[*]? */
+    ktrans = lenx - 1;          /* x[*] less than h0[*]? */
 
-  for (kx = *k0; kx <= ktrans; kx += downfac)
-  {
-    y[ky] = x[kx] * h0[0];	/* first part in dot-product */
-    for (kappa = 1; kappa <= kx; kappa++)	/* first part from x-array */
-    {
+  for (kx = *k0; kx <= ktrans; kx += downfac) {
+    y[ky] = x[kx] * h0[0];      /* first part in dot-product */
+    for (kappa = 1; kappa <= kx; kappa++) {     /* first part from x-array */
       y[ky] += x[kx - kappa] * h0[kappa];
     }
 
-    for (kappa = kx + 1; kappa < lenh0; kappa++)	/* second part from
-							 * T-array */
-    {
+    for (kappa = kx + 1; kappa < lenh0; kappa++) {      /* second part from * T-array */
       y[ky] += T[lenh0 - 2 + kx + 1 - kappa] * h0[kappa];
     }
     ky++;
-    kStart = kx;		/* Save index of last processed sample */
+    kStart = kx;                /* Save index of last processed sample */
   }
 
 
@@ -461,29 +443,21 @@ static long     fir_downsampling_kernel(lenx, x, y, lenh0, h0, T, downfac, k0)
   */
 
   *k0 = kStart;
-  for (kx = kStart + downfac; kx <= lenx - 1; kx += downfac)
-  {
-    y[ky] = x[kx] * h0[0];	/* first part in dot-product */
-    for (kappa = 1; kappa <= lenh0 - 1; kappa++)
-    {
-      y[ky] += x[kx - kappa] * h0[kappa];	/* remaining part of
-						 * dot-product */
+  for (kx = kStart + downfac; kx <= lenx - 1; kx += downfac) {
+    y[ky] = x[kx] * h0[0];      /* first part in dot-product */
+    for (kappa = 1; kappa <= lenh0 - 1; kappa++) {
+      y[ky] += x[kx - kappa] * h0[kappa];       /* remaining part of dot-product */
     }
     ky++;
     *k0 = kx;
   }
 
-  /* if the number of input samples is not a multiple of the down sampling
-   * factor, k0 points to the first sample in the next input segment to be
-   * processed */
-  if (*k0 <= lenx -1)
-  {
-      *k0 = *k0 + downfac;
-      *k0 = *k0 - lenx;
-  } else						/* if the offset was greater than the block length, nothing was done.
-								 * Just decrease the value of this offset with the size of this "skipped" block */
-  {
-	  *k0 = *k0 - lenx;
+  /* if the number of input samples is not a multiple of the down sampling factor, k0 points to the first sample in the next input segment to be processed */
+  if (*k0 <= lenx - 1) {
+    *k0 = *k0 + downfac;
+    *k0 = *k0 - lenx;
+  } else {                      /* if the offset was greater than the block length, nothing was done. * Just decrease the value of this offset with the size of this "skipped" block */
+    *k0 = *k0 - lenx;
   }
 
 
@@ -492,24 +466,18 @@ static long     fir_downsampling_kernel(lenx, x, y, lenh0, h0, T, downfac, k0)
  *                      (update of delay line)
  */
 
-  if (lenx >= lenh0 - 1)	/* ... all samples taken from x-array */
-  {
-    for (kappa = 0; kappa <= lenh0 - 2; kappa++)
-    {
+  if (lenx >= lenh0 - 1) {      /* ... all samples taken from x-array */
+    for (kappa = 0; kappa <= lenh0 - 2; kappa++) {
       T[kappa] = x[lenx + 1 - lenh0 + kappa];
     }
-  }
-  else
-  {
+  } else {
     /* Left-Shift of T-array */
-    for (kappa = 0; kappa <= lenh0 - 2 - lenx; kappa++)
-    {
+    for (kappa = 0; kappa <= lenh0 - 2 - lenx; kappa++) {
       T[kappa] = T[kappa + lenx];
     }
 
     /* Copy complete x-array -> T-array */
-    for (kappa = lenh0 - 1 - lenx; kappa <= lenh0 - 2; kappa++)
-    {
+    for (kappa = lenh0 - 1 - lenx; kappa <= lenh0 - 2; kappa++) {
       T[kappa] = x[lenx - 1 + kappa - (lenh0 - 2)];
     }
   }
@@ -517,6 +485,7 @@ static long     fir_downsampling_kernel(lenx, x, y, lenh0, h0, T, downfac, k0)
   /* Return number of output samples */
   return ky;
 }
+
 /* ................... End of fir_downsampling_kernel() ................... */
 
 
@@ -556,49 +525,44 @@ static long     fir_downsampling_kernel(lenx, x, y, lenh0, h0, T, downfac, k0)
 
  ============================================================================
 */
-static long     fir_upsampling_kernel(lenx, x, y, lenh0, h0, T, iupfac)
-  long            lenx;
-  float          *x, *y;
-  long            lenh0;
-  float          *h0, *T;
-  long            iupfac;
+static long fir_upsampling_kernel (lenx, x, y, lenh0, h0, T, iupfac)
+     long lenx;
+     float *x, *y;
+     long lenh0;
+     float *h0, *T;
+     long iupfac;
 {
-  long            ktrans, iup, kx, kStart, ky, kappa;	/* loop indices */
+  long ktrans, iup, kx, kStart, ky, kappa;      /* loop indices */
 
 
-  ky = 0;			/* starting index in output array (y) */
+  ky = 0;                       /* starting index in output array (y) */
 
 /*
   * ......... FIRST STEP: Transition from k=(0..lenh0/iupasm-2) .........
   */
 
   kStart = 0;
-  ktrans = (lenh0 / iupfac > lenx ?	/* length of transition */
-	    lenx :
-	    lenh0 / iupfac);
-  for (kx = 0; kx <= ktrans - 1; kx++)
-  {
+  ktrans = (lenh0 / iupfac > lenx ?     /* length of transition */
+            lenx : lenh0 / iupfac);
+  for (kx = 0; kx <= ktrans - 1; kx++) {
     /* Loop over #iupfac partial FIR coefficients */
-    for (iup = 0; iup <= iupfac - 1; iup++)
-    {
+    for (iup = 0; iup <= iupfac - 1; iup++) {
       /* ... first contribution in dot-product */
       y[ky] = x[kx] * h0[iup];
 
       /* ... compute partial dot-product with source data from x-array */
-      for (kappa = 1; kappa <= kx; kappa++)
-      {
-	y[ky] += x[kx - kappa] * h0[iup + kappa * iupfac];
+      for (kappa = 1; kappa <= kx; kappa++) {
+        y[ky] += x[kx - kappa] * h0[iup + kappa * iupfac];
       }
 
       /* ... compute rest of dot-product with source data from T-array */
-      for (kappa = kx + 1; kappa < lenh0 / iupfac; kappa++)
-      {
-	y[ky] += T[lenh0 / iupfac - 2 + kx + 1 - kappa]
-	  * h0[iup + kappa * iupfac];
+      for (kappa = kx + 1; kappa < lenh0 / iupfac; kappa++) {
+        y[ky] += T[lenh0 / iupfac - 2 + kx + 1 - kappa]
+          * h0[iup + kappa * iupfac];
       }
       ky++;
     }
-    kStart = kx;		/* Save index of last processed sample */
+    kStart = kx;                /* Save index of last processed sample */
   }
 
 
@@ -607,17 +571,14 @@ static long     fir_upsampling_kernel(lenx, x, y, lenh0, h0, T, iupfac)
  *                        completely with data from x[*]
  */
 
-  for (kx = kStart + 1; kx <= lenx - 1; kx++)
-  {
-    for (iup = 0; iup <= iupfac - 1; iup++)
-    {
+  for (kx = kStart + 1; kx <= lenx - 1; kx++) {
+    for (iup = 0; iup <= iupfac - 1; iup++) {
       /* ... first contribution in dot-product */
       y[ky] = x[kx] * h0[iup];
 
       /* ... compute partial dot-product with source data from x-array */
-      for (kappa = 1; kappa <= lenh0 / iupfac - 1; kappa++)
-      {
-	y[ky] += x[kx - kappa] * h0[iup + kappa * iupfac];
+      for (kappa = 1; kappa <= lenh0 / iupfac - 1; kappa++) {
+        y[ky] += x[kx - kappa] * h0[iup + kappa * iupfac];
       }
       ky++;
     }
@@ -629,32 +590,26 @@ static long     fir_upsampling_kernel(lenx, x, y, lenh0, h0, T, iupfac)
  *                        (update of delay line)
  */
 
-  if (lenx >= lenh0 / iupfac - 1)
-  {
+  if (lenx >= lenh0 / iupfac - 1) {
     /* ... all samples taken from x-array */
-    for (kappa = 0; kappa <= lenh0 / iupfac - 2; kappa++)
-    {
+    for (kappa = 0; kappa <= lenh0 / iupfac - 2; kappa++) {
       T[kappa] = x[lenx + 1 - lenh0 / iupfac + kappa];
     }
-  }
-  else
-  {
+  } else {
     /* ... left-Shift of T-array */
-    for (kappa = 0; kappa <= lenh0 / iupfac - 2 - lenx; kappa++)
-    {
+    for (kappa = 0; kappa <= lenh0 / iupfac - 2 - lenx; kappa++) {
       T[kappa] = T[kappa + lenx];
     }
 
     /* ... copy complete x-array -> T-array */
-    for (kappa = lenh0 / iupfac - 1 - lenx;
-	 kappa <= lenh0 / iupfac - 2; kappa++)
-    {
+    for (kappa = lenh0 / iupfac - 1 - lenx; kappa <= lenh0 / iupfac - 2; kappa++) {
       T[kappa] = x[lenx - 1 + kappa - (lenh0 / iupfac - 2)];
     }
   }
 
   return ky;
 }
+
 /* ................. End of fir_upsampling_kernel() .................. */
 
 

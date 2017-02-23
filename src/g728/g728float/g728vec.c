@@ -15,68 +15,61 @@
  * herein.
  */
 
-void g728_vsub(Float *a, Float *b, int n, Float *c)
-{
-	int i;
+void g728_vsub (Float * a, Float * b, int n, Float * c) {
+  int i;
 
-	for (i = 0; i < n; i++)
-		c[i] = a[i] - b[i];
+  for (i = 0; i < n; i++)
+    c[i] = a[i] - b[i];
 }
 
-void g728_vmult(Float *a, Float *b, int n, Float *c)
-{
-	int i;
+void g728_vmult (Float * a, Float * b, int n, Float * c) {
+  int i;
 
-	for (i = 0; i < n; i++)
-		c[i] = a[i] * b[i];
+  for (i = 0; i < n; i++)
+    c[i] = a[i] * b[i];
 }
 
-void g728_vscale(Float *a, Float b, int n, Float *c)
-{
-	int i;
+void g728_vscale (Float * a, Float b, int n, Float * c) {
+  int i;
 
-	for (i = 0; i < n; i++)
-                c[i] = b * a[i];
+  for (i = 0; i < n; i++)
+    c[i] = b * a[i];
 }
 
-Float g728_vsumabs(Float *a, int n)
-{
-	int i;
-	Float sum = (Float)0.;
+Float g728_vsumabs (Float * a, int n) {
+  int i;
+  Float sum = (Float) 0.;
 
-	for (i = 0; i < n; i++)
-		if (a[i] >= (Float)0.)
-			sum += a[i];
-		else
-			sum -= a[i];
-	return sum;
+  for (i = 0; i < n; i++)
+    if (a[i] >= (Float) 0.)
+      sum += a[i];
+    else
+      sum -= a[i];
+  return sum;
 }
 
-Float g728_vdotp(Float *a, Float *b, int n)
-{
-	int i;
-	Float sum = (Float)0.;
+Float g728_vdotp (Float * a, Float * b, int n) {
+  int i;
+  Float sum = (Float) 0.;
 
-	for (i = 0; i < n; i++)
-		sum += a[i] * b[i];
-	return sum;
+  for (i = 0; i < n; i++)
+    sum += a[i] * b[i];
+  return sum;
 }
 
-Float g728_vrdotp(Float *a, Float *b, int n)
-{
-	int i;
-	Float sum = (Float)0.;
+Float g728_vrdotp (Float * a, Float * b, int n) {
+  int i;
+  Float sum = (Float) 0.;
 
-	b += n - 1;
-	for (i = 0; i < n; i++)
-		sum += a[i] * *b--;
-	return sum;
+  b += n - 1;
+  for (i = 0; i < n; i++)
+    sum += a[i] * *b--;
+  return sum;
 }
 
-void g728_clamp(Float *x, Float h, Float l)
-{
-	if (*x > h)
-		*x = h;
-	else if (*x < l)
-		*x = l;
+void g728_clamp (Float * x, Float h, Float l) {
+  if (*x > h)
+    *x = h;
+  else if (*x < l)
+    *x = l;
 }

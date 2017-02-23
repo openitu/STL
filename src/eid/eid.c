@@ -145,10 +145,10 @@ FUNCTIONS       : - open_eid (double ber, double gamma)
   =============================================================================
 */
 
- 
- 
+
+
 /* ********************* BEGIN OF EXAMPLES ON USAGE *********************** */
- 
+
 /* ==========================================================================
    Below two example programs are presented, how to use the EID-functions,
    one for insertion of bit errors and the other one for frame erasure.
@@ -165,167 +165,159 @@ FUNCTIONS       : - open_eid (double ber, double gamma)
 /*============================================================================*/
 /*                   Example Program for BIT ERROR INSERTION                  */
 /*============================================================================*/
-#ifdef A_Z_R_J_B_L_X                    /* to avoid compilation of examples */
+#ifdef A_Z_R_J_B_L_X            /* to avoid compilation of examples */
 
-main(int argc, char** argv)
-{
-   SCD_EID *BEReid;                     /* pointer to EID-structure */
-   char ifile[MAX_STRLEN],ofile[MAX_STRLEN]; /* input/output file names */
-   FILE *ifilptr,*ofilptr;              /* input/output file pointer */
-   int    EOF_detected;
- 
-   double ber,gamma;                    /* bit error rate, burst factor */
-   long   lseg,lread;                   /* length of one transmitted frame */
-   double ber1;                         /* return values from BER_generator */
-   double dstbits;                      /* count total distorted bits */
-   double prcbits;                      /* count number of processed bits */
+main (int argc, char **argv) {
+  SCD_EID *BEReid;              /* pointer to EID-structure */
+  char ifile[MAX_STRLEN], ofile[MAX_STRLEN];    /* input/output file names */
+  FILE *ifilptr, *ofilptr;      /* input/output file pointer */
+  int EOF_detected;
 
-   short *xbuff,*ybuff,shvar;           /* pointer to bit-buffer */
-   short *EPbuff;                       /* pointer to error pattern-buffer */
-   short SYNCword,i;
- 
-    clock_t t1,t2;
-    double t;
- 
+  double ber, gamma;            /* bit error rate, burst factor */
+  long lseg, lread;             /* length of one transmitted frame */
+  double ber1;                  /* return values from BER_generator */
+  double dstbits;               /* count total distorted bits */
+  double prcbits;               /* count number of processed bits */
+
+  short *xbuff, *ybuff, shvar;  /* pointer to bit-buffer */
+  short *EPbuff;                /* pointer to error pattern-buffer */
+  short SYNCword, i;
+
+  clock_t t1, t2;
+  double t;
+
 /* ------------------------------- Statements ------------------------------- */
- 
-   .... Put your statements here ....
- 
-  GET_PAR_S(1,"_File with input bit stream: ............... ",ifile);
-   ifilptr = fopen(ifile,RB);           /* open input file */
-   if (ifilptr==NULL)
-      HARAKIRI("    Could not open input file",1);
- 
-        /* ------------------------------------------------------------------ */
-        /* Find SYNC-word and frame length on file */
-        /* ------------------------------------------------------------------ */
-        lread = fread(&SYNCword,2,1,ifilptr);
-        if (SYNCword!=(short)0x6B21)
-          HARAKIRI("    First word on input file not the SYNC-word (0x6B21)",1);
-        lseg = 0;
-        i    = 0;
-        while(lseg==0)
-        {
-            lread = fread(&shvar,2,1,ifilptr);
-            if (lread==0)
-               HARAKIRI("    No next SYNC-word found on input file",1);
-            if (shvar==SYNCword)
-                lseg=i;
-            i++;
-        }
-        fseek(ifilptr,0L,0);            /* filepointer back */
- 
- 
-  GET_PAR_S(2,"_File for disturbed bitstream: ............. ",ofile);
-   ofilptr = fopen(ofile,WB);
-   if (ofilptr==NULL)
-      HARAKIRI("    Could not create output file",1);
- 
- 
+
+  ....Put your statements here ....GET_PAR_S (1, "_File with input bit stream: ............... ", ifile);
+  ifilptr = fopen (ifile, RB);  /* open input file */
+  if (ifilptr == NULL)
+    HARAKIRI ("    Could not open input file", 1);
+
+  /* ------------------------------------------------------------------ */
+  /* Find SYNC-word and frame length on file */
+  /* ------------------------------------------------------------------ */
+  lread = fread (&SYNCword, 2, 1, ifilptr);
+  if (SYNCword != (short) 0x6B21)
+    HARAKIRI ("    First word on input file not the SYNC-word (0x6B21)", 1);
+  lseg = 0;
+  i = 0;
+  while (lseg == 0) {
+    lread = fread (&shvar, 2, 1, ifilptr);
+    if (lread == 0)
+      HARAKIRI ("    No next SYNC-word found on input file", 1);
+    if (shvar == SYNCword)
+      lseg = i;
+    i++;
+  }
+  fseek (ifilptr, 0L, 0);       /* filepointer back */
+
+
+  GET_PAR_S (2, "_File for disturbed bitstream: ............. ", ofile);
+  ofilptr = fopen (ofile, WB);
+  if (ofilptr == NULL)
+    HARAKIRI ("    Could not create output file", 1);
+
+
 /* -------------------------------------------------------------------------- */
 /*                       Initialize EID (bit error rate) */
 /* -------------------------------------------------------------------------- */
-  GET_PAR_D(3,"_bit error rate     (0.0 ... 0.50): ........ ",ber);
-  GET_PAR_D(4,"_burst factor       (0.0 ... 0.99): ........ ",gamma);
- 
-     BEReid = open_eid(ber,gamma);      /* Open EID */
-     if (BEReid==(SCD_EID *)0)
-        HARAKIRI("    Could not create EID for bit errors!?",1);
- 
- 
+  GET_PAR_D (3, "_bit error rate     (0.0 ... 0.50): ........ ", ber);
+  GET_PAR_D (4, "_burst factor       (0.0 ... 0.99): ........ ", gamma);
+
+  BEReid = open_eid (ber, gamma);       /* Open EID */
+  if (BEReid == (SCD_EID *) 0)
+    HARAKIRI ("    Could not create EID for bit errors!?", 1);
+
+
 /* -------------------------------------------------------------------------- */
 /*                       Allocate memory for I/O-buffer */
 /* -------------------------------------------------------------------------- */
-  printf("_found frame length on input file: ......... %d\n",lseg);
- 
+  printf ("_found frame length on input file: ......... %d\n", lseg);
+
 /* -------------------------------------------------------------------------- */
 /* a) buffer for input bit stream: */
-    xbuff = (short *)malloc((1+lseg)*sizeof(short));
-    if (xbuff==(short *)0)
-       HARAKIRI("    Could not allocate memory for input bit stream buffer",1);
- 
+  xbuff = (short *) malloc ((1 + lseg) * sizeof (short));
+  if (xbuff == (short *) 0)
+    HARAKIRI ("    Could not allocate memory for input bit stream buffer", 1);
+
 /* -------------------------------------------------------------------------- */
 /* b) buffer for output bit stream: */
-    ybuff = (short *)malloc((1+lseg)*sizeof(short));
-    if (ybuff==(short *)0)
-       HARAKIRI("    Could not allocate memory for output bit stream buffer",1);
- 
+  ybuff = (short *) malloc ((1 + lseg) * sizeof (short));
+  if (ybuff == (short *) 0)
+    HARAKIRI ("    Could not allocate memory for output bit stream buffer", 1);
+
 /* -------------------------------------------------------------------------- */
 /* c) buffer for storing the error pattern: */
-    EPbuff = (short *)malloc((lseg)*sizeof(short));
-    if (EPbuff==(short *)0)
-       HARAKIRI("    Could not allocate memory for error pattern buffer",1);
- 
+  EPbuff = (short *) malloc ((lseg) * sizeof (short));
+  if (EPbuff == (short *) 0)
+    HARAKIRI ("    Could not allocate memory for error pattern buffer", 1);
+
 /* -------------------------------------------------------------------------- */
 /*                           Now process input file */
 /* -------------------------------------------------------------------------- */
 /* initialize counters fro computing bit error rate/frame erasure rate */
-    dstbits = 0.0;                      /* number of distorted bits */
-    prcbits = 0.0;                      /* number of processed bits */
+  dstbits = 0.0;                /* number of distorted bits */
+  prcbits = 0.0;                /* number of processed bits */
 
-    /* ---------------------------------------------------------------------- */
-    /*      Read file with input bit stream (segments of lenght "lseg+1") */
-    /* ---------------------------------------------------------------------- */
-    EOF_detected=0;                     /* Flag, to mark END OF FILE */
-    t1 = clock();                       /* measure CPU-time */
- 
-    while( (lread=fread(xbuff,2,lseg+1,ifilptr)) == lseg+1)
-    {
-      if (xbuff[0]==SYNCword && EOF_detected==0)
-      {
-        /* ------------------------------------------------------------------ */
-        /*                       Generate Error Pattern */
-        /* ------------------------------------------------------------------ */
-        ber1 = BER_generator(BEReid, lseg,EPbuff);
-          dstbits += ber1;              /* count number of disturbed bits */
-          prcbits += (double)lseg;      /* count number of processed bits */
+  /* ---------------------------------------------------------------------- */
+  /* Read file with input bit stream (segments of lenght "lseg+1") */
+  /* ---------------------------------------------------------------------- */
+  EOF_detected = 0;             /* Flag, to mark END OF FILE */
+  t1 = clock ();                /* measure CPU-time */
 
-        /* ------------------------------------------------------------------ */
-        /*     Modify input bit stream according the stored error pattern */
-        /* ------------------------------------------------------------------ */
-        BER_insertion(lseg+1,xbuff,ybuff,EPbuff);
- 
- 
-        /* ------------------------------------------------------------------ */
-        /*               Write disturbed bits to output file */
-        /* ------------------------------------------------------------------ */
-        lread=fwrite(ybuff,2,lseg+1,ofilptr);
-      }
- 
-      else                              /* if the next SYNC-word is missed */
-      {
-         EOF_detected=1;
-      }
+  while ((lread = fread (xbuff, 2, lseg + 1, ifilptr)) == lseg + 1) {
+    if (xbuff[0] == SYNCword && EOF_detected == 0) {
+      /* ------------------------------------------------------------------ */
+      /* Generate Error Pattern */
+      /* ------------------------------------------------------------------ */
+      ber1 = BER_generator (BEReid, lseg, EPbuff);
+      dstbits += ber1;          /* count number of disturbed bits */
+      prcbits += (double) lseg; /* count number of processed bits */
+
+      /* ------------------------------------------------------------------ */
+      /* Modify input bit stream according the stored error pattern */
+      /* ------------------------------------------------------------------ */
+      BER_insertion (lseg + 1, xbuff, ybuff, EPbuff);
+
+
+      /* ------------------------------------------------------------------ */
+      /* Write disturbed bits to output file */
+      /* ------------------------------------------------------------------ */
+      lread = fwrite (ybuff, 2, lseg + 1, ofilptr);
     }
- 
-    if (EOF_detected==1)
-        printf("   --- end of file detected (no SYNCword match) ---\n");
-    printf("\n");
- 
-    t2 = clock();
-    t  = (t2 - t1) / (double) CLOCKS_PER_SEC;
-    printf("CPU-time %f sec\r\n\n",t);
- 
+
+    else {                      /* if the next SYNC-word is missed */
+
+      EOF_detected = 1;
+    }
+  }
+
+  if (EOF_detected == 1)
+    printf ("   --- end of file detected (no SYNCword match) ---\n");
+  printf ("\n");
+
+  t2 = clock ();
+  t = (t2 - t1) / (double) CLOCKS_PER_SEC;
+  printf ("CPU-time %f sec\r\n\n", t);
+
 /* -------------------------------------------------------------------------- */
 /*                 Print message with measured bit error rate */
 /* -------------------------------------------------------------------------- */
-    if (prcbits>0)
-    {
-        printf("measured bit error rate    : %f  (%ld of %ld bits distorted)\n",
-                dstbits/prcbits,(long)dstbits,(long)prcbits);
-    }
- 
-    exit(0);
+  if (prcbits > 0) {
+    printf ("measured bit error rate    : %f  (%ld of %ld bits distorted)\n", dstbits / prcbits, (long) dstbits, (long) prcbits);
+  }
+
+  exit (0);
 }
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
+
+
 /* ========================================================================== */
 /*                      Example program for FRAME ERASURE                     */
 /* ========================================================================== */
@@ -333,173 +325,165 @@ main(int argc, char** argv)
 /*                                Main Program                                */
 /* -------------------------------------------------------------------------- */
 
-main(int argc, char** argv)
-{
-   SCD_EID *FEReid;                     /* pointer to EID-structure */
-   char ifile[MAX_STRLEN],ofile[MAX_STRLEN]; /* input/output file names */
-   FILE *ifilptr,*ofilptr;              /* input/output file pointer */
-   int    EOF_detected;
- 
-   double fer,gamma;                    /* frame erasure rate; burst factor */
- 
-   long   lseg,lread;                   /* length of one transmitted frame */
-   double fer1;                         /* return value from FER_insertion */
-   double ersfrms;                      /* total distorted frames */
-   double prcfrms;                      /* number of processed frames */
-   short *xbuff,*ybuff,shvar;           /* pointer to bit-buffer */
-   short SYNCword,i;
- 
-   clock_t t1,t2;
-   double t;
- 
+main (int argc, char **argv) {
+  SCD_EID *FEReid;              /* pointer to EID-structure */
+  char ifile[MAX_STRLEN], ofile[MAX_STRLEN];    /* input/output file names */
+  FILE *ifilptr, *ofilptr;      /* input/output file pointer */
+  int EOF_detected;
+
+  double fer, gamma;            /* frame erasure rate; burst factor */
+
+  long lseg, lread;             /* length of one transmitted frame */
+  double fer1;                  /* return value from FER_insertion */
+  double ersfrms;               /* total distorted frames */
+  double prcfrms;               /* number of processed frames */
+  short *xbuff, *ybuff, shvar;  /* pointer to bit-buffer */
+  short SYNCword, i;
+
+  clock_t t1, t2;
+  double t;
+
 /* ------------------------------- Statements ------------------------------- */
- 
-  .... Put your statements here ....
- 
-  GET_PAR_S(1,"_File with input bit stream: ............... ",ifile);
-   ifilptr = fopen(ifile,RB);
-   if (ifilptr==NULL)
-      HARAKIRI("    Could not open input file",1);
-        /* ------------------------------------------------------------------ */
-        /* Find SYNC-word and frame length on file */
-        /* ------------------------------------------------------------------ */
-        lread = fread(&SYNCword,2,1,ifilptr);
-        if (SYNCword!=(short)0x6B21)
-          HARAKIRI("    First word on input file not the SYNC-word (0x6B21)",1);
-        lseg = 0;
-        i    = 0;
-        while(lseg==0)
-        {
-            lread = fread(&shvar,2,1,ifilptr);
-            if (lread==0)
-               HARAKIRI("    No next SYNC-word found on input file",1);
-            if (shvar==SYNCword)
-                lseg=i;
-            i++;
-        }
-        fseek(ifilptr,0L,0);            /* filepointer back */
- 
- 
-  GET_PAR_S(2,"_File for disturbed bitstream: ............. ",ofile);
-   ofilptr = fopen(ofile,WB);
-   if (ofilptr==NULL)
-      HARAKIRI("    Could not create output file",1);
- 
-  GET_PAR_D(3,"_frame erasure rate (0.0 ... 0.50): ........ ",fer);
-  GET_PAR_D(4,"_burst factor       (0.0 ... 0.99): ........ ",gamma);
- 
+
+  ....Put your statements here ....GET_PAR_S (1, "_File with input bit stream: ............... ", ifile);
+  ifilptr = fopen (ifile, RB);
+  if (ifilptr == NULL)
+    HARAKIRI ("    Could not open input file", 1);
+  /* ------------------------------------------------------------------ */
+  /* Find SYNC-word and frame length on file */
+  /* ------------------------------------------------------------------ */
+  lread = fread (&SYNCword, 2, 1, ifilptr);
+  if (SYNCword != (short) 0x6B21)
+    HARAKIRI ("    First word on input file not the SYNC-word (0x6B21)", 1);
+  lseg = 0;
+  i = 0;
+  while (lseg == 0) {
+    lread = fread (&shvar, 2, 1, ifilptr);
+    if (lread == 0)
+      HARAKIRI ("    No next SYNC-word found on input file", 1);
+    if (shvar == SYNCword)
+      lseg = i;
+    i++;
+  }
+  fseek (ifilptr, 0L, 0);       /* filepointer back */
+
+
+  GET_PAR_S (2, "_File for disturbed bitstream: ............. ", ofile);
+  ofilptr = fopen (ofile, WB);
+  if (ofilptr == NULL)
+    HARAKIRI ("    Could not create output file", 1);
+
+  GET_PAR_D (3, "_frame erasure rate (0.0 ... 0.50): ........ ", fer);
+  GET_PAR_D (4, "_burst factor       (0.0 ... 0.99): ........ ", gamma);
+
 /* -------------------------------------------------------------------------- */
 /*                               Initialize EID */
 /* -------------------------------------------------------------------------- */
-     FEReid = open_eid(fer,gamma);      /* Open EID for frame erasure */
-     if (FEReid==(SCD_EID *)0)
-        HARAKIRI("    Could not create EID for frame erasure module!?",1);
- 
- 
+  FEReid = open_eid (fer, gamma);       /* Open EID for frame erasure */
+  if (FEReid == (SCD_EID *) 0)
+    HARAKIRI ("    Could not create EID for frame erasure module!?", 1);
+
+
 /* -------------------------------------------------------------------------- */
 /*                       Allocate memory for I/O-buffer */
 /* -------------------------------------------------------------------------- */
-  printf("_found frame length on input file: ......... %d\n",lseg);
- 
+  printf ("_found frame length on input file: ......... %d\n", lseg);
+
 /* -------------------------------------------------------------------------- */
 /* a) buffer for data from input file: */
-    xbuff = (short *)malloc((1+lseg)*sizeof(short));
-    if (xbuff==(short *)0)
-       HARAKIRI("    Could not allocate memory for input bit stream buffer",1);
- 
+  xbuff = (short *) malloc ((1 + lseg) * sizeof (short));
+  if (xbuff == (short *) 0)
+    HARAKIRI ("    Could not allocate memory for input bit stream buffer", 1);
+
 /* -------------------------------------------------------------------------- */
 /* b) buffer for output bit stream: */
-    ybuff = (short *)malloc((1+lseg)*sizeof(short));
-    if (ybuff==(short *)0)
-       HARAKIRI("    Could not allocate memory for output bit stream buffer",1);
- 
+  ybuff = (short *) malloc ((1 + lseg) * sizeof (short));
+  if (ybuff == (short *) 0)
+    HARAKIRI ("    Could not allocate memory for output bit stream buffer", 1);
+
 /* -------------------------------------------------------------------------- */
 /*                           Now process input file */
 /* -------------------------------------------------------------------------- */
 /* initialize counters fro computing bit error rate/frame erasure rate */
-    ersfrms = 0.0;                      /* number of erased frames */
-    prcfrms = 0.0;                      /* number of processed frames */
+  ersfrms = 0.0;                /* number of erased frames */
+  prcfrms = 0.0;                /* number of processed frames */
 
-    /* ---------------------------------------------------------------------- */
-    /*      Read file with input bit stream (segments of lenght "lseg+1") */
-    /* ---------------------------------------------------------------------- */
-    EOF_detected=0;                     /* Flag, to mark END OF FILE */
-    t1 = clock();                       /* measure CPU-time */
-    while( (lread=fread(xbuff,2,lseg+1,ifilptr)) == lseg+1)
-    {
-      if (xbuff[0]==SYNCword && EOF_detected==0)
-      {
-        /* ------------------------------------------------------------------ */
-        /*                            Frame erasure */
-        /* ------------------------------------------------------------------ */
-        fer1 = FER_module(FEReid,lseg+1,xbuff,ybuff);
-          ersfrms += fer1;              /* count number of erased frames */
-          prcfrms += (double)1;         /* count number of processed frames */
- 
-        /* ------------------------------------------------------------------ */
-        /*                    Write (erased) frames to file */
-        /* ------------------------------------------------------------------ */
-        lread=fwrite(ybuff[0],2,lseg+1,ofilptr);
-      }
- 
-      else                              /* if the next SYNC-word is missed */
-      {
-         EOF_detected=1;
-      }
+  /* ---------------------------------------------------------------------- */
+  /* Read file with input bit stream (segments of lenght "lseg+1") */
+  /* ---------------------------------------------------------------------- */
+  EOF_detected = 0;             /* Flag, to mark END OF FILE */
+  t1 = clock ();                /* measure CPU-time */
+  while ((lread = fread (xbuff, 2, lseg + 1, ifilptr)) == lseg + 1) {
+    if (xbuff[0] == SYNCword && EOF_detected == 0) {
+      /* ------------------------------------------------------------------ */
+      /* Frame erasure */
+      /* ------------------------------------------------------------------ */
+      fer1 = FER_module (FEReid, lseg + 1, xbuff, ybuff);
+      ersfrms += fer1;          /* count number of erased frames */
+      prcfrms += (double) 1;    /* count number of processed frames */
+
+      /* ------------------------------------------------------------------ */
+      /* Write (erased) frames to file */
+      /* ------------------------------------------------------------------ */
+      lread = fwrite (ybuff[0], 2, lseg + 1, ofilptr);
     }
- 
-    if (EOF_detected==1)
-        printf("   --- end of file detected (no SYNCword match) ---\n");
-    printf("\n");
- 
-    t2 = clock();
-    t  = (t2 - t1) / (double) CLOCKS_PER_SEC;
-    printf("CPU-time %f sec\r\n\n",t);
- 
+
+    else {                      /* if the next SYNC-word is missed */
+
+      EOF_detected = 1;
+    }
+  }
+
+  if (EOF_detected == 1)
+    printf ("   --- end of file detected (no SYNCword match) ---\n");
+  printf ("\n");
+
+  t2 = clock ();
+  t = (t2 - t1) / (double) CLOCKS_PER_SEC;
+  printf ("CPU-time %f sec\r\n\n", t);
+
 /* -------------------------------------------------------------------------- */
 /*                 Print message with measured bit error rate */
 /* -------------------------------------------------------------------------- */
-    if (prcfrms>0)
-    {
-        printf("measured frame erasure rate: %f  (%ld of %ld frames erased)\n",
-                ersfrms/prcfrms,(long)ersfrms,(long)prcfrms);
-    }
- 
-    exit(0);
+  if (prcfrms > 0) {
+    printf ("measured frame erasure rate: %f  (%ld of %ld frames erased)\n", ersfrms / prcfrms, (long) ersfrms, (long) prcfrms);
+  }
+
+  exit (0);
 }
 #endif
 /* *********************** END OF EXAMPLES ON USAGE *********************** */
- 
+
 
 #ifdef PORT_TEST
-    int PORTABILITY_TEST_OPERATION = 1;
+int PORTABILITY_TEST_OPERATION = 1;
 #endif
 
- 
- 
-/* ......... Include of general definitions .........*/ 
+
+
+/* ......... Include of general definitions .........*/
 #include <time.h>
 #include <math.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
 
-/* ......... Include of EID prototypes and definitions .........*/ 
+/* ......... Include of EID prototypes and definitions .........*/
 #include "eid.h"
 
-/* Local function prototypes and definitions .........*/ 
-double EID_random ARGS((unsigned long *seed));
-void update_EID_random ARGS((long len_register, long *shift_register));
-long GEC_init ARGS((SCD_EID *EID, double  ber, double  gamma));
-double bfer_comp(long index);
+/* Local function prototypes and definitions .........*/
+double EID_random ARGS ((unsigned long *seed));
+void update_EID_random ARGS ((long len_register, long *shift_register));
+long GEC_init ARGS ((SCD_EID * EID, double ber, double gamma));
+double bfer_comp (long index);
 /* ......... Global variable: Bellcore Model Transition probability vector ......... */
 /* ......... prob[0]=P0 updated from command line, using function bfer_comp......... */
-double prob[MODEL_SIZE] = { 0.0023, 0.85, 0.825, 0.8, 0.775, 0.75, 0.725, 0.7, 0.6, 0.45, 0.0}; 
+double prob[MODEL_SIZE] = { 0.0023, 0.85, 0.825, 0.8, 0.775, 0.75, 0.725, 0.7, 0.6, 0.45, 0.0 };
 
 /*
  * ...................... BEGIN OF FUNCTIONS .........................
  */
- 
+
 
 /*
   ============================================================================ 
@@ -532,37 +516,40 @@ double prob[MODEL_SIZE] = { 0.0023, 0.85, 0.825, 0.8, 0.775, 0.75, 0.725, 0.7, 0
  ============================================================================
 */
 SCD_EID *open_eid (ber, gamma)
-double ber,gamma;
+     double ber, gamma;
 {
-    SCD_EID *EID;
-    time_t  t1;
- 
+  SCD_EID *EID;
+  time_t t1;
+
 
   /* Allocate EID structure */
-   if ((EID=(SCD_EID *)malloc(sizeof(SCD_EID)))==0L) return((SCD_EID *)0);
+  if ((EID = (SCD_EID *) malloc (sizeof (SCD_EID))) == 0L)
+    return ((SCD_EID *) 0);
 
   /* Preset of the random generator seed with current system time */
 #ifdef PORT_TEST
-    t1 = 314159265;
+  t1 = 314159265;
 #else
-    time(&t1);
+  time (&t1);
 #endif
-    EID->seed = (unsigned long) t1;
- 
+  EID->seed = (unsigned long) t1;
+
 
   /* Initialize Gilbert-Elliot Channel model */
-    if (GEC_init(EID,ber,gamma)==0L) return((SCD_EID *)0);
- 
+  if (GEC_init (EID, ber, gamma) == 0L)
+    return ((SCD_EID *) 0);
+
   /* Store ber/gamma in struct */
-        EID->usrber   = ber;            /* user defined bit error rate */
-        EID->usrgamma = gamma;          /* user defined correlation factor */
+  EID->usrber = ber;            /* user defined bit error rate */
+  EID->usrgamma = gamma;        /* user defined correlation factor */
 
   /* Return initialized structure */
-        return(EID);
-}  
+  return (EID);
+}
+
 /* ....................... End of open_eid() ....................... */
- 
- 
+
+
 
 /*
   ============================================================================ 
@@ -594,27 +581,28 @@ double ber,gamma;
  ============================================================================
 */
 void close_eid (EID)
-    SCD_EID *EID;
+     SCD_EID *EID;
 {
-   long i;
+  long i;
 
 
-   /* Free state transition matrix columns */
-    for (i=0; i<EID->nstates; i++)
-       free((char *)EID->matrix[i]);
+  /* Free state transition matrix columns */
+  for (i = 0; i < EID->nstates; i++)
+    free ((char *) EID->matrix[i]);
 
-   /* Free state transition matrix rows */
-    free((char *)EID->matrix);
+  /* Free state transition matrix rows */
+  free ((char *) EID->matrix);
 
   /* Free memory of bit error array */
-    free((char *)EID->ber);
+  free ((char *) EID->ber);
 
-   /* Free EID structure */
-   free((char *)EID);
-}  
+  /* Free EID structure */
+  free ((char *) EID);
+}
+
 /* ....................... End of close_eid() ....................... */
- 
- 
+
+
 
 /*                   
   ============================================================================ 
@@ -647,59 +635,57 @@ void close_eid (EID)
 
  ============================================================================
 */
-double BER_generator (EID, lseg,EPbuff)
-SCD_EID *EID;
-long    lseg;
-short   *EPbuff;
+double BER_generator (EID, lseg, EPbuff)
+     SCD_EID *EID;
+     long lseg;
+     short *EPbuff;
 {
-   long i,n;                        /* value of random generator */
-   double RAN, ber;                 /* aux. for computing bit error rate */
- 
+  long i, n;                    /* value of random generator */
+  double RAN, ber;              /* aux. for computing bit error rate */
 
-   /* Return if no samples are to be processed */
-    if (lseg==(long)0) return(0.0);
- 
-   /* Generate random bits */
-    ber = 0.0;
-    for (i=0; i<lseg; i++)
-    {
-        /* Get next random number */
-        RAN = EID_random(&(EID->seed));
- 
-        /* ... check the new channel state */
-        for (n=0; n<EID->nstates; n++)
-        {
-            if (RAN < EID->matrix[EID->current_state][n])
-            {
-                EID->current_state = n; /* goto to the selected state */
-                n = EID->nstates;       /* -> aborts loop */
-            }
-        }
- 
 
-  /* 
-   * ......... COMPUTE BIT ERROR IN CURRENT STATE .........
-   */
+  /* Return if no samples are to be processed */
+  if (lseg == (long) 0)
+    return (0.0);
 
-        /* Get next random number */
-        RAN = EID_random(&(EID->seed));
- 
-        /* If random number is below the threshold (bit error rate in 
-           current state), insert soft decision information for 'error' */
-        if (RAN < EID->ber[EID->current_state])
-        {   EPbuff[i] = (short)0x0081;
-            ber += 1.0;                 /* increment number of errors */
-        }
-        /* otherwise insert soft decision information for 'no error' */
-        else
-        {   EPbuff[i] = (short)0x007F;
-        }
+  /* Generate random bits */
+  ber = 0.0;
+  for (i = 0; i < lseg; i++) {
+    /* Get next random number */
+    RAN = EID_random (&(EID->seed));
+
+    /* ... check the new channel state */
+    for (n = 0; n < EID->nstates; n++) {
+      if (RAN < EID->matrix[EID->current_state][n]) {
+        EID->current_state = n; /* goto to the selected state */
+        n = EID->nstates;       /* -> aborts loop */
+      }
     }
-    return(ber);                        /* return number of error bits */
-} 
+
+
+    /* 
+     * ......... COMPUTE BIT ERROR IN CURRENT STATE .........
+     */
+
+    /* Get next random number */
+    RAN = EID_random (&(EID->seed));
+
+    /* If random number is below the threshold (bit error rate in current state), insert soft decision information for 'error' */
+    if (RAN < EID->ber[EID->current_state]) {
+      EPbuff[i] = (short) 0x0081;
+      ber += 1.0;               /* increment number of errors */
+    }
+    /* otherwise insert soft decision information for 'no error' */
+    else {
+      EPbuff[i] = (short) 0x007F;
+    }
+  }
+  return (ber);                 /* return number of error bits */
+}
+
 /* ....................... End of BER_generator() ....................... */
 
- 
+
 /*                                                                            
   ============================================================================ 
 
@@ -778,38 +764,34 @@ short   *EPbuff;
                        changed <simao@ctd.comsat.com>
  ============================================================================
 */
-void BER_insertion_stl92(lseg, xbuff,ybuff, EPbuff)
-    long lseg;
-    short *xbuff; 
-    short *ybuff; 
-    short *EPbuff;
+void BER_insertion_stl92 (lseg, xbuff, ybuff, EPbuff)
+     long lseg;
+     short *xbuff;
+     short *ybuff;
+     short *EPbuff;
 {
-   long i;
- 
+  long i;
+
   /* FIRST STEP: Copy SYNC-word -> output buffer */
-    ybuff[0] = xbuff[0];
+  ybuff[0] = xbuff[0];
 
   /* THEN: Process data bits */
-    /*    for (i=1; i<lseg+1; i++) This was in the STL92, but this is wrong!
-     */
-    for (i=1; i<lseg; i++)
-    {   
-      if (xbuff[i]==(short)0x007F)
-        {
-          /* input bit = '0' ('hard bit' = 7F) */
-          ybuff[i] = (short)(0x00FF) &   EPbuff[i-1];
-        }
-      else
-        {  
-          /* input bit = '1' ('hard bit' = 81) */
-          ybuff[i] = (short)(0x00FF) & (~EPbuff[i-1] + 1);
-        }
+  /* for (i=1; i<lseg+1; i++) This was in the STL92, but this is wrong! */
+  for (i = 1; i < lseg; i++) {
+    if (xbuff[i] == (short) 0x007F) {
+      /* input bit = '0' ('hard bit' = 7F) */
+      ybuff[i] = (short) (0x00FF) & EPbuff[i - 1];
+    } else {
+      /* input bit = '1' ('hard bit' = 81) */
+      ybuff[i] = (short) (0x00FF) & (~EPbuff[i - 1] + 1);
     }
+  }
 }
+
 /* ..................... End of BER_insertion_stl92() ..................... */
 
- 
- 
+
+
 /*                                                                            
   ============================================================================ 
 
@@ -909,37 +891,34 @@ void BER_insertion_stl92(lseg, xbuff,ybuff, EPbuff)
                        <simao@ctd.comsat.com>
  ============================================================================
 */
-void BER_insertion_stl96(lseg, xbuff,ybuff, EPbuff)
-    long lseg;
-    short *xbuff; 
-    short *ybuff; 
-    short *EPbuff;
+void BER_insertion_stl96 (lseg, xbuff, ybuff, EPbuff)
+     long lseg;
+     short *xbuff;
+     short *ybuff;
+     short *EPbuff;
 {
   register long i;
- 
+
   /* FIRST STEP: Copy sync header to the output buffer */
   ybuff[0] = xbuff[0];
   ybuff[1] = xbuff[1];
 
   /* THEN: Process data bits */
-  for (i=2; i<lseg; i++)
-  {   
-    if (xbuff[i]==(short)0x007F)
-    {
+  for (i = 2; i < lseg; i++) {
+    if (xbuff[i] == (short) 0x007F) {
       /* input bit = '0' ('hard bit' = 7F) */
-      ybuff[i] = (short)(0x00FF) &   EPbuff[i-2];
-    }
-    else
-    {  
+      ybuff[i] = (short) (0x00FF) & EPbuff[i - 2];
+    } else {
       /* input bit = '1' ('hard bit' = 81) */
-      ybuff[i] = (short)(0x00FF) & (~EPbuff[i-2] + 1);
+      ybuff[i] = (short) (0x00FF) & (~EPbuff[i - 2] + 1);
     }
   }
 }
+
 /* ..................... End of BER_insertion_stl96() ..................... */
 
- 
- 
+
+
 /*
   ============================================================================ 
 
@@ -972,47 +951,42 @@ void BER_insertion_stl96(lseg, xbuff,ybuff, EPbuff)
 
  ============================================================================ 
 */
-double FER_generator_random(EID)
-SCD_EID *EID; 
+double FER_generator_random (EID)
+     SCD_EID *EID;
 {
-   long n;                        /* value of random generator */
-   double RAN,fer;
- 
+  long n;                       /* value of random generator */
+  double RAN, fer;
 
-   /* Get next random number */
-   RAN = EID_random(&(EID->seed));
- 
-   /* See if another channel state has to be entered */
-   for (n=0; n<EID->nstates; n++)
-   {
-     if (RAN < EID->matrix[EID->current_state][n])
-     {
-       EID->current_state = n; /* go to the selected state */
-       n = EID->nstates;       /* -> aborts loop */
-     }
-   }
- 
+
+  /* Get next random number */
+  RAN = EID_random (&(EID->seed));
+
+  /* See if another channel state has to be entered */
+  for (n = 0; n < EID->nstates; n++) {
+    if (RAN < EID->matrix[EID->current_state][n]) {
+      EID->current_state = n;   /* go to the selected state */
+      n = EID->nstates;         /* -> aborts loop */
+    }
+  }
+
 /*
    * ......... Compute bit error in current state .........
    */
 
-   /* Get next random number */
-   RAN = EID_random(&(EID->seed));
- 
-   /* if random number below the threshold (bit error rate in current state), 
-      erase current frame totally */
-   if (RAN < EID->ber[EID->current_state])
-   {
-     fer = 1.0;
-   }
-   else
-   {
-     fer = 0.0;
-   }
+  /* Get next random number */
+  RAN = EID_random (&(EID->seed));
+
+  /* if random number below the threshold (bit error rate in current state), erase current frame totally */
+  if (RAN < EID->ber[EID->current_state]) {
+    fer = 1.0;
+  } else {
+    fer = 0.0;
+  }
 
   /* Return the frame erasure flag */
-    return(fer);
+  return (fer);
 }
+
 /* ....................... End of FER_generator_random() ................. */
 
 
@@ -1068,60 +1042,55 @@ SCD_EID *EID;
 
  ============================================================================ 
 */
-double FER_module_stl92(EID, lseg,xbuff,ybuff)
-SCD_EID *EID; 
-long  lseg; 
-short *xbuff; 
-short *ybuff; 
+double FER_module_stl92 (EID, lseg, xbuff, ybuff)
+     SCD_EID *EID;
+     long lseg;
+     short *xbuff;
+     short *ybuff;
 {
-   long i,n;                        /* value of random generator */
-   double RAN,fer;
- 
+  long i, n;                    /* value of random generator */
+  double RAN, fer;
 
-        /* Get next random number */
-        RAN = EID_random(&(EID->seed));
- 
-        /* See if another channel state has to be entered */
-        for (n=0; n<EID->nstates; n++)
-        {
-            if (RAN < EID->matrix[EID->current_state][n])
-            {
-                EID->current_state = n; /* go to the selected state */
-                n = EID->nstates;       /* -> aborts loop */
-            }
-        }
- 
+
+  /* Get next random number */
+  RAN = EID_random (&(EID->seed));
+
+  /* See if another channel state has to be entered */
+  for (n = 0; n < EID->nstates; n++) {
+    if (RAN < EID->matrix[EID->current_state][n]) {
+      EID->current_state = n;   /* go to the selected state */
+      n = EID->nstates;         /* -> aborts loop */
+    }
+  }
+
 /*
    * ......... Compute bit error in current state .........
    */
 
-        /* Get next random number */
-        RAN = EID_random(&(EID->seed));
- 
-        /* if random number below the threshold (bit error rate in current state), 
-           erase current frame totally */
-        if (RAN < EID->ber[EID->current_state])
-        {
-            ybuff[0] = xbuff[0] & 0x0000FFF0; /* modify SYNC-word */
-            /* set all bits in current frame to 0 (which means 'not good - 
-               not bad') */
-            for (i=1; i<lseg; i++) ybuff[i] = (short)0;    
-            fer = 1.0;
-        }
-        else
-        {
-        /* otherwise copy current frame into output buffer */
-            ybuff[0] = xbuff[0];        /* store SYNC-word */
-            for (i=1; i<lseg; i++)      /* store data */
-                ybuff[i] = (short)(0x00FF) & (xbuff[i]);
-            fer = 0.0;
-        }
+  /* Get next random number */
+  RAN = EID_random (&(EID->seed));
+
+  /* if random number below the threshold (bit error rate in current state), erase current frame totally */
+  if (RAN < EID->ber[EID->current_state]) {
+    ybuff[0] = xbuff[0] & 0x0000FFF0;   /* modify SYNC-word */
+    /* set all bits in current frame to 0 (which means 'not good - not bad') */
+    for (i = 1; i < lseg; i++)
+      ybuff[i] = (short) 0;
+    fer = 1.0;
+  } else {
+    /* otherwise copy current frame into output buffer */
+    ybuff[0] = xbuff[0];        /* store SYNC-word */
+    for (i = 1; i < lseg; i++)  /* store data */
+      ybuff[i] = (short) (0x00FF) & (xbuff[i]);
+    fer = 0.0;
+  }
 
   /* Return the frame erasure flag */
-    return(fer);
+  return (fer);
 }
+
 /* ....................... End of FER_module_stl92() ....................... */
- 
+
 
 /*
   ============================================================================ 
@@ -1189,67 +1158,61 @@ short *ybuff;
 
  ============================================================================ 
 */
-double FER_module_stl96(EID, lseg,xbuff,ybuff)
-SCD_EID *EID; 
-long  lseg; 
-short *xbuff; 
-short *ybuff; 
+double FER_module_stl96 (EID, lseg, xbuff, ybuff)
+     SCD_EID *EID;
+     long lseg;
+     short *xbuff;
+     short *ybuff;
 {
-  long i,n;                        /* value of random generator */
-  double RAN,fer;
- 
+  long i, n;                    /* value of random generator */
+  double RAN, fer;
+
 
   /* Get next random number */
-  RAN = EID_random(&(EID->seed));
- 
+  RAN = EID_random (&(EID->seed));
+
   /* See if another channel state has to be entered */
-  for (n=0; n<EID->nstates; n++)
-  {
-    if (RAN < EID->matrix[EID->current_state][n])
-    {
-      EID->current_state = n; /* go to the selected state */
-      n = EID->nstates;       /* -> aborts loop */
+  for (n = 0; n < EID->nstates; n++) {
+    if (RAN < EID->matrix[EID->current_state][n]) {
+      EID->current_state = n;   /* go to the selected state */
+      n = EID->nstates;         /* -> aborts loop */
     }
   }
- 
-  /*
+
+  /* 
    * ......... Compute bit error in current state .........
    */
 
   /* Get next random number */
-  RAN = EID_random(&(EID->seed));
- 
-  /* if random number below the threshold (bit error rate in current state), 
-     erase current frame totally */
-  if (RAN < EID->ber[EID->current_state])
-  {
+  RAN = EID_random (&(EID->seed));
+
+  /* if random number below the threshold (bit error rate in current state), erase current frame totally */
+  if (RAN < EID->ber[EID->current_state]) {
     /* Modify SYNC-word and copy frame length word */
-    ybuff[0] = xbuff[0] & 0x0000FFF0; 
+    ybuff[0] = xbuff[0] & 0x0000FFF0;
     ybuff[1] = xbuff[1];
 
-    /* set all bits in current frame to 0x0000 (which means 'not good - 
-       not bad') */
-    for (i=2; i<lseg; i++)
-      ybuff[i] = (short)0x0000;    
+    /* set all bits in current frame to 0x0000 (which means 'not good - not bad') */
+    for (i = 2; i < lseg; i++)
+      ybuff[i] = (short) 0x0000;
     fer = 1.0;
-  }
-  else
-  {
-    /* otherwise copy SYNC-word and frame length word into output buffer*/
+  } else {
+    /* otherwise copy SYNC-word and frame length word into output buffer */
     ybuff[0] = xbuff[0];
     ybuff[1] = xbuff[1];
 
     /* ... and store data remaining data */
-    for (i=2; i<lseg; i++)
-      ybuff[i] = (short)(0x00FF) & (xbuff[i]);
+    for (i = 2; i < lseg; i++)
+      ybuff[i] = (short) (0x00FF) & (xbuff[i]);
     fer = 0.0;
   }
 
   /* Return the frame erasure flag */
-  return(fer);
+  return (fer);
 }
+
 /* ....................... End of FER_module_stl96() ....................... */
- 
+
 
 /*
   ============================================================================ 
@@ -1288,25 +1251,26 @@ short *ybuff;
 
  ============================================================================
 */
-double EID_random(seed)
-unsigned long *seed;
+double EID_random (seed)
+     unsigned long *seed;
 {
-  /* Size in bits (=size in bytes * 8) for long variables*/
-   static double bits_in_long = sizeof(long) * 8;
+  /* Size in bits (=size in bytes * 8) for long variables */
+  static double bits_in_long = sizeof (long) * 8;
 
-   /* Update RNG */
-   *seed = ((unsigned long)69069L * (*seed) +1L);
+  /* Update RNG */
+  *seed = ((unsigned long) 69069L * (*seed) + 1L);
 
-   /* Return random number as a double */
+  /* Return random number as a double */
 #ifdef WAS
-   return(pow((double)2.0, (double)-32.0) * (double)(*seed));
+  return (pow ((double) 2.0, (double) -32.0) * (double) (*seed));
 #else
-   return(pow((double)2.0, -bits_in_long) * (double)(*seed));
+  return (pow ((double) 2.0, -bits_in_long) * (double) (*seed));
 #endif
 }
-/* ....................... End of EID_random() ....................... */ 
- 
- 
+
+/* ....................... End of EID_random() ....................... */
+
+
 /*
   ============================================================================ 
 
@@ -1405,62 +1369,61 @@ unsigned long *seed;
 
  ============================================================================
 */
-long GEC_init(EID, ber, gamma)
-SCD_EID *EID;
-double  ber;
-double  gamma;
+long GEC_init (EID, ber, gamma)
+     SCD_EID *EID;
+     double ber;
+     double gamma;
 {
-   long i;
-    double P,Q,P_G,P_B;
- 
+  long i;
+  double P, Q, P_G, P_B;
 
-   /* simple channel model with only two states: "BAD" and "GOOD" */
-    EID->nstates = 2;
+
+  /* simple channel model with only two states: "BAD" and "GOOD" */
+  EID->nstates = 2;
 
   /* Allocate memory for bit error array */
-    if ((EID->ber = (double *)malloc(EID->nstates*sizeof(double))) == 0L) 
-      return((long)0);
- 
+  if ((EID->ber = (double *) malloc (EID->nstates * sizeof (double))) == 0L)
+    return ((long) 0);
+
   /* Allocate memory for the `transition matrix' */
-    if ((EID->matrix = (double **)malloc(EID->nstates*(long)sizeof(double *) )) 
-         == (double **)0) 
-       return(0L);
- 
-    for (i=0; i<EID->nstates; i++)
-    {
-       EID->matrix[i] = (double *)malloc(EID->nstates*(long)sizeof(double));
-       if (EID->matrix[i]  == (double *)0) return(0L);
-    }
- 
+  if ((EID->matrix = (double **) malloc (EID->nstates * (long) sizeof (double *)))
+      == (double **) 0)
+    return (0L);
+
+  for (i = 0; i < EID->nstates; i++) {
+    EID->matrix[i] = (double *) malloc (EID->nstates * (long) sizeof (double));
+    if (EID->matrix[i] == (double *) 0)
+      return (0L);
+  }
+
   /* Fix P_G to 0.0 and P_B to 0.5 */
-    P_G = 0.0;
-    P_B = 0.5;
+  P_G = 0.0;
+  P_B = 0.5;
 
-   /* P("GOOD" --> "BAD") */
-    P   = (1.0 - gamma) * 2.0 * ber;
+  /* P("GOOD" --> "BAD") */
+  P = (1.0 - gamma) * 2.0 * ber;
 
-   /* P("BAD"  --> "GOOD") */
-    Q   = (1.0 - gamma) * (1.0 - 2.0 * ber);
+  /* P("BAD" --> "GOOD") */
+  Q = (1.0 - gamma) * (1.0 - 2.0 * ber);
 
-   /* Error rate in state GOOD */
-    EID->ber[0]   = P_G;
+  /* Error rate in state GOOD */
+  EID->ber[0] = P_G;
 
-   /* Error rate in state BAD */
-    EID->ber[1]   = P_B;
+  /* Error rate in state BAD */
+  EID->ber[1] = P_B;
 
-  /* Fill the transition matrix with normalized thresholds, which must be 
-    integer values, since the random generator produces integer values from 
-    0x00000000 ... 0x7FFFFFFF.  */
+  /* Fill the transition matrix with normalized thresholds, which must be integer values, since the random generator produces integer values from 0x00000000 ... 0x7FFFFFFF.  */
 
-    EID->matrix[0][0]  = (1.0-P);               /* "GOOD" -> "GOOD" */
-    EID->matrix[0][1]  =  1.0;                  /* Intervall "GOOD" -> "BAD" */
-    EID->matrix[1][0]  =  Q;                    /* Intervall "BAD"  -> "GOOD" */
-    EID->matrix[1][1]  =  1.0;                  /* "BAD"  -> "BAD" */
-    EID->current_state = 0L;                    /* start with state "GOOD" */
- 
+  EID->matrix[0][0] = (1.0 - P);        /* "GOOD" -> "GOOD" */
+  EID->matrix[0][1] = 1.0;      /* Intervall "GOOD" -> "BAD" */
+  EID->matrix[1][0] = Q;        /* Intervall "BAD" -> "GOOD" */
+  EID->matrix[1][1] = 1.0;      /* "BAD" -> "BAD" */
+  EID->current_state = 0L;      /* start with state "GOOD" */
+
   /* Return OK */
-    return(1L);
+  return (1L);
 }
+
 /* ....................... End of GEC_init() ....................... */
 
 
@@ -1495,12 +1458,13 @@ double  gamma;
 
  ============================================================================
 */
-void set_RAN_seed(EID,seed)                                                  
-SCD_EID *EID;
-unsigned long seed;
+void set_RAN_seed (EID, seed)
+     SCD_EID *EID;
+     unsigned long seed;
 {
   EID->seed = seed;
 }
+
 /* ....................... End of set_RAN_seed() ....................... */
 
 
@@ -1533,11 +1497,12 @@ unsigned long seed;
 
  ============================================================================ 
 */
-unsigned long get_RAN_seed(EID)
-SCD_EID *EID;
+unsigned long get_RAN_seed (EID)
+     SCD_EID *EID;
 {
-   return(EID->seed);
+  return (EID->seed);
 }
+
 /* ....................... End of get_RAN_seed() ....................... */
 
 
@@ -1572,27 +1537,28 @@ SCD_EID *EID;
 
  ============================================================================
 */
-void set_GEC_matrix(EID,threshold,current_state,next_state)
-SCD_EID *EID;
-double threshold;
-int /* char */ current_state;
-int /* char */ next_state;
+void set_GEC_matrix (EID, threshold, current_state, next_state)
+     SCD_EID *EID;
+     double threshold;
+     int /* char */ current_state;
+     int /* char */ next_state;
 {
-  int icurr,inext;
+  int icurr, inext;
 
 
-  if (toupper(current_state)=='G')
+  if (toupper (current_state) == 'G')
     icurr = 0;
   else
     icurr = 1;
 
-  if (toupper(next_state)=='G')
+  if (toupper (next_state) == 'G')
     inext = 0;
   else
     inext = 1;
 
   EID->matrix[icurr][inext] = threshold;
 }
+
 /* ....................... End of set_GEC_matrix() ....................... */
 
 
@@ -1629,26 +1595,27 @@ int /* char */ next_state;
 
  ============================================================================
 */
-double get_GEC_matrix(EID,current_state,next_state)
-SCD_EID *EID;
-int /* char */ current_state;
-int /* char */ next_state;
+double get_GEC_matrix (EID, current_state, next_state)
+     SCD_EID *EID;
+     int /* char */ current_state;
+     int /* char */ next_state;
 {
-   int icurr,inext;
+  int icurr, inext;
 
 
-   if (toupper(current_state)=='G')
-     icurr = 0;
-   else
-     icurr = 1;
+  if (toupper (current_state) == 'G')
+    icurr = 0;
+  else
+    icurr = 1;
 
-   if (toupper(next_state)=='G')
-     inext = 0;
-   else
-     inext = 1;
+  if (toupper (next_state) == 'G')
+    inext = 0;
+  else
+    inext = 1;
 
-   return(EID->matrix[icurr][inext]);
+  return (EID->matrix[icurr][inext]);
 }
+
 /* ....................... End of get_GEC_matrix() ....................... */
 
 
@@ -1680,15 +1647,16 @@ int /* char */ next_state;
 
  ============================================================================
 */
-void set_GEC_current_state(EID,current_state)
-SCD_EID *EID;
-int /* char */ current_state;
+void set_GEC_current_state (EID, current_state)
+     SCD_EID *EID;
+     int /* char */ current_state;
 {
-  if (toupper(current_state)=='G')
+  if (toupper (current_state) == 'G')
     EID->current_state = 0L;
   else
     EID->current_state = 1L;
 }
+
 /* ................... End of set_GEC_current_state() ................... */
 
 
@@ -1720,14 +1688,15 @@ int /* char */ current_state;
 
  ============================================================================ 
 */
-char get_GEC_current_state(EID)
-SCD_EID *EID; 
+char get_GEC_current_state (EID)
+     SCD_EID *EID;
 {
-  if (EID->current_state==0L)
-    return('G');
+  if (EID->current_state == 0L)
+    return ('G');
   else
-    return('B');
+    return ('B');
 }
+
 /* .................... End of get_GEC_current_state() .................... */
 
 
@@ -1774,51 +1743,51 @@ SCD_EID *EID;
 */
 
 
-BURST_EID   *open_burst_eid (index)
-long index;
+BURST_EID *open_burst_eid (index)
+     long index;
 {
   BURST_EID *burst_eid;
   time_t t1;
   long i;
 
   /* Allocate EID structure */
-   if ((burst_eid=(BURST_EID *)malloc(sizeof(BURST_EID)))==0L) 
-	    return((BURST_EID *)0);
+  if ((burst_eid = (BURST_EID *) malloc (sizeof (BURST_EID))) == 0L)
+    return ((BURST_EID *) 0);
 
   /* Preset of the random generator seed with current system time */
 #ifdef PORT_TEST
-    t1 = 314159265;
+  t1 = 314159265;
 #else
-    time(&t1);
+  time (&t1);
 #endif
 
-    burst_eid->seedptr = (unsigned long) t1;
-    for (i=0;  i<MODEL_SIZE;  i++)
-    {
-      burst_eid->internal[i] = 0;
-    }
-    burst_eid->s_new = 0;
-    
-    burst_eid->index = index;
-	if((burst_eid->index>60) || (burst_eid->index < 1)){
-	    fprintf(stderr, " Using default error rate of 1 %%\n");
-	    burst_eid->index = 2;
-    }
+  burst_eid->seedptr = (unsigned long) t1;
+  for (i = 0; i < MODEL_SIZE; i++) {
+    burst_eid->internal[i] = 0;
+  }
+  burst_eid->s_new = 0;
 
-    prob[0]=bfer_comp(burst_eid->index);
+  burst_eid->index = index;
+  if ((burst_eid->index > 60) || (burst_eid->index < 1)) {
+    fprintf (stderr, " Using default error rate of 1 %%\n");
+    burst_eid->index = 2;
+  }
 
-#ifdef DEBUG 
-    /*	 
-    **  Print out the selected coefficient vector
-    */        
-    for (i=0;  i< MODEL_SIZE;  i++){
-      printf ("p[%2d]=%f\n", i,prob[i]);
-    }
+  prob[0] = bfer_comp (burst_eid->index);
+
+#ifdef DEBUG
+  /* 
+   **  Print out the selected coefficient vector
+   */
+  for (i = 0; i < MODEL_SIZE; i++) {
+    printf ("p[%2d]=%f\n", i, prob[i]);
+  }
 #endif
 
-   /* Return BURST_EID structure */
-    return (burst_eid);
+  /* Return BURST_EID structure */
+  return (burst_eid);
 }
+
 /* .................... End of open_burst_eid() .................... */
 
 
@@ -1862,37 +1831,37 @@ long index;
  ============================================================================
 */
 double FER_generator_burst (state)
-BURST_EID *state;
+     BURST_EID *state;
 {
-  long    in;
-  double  ran, aux; 
-  /* Size in bits (=size in bytes * 8) for long variables*/
-  static double bits_in_long = sizeof(long) * 8;
+  long in;
+  double ran, aux;
+  /* Size in bits (=size in bytes * 8) for long variables */
+  static double bits_in_long = sizeof (long) * 8;
 
   /* UGST Random number generator */
-  state->seedptr = ((unsigned long)69069L * (state->seedptr) +1L);
+  state->seedptr = ((unsigned long) 69069L * (state->seedptr) + 1L);
 
   /* Return random number as a double in range [0...1] */
 #ifdef WAS
-  ran = (pow((double)2.0, (double)-32.0) * (double)(state->seedptr));
+  ran = (pow ((double) 2.0, (double) -32.0) * (double) (state->seedptr));
 #else
-  ran = (pow((double)2.0, -bits_in_long) * (double)(state->seedptr));
+  ran = (pow ((double) 2.0, -bits_in_long) * (double) (state->seedptr));
 #endif
-   aux = prob[state->s_new];
-  in = floor(ran + aux);	/* in = 0 indicates good frame */
-                                /* in = 1 indicates bad frame */
-  if (in == 0)                    /* If frame is good, */
-  {
+  aux = prob[state->s_new];
+  in = floor (ran + aux);       /* in = 0 indicates good frame */
+  /* in = 1 indicates bad frame */
+  if (in == 0) {                /* If frame is good, */
     /* increment frame counter for state */
     state->internal[state->s_new]++;
-    if (state->s_new != 0) state->internal[0]++;
+    if (state->s_new != 0)
+      state->internal[0]++;
     state->s_new = 0;
-  }
-  else
-    state->s_new++;      /* Else, if frame is bad, increment state */
+  } else
+    state->s_new++;             /* Else, if frame is bad, increment state */
 
-  return((double) in);
+  return ((double) in);
 }
+
 /* .................... End of FER_generator_burst() .................... */
 
 
@@ -1927,8 +1896,8 @@ BURST_EID *state;
    15.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-BURST_EID *reset_burst_eid(burst_eid)
-BURST_EID *burst_eid;
+BURST_EID *reset_burst_eid (burst_eid)
+     BURST_EID *burst_eid;
 {
 #ifdef RESET_SEED_AS_WELL
   time_t t1;
@@ -1936,22 +1905,21 @@ BURST_EID *burst_eid;
   long i;
 
   /* If state variable was not initialized, return a null pointer */
-  if (burst_eid == (BURST_EID *)0)
-    return((BURST_EID *)0);
+  if (burst_eid == (BURST_EID *) 0)
+    return ((BURST_EID *) 0);
 
 #ifdef RESET_SEED_AS_WELL
   /* Reset random generator seed */
-# ifdef PORT_TEST
+#ifdef PORT_TEST
   t1 = 314159265;
-# else
-  time(&t1);
-# endif
+#else
+  time (&t1);
+#endif
   burst_eid->seedptr = (unsigned long) t1;
-#endif  /* RESET_SEED_AS_WELL */
+#endif /* RESET_SEED_AS_WELL */
 
   /* Reset internal counters */
-  for (i=0;  i<MODEL_SIZE;  i++)
-  {
+  for (i = 0; i < MODEL_SIZE; i++) {
     burst_eid->internal[i] = 0;
   }
   burst_eid->s_new = 0;
@@ -1959,31 +1927,31 @@ BURST_EID *burst_eid;
   /* Return pointer to BURST_EID state variable */
   return (burst_eid);
 }
+
 /* ...................... End of reset_burst_eid() ...................... */
 
 /* bfer_comp for Bellcore model
    compute steady state value of P0 in state transition prob matrix,
    given that P1..P9 are fixed 
-   input index, gives desired total output FER(Pe) */ 
+   input index, gives desired total output FER(Pe) */
 
-double bfer_comp(long index)
-{
-	double Pe;
-	double num,den,prod;
-	int i,k;
+double bfer_comp (long index) {
+  double Pe;
+  double num, den, prod;
+  int i, k;
 
-	Pe = (double)index/200.0; /* Pe quantized in 0.5% steps due to legacy state saving method */
+  Pe = (double) index / 200.0;  /* Pe quantized in 0.5% steps due to legacy state saving method */
 
-	num=(1/(1-Pe))-1.0;
-    den=0.0;
-	for (i=1;i<=(MODEL_SIZE-2);i++){
-	   prod=1.0;
-	   for(k=1;k<=i;k++){
-         prod *= prob[k];
-	   }
-	   den+=prod;
-	 }
-	 den=den+1.0;
+  num = (1 / (1 - Pe)) - 1.0;
+  den = 0.0;
+  for (i = 1; i <= (MODEL_SIZE - 2); i++) {
+    prod = 1.0;
+    for (k = 1; k <= i; k++) {
+      prod *= prob[k];
+    }
+    den += prod;
+  }
+  den = den + 1.0;
 
- return (num/den); 
+  return (num / den);
 }

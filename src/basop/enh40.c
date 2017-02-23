@@ -124,46 +124,46 @@ extern int currCounter;
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_shl( Word40 L40_var1, Word16 var2) {
+Word40 L40_shl (Word40 L40_var1, Word16 var2) {
 
-   Word40 L40_var_out;
-	Word40 L40_constant = L40_set( 0xc000000000);
+  Word40 L40_var_out;
+  Word40 L40_constant = L40_set (0xc000000000);
 
-   if( var2 < 0) {
-      var2 = -var2;
-      L40_var_out = L40_shr( L40_var1, var2);
+  if (var2 < 0) {
+    var2 = -var2;
+    L40_var_out = L40_shr (L40_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_shr--;
-      #endif /* ifdef WMOPS */
-   }
+#if (WMOPS)
+    multiCounter[currCounter].L40_shr--;
+#endif /* ifdef WMOPS */
+  }
 
-    else {
-      L40_var_out = L40_var1;
+  else {
+    L40_var_out = L40_var1;
 
-      for ( ; var2 > 0; var2--) {
-         if( L40_var_out > 0x003fffffffff) {
-            L40_var_out = L40_OVERFLOW_OCCURED( L40_var_out);
-            break;
-         }
-
-         else if ( L40_var_out < L40_constant) {
-            L40_var_out = L40_UNDERFLOW_OCCURED( L40_var_out);
-            break;
-         }
-
-         else {
-            L40_var_out = L40_var_out << 1;
-         }
+    for (; var2 > 0; var2--) {
+      if (L40_var_out > 0x003fffffffff) {
+        L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
+        break;
       }
-   }
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_set--;
-   multiCounter[currCounter].L40_shl++;
-   #endif /* ifdef WMOPS */
+      else if (L40_var_out < L40_constant) {
+        L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
+        break;
+      }
 
-   return( L40_var_out);
+      else {
+        L40_var_out = L40_var_out << 1;
+      }
+    }
+  }
+
+#if (WMOPS)
+  multiCounter[currCounter].L40_set--;
+  multiCounter[currCounter].L40_shl++;
+#endif /* ifdef WMOPS */
+
+  return (L40_var_out);
 }
 
 
@@ -201,26 +201,26 @@ Word40 L40_shl( Word40 L40_var1, Word16 var2) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_shr( Word40 L40_var1, Word16 var2) {
-   Word40 L40_var_out;
+Word40 L40_shr (Word40 L40_var1, Word16 var2) {
+  Word40 L40_var_out;
 
-   if( var2 < 0) {
-      var2 = -var2;
-      L40_var_out  = L40_shl ( L40_var1, var2);
+  if (var2 < 0) {
+    var2 = -var2;
+    L40_var_out = L40_shl (L40_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_shl--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L40_shl--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      L40_var_out = L40_var1 >> var2;
-   }
+  } else {
+    L40_var_out = L40_var1 >> var2;
+  }
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_shr++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L40_shr++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -251,17 +251,17 @@ Word40 L40_shr( Word40 L40_var1, Word16 var2) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_negate( Word40 L40_var1) {
-   Word40 L40_var_out;
+Word40 L40_negate (Word40 L40_var1) {
+  Word40 L40_var_out;
 
-   L40_var_out = L40_add( ~L40_var1, 0x01);
+  L40_var_out = L40_add (~L40_var1, 0x01);
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_add--;
-   multiCounter[currCounter].L40_negate++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L40_add--;
+  multiCounter[currCounter].L40_negate++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -295,27 +295,26 @@ Word40 L40_negate( Word40 L40_var1) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_add( Word40 L40_var1, Word40 L40_var2) {
-   Word40 L40_var_out;
+Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
+  Word40 L40_var_out;
 
-   L40_var_out = L40_var1 + L40_var2;
+  L40_var_out = L40_var1 + L40_var2;
 
-   if(  ((( L40_var1    & 0x8000000000) >> 39) != 0)
-     && ((( L40_var2    & 0x8000000000) >> 39) != 0)
-     && ((( L40_var_out & 0x8000000000) >> 39) == 0)) {
-      L40_var_out = L40_UNDERFLOW_OCCURED( L40_var_out);
+  if ((((L40_var1 & 0x8000000000) >> 39) != 0)
+      && (((L40_var2 & 0x8000000000) >> 39) != 0)
+      && (((L40_var_out & 0x8000000000) >> 39) == 0)) {
+    L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
 
-   } else if( (((L40_var1    & 0x8000000000) >> 39) == 0)
-           && (((L40_var2    & 0x8000000000) >> 39) == 0)
-           && (((L40_var_out & 0x8000000000) >> 39) != 0)) {
-      L40_var_out = L40_OVERFLOW_OCCURED( L40_var_out);
-   }
+  } else if ((((L40_var1 & 0x8000000000) >> 39) == 0)
+             && (((L40_var2 & 0x8000000000) >> 39) == 0)
+             && (((L40_var_out & 0x8000000000) >> 39) != 0)) {
+    L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
+  }
+#if (WMOPS)
+  multiCounter[currCounter].L40_add++;
+#endif /* ifdef WMOPS */
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_add++;
-   #endif /* ifdef WMOPS */
-
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -349,26 +348,26 @@ Word40 L40_add( Word40 L40_var1, Word40 L40_var2) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_sub( Word40 L40_var1, Word40 L40_var2) {
-   Word40 L40_var_out;
+Word40 L40_sub (Word40 L40_var1, Word40 L40_var2) {
+  Word40 L40_var_out;
 
-   L40_var_out = L40_var1 - L40_var2;
+  L40_var_out = L40_var1 - L40_var2;
 
-   if( (((L40_var1    & 0x8000000000) >> 39) != 0)
-    && (((L40_var2    & 0x8000000000) >> 39) == 0)
-    && (((L40_var_out & 0x8000000000) >> 39) == 0)) {
-      L40_var_out = L40_UNDERFLOW_OCCURED( L40_var_out);
+  if ((((L40_var1 & 0x8000000000) >> 39) != 0)
+      && (((L40_var2 & 0x8000000000) >> 39) == 0)
+      && (((L40_var_out & 0x8000000000) >> 39) == 0)) {
+    L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
 
-   } else if( (((L40_var1    & 0x8000000000) >> 39) == 0)
-           && (((L40_var2    & 0x8000000000) >> 39) != 0)
-           && (((L40_var_out & 0x8000000000) >> 39) != 0)) {
-      L40_var_out = L40_OVERFLOW_OCCURED( L40_var_out);
-   }
-   #if (WMOPS)
-    multiCounter[currCounter].L40_sub++;
-   #endif /* ifdef WMOPS */
+  } else if ((((L40_var1 & 0x8000000000) >> 39) == 0)
+             && (((L40_var2 & 0x8000000000) >> 39) != 0)
+             && (((L40_var_out & 0x8000000000) >> 39) != 0)) {
+    L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
+  }
+#if (WMOPS)
+  multiCounter[currCounter].L40_sub++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -399,25 +398,25 @@ Word40 L40_sub( Word40 L40_var1, Word40 L40_var2) {
  *                the range : 0x00 0000 0000 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_abs( Word40 L40_var1) {
-   Word40 L40_var_out;
+Word40 L40_abs (Word40 L40_var1) {
+  Word40 L40_var_out;
 
-   if( L40_var1 < 0) {
-      L40_var_out = L40_negate ( L40_var1);
+  if (L40_var1 < 0) {
+    L40_var_out = L40_negate (L40_var1);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_negate--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L40_negate--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      L40_var_out = L40_var1;
-   }
+  } else {
+    L40_var_out = L40_var1;
+  }
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_abs++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L40_abs++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -450,19 +449,19 @@ Word40 L40_abs( Word40 L40_var1) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_max( Word40 L40_var1, Word40 L40_var2) {
-   Word40 L40_var_out;
+Word40 L40_max (Word40 L40_var1, Word40 L40_var2) {
+  Word40 L40_var_out;
 
-   if( L40_var1 < L40_var2)
-      L40_var_out = L40_var2;
-   else
-      L40_var_out = L40_var1;
+  if (L40_var1 < L40_var2)
+    L40_var_out = L40_var2;
+  else
+    L40_var_out = L40_var1;
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_max++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L40_max++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -495,19 +494,19 @@ Word40 L40_max( Word40 L40_var1, Word40 L40_var2) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_min( Word40 L40_var1, Word40 L40_var2) {
-   Word40 L40_var_out;
+Word40 L40_min (Word40 L40_var1, Word40 L40_var2) {
+  Word40 L40_var_out;
 
-   if( L40_var1 < L40_var2)
-      L40_var_out = L40_var1;
-   else
-      L40_var_out = L40_var2;
+  if (L40_var1 < L40_var2)
+    L40_var_out = L40_var1;
+  else
+    L40_var_out = L40_var2;
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_min++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L40_min++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -538,30 +537,30 @@ Word40 L40_min( Word40 L40_var1, Word40 L40_var2) {
  *                the range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-Word32 L_saturate40( Word40 L40_var1) {
-   Word32 L_var_out;
+Word32 L_saturate40 (Word40 L40_var1) {
+  Word32 L_var_out;
 
-   Word40 UNDER_L40_var2 = ( Word40) ~(((( Word40) 1) << 31) - ( Word40) 1 );
-   Word40 OVER_L40_var2  = ( Word40)  (((( Word40) 1) << 31) - ( Word40) 1 );
+  Word40 UNDER_L40_var2 = (Word40) ~ ((((Word40) 1) << 31) - (Word40) 1);
+  Word40 OVER_L40_var2 = (Word40) ((((Word40) 1) << 31) - (Word40) 1);
 
-   if( L40_var1 < UNDER_L40_var2) {
+  if (L40_var1 < UNDER_L40_var2) {
     L40_var1 = UNDER_L40_var2;
     Overflow = 1;
-   }
+  }
 
-   if( L40_var1 > OVER_L40_var2) {
+  if (L40_var1 > OVER_L40_var2) {
     L40_var1 = OVER_L40_var2;
     Overflow = 1;
-   }
+  }
 
-   L_var_out = L_Extract40( L40_var1);
+  L_var_out = L_Extract40 (L40_var1);
 
-   #if (WMOPS)
-    multiCounter[currCounter].L_Extract40--;
-    multiCounter[currCounter].L_saturate40++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L_Extract40--;
+  multiCounter[currCounter].L_saturate40++;
+#endif /* ifdef WMOPS */
 
-   return( L_var_out);
+  return (L_var_out);
 }
 
 
@@ -601,45 +600,45 @@ Word32 L_saturate40( Word40 L40_var1) {
  *    none
  *
  *****************************************************************************/
-void Mpy_32_16_ss( Word32 L_var1, Word16 var2, Word32 *L_varout_h, UWord16 *varout_l) {
-   Word16 var1_h;
-   UWord16 uvar1_l;
-   Word40 L40_var1;
+void Mpy_32_16_ss (Word32 L_var1, Word16 var2, Word32 * L_varout_h, UWord16 * varout_l) {
+  Word16 var1_h;
+  UWord16 uvar1_l;
+  Word40 L40_var1;
 
-   if( (L_var1 == ( Word32) 0x80000000)
-    && (var2   == ( Word16) 0x8000)) {
-      *L_varout_h = 0x7fffffff;
-      *varout_l = ( UWord16) 0xffff;
+  if ((L_var1 == (Word32) 0x80000000)
+      && (var2 == (Word16) 0x8000)) {
+    *L_varout_h = 0x7fffffff;
+    *varout_l = (UWord16) 0xffff;
 
-    } else {
-      uvar1_l = extract_l( L_var1);
-      var1_h = extract_h( L_var1);
+  } else {
+    uvar1_l = extract_l (L_var1);
+    var1_h = extract_h (L_var1);
 
-      /* Below line can not overflow, so we can use << instead of L40_shl.  */
-      L40_var1 = (( Word40) (( Word32) var2 * ( Word32) uvar1_l)) << 1;
+    /* Below line can not overflow, so we can use << instead of L40_shl.  */
+    L40_var1 = ((Word40) ((Word32) var2 * (Word32) uvar1_l)) << 1;
 
-      *varout_l = Extract40_L( L40_var1);
+    *varout_l = Extract40_L (L40_var1);
 
-      L40_var1 = L40_shr( L40_var1, 16);
-      L40_var1 = L40_mac( L40_var1, var2, var1_h);
+    L40_var1 = L40_shr (L40_var1, 16);
+    L40_var1 = L40_mac (L40_var1, var2, var1_h);
 
-      *L_varout_h = L_Extract40( L40_var1);
+    *L_varout_h = L_Extract40 (L40_var1);
 
-      #if(WMOPS)
-      multiCounter[currCounter].extract_l--;
-      multiCounter[currCounter].extract_h--;
-      multiCounter[currCounter].Extract40_L--;
-      multiCounter[currCounter].L40_shr--;
-      multiCounter[currCounter].L40_mac--;
-      multiCounter[currCounter].L_Extract40--;
-      #endif /* ifdef WMOPS */
-   }
+#if(WMOPS)
+    multiCounter[currCounter].extract_l--;
+    multiCounter[currCounter].extract_h--;
+    multiCounter[currCounter].Extract40_L--;
+    multiCounter[currCounter].L40_shr--;
+    multiCounter[currCounter].L40_mac--;
+    multiCounter[currCounter].L_Extract40--;
+#endif /* ifdef WMOPS */
+  }
 
-   #if (WMOPS)
-   multiCounter[currCounter].Mpy_32_16_ss++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].Mpy_32_16_ss++;
+#endif /* ifdef WMOPS */
 
-   return;
+  return;
 }
 
 
@@ -679,53 +678,53 @@ void Mpy_32_16_ss( Word32 L_var1, Word16 var2, Word32 *L_varout_h, UWord16 *varo
  *    none
  *
  *****************************************************************************/
-void Mpy_32_32_ss( Word32 L_var1, Word32 L_var2, Word32 *L_varout_h, UWord32 *L_varout_l) {
-   UWord16 uvar1_l, uvar2_l;
-   Word16   var1_h,  var2_h;
-   Word40 L40_var1;
+void Mpy_32_32_ss (Word32 L_var1, Word32 L_var2, Word32 * L_varout_h, UWord32 * L_varout_l) {
+  UWord16 uvar1_l, uvar2_l;
+  Word16 var1_h, var2_h;
+  Word40 L40_var1;
 
-   if( (L_var1 == ( Word32)0x80000000)
-    && (L_var2 == ( Word32)0x80000000)) {
-      *L_varout_h = 0x7fffffff;
-      *L_varout_l = ( UWord32)0xffffffff;
+  if ((L_var1 == (Word32) 0x80000000)
+      && (L_var2 == (Word32) 0x80000000)) {
+    *L_varout_h = 0x7fffffff;
+    *L_varout_l = (UWord32) 0xffffffff;
 
-   } else {
+  } else {
 
-      uvar1_l = extract_l( L_var1);
-      var1_h = extract_h( L_var1);
-      uvar2_l = extract_l( L_var2);
-      var2_h = extract_h( L_var2);
+    uvar1_l = extract_l (L_var1);
+    var1_h = extract_h (L_var1);
+    uvar2_l = extract_l (L_var2);
+    var2_h = extract_h (L_var2);
 
-      /* Below line can not overflow, so we can use << instead of L40_shl.  */
-      L40_var1 = (( Word40) (( UWord32) uvar2_l * ( UWord32) uvar1_l)) << 1;
+    /* Below line can not overflow, so we can use << instead of L40_shl.  */
+    L40_var1 = ((Word40) ((UWord32) uvar2_l * (UWord32) uvar1_l)) << 1;
 
-      *L_varout_l = 0x0000ffff & L_Extract40( L40_var1);
+    *L_varout_l = 0x0000ffff & L_Extract40 (L40_var1);
 
-      L40_var1 = L40_shr( L40_var1, 16);
-      L40_var1 = L40_add( L40_var1, (( Word40) (( Word32) var2_h * ( Word32) uvar1_l)) << 1);
-      L40_var1 = L40_add( L40_var1, (( Word40) (( Word32) var1_h * ( Word32) uvar2_l)) << 1);
-      *L_varout_l |= (L_Extract40( L40_var1)) << 16;
+    L40_var1 = L40_shr (L40_var1, 16);
+    L40_var1 = L40_add (L40_var1, ((Word40) ((Word32) var2_h * (Word32) uvar1_l)) << 1);
+    L40_var1 = L40_add (L40_var1, ((Word40) ((Word32) var1_h * (Word32) uvar2_l)) << 1);
+    *L_varout_l |= (L_Extract40 (L40_var1)) << 16;
 
-      L40_var1 = L40_shr( L40_var1, 16);
-      L40_var1 = L40_mac( L40_var1, var1_h, var2_h);
+    L40_var1 = L40_shr (L40_var1, 16);
+    L40_var1 = L40_mac (L40_var1, var1_h, var2_h);
 
-      *L_varout_h = L_Extract40( L40_var1);
+    *L_varout_h = L_Extract40 (L40_var1);
 
-      #if (WMOPS)
-      multiCounter[currCounter].extract_l-=2;
-      multiCounter[currCounter].extract_h-=2;
-      multiCounter[currCounter].L_Extract40-=3;
-      multiCounter[currCounter].L40_shr-=2;
-      multiCounter[currCounter].L40_add-=2;
-      multiCounter[currCounter].L40_mac--;
-      #endif /* ifdef WMOPS */
-   }
+#if (WMOPS)
+    multiCounter[currCounter].extract_l -= 2;
+    multiCounter[currCounter].extract_h -= 2;
+    multiCounter[currCounter].L_Extract40 -= 3;
+    multiCounter[currCounter].L40_shr -= 2;
+    multiCounter[currCounter].L40_add -= 2;
+    multiCounter[currCounter].L40_mac--;
+#endif /* ifdef WMOPS */
+  }
 
-   #if (WMOPS)
-    multiCounter[currCounter].Mpy_32_32_ss++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].Mpy_32_32_ss++;
+#endif /* ifdef WMOPS */
 
-   return;
+  return;
 }
 
 
@@ -761,35 +760,35 @@ void Mpy_32_32_ss( Word32 L_var1, Word32 L_var2, Word32 *L_varout_h, UWord32 *L_
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_lshl( Word40 L40_var1, Word16 var2) {
-   Word40 L40_var_out;
+Word40 L40_lshl (Word40 L40_var1, Word16 var2) {
+  Word40 L40_var_out;
 
-   if( var2 <= 0) {
-      var2 = -var2;
-      L40_var_out = L40_lshr  ( L40_var1, var2);
+  if (var2 <= 0) {
+    var2 = -var2;
+    L40_var_out = L40_lshr (L40_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_lshr--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L40_lshr--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      if( var2 >= 40)
-         L40_var_out = 0x0000000000;
-      else
-         L40_var_out = L40_var1 << var2;
+  } else {
+    if (var2 >= 40)
+      L40_var_out = 0x0000000000;
+    else
+      L40_var_out = L40_var1 << var2;
 
-      L40_var_out = L40_set( L40_var_out);
+    L40_var_out = L40_set (L40_var_out);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_set--;
-      #endif /* ifdef WMOPS */
-   }
+#if (WMOPS)
+    multiCounter[currCounter].L40_set--;
+#endif /* ifdef WMOPS */
+  }
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_lshl++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L40_lshl++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -825,28 +824,28 @@ Word40 L40_lshl( Word40 L40_var1, Word16 var2) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_lshr( Word40 L40_var1, Word16 var2) {
-   Word40 L40_var_out;
+Word40 L40_lshr (Word40 L40_var1, Word16 var2) {
+  Word40 L40_var_out;
 
-   if( var2 < 0) {
-      var2 = -var2;
-      L40_var_out = L40_lshl ( L40_var1, var2);
+  if (var2 < 0) {
+    var2 = -var2;
+    L40_var_out = L40_lshl (L40_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_lshl--;
-      #endif /* ifdef WMOPS */
-   } else {
-      if( var2 >= 40)
-         L40_var_out = 0x0000000000;
-      else
-         L40_var_out = (L40_var1 & 0xffffffffff) >> var2;
-   }
+#if (WMOPS)
+    multiCounter[currCounter].L40_lshl--;
+#endif /* ifdef WMOPS */
+  } else {
+    if (var2 >= 40)
+      L40_var_out = 0x0000000000;
+    else
+      L40_var_out = (L40_var1 & 0xffffffffff) >> var2;
+  }
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_lshr++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L40_lshr++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -882,41 +881,40 @@ Word40 L40_lshr( Word40 L40_var1, Word16 var2) {
  *                the range : -8 <= var_out <= 31.
  *
  *****************************************************************************/
-Word16 norm_L40( Word40 L40_var1) {
-   Word16 var_out;
+Word16 norm_L40 (Word40 L40_var1) {
+  Word16 var_out;
 
-   var_out = 0;
+  var_out = 0;
 
-   if( L40_var1 != 0) {
-      while( (L40_var1 > ( Word32)0x80000000L)
-          && (L40_var1 < ( Word32)0x7fffffffL)) {
+  if (L40_var1 != 0) {
+    while ((L40_var1 > (Word32) 0x80000000L)
+           && (L40_var1 < (Word32) 0x7fffffffL)) {
 
-         L40_var1 = L40_shl( L40_var1, 1);
-         var_out++;
+      L40_var1 = L40_shl (L40_var1, 1);
+      var_out++;
 
-         #ifdef WMOPS
-         multiCounter[currCounter].L40_shl--;
-         #endif /* ifdef WMOPS */
-      }
+#ifdef WMOPS
+      multiCounter[currCounter].L40_shl--;
+#endif /* ifdef WMOPS */
+    }
 
-      while( (L40_var1 < ( Word32)0x80000000L)
-          || (L40_var1 > ( Word32)0x7fffffffL)) {
+    while ((L40_var1 < (Word32) 0x80000000L)
+           || (L40_var1 > (Word32) 0x7fffffffL)) {
 
-         L40_var1 = L40_shl( L40_var1, -1);
-         var_out--;
+      L40_var1 = L40_shl (L40_var1, -1);
+      var_out--;
 
-         #ifdef WMOPS
-         multiCounter[currCounter].L40_shl--;
-         #endif /* ifdef WMOPS */
-      }
-   }
-
-  #ifdef WMOPS
+#ifdef WMOPS
+      multiCounter[currCounter].L40_shl--;
+#endif /* ifdef WMOPS */
+    }
+  }
+#ifdef WMOPS
   multiCounter[currCounter].norm_L40++;
-  #endif /* ifdef WMOPS */
+#endif /* ifdef WMOPS */
 
-  return( var_out);
- }
+  return (var_out);
+}
 
 
 
@@ -956,32 +954,32 @@ Word16 norm_L40( Word40 L40_var1) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_shr_r( Word40 L40_var1, Word16 var2) {
-   Word40 L40_var_out;
+Word40 L40_shr_r (Word40 L40_var1, Word16 var2) {
+  Word40 L40_var_out;
 
-   if( var2 > 39) {
-      L40_var_out = 0;
+  if (var2 > 39) {
+    L40_var_out = 0;
 
-   } else {
-      L40_var_out = L40_shr( L40_var1, var2);
+  } else {
+    L40_var_out = L40_shr (L40_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_shr--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L40_shr--;
+#endif /* ifdef WMOPS */
 
-      if( var2 > 0) {
-         if( ( L40_var1 & (( Word40) 1 << (var2 - 1))) != 0) {
-            /* below line can not generate overflows on 40-bit */
-            L40_var_out++;
-         }
+    if (var2 > 0) {
+      if ((L40_var1 & ((Word40) 1 << (var2 - 1))) != 0) {
+        /* below line can not generate overflows on 40-bit */
+        L40_var_out++;
       }
-   }
+    }
+  }
 
-   #if (WMOPS)
-   multiCounter[currCounter].L40_shr_r++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+  multiCounter[currCounter].L40_shr_r++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 
@@ -1018,29 +1016,29 @@ Word40 L40_shr_r( Word40 L40_var1, Word16 var2) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
-Word40 L40_shl_r( Word40 L40_var1, Word16 var2) {
-   Word40 L40_var_out;
+Word40 L40_shl_r (Word40 L40_var1, Word16 var2) {
+  Word40 L40_var_out;
 
-   if( var2 >= 0) {
-      L40_var_out = L40_shl( L40_var1, var2);
+  if (var2 >= 0) {
+    L40_var_out = L40_shl (L40_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_shl--;
-      #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L40_shl--;
+#endif /* ifdef WMOPS */
 
-   } else {
-      var2 = -var2;
-      L40_var_out = L40_shr_r ( L40_var1, var2);
+  } else {
+    var2 = -var2;
+    L40_var_out = L40_shr_r (L40_var1, var2);
 
-      #if (WMOPS)
-      multiCounter[currCounter].L40_shr_r--;
-      #endif /* ifdef WMOPS */
-   }
-   #if (WMOPS)
-   multiCounter[currCounter].L40_shl_r++;
-   #endif /* ifdef WMOPS */
+#if (WMOPS)
+    multiCounter[currCounter].L40_shr_r--;
+#endif /* ifdef WMOPS */
+  }
+#if (WMOPS)
+  multiCounter[currCounter].L40_shl_r++;
+#endif /* ifdef WMOPS */
 
-   return( L40_var_out);
+  return (L40_var_out);
 }
 
 

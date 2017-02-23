@@ -57,25 +57,22 @@ HISTORY:
  * ......... INCLUDES .........
  */
 #ifndef VMS
-#include <stdlib.h>		  /* General utility definitions */
+#include <stdlib.h>             /* General utility definitions */
 #endif
-#include <math.h>		  /* RTL Math Function Declarations */
+#include <math.h>               /* RTL Math Function Declarations */
 
 /* Definitions for IIR filters */
-#include "iirflt.h"		  
+#include "iirflt.h"
 
 
 
 /*
  * ......... Local function *smart* prototypes .........
  */
-void fill_iir_cof_16khz ARGS((float ***b_cof, float ***c_cof, 
-			      double *K, long *nblocks));
+void fill_iir_cof_16khz ARGS ((float ***b_cof, float ***c_cof, double *K, long *nblocks));
 
 /* External function prototypes - code in in iir-lib.c */
-extern SCD_IIR *scd_stdpcm_init ARGS((long nblocks, float (*b)[3], 
-			    float (*c)[2], double direct_cof, double gain, 
-			    long idown, int hswitch));
+extern SCD_IIR *scd_stdpcm_init ARGS ((long nblocks, float (*b)[3], float (*c)[2], double direct_cof, double gain, long idown, int hswitch));
 
 
 /*
@@ -111,28 +108,26 @@ extern SCD_IIR *scd_stdpcm_init ARGS((long nblocks, float (*b)[3],
 
  ============================================================================
 */
-SCD_IIR        *stdpcm_16khz_init()
-{
-  float         **b_cof, **c_cof; /* pointer to numerator/denominator */
-  double          K;		  /* coefficients; direct path coef. */
-  long            nblocks;	  /* number of 2'nd order blocks */
+SCD_IIR *stdpcm_16khz_init () {
+  float **b_cof, **c_cof;       /* pointer to numerator/denominator */
+  double K;                     /* coefficients; direct path coef. */
+  long nblocks;                 /* number of 2'nd order blocks */
 
 
   /* get pointer to filter-coefficients */
-  fill_iir_cof_16khz(&b_cof, &c_cof, &K, &nblocks);
+  fill_iir_cof_16khz (&b_cof, &c_cof, &K, &nblocks);
 
   /* Returns: pointer to SCD_IIR-struct */
-  return scd_stdpcm_init(nblocks, /* In: number of 2'nd order blocks */
-			 (float (*)[3]) b_cof,	/* In: 24-bit repres. of
-						 * numer. coef. */
-			 (float (*)[2]) c_cof,	/* In: 24-bit repres. of
-						 * denom. coef. */
-			 K,	  /* 'K' (direct path coefficient) */
-			 1.0,	  /* In: gain factor for filter */
-			 (long) 1,/* In: Down-sampling factor */
-			 'D');	  /* -> call down-sampling routine */
+  return scd_stdpcm_init (nblocks,      /* In: number of 2'nd order blocks */
+                          (float (*)[3]) b_cof, /* In: 24-bit repres. of numer. coef. */
+                          (float (*)[2]) c_cof, /* In: 24-bit repres. of denom. coef. */
+                          K,    /* 'K' (direct path coefficient) */
+                          1.0,  /* In: gain factor for filter */
+                          (long) 1,     /* In: Down-sampling factor */
+                          'D'); /* -> call down-sampling routine */
 
 }
+
 /* ....................... End of stdpcm_16khz_init() ....................... */
 
 
@@ -166,29 +161,26 @@ SCD_IIR        *stdpcm_16khz_init()
 
  ============================================================================
 */
-SCD_IIR        *stdpcm_2_to_1_init()
-{
-  float         **b_cof, **c_cof; /* pointer to numerator/denominator */
-  double          K;		  /* coefficients; direct path coef. */
-  long            nblocks;	  /* number of 2'nd order blocks */
+SCD_IIR *stdpcm_2_to_1_init () {
+  float **b_cof, **c_cof;       /* pointer to numerator/denominator */
+  double K;                     /* coefficients; direct path coef. */
+  long nblocks;                 /* number of 2'nd order blocks */
 
 
-  fill_iir_cof_16khz		  /* get pointer to filter-coefficients */
-    (&b_cof, &c_cof, &K, &nblocks);	/* */
+  fill_iir_cof_16khz            /* get pointer to filter-coefficients */
+    (&b_cof, &c_cof, &K, &nblocks);     /* */
 
-  return
-    scd_stdpcm_init(		  /* Returns: pointer to SCD_IIR-struct */
-		    nblocks,	  /* In: number of 2'nd order blocks */
-		    (float (*)[3]) b_cof,	/* In: 24-bit repres. of
-						 * numer. coef. */
-		    (float (*)[2]) c_cof,	/* In: 24-bit repres. of
-						 * denom. coef. */
-		    K,		  /* 'K' (direct path coefficient) */
-		    1.0,	  /* In: gain factor for filter */
-		    (long) 2,	  /* In: Down-sampling factor */
-		    'D'		  /* -> call down-sampling routine */
+  return scd_stdpcm_init (      /* Returns: pointer to SCD_IIR-struct */
+                           nblocks,     /* In: number of 2'nd order blocks */
+                           (float (*)[3]) b_cof,        /* In: 24-bit repres. of numer. coef. */
+                           (float (*)[2]) c_cof,        /* In: 24-bit repres. of denom. coef. */
+                           K,   /* 'K' (direct path coefficient) */
+                           1.0, /* In: gain factor for filter */
+                           (long) 2,    /* In: Down-sampling factor */
+                           'D'  /* -> call down-sampling routine */
     );
 }
+
 /* ..................... End of stdpcm_2_to_1_init() ..................... */
 
 
@@ -223,29 +215,26 @@ SCD_IIR        *stdpcm_2_to_1_init()
 
  ============================================================================
 */
-SCD_IIR        *stdpcm_1_to_2_init()
-{
-  float         **b_cof, **c_cof; /* pointer to numerator/denominator */
-  double          K;		  /* coefficients; direct path coef. */
-  long            nblocks;	  /* number of 2'nd order blocks */
+SCD_IIR *stdpcm_1_to_2_init () {
+  float **b_cof, **c_cof;       /* pointer to numerator/denominator */
+  double K;                     /* coefficients; direct path coef. */
+  long nblocks;                 /* number of 2'nd order blocks */
 
 
   /* get pointer to filter-coefficients */
-  fill_iir_cof_16khz(&b_cof, &c_cof, &K, &nblocks);
+  fill_iir_cof_16khz (&b_cof, &c_cof, &K, &nblocks);
 
-  return
-    scd_stdpcm_init(		  /* Returns: pointer to SCD_IIR-struct */
-		    nblocks,	  /* In: number of 2'nd order blocks */
-		    (float (*)[3]) b_cof,	/* In: 24-bit repres. of
-						 * numer. coef. */
-		    (float (*)[2]) c_cof,	/* In: 24-bit repres. of
-						 * denom. coef. */
-		    K,		  /* 'K' (direct path coefficient) */
-		    2.0,	  /* In: gain factor for filter */
-		    (long) 2,	  /* In: Up-sampling factor */
-		    'U'		  /* -> call up-sampling routine */
+  return scd_stdpcm_init (      /* Returns: pointer to SCD_IIR-struct */
+                           nblocks,     /* In: number of 2'nd order blocks */
+                           (float (*)[3]) b_cof,        /* In: 24-bit repres. of numer. coef. */
+                           (float (*)[2]) c_cof,        /* In: 24-bit repres. of denom. coef. */
+                           K,   /* 'K' (direct path coefficient) */
+                           2.0, /* In: gain factor for filter */
+                           (long) 2,    /* In: Up-sampling factor */
+                           'U'  /* -> call up-sampling routine */
     );
 }
+
 /* ...................... End of stdpcm_1_to_2_init() ...................... */
 
 
@@ -281,35 +270,33 @@ SCD_IIR        *stdpcm_1_to_2_init()
 
  ============================================================================
 */
-void            fill_iir_cof_16khz(b_cof, c_cof, K, nblocks)
-  float        ***b_cof;
-  float        ***c_cof;
-  double         *K;
-  long           *nblocks;
+void fill_iir_cof_16khz (b_cof, c_cof, K, nblocks)
+     float ***b_cof;
+     float ***c_cof;
+     double *K;
+     long *nblocks;
 {
-#define nblocks_16khz        4	  /* number of 2'nd order blocks */
+#define nblocks_16khz        4  /* number of 2'nd order blocks */
 #define f24                  (float)0x00800000
-#define K_direct_path_16khz  -0.620901	/* 'K' (direct path coefficient) */
+#define K_direct_path_16khz  -0.620901  /* 'K' (direct path coefficient) */
 
 
   /* Numerator coefficients */
-  static float b_16khz[4][3] = 
-                           { /*       T[L]1   ,      T[L]2 */
-                            { 0.,  1990214./f24, -4831226./f24},
-                            { 0., - 891214./f24,   390775./f24},
-                            { 0.,   188047./f24, - 190086./f24},
-                            { 0., -7026995./f24,  7461919./f24}
-                           };
+  static float b_16khz[4][3] = {        /* T[L]1 , T[L]2 */
+    {0., 1990214. / f24, -4831226. / f24},
+    {0., -891214. / f24, 390775. / f24},
+    {0., 188047. / f24, -190086. / f24},
+    {0., -7026995. / f24, 7461919. / f24}
+  };
 
 
   /* (Denominator coefficients) */
-  static float  c_16khz[4][2] =
-                           { /*  T[L]3   ,      T[L]4 */
-                            { 1599397./f24, -2059789./f24},
-                            { 3376264./f24, -1250280./f24},
-                            { 4020626./f24, -8195142./f24},
-                            { 1243410./f24, -5159623./f24}
-                           };
+  static float c_16khz[4][2] = {        /* T[L]3 , T[L]4 */
+    {1599397. / f24, -2059789. / f24},
+    {3376264. / f24, -1250280. / f24},
+    {4020626. / f24, -8195142. / f24},
+    {1243410. / f24, -5159623. / f24}
+  };
 
 
   *nblocks = nblocks_16khz;
@@ -317,11 +304,10 @@ void            fill_iir_cof_16khz(b_cof, c_cof, K, nblocks)
   *c_cof = (float **) c_16khz;
   *K = K_direct_path_16khz;
 }
+
 #undef K_direct_path_16khz
 #undef f24
 #undef nblocks_16khz
 /* ...................... End of fill_iir_cof_16khz() ...................... */
 
 /* ************************** END OF IIR-G712.C *************************** */
-
-

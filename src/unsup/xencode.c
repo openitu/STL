@@ -155,7 +155,7 @@
 #define XENCODE 211
 
 /* General includes */
-#include "ugstdemo.h"		/* UGST demo macros - the 1st include */
+#include "ugstdemo.h"           /* UGST demo macros - the 1st include */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -187,23 +187,21 @@
 
 
 /* Defines for CRC routine */
-#define W       16		/* CRC width */
-#define WTYPE	unsigned short	/* Basic data type */
-#define B	8		/* the number of bits per char */
+#define W       16              /* CRC width */
+#define WTYPE	unsigned short  /* Basic data type */
+#define B	8               /* the number of bits per char */
 
 /* Local function prototypes */
-void display_usage ARGS((void));
-int encode      ARGS((FILE *in, FILE *out, long charno));
-int fr          ARGS((FILE *fd, char *buf, int cnt));
-int get_mode    ARGS((FILE *fp));
-char           *get_extension ARGS((char *ext, char *full_name, int max_length));
-char           *get_root ARGS((char *root, char *full_name));
-char           *xcode_index ARGS((register char *sp, register char c));
-int outenc      ARGS((char *p, FILE * f));
-void put_info   ARGS((FILE * out, char *ori_file, char *root, char *ext,
-                  char mode, int filno));
-WTYPE updcrc    ARGS((WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab,
-                  char swapped));
+void display_usage ARGS ((void));
+int encode ARGS ((FILE * in, FILE * out, long charno));
+int fr ARGS ((FILE * fd, char *buf, int cnt));
+int get_mode ARGS ((FILE * fp));
+char *get_extension ARGS ((char *ext, char *full_name, int max_length));
+char *get_root ARGS ((char *root, char *full_name));
+char *xcode_index ARGS ((register char *sp, register char c));
+int outenc ARGS ((char *p, FILE * f));
+void put_info ARGS ((FILE * out, char *ori_file, char *root, char *ext, char mode, int filno));
+WTYPE updcrc ARGS ((WTYPE icrc, unsigned char *icp, int icnt, WTYPE * crctab, char swapped));
 
 /* ENC is the basic 1 character encoding function to make a char printing */
 char c_global;
@@ -216,158 +214,137 @@ char c_global;
 #define get_xmodem_crc(crc,buf,n) updcrc(crc, buf, n, crctab_xmodem, 1)
 
 /* Global variables related to crc calculations */
-WTYPE           crc_a = 0, crc_c = 0, crc_x = 0;
-int             init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
+WTYPE crc_a = 0, crc_c = 0, crc_x = 0;
+int init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
 
 
 /* ================================================== */
-int main(argc, argv)
-  int             argc;
-  char           *argv[];
+int main (argc, argv)
+     int argc;
+     char *argv[];
 {
-  FILE           *in, *out;
-  long            blk = MAX_LONG;
-  int             filno, i;
-  int             input_is_file = YES;
-  int             output_is_file = YES;
-  char            root[120], ext[5], src[120], this_file[120], next_file[120];
-  char           *get_root(), *get_extension(), mode_is_binary = YES, quiet=0;
-  struct stat     inpfil;
+  FILE *in, *out;
+  long blk = MAX_LONG;
+  int filno, i;
+  int input_is_file = YES;
+  int output_is_file = YES;
+  char root[120], ext[5], src[120], this_file[120], next_file[120];
+  char *get_root (), *get_extension (), mode_is_binary = YES, quiet = 0;
+  struct stat inpfil;
 #ifdef VMS
-  static char     mrs[15] = "mrs=512";	/* for correct mrs in VMS environment */
+  static char mrs[15] = "mrs=512";      /* for correct mrs in VMS environment */
 #endif
 
   /* Check if 1st par. is an option */
-  while (argc > 1 && argv[1][0] == '-' && strlen(argv[1]) > 1)
-    if (strcmp(argv[1], "-t") == 0)
-    {
+  while (argc > 1 && argv[1][0] == '-' && strlen (argv[1]) > 1)
+    if (strcmp (argv[1], "-t") == 0) {
       /* set mode as text */
       mode_is_binary = 0;
 
-	/* Move argv over the option to the next argument */
+      /* Move argv over the option to the next argument */
       argc--;
       argv++;
-    }
-    else if (strcmp(argv[1], "-b") == 0)
-    {
+    } else if (strcmp (argv[1], "-b") == 0) {
       /* set mode as binary */
       mode_is_binary = 1;
 
       /* Move argv over the option to the next argument */
       argv++;
       argc--;
-    }
-    else if (strcmp(argv[1], "-q") == 0)
-    {
+    } else if (strcmp (argv[1], "-q") == 0) {
       /* Don't print progress indicator */
       quiet = 1;
 
       /* Move argv over the option to the next argument */
       argv++;
       argc--;
-    }
-    else if (strcmp(argv[1], "-?") == 0 || strstr(argv[1], "-help"))
-    {
+    } else if (strcmp (argv[1], "-?") == 0 || strstr (argv[1], "-help")) {
       /* Print help */
-      display_usage();
-    }
-    else
-    {
-      fprintf(stderr, "ERROR! Invalid option \"%s\" in command line\n\n",
-	      argv[1]);
-      display_usage();
+      display_usage ();
+    } else {
+      fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+      display_usage ();
     }
 
 
   /* Check arguments ... */
-  if (argc > 3)			/* , then block size specified */
-  {
-    blk = atol(argv[3]) * 1024l;
-    blk -= blk % 45;		/* blk is in bytes */
+  if (argc > 3) {               /* , then block size specified */
+    blk = atol (argv[3]) * 1024l;
+    blk -= blk % 45;            /* blk is in bytes */
     argc--;
     if (blk == 0)
-      HARAKIRI("Bad max.size for encoded file was specified! \n", 4);
+      HARAKIRI ("Bad max.size for encoded file was specified! \n", 4);
   }
 
   /* If 3 arguments, then output file specified */
-  if (argc > 2)
-  {
+  if (argc > 2) {
     argc--;
-  }
-  else
-  {
-    out = stdout;		/* output is not a file, but the std. output */
+  } else {
+    out = stdout;               /* output is not a file, but the std. output */
     output_is_file = NO;
   }
 
   /* If 2 arguments, then input file specified */
-  if (argc > 1)
-  {
-    strcpy(src, argv[1]);
+  if (argc > 1) {
+    strcpy (src, argv[1]);
     if (mode_is_binary)
-      in = fopen(src, RB);
+      in = fopen (src, RB);
     else
-      in = fopen(src, RT);
+      in = fopen (src, RT);
     if (in == NULL)
-      KILL(src, 2);
+      KILL (src, 2);
     argc--;
-  }
-  else
-  {
-    in = stdin;			/* input is not a file, but the std. input */
+  } else {
+    in = stdin;                 /* input is not a file, but the std. input */
     input_is_file = NO;
   }
 
 
   /* Warns wrong usage */
   if (argc != 1)
-    display_usage();
+    display_usage ();
 
   /* Finds out the number of files to generate, filno */
-  if (input_is_file)
-  {
-    long tmp = blk * 3/4;
-    fstat(fileno(in), &inpfil);      /* Stat structure */
-    filno = inpfil.st_size / tmp;    /* Number of files; */
-    if (inpfil.st_size % tmp != 0)   /* Add one to avoid truncation */
+  if (input_is_file) {
+    long tmp = blk * 3 / 4;
+    fstat (fileno (in), &inpfil);       /* Stat structure */
+    filno = inpfil.st_size / tmp;       /* Number of files; */
+    if (inpfil.st_size % tmp != 0)      /* Add one to avoid truncation */
       filno++;
-  }
-  else
-    filno = 1;			/* only one file will be generated */
+  } else
+    filno = 1;                  /* only one file will be generated */
 
 
   /* Remove path from input file name */
-  get_root(root, src);
-  get_extension(ext, src, 4);
-  strcpy(src, root);
-  strcat(src, ext);
+  get_root (root, src);
+  get_extension (ext, src, 4);
+  strcpy (src, root);
+  strcat (src, ext);
 
 
   /* Print info on screen when not a pipe/redirection */
-  if (output_is_file)
-  {
+  if (output_is_file) {
     /* Displays blocking information */
-    if (filno > 1)
-    {
-      fprintf(stderr, " Input file will be broken");
-      fprintf(stderr, " in %3d files ", filno);
-      fprintf(stderr, " of %ld bytes each.\n", blk);
+    if (filno > 1) {
+      fprintf (stderr, " Input file will be broken");
+      fprintf (stderr, " in %3d files ", filno);
+      fprintf (stderr, " of %ld bytes each.\n", blk);
     }
 
     /* Get the root of the file name (ie, name w/o extension) */
-    get_root(root, argv[2]);
+    get_root (root, argv[2]);
 
     /* Get file name's extension */
-    get_extension(ext, argv[2], 4);
+    get_extension (ext, argv[2], 4);
 
     /* Initializes this_file with the given output file name */
     /* PS: this is the FIRST file; srips off the path! */
-    strcpy(this_file, root);
-    strcat(this_file, ext);
+    strcpy (this_file, root);
+    strcat (this_file, ext);
 
     /* tell something ... */
     if (input_is_file)
-      fprintf(stderr, " Encoding %s into ", src);
+      fprintf (stderr, " Encoding %s into ", src);
   }
 
 
@@ -377,72 +354,65 @@ int main(argc, argv)
   crc_x = init_crc_x;
 
   /* Process input file saving in blocks, as specified */
-  for (i = 0; i < filno; i++)
-  {
+  for (i = 0; i < filno; i++) {
     /* Mounts the next output file name, if any */
-    if (i < filno - 1 && output_is_file)
-    {
-      sprintf(next_file, "%s%02d%s\0", root, i + 1, ext);
-    }
-    else
-      strcpy(next_file, "\0");	/* no next file! */
+    if (i < filno - 1 && output_is_file) {
+      sprintf (next_file, "%s%02d%s\0", root, i + 1, ext);
+    } else
+      strcpy (next_file, "\0"); /* no next file! */
 
     /* Opens output file */
-    if (output_is_file)
-    {
+    if (output_is_file) {
       /* Print the name the file *shall* have after being extracted */
-      if ((out = fopen(this_file, WT)) == NULL)
-	KILL(this_file, 3);
-      if (filno>1)
-      {
-	  fprintf(out, "\n\n%%XENCODE-INFO: This is ");
-	  fprintf(out, "Part %02d/%02d of %s. ",
-		  i + 1, filno, src);
-	  fprintf(out, "Name it as \"%s\".\n\n", this_file);
+      if ((out = fopen (this_file, WT)) == NULL)
+        KILL (this_file, 3);
+      if (filno > 1) {
+        fprintf (out, "\n\n%%XENCODE-INFO: This is ");
+        fprintf (out, "Part %02d/%02d of %s. ", i + 1, filno, src);
+        fprintf (out, "Name it as \"%s\".\n\n", this_file);
       }
     }
 
     /* Write out information on how to xdecode files */
     if (i == 0 && !quiet)
-      put_info(out, src, root, ext, mode_is_binary, filno);
+      put_info (out, src, root, ext, mode_is_binary, filno);
 
     /* Complement information */
     if (input_is_file && output_is_file)
-      fprintf(stderr, "%s%c", this_file, (i < filno - 1) ? ',' : '.');
+      fprintf (stderr, "%s%c", this_file, (i < filno - 1) ? ',' : '.');
 
     /* Mounts the encoded file's header */
-    fprintf(out, "begin %o %s %s\n",
-	    inpfil.st_mode & 0777,	/* access mode */
-	    src,		/* original file's name */
-	    next_file);		/* cont.file's name */
+    fprintf (out, "begin %o %s %s\n", inpfil.st_mode & 0777,    /* access mode */
+             src,               /* original file's name */
+             next_file);        /* cont.file's name */
 
     /* Proceeds to encoding process */
-    encode(in, out, blk);
+    encode (in, out, blk);
 
     /* Put file's end mark */
-    fprintf(out, "end\n");
+    fprintf (out, "end\n");
 
     /* Print incremental CRCs */
-    fprintf(out, "%%XENCODE-CRC: %d CCITT %4X ARC %4X XMODEM %4X\n",
-	    (int) XENCODE, crc_c, crc_a, crc_x);
+    fprintf (out, "%%XENCODE-CRC: %d CCITT %4X ARC %4X XMODEM %4X\n", (int) XENCODE, crc_c, crc_a, crc_x);
 
     /* Closes the present output file */
-    fclose(out);
+    fclose (out);
 
     /* updates file names */
-    strcpy(this_file, next_file);
+    strcpy (this_file, next_file);
   }
   if (input_is_file && output_is_file)
-    fprintf(stderr, "\n -> Done! \n");
+    fprintf (stderr, "\n -> Done! \n");
 
   /* Closes input file */
-  fclose(in);
+  fclose (in);
 
   /* And exits! */
 #ifndef VMS
   return 0;
 #endif
 }
+
 /* ........................... end of main() ........................... */
 
 
@@ -470,17 +440,17 @@ int main(argc, argv)
   ----------------------------------------------------------------------------
 */
 #define FP(x) fprintf(stderr, x);
-void display_usage()
-{
-  fprintf(stderr, "\nxencode Ver.%.2f - ", (float)XENCODE/100.0);
-  FP("UGST file email transmission tool compatible with uuencode\n");
-  FP("Usage: xencode [-options] [infile [outfile [blocksize] ] ]\n");
-  FP("Options:\n");
-  FP("-t ... treat input data as ASCII [default: binary]\n");
-  FP("-b ... treat input data as binary [default]\n");
-  FP("-q ... do not produce information text header\n");
-  exit(-128);
+void display_usage () {
+  fprintf (stderr, "\nxencode Ver.%.2f - ", (float) XENCODE / 100.0);
+  FP ("UGST file email transmission tool compatible with uuencode\n");
+  FP ("Usage: xencode [-options] [infile [outfile [blocksize] ] ]\n");
+  FP ("Options:\n");
+  FP ("-t ... treat input data as ASCII [default: binary]\n");
+  FP ("-b ... treat input data as binary [default]\n");
+  FP ("-q ... do not produce information text header\n");
+  exit (-128);
 }
+
 /* ...................... end of display_usage() ........................ */
 
 /*
@@ -516,81 +486,72 @@ void display_usage()
 
   ----------------------------------------------------------------------------
 */
-void            put_info(out, ori_file, root, ext, mode, filno)
-  FILE           *out;
-  char           *ori_file, *root, *ext, mode;
-  int             filno;
+void put_info (out, ori_file, root, ext, mode, filno)
+     FILE *out;
+     char *ori_file, *root, *ext, mode;
+     int filno;
 {
-  int             i;
-  char           *ori_ext;
+  int i;
+  char *ori_ext;
 
-  ori_ext = strrchr(ori_file, '.');
+  ori_ext = strrchr (ori_file, '.');
 
-  fprintf(out, "ATTENTION!\n\n");
+  fprintf (out, "ATTENTION!\n\n");
 
-  fprintf(out, "The original file %s has been xencode'd (software\n",
-	  ori_file);
-  fprintf(out, "tool xencode.c) and broken into %d file(s).\n", filno);
-  fprintf(out, "To decode the files back to the original, please:\n\n");
+  fprintf (out, "The original file %s has been xencode'd (software\n", ori_file);
+  fprintf (out, "tool xencode.c) and broken into %d file(s).\n", filno);
+  fprintf (out, "To decode the files back to the original, please:\n\n");
 
-  fprintf(out, "1. Extract each of the e-mails received with the names:\n");
+  fprintf (out, "1. Extract each of the e-mails received with the names:\n");
 
-  fprintf(out, "\tpart 01/%02d\t -> %s%s\n", filno, root, ext);
+  fprintf (out, "\tpart 01/%02d\t -> %s%s\n", filno, root, ext);
 
   /* Mounts the next file name of parts 2..filno */
   for (i = 1; i < filno; i++)
-    fprintf(out, "\tpart %02d/%02d\t -> %s%02d%s\n",
-	    i + 1, filno, root, i, ext);
+    fprintf (out, "\tpart %02d/%02d\t -> %s%02d%s\n", i + 1, filno, root, i, ext);
 
-  fprintf(out, "\n2. Run the utility xdecode, as follows:\n");
+  fprintf (out, "\n2. Run the utility xdecode, as follows:\n");
   if (mode)
-    fprintf(out, "   $ xdecode %s%s\n", root, ext);
+    fprintf (out, "   $ xdecode %s%s\n", root, ext);
   else
-    fprintf(out, "   $ xdecode -t %s%s\n", root, ext);
-  fprintf(out, "   and it will generate the file %s.\n\n", ori_file);
+    fprintf (out, "   $ xdecode -t %s%s\n", root, ext);
+  fprintf (out, "   and it will generate the file %s.\n\n", ori_file);
 
-  if (strcmp(ori_ext, ".zip")==0 || strcmp(ext, ".ZIP")==0)
-  {
-    fprintf(out, "3. Run a pkunzip-compatible unarchiver on a MSDOS, Unix,\n");
-    fprintf(out, "   or VMS environment. Pkunzip is a shareware on MSDOS,\n");
-    fprintf(out, "   unzip is a free software available for most operating\n");
-    fprintf(out, "   systems and platforms. To get a copy of pkunzip, get\n");
-    fprintf(out, "   the package from wuarchive.wustl.edu, directory\n");
-    fprintf(out, "   /systems/ibmpc/simtel/zip/, file pkz204g.exe. To get\n");
-    fprintf(out, "   a MSDOS version of unzip, get in the same site,\n");
-    fprintf(out, "   directory /systems/ibmpc/simtel/starter, file\n");
-    fprintf(out, "   unz512x.exe. For other operating systems, see your\n");
-    fprintf(out, "   system guru.\n\n");
+  if (strcmp (ori_ext, ".zip") == 0 || strcmp (ext, ".ZIP") == 0) {
+    fprintf (out, "3. Run a pkunzip-compatible unarchiver on a MSDOS, Unix,\n");
+    fprintf (out, "   or VMS environment. Pkunzip is a shareware on MSDOS,\n");
+    fprintf (out, "   unzip is a free software available for most operating\n");
+    fprintf (out, "   systems and platforms. To get a copy of pkunzip, get\n");
+    fprintf (out, "   the package from wuarchive.wustl.edu, directory\n");
+    fprintf (out, "   /systems/ibmpc/simtel/zip/, file pkz204g.exe. To get\n");
+    fprintf (out, "   a MSDOS version of unzip, get in the same site,\n");
+    fprintf (out, "   directory /systems/ibmpc/simtel/starter, file\n");
+    fprintf (out, "   unz512x.exe. For other operating systems, see your\n");
+    fprintf (out, "   system guru.\n\n");
   }
 
-  fprintf(out, "NOTE1: VMS and DOS users should explicitly use xdecode\n");
-  fprintf(out, "       option -b if the original file was a binary file\n");
-  fprintf(out, "       (eg, speech),and -t if it was a text file (eg a \n");
-  fprintf(out, "       postscript file or a C code program). XDECODE\n");
-  fprintf(out, "       default is *binary* mode.\n\n");
+  fprintf (out, "NOTE1: VMS and DOS users should explicitly use xdecode\n");
+  fprintf (out, "       option -b if the original file was a binary file\n");
+  fprintf (out, "       (eg, speech),and -t if it was a text file (eg a \n");
+  fprintf (out, "       postscript file or a C code program). XDECODE\n");
+  fprintf (out, "       default is *binary* mode.\n\n");
 
-  fprintf(out, "NOTE2: no edition of the uuencoded files is needed.\n");
-  fprintf(out, "       XDECODE will get rid of all the garbage.\n\n");
+  fprintf (out, "NOTE2: no edition of the uuencoded files is needed.\n");
+  fprintf (out, "       XDECODE will get rid of all the garbage.\n\n");
 
-  fprintf(out, "Good luck!\n\n");
+  fprintf (out, "Good luck!\n\n");
 
   /* Print the next only if more than 1 part */
-  if (filno > 1)
-  {
-    fprintf(out, "%s%s", "*************************************",
-	    "************************************\n");
-    fprintf(out, "%s%s",
-	    "\t  ORIG.FILE  NEXT FILE XDECODE WILL LOOK FOR! ",
-	    "BE SURE IT EXISTS,\n");
-    fprintf(out, "%s%s",
-	    "\t    NAME     OR A \"SHORT FILE\" MESSAGE ",
-	    "WILL BE DISPLAYED!!!\n");
-    fprintf(out, "             |           |\n");
-    fprintf(out, "             V           V\n");
-    fprintf(out, "%s%s", "*************************************",
-	    "************************************\n\n");
+  if (filno > 1) {
+    fprintf (out, "%s%s", "*************************************", "************************************\n");
+    fprintf (out, "%s%s", "\t  ORIG.FILE  NEXT FILE XDECODE WILL LOOK FOR! ", "BE SURE IT EXISTS,\n");
+    fprintf (out, "%s%s", "\t    NAME     OR A \"SHORT FILE\" MESSAGE ", "WILL BE DISPLAYED!!!\n");
+    fprintf (out, "             |           |\n");
+    fprintf (out, "             V           V\n");
+    fprintf (out, "%s%s", "*************************************", "************************************\n\n");
   }
 }
+
 /* ........................... end of put_info() ........................... */
 
 
@@ -643,7 +604,7 @@ void            put_info(out, ori_file, root, ext, mode, filno)
 */
 
 /* Table for CCITT CRCs */
-static WTYPE    crctab_ccitt[1 << B] = {
+static WTYPE crctab_ccitt[1 << B] = {
   0x0, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
   0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
   0x1231, 0x210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
@@ -679,7 +640,7 @@ static WTYPE    crctab_ccitt[1 << B] = {
 };
 
 /* Table for xmodem CRCs */
-static WTYPE    crctab_xmodem[1 << B] = {
+static WTYPE crctab_xmodem[1 << B] = {
   0x0, 0x17ce, 0xfdf, 0x1811, 0x1fbe, 0x870, 0x1061, 0x7af,
   0x1f3f, 0x8f1, 0x10e0, 0x72e, 0x81, 0x174f, 0xf5e, 0x1890,
   0x1e3d, 0x9f3, 0x11e2, 0x62c, 0x183, 0x164d, 0xe5c, 0x1992,
@@ -715,7 +676,7 @@ static WTYPE    crctab_xmodem[1 << B] = {
 };
 
 /* Table for ARC CRCs */
-static WTYPE    crctab_arc[1 << B] = {
+static WTYPE crctab_arc[1 << B] = {
   0x0, 0xc0c1, 0xc181, 0x140, 0xc301, 0x3c0, 0x280, 0xc241,
   0xc601, 0x6c0, 0x780, 0xc741, 0x500, 0xc5c1, 0xc481, 0x440,
   0xcc01, 0xcc0, 0xd80, 0xcd41, 0xf00, 0xcfc1, 0xce81, 0xe40,
@@ -751,30 +712,27 @@ static WTYPE    crctab_arc[1 << B] = {
 };
 
 /* -------------- Begin of function updcrc() ---------------------- */
-WTYPE
-updcrc(icrc, icp, icnt, crctab, swapped)
-  WTYPE           icrc, *crctab;
-  unsigned char  *icp;
-  int             icnt;
-  char            swapped;
+WTYPE updcrc (icrc, icp, icnt, crctab, swapped)
+     WTYPE icrc, *crctab;
+     unsigned char *icp;
+     int icnt;
+     char swapped;
 {
-  register WTYPE  crc = icrc;
+  register WTYPE crc = icrc;
   register unsigned char *cp = icp;
-  register int    cnt = icnt;
+  register int cnt = icnt;
 
   if (swapped)
-    while (cnt--)
-    {
+    while (cnt--) {
       crc = (crc >> B) ^ crctab[(crc & ((1 << B) - 1)) ^ *cp++];
-    }
-  else
-    while (cnt--)
-    {
+  } else
+    while (cnt--) {
       crc = (crc << B) ^ crctab[(crc >> (W - B)) ^ *cp++];
     }
 
   return (crc);
 }
+
 /* .......................... End of updcrc() ............................ */
 
 
@@ -808,15 +766,16 @@ updcrc(icrc, icp, icnt, crctab, swapped)
 	~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-int             get_mode(fp)
-  FILE           *fp;
+int get_mode (fp)
+     FILE *fp;
 {
-  struct stat     sbuf;
+  struct stat sbuf;
 
   /* figure out file mode */
-  fstat(fileno(fp), &sbuf);
+  fstat (fileno (fp), &sbuf);
   return (sbuf.st_mode & 0777);
 }
+
 /* ........................... end of get_mode() ........................... */
 
 
@@ -853,45 +812,45 @@ int             get_mode(fp)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-int             encode(in, out, charno)
-  FILE           *in;
-  FILE           *out;
-  long            charno;
+int encode (in, out, charno)
+     FILE *in;
+     FILE *out;
+     long charno;
 {
-  char            buf[80];
-  int             i, n;
-  long            count = 0;
+  char buf[80];
+  int i, n;
+  long count = 0;
 
   /* Adjust input bytes to output bytes */
-  charno = (long)(charno * 3 / 4);
+  charno = (long) (charno * 3 / 4);
 
-  do
-  {
+  do {
     /* Find out, encode and write the no.of chars/line (upto 45) */
-    n = fr(in, buf, 45);
-    putc(ENC(n), out);
+    n = fr (in, buf, 45);
+    putc (ENC (n), out);
 
     /* Update CRCs for the block of data */
-    crc_a = get_arc_crc(crc_a,(unsigned char *) buf, n);
-    crc_c = get_ccitt_crc(crc_c, (unsigned char *) buf, n);
-    crc_x = get_xmodem_crc(crc_x, (unsigned char *) buf, n);
+    crc_a = get_arc_crc (crc_a, (unsigned char *) buf, n);
+    crc_c = get_ccitt_crc (crc_c, (unsigned char *) buf, n);
+    crc_x = get_xmodem_crc (crc_x, (unsigned char *) buf, n);
 
     /* Encode the data from input and save to output, 3 at a time */
     for (i = 0; i < n; i += 3)
-      outenc(&buf[i], out);
+      outenc (&buf[i], out);
 
     /* New line after "n" chars are out */
-    putc('\n', out);
+    putc ('\n', out);
 
     /* Updates counter of output samples */
     count += n;
 
-  } while (n > 0 && count < charno);	/* i.e., not EOF, ... */
+  } while (n > 0 && count < charno);    /* i.e., not EOF, ... */
   if (count >= charno)
-    fprintf(out, "`\n");
+    fprintf (out, "`\n");
 
   return 0;
 }
+
 /* .......................... end of encode() .......................... */
 
 /*
@@ -921,23 +880,24 @@ int             encode(in, out, charno)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-int outenc(p, f)
-  char           *p;
-  FILE           *f;
+int outenc (p, f)
+     char *p;
+     FILE *f;
 {
-  int             c1, c2, c3, c4;
+  int c1, c2, c3, c4;
 
   c1 = *p >> 2;
   c2 = ((*p << 4) & 060) | ((p[1] >> 4) & 017);
   c3 = ((p[1] << 2) & 074) | ((p[2] >> 6) & 03);
   c4 = p[2] & 077;
-  putc(ENC(c1), f);
-  putc(ENC(c2), f);
-  putc(ENC(c3), f);
-  putc(ENC(c4), f);
+  putc (ENC (c1), f);
+  putc (ENC (c2), f);
+  putc (ENC (c3), f);
+  putc (ENC (c4), f);
 
   return 0;
 }
+
 /* ........................... end of outenc() ........................... */
 
 
@@ -966,22 +926,22 @@ int outenc(p, f)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-int             fr(fd, buf, cnt)
-  FILE           *fd;
-  char           *buf;
-  int             cnt;
+int fr (fd, buf, cnt)
+     FILE *fd;
+     char *buf;
+     int cnt;
 {
-  int             c, i;
+  int c, i;
 
-  for (i = 0; i < cnt; i++)
-  {
-    c = getc(fd);
+  for (i = 0; i < cnt; i++) {
+    c = getc (fd);
     if (c == EOF)
       return (i);
     buf[i] = c;
   }
   return (cnt);
 }
+
 /* ........................... end of fr() ........................... */
 
 
@@ -1010,20 +970,20 @@ int             fr(fd, buf, cnt)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 #ifdef NULL
-# undef NULL
+#undef NULL
 #endif
 #define	NULL	0
-char           *xcode_index(sp, c)
-  register char  *sp;
-  register char   c;
+char *xcode_index (sp, c)
+     register char *sp;
+     register char c;
 {
-  do
-  {
+  do {
     if (*sp == c)
       return (sp);
   } while (*sp++);
   return (NULL);
 }
+
 /* ........................... end of xcode_index() ........................... */
 
 
@@ -1065,40 +1025,39 @@ char           *xcode_index(sp, c)
 #define PATH_END ']'
 #elif defined(MSDOS)
 #define PATH_END '\\'
-#else				/* Unix */
+#else /* Unix */
 #define PATH_END '/'
 #endif
 
-char           *get_root(root, full_name)
-  char           *root;
-  char           *full_name;
+char *get_root (root, full_name)
+     char *root;
+     char *full_name;
 {
-  register char  *tmp = full_name;
+  register char *tmp = full_name;
 #if (XENCODE==200)
-  int             n;
+  int n;
 #endif
 
   /* copy full-name to root buffer */
-  strcpy(root, full_name);
+  strcpy (root, full_name);
 
   /* finds last occurence of a pointend of the path */
-  tmp = (char *) strrchr(root, PATH_END);
+  tmp = (char *) strrchr (root, PATH_END);
   if (tmp == NULL)
-    tmp = root; 		/* name starts with root, i.e., no path
-				 * present */
+    tmp = root;                 /* name starts with root, i.e., no path present */
   else
-    tmp++;			/* move onto start of root name */
+    tmp++;                      /* move onto start of root name */
 
 #if (XENCODE==200)
   /* finds last occurence of a point */
-  n = (long) strcspn(tmp, ".");
+  n = (long) strcspn (tmp, ".");
 
   /* copy root from tmp to `root' */
-  strncpy(root, tmp, n);
+  strncpy (root, tmp, n);
   root[n] = '\0';
 #else
   /* finds last occurence of a dot */
-  tmp = strrchr(tmp, '.');
+  tmp = strrchr (tmp, '.');
   if (tmp)
     *tmp = 0;
 #endif
@@ -1106,6 +1065,7 @@ char           *get_root(root, full_name)
   /* returns the file name without extension */
   return (root);
 }
+
 #undef PATH_END
 /* ........................... end of get_root() ........................... */
 
@@ -1148,26 +1108,25 @@ char           *get_root(root, full_name)
 	~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-char           *get_extension(ext, full_name, max_length)
-  char           *ext;
-  char           *full_name;
-  int             max_length;
+char *get_extension (ext, full_name, max_length)
+     char *ext;
+     char *full_name;
+     int max_length;
 {
-  register char  *tmp, *end;
+  register char *tmp, *end;
 
   /* finds last occurence of a point */
-  if ((tmp = (char *) strrchr(full_name, '.')) == NULL)
-  {
+  if ((tmp = (char *) strrchr (full_name, '.')) == NULL) {
     /* if original file had no extension, returns a '.' */
-    strcpy(ext, ".");
+    strcpy (ext, ".");
     return (NULL);
   }
 
   /* and string's end */
-  end = (char *) strrchr(full_name, 0);
+  end = (char *) strrchr (full_name, 0);
 
   /* copies the extension from the point, ... */
-  strncpy(ext, tmp, max_length);
+  strncpy (ext, tmp, max_length);
 
   /* ... and appends a '\0', if needed */
   if (max_length <= end - tmp)
@@ -1176,4 +1135,5 @@ char           *get_extension(ext, full_name, max_length)
   /* returns the file name's extension ('.' included!) */
   return (ext);
 }
+
 /* ......................... end of get_extension() ......................... */

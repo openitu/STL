@@ -96,14 +96,14 @@ HISTORY:
 /*
  * .................... INCLUDES ....................
  */
-#include <string.h> /* For memset() */
-#include "ugst-utl.h" /* Module Function prototypes */
- 
- 
+#include <string.h>             /* For memset() */
+#include "ugst-utl.h"           /* Module Function prototypes */
+
+
 /*
  * .................... FUNCTIONS ....................
  */
- 
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
@@ -158,23 +158,23 @@ HISTORY:
  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-long            scale(buffer, smpno, factor)
-  float          *buffer;
-  double          factor;
-  long            smpno;
+long scale (buffer, smpno, factor)
+     float *buffer;
+     double factor;
+     long smpno;
 {
-  register long   j;
-  register float  f;
- 
+  register long j;
+  register float f;
+
   /* scales all of the samples */
   for (f = (float) factor, j = 0; j < smpno; j++)
     buffer[j] *= f;
- 
+
   /* and return the number of scaled samples */
   return (j);
-}                  /* ......... end of scale() ......... */
- 
- 
+}                               /* ......... end of scale() ......... */
+
+
 /*
   --------------------------------------------------------------------------
  
@@ -257,15 +257,15 @@ long            scale(buffer, smpno, factor)
  
   --------------------------------------------------------------------------
 */
- 
-long            fl2sh(n, x, iy, half_lsb, mask)
-  long            n;
-  float          *x;
-  short          *iy;
-  double          half_lsb;
-  short           mask;
+
+long fl2sh (n, x, iy, half_lsb, mask)
+     long n;
+     float *x;
+     short *iy;
+     double half_lsb;
+     short mask;
 {
-  register long   iOvrFlw, k;
+  register long iOvrFlw, k;
   register double y;
 
   /* Reset overflow counter */
@@ -274,25 +274,20 @@ long            fl2sh(n, x, iy, half_lsb, mask)
   /* Loop over all input samples: assume result left justified in array */
 
   /* ------------------------------------------------------------------------ */
-  /* Perform 2's complement truncation if "no rounding" is selected           */
+  /* Perform 2's complement truncation if "no rounding" is selected */
   /* ------------------------------------------------------------------------ */
-  if (half_lsb == 0.0)
-  {
-    for (k = 0; k < n; k++)
-    {
+  if (half_lsb == 0.0) {
+    for (k = 0; k < n; k++) {
       /* Convert input data from normalized to 16-bit range (still float) */
       y = x[k] * 32768;
 
       /* Amplitude clip */
-      if (y > 32767.0)		/* limitation to positive maximum */
-      {
-	y = 32767.0;
-	iOvrFlw += 1;
-      }
-      else if (y < -32768.0)	/* limitation to negative maximum */
-      {
-	y = -32768.0;
-	iOvrFlw += 1;
+      if (y > 32767.0) {        /* limitation to positive maximum */
+        y = 32767.0;
+        iOvrFlw += 1;
+      } else if (y < -32768.0) {        /* limitation to negative maximum */
+        y = -32768.0;
+        iOvrFlw += 1;
       }
 
       iy[k] = (short) (y);
@@ -301,53 +296,45 @@ long            fl2sh(n, x, iy, half_lsb, mask)
   }
 
   /* ---------------------------------------------------------------------- */
-  /* Perform Magnitude Rounding                                             */
+  /* Perform Magnitude Rounding */
   /* ---------------------------------------------------------------------- */
-  else
-  {
-    for (k = 0; k < n; k++)
-    {
+  else {
+    for (k = 0; k < n; k++) {
       /* Convert input data from normalized to 16-bit range (still float) */
       y = x[k] * 32768;
       if (y >= 0.0)
-	y = y + half_lsb;
+        y = y + half_lsb;
       else
-	y = y - half_lsb;
+        y = y - half_lsb;
 
       /* Amplitude clip */
-      if (y > 32767.0)
-      {
-	/* limitation to positive maximum */
-	y = 32767.0;
-	iOvrFlw += 1;
-      }
-      else if (y < -32768.0)
-      {
-	/* limitation to negative maximum */
-	y = -32768.0;
-	iOvrFlw += 1;
+      if (y > 32767.0) {
+        /* limitation to positive maximum */
+        y = 32767.0;
+        iOvrFlw += 1;
+      } else if (y < -32768.0) {
+        /* limitation to negative maximum */
+        y = -32768.0;
+        iOvrFlw += 1;
       }
 
-      if (y >= 0.0)
-      {
-	/* conversion to short (16 bit) */
-	iy[k] = (short) (y);
-	iy[k] &= mask;
-      }
-      else
-      {
-	/* if (y < 0.0) */
-	iy[k] = (short) (-y);	/* iy will be 0x8000 even if y = -32768.0   */
-	iy[k] &= mask;
-	iy[k] = -iy[k];
+      if (y >= 0.0) {
+        /* conversion to short (16 bit) */
+        iy[k] = (short) (y);
+        iy[k] &= mask;
+      } else {
+        /* if (y < 0.0) */
+        iy[k] = (short) (-y);   /* iy will be 0x8000 even if y = -32768.0 */
+        iy[k] &= mask;
+        iy[k] = -iy[k];
       }
     }
   }
 
   /* Return number of overflows */
   return iOvrFlw;
-}                   /* ......... end of fl2sh() ......... */
- 
+}                               /* ......... end of fl2sh() ......... */
+
 /*
   --------------------------------------------------------------------------
  
@@ -399,22 +386,22 @@ long            fl2sh(n, x, iy, half_lsb, mask)
  
   --------------------------------------------------------------------------
 */
- 
-void            sh2fl_alt(n, ix, y, mask)
-  long            n;
-  short          *ix, mask;
-  float          *y;
+
+void sh2fl_alt (n, ix, y, mask)
+     long n;
+     short *ix, mask;
+     float *y;
 {
-  register long   k;
-  register float  factor;
+  register long k;
+  register float factor;
 
 
   for (k = 0, factor = (1. / 32768.); k < n; k++)
     *y++ = factor * ((*ix++) & mask);
 
-}              /* ......... end of sh2fl_alt() ......... */
+}                               /* ......... end of sh2fl_alt() ......... */
 
- 
+
 /*
   -------------------------------------------------------------------------- 
  
@@ -466,20 +453,19 @@ void            sh2fl_alt(n, ix, y, mask)
  
   --------------------------------------------------------------------------
 */
- 
-void            sh2fl(n, ix, y, resolution, norm)
-  long            n;
-  short          *ix;
-  float          *y;
-  long            resolution;
-  char            norm;
+
+void sh2fl (n, ix, y, resolution, norm)
+     long n;
+     short *ix;
+     float *y;
+     long resolution;
+     char norm;
 {
-  register long   k;
-  float           factor;
- 
+  register long k;
+  float factor;
+
   /* Shift of left-adjusted samples to the desired resolution */
-  if (resolution != 16)
-  { /* Block been correct as per suggestion from <bloecher@pkinbg.uucp> */
+  if (resolution != 16) {       /* Block been correct as per suggestion from <bloecher@pkinbg.uucp> */
     register long tmp;
     tmp = 16 - resolution;
     for (k = 0; k < n; k++)
@@ -490,20 +476,20 @@ void            sh2fl(n, ix, y, resolution, norm)
   if (norm)
     for (factor = 32768.0, k = 16 - resolution; k > 0; k--)
       factor /= 2;
- 
+
   /* Convert all samples */
   for (k = 0; k < n; k++)
     y[k] = (float) ix[k];
- 
+
   /* Normalize samples, fi requested, to the range -1..+1 */
   if (norm)
     for (k = 0; k < n; k++)
       y[k] /= factor;
- 
-}                  /* ......... end of sh2fl() ......... */
- 
- 
- 
+
+}                               /* ......... end of sh2fl() ......... */
+
+
+
 /*
  ============================================================================
  
@@ -606,66 +592,64 @@ void            sh2fl(n, ix, y, resolution, norm)
 #define EID_ZERO  0x007F
 #define EID_ONE   0x0081
 #define SYNC_WORD 0x6B21
- 
+
 long serialize_right_justifiedstl92 (par_buf, bit_stm, n, resol, sync)
-        short *par_buf, *bit_stm;
-        long n, resol;
-        char sync;
+     short *par_buf, *bit_stm;
+     long n, resol;
+     char sync;
 {
   unsigned short tmp, *bs;
   long bs_length;
-  long j,k;
- 
- 
+  long j, k;
+
+
 /*
   * ......... INITIALIZATIONS .........
   */
- 
+
   /* Calculate size of bitstream */
-  bs_length = n * resol + (sync==1?1:0);
- 
- 
+  bs_length = n * resol + (sync == 1 ? 1 : 0);
+
+
 /*
   * ......... PROCEEDS NORMAL PROCESSING .........
   */
- 
-  /* initialize unsigned pointer to input (potentially signed) and
-     output buffers */
-  bs = (unsigned short *)bit_stm;
- 
+
+  /* initialize unsigned pointer to input (potentially signed) and output buffers */
+  bs = (unsigned short *) bit_stm;
+
   /* Put a sync word at beginning of the frame, if requested */
-    if (sync) *bs++ = SYNC_WORD;
- 
-  /* Convert every sample in parallel buffer into a bitstream,
-     including a sync word if requested */
-  for (j=0; j<n; j++)
-  {
+  if (sync)
+    *bs++ = SYNC_WORD;
+
+  /* Convert every sample in parallel buffer into a bitstream, including a sync word if requested */
+  for (j = 0; j < n; j++) {
     /* Convert input word to unsigned */
-    tmp = (unsigned short)par_buf[j];
- 
+    tmp = (unsigned short) par_buf[j];
+
     /* Serialize all sample's bits ... */
-    for (k=0; k<resol; k++)
-    {
-      *bs++ = (tmp&0x0001)?EID_ONE:EID_ZERO;
+    for (k = 0; k < resol; k++) {
+      *bs++ = (tmp & 0x0001) ? EID_ONE : EID_ZERO;
       tmp >>= 1;
     }
   }
- 
- 
+
+
 /*
   * ......... RETURN bitstream length (include sync word) .........
   */
- 
-   return((long)((short *)bs-bit_stm));
- 
+
+  return ((long) ((short *) bs - bit_stm));
+
 }
+
 #undef EID_ONE
 #undef EID_ZERO
 #undef SYNC_WORD
 /* ............... End of serialize_right_justifiedstl92() ............... */
- 
- 
- 
+
+
+
 /*
 ============================================================================
  
@@ -772,64 +756,62 @@ long serialize_right_justifiedstl92 (par_buf, bit_stm, n, resol, sync)
 #define EID_ZERO  0x007F
 #define EID_ONE   0x0081
 #define SYNC_WORD 0x6B21
- 
+
 long parallelize_right_justifiedstl92 (bit_stm, par_buf, bs_len, resol, sync)
-        short *bit_stm, *par_buf;
-        long bs_len, resol;
-        char sync;
+     short *bit_stm, *par_buf;
+     long bs_len, resol;
+     char sync;
 {
   unsigned short tmp, *bs;
-  long n,j,k;
- 
- 
+  long n, j, k;
+
+
 /*
   * ......... INITIALIZATIONS .........
   */
- 
+
   /* Calculate size of bitstream */
-  n = (bs_len - (sync==1?1:0))/resol;
- 
+  n = (bs_len - (sync == 1 ? 1 : 0)) / resol;
+
 /*
   * ......... PROCEEDS NORMAL PROCESSING .........
   */
- 
-  /* initialize unsigned pointer to input (potentially signed) and
-     output buffers */
-  bs = (unsigned short *)bit_stm;
- 
-  /* Convert every sample in parallel buffer into a bitstream,
-     including a sync word if requested */
-  for (j=0; j<n; j++)
-  {
+
+  /* initialize unsigned pointer to input (potentially signed) and output buffers */
+  bs = (unsigned short *) bit_stm;
+
+  /* Convert every sample in parallel buffer into a bitstream, including a sync word if requested */
+  for (j = 0; j < n; j++) {
     /* Skip sync word if present */
-    if (*bs == SYNC_WORD) bs++;
- 
+    if (*bs == SYNC_WORD)
+      bs++;
+
     /* Get 1st bit ... */
-    tmp = (unsigned short)(*bs++==EID_ONE)?1:0;
- 
+    tmp = (unsigned short) (*bs++ == EID_ONE) ? 1 : 0;
+
     /* Parallelize all the other bits ... */
-    for (k=1; k<resol; k++)
-    {
-      tmp += (unsigned short)( ( (*bs++) == EID_ONE ? 1 : 0) << k);
+    for (k = 1; k < resol; k++) {
+      tmp += (unsigned short) (((*bs++) == EID_ONE ? 1 : 0) << k);
     }
- 
+
     /* Save word as short */
-    par_buf[j] = (short)tmp;
+    par_buf[j] = (short) tmp;
   }
- 
- 
+
+
 /*
   * ......... RETURN .........
   */
- 
-   return((long)n);
+
+  return ((long) n);
 }
+
 #undef EID_ONE
 #undef EID_ZERO
 #undef SYNC_WORD
 /* ............... End of parallelize_right_justifiedstl92() .............. */
- 
- 
+
+
 /*
  ============================================================================
  
@@ -915,69 +897,67 @@ long parallelize_right_justifiedstl92 (bit_stm, par_buf, bs_len, resol, sync)
 #define EID_ZERO  0x007F
 #define EID_ONE  0x0081
 #define SYNC_WORD 0x6B21
- 
+
 long serialize_left_justifiedstl92 (par_buf, bit_stm, n, resol, sync)
-        short *par_buf, *bit_stm;
-        long n, resol;
-        char sync;
+     short *par_buf, *bit_stm;
+     long n, resol;
+     char sync;
 {
   unsigned short tmp, *bs;
   long bs_length;
-  long j,k,l;
- 
- 
+  long j, k, l;
+
+
 /*
   * ......... INITIALIZATIONS .........
   */
- 
+
   /* Calculate size of bitstream */
-  bs_length = n * resol + (sync==1?1:0);
- 
- 
+  bs_length = n * resol + (sync == 1 ? 1 : 0);
+
+
 /*
   * ......... PROCEEDS NORMAL PROCESSING .........
   */
- 
-  /* initialize unsigned pointer to input (potentially signed) and
-     output buffers */
-  bs = (unsigned short *)bit_stm;
- 
+
+  /* initialize unsigned pointer to input (potentially signed) and output buffers */
+  bs = (unsigned short *) bit_stm;
+
   /* Put a sync word at beginning of the frame, if requested */
-  if (sync) *bs++ = SYNC_WORD;
- 
+  if (sync)
+    *bs++ = SYNC_WORD;
+
   /* Convert samples from left- to right-justified in input buffer */
-  l = 16-resol;
- 
-  /* Convert every sample in parallel buffer into a bitstream,
-     including a sync word if requested */
-  for (j=0; j<n; j++)
-  {
+  l = 16 - resol;
+
+  /* Convert every sample in parallel buffer into a bitstream, including a sync word if requested */
+  for (j = 0; j < n; j++) {
     /* Convert input word to unsigned */
-    tmp = (unsigned short)(par_buf[j] >> l);
- 
+    tmp = (unsigned short) (par_buf[j] >> l);
+
     /* Serialize all sample's bits ... */
-    for (k=0; k<resol; k++)
-    {
-      *bs++ = (tmp&0x0001)?EID_ONE:EID_ZERO;
+    for (k = 0; k < resol; k++) {
+      *bs++ = (tmp & 0x0001) ? EID_ONE : EID_ZERO;
       tmp >>= 1;
     }
   }
- 
- 
+
+
 /*
   * ......... RETURN bitstream length (include sync word) .........
   */
- 
-   return((long)((short *)bs-bit_stm));
- 
+
+  return ((long) ((short *) bs - bit_stm));
+
 }
+
 #undef EID_ONE
 #undef EID_ZERO
 #undef SYNC_WORD
 /* ............... End of serialize_left_justifiedstl92() ............... */
- 
- 
- 
+
+
+
 /*
 ============================================================================
  
@@ -1067,84 +1047,81 @@ long serialize_left_justifiedstl92 (par_buf, bit_stm, n, resol, sync)
 #define EID_ZERO  0x007F
 #define EID_ONE   0x0081
 #define SYNC_WORD 0x6B21
- 
+
 long parallelize_left_justifiedstl92 (bit_stm, par_buf, bs_len, resol, sync)
-        short *bit_stm, *par_buf;
-        long bs_len, resol;
-        char sync;
+     short *bit_stm, *par_buf;
+     long bs_len, resol;
+     char sync;
 {
   unsigned short tmp, *bs;
-  long n,j,k;
- 
- 
+  long n, j, k;
+
+
 /*
   * ......... INITIALIZATIONS .........
   */
- 
+
   /* Calculate size of bitstream */
-  n = (bs_len - (sync==1?1:0))/resol;
- 
+  n = (bs_len - (sync == 1 ? 1 : 0)) / resol;
+
 /*
   * ......... PROCEEDS NORMAL PROCESSING .........
   */
- 
-  /* initialize unsigned pointer to input (potentially signed) and
-     output buffers */
-  bs = (unsigned short *)bit_stm;
- 
-  /* Convert every sample in parallel buffer into a bitstream,
-     including a sync word if requested */
-  for (j=0; j<n; j++)
-  {
+
+  /* initialize unsigned pointer to input (potentially signed) and output buffers */
+  bs = (unsigned short *) bit_stm;
+
+  /* Convert every sample in parallel buffer into a bitstream, including a sync word if requested */
+  for (j = 0; j < n; j++) {
     /* Skip sync word if present */
-    if (*bs == SYNC_WORD) bs++;
- 
+    if (*bs == SYNC_WORD)
+      bs++;
+
     /* Get 1st bit ... */
-    tmp = (unsigned)(*bs++==EID_ONE)?1:0;
- 
+    tmp = (unsigned) (*bs++ == EID_ONE) ? 1 : 0;
+
     /* Parallelize all the other bits ... */
-    for (k=1; k<resol; k++)
-    {
-      tmp += (unsigned)( ( (*bs++) == EID_ONE ? 1 : 0) << k);
+    for (k = 1; k < resol; k++) {
+      tmp += (unsigned) (((*bs++) == EID_ONE ? 1 : 0) << k);
     }
- 
+
     /* Sign extension is needed if last bit was a `1' ... */
-    if (*(bs-1) == EID_ONE)
-      for (;k<16;k++) tmp += (1 << k);
- 
+    if (*(bs - 1) == EID_ONE)
+      for (; k < 16; k++)
+        tmp += (1 << k);
+
     /* Save word as short */
-    par_buf[j] = (short)tmp;
+    par_buf[j] = (short) tmp;
   }
- 
- 
+
+
 /*
   * Convert samples from right- to left-justified in output buffer
   *               (only needed if resol is not 16!)
   */
- 
-  if ((resol = 16-resol)!=0)
-  for (j=0; j<n; j++)
-  {
-    /* Shift up */
-    k = (long)par_buf[j] << resol;
- 
-    /* Check for overflow and save back to output vector */
-    par_buf[j] = (k > 32767) ? 32767 :
-                               (k < -32768? (-32768) : (short)k );
-  }
- 
- 
+
+  if ((resol = 16 - resol) != 0)
+    for (j = 0; j < n; j++) {
+      /* Shift up */
+      k = (long) par_buf[j] << resol;
+
+      /* Check for overflow and save back to output vector */
+      par_buf[j] = (k > 32767) ? 32767 : (k < -32768 ? (-32768) : (short) k);
+    }
+
+
 /*
   * ......... RETURN .........
   */
- 
-   return((long)n);
+
+  return ((long) n);
 }
+
 #undef EID_ONE
 #undef EID_ZERO
 #undef SYNC_WORD
 /* .............. End of parallelize_left_justifiedstl92() .............. */
- 
+
 
 
 
@@ -1263,72 +1240,67 @@ long parallelize_left_justifiedstl92 (bit_stm, par_buf, bs_len, resol, sync)
 #define EID_ZERO  0x007F
 #define EID_ONE   0x0081
 #define SYNC_WORD 0x6B21
- 
+
 long serialize_right_justifiedstl96 (par_buf, bit_stm, n, resol, sync)
-        short *par_buf, *bit_stm;
-        long n, resol;
-        char sync;
+     short *par_buf, *bit_stm;
+     long n, resol;
+     char sync;
 {
   register unsigned short tmp, *bs;
   register unsigned short bs_length;
-  long j,k;
- 
- 
+  long j, k;
+
+
 /*
   * ......... INITIALIZATIONS .........
   */
- 
+
   /* Calculate size of softbits in bitstream */
   bs_length = n * resol;
- 
-  /* Initialize unsigned pointer to input (potentially signed) and
-     output buffers */
-  bs = (unsigned short *)bit_stm;
- 
- 
+
+  /* Initialize unsigned pointer to input (potentially signed) and output buffers */
+  bs = (unsigned short *) bit_stm;
+
+
 /*
   * ......... PROCEEDS NORMAL PROCESSING .........
   */
- 
+
   /* Put a sync and length word at beginning of the frame, if requested */
-  if (sync) 
-  {
-    /* Frame boundaries have the sync word and the number of
-       softbits per frame */
+  if (sync) {
+    /* Frame boundaries have the sync word and the number of softbits per frame */
     *bs++ = SYNC_WORD;
     *bs++ = bs_length;
   }
- 
-  /* Convert every sample in parallel buffer into a bitstream,
-     including a sync word if requested */
-  for (j=0; j<n; j++)
-  {
+
+  /* Convert every sample in parallel buffer into a bitstream, including a sync word if requested */
+  for (j = 0; j < n; j++) {
     /* Convert input right-justified word to unsigned */
-    tmp = (unsigned short)par_buf[j];
- 
+    tmp = (unsigned short) par_buf[j];
+
     /* Serialize all sample's bits ... */
-    for (k=0; k<resol; k++)
-    {
-      *bs++ = (tmp&0x0001)?EID_ONE:EID_ZERO;
+    for (k = 0; k < resol; k++) {
+      *bs++ = (tmp & 0x0001) ? EID_ONE : EID_ZERO;
       tmp >>= 1;
     }
   }
- 
- 
+
+
 /*
   * ......... RETURN bitstream length (include sync word) .........
   */
- 
-   return((long)((short *)bs-bit_stm));
- 
+
+  return ((long) ((short *) bs - bit_stm));
+
 }
+
 #undef EID_ONE
 #undef EID_ZERO
 #undef SYNC_WORD
 /* ............... End of serialize_right_justifiedstl96() ............... */
- 
- 
- 
+
+
+
 /*
 ============================================================================
  
@@ -1462,95 +1434,87 @@ long serialize_right_justifiedstl96 (par_buf, bit_stm, n, resol, sync)
 #define EID_ONE   0x0081
 #define SYNC_WORD 0x6B21
 #define BAD_FRAME 0x6B20
- 
+
 long parallelize_right_justifiedstl96 (bit_stm, par_buf, bs_len, resol, sync)
-        short *bit_stm, *par_buf;
-        long bs_len, resol;
-        char sync;
+     short *bit_stm, *par_buf;
+     long bs_len, resol;
+     char sync;
 {
   unsigned short tmp, *bs;
-  long n,j,k;
- 
- 
+  long n, j, k;
+
+
 /*
   * ......... INITIALIZATIONS .........
   */
- 
-  /* Calculate size of bitstream */
-  n = (bs_len - (sync==1?2:0))/resol;
 
-  /* Initialize unsigned pointer to input (potentially signed) and
-     output buffers */
-  bs = (unsigned short *)bit_stm;
- 
+  /* Calculate size of bitstream */
+  n = (bs_len - (sync == 1 ? 2 : 0)) / resol;
+
+  /* Initialize unsigned pointer to input (potentially signed) and output buffers */
+  bs = (unsigned short *) bit_stm;
+
   /* Check if number of softbits in frame is consistent with the resolution */
-  if (n*resol + (sync==1?2:0) != bs_len)
-  {
-    /* The bitstream does not have an integer number of parallel samples
-       of width resol ... */
+  if (n * resol + (sync == 1 ? 2 : 0) != bs_len) {
+    /* The bitstream does not have an integer number of parallel samples of width resol ... */
 
     /* ... set all samples in bitstream to -1 */
-    memset(par_buf, -1, n * sizeof(short));
+    memset (par_buf, -1, n * sizeof (short));
 
     /* ... and return error code */
-    return(-1);
-  }
-  else
-  {
+    return (-1);
+  } else {
     /* No problems - reset samples in parallel sample buffer */
-    memset(par_buf, 0, n * sizeof(short));
+    memset (par_buf, 0, n * sizeof (short));
   }
 
 
 /*
   * ......... PROCEEDS NORMAL PROCESSING .........
   */
- 
+
   /* Convert every softbit in serial buffer to a parallel sample format */
-  for (j=0; j<n; j++)
-  {
-    /* If bad frame indicator present, no valid samples are returned.
-       The output buffer will contain just zero samples */
+  for (j = 0; j < n; j++) {
+    /* If bad frame indicator present, no valid samples are returned. The output buffer will contain just zero samples */
     if (*bs == BAD_FRAME)
-      return(0l);
+      return (0l);
 
     /* Skip sync word if present */
-    if (*bs == SYNC_WORD)
-    {
+    if (*bs == SYNC_WORD) {
       /* Skip sync word */
       bs++;
       /* Check frame length for consistency */
-      if (*bs++ != (bs_len-2))
-	return(-bs_len);
+      if (*bs++ != (bs_len - 2))
+        return (-bs_len);
     }
- 
+
     /* Get 1st bit ... */
-    tmp = (unsigned short)(*bs++==EID_ONE)?1:0;
- 
+    tmp = (unsigned short) (*bs++ == EID_ONE) ? 1 : 0;
+
     /* Parallelize all the other bits ... */
-    for (k=1; k<resol; k++)
-    {
-      tmp += (unsigned short)( ( (*bs++) == EID_ONE ? 1 : 0) << k);
+    for (k = 1; k < resol; k++) {
+      tmp += (unsigned short) (((*bs++) == EID_ONE ? 1 : 0) << k);
     }
- 
+
     /* Save word as short */
-    par_buf[j] = (short)tmp;
+    par_buf[j] = (short) tmp;
   }
- 
- 
+
+
 /*
   * ......... RETURN .........
   */
- 
-   return((long)n);
+
+  return ((long) n);
 }
+
 #undef BAD_FRAME
 #undef EID_ONE
 #undef EID_ZERO
 #undef SYNC_WORD
 /* .............. End of parallelize_right_justifiedstl96() .............. */
- 
- 
+
+
 /*
  ============================================================================
  
@@ -1636,75 +1600,70 @@ long parallelize_right_justifiedstl96 (bit_stm, par_buf, bs_len, resol, sync)
 #define EID_ZERO  0x007F
 #define EID_ONE  0x0081
 #define SYNC_WORD 0x6B21
- 
+
 long serialize_left_justifiedstl96 (par_buf, bit_stm, n, resol, sync)
-        short *par_buf, *bit_stm;
-        long n, resol;
-        char sync;
+     short *par_buf, *bit_stm;
+     long n, resol;
+     char sync;
 {
   unsigned short tmp, *bs;
   long bs_length;
-  long j,k,l;
- 
- 
+  long j, k, l;
+
+
 /*
   * ......... INITIALIZATIONS .........
   */
- 
-  /* Calculate number of softbits in bitstream frame*/
+
+  /* Calculate number of softbits in bitstream frame */
   bs_length = n * resol;
 
-  /* Initialize unsigned pointer to input (potentially signed) and
-     output buffers */
-  bs = (unsigned short *)bit_stm;
- 
+  /* Initialize unsigned pointer to input (potentially signed) and output buffers */
+  bs = (unsigned short *) bit_stm;
+
 
 /*
   * ......... PROCEEDS NORMAL PROCESSING .........
   */
- 
+
   /* Put a sync word at beginning of the frame, if requested */
-  if (sync) 
-  {
-    /* Frame boundaries have the sync word and the number of
-       softbits per frame */
+  if (sync) {
+    /* Frame boundaries have the sync word and the number of softbits per frame */
     *bs++ = SYNC_WORD;
     *bs++ = bs_length;
   }
- 
+
   /* Convert samples from left- to right-justified in input buffer */
-  l = 16-resol;
- 
-  /* Convert every sample in parallel buffer into a bitstream,
-     including a sync word if requested */
-  for (j=0; j<n; j++)
-  {
+  l = 16 - resol;
+
+  /* Convert every sample in parallel buffer into a bitstream, including a sync word if requested */
+  for (j = 0; j < n; j++) {
     /* Convert input word to unsigned */
-    tmp = (unsigned short)(par_buf[j] >> l);
- 
+    tmp = (unsigned short) (par_buf[j] >> l);
+
     /* Serialize all sample's bits ... */
-    for (k=0; k<resol; k++)
-    {
-      *bs++ = (tmp&0x0001)?EID_ONE:EID_ZERO;
+    for (k = 0; k < resol; k++) {
+      *bs++ = (tmp & 0x0001) ? EID_ONE : EID_ZERO;
       tmp >>= 1;
     }
   }
- 
- 
+
+
 /*
   * ......... RETURN bitstream length (include sync word) .........
   */
- 
-   return((long)((short *)bs-bit_stm));
- 
+
+  return ((long) ((short *) bs - bit_stm));
+
 }
+
 #undef EID_ONE
 #undef EID_ZERO
 #undef SYNC_WORD
 /* ............... End of serialize_left_justifiedstl96() ............... */
- 
- 
- 
+
+
+
 /*
 ============================================================================
  
@@ -1817,115 +1776,104 @@ long serialize_left_justifiedstl96 (par_buf, bit_stm, n, resol, sync)
 #define EID_ONE   0x0081
 #define SYNC_WORD 0x6B21
 #define BAD_FRAME 0x6B20
- 
+
 long parallelize_left_justifiedstl96 (bit_stm, par_buf, bs_len, resol, sync)
-        short *bit_stm, *par_buf;
-        long bs_len, resol;
-        char sync;
+     short *bit_stm, *par_buf;
+     long bs_len, resol;
+     char sync;
 {
   unsigned short tmp, *bs;
-  long n,j,k;
- 
- 
+  long n, j, k;
+
+
 /*
   * ......... INITIALIZATIONS .........
   */
- 
+
   /* Calculate size of bitstream */
-  n = (bs_len - (sync==1?2:0))/resol;
- 
-  /* Initialize unsigned pointer to input (potentially signed) and
-     output buffers */
-  bs = (unsigned short *)bit_stm;
- 
+  n = (bs_len - (sync == 1 ? 2 : 0)) / resol;
+
+  /* Initialize unsigned pointer to input (potentially signed) and output buffers */
+  bs = (unsigned short *) bit_stm;
+
   /* Check if number of softbits in frame is consistent with the resolution */
-  if (n*resol + (sync==1?2:0) != bs_len)
-  {
-    /* The bitstream does not have an integer number of parallel samples
-       of width resol ... */
+  if (n * resol + (sync == 1 ? 2 : 0) != bs_len) {
+    /* The bitstream does not have an integer number of parallel samples of width resol ... */
 
     /* ... set all samples in bitstream to -1 */
-    memset(par_buf, -1, n * sizeof(short));
+    memset (par_buf, -1, n * sizeof (short));
 
     /* ... and return error code */
-    return(-1);
-  }
-  else
-  {
+    return (-1);
+  } else {
     /* No problems - reset samples in parallel sample buffer */
-    memset(par_buf, 0, n * sizeof(short));
+    memset (par_buf, 0, n * sizeof (short));
   }
 
 
 /*
   * ......... PROCEEDS NORMAL PROCESSING .........
   */
- 
-  /* Convert every sample in parallel buffer into a bitstream,
-     including a sync word if requested */
-  for (j=0; j<n; j++)
-  {
-    /* If bad frame indicator present, no valid samples are returned.
-       The output buffer will contain just zero samples */
+
+  /* Convert every sample in parallel buffer into a bitstream, including a sync word if requested */
+  for (j = 0; j < n; j++) {
+    /* If bad frame indicator present, no valid samples are returned. The output buffer will contain just zero samples */
     if (*bs == BAD_FRAME)
-      return(0l);
+      return (0l);
 
     /* Skip sync word if present */
-    if (*bs == SYNC_WORD)
-    {
+    if (*bs == SYNC_WORD) {
       /* Skip sync word */
       bs++;
       /* Check frame length for consistency */
-      if (*bs++ != (bs_len-2))
-	return(-bs_len);
+      if (*bs++ != (bs_len - 2))
+        return (-bs_len);
     }
- 
+
     /* Get 1st bit ... */
-    tmp = (unsigned)(*bs++==EID_ONE)?1:0;
- 
+    tmp = (unsigned) (*bs++ == EID_ONE) ? 1 : 0;
+
     /* Parallelize all the other bits ... */
-    for (k=1; k<resol; k++)
-    {
-      tmp += (unsigned)( ( (*bs++) == EID_ONE ? 1 : 0) << k);
+    for (k = 1; k < resol; k++) {
+      tmp += (unsigned) (((*bs++) == EID_ONE ? 1 : 0) << k);
     }
- 
+
     /* Sign extension is needed if last bit was a `1' ... */
-    if (*(bs-1) == EID_ONE)
-      for (;k<16;k++) tmp += (1 << k);
- 
+    if (*(bs - 1) == EID_ONE)
+      for (; k < 16; k++)
+        tmp += (1 << k);
+
     /* Save word as short */
-    par_buf[j] = (short)tmp;
+    par_buf[j] = (short) tmp;
   }
- 
- 
+
+
 /*
   * Convert samples from right- to left-justified in output buffer
   *               (only needed if resol is not 16!)
   */
- 
-  if ((resol = 16-resol)!=0)
-  for (j=0; j<n; j++)
-  {
-    /* Shift up */
-    k = (long)par_buf[j] << resol;
- 
-    /* Check for overflow and save back to output vector */
-    par_buf[j] = (k > 32767) ? 32767 :
-                               (k < -32768? (-32768) : (short)k );
-  }
- 
- 
+
+  if ((resol = 16 - resol) != 0)
+    for (j = 0; j < n; j++) {
+      /* Shift up */
+      k = (long) par_buf[j] << resol;
+
+      /* Check for overflow and save back to output vector */
+      par_buf[j] = (k > 32767) ? 32767 : (k < -32768 ? (-32768) : (short) k);
+    }
+
+
 /*
   * ......... RETURN .........
   */
- 
-   return((long)n);
+
+  return ((long) n);
 }
+
 #undef BAD_FRAME
 #undef EID_ONE
 #undef EID_ZERO
 #undef SYNC_WORD
 /* ............... End of parallelize_left_justifiedstl96() ............... */
- 
-/* ......................... END OF UGST-UTL.C .......................... */
 
+/* ......................... END OF UGST-UTL.C .......................... */

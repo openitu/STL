@@ -33,24 +33,10 @@
 extern BASIC_OP multiCounter[MAXCOUNTERS];
 extern int currCounter;
 
-  /* Technical note :
-   * The following 3 variables are only used for correct complexity
-   * evaluation of the following structure :
-   *   IF{
-   *     ...
-   *   } ELSE IF {
-   *     ...
-   *   } ELSE IF {
-   *     ...
-   *   }
-   *   ...
-   *   } ELSE {
-   *     ...
-   *   }
-   */
-extern int  funcId_where_last_call_to_else_occurred;
+  /* Technical note : The following 3 variables are only used for correct complexity evaluation of the following structure : IF{ ...  } ELSE IF { ...  } ELSE IF { ...  } ...  } ELSE { ...  } */
+extern int funcId_where_last_call_to_else_occurred;
 extern long funcid_total_wmops_at_last_call_to_else;
-extern int  call_occurred;
+extern int call_occurred;
 #endif /* ifdef WMOPS */
 
 
@@ -79,8 +65,8 @@ extern int  call_occurred;
 #else /* ifndef WMOPS */
 #define FOR( a) if( incrFor(), 0); else for( a)
 
-static __inline void incrFor( void) {
-   multiCounter[currCounter].For++;
+static __inline void incrFor (void) {
+  multiCounter[currCounter].For++;
 }
 #endif /* ifndef WMOPS */
 
@@ -104,8 +90,8 @@ static __inline void incrFor( void) {
 #else /* ifndef WMOPS */
 #define WHILE( a) while( incrWhile(), a)
 
-static __inline void incrWhile( void) {
-   multiCounter[currCounter].While++;
+static __inline void incrWhile (void) {
+  multiCounter[currCounter].While++;
 }
 #endif /* ifndef WMOPS */
 
@@ -156,18 +142,15 @@ static __inline void incrWhile( void) {
 #else /* ifndef WMOPS */
 #define IF( a) if( incrIf(), a)
 
-static __inline void incrIf( void) {
-   /* Technical note :
-    * If the "IF" operator comes just after an "ELSE", its counter
-    * must not be incremented.
-    */
-   if ( (currCounter != funcId_where_last_call_to_else_occurred)
-     || (TotalWeightedOperation() != funcid_total_wmops_at_last_call_to_else)
-     || (call_occurred == 1))
-     multiCounter[currCounter].If++;
+static __inline void incrIf (void) {
+  /* Technical note : If the "IF" operator comes just after an "ELSE", its counter must not be incremented. */
+  if ((currCounter != funcId_where_last_call_to_else_occurred)
+      || (TotalWeightedOperation () != funcid_total_wmops_at_last_call_to_else)
+      || (call_occurred == 1))
+    multiCounter[currCounter].If++;
 
-   call_occurred = 0;
-   funcId_where_last_call_to_else_occurred = MAXCOUNTERS;
+  call_occurred = 0;
+  funcId_where_last_call_to_else_occurred = MAXCOUNTERS;
 }
 #endif /* ifndef WMOPS */
 
@@ -189,22 +172,17 @@ static __inline void incrIf( void) {
 #else /* ifndef WMOPS */
 #define ELSE else if( incrElse(), 0) ; else
 
-static __inline void incrElse( void) {
-   multiCounter[currCounter].If++;
+static __inline void incrElse (void) {
+  multiCounter[currCounter].If++;
 
-   /* We keep track of the funcId of the last function
-    * which used ELSE {...} structure.
-    */
-   funcId_where_last_call_to_else_occurred = currCounter;
+  /* We keep track of the funcId of the last function which used ELSE {...} structure. */
+  funcId_where_last_call_to_else_occurred = currCounter;
 
-   /* We keep track of the number of WMOPS of this funcId
-    * when the ELSE macro was called.
-    */
-   funcid_total_wmops_at_last_call_to_else = TotalWeightedOperation();
+  /* We keep track of the number of WMOPS of this funcId when the ELSE macro was called. */
+  funcid_total_wmops_at_last_call_to_else = TotalWeightedOperation ();
 
-   /* call_occurred is set to 0, in order to count the next IF (if necessary)
-    */
-   call_occurred=0;
+  /* call_occurred is set to 0, in order to count the next IF (if necessary) */
+  call_occurred = 0;
 }
 #endif /* ifndef WMOPS */
 
@@ -226,8 +204,8 @@ static __inline void incrElse( void) {
 #else /* ifndef WMOPS */
 #define SWITCH( a) switch( incrSwitch(), a)
 
-static __inline void incrSwitch( void) {
-   multiCounter[currCounter].Switch++;
+static __inline void incrSwitch (void) {
+  multiCounter[currCounter].Switch++;
 }
 #endif /* ifndef WMOPS */
 
@@ -249,8 +227,8 @@ static __inline void incrSwitch( void) {
 #else /* ifndef WMOPS */
 #define CONTINUE if( incrContinue(), 0); else continue
 
-static __inline void incrContinue( void) {
-   multiCounter[currCounter].Continue++;
+static __inline void incrContinue (void) {
+  multiCounter[currCounter].Continue++;
 }
 #endif /* ifndef WMOPS */
 
@@ -272,8 +250,8 @@ static __inline void incrContinue( void) {
 #else /* ifndef WMOPS */
 #define BREAK if( incrBreak(), 0); else break
 
-static __inline void incrBreak( void) {
-   multiCounter[currCounter].Break++;
+static __inline void incrBreak (void) {
+  multiCounter[currCounter].Break++;
 }
 #endif /* ifndef WMOPS */
 
@@ -295,8 +273,8 @@ static __inline void incrBreak( void) {
 #else /* ifndef WMOPS */
 #define GOTO if( incrGoto(), 0); else goto
 
-static __inline void incrGoto( void) {
-   multiCounter[currCounter].Goto++;
+static __inline void incrGoto (void) {
+  multiCounter[currCounter].Goto++;
 }
 #endif /* ifndef WMOPS */
 

@@ -46,7 +46,7 @@
 #include "eid_io.h"
 
 #define MAGIC_EID "EID"
-#define MAGIC_BURST 0x42464552 /* Long int encoding for ASCII string "BFER" */
+#define MAGIC_BURST 0x42464552  /* Long int encoding for ASCII string "BFER" */
 
 /*
   ===========================================================================
@@ -99,53 +99,50 @@
 
   ===========================================================================
 */
-long            save_EID_to_file(EID, EIDfile, BER, GAMMA)
-  SCD_EID        *EID;
-  char           *EIDfile;
-  double          BER, GAMMA;
+long save_EID_to_file (EID, EIDfile, BER, GAMMA)
+     SCD_EID *EID;
+     char *EIDfile;
+     double BER, GAMMA;
 {
-  FILE           *EIDfileptr;
+  FILE *EIDfileptr;
 
   /* open specified ASCII file for "overwriting": */
-  EIDfileptr = fopen(EIDfile, RWT);
+  EIDfileptr = fopen (EIDfile, RWT);
 
   /* If failed, create new file: */
-  if (EIDfileptr == NULL)
-  {
-    if ((EIDfileptr = fopen(EIDfile, WT)) == NULL)
+  if (EIDfileptr == NULL) {
+    if ((EIDfileptr = fopen (EIDfile, WT)) == NULL)
       return (0L);
   }
 
   /* otherwise: set filepointer to beginning of file for overwriting */
-    else
-    {
-      fseek(EIDfileptr, 0L, 0);
-    }
+  else {
+    fseek (EIDfileptr, 0L, 0);
+  }
 
   /* Save EID magic number into state variable file */
-  fprintf(EIDfileptr, "%s\n", MAGIC_EID);
+  fprintf (EIDfileptr, "%s\n", MAGIC_EID);
 
-  /* Since the selected bit error rate and burst factor cannot be seen from
-   * the transition matrix, these values are also stored in file (only for
-   * documentation purposes). */
-  fprintf(EIDfileptr, "BER           = %f\n", BER);
-  fprintf(EIDfileptr, "GAMMA         = %f\n", GAMMA);
+  /* Since the selected bit error rate and burst factor cannot be seen from the transition matrix, these values are also stored in file (only for documentation purposes). */
+  fprintf (EIDfileptr, "BER           = %f\n", BER);
+  fprintf (EIDfileptr, "GAMMA         = %f\n", GAMMA);
 
   /* current state of random generator: */
-  fprintf(EIDfileptr, "RAN-seed      = 0x%08lx\n", get_RAN_seed(EID));
+  fprintf (EIDfileptr, "RAN-seed      = 0x%08lx\n", get_RAN_seed (EID));
 
   /* current state of GEC-model: */
-  fprintf(EIDfileptr, "Current State = %c\n", get_GEC_current_state(EID));
+  fprintf (EIDfileptr, "Current State = %c\n", get_GEC_current_state (EID));
 
   /* Save contents of Transition Matrix: */
-  fprintf(EIDfileptr, "GOOD->GOOD    = %f\n", get_GEC_matrix(EID, 'G', 'G'));
-  fprintf(EIDfileptr, "GOOD->BAD     = %f\n", get_GEC_matrix(EID, 'G', 'B'));
-  fprintf(EIDfileptr, "BAD ->GOOD    = %f\n", get_GEC_matrix(EID, 'B', 'G'));
-  fprintf(EIDfileptr, "BAD ->BAD     = %f\n", get_GEC_matrix(EID, 'B', 'B'));
+  fprintf (EIDfileptr, "GOOD->GOOD    = %f\n", get_GEC_matrix (EID, 'G', 'G'));
+  fprintf (EIDfileptr, "GOOD->BAD     = %f\n", get_GEC_matrix (EID, 'G', 'B'));
+  fprintf (EIDfileptr, "BAD ->GOOD    = %f\n", get_GEC_matrix (EID, 'B', 'G'));
+  fprintf (EIDfileptr, "BAD ->BAD     = %f\n", get_GEC_matrix (EID, 'B', 'B'));
 
-  fclose(EIDfileptr);
+  fclose (EIDfileptr);
   return (1L);
 }
+
 /* ....................... End of save_EID_to_file() ....................... */
 
 
@@ -192,64 +189,65 @@ long            save_EID_to_file(EID, EIDfile, BER, GAMMA)
 
  ============================================================================
 */
-SCD_EID        *recall_eid_from_file(EIDfile, ber, gamma)
-  char           *EIDfile;
-  double         *ber;
-  double         *gamma;
+SCD_EID *recall_eid_from_file (EIDfile, ber, gamma)
+     char *EIDfile;
+     double *ber;
+     double *gamma;
 {
-  SCD_EID        *EID;
-  FILE           *EIDfileptr;
-  char            chr;
-  double          thr;
-  long            seed;
-  char            magic[8];
+  SCD_EID *EID;
+  FILE *EIDfileptr;
+  char chr;
+  double thr;
+  long seed;
+  char magic[8];
 
   /* Open ASCII file with EID states */
-  if ((EIDfileptr = fopen(EIDfile, RT)) == NULL)
+  if ((EIDfileptr = fopen (EIDfile, RT)) == NULL)
     return ((SCD_EID *) 0);
 
   /* Look for EID magic number into state variable file */
   /* If the magic number is not found, returns a NULL pointer */
-  fgets(magic, 5, EIDfileptr);
-  if (strncmp(magic, MAGIC_EID, strlen(MAGIC_EID)))
+  fgets (magic, 5, EIDfileptr);
+  if (strncmp (magic, MAGIC_EID, strlen (MAGIC_EID)))
     return ((SCD_EID *) 0);
 
   /* Load channel model parameters ber and gamma */
-  READ_lf(EIDfileptr, 1L, ber);
-  READ_lf(EIDfileptr, 1L, gamma);
+  READ_lf (EIDfileptr, 1L, ber);
+  READ_lf (EIDfileptr, 1L, gamma);
 
   /* Now open EID with default values and update states afterwards from file */
-  if ((EID = open_eid(*ber, *gamma)) == (SCD_EID *) 0)
+  if ((EID = open_eid (*ber, *gamma)) == (SCD_EID *) 0)
     return ((SCD_EID *) 0);
 
   /* update EID-struct from file: seed for random generator */
-  READ_L(EIDfileptr, 1L, &seed);
-  set_RAN_seed(EID, (unsigned long) seed);	/* store into struct */
+  READ_L (EIDfileptr, 1L, &seed);
+  set_RAN_seed (EID, (unsigned long) seed);     /* store into struct */
 
   /* update EID-struct from file: current state */
-  READ_c(EIDfileptr, 1L, &chr);
-  set_GEC_current_state(EID, chr);
+  READ_c (EIDfileptr, 1L, &chr);
+  set_GEC_current_state (EID, chr);
 
   /* update EID-struct from file: threshold GOOD->GOOD */
-  READ_lf(EIDfileptr, 1L, &thr);
-  set_GEC_matrix(EID, thr, 'G', 'G');
+  READ_lf (EIDfileptr, 1L, &thr);
+  set_GEC_matrix (EID, thr, 'G', 'G');
 
   /* update EID-struct from file: threshold GOOD->BAD */
-  READ_lf(EIDfileptr, 1L, &thr);
-  set_GEC_matrix(EID, thr, 'G', 'B');
+  READ_lf (EIDfileptr, 1L, &thr);
+  set_GEC_matrix (EID, thr, 'G', 'B');
 
   /* update EID-struct from file: threshold BAD ->GOOD */
-  READ_lf(EIDfileptr, 1L, &thr);
-  set_GEC_matrix(EID, thr, 'B', 'G');
+  READ_lf (EIDfileptr, 1L, &thr);
+  set_GEC_matrix (EID, thr, 'B', 'G');
 
   /* update EID-struct from file: threshold BAD ->BAD */
-  READ_lf(EIDfileptr, 1L, &thr);
-  set_GEC_matrix(EID, thr, 'B', 'B');
+  READ_lf (EIDfileptr, 1L, &thr);
+  set_GEC_matrix (EID, thr, 'B', 'B');
 
   /* Finalizations */
-  fclose(EIDfileptr);
+  fclose (EIDfileptr);
   return (EID);
 }
+
 /* ..................... End of recall_eid_from_file() ..................... */
 
 
@@ -277,40 +275,35 @@ SCD_EID        *recall_eid_from_file(EIDfile, ber, gamma)
 
  ============================================================================
 */
-long
-                READ_L(fp, n, longary)
-  FILE           *fp;
-  long            n;
-  long           *longary;
+long READ_L (fp, n, longary)
+     FILE *fp;
+     long n;
+     long *longary;
 {
-  long            i, ic;
-  char            c;
-  char            ch[16];
+  long i, ic;
+  char c;
+  char ch[16];
 
 
-  while ((c = getc(fp)) != '=');
-  for (i = 0; i < n; i++)
-  {
-    while (((c = getc(fp)) == 32) || (c == 9));
+  while ((c = getc (fp)) != '=');
+  for (i = 0; i < n; i++) {
+    while (((c = getc (fp)) == 32) || (c == 9));
 
     ic = 0;
-    while ((c != 32) && (c != 9) && (c != '\n') && (ic < 15))
-    {
+    while ((c != 32) && (c != 9) && (c != '\n') && (ic < 15)) {
       ch[ic++] = c;
-      c = getc(fp);
+      c = getc (fp);
     }
     ch[ic] = (char) 0;
-    if ((ch[0] == '0') && (toupper((int)ch[1]) == 'X'))
-    {
-      sscanf(&ch[2], "%lx", &longary[i]);
-    }
-    else
-    {
-      sscanf(ch, "%ld", &longary[i]);
+    if ((ch[0] == '0') && (toupper ((int) ch[1]) == 'X')) {
+      sscanf (&ch[2], "%lx", &longary[i]);
+    } else {
+      sscanf (ch, "%ld", &longary[i]);
     }
   }
   return (n);
 }
+
 /* ....................... End of READ_L() ....................... */
 
 
@@ -337,33 +330,31 @@ long
 
  ============================================================================
 */
-long
-                READ_lf(fp, n, doubleary)
-  FILE           *fp;
-  long            n;
-  double         *doubleary;
+long READ_lf (fp, n, doubleary)
+     FILE *fp;
+     long n;
+     double *doubleary;
 {
-  long            i, ic;
-  char            c;
-  char            ch[64];
+  long i, ic;
+  char c;
+  char ch[64];
 
 
-  while ((c = getc(fp)) != '=');
-  for (i = 0; i < n; i++)
-  {
-    while (((c = getc(fp)) == 32) || (c == 9));
+  while ((c = getc (fp)) != '=');
+  for (i = 0; i < n; i++) {
+    while (((c = getc (fp)) == 32) || (c == 9));
 
     ic = 0;
-    while ((c != 32) && (c != 9) && (c != '\n') && (ic < 63))
-    {
+    while ((c != 32) && (c != 9) && (c != '\n') && (ic < 63)) {
       ch[ic++] = c;
-      c = getc(fp);
+      c = getc (fp);
     }
     ch[ic] = (char) 0;
-    sscanf(ch, "%lf", &doubleary[i]);
+    sscanf (ch, "%lf", &doubleary[i]);
   }
   return (n);
 }
+
 /* ....................... End of READ_lf() ....................... */
 
 
@@ -390,25 +381,24 @@ long
 
  ============================================================================
 */
-long
-                READ_c(fp, n, chr)
-  FILE           *fp;
-  long            n;
-  char           *chr;
+long READ_c (fp, n, chr)
+     FILE *fp;
+     long n;
+     char *chr;
 {
-  long            i;
-  char            c;
+  long i;
+  char c;
 
 
-  while ((c = getc(fp)) != '=');
-  for (i = 0; i < n; i++)
-  {
-    while (((c = getc(fp)) == 32) || (c == 9));
+  while ((c = getc (fp)) != '=');
+  for (i = 0; i < n; i++) {
+    while (((c = getc (fp)) == 32) || (c == 9));
     *chr = c;
-    while ((c = getc(fp)) != '\n');
+    while ((c = getc (fp)) != '\n');
   }
   return (n);
 }
+
 /* ....................... End of READ_c() ....................... */
 
 
@@ -451,66 +441,64 @@ long
   14.Aug.97 v1.2 Added magic number <simao.campos@comsat.com>
  ============================================================================
 */
-BURST_EID *recall_burst_eid_from_file (state_file,index)
-    char *state_file;
-    long index;
+BURST_EID *recall_burst_eid_from_file (state_file, index)
+     char *state_file;
+     long index;
 {
-    FILE       *state_ptr;
-    BURST_EID  *burst_eid,
-	       *eid_in;
-    long	items, magic;
+  FILE *state_ptr;
+  BURST_EID *burst_eid, *eid_in;
+  long items, magic;
 #if defined(VMS)
-    char mrs[15] = "mrs=512";
+  char mrs[15] = "mrs=512";
 #endif
 
-    /*	  
-    **  Open BURST EID state file
-    **	Return a null pointer, if the file doesn't exists
-    */	  
-    if ((state_ptr = fopen (state_file, RB)) == NULL)
-    	 return ((BURST_EID *) 0);
-    	 
-    /* 
-    ** Read Magic number for Burst EID State Files.
-    ** If it does not find the magic number, it returns 0
-    */
-    items = fread (&magic, 1, sizeof (long), state_ptr);
-    if (items != sizeof(long) || magic != MAGIC_BURST)
-    	return ((BURST_EID *) 0);
+  /* 
+   **  Open BURST EID state file
+   ** Return a null pointer, if the file doesn't exists
+   */
+  if ((state_ptr = fopen (state_file, RB)) == NULL)
+    return ((BURST_EID *) 0);
 
-    /*	  
-    **  Allocate memory for the burst eid from file
-    */	  
-    if ((eid_in = (BURST_EID *)malloc (sizeof (BURST_EID))) == 0L)
-	    return ((BURST_EID *) 0);
-    /*	  
-    **  Read state from file
-    */	  
-    items = fread (eid_in, 1, sizeof (BURST_EID),  state_ptr);
-    if (items != sizeof(BURST_EID))
-   	return ((BURST_EID *) 0);
-   	
-    /*	  
-    **  Open internal eid
-    */	  
-    if ((burst_eid = open_burst_eid(index)) == (BURST_EID *) 0)
-	{
-	    return ((BURST_EID *) 0);
-	} 		
+  /* 
+   ** Read Magic number for Burst EID State Files.
+   ** If it does not find the magic number, it returns 0
+   */
+  items = fread (&magic, 1, sizeof (long), state_ptr);
+  if (items != sizeof (long) || magic != MAGIC_BURST)
+    return ((BURST_EID *) 0);
 
-    /*	  
-    **  Update burst eid
-    */	  
-    if ((index-1) == eid_in->index)
-    {
-    	burst_eid->seedptr = eid_in->seedptr;
-	burst_eid->s_new   = eid_in->s_new;
-    }
-    
-    /* Close and return */
-    fclose (state_ptr);
-    return (burst_eid);
+  /* 
+   **  Allocate memory for the burst eid from file
+   */
+  if ((eid_in = (BURST_EID *) malloc (sizeof (BURST_EID))) == 0L)
+    return ((BURST_EID *) 0);
+  /* 
+   **  Read state from file
+   */
+  items = fread (eid_in, 1, sizeof (BURST_EID), state_ptr);
+  if (items != sizeof (BURST_EID))
+    return ((BURST_EID *) 0);
+
+  /* 
+   **  Open internal eid
+   */
+  if ((burst_eid = open_burst_eid (index)) == (BURST_EID *) 0) {
+    return ((BURST_EID *) 0);
+  }
+
+  /* 
+   **  Update burst eid
+   */
+  if ((index - 1) == eid_in->index) {
+    burst_eid->seedptr = eid_in->seedptr;
+    burst_eid->s_new = eid_in->s_new;
+  }
+
+  /* Close and return */
+  fclose (state_ptr);
+  return (burst_eid);
 }
+
 /* ................ End of recall_burst_eid_from_file() ................. */
 
 
@@ -556,44 +544,45 @@ BURST_EID *recall_burst_eid_from_file (state_file,index)
   14.Aug.97 v1.2 Added magic number <simao.campos@comsat.com>
  ============================================================================
 */
-long save_burst_eid_to_file (burst_eid,state_file)
-    BURST_EID	*burst_eid;
-    char	*state_file;
+long save_burst_eid_to_file (burst_eid, state_file)
+     BURST_EID *burst_eid;
+     char *state_file;
 {
 #if defined(VMS)
-    char mrs[15] = "mrs=512";
+  char mrs[15] = "mrs=512";
 #endif
-    FILE	*state_ptr;
-    long	items, magic = MAGIC_BURST;
+  FILE *state_ptr;
+  long items, magic = MAGIC_BURST;
 
 
-    /*	  
-    **  Open BURST EID state file
-    **	Return zero, if the file doesn't exist
-    */	  
-    if ((state_ptr = fopen (state_file, WB)) == NULL)
-    	 return (0);
+  /* 
+   **  Open BURST EID state file
+   ** Return zero, if the file doesn't exist
+   */
+  if ((state_ptr = fopen (state_file, WB)) == NULL)
+    return (0);
 
-    /* 
-    ** Save Magic number into Burst EID State Files.
-    */
-    items = fwrite (&magic, 1, sizeof (long), state_ptr);
-    if (items != sizeof(long))
-    	return (0);
+  /* 
+   ** Save Magic number into Burst EID State Files.
+   */
+  items = fwrite (&magic, 1, sizeof (long), state_ptr);
+  if (items != sizeof (long))
+    return (0);
 
-    /*	  
-    ** Write state to file
-    */	  
-    items = fwrite (burst_eid, 1, sizeof (BURST_EID), state_ptr);
-    if (items != sizeof(BURST_EID))
-    	return (0);
+  /* 
+   ** Write state to file
+   */
+  items = fwrite (burst_eid, 1, sizeof (BURST_EID), state_ptr);
+  if (items != sizeof (BURST_EID))
+    return (0);
 
-    /*	  
-    **  Close state file
-    */	  
-    fclose (state_ptr);
-    return(1); /* OK status */
+  /* 
+   **  Close state file
+   */
+  fclose (state_ptr);
+  return (1);                   /* OK status */
 }
+
 /* ................ End of save_burst_eid_to_file() ................. */
 
 
