@@ -1,7 +1,67 @@
+       =============================================================
+       COPYRIGHT NOTE: This source code, and all of its derivations,
+       is subject to the "ITU-T General Public License". Please have
+       it  read  in    the  distribution  disk,   or  in  the  ITU-T
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+       CODING STANDARDS". In special, this software had its use kindly
+       authorized by Motorola, who keeps the original copyright. See
+       file cpyright on this directory.
+       =============================================================
+
+The ITU-T/UGST distribution of the Motorola reference implementation
+IS54 program is built of the following files:
+
+
+C program code
+===
+The main vselp encoding PROGRAM is implemented by vselp.c (this is NOT a
+module!). The other C programs implement its supporting functions:
+	b_con.c		calcp.c		cunpack0.c	decorr.c
+	excite.c	filt4.c		filters.c	flatv.c
+	fspace.c	g_quant.c	getp.c   	init.c
+	interp.c 	isdef.c  	lag.c   	makec.c
+	p_ex.c  	pconv.c 	putc.c  	r_sub.c
+	rs_rr.c 	split.c 	t_sub.c 	v_con.c
+	v_srch.c 	vselp.c 	wsnr.c
+
+There are several specific header files:
+	r_sub.h 	t_sub.h		vparams.h	vselp.h
+
+And one UGST general header file:
+	ugstdemo.h
+
+There are several "inline" code files, that are either included during
+compilation (32-bit C compilers) or read by the compiled program during run
+time (16-bit C compilers):
+	basis.i 	edef.i  	gray.i  	k_table.i
+
+Makefiles
+===
+Makefiles have been provided for automatic build-up of the executable program:
+make-vms.com: ... DCL for VAX/VMS Vax-cc compiler or the VMS port of gcc
+makefile.tcc: ... makefile for MSDOS Borland bcc
+makefile.cl: .... makefile for MS Visual C Compiler
+makefile.djc: ... makefile for MSDOS port of gcc
+makefile.unx: ... makefile for Unix, using either cc, acc (Sun), or gcc
+
+Testing
+===
+is54-tst.zip: ... PKZIP-compatible archive with test files for the IS54
+		  implementation and makefiles to automatically carry out the
+		  tests. BECAREFUL, makefile names are equal to the ones
+		  described above, but the files are DIFFERENT! This file, and
+		  the makefiles are in the directory "bin".
+
+-- <simao@cpqd.ansp.br> --
+
+
+Original README
+===
+
 14/4/93 - IS54 US Cellular Coder
 
 This package is not very user friendly, but it works. To compile
-edit the Makefile to change the compilations flags. 
+edit the Makefile to change the compilations flags.
 
 If you are not using SPPACK headers, remove the SPPACK flag from
 the compile line.
@@ -13,31 +73,6 @@ It runs successfully on SGI R4000 and Sparc stations, and it has
 been claimed that it will run on a PC with Turbo C.
 
 For questions contact Peter Kroon kroon@research.att.com  MH x7000
-
-
-/**************************************************************************
-
-                (C) Copyright 1990, Motorola Inc., U.S.A.
-
-Note:  Reproduction and use for the development of North American digital
-       cellular standards or development of digital speech coding
-       standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
-       Inc. No other use is intended or authorized.
-
-       The availability of this material does not provide any license
-       by implication, estoppel, or otherwise under any patent rights
-       of Motorola Inc. or others covering any use of the contents
-       herein.
-
-       Any copies or derivative works must incude this and all other
-       proprietary notices.
-
-Systems Research Laboratories
-Chicago Corporate Research and Development Center
-Motorola Inc.
-
-**************************************************************************/
 
 1.  General Description
 
@@ -162,7 +197,7 @@ The following .prm files are provided
    uvselp.prm  - runs encoded/decoder and produces a bstream file
    synpf.prm   - runs decoder and produces a postfiltered output
    synnpf.prm  - runs decoder and produces an unpostfiltered output
- 
+
  All these scripts use fixed filenames
 
    INPUT - sampled input data
@@ -219,7 +254,7 @@ Bits:			Parameter:
 	138-145 (8)			gsp0, s.f. 4
 	146-152 (7)			vselp code1, s.f. 4
 	153-159 (7)			vselp code2, s.f. 4
-	
+
 The bits for each coded parameter are ordered MSB first to LSB last.
 This bit-stream is then sectioned into four bit hexadecimal
 representation, and written out in ascii.  The final hexadecimal digit
@@ -262,11 +297,3 @@ modifications were made:
 
   1)  The option for number of frames to process has been disabled (vselp.c)
   2)  getp.c has been modified to read also the filenames from the *.prm file
-
-
-
-
-
-
-
-
