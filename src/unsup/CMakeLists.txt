@@ -1,12 +1,8 @@
 include_directories(../utl)
 
-#TODO
-#add: 	add.o
-#add.o:	sub-add.c
-#	$(CC) -c $(CC_OPT) -DADD_FILES -o add.o sub-add.c
-#sub: 	sub.o
-#  sub.o:	sub-add.c
-#  	$(CC) -c $(CC_OPT) -o sub.o sub-add.c
+add_executable(add sub-add.c)
+target_compile_definitions(add PRIVATE ADD_FILES)
+add_executable(sub sub-add.c)
 
 add_executable(asc2bin asc2bin.c)
 target_link_libraries(asc2bin ${M_LIBRARY})
@@ -25,10 +21,7 @@ add_executable(concat concat.c)
 add_executable(df dumpfile.c)
 target_link_libraries(df ${M_LIBRARY})
 
-#add_executable(endian endian.c)
-#target_link_libraries(asc2bin ${M_LIBRARY})
-#endian: endian.c
-#	$(CC) -DRUN -o endian endian.c
+add_executable(endian endian.c)
 
 add_executable(fdelay fdelay.c)
 target_link_libraries(fdelay ${M_LIBRARY})

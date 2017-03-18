@@ -51,7 +51,6 @@ int is_little_endian () {
   return (strncmp ("ABCD", (char *) &tmp, 4));
 }
 
-#ifdef RUN
 void test_s () {
   short a, b;
   while (1) {
@@ -92,4 +91,3 @@ void main () {
 
 #endif
 }
-#endif
