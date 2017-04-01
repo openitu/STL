@@ -73,7 +73,7 @@ void test_l () {
   }
 }
 
-void main () {
+int main () {
 #ifdef TEST_ME
   fprintf (stderr, "System is %s endian\n", is_little_endian ()? "little" : "big");
 #ifdef TEST_SHORT

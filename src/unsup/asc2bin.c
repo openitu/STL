@@ -37,29 +37,13 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-/* OS definition */
-#ifdef __MSDOS__
-#define MSDOS
-#endif
-
 /* includes in general */
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
-/* includes for DOS specific directives */
-#if defined(MSDOS)
-#include <fcntl.h>
-#include <io.h>
-#include <sys\stat.h>
-/* includes for VMS specific directives */
-#elif defined(VMS)
-#include <perror.h>
-#include <file.h>
-/* includes for other OS (Unix) specific directives */
-#else
 #include <sys/stat.h>
-#endif
 
 /* ---------------------------- Display Usage ---------------------------- */
 #define P(x) printf x
