@@ -361,7 +361,7 @@ int main (int argc, char *argv[]) {
   while (preamble_items < start_item) {
     if ((ep_format == byte) || (ep_format == g192)) {
       items = read_patt (ep, 1, Fep);   /* one item at a time consumed, for g.192 and byte */
-    } else if ((ep_format == compact)) {
+    } else if (ep_format == compact) {
       if ((start_item % 8) == 0) {
         items = read_patt (ep, 8, Fep); /* 8 items time consumed, for bit/compact packed fer */
       } else {

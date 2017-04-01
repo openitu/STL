@@ -183,7 +183,7 @@ int main (int argc, char *argv[]) {
 
   /* Check options */
   if (argc < 2)
-    display_usage (0);
+    display_usage ();
   else {
     while (argc > 1 && argv[1][0] == '-')
       if (strcmp (argv[1], "-start") == 0) {
@@ -254,12 +254,12 @@ int main (int argc, char *argv[]) {
         argc--;
         argv++;
       } else if (strcmp (argv[1], "-?") == 0) {
-        display_usage (0);
+        display_usage ();
       } else if (strstr (argv[1], "-help")) {
-        display_usage (1);
+        display_usage ();
       } else {
         fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
-        display_usage (0);
+        display_usage ();
       }
   }
 
