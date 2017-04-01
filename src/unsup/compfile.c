@@ -455,6 +455,8 @@ int main (int argc, char *argv[]) {
   char File1[50], File2[50];
   char KindOfDump = 'D', TypeOfData = 'I', quiet = 0;
   FILE *f1, *f2;
+  struct stat st;
+  long k, l, s1, s2;
 #ifdef VMS
   char mrs[15] = "mrs=";
 #endif
@@ -571,23 +573,19 @@ int main (int argc, char *argv[]) {
     start_byte2 *= (N1 * N - delay);
   }
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-    long k, l, s1, s2;
-
-    /* ... find the shortest of the 2 files and the number of blks from it */
-    /* ... hey, need to skip the delayed samples! ... */
-    stat (File1, &st);
-    s1 = st.st_size - start_byte1;
-    k = ceil ((st.st_size - start_byte1) / (double) (N * samplesize));
-    stat (File2, &st);
-    s2 = st.st_size - start_byte2;
-    l = ceil ((st.st_size - start_byte2) / (double) (N * samplesize));
-    N2 = k < l ? k : l;
-    tot_smp = (s1 > s2 ? s1 : s2) / samplesize;
-    if (k != l)
-      fprintf (stderr, "%%CMP-W-DIFSIZ: Files have different sizes!\n");
+  //Determine file sizes
+  /* ... find the shortest of the 2 files and the number of blks from it */
+  /* ... hey, need to skip the delayed samples! ... */
+  stat (File1, &st);
+  s1 = st.st_size - start_byte1;
+  k = ceil ((st.st_size - start_byte1) / (double) (N * samplesize));
+  stat (File2, &st);
+  s2 = st.st_size - start_byte2;
+  l = ceil ((st.st_size - start_byte2) / (double) (N * samplesize));
+  N2 = k < l ? k : l;
+  tot_smp = (s1 > s2 ? s1 : s2) / samplesize;
+  if (k != l) {
+    fprintf (stderr, "%%CMP-W-DIFSIZ: Files have different sizes!\n");
   }
 
   /* Opening test file; abort if there's any problem */
@@ -651,7 +649,6 @@ int main (int argc, char *argv[]) {
   /* Finalizations */
   close (fh1);
   close (fh2);
-#ifndef VMS
-  return (0);
-#endif
+
+  return (s1 == s2 && NrDiffs == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
