@@ -647,8 +647,8 @@ int main (int argc, char *argv[]) {
   }
 
   /* Finalizations */
-  close (fh1);
-  close (fh2);
+  fclose (f1);
+  fclose (f2);
 
   return (s1 == s2 && NrDiffs == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
