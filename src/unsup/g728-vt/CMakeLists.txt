@@ -1,14 +1,13 @@
 include_directories(../../utl)
 
-#TODO needs math.h:log10 but redifines round...
-#add_executable(unsup_snr snr.c)
-#target_link_libraries(unsup_snr m)
+add_executable(unsup_snr snr.c)
+target_link_libraries(unsup_snr  ${M_LIBRARY})
 
-#TODO needs math.h:log10 but redifines round...
+#TODO Does not compile: undefined reference to `i_dnnt'
 #add_executable(wsnr wsnr.c ldcsub.c s_rnge.c sig_die.c)
 #target_link_libraries(wsnr m)
 
-#TODO needs math.h:log10 but redifines round...
+#TODO Does not compile: undefined reference to `i_dnnt'
 #add_executable(ldcdec ldcdec ldcdec.c ldcsub.c s_rnge.c sig_die.c)
 #target_link_libraries(ldcdec m)
 

@@ -7,9 +7,11 @@
 #include <math.h>
 #include "ugstdemo.h"
 
+/*
 short round (double x) {
   return (short) (x + 0.5 * ((x > 0) ? 1 : -1));
 }
+*/
 
 /* Common Block Declarations */
 struct {
@@ -1163,7 +1165,7 @@ int pstflt_ (long *nvect, double *sx, double *sy) {
   sunfil = (double) 0.;
   i_1 = idim;
   for (k = 1; k <= i_1; ++k) {
-    sunfil + = fabs (sd[k + 239]);
+    sunfil += fabs (sd[k + 239]);
   }
 
   /* Calculate the sum of absolute values of the components of the */
