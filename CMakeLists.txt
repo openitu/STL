@@ -3,6 +3,18 @@ project(ITU-T_STL2009)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+#Platform-specific settings
+if("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
+  message(DEBUG "libm: <<MSVC>> provides <<libm>> by default and thus __cannot_ link against <<libm>>.")
+  set(M_LIBRARY "")
+else()
+  set(M_LIBRARY "m")
+endif()
+
+#Testing
+enable_testing()
+add_custom_target(test-verbose COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
+
 #Source folders
 add_subdirectory(src/basop/flc)
 add_subdirectory(src/eid)
@@ -27,3 +39,4 @@ add_subdirectory(src/unsup)
 add_subdirectory(src/unsup/g728-vt)
 add_subdirectory(src/unsup/pshar)
 add_subdirectory(src/utl)
+

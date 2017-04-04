@@ -9,40 +9,40 @@ include_directories(../utl)
 #  	$(CC) -c $(CC_OPT) -o sub.o sub-add.c
 
 add_executable(asc2bin asc2bin.c)
-target_link_libraries(asc2bin m)
+target_link_libraries(asc2bin ${M_LIBRARY})
 
 add_executable(astrip astrip.c)
-target_link_libraries(astrip m)
+target_link_libraries(astrip ${M_LIBRARY})
 
 add_executable(bin2asc bin2asc.c)
-target_link_libraries(bin2asc m)
+target_link_libraries(bin2asc ${M_LIBRARY})
 
 add_executable(cf compfile.c)
-target_link_libraries(cf m)
+target_link_libraries(cf ${M_LIBRARY})
 
 add_executable(concat concat.c)
 
 add_executable(df dumpfile.c)
-target_link_libraries(df m)
+target_link_libraries(df ${M_LIBRARY})
 
 #add_executable(endian endian.c)
-#target_link_libraries(asc2bin m)
+#target_link_libraries(asc2bin ${M_LIBRARY})
 #endian: endian.c
 #	$(CC) -DRUN -o endian endian.c
 
 add_executable(fdelay fdelay.c)
-target_link_libraries(fdelay m)
+target_link_libraries(fdelay ${M_LIBRARY})
 
 add_executable(measure measure.c)
-target_link_libraries(measure m)
+target_link_libraries(measure ${M_LIBRARY})
 
 add_executable(oper oper.c)
-target_link_libraries(oper m)
+target_link_libraries(oper ${M_LIBRARY})
 
 add_executable(sb sb.c)
 
 add_executable(sine sine.c)
-target_link_libraries(sine m)
+target_link_libraries(sine ${M_LIBRARY})
 
 add_executable(chr2sh chr2sh.c)
 
