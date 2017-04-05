@@ -1,0 +1,1987 @@
+1    25    26 6 21 3 11 3 4 3 5 2 
+    ILAG =   0     CODE1 =   0     CODE2 =   0     IGSP0 =   0
+    ILAG =   0     CODE1 =   0     CODE2 =   0     IGSP0 =   0
+    ILAG =   0     CODE1 =   9     CODE2 =  57     IGSP0 = 229
+    ILAG =  28     CODE1 = 120     CODE2 =  61     IGSP0 =  80
+
+2    8    0 27 23 0 6 1 6 5 4 2 
+    ILAG =  56     CODE1 =  67     CODE2 =  10     IGSP0 =  17
+    ILAG =  58     CODE1 =  62     CODE2 = 125     IGSP0 =  67
+    ILAG =  56     CODE1 =  96     CODE2 =  27     IGSP0 = 163
+    ILAG =  58     CODE1 =  13     CODE2 =  56     IGSP0 =  17
+
+3    1    49 12 14 7 5 4 3 3 3 2 
+    ILAG =  50     CODE1 =  13     CODE2 =  57     IGSP0 =   1
+    ILAG = 120     CODE1 =  76     CODE2 =  49     IGSP0 =  83
+    ILAG =  77     CODE1 = 117     CODE2 =  12     IGSP0 =  69
+    ILAG =  75     CODE1 = 117     CODE2 =  62     IGSP0 = 136
+
+4    1    47 14 16 5 5 3 4 4 3 2 
+    ILAG =  22     CODE1 =  32     CODE2 = 100     IGSP0 = 164
+    ILAG =  11     CODE1 = 108     CODE2 =   1     IGSP0 =  92
+    ILAG =  97     CODE1 =   6     CODE2 =  53     IGSP0 =  55
+    ILAG =  19     CODE1 =  99     CODE2 = 117     IGSP0 =  77
+
+5    3    52 16 8 8 5 2 4 4 2 2 
+    ILAG =  23     CODE1 =  36     CODE2 = 101     IGSP0 =  83
+    ILAG =  48     CODE1 =  55     CODE2 = 122     IGSP0 =  39
+    ILAG =   8     CODE1 = 125     CODE2 =  18     IGSP0 =  90
+    ILAG = 106     CODE1 = 111     CODE2 =  51     IGSP0 = 160
+
+6    2    50 12 10 6 6 5 5 5 3 2 
+    ILAG =  28     CODE1 =  74     CODE2 = 108     IGSP0 = 152
+    ILAG =  35     CODE1 = 113     CODE2 =  23     IGSP0 = 226
+    ILAG =  30     CODE1 =  32     CODE2 =  59     IGSP0 = 164
+    ILAG =   4     CODE1 =  84     CODE2 =  48     IGSP0 = 138
+
+7    1    48 12 18 6 7 4 3 2 3 2 
+    ILAG =  53     CODE1 = 119     CODE2 =  41     IGSP0 =  97
+    ILAG =  67     CODE1 = 124     CODE2 =  53     IGSP0 =  75
+    ILAG =  21     CODE1 =  36     CODE2 =  54     IGSP0 =  77
+    ILAG =  94     CODE1 = 109     CODE2 =  22     IGSP0 = 130
+
+8    1    47 11 13 4 6 3 3 4 3 2 
+    ILAG =  37     CODE1 =  60     CODE2 =  47     IGSP0 =  91
+    ILAG = 101     CODE1 =  11     CODE2 =  60     IGSP0 =  39
+    ILAG =  88     CODE1 =  55     CODE2 =  55     IGSP0 =  81
+    ILAG =  91     CODE1 =  27     CODE2 = 110     IGSP0 =  54
+
+9    7    51 18 23 8 3 2 4 3 4 2 
+    ILAG =  31     CODE1 =  97     CODE2 =  82     IGSP0 = 130
+    ILAG =  20     CODE1 =  54     CODE2 =  74     IGSP0 =  43
+    ILAG =  57     CODE1 =  81     CODE2 =  42     IGSP0 =  32
+    ILAG =  85     CODE1 = 107     CODE2 =  30     IGSP0 =  82
+
+10    21    26 8 18 13 10 6 1 3 4 3 
+    ILAG = 102     CODE1 =  77     CODE2 =  25     IGSP0 = 234
+    ILAG =  55     CODE1 =  79     CODE2 =  32     IGSP0 = 168
+    ILAG =  89     CODE1 =  96     CODE2 =  51     IGSP0 = 147
+    ILAG =  27     CODE1 =   4     CODE2 =  12     IGSP0 = 152
+
+11    22    24 6 20 13 11 5 1 3 4 3 
+    ILAG =  54     CODE1 =   1     CODE2 =  23     IGSP0 =  91
+    ILAG =  33     CODE1 =  32     CODE2 =  49     IGSP0 = 192
+    ILAG =  79     CODE1 =  12     CODE2 =  56     IGSP0 = 121
+    ILAG =  28     CODE1 = 113     CODE2 =  73     IGSP0 = 115
+
+12    22    20 6 20 14 9 5 0 3 3 3 
+    ILAG =  26     CODE1 =  66     CODE2 =  68     IGSP0 = 197
+    ILAG =  27     CODE1 =  49     CODE2 =  65     IGSP0 = 185
+    ILAG =  27     CODE1 =  76     CODE2 =  98     IGSP0 = 178
+    ILAG =  27     CODE1 =  51     CODE2 =   0     IGSP0 = 101
+
+13    20    23 5 12 15 10 5 1 2 3 3 
+    ILAG =  27     CODE1 =  75     CODE2 = 121     IGSP0 = 116
+    ILAG =  27     CODE1 =   5     CODE2 =  60     IGSP0 = 178
+    ILAG =  28     CODE1 =  63     CODE2 =  64     IGSP0 = 176
+    ILAG =  29     CODE1 = 114     CODE2 =  13     IGSP0 = 178
+
+14    12    4 12 24 14 9 3 3 2 1 3 
+    ILAG =  30     CODE1 =  95     CODE2 =  51     IGSP0 =  83
+    ILAG =  30     CODE1 =  73     CODE2 =  22     IGSP0 = 104
+    ILAG =  38     CODE1 =  51     CODE2 =  37     IGSP0 = 200
+    ILAG =  77     CODE1 = 110     CODE2 =   2     IGSP0 = 160
+
+15    11    7 11 12 13 13 5 4 3 1 1 
+    ILAG =  96     CODE1 =  67     CODE2 =  50     IGSP0 =  90
+    ILAG =  23     CODE1 =  41     CODE2 =  49     IGSP0 = 142
+    ILAG =  50     CODE1 =   5     CODE2 =  32     IGSP0 = 135
+    ILAG =  93     CODE1 =  74     CODE2 =  78     IGSP0 = 150
+
+16    10    2 18 26 11 8 3 1 3 2 2 
+    ILAG =  95     CODE1 =  97     CODE2 =   6     IGSP0 = 200
+    ILAG =  92     CODE1 =  27     CODE2 =  53     IGSP0 =  60
+    ILAG =  88     CODE1 =  48     CODE2 =  63     IGSP0 = 164
+    ILAG =  87     CODE1 =  84     CODE2 = 124     IGSP0 = 149
+
+17    8    4 12 24 11 11 4 3 3 2 1 
+    ILAG =  26     CODE1 =  63     CODE2 =  62     IGSP0 = 165
+    ILAG =  87     CODE1 =  51     CODE2 =  13     IGSP0 =  90
+    ILAG =  57     CODE1 =  55     CODE2 =  46     IGSP0 =  92
+    ILAG =  45     CODE1 =  80     CODE2 =   3     IGSP0 =  81
+
+18    17    36 27 16 5 6 4 3 4 4 2 
+    ILAG =  29     CODE1 =   3     CODE2 =  53     IGSP0 = 148
+    ILAG =  32     CODE1 =  58     CODE2 = 105     IGSP0 =  32
+    ILAG =  36     CODE1 =  97     CODE2 =   2     IGSP0 =   5
+    ILAG =  36     CODE1 =  87     CODE2 =  70     IGSP0 =   1
+
+19    17    35 24 9 4 7 4 3 5 5 2 
+    ILAG =   4     CODE1 =  34     CODE2 =  70     IGSP0 = 224
+    ILAG =  19     CODE1 = 106     CODE2 = 113     IGSP0 = 132
+    ILAG =  48     CODE1 =  22     CODE2 = 118     IGSP0 = 235
+    ILAG =  72     CODE1 =  87     CODE2 =  19     IGSP0 =  29
+
+20    16    34 24 7 4 8 5 5 5 4 2 
+    ILAG = 120     CODE1 =  22     CODE2 =  52     IGSP0 =  54
+    ILAG = 103     CODE1 = 123     CODE2 =  72     IGSP0 = 248
+    ILAG = 106     CODE1 =   1     CODE2 =  60     IGSP0 =  46
+    ILAG = 100     CODE1 =  88     CODE2 =   7     IGSP0 =  13
+
+21    18    7 19 16 10 11 6 6 4 1 0 
+    ILAG = 102     CODE1 =  62     CODE2 =   0     IGSP0 =  42
+    ILAG =  27     CODE1 =  62     CODE2 =  48     IGSP0 = 141
+    ILAG =  18     CODE1 =  50     CODE2 = 100     IGSP0 =  82
+    ILAG =  20     CODE1 =  84     CODE2 = 123     IGSP0 = 202
+
+22    22    5 27 19 14 5 4 4 1 1 3 
+    ILAG =  36     CODE1 =  32     CODE2 = 112     IGSP0 = 150
+    ILAG =  86     CODE1 =  44     CODE2 =  74     IGSP0 =  93
+    ILAG =  28     CODE1 =  83     CODE2 = 103     IGSP0 = 114
+    ILAG =  28     CODE1 =   0     CODE2 =  29     IGSP0 = 162
+
+23    24    5 26 22 14 6 2 3 2 2 2 
+    ILAG =  28     CODE1 =  86     CODE2 =  28     IGSP0 = 120
+    ILAG =  27     CODE1 =  12     CODE2 = 125     IGSP0 = 108
+    ILAG =  26     CODE1 =  53     CODE2 =  58     IGSP0 =  62
+    ILAG =  26     CODE1 =  53     CODE2 = 102     IGSP0 = 105
+
+24    24    6 25 24 14 8 2 2 2 2 1 
+    ILAG =  70     CODE1 =  29     CODE2 = 102     IGSP0 = 105
+    ILAG =  25     CODE1 = 115     CODE2 =  99     IGSP0 = 110
+    ILAG =  26     CODE1 =  97     CODE2 =  27     IGSP0 = 110
+    ILAG =  25     CODE1 =  33     CODE2 =  31     IGSP0 = 106
+
+25    24    7 21 25 14 11 3 1 2 2 1 
+    ILAG =  25     CODE1 =  36     CODE2 =  13     IGSP0 = 109
+    ILAG =  24     CODE1 =  36     CODE2 =  76     IGSP0 = 122
+    ILAG =  67     CODE1 = 101     CODE2 =  76     IGSP0 = 177
+    ILAG =  24     CODE1 =  26     CODE2 =  92     IGSP0 = 123
+
+26    23    8 18 27 14 12 4 0 1 3 2 
+    ILAG =  23     CODE1 =  89     CODE2 =  69     IGSP0 = 182
+    ILAG =  66     CODE1 =  70     CODE2 = 114     IGSP0 = 198
+    ILAG =  23     CODE1 =  42     CODE2 =  13     IGSP0 = 220
+    ILAG = 107     CODE1 =  82     CODE2 = 105     IGSP0 = 218
+
+27    22    9 15 28 14 11 4 0 1 3 2 
+    ILAG =  64     CODE1 = 110     CODE2 =  57     IGSP0 = 214
+    ILAG =  22     CODE1 = 123     CODE2 =  90     IGSP0 = 212
+    ILAG =  22     CODE1 =  29     CODE2 = 116     IGSP0 = 207
+    ILAG =  22     CODE1 = 125     CODE2 =  43     IGSP0 = 190
+
+28    17    8 13 25 14 10 4 0 2 4 3 
+    ILAG =  22     CODE1 =  25     CODE2 = 102     IGSP0 = 184
+    ILAG =  64     CODE1 =  85     CODE2 =  45     IGSP0 = 166
+    ILAG = 113     CODE1 = 103     CODE2 = 106     IGSP0 = 154
+    ILAG =  73     CODE1 =  10     CODE2 =  39     IGSP0 = 103
+
+29    13    31 3 9 9 10 5 4 4 3 2 
+    ILAG =  75     CODE1 =  42     CODE2 =  33     IGSP0 = 100
+    ILAG =  31     CODE1 =  58     CODE2 = 109     IGSP0 =  45
+    ILAG =  27     CODE1 =  57     CODE2 =  88     IGSP0 =  79
+    ILAG =  29     CODE1 =  20     CODE2 =  96     IGSP0 = 140
+
+30    21    12 9 26 14 11 4 0 2 3 3 
+    ILAG =  70     CODE1 =  97     CODE2 = 111     IGSP0 = 117
+    ILAG =  24     CODE1 =  12     CODE2 =  63     IGSP0 =  96
+    ILAG =  23     CODE1 =  50     CODE2 =  63     IGSP0 = 168
+    ILAG =  22     CODE1 =  81     CODE2 =  13     IGSP0 = 165
+
+31    22    10 13 28 14 10 2 0 2 4 2 
+    ILAG =  20     CODE1 =  81     CODE2 =  23     IGSP0 = 175
+    ILAG =  20     CODE1 =  89     CODE2 = 116     IGSP0 = 175
+    ILAG =  20     CODE1 = 115     CODE2 =  25     IGSP0 = 184
+    ILAG =  20     CODE1 = 115     CODE2 = 124     IGSP0 = 189
+
+32    22    11 11 27 14 10 2 0 3 4 2 
+    ILAG =  59     CODE1 = 109     CODE2 =  45     IGSP0 = 185
+    ILAG =  20     CODE1 =  26     CODE2 =  25     IGSP0 = 210
+    ILAG =  20     CODE1 =  15     CODE2 = 102     IGSP0 = 212
+    ILAG =  20     CODE1 = 120     CODE2 =  25     IGSP0 = 178
+
+33    21    12 10 23 15 8 1 0 3 4 3 
+    ILAG =  58     CODE1 =  88     CODE2 =  17     IGSP0 = 181
+    ILAG =  20     CODE1 = 111     CODE2 =  45     IGSP0 = 190
+    ILAG =  20     CODE1 = 123     CODE2 = 112     IGSP0 = 185
+    ILAG =  97     CODE1 =  41     CODE2 = 126     IGSP0 = 184
+
+34    20    5 24 25 12 0 1 2 4 4 3 
+    ILAG =  58     CODE1 = 101     CODE2 =  98     IGSP0 = 126
+    ILAG =  97     CODE1 = 118     CODE2 = 115     IGSP0 = 126
+    ILAG =  19     CODE1 =  37     CODE2 =  76     IGSP0 = 179
+    ILAG =  96     CODE1 =  54     CODE2 = 121     IGSP0 = 110
+
+35    15    1 28 25 6 2 1 3 3 4 3 
+    ILAG =  22     CODE1 =  50     CODE2 =  32     IGSP0 =  57
+    ILAG =  24     CODE1 =  82     CODE2 =   1     IGSP0 = 115
+    ILAG =  24     CODE1 = 127     CODE2 = 118     IGSP0 = 180
+    ILAG =  24     CODE1 =  70     CODE2 =  49     IGSP0 = 173
+
+36    13    1 23 28 9 5 2 2 2 3 2 
+    ILAG =  24     CODE1 = 100     CODE2 =  83     IGSP0 =  72
+    ILAG =  25     CODE1 = 119     CODE2 =  67     IGSP0 =  98
+    ILAG =  24     CODE1 = 101     CODE2 =  31     IGSP0 =  82
+    ILAG =  24     CODE1 =  97     CODE2 =  48     IGSP0 =  83
+
+37    5    13 6 16 7 9 5 6 5 4 2 
+    ILAG =  25     CODE1 =   8     CODE2 =  57     IGSP0 =  69
+    ILAG =  25     CODE1 =  34     CODE2 = 123     IGSP0 = 169
+    ILAG =  26     CODE1 =  50     CODE2 =  62     IGSP0 =  89
+    ILAG = 117     CODE1 =  34     CODE2 = 107     IGSP0 =  78
+
+38    1    47 11 17 4 7 3 3 4 2 2 
+    ILAG =  75     CODE1 =  26     CODE2 =  92     IGSP0 =  41
+    ILAG =  97     CODE1 =  60     CODE2 =  13     IGSP0 =  45
+    ILAG =  40     CODE1 =  13     CODE2 =  60     IGSP0 =  98
+    ILAG =  42     CODE1 =  54     CODE2 = 121     IGSP0 =  79
+
+39    11    36 11 16 6 7 5 4 5 6 1 
+    ILAG =  14     CODE1 =  57     CODE2 =  57     IGSP0 =  77
+    ILAG =  47     CODE1 = 113     CODE2 = 110     IGSP0 =  13
+    ILAG =  15     CODE1 =   7     CODE2 = 124     IGSP0 =   1
+    ILAG =  50     CODE1 = 124     CODE2 =  20     IGSP0 =  97
+
+40    17    9 22 17 5 6 5 4 3 3 2 
+    ILAG =  54     CODE1 =  26     CODE2 =  57     IGSP0 = 137
+    ILAG =  64     CODE1 =  30     CODE2 =  10     IGSP0 =  95
+    ILAG = 106     CODE1 = 113     CODE2 =  29     IGSP0 =  35
+    ILAG =  17     CODE1 = 105     CODE2 =  78     IGSP0 = 100
+
+41    21    8 30 10 3 3 7 5 2 3 3 
+    ILAG =  18     CODE1 = 123     CODE2 =  47     IGSP0 = 151
+    ILAG =  22     CODE1 =  87     CODE2 =   0     IGSP0 = 242
+    ILAG =  68     CODE1 =  87     CODE2 =  76     IGSP0 = 175
+    ILAG =  26     CODE1 =  23     CODE2 =  11     IGSP0 = 210
+
+42    22    9 30 7 2 4 7 5 1 3 3 
+    ILAG =  27     CODE1 =  94     CODE2 =  36     IGSP0 = 212
+    ILAG =  27     CODE1 = 114     CODE2 =   7     IGSP0 = 182
+    ILAG =  27     CODE1 =  77     CODE2 = 117     IGSP0 = 122
+    ILAG =  27     CODE1 =  37     CODE2 =  34     IGSP0 = 204
+
+43    22    9 30 5 3 8 6 4 1 3 3 
+    ILAG =  27     CODE1 =  98     CODE2 =   8     IGSP0 = 199
+    ILAG =  27     CODE1 =  70     CODE2 =  29     IGSP0 = 219
+    ILAG =  27     CODE1 =  28     CODE2 =  69     IGSP0 = 214
+    ILAG =  74     CODE1 = 115     CODE2 =  95     IGSP0 = 220
+
+44    23    10 30 7 3 8 6 4 1 3 2 
+    ILAG =  28     CODE1 = 123     CODE2 =  70     IGSP0 = 221
+    ILAG =  28     CODE1 =  16     CODE2 =  71     IGSP0 = 215
+    ILAG =  28     CODE1 =   8     CODE2 = 120     IGSP0 = 190
+    ILAG =  28     CODE1 =  55     CODE2 =   0     IGSP0 = 127
+
+45    23    11 30 7 5 7 7 4 1 3 3 
+    ILAG =  28     CODE1 =  44     CODE2 =  71     IGSP0 = 212
+    ILAG =  28     CODE1 =  83     CODE2 =   2     IGSP0 = 215
+    ILAG =  28     CODE1 =  99     CODE2 =  12     IGSP0 = 211
+    ILAG =  27     CODE1 =  65     CODE2 =  87     IGSP0 = 187
+
+46    23    12 29 8 6 7 6 4 1 4 2 
+    ILAG =  28     CODE1 =  33     CODE2 = 118     IGSP0 = 218
+    ILAG =  28     CODE1 =  92     CODE2 =  40     IGSP0 = 215
+    ILAG =  28     CODE1 =  54     CODE2 =  57     IGSP0 = 191
+    ILAG =  28     CODE1 =  45     CODE2 = 117     IGSP0 = 191
+
+47    22    15 26 7 9 8 6 3 2 4 2 
+    ILAG =  28     CODE1 =  33     CODE2 =  46     IGSP0 = 189
+    ILAG =  28     CODE1 =  37     CODE2 = 107     IGSP0 = 191
+    ILAG =  28     CODE1 =  29     CODE2 =   3     IGSP0 = 213
+    ILAG =  28     CODE1 =  36     CODE2 = 115     IGSP0 = 221
+
+48    22    18 23 8 9 7 6 4 2 4 2 
+    ILAG =  28     CODE1 =  77     CODE2 =  49     IGSP0 = 220
+    ILAG =  28     CODE1 =  21     CODE2 =  49     IGSP0 = 220
+    ILAG =  28     CODE1 =  44     CODE2 =   0     IGSP0 = 220
+    ILAG =  28     CODE1 =  95     CODE2 =  98     IGSP0 = 217
+
+49    22    22 20 6 11 8 6 3 2 4 2 
+    ILAG =  28     CODE1 =  99     CODE2 =  77     IGSP0 = 122
+    ILAG =  28     CODE1 =  28     CODE2 =  79     IGSP0 = 214
+    ILAG =  28     CODE1 =  28     CODE2 =  76     IGSP0 = 215
+    ILAG =  28     CODE1 =  49     CODE2 =  88     IGSP0 = 213
+
+50    22    21 18 8 12 8 6 3 2 3 2 
+    ILAG = 123     CODE1 = 123     CODE2 =  35     IGSP0 = 213
+    ILAG = 123     CODE1 =  13     CODE2 =  57     IGSP0 = 214
+    ILAG =  29     CODE1 =   1     CODE2 =  58     IGSP0 = 126
+    ILAG =  76     CODE1 =  71     CODE2 =  85     IGSP0 = 126
+
+51    22    21 15 9 13 11 5 3 2 2 2 
+    ILAG =  76     CODE1 = 101     CODE2 =  55     IGSP0 = 190
+    ILAG =  76     CODE1 =   8     CODE2 = 106     IGSP0 = 215
+    ILAG = 123     CODE1 =   4     CODE2 =  62     IGSP0 = 212
+    ILAG =  76     CODE1 =  32     CODE2 =  57     IGSP0 = 188
+
+52    21    17 15 15 13 12 5 3 1 2 1 
+    ILAG =  29     CODE1 =  48     CODE2 = 123     IGSP0 = 188
+    ILAG =  27     CODE1 = 107     CODE2 =  64     IGSP0 = 100
+    ILAG =  29     CODE1 =  72     CODE2 = 103     IGSP0 = 217
+    ILAG =  29     CODE1 =   6     CODE2 = 125     IGSP0 = 217
+
+53    21    13 16 20 13 9 4 1 2 3 2 
+    ILAG =  30     CODE1 =  99     CODE2 = 108     IGSP0 = 213
+    ILAG =  78     CODE1 =  21     CODE2 =  68     IGSP0 = 213
+    ILAG =  78     CODE1 =  79     CODE2 =  52     IGSP0 = 122
+    ILAG =  29     CODE1 =  36     CODE2 =  63     IGSP0 = 182
+
+54    19    10 14 21 14 8 4 1 2 4 2 
+    ILAG =  30     CODE1 =  13     CODE2 = 102     IGSP0 = 180
+    ILAG =  30     CODE1 = 119     CODE2 =   3     IGSP0 = 126
+    ILAG =  30     CODE1 =  86     CODE2 = 108     IGSP0 = 206
+    ILAG =  30     CODE1 =  99     CODE2 =  46     IGSP0 = 174
+
+55    13    6 14 28 9 11 3 1 3 1 1 
+    ILAG =  31     CODE1 =  94     CODE2 =  55     IGSP0 = 168
+    ILAG =  81     CODE1 =  91     CODE2 =  98     IGSP0 = 250
+    ILAG =  85     CODE1 = 115     CODE2 =  54     IGSP0 = 142
+    ILAG = 124     CODE1 =  90     CODE2 = 105     IGSP0 =  73
+
+56    10    3 17 28 10 10 4 2 2 2 1 
+    ILAG =  40     CODE1 =  21     CODE2 =  58     IGSP0 =  83
+    ILAG =  90     CODE1 =   2     CODE2 =  36     IGSP0 = 114
+    ILAG =  39     CODE1 =  24     CODE2 = 113     IGSP0 = 129
+    ILAG =  42     CODE1 =  28     CODE2 =  59     IGSP0 = 152
+
+57    10    2 16 27 11 11 3 3 2 2 1 
+    ILAG =  26     CODE1 =  85     CODE2 =   5     IGSP0 =  88
+    ILAG =  87     CODE1 =  55     CODE2 =  28     IGSP0 = 136
+    ILAG =  88     CODE1 =  79     CODE2 = 126     IGSP0 = 194
+    ILAG =  89     CODE1 =  73     CODE2 =  60     IGSP0 = 116
+
+58    6    7 7 20 10 11 6 4 4 3 2 
+    ILAG =  44     CODE1 =  68     CODE2 =  62     IGSP0 =  99
+    ILAG =  92     CODE1 =  43     CODE2 =   9     IGSP0 =  94
+    ILAG =  35     CODE1 =  37     CODE2 =  48     IGSP0 = 194
+    ILAG =  88     CODE1 =  94     CODE2 = 109     IGSP0 = 147
+
+59    14    55 14 20 8 7 2 4 4 4 2 
+    ILAG =  94     CODE1 =  71     CODE2 =  14     IGSP0 =  93
+    ILAG =  32     CODE1 =  41     CODE2 =  53     IGSP0 =  14
+    ILAG =  30     CODE1 =  56     CODE2 = 108     IGSP0 =   5
+    ILAG =  87     CODE1 = 101     CODE2 =  55     IGSP0 =   1
+
+60    17    53 13 10 4 6 2 5 5 1 2 
+    ILAG =  38     CODE1 =  37     CODE2 =  59     IGSP0 =   5
+    ILAG =  40     CODE1 =  67     CODE2 =  10     IGSP0 = 236
+    ILAG =  11     CODE1 =  40     CODE2 =  90     IGSP0 = 134
+    ILAG =  17     CODE1 = 125     CODE2 = 115     IGSP0 =  34
+
+61    21    15 18 19 10 9 5 2 2 4 2 
+    ILAG =  88     CODE1 =  85     CODE2 =   9     IGSP0 =  32
+    ILAG =  18     CODE1 =  48     CODE2 =  17     IGSP0 = 228
+    ILAG =   3     CODE1 =  73     CODE2 = 107     IGSP0 = 152
+    ILAG =   9     CODE1 =  17     CODE2 =   5     IGSP0 =  55
+
+62    21    22 20 11 10 10 5 2 3 5 1 
+    ILAG =  32     CODE1 =  28     CODE2 = 100     IGSP0 = 172
+    ILAG =  32     CODE1 =  42     CODE2 =  20     IGSP0 = 186
+    ILAG =  32     CODE1 =  82     CODE2 =  37     IGSP0 = 187
+    ILAG =  32     CODE1 =  30     CODE2 =  46     IGSP0 = 111
+
+63    21    24 21 9 9 9 5 2 3 4 2 
+    ILAG =  32     CODE1 =  17     CODE2 =  12     IGSP0 = 118
+    ILAG =  84     CODE1 =  57     CODE2 = 127     IGSP0 = 204
+    ILAG =  33     CODE1 =  26     CODE2 =  11     IGSP0 = 189
+    ILAG =  85     CODE1 =  43     CODE2 = 106     IGSP0 = 124
+
+64    21    25 23 8 8 9 4 2 2 5 3 
+    ILAG =  33     CODE1 = 110     CODE2 =  61     IGSP0 =  60
+    ILAG =  34     CODE1 =  17     CODE2 =  53     IGSP0 = 185
+    ILAG =  34     CODE1 =  17     CODE2 =  89     IGSP0 = 210
+    ILAG =  86     CODE1 =  61     CODE2 =  33     IGSP0 = 180
+
+65    20    25 22 10 6 6 5 3 2 4 2 
+    ILAG =  33     CODE1 =  44     CODE2 = 127     IGSP0 =  62
+    ILAG =  35     CODE1 =  44     CODE2 =  21     IGSP0 = 212
+    ILAG =  34     CODE1 =  95     CODE2 = 108     IGSP0 = 189
+    ILAG =  34     CODE1 =  31     CODE2 = 112     IGSP0 = 209
+
+66    20    25 24 6 7 9 5 2 3 4 3 
+    ILAG =  34     CODE1 =  53     CODE2 =  10     IGSP0 =  59
+    ILAG =  35     CODE1 =  30     CODE2 =  91     IGSP0 = 190
+    ILAG =  35     CODE1 =  40     CODE2 =  62     IGSP0 = 191
+    ILAG =  89     CODE1 = 110     CODE2 =  31     IGSP0 = 214
+
+67    19    24 23 10 7 5 6 3 2 4 3 
+    ILAG =  35     CODE1 =   8     CODE2 =  46     IGSP0 = 111
+    ILAG =  36     CODE1 =  80     CODE2 =  73     IGSP0 = 215
+    ILAG =  36     CODE1 =  33     CODE2 =  32     IGSP0 = 244
+    ILAG =  36     CODE1 = 122     CODE2 =  17     IGSP0 = 122
+
+68    19    23 23 11 7 3 5 4 2 4 3 
+    ILAG =  37     CODE1 =  51     CODE2 =   2     IGSP0 = 215
+    ILAG =  37     CODE1 = 102     CODE2 =  45     IGSP0 = 211
+    ILAG =  93     CODE1 =  98     CODE2 =  32     IGSP0 = 215
+    ILAG =  37     CODE1 =  68     CODE2 =  65     IGSP0 =  58
+
+69    19    23 23 11 8 4 4 5 2 3 3 
+    ILAG =  37     CODE1 =  17     CODE2 =  64     IGSP0 = 214
+    ILAG =  38     CODE1 =  95     CODE2 =  13     IGSP0 = 218
+    ILAG =  38     CODE1 =  46     CODE2 =  66     IGSP0 =  58
+    ILAG =  95     CODE1 =  24     CODE2 = 103     IGSP0 = 213
+
+70    19    24 23 10 8 5 4 4 3 3 3 
+    ILAG =  96     CODE1 =  51     CODE2 = 112     IGSP0 = 210
+    ILAG =  39     CODE1 =  63     CODE2 =  32     IGSP0 = 125
+    ILAG =  96     CODE1 =  93     CODE2 =   0     IGSP0 = 184
+    ILAG =  39     CODE1 =  99     CODE2 = 122     IGSP0 = 214
+
+71    19    25 20 9 10 4 5 3 2 4 3 
+    ILAG =  96     CODE1 =  71     CODE2 = 122     IGSP0 = 211
+    ILAG =  39     CODE1 =  45     CODE2 =  27     IGSP0 =  58
+    ILAG =  39     CODE1 =  78     CODE2 =  34     IGSP0 = 190
+    ILAG =  98     CODE1 =  32     CODE2 =   2     IGSP0 = 175
+
+72    18    24 20 10 10 7 3 3 3 4 3 
+    ILAG =  39     CODE1 =  83     CODE2 =  95     IGSP0 = 105
+    ILAG =  98     CODE1 =  98     CODE2 =   6     IGSP0 = 221
+    ILAG =  40     CODE1 =  27     CODE2 = 113     IGSP0 = 223
+    ILAG =  40     CODE1 =  21     CODE2 =  98     IGSP0 = 109
+
+73    18    24 18 10 11 10 3 2 3 4 3 
+    ILAG =  40     CODE1 =  37     CODE2 = 115     IGSP0 = 222
+    ILAG =  41     CODE1 =  25     CODE2 =   5     IGSP0 = 223
+    ILAG = 100     CODE1 = 110     CODE2 =  31     IGSP0 = 109
+    ILAG =  40     CODE1 =  24     CODE2 = 115     IGSP0 = 245
+
+74    18    20 16 13 11 11 4 3 2 4 3 
+    ILAG =  42     CODE1 =  93     CODE2 =  68     IGSP0 = 206
+    ILAG = 101     CODE1 =  30     CODE2 =  94     IGSP0 =  62
+    ILAG =  40     CODE1 =  23     CODE2 = 101     IGSP0 = 214
+    ILAG =  41     CODE1 =  83     CODE2 =  82     IGSP0 = 214
+
+75    17    16 16 20 11 10 3 2 2 4 2 
+    ILAG =  41     CODE1 = 110     CODE2 =  96     IGSP0 =  62
+    ILAG =  41     CODE1 =  91     CODE2 =  61     IGSP0 = 220
+    ILAG =  42     CODE1 = 123     CODE2 = 116     IGSP0 = 215
+    ILAG = 101     CODE1 =  68     CODE2 =  69     IGSP0 = 105
+
+76    17    14 14 23 12 9 5 2 2 4 2 
+    ILAG =  41     CODE1 =  61     CODE2 =  59     IGSP0 = 220
+    ILAG =  42     CODE1 =  29     CODE2 = 124     IGSP0 = 219
+    ILAG =  42     CODE1 = 117     CODE2 =  68     IGSP0 =  55
+    ILAG =  43     CODE1 =  28     CODE2 = 126     IGSP0 = 209
+
+77    12    12 12 22 11 9 5 3 2 1 2 
+    ILAG =  40     CODE1 =  52     CODE2 =  16     IGSP0 = 173
+    ILAG =  10     CODE1 = 117     CODE2 =  41     IGSP0 =  81
+    ILAG =  45     CODE1 =   1     CODE2 = 123     IGSP0 = 254
+    ILAG =  47     CODE1 =  47     CODE2 = 108     IGSP0 =  41
+
+78    5    17 6 14 8 10 5 5 5 3 2 
+    ILAG =  10     CODE1 =  67     CODE2 =  35     IGSP0 =  43
+    ILAG =  28     CODE1 =   3     CODE2 =  61     IGSP0 =  97
+    ILAG = 108     CODE1 =  19     CODE2 = 115     IGSP0 = 164
+    ILAG =  47     CODE1 =   5     CODE2 = 101     IGSP0 =  53
+
+79    12    47 7 13 7 5 5 6 5 4 3 
+    ILAG =  50     CODE1 =   7     CODE2 =  61     IGSP0 =  89
+    ILAG =  48     CODE1 =  62     CODE2 =  46     IGSP0 =  44
+    ILAG =  96     CODE1 =  65     CODE2 =  59     IGSP0 =   4
+    ILAG =  33     CODE1 =  58     CODE2 =  76     IGSP0 =   6
+
+80    8    45 9 11 6 6 5 7 4 2 3 
+    ILAG =  31     CODE1 =  97     CODE2 =  53     IGSP0 = 227
+    ILAG = 104     CODE1 = 114     CODE2 =  55     IGSP0 =  90
+    ILAG = 108     CODE1 =  35     CODE2 =  72     IGSP0 = 115
+    ILAG =  23     CODE1 = 127     CODE2 =  63     IGSP0 = 167
+
+81    6    43 11 11 5 7 6 5 5 4 3 
+    ILAG =  44     CODE1 =   9     CODE2 =  77     IGSP0 =  83
+    ILAG = 108     CODE1 =  78     CODE2 =  71     IGSP0 = 146
+    ILAG =  65     CODE1 = 110     CODE2 =  11     IGSP0 = 144
+    ILAG =  96     CODE1 = 103     CODE2 =  16     IGSP0 = 149
+
+82    4    44 10 13 6 4 5 5 4 3 2 
+    ILAG = 125     CODE1 =  46     CODE2 =  27     IGSP0 = 137
+    ILAG = 117     CODE1 = 118     CODE2 =  17     IGSP0 = 166
+    ILAG =  62     CODE1 =  69     CODE2 =  76     IGSP0 = 168
+    ILAG =  37     CODE1 =  97     CODE2 =  89     IGSP0 = 139
+
+83    1    46 12 18 4 5 3 4 4 3 2 
+    ILAG =  64     CODE1 =  12     CODE2 =  61     IGSP0 =  91
+    ILAG =  61     CODE1 = 127     CODE2 =  82     IGSP0 = 100
+    ILAG =  41     CODE1 =   1     CODE2 = 124     IGSP0 = 192
+    ILAG =  15     CODE1 =   5     CODE2 =  58     IGSP0 = 129
+
+84    1    46 8 15 4 7 5 3 5 4 2 
+    ILAG =  21     CODE1 =  68     CODE2 = 121     IGSP0 =  51
+    ILAG =  57     CODE1 =   5     CODE2 =  31     IGSP0 =  82
+    ILAG =  17     CODE1 =  22     CODE2 =  98     IGSP0 =  99
+    ILAG = 104     CODE1 = 115     CODE2 = 104     IGSP0 = 160
+
+85    0    48 13 18 5 6 1 4 5 0 2 
+    ILAG =   2     CODE1 = 124     CODE2 =  59     IGSP0 = 112
+    ILAG =  40     CODE1 =   4     CODE2 =  19     IGSP0 =   0
+    ILAG =  25     CODE1 =  73     CODE2 =  71     IGSP0 =   0
+    ILAG =  96     CODE1 = 124     CODE2 = 106     IGSP0 =   0
+
+86    0    48 14 17 7 9 3 3 4 4 2 
+    ILAG = 103     CODE1 =   3     CODE2 =  53     IGSP0 =   0
+    ILAG =   0     CODE1 = 124     CODE2 = 104     IGSP0 =   0
+    ILAG =   0     CODE1 =  51     CODE2 = 105     IGSP0 =   0
+    ILAG =   0     CODE1 = 106     CODE2 =   3     IGSP0 =   0
+
+87    1    49 16 18 5 6 3 3 4 3 2 
+    ILAG =   0     CODE1 = 112     CODE2 = 102     IGSP0 =   0
+    ILAG =   0     CODE1 =  51     CODE2 =  82     IGSP0 =   0
+    ILAG =   0     CODE1 = 119     CODE2 =  96     IGSP0 = 173
+    ILAG =  50     CODE1 =  91     CODE2 =  45     IGSP0 =  81
+
+88    1    50 13 20 5 6 5 3 3 4 2 
+    ILAG =  20     CODE1 =  55     CODE2 =   5     IGSP0 =  66
+    ILAG =  78     CODE1 =  91     CODE2 =  83     IGSP0 =  38
+    ILAG =  44     CODE1 =   3     CODE2 =   1     IGSP0 =  88
+    ILAG =  68     CODE1 =  63     CODE2 =  28     IGSP0 =  38
+
+89    1    45 13 18 9 10 4 3 2 3 1 
+    ILAG =  15     CODE1 =  20     CODE2 =  28     IGSP0 =  66
+    ILAG =  10     CODE1 = 105     CODE2 =  65     IGSP0 =  40
+    ILAG =  62     CODE1 =  93     CODE2 = 127     IGSP0 =  45
+    ILAG =  38     CODE1 =  21     CODE2 =  10     IGSP0 =  29
+
+90    1    46 9 18 6 7 4 3 3 4 2 
+    ILAG =   6     CODE1 =  90     CODE2 =   5     IGSP0 =  97
+    ILAG =  13     CODE1 =  91     CODE2 =  82     IGSP0 =  77
+    ILAG = 114     CODE1 =  77     CODE2 =  79     IGSP0 =  56
+    ILAG =  87     CODE1 =  82     CODE2 =  59     IGSP0 =  78
+
+91    1    45 8 12 6 6 4 4 5 5 3 
+    ILAG =  47     CODE1 = 117     CODE2 =  66     IGSP0 =  79
+    ILAG =  75     CODE1 = 122     CODE2 =  86     IGSP0 =  43
+    ILAG =  86     CODE1 =  47     CODE2 =  87     IGSP0 =  73
+    ILAG =  58     CODE1 =  75     CODE2 =  76     IGSP0 =  72
+
+92    1    34 8 18 9 10 3 4 5 4 2 
+    ILAG = 125     CODE1 =   1     CODE2 =  97     IGSP0 =  67
+    ILAG =  50     CODE1 =  79     CODE2 =  59     IGSP0 =  76
+    ILAG =   3     CODE1 =  33     CODE2 = 100     IGSP0 =  28
+    ILAG =  79     CODE1 =   6     CODE2 =  68     IGSP0 =  83
+
+93    12    36 26 10 3 7 5 3 5 6 3 
+    ILAG =  19     CODE1 =  76     CODE2 =  36     IGSP0 = 150
+    ILAG =  76     CODE1 =  52     CODE2 =  65     IGSP0 =  32
+    ILAG = 101     CODE1 = 115     CODE2 =  74     IGSP0 =  11
+    ILAG = 118     CODE1 = 100     CODE2 =  78     IGSP0 = 227
+
+94    13    22 18 4 9 9 5 3 5 4 1 
+    ILAG =   8     CODE1 = 109     CODE2 =  37     IGSP0 =  95
+    ILAG =  89     CODE1 = 102     CODE2 = 110     IGSP0 =  45
+    ILAG =   9     CODE1 = 111     CODE2 = 104     IGSP0 =  23
+    ILAG =  36     CODE1 =  42     CODE2 = 100     IGSP0 =  50
+
+95    21    23 18 4 12 8 7 2 4 4 1 
+    ILAG =  28     CODE1 = 121     CODE2 =  85     IGSP0 = 166
+    ILAG =  16     CODE1 =  53     CODE2 =  77     IGSP0 = 225
+    ILAG =  20     CODE1 =  58     CODE2 = 125     IGSP0 = 109
+    ILAG =  63     CODE1 =  57     CODE2 = 107     IGSP0 =  94
+
+96    23    28 17 5 13 8 7 1 5 3 1 
+    ILAG =  24     CODE1 =  44     CODE2 =  51     IGSP0 = 179
+    ILAG =  23     CODE1 =  34     CODE2 =  66     IGSP0 = 179
+    ILAG =  24     CODE1 =  72     CODE2 =  49     IGSP0 = 115
+    ILAG =  24     CODE1 =  94     CODE2 =  10     IGSP0 = 182
+
+97    23    32 16 5 12 8 7 2 5 2 2 
+    ILAG =  23     CODE1 =  29     CODE2 =  49     IGSP0 = 192
+    ILAG =  24     CODE1 = 115     CODE2 =  11     IGSP0 = 179
+    ILAG =  24     CODE1 =  11     CODE2 =  95     IGSP0 = 120
+    ILAG =  24     CODE1 =  33     CODE2 =  48     IGSP0 = 196
+
+98    22    32 16 8 11 7 6 2 5 3 2 
+    ILAG =  24     CODE1 =  94     CODE2 =  73     IGSP0 = 212
+    ILAG =  24     CODE1 =   2     CODE2 =  45     IGSP0 = 213
+    ILAG =  24     CODE1 =  28     CODE2 = 116     IGSP0 = 212
+    ILAG = 111     CODE1 =  94     CODE2 = 116     IGSP0 = 211
+
+99    22    33 15 10 10 7 7 1 5 3 2 
+    ILAG =  24     CODE1 = 127     CODE2 = 107     IGSP0 = 218
+    ILAG =  24     CODE1 =  34     CODE2 =  10     IGSP0 = 207
+    ILAG =  24     CODE1 =  83     CODE2 = 119     IGSP0 = 216
+    ILAG =  66     CODE1 =  96     CODE2 =  78     IGSP0 = 245
+
+100    23    33 16 10 9 7 6 1 6 2 2 
+    ILAG =  66     CODE1 = 123     CODE2 =  34     IGSP0 = 222
+    ILAG =  66     CODE1 =  50     CODE2 =  94     IGSP0 = 190
+    ILAG =  66     CODE1 =  54     CODE2 =  70     IGSP0 = 184
+    ILAG =  65     CODE1 =  99     CODE2 = 113     IGSP0 = 186
+
+101    23    35 17 6 9 8 5 2 6 2 1 
+    ILAG = 107     CODE1 =  32     CODE2 = 113     IGSP0 = 127
+    ILAG =  64     CODE1 =  20     CODE2 = 110     IGSP0 = 191
+    ILAG =  22     CODE1 =  32     CODE2 = 104     IGSP0 = 189
+    ILAG =  22     CODE1 =  17     CODE2 =   9     IGSP0 = 122
+
+102    23    35 18 4 11 8 6 2 6 2 1 
+    ILAG =  62     CODE1 =  83     CODE2 =  23     IGSP0 = 170
+    ILAG =  21     CODE1 =  89     CODE2 =  99     IGSP0 = 211
+    ILAG =  21     CODE1 =  31     CODE2 =  25     IGSP0 = 190
+    ILAG =  21     CODE1 =  32     CODE2 =  75     IGSP0 = 188
+
+103    23    29 16 9 10 9 7 1 6 2 2 
+    ILAG =  60     CODE1 =  94     CODE2 =  87     IGSP0 = 242
+    ILAG =  20     CODE1 =  59     CODE2 =  29     IGSP0 = 206
+    ILAG =  20     CODE1 =  80     CODE2 =  15     IGSP0 = 218
+    ILAG =  20     CODE1 =  49     CODE2 =  17     IGSP0 = 199
+
+104    22    19 20 16 10 6 7 0 6 2 2 
+    ILAG =  19     CODE1 =  51     CODE2 =  35     IGSP0 = 198
+    ILAG =  20     CODE1 =  68     CODE2 = 115     IGSP0 = 174
+    ILAG =  19     CODE1 =  36     CODE2 = 115     IGSP0 = 216
+    ILAG =  20     CODE1 =  48     CODE2 =  33     IGSP0 = 177
+
+105    14    3 25 15 7 8 4 2 3 3 2 
+    ILAG =  21     CODE1 =  84     CODE2 =  32     IGSP0 =  36
+    ILAG =  67     CODE1 =  69     CODE2 =  51     IGSP0 =  69
+    ILAG =  20     CODE1 = 100     CODE2 = 123     IGSP0 = 196
+    ILAG =   1     CODE1 =  97     CODE2 = 111     IGSP0 = 137
+
+106    11    2 24 23 6 8 3 2 3 3 2 
+    ILAG =  23     CODE1 =  21     CODE2 = 103     IGSP0 = 109
+    ILAG =  65     CODE1 =  45     CODE2 =  99     IGSP0 = 188
+    ILAG =  24     CODE1 =  95     CODE2 =  79     IGSP0 = 218
+    ILAG =  23     CODE1 =  90     CODE2 =  19     IGSP0 = 188
+
+107    16    25 15 14 4 5 7 5 3 4 2 
+    ILAG =  28     CODE1 =   3     CODE2 =  13     IGSP0 = 148
+    ILAG =  24     CODE1 =   6     CODE2 = 108     IGSP0 = 101
+    ILAG =  24     CODE1 =   9     CODE2 = 123     IGSP0 =  31
+    ILAG =  24     CODE1 =   5     CODE2 =  43     IGSP0 = 102
+
+108    19    27 17 16 5 6 7 4 4 4 2 
+    ILAG =  63     CODE1 =  92     CODE2 =  48     IGSP0 = 165
+    ILAG =  20     CODE1 =  91     CODE2 =  43     IGSP0 = 195
+    ILAG =  45     CODE1 =  36     CODE2 =  78     IGSP0 = 157
+    ILAG =   9     CODE1 =  72     CODE2 = 111     IGSP0 =  75
+
+109    10    16 28 27 9 6 5 4 3 4 3 
+    ILAG =   8     CODE1 = 123     CODE2 =  50     IGSP0 =  27
+    ILAG =  35     CODE1 =  72     CODE2 = 116     IGSP0 =  46
+    ILAG =  47     CODE1 =  89     CODE2 =  33     IGSP0 =  28
+    ILAG =   5     CODE1 = 125     CODE2 =  15     IGSP0 =  27
+
+110    10    39 15 23 5 2 7 6 5 4 3 
+    ILAG = 124     CODE1 = 115     CODE2 =  20     IGSP0 =  11
+    ILAG =  70     CODE1 =  73     CODE2 =  66     IGSP0 =   6
+    ILAG =  52     CODE1 = 100     CODE2 = 122     IGSP0 = 139
+    ILAG =  87     CODE1 =   2     CODE2 = 121     IGSP0 = 146
+
+111    1    37 10 20 10 11 6 6 5 3 1 
+    ILAG =   4     CODE1 =  17     CODE2 =  38     IGSP0 =  45
+    ILAG =  72     CODE1 =  68     CODE2 =  80     IGSP0 =  27
+    ILAG = 122     CODE1 =  61     CODE2 = 122     IGSP0 =  88
+    ILAG =  25     CODE1 = 113     CODE2 =  72     IGSP0 = 161
+
+112    1    50 12 17 5 5 3 4 5 4 2 
+    ILAG =  45     CODE1 =  73     CODE2 =  59     IGSP0 =  76
+    ILAG =  14     CODE1 =  91     CODE2 =  66     IGSP0 =  48
+    ILAG = 114     CODE1 = 119     CODE2 = 113     IGSP0 =  48
+    ILAG =  81     CODE1 =  14     CODE2 =  18     IGSP0 =  60
+
+113    1    50 13 19 5 9 3 3 5 4 2 
+    ILAG = 103     CODE1 =   9     CODE2 =  76     IGSP0 =  52
+    ILAG =  19     CODE1 =  78     CODE2 =  65     IGSP0 =  74
+    ILAG =  92     CODE1 = 119     CODE2 =  11     IGSP0 =  52
+    ILAG =  48     CODE1 = 125     CODE2 = 108     IGSP0 =  42
+
+114    14    40 22 24 5 3 7 4 5 5 3 
+    ILAG = 110     CODE1 =  27     CODE2 =  90     IGSP0 =  54
+    ILAG =  40     CODE1 = 123     CODE2 = 120     IGSP0 =   6
+    ILAG =  34     CODE1 = 117     CODE2 =  83     IGSP0 =   1
+    ILAG =  78     CODE1 = 121     CODE2 =  41     IGSP0 =   1
+
+115    21    33 18 18 4 7 7 3 4 4 2 
+    ILAG =  80     CODE1 = 107     CODE2 = 102     IGSP0 = 231
+    ILAG =  21     CODE1 = 126     CODE2 =   4     IGSP0 =  89
+    ILAG =  72     CODE1 = 119     CODE2 = 107     IGSP0 =  40
+    ILAG =  20     CODE1 = 102     CODE2 = 110     IGSP0 = 147
+
+116    22    28 22 6 11 11 4 1 6 3 1 
+    ILAG =  32     CODE1 =  80     CODE2 =  94     IGSP0 = 170
+    ILAG =  22     CODE1 = 122     CODE2 =  61     IGSP0 = 185
+    ILAG = 117     CODE1 = 112     CODE2 =  46     IGSP0 = 168
+    ILAG =  67     CODE1 =  28     CODE2 = 121     IGSP0 = 117
+
+117    21    27 19 9 6 11 7 1 6 3 1 
+    ILAG =  24     CODE1 =  37     CODE2 =   0     IGSP0 = 117
+    ILAG =  24     CODE1 =  82     CODE2 =  75     IGSP0 = 121
+    ILAG =  23     CODE1 =  13     CODE2 =  44     IGSP0 = 185
+    ILAG =  24     CODE1 =  75     CODE2 =  54     IGSP0 = 177
+
+118    22    24 17 11 7 11 7 1 5 3 1 
+    ILAG =  23     CODE1 =  83     CODE2 =  29     IGSP0 = 210
+    ILAG =  23     CODE1 = 121     CODE2 =  98     IGSP0 = 188
+    ILAG =  23     CODE1 = 111     CODE2 =  63     IGSP0 = 189
+    ILAG =  23     CODE1 =  40     CODE2 =   9     IGSP0 = 186
+
+119    22    20 15 17 7 11 7 1 4 3 1 
+    ILAG =  23     CODE1 =   9     CODE2 = 100     IGSP0 = 189
+    ILAG =  23     CODE1 =  70     CODE2 =  27     IGSP0 = 187
+    ILAG =  23     CODE1 =  20     CODE2 =  36     IGSP0 = 189
+    ILAG =  23     CODE1 =  51     CODE2 = 125     IGSP0 = 183
+
+120    15    11 16 9 9 10 5 3 5 4 2 
+    ILAG =  24     CODE1 =   9     CODE2 =  73     IGSP0 = 121
+    ILAG = 114     CODE1 = 122     CODE2 = 111     IGSP0 = 131
+    ILAG =  75     CODE1 =  93     CODE2 =  42     IGSP0 =  82
+    ILAG =  29     CODE1 =  78     CODE2 =  58     IGSP0 = 174
+
+121    12    3 25 24 5 3 2 2 5 5 3 
+    ILAG =  25     CODE1 = 122     CODE2 =   6     IGSP0 = 182
+    ILAG =  70     CODE1 =  33     CODE2 =  69     IGSP0 = 173
+    ILAG =  28     CODE1 =   4     CODE2 = 101     IGSP0 = 204
+    ILAG =  29     CODE1 =  55     CODE2 =  87     IGSP0 = 172
+
+122    9    3 20 25 8 8 3 2 2 3 2 
+    ILAG =  30     CODE1 =  44     CODE2 =  82     IGSP0 =  83
+    ILAG =  30     CODE1 =  53     CODE2 =  24     IGSP0 = 161
+    ILAG =  31     CODE1 =  45     CODE2 =  56     IGSP0 = 240
+    ILAG =  31     CODE1 =  79     CODE2 =  38     IGSP0 = 173
+
+123    4    12 5 20 8 11 5 4 4 3 1 
+    ILAG =  35     CODE1 =  70     CODE2 =  86     IGSP0 = 117
+    ILAG =  33     CODE1 =  40     CODE2 = 115     IGSP0 =  94
+    ILAG =  78     CODE1 = 127     CODE2 =  64     IGSP0 = 153
+    ILAG =  33     CODE1 =  17     CODE2 =  30     IGSP0 =  79
+
+124    16    41 3 15 8 7 3 5 5 4 2 
+    ILAG =  32     CODE1 =  10     CODE2 =  84     IGSP0 =  48
+    ILAG =  45     CODE1 =  65     CODE2 =  19     IGSP0 = 239
+    ILAG =  76     CODE1 =  42     CODE2 = 120     IGSP0 =  70
+    ILAG =  25     CODE1 =  23     CODE2 =  18     IGSP0 = 137
+
+125    23    29 12 13 6 9 7 2 3 4 1 
+    ILAG =  57     CODE1 =  62     CODE2 =  85     IGSP0 =  32
+    ILAG =  17     CODE1 =  54     CODE2 = 101     IGSP0 = 128
+    ILAG =  18     CODE1 =  84     CODE2 =  19     IGSP0 = 109
+    ILAG =  25     CODE1 = 103     CODE2 = 126     IGSP0 = 114
+
+126    24    27 16 13 6 9 7 2 4 4 2 
+    ILAG =  25     CODE1 =  91     CODE2 = 110     IGSP0 = 182
+    ILAG =  25     CODE1 =  76     CODE2 = 111     IGSP0 = 182
+    ILAG =  26     CODE1 =  74     CODE2 =  48     IGSP0 = 119
+    ILAG =  26     CODE1 =  21     CODE2 =  17     IGSP0 = 116
+
+127    23    30 19 12 5 6 7 2 5 4 2 
+    ILAG =  26     CODE1 = 115     CODE2 =  43     IGSP0 =  61
+    ILAG =  26     CODE1 =  25     CODE2 =  36     IGSP0 = 119
+    ILAG =  26     CODE1 = 122     CODE2 =  71     IGSP0 = 182
+    ILAG =  27     CODE1 =  92     CODE2 =  13     IGSP0 = 189
+
+128    24    29 23 8 5 8 7 2 4 4 2 
+    ILAG =  27     CODE1 = 103     CODE2 = 123     IGSP0 = 187
+    ILAG =  27     CODE1 =  16     CODE2 =  43     IGSP0 = 186
+    ILAG =  27     CODE1 =  38     CODE2 = 106     IGSP0 = 183
+    ILAG =  28     CODE1 =  24     CODE2 =  41     IGSP0 = 187
+
+129    23    28 25 6 8 10 7 1 5 4 2 
+    ILAG =  74     CODE1 =  98     CODE2 =  28     IGSP0 = 107
+    ILAG =  28     CODE1 = 107     CODE2 =  34     IGSP0 = 188
+    ILAG =  28     CODE1 = 110     CODE2 =  29     IGSP0 = 219
+    ILAG =  28     CODE1 =  59     CODE2 =  76     IGSP0 = 219
+
+130    24    28 24 7 6 9 7 1 5 4 2 
+    ILAG =  28     CODE1 =   8     CODE2 =  15     IGSP0 = 220
+    ILAG =  28     CODE1 =  25     CODE2 =  77     IGSP0 = 215
+    ILAG =  28     CODE1 =   5     CODE2 =  30     IGSP0 = 127
+    ILAG =  28     CODE1 =  88     CODE2 = 111     IGSP0 = 107
+
+131    23    30 23 9 5 9 7 1 5 3 2 
+    ILAG =  28     CODE1 = 101     CODE2 =  60     IGSP0 = 127
+    ILAG =  28     CODE1 =  74     CODE2 =  98     IGSP0 = 191
+    ILAG =  28     CODE1 = 102     CODE2 = 110     IGSP0 = 212
+    ILAG = 121     CODE1 = 110     CODE2 =  25     IGSP0 = 211
+
+132    22    29 18 13 4 6 7 1 5 3 2 
+    ILAG =  74     CODE1 =  91     CODE2 = 122     IGSP0 = 190
+    ILAG =  74     CODE1 =  36     CODE2 =  57     IGSP0 = 205
+    ILAG =  27     CODE1 =  31     CODE2 =  18     IGSP0 = 180
+    ILAG =  27     CODE1 =  48     CODE2 =  79     IGSP0 = 210
+
+133    20    19 16 14 7 9 7 1 4 2 2 
+    ILAG =  74     CODE1 = 106     CODE2 =  29     IGSP0 = 173
+    ILAG =  27     CODE1 =  23     CODE2 = 110     IGSP0 = 199
+    ILAG =  27     CODE1 = 106     CODE2 =  16     IGSP0 = 206
+    ILAG =  28     CODE1 =  36     CODE2 =  57     IGSP0 = 180
+
+134    16    8 17 21 11 7 5 0 4 4 2 
+    ILAG =  27     CODE1 =  82     CODE2 =  66     IGSP0 =  61
+    ILAG =  27     CODE1 =  16     CODE2 =   7     IGSP0 = 111
+    ILAG =  27     CODE1 =  68     CODE2 =  71     IGSP0 = 182
+    ILAG =  28     CODE1 =  25     CODE2 =  68     IGSP0 = 101
+
+135    12    4 25 25 7 3 2 2 5 4 2 
+    ILAG =  29     CODE1 =  57     CODE2 =  24     IGSP0 =  62
+    ILAG =  30     CODE1 =  24     CODE2 =  95     IGSP0 = 114
+    ILAG =  30     CODE1 =  37     CODE2 =  14     IGSP0 = 110
+    ILAG =  81     CODE1 =  94     CODE2 =  56     IGSP0 = 121
+
+136    14    44 5 4 8 8 4 5 6 5 1 
+    ILAG =  85     CODE1 =   3     CODE2 =  68     IGSP0 = 101
+    ILAG =  34     CODE1 = 108     CODE2 = 104     IGSP0 =  31
+    ILAG =  33     CODE1 =  91     CODE2 =  76     IGSP0 =  27
+    ILAG =  28     CODE1 =  17     CODE2 =  53     IGSP0 = 143
+
+137    17    20 4 24 14 10 2 2 5 3 1 
+    ILAG =  27     CODE1 =  46     CODE2 =  17     IGSP0 = 147
+    ILAG =  80     CODE1 =  52     CODE2 =  47     IGSP0 = 168
+    ILAG =  33     CODE1 =  40     CODE2 =  55     IGSP0 = 168
+    ILAG =  32     CODE1 =  23     CODE2 = 122     IGSP0 = 164
+
+138    19    17 6 25 15 10 1 1 5 4 1 
+    ILAG =  32     CODE1 = 117     CODE2 =  30     IGSP0 = 172
+    ILAG =  32     CODE1 = 121     CODE2 =  34     IGSP0 = 209
+    ILAG =  33     CODE1 =  53     CODE2 =  13     IGSP0 = 184
+    ILAG =  33     CODE1 =  25     CODE2 = 102     IGSP0 = 124
+
+139    19    26 4 17 15 13 4 0 3 3 2 
+    ILAG =  33     CODE1 =  99     CODE2 = 102     IGSP0 = 122
+    ILAG =  33     CODE1 =  28     CODE2 =  70     IGSP0 = 201
+    ILAG =  34     CODE1 = 115     CODE2 = 102     IGSP0 = 199
+    ILAG =  35     CODE1 =   8     CODE2 =  94     IGSP0 = 240
+
+140    19    18 7 19 14 11 5 1 4 1 1 
+    ILAG =  88     CODE1 = 123     CODE2 =  79     IGSP0 = 103
+    ILAG =  36     CODE1 =  96     CODE2 =  51     IGSP0 = 241
+    ILAG =  36     CODE1 =  12     CODE2 =  16     IGSP0 = 222
+    ILAG =  38     CODE1 =  28     CODE2 =  33     IGSP0 = 109
+
+141    10    4 21 26 9 5 3 3 5 2 2 
+    ILAG =  38     CODE1 =  84     CODE2 =  16     IGSP0 = 113
+    ILAG = 101     CODE1 = 110     CODE2 =  60     IGSP0 = 101
+    ILAG =  46     CODE1 = 120     CODE2 =  99     IGSP0 = 192
+    ILAG = 109     CODE1 =  64     CODE2 =  60     IGSP0 = 169
+
+142    1    31 6 10 3 5 4 5 6 3 1 
+    ILAG =  36     CODE1 =  54     CODE2 =   0     IGSP0 =  60
+    ILAG =  97     CODE1 =  40     CODE2 =  64     IGSP0 =  67
+    ILAG =  94     CODE1 =  29     CODE2 =  41     IGSP0 = 152
+    ILAG =  96     CODE1 =  21     CODE2 =   4     IGSP0 =  54
+
+143    1    43 6 10 5 8 5 5 6 5 2 
+    ILAG = 108     CODE1 =  77     CODE2 =  29     IGSP0 =  97
+    ILAG =  74     CODE1 =  27     CODE2 =  49     IGSP0 =  47
+    ILAG =  42     CODE1 =  36     CODE2 = 115     IGSP0 =  72
+    ILAG =  99     CODE1 =  18     CODE2 =  43     IGSP0 =  79
+
+144    16    29 9 12 9 8 7 2 4 3 2 
+    ILAG =  29     CODE1 = 101     CODE2 =  29     IGSP0 =  65
+    ILAG =  81     CODE1 =  57     CODE2 =  18     IGSP0 =   7
+    ILAG =   7     CODE1 =  67     CODE2 =  78     IGSP0 =   1
+    ILAG = 107     CODE1 = 107     CODE2 =  45     IGSP0 = 160
+
+145    20    31 9 13 10 8 7 2 3 3 2 
+    ILAG =  60     CODE1 =  67     CODE2 =  68     IGSP0 =  66
+    ILAG =  60     CODE1 =  28     CODE2 =  57     IGSP0 = 202
+    ILAG =  27     CODE1 =  55     CODE2 = 109     IGSP0 = 243
+    ILAG =  86     CODE1 =  80     CODE2 =  37     IGSP0 =  91
+
+146    19    27 12 20 10 7 6 0 3 3 2 
+    ILAG =  39     CODE1 = 102     CODE2 =   5     IGSP0 =  76
+    ILAG =  37     CODE1 =  71     CODE2 = 124     IGSP0 = 205
+    ILAG =  95     CODE1 =  92     CODE2 =  37     IGSP0 = 212
+    ILAG =  96     CODE1 =  23     CODE2 =  33     IGSP0 = 104
+
+147    19    29 11 19 10 7 7 1 4 4 2 
+    ILAG =  39     CODE1 =  66     CODE2 = 100     IGSP0 = 245
+    ILAG =  40     CODE1 =  49     CODE2 =  43     IGSP0 = 220
+    ILAG =  40     CODE1 =  36     CODE2 =  97     IGSP0 = 171
+    ILAG =  98     CODE1 =  13     CODE2 =  14     IGSP0 = 155
+
+148    18    30 10 18 10 7 6 1 3 3 2 
+    ILAG =  99     CODE1 = 120     CODE2 =  85     IGSP0 = 220
+    ILAG =  99     CODE1 =  46     CODE2 = 121     IGSP0 = 103
+    ILAG = 100     CODE1 = 122     CODE2 =  49     IGSP0 = 242
+    ILAG =  41     CODE1 =   6     CODE2 =   8     IGSP0 = 247
+
+149    17    28 13 20 9 7 6 0 4 4 2 
+    ILAG = 100     CODE1 =   1     CODE2 =  78     IGSP0 =  62
+    ILAG =  41     CODE1 =  38     CODE2 = 124     IGSP0 = 247
+    ILAG =  42     CODE1 =  27     CODE2 =  64     IGSP0 = 253
+    ILAG =  42     CODE1 =  94     CODE2 = 111     IGSP0 = 124
+
+150    17    26 18 13 10 8 5 1 6 3 1 
+    ILAG =  42     CODE1 =  69     CODE2 =  51     IGSP0 = 244
+    ILAG =  42     CODE1 = 105     CODE2 =  36     IGSP0 = 218
+    ILAG =  42     CODE1 = 102     CODE2 =  67     IGSP0 = 120
+    ILAG =  42     CODE1 =  74     CODE2 =  35     IGSP0 = 207
+
+151    17    22 20 13 9 7 4 1 6 3 1 
+    ILAG =  44     CODE1 =  94     CODE2 =   9     IGSP0 = 241
+    ILAG =  44     CODE1 =  19     CODE2 =  64     IGSP0 = 109
+    ILAG = 104     CODE1 =  55     CODE2 =  26     IGSP0 = 219
+    ILAG = 105     CODE1 =  95     CODE2 =  21     IGSP0 = 212
+
+152    16    20 22 17 9 6 5 1 5 4 1 
+    ILAG =  45     CODE1 = 103     CODE2 = 117     IGSP0 =  62
+    ILAG =  44     CODE1 =  29     CODE2 =  27     IGSP0 = 246
+    ILAG = 108     CODE1 =  14     CODE2 =  25     IGSP0 = 118
+    ILAG =  48     CODE1 =  99     CODE2 =  52     IGSP0 = 155
+
+153    15    25 19 8 11 8 4 2 5 3 1 
+    ILAG =  28     CODE1 =  18     CODE2 =  75     IGSP0 = 243
+    ILAG = 116     CODE1 =   5     CODE2 =  54     IGSP0 =  38
+    ILAG =  43     CODE1 = 126     CODE2 = 123     IGSP0 =  16
+    ILAG =  43     CODE1 =  69     CODE2 =  42     IGSP0 =  98
+
+154    15    28 17 10 10 8 6 0 5 3 1 
+    ILAG =  37     CODE1 =  83     CODE2 =   3     IGSP0 = 146
+    ILAG =  25     CODE1 = 100     CODE2 =  61     IGSP0 = 231
+    ILAG =  27     CODE1 =  71     CODE2 = 103     IGSP0 =  97
+    ILAG = 111     CODE1 =   6     CODE2 =  38     IGSP0 =  52
+
+155    14    23 17 10 10 8 5 1 4 4 0 
+    ILAG = 110     CODE1 =   1     CODE2 = 113     IGSP0 = 254
+    ILAG =  41     CODE1 = 108     CODE2 =  17     IGSP0 = 137
+    ILAG =  88     CODE1 =  30     CODE2 = 104     IGSP0 = 168
+    ILAG =  87     CODE1 =  80     CODE2 =  99     IGSP0 = 235
+
+156    15    22 15 9 11 9 5 1 5 4 1 
+    ILAG = 107     CODE1 =  69     CODE2 =  67     IGSP0 =  45
+    ILAG =  27     CODE1 = 103     CODE2 =  27     IGSP0 =  60
+    ILAG = 105     CODE1 = 102     CODE2 =  17     IGSP0 = 250
+    ILAG =  98     CODE1 =  68     CODE2 =  32     IGSP0 =  56
+
+157    12    14 15 14 12 10 4 0 1 5 2 
+    ILAG =  99     CODE1 =  58     CODE2 =  10     IGSP0 =  61
+    ILAG = 100     CODE1 =  33     CODE2 =  99     IGSP0 = 255
+    ILAG = 107     CODE1 =  69     CODE2 = 110     IGSP0 =  66
+    ILAG = 105     CODE1 = 117     CODE2 =   3     IGSP0 = 100
+
+158    1    31 6 14 5 8 5 4 5 2 1 
+    ILAG =  27     CODE1 =  72     CODE2 =  69     IGSP0 =  95
+    ILAG =  64     CODE1 =  53     CODE2 =  21     IGSP0 =  55
+    ILAG =  73     CODE1 =  91     CODE2 =  28     IGSP0 = 136
+    ILAG = 109     CODE1 =  38     CODE2 =   1     IGSP0 =  71
+
+159    1    48 16 16 3 6 3 3 6 3 2 
+    ILAG =  76     CODE1 = 124     CODE2 = 123     IGSP0 =  79
+    ILAG =  46     CODE1 =   3     CODE2 =  20     IGSP0 =  29
+    ILAG = 100     CODE1 =   9     CODE2 =  84     IGSP0 =  53
+    ILAG =  94     CODE1 =  68     CODE2 =  99     IGSP0 = 102
+
+160    6    44 14 13 4 5 4 4 5 5 3 
+    ILAG =  14     CODE1 =  17     CODE2 =   9     IGSP0 = 131
+    ILAG =  14     CODE1 =  65     CODE2 = 110     IGSP0 = 100
+    ILAG =  39     CODE1 =  66     CODE2 =  80     IGSP0 = 143
+    ILAG = 127     CODE1 =  54     CODE2 =  93     IGSP0 =  82
+
+161    4    51 15 13 3 5 5 5 5 4 3 
+    ILAG = 120     CODE1 = 100     CODE2 = 118     IGSP0 =  55
+    ILAG = 122     CODE1 = 103     CODE2 =  96     IGSP0 = 168
+    ILAG =  51     CODE1 =  29     CODE2 =  72     IGSP0 = 131
+    ILAG =  22     CODE1 = 117     CODE2 =  59     IGSP0 = 138
+
+162    5    49 19 20 6 3 5 4 3 5 2 
+    ILAG = 126     CODE1 =  60     CODE2 =  61     IGSP0 = 142
+    ILAG =  46     CODE1 = 103     CODE2 =  65     IGSP0 = 139
+    ILAG = 113     CODE1 = 121     CODE2 =  78     IGSP0 = 153
+    ILAG =  28     CODE1 =  57     CODE2 =  51     IGSP0 = 142
+
+163    5    48 18 15 4 5 5 5 5 6 2 
+    ILAG =  21     CODE1 =  78     CODE2 =   3     IGSP0 = 139
+    ILAG =  73     CODE1 =  41     CODE2 =  64     IGSP0 = 136
+    ILAG =  46     CODE1 =  75     CODE2 =  94     IGSP0 = 134
+    ILAG = 114     CODE1 =  30     CODE2 = 101     IGSP0 = 152
+
+164    4    48 18 17 3 6 4 5 5 4 3 
+    ILAG =  91     CODE1 = 106     CODE2 =  54     IGSP0 = 164
+    ILAG =  50     CODE1 =  45     CODE2 =   1     IGSP0 = 145
+    ILAG =   7     CODE1 =  56     CODE2 =  53     IGSP0 = 150
+    ILAG =  76     CODE1 =  20     CODE2 =  59     IGSP0 =  87
+
+165    4    42 14 16 6 9 3 4 2 3 3 
+    ILAG =  91     CODE1 =  22     CODE2 =   8     IGSP0 =  92
+    ILAG =  98     CODE1 =  53     CODE2 =  65     IGSP0 = 137
+    ILAG =  47     CODE1 = 109     CODE2 = 109     IGSP0 = 229
+    ILAG =  98     CODE1 =  62     CODE2 = 124     IGSP0 = 129
+
+166    1    43 11 19 8 7 3 4 5 2 2 
+    ILAG =  25     CODE1 = 124     CODE2 = 106     IGSP0 =   0
+    ILAG =  48     CODE1 =   3     CODE2 =   3     IGSP0 =   1
+    ILAG =  57     CODE1 =  42     CODE2 = 105     IGSP0 =   1
+    ILAG =  17     CODE1 =  48     CODE2 =  22     IGSP0 =  83
+
+167    3    50 16 14 6 6 4 3 5 5 2 
+    ILAG = 116     CODE1 =  27     CODE2 = 112     IGSP0 =  81
+    ILAG =  67     CODE1 =  59     CODE2 =  25     IGSP0 = 139
+    ILAG =  49     CODE1 = 116     CODE2 =  73     IGSP0 = 152
+    ILAG =  23     CODE1 =  10     CODE2 =  91     IGSP0 = 229
+
+168    1    47 14 12 4 6 4 5 3 3 2 
+    ILAG = 112     CODE1 = 101     CODE2 =  76     IGSP0 =  74
+    ILAG = 113     CODE1 =  55     CODE2 = 102     IGSP0 =  84
+    ILAG =  99     CODE1 = 106     CODE2 = 100     IGSP0 =  67
+    ILAG =  18     CODE1 =  40     CODE2 = 120     IGSP0 =  50
+
+169    1    49 14 17 3 7 4 4 5 3 2 
+    ILAG =  18     CODE1 =  40     CODE2 =  76     IGSP0 =  80
+    ILAG =  88     CODE1 =  20     CODE2 =  14     IGSP0 =  66
+    ILAG =  31     CODE1 =  33     CODE2 =  96     IGSP0 =  44
+    ILAG =  82     CODE1 = 104     CODE2 =  21     IGSP0 =  49
+
+170    3    39 21 17 5 7 4 3 5 4 1 
+    ILAG =  49     CODE1 =  96     CODE2 =  57     IGSP0 =  28
+    ILAG =  60     CODE1 =   0     CODE2 = 101     IGSP0 =  38
+    ILAG =  67     CODE1 =  69     CODE2 =  74     IGSP0 =  41
+    ILAG =  51     CODE1 = 107     CODE2 =  71     IGSP0 =  88
+
+171    7    41 24 12 3 10 4 2 6 4 2 
+    ILAG =  68     CODE1 = 109     CODE2 =  83     IGSP0 = 150
+    ILAG = 105     CODE1 =  58     CODE2 =  72     IGSP0 = 235
+    ILAG =  62     CODE1 =  12     CODE2 =  54     IGSP0 = 118
+    ILAG =  77     CODE1 = 111     CODE2 =  35     IGSP0 = 146
+
+172    18    16 19 9 7 13 3 3 7 2 1 
+    ILAG = 120     CODE1 =  53     CODE2 =  88     IGSP0 = 162
+    ILAG =  79     CODE1 =  61     CODE2 =  52     IGSP0 =  11
+    ILAG =  77     CODE1 = 124     CODE2 = 121     IGSP0 =   2
+    ILAG =  72     CODE1 =   5     CODE2 = 107     IGSP0 = 230
+
+173    22    19 20 7 7 14 4 3 7 2 0 
+    ILAG =   9     CODE1 =  91     CODE2 =  34     IGSP0 = 133
+    ILAG =  41     CODE1 =  67     CODE2 = 103     IGSP0 = 240
+    ILAG = 105     CODE1 =  99     CODE2 =  11     IGSP0 = 116
+    ILAG =  43     CODE1 =  93     CODE2 =  87     IGSP0 = 200
+
+174    22    19 20 7 6 14 4 3 7 2 1 
+    ILAG =  45     CODE1 = 107     CODE2 =  54     IGSP0 = 211
+    ILAG =  46     CODE1 =  38     CODE2 =  19     IGSP0 =  55
+    ILAG =  44     CODE1 =   8     CODE2 =  98     IGSP0 = 216
+    ILAG =  44     CODE1 =  21     CODE2 =  49     IGSP0 = 221
+
+175    23    17 19 8 5 14 5 2 7 3 0 
+    ILAG =  44     CODE1 =  75     CODE2 =  42     IGSP0 = 107
+    ILAG = 108     CODE1 = 121     CODE2 =   4     IGSP0 = 221
+    ILAG = 109     CODE1 =  56     CODE2 =  11     IGSP0 = 191
+    ILAG =  45     CODE1 =  20     CODE2 =  94     IGSP0 =  62
+
+176    20    19 19 3 11 13 2 5 7 2 1 
+    ILAG = 110     CODE1 =  22     CODE2 = 121     IGSP0 = 219
+    ILAG =  46     CODE1 =  36     CODE2 =  40     IGSP0 =  54
+    ILAG =  47     CODE1 = 103     CODE2 = 110     IGSP0 = 255
+    ILAG =  51     CODE1 =  87     CODE2 =  20     IGSP0 = 203
+
+177    10    45 12 11 3 2 5 5 4 6 3 
+    ILAG =  51     CODE1 =  85     CODE2 =  18     IGSP0 =  73
+    ILAG =  33     CODE1 =   6     CODE2 = 111     IGSP0 =  72
+    ILAG =  71     CODE1 =  69     CODE2 =  11     IGSP0 = 130
+    ILAG =  59     CODE1 = 111     CODE2 =  69     IGSP0 =  93
+
+178    11    48 17 22 9 7 2 3 3 3 3 
+    ILAG = 114     CODE1 =  70     CODE2 =  84     IGSP0 =  94
+    ILAG = 119     CODE1 =  95     CODE2 =  55     IGSP0 = 152
+    ILAG = 108     CODE1 = 112     CODE2 =  69     IGSP0 = 139
+    ILAG = 127     CODE1 =  23     CODE2 = 100     IGSP0 = 152
+
+179    12    52 16 19 11 7 3 3 4 4 2 
+    ILAG =  55     CODE1 =  49     CODE2 =  50     IGSP0 = 192
+    ILAG = 123     CODE1 =  28     CODE2 =  92     IGSP0 = 147
+    ILAG =  95     CODE1 = 126     CODE2 = 122     IGSP0 = 146
+    ILAG = 122     CODE1 =  38     CODE2 =  22     IGSP0 = 141
+
+180    12    48 16 25 10 7 4 4 4 4 2 
+    ILAG =  14     CODE1 =   5     CODE2 = 126     IGSP0 = 142
+    ILAG =  72     CODE1 =  96     CODE2 =  27     IGSP0 = 232
+    ILAG =  46     CODE1 =  75     CODE2 = 121     IGSP0 = 152
+    ILAG =  23     CODE1 = 111     CODE2 = 108     IGSP0 = 147
+
+181    11    47 15 22 10 4 2 4 4 5 2 
+    ILAG =   4     CODE1 =   5     CODE2 =  54     IGSP0 = 197
+    ILAG =   8     CODE1 =  87     CODE2 =  70     IGSP0 = 152
+    ILAG = 101     CODE1 =  95     CODE2 = 104     IGSP0 = 132
+    ILAG =  44     CODE1 =  16     CODE2 = 113     IGSP0 = 165
+
+182    22    16 25 15 3 8 3 6 6 2 2 
+    ILAG =  47     CODE1 =  19     CODE2 =  70     IGSP0 = 239
+    ILAG =   3     CODE1 =  58     CODE2 =   8     IGSP0 =  74
+    ILAG =  85     CODE1 = 115     CODE2 =  76     IGSP0 =  92
+    ILAG =  30     CODE1 =  38     CODE2 = 108     IGSP0 = 243
+
+183    24    19 26 20 1 8 5 5 6 2 2 
+    ILAG = 103     CODE1 =  87     CODE2 =  92     IGSP0 = 102
+    ILAG =  41     CODE1 =  53     CODE2 =  98     IGSP0 = 242
+    ILAG =  41     CODE1 = 108     CODE2 =   5     IGSP0 = 183
+    ILAG =  40     CODE1 =  29     CODE2 =  90     IGSP0 = 109
+
+184    24    19 26 23 1 6 5 5 5 2 2 
+    ILAG =  40     CODE1 =  80     CODE2 = 100     IGSP0 = 212
+    ILAG =  40     CODE1 =   0     CODE2 =   0     IGSP0 = 191
+    ILAG =  99     CODE1 =  24     CODE2 =  76     IGSP0 = 113
+    ILAG =  40     CODE1 =  91     CODE2 =  83     IGSP0 = 188
+
+185    24    20 26 23 2 6 5 6 5 2 2 
+    ILAG =  99     CODE1 = 122     CODE2 =  21     IGSP0 = 183
+    ILAG =  40     CODE1 =  96     CODE2 = 108     IGSP0 = 103
+    ILAG =  41     CODE1 =  76     CODE2 =  95     IGSP0 = 199
+    ILAG =  40     CODE1 =  44     CODE2 =  92     IGSP0 = 187
+
+186    23    21 25 21 4 5 5 6 4 2 2 
+    ILAG = 100     CODE1 =  10     CODE2 =   9     IGSP0 =  63
+    ILAG =  41     CODE1 =  58     CODE2 =  76     IGSP0 = 221
+    ILAG =  41     CODE1 = 108     CODE2 =  39     IGSP0 = 218
+    ILAG =  41     CODE1 =  80     CODE2 = 100     IGSP0 = 109
+
+187    24    22 23 25 2 7 5 6 6 2 2 
+    ILAG = 103     CODE1 =  87     CODE2 =  76     IGSP0 = 249
+    ILAG =  43     CODE1 =  19     CODE2 =  50     IGSP0 = 222
+    ILAG =  43     CODE1 =  58     CODE2 = 102     IGSP0 = 106
+    ILAG =  44     CODE1 =  26     CODE2 =  76     IGSP0 = 216
+
+188    24    23 23 23 2 8 5 6 5 2 2 
+    ILAG =  45     CODE1 =  31     CODE2 =  81     IGSP0 = 212
+    ILAG =  45     CODE1 = 117     CODE2 =  77     IGSP0 = 111
+    ILAG = 111     CODE1 =  27     CODE2 =   4     IGSP0 = 219
+    ILAG =  47     CODE1 =  46     CODE2 =  93     IGSP0 =  59
+
+189    24    21 22 20 3 9 5 6 5 2 2 
+    ILAG =  47     CODE1 =  49     CODE2 =  68     IGSP0 = 219
+    ILAG =  49     CODE1 =  95     CODE2 =  59     IGSP0 = 211
+    ILAG =  49     CODE1 =  32     CODE2 =  57     IGSP0 = 110
+    ILAG =  51     CODE1 =  19     CODE2 =  50     IGSP0 = 221
+
+190    22    17 23 18 3 11 5 7 4 1 2 
+    ILAG =  51     CODE1 =  91     CODE2 =  72     IGSP0 =  62
+    ILAG =  53     CODE1 =  30     CODE2 =  51     IGSP0 = 247
+    ILAG =  54     CODE1 = 114     CODE2 =  84     IGSP0 =  29
+    ILAG = 126     CODE1 =  70     CODE2 =   0     IGSP0 = 250
+
+191    22    16 20 17 4 11 4 7 5 1 2 
+    ILAG =  18     CODE1 =  14     CODE2 =  86     IGSP0 =  25
+    ILAG =  57     CODE1 =  12     CODE2 =  16     IGSP0 = 175
+    ILAG =  58     CODE1 =  70     CODE2 =   6     IGSP0 =  31
+    ILAG =  58     CODE1 =  37     CODE2 =  59     IGSP0 = 169
+
+192    23    16 18 21 3 12 5 6 6 1 1 
+    ILAG =  59     CODE1 =  27     CODE2 = 125     IGSP0 = 123
+    ILAG =  58     CODE1 =  86     CODE2 =  38     IGSP0 = 172
+    ILAG =  59     CODE1 =  49     CODE2 =  79     IGSP0 = 189
+    ILAG =  60     CODE1 =  94     CODE2 = 124     IGSP0 = 110
+
+193    22    16 16 22 2 13 6 4 6 2 1 
+    ILAG =  59     CODE1 =  39     CODE2 = 106     IGSP0 = 182
+    ILAG =  60     CODE1 =  82     CODE2 =  48     IGSP0 = 102
+    ILAG =  60     CODE1 =  57     CODE2 =   5     IGSP0 = 218
+    ILAG =  60     CODE1 = 120     CODE2 =  32     IGSP0 = 106
+
+194    22    16 18 14 3 14 6 3 6 3 1 
+    ILAG =  61     CODE1 =   8     CODE2 =  78     IGSP0 = 215
+    ILAG =  62     CODE1 =  81     CODE2 =  65     IGSP0 = 105
+    ILAG =  62     CODE1 =  88     CODE2 =  53     IGSP0 = 186
+    ILAG =  62     CODE1 = 115     CODE2 =   8     IGSP0 =  62
+
+195    21    14 21 8 6 15 5 3 7 3 0 
+    ILAG =  63     CODE1 = 100     CODE2 = 123     IGSP0 = 190
+    ILAG =  62     CODE1 =  45     CODE2 =  22     IGSP0 = 103
+    ILAG =  64     CODE1 =  78     CODE2 =  11     IGSP0 = 186
+    ILAG =  64     CODE1 =  90     CODE2 =  31     IGSP0 = 246
+
+196    18    13 23 8 12 12 3 4 5 3 1 
+    ILAG =  64     CODE1 =  24     CODE2 =  19     IGSP0 =  47
+    ILAG =  66     CODE1 =  16     CODE2 =  66     IGSP0 = 254
+    ILAG =  63     CODE1 =  91     CODE2 =  13     IGSP0 =  99
+    ILAG =  71     CODE1 = 123     CODE2 = 101     IGSP0 = 207
+
+197    11    45 20 17 3 3 3 3 4 4 3 
+    ILAG =  62     CODE1 =  14     CODE2 =  16     IGSP0 =  17
+    ILAG =  57     CODE1 =  15     CODE2 =  43     IGSP0 = 192
+    ILAG =  51     CODE1 =  25     CODE2 =  56     IGSP0 = 233
+    ILAG =  58     CODE1 =  24     CODE2 =   0     IGSP0 = 131
+
+198    11    48 19 20 8 5 4 5 3 3 3 
+    ILAG = 119     CODE1 =  44     CODE2 = 113     IGSP0 = 144
+    ILAG =  95     CODE1 =  62     CODE2 =  54     IGSP0 = 139
+    ILAG =   7     CODE1 =  28     CODE2 =  55     IGSP0 =  91
+    ILAG =  78     CODE1 =  32     CODE2 =  17     IGSP0 = 142
+
+199    9    48 13 20 11 9 3 5 4 4 2 
+    ILAG = 120     CODE1 =  81     CODE2 =  72     IGSP0 =  99
+    ILAG = 116     CODE1 =  75     CODE2 =  74     IGSP0 = 224
+    ILAG = 116     CODE1 =  73     CODE2 =  13     IGSP0 = 139
+    ILAG =  61     CODE1 = 117     CODE2 =  36     IGSP0 = 157
+
+200    8    51 15 21 10 7 4 4 5 5 1 
+    ILAG =  65     CODE1 =  31     CODE2 =   9     IGSP0 = 138
+    ILAG =  64     CODE1 = 126     CODE2 =  80     IGSP0 = 147
+    ILAG =  78     CODE1 =  94     CODE2 =  63     IGSP0 = 152
+    ILAG =  45     CODE1 =  44     CODE2 =  67     IGSP0 = 149
+
+201    11    49 17 23 12 6 3 4 6 5 2 
+    ILAG = 101     CODE1 = 106     CODE2 = 120     IGSP0 = 131
+    ILAG =  39     CODE1 =  92     CODE2 = 115     IGSP0 = 147
+    ILAG =  61     CODE1 =  94     CODE2 = 110     IGSP0 =  83
+    ILAG = 123     CODE1 =  39     CODE2 =   4     IGSP0 = 137
+
+202    11    46 15 21 9 5 4 4 4 4 3 
+    ILAG =  22     CODE1 =  34     CODE2 =  19     IGSP0 = 130
+    ILAG = 101     CODE1 =  43     CODE2 = 115     IGSP0 = 230
+    ILAG =  62     CODE1 =   1     CODE2 =  42     IGSP0 = 150
+    ILAG =  22     CODE1 =  69     CODE2 = 120     IGSP0 = 157
+
+203    19    17 20 11 7 11 5 7 4 2 1 
+    ILAG =   4     CODE1 =  32     CODE2 =  68     IGSP0 =  88
+    ILAG = 121     CODE1 =  75     CODE2 =  27     IGSP0 =  26
+    ILAG = 101     CODE1 =  84     CODE2 =  43     IGSP0 =  32
+    ILAG =  28     CODE1 =  83     CODE2 =  22     IGSP0 = 172
+
+204    22    20 18 14 7 11 5 7 5 1 1 
+    ILAG =  98     CODE1 =  81     CODE2 =   0     IGSP0 = 227
+    ILAG =  47     CODE1 =  35     CODE2 =  66     IGSP0 = 246
+    ILAG = 120     CODE1 =  96     CODE2 =  70     IGSP0 =  60
+    ILAG =  50     CODE1 =  53     CODE2 =  11     IGSP0 = 217
+
+205    22    20 15 17 7 11 5 7 5 0 1 
+    ILAG =  50     CODE1 =  50     CODE2 =  67     IGSP0 =  48
+    ILAG =  50     CODE1 =  36     CODE2 = 127     IGSP0 = 216
+    ILAG =  52     CODE1 =  33     CODE2 =  97     IGSP0 = 204
+    ILAG =  51     CODE1 =  41     CODE2 =  56     IGSP0 = 113
+
+206    22    25 14 14 7 11 5 7 6 0 1 
+    ILAG =  52     CODE1 = 104     CODE2 = 118     IGSP0 = 214
+    ILAG = 122     CODE1 =  54     CODE2 = 124     IGSP0 =  31
+    ILAG =  53     CODE1 = 103     CODE2 = 124     IGSP0 = 216
+    ILAG =  53     CODE1 =  57     CODE2 =  12     IGSP0 =  56
+
+207    22    22 13 18 9 12 5 6 5 1 1 
+    ILAG =  54     CODE1 =  68     CODE2 =  71     IGSP0 = 206
+    ILAG =  54     CODE1 = 108     CODE2 =  28     IGSP0 =  57
+    ILAG =  55     CODE1 =  33     CODE2 =   9     IGSP0 = 211
+    ILAG =  56     CODE1 =  35     CODE2 =  38     IGSP0 = 117
+
+208    22    22 14 17 8 12 5 7 6 1 1 
+    ILAG =  56     CODE1 =  72     CODE2 =  77     IGSP0 = 216
+    ILAG =  57     CODE1 =  87     CODE2 = 102     IGSP0 = 216
+    ILAG =  57     CODE1 = 123     CODE2 =  86     IGSP0 = 103
+    ILAG =  58     CODE1 =  89     CODE2 =  60     IGSP0 = 247
+
+209    22    22 15 18 7 11 5 7 6 1 1 
+    ILAG =  59     CODE1 = 101     CODE2 =  41     IGSP0 =  61
+    ILAG =  59     CODE1 =  28     CODE2 =  47     IGSP0 = 244
+    ILAG =  59     CODE1 = 122     CODE2 =  64     IGSP0 =  57
+    ILAG =  60     CODE1 =  33     CODE2 =  77     IGSP0 = 246
+
+210    21    21 17 20 5 10 5 6 6 2 1 
+    ILAG =  60     CODE1 =  60     CODE2 =  99     IGSP0 =  44
+    ILAG =  62     CODE1 = 100     CODE2 =  73     IGSP0 = 207
+    ILAG =  62     CODE1 =  37     CODE2 =  77     IGSP0 =  60
+    ILAG =  63     CODE1 =  32     CODE2 =   5     IGSP0 = 203
+
+211    22    17 23 23 4 8 4 6 6 2 1 
+    ILAG =  62     CODE1 = 113     CODE2 =  66     IGSP0 =  47
+    ILAG =  64     CODE1 =  35     CODE2 =  74     IGSP0 = 205
+    ILAG =  64     CODE1 =  94     CODE2 =  12     IGSP0 = 105
+    ILAG =  64     CODE1 =  91     CODE2 =  66     IGSP0 =  44
+
+212    22    15 24 27 2 6 5 6 7 2 1 
+    ILAG =  67     CODE1 =  83     CODE2 =   4     IGSP0 = 217
+    ILAG =  19     CODE1 =  38     CODE2 =  33     IGSP0 =  47
+    ILAG =  69     CODE1 =  17     CODE2 =  57     IGSP0 = 244
+    ILAG =  70     CODE1 =   9     CODE2 = 124     IGSP0 =  51
+
+213    21    13 26 28 1 3 5 7 5 2 2 
+    ILAG =  71     CODE1 =  97     CODE2 =  59     IGSP0 = 220
+    ILAG =  72     CODE1 =  44     CODE2 = 110     IGSP0 = 101
+    ILAG =  73     CODE1 =  96     CODE2 =  68     IGSP0 = 222
+    ILAG =  74     CODE1 = 106     CODE2 =  77     IGSP0 = 119
+
+214    21    10 28 28 2 2 5 7 5 1 2 
+    ILAG =  75     CODE1 =  79     CODE2 =  67     IGSP0 =  56
+    ILAG =  73     CODE1 =  13     CODE2 = 119     IGSP0 = 202
+    ILAG =  60     CODE1 =  40     CODE2 =  63     IGSP0 =  29
+    ILAG =  75     CODE1 =  70     CODE2 =  95     IGSP0 = 241
+
+215    20    8 27 27 5 0 5 7 4 1 1 
+    ILAG =  75     CODE1 =  42     CODE2 =  56     IGSP0 =  48
+    ILAG =  75     CODE1 =  36     CODE2 =  19     IGSP0 = 186
+    ILAG =  73     CODE1 = 118     CODE2 =  62     IGSP0 =  65
+    ILAG =  26     CODE1 = 115     CODE2 =   8     IGSP0 =  10
+
+216    15    4 24 27 5 3 5 6 3 4 3 
+    ILAG =  74     CODE1 =   8     CODE2 =  42     IGSP0 = 110
+    ILAG =  20     CODE1 =  27     CODE2 = 118     IGSP0 =  29
+    ILAG =  77     CODE1 =  98     CODE2 =  80     IGSP0 = 241
+    ILAG =  20     CODE1 = 124     CODE2 =   1     IGSP0 = 153
+
+217    9    4 16 15 9 12 5 4 4 5 2 
+    ILAG =  54     CODE1 =  23     CODE2 =  72     IGSP0 =  74
+    ILAG =  79     CODE1 =  55     CODE2 = 111     IGSP0 = 174
+    ILAG = 122     CODE1 =  54     CODE2 =  53     IGSP0 = 154
+    ILAG =  93     CODE1 = 122     CODE2 =   4     IGSP0 = 146
+
+218    6    15 10 11 9 12 4 4 5 5 3 
+    ILAG =  37     CODE1 =  48     CODE2 =  32     IGSP0 = 168
+    ILAG =  79     CODE1 =  65     CODE2 =  69     IGSP0 =  90
+    ILAG =  52     CODE1 =  30     CODE2 =  45     IGSP0 = 172
+    ILAG =  99     CODE1 =  63     CODE2 =  51     IGSP0 = 195
+
+219    15    5 22 24 10 5 3 7 4 3 1 
+    ILAG =  77     CODE1 =  17     CODE2 =  43     IGSP0 = 147
+    ILAG =  75     CODE1 =  21     CODE2 =  54     IGSP0 = 169
+    ILAG =  67     CODE1 =  51     CODE2 =  98     IGSP0 = 101
+    ILAG =  98     CODE1 =  69     CODE2 =  23     IGSP0 =  70
+
+220    17    7 17 21 10 9 2 6 5 2 2 
+    ILAG =  64     CODE1 =  79     CODE2 =  26     IGSP0 = 168
+    ILAG =  63     CODE1 =  37     CODE2 =  46     IGSP0 = 150
+    ILAG =  20     CODE1 =  75     CODE2 =   6     IGSP0 =  41
+    ILAG =  64     CODE1 =   9     CODE2 =  94     IGSP0 = 195
+
+221    18    12 16 20 7 7 3 5 5 3 2 
+    ILAG =  64     CODE1 =  27     CODE2 =  84     IGSP0 =  31
+    ILAG =  67     CODE1 =  55     CODE2 =  47     IGSP0 = 216
+    ILAG =  67     CODE1 =  75     CODE2 =  87     IGSP0 =  30
+    ILAG =  66     CODE1 = 123     CODE2 = 121     IGSP0 = 182
+
+222    20    21 14 21 3 8 6 6 4 1 3 
+    ILAG =  66     CODE1 =  37     CODE2 =  24     IGSP0 =  91
+    ILAG =  66     CODE1 =  17     CODE2 = 111     IGSP0 = 230
+    ILAG =  64     CODE1 =  33     CODE2 =  89     IGSP0 =  91
+    ILAG =  68     CODE1 = 111     CODE2 = 122     IGSP0 = 207
+
+223    20    27 13 20 4 7 6 6 3 1 3 
+    ILAG =  66     CODE1 =  94     CODE2 = 126     IGSP0 =  92
+    ILAG =  65     CODE1 =  78     CODE2 = 114     IGSP0 = 244
+    ILAG =  64     CODE1 = 102     CODE2 =  67     IGSP0 = 117
+    ILAG =  63     CODE1 =  81     CODE2 =  68     IGSP0 = 219
+
+224    20    22 14 17 6 7 6 4 1 4 3 
+    ILAG =  63     CODE1 =  86     CODE2 =   3     IGSP0 = 111
+    ILAG =  63     CODE1 =  31     CODE2 =  51     IGSP0 = 212
+    ILAG =  63     CODE1 =  81     CODE2 = 127     IGSP0 = 102
+    ILAG =  63     CODE1 =  85     CODE2 = 113     IGSP0 = 212
+
+225    19    22 12 17 6 8 6 5 2 3 3 
+    ILAG =  63     CODE1 =  32     CODE2 = 122     IGSP0 = 101
+    ILAG =  60     CODE1 =  67     CODE2 = 107     IGSP0 = 209
+    ILAG =  62     CODE1 =  81     CODE2 = 108     IGSP0 =  93
+    ILAG =  63     CODE1 =  36     CODE2 =   5     IGSP0 = 207
+
+226    17    8 15 18 11 8 4 5 4 4 2 
+    ILAG =  63     CODE1 =  94     CODE2 =  49     IGSP0 = 177
+    ILAG =  63     CODE1 =  26     CODE2 =  12     IGSP0 =  57
+    ILAG =  64     CODE1 =   1     CODE2 =  35     IGSP0 = 140
+    ILAG =  59     CODE1 =  67     CODE2 =  23     IGSP0 =  38
+
+227    17    7 17 20 11 10 2 4 5 3 2 
+    ILAG =  63     CODE1 = 123     CODE2 =  80     IGSP0 = 235
+    ILAG =  62     CODE1 =   9     CODE2 =  55     IGSP0 =  29
+    ILAG =  64     CODE1 =  23     CODE2 =  99     IGSP0 = 253
+    ILAG =  64     CODE1 =  90     CODE2 =  29     IGSP0 = 105
+
+228    19    26 4 16 11 13 5 5 3 1 3 
+    ILAG =  66     CODE1 =  15     CODE2 =  44     IGSP0 = 244
+    ILAG =  65     CODE1 =  42     CODE2 =  37     IGSP0 =  29
+    ILAG =  66     CODE1 =  22     CODE2 =  68     IGSP0 = 198
+    ILAG =  66     CODE1 =  36     CODE2 =  45     IGSP0 =  31
+
+229    18    26 4 15 13 14 5 3 2 2 3 
+    ILAG =  67     CODE1 = 107     CODE2 =  59     IGSP0 = 198
+    ILAG =  67     CODE1 =  30     CODE2 = 121     IGSP0 =  56
+    ILAG =  69     CODE1 =  96     CODE2 =  98     IGSP0 = 153
+    ILAG =  69     CODE1 = 125     CODE2 =  64     IGSP0 =  79
+
+230    17    18 5 19 14 13 4 2 1 3 3 
+    ILAG =  70     CODE1 = 106     CODE2 =  25     IGSP0 = 122
+    ILAG =  70     CODE1 =  61     CODE2 =   3     IGSP0 = 186
+    ILAG =  70     CODE1 =  17     CODE2 =  25     IGSP0 =  44
+    ILAG =  70     CODE1 =  97     CODE2 =  52     IGSP0 = 241
+
+231    16    11 8 24 14 13 4 2 1 3 3 
+    ILAG =  72     CODE1 =   9     CODE2 =  88     IGSP0 =  31
+    ILAG =  72     CODE1 =  70     CODE2 =   9     IGSP0 = 222
+    ILAG =  70     CODE1 =  62     CODE2 =  56     IGSP0 =  51
+    ILAG =  73     CODE1 = 107     CODE2 =  25     IGSP0 = 209
+
+232    8    5 20 28 9 7 3 3 5 3 1 
+    ILAG =  73     CODE1 = 120     CODE2 =  67     IGSP0 =  77
+    ILAG = 114     CODE1 =  95     CODE2 =  75     IGSP0 =  41
+    ILAG =  76     CODE1 =   2     CODE2 =  90     IGSP0 = 234
+    ILAG =  79     CODE1 =  63     CODE2 =  51     IGSP0 = 163
+
+233    1    47 12 14 3 5 3 3 4 3 2 
+    ILAG =  79     CODE1 =  44     CODE2 =  96     IGSP0 =  10
+    ILAG =  74     CODE1 =  10     CODE2 =  97     IGSP0 =  26
+    ILAG =  57     CODE1 =  77     CODE2 =  96     IGSP0 =  44
+    ILAG =  45     CODE1 = 106     CODE2 = 110     IGSP0 =  67
+
+234    9    48 10 16 8 4 3 5 3 4 2 
+    ILAG =  10     CODE1 =  50     CODE2 =  63     IGSP0 =  23
+    ILAG =  10     CODE1 =  57     CODE2 =  34     IGSP0 =  12
+    ILAG =  56     CODE1 =  98     CODE2 =   7     IGSP0 =   1
+    ILAG = 100     CODE1 =  11     CODE2 = 101     IGSP0 =   1
+
+235    12    53 18 7 4 10 2 5 6 4 2 
+    ILAG = 117     CODE1 =  20     CODE2 =  54     IGSP0 = 233
+    ILAG =  51     CODE1 =  81     CODE2 =  53     IGSP0 = 138
+    ILAG = 102     CODE1 =  48     CODE2 =  68     IGSP0 = 100
+    ILAG =  65     CODE1 =  53     CODE2 =  30     IGSP0 =  99
+
+236    12    50 19 18 11 1 3 7 4 3 2 
+    ILAG = 120     CODE1 =  50     CODE2 =  72     IGSP0 =  95
+    ILAG =  15     CODE1 =  89     CODE2 = 117     IGSP0 = 150
+    ILAG =  24     CODE1 =  98     CODE2 =  29     IGSP0 = 140
+    ILAG =  24     CODE1 =  10     CODE2 = 125     IGSP0 = 146
+
+237    10    43 13 11 6 3 3 7 5 3 2 
+    ILAG =  76     CODE1 =  46     CODE2 = 121     IGSP0 = 130
+    ILAG = 102     CODE1 =  91     CODE2 =  21     IGSP0 = 130
+    ILAG =  33     CODE1 =  97     CODE2 =  35     IGSP0 =  77
+    ILAG =  46     CODE1 = 104     CODE2 =  48     IGSP0 = 156
+
+238    20    26 19 9 6 9 6 7 3 2 2 
+    ILAG = 121     CODE1 =  34     CODE2 =  58     IGSP0 = 145
+    ILAG =   5     CODE1 =   7     CODE2 =  38     IGSP0 =  33
+    ILAG = 103     CODE1 = 107     CODE2 =  80     IGSP0 = 153
+    ILAG =  72     CODE1 =  56     CODE2 = 120     IGSP0 =  36
+
+239    20    26 19 11 6 9 5 7 4 3 3 
+    ILAG =  64     CODE1 =  97     CODE2 = 122     IGSP0 = 249
+    ILAG =  91     CODE1 =  52     CODE2 =   1     IGSP0 = 128
+    ILAG =  23     CODE1 =  73     CODE2 =  79     IGSP0 =  29
+    ILAG =  88     CODE1 =  97     CODE2 = 127     IGSP0 = 163
+
+240    19    22 22 9 9 11 6 7 2 1 2 
+    ILAG = 115     CODE1 =  38     CODE2 =   1     IGSP0 =  67
+    ILAG =  52     CODE1 =  42     CODE2 =  31     IGSP0 = 238
+    ILAG =  22     CODE1 =  72     CODE2 = 113     IGSP0 =  34
+    ILAG =  31     CODE1 =  56     CODE2 =  41     IGSP0 =  32
+
+241    19    24 21 8 9 9 7 6 2 4 2 
+    ILAG =  94     CODE1 =  69     CODE2 = 102     IGSP0 =   0
+    ILAG =  36     CODE1 = 110     CODE2 =   2     IGSP0 =   7
+    ILAG = 109     CODE1 = 126     CODE2 =  92     IGSP0 =  10
+    ILAG =  48     CODE1 =  11     CODE2 =  11     IGSP0 = 165
+
+242    12    16 21 15 8 7 7 5 1 4 2 
+    ILAG =  92     CODE1 =  95     CODE2 =  95     IGSP0 = 225
+    ILAG =  21     CODE1 =  66     CODE2 =  20     IGSP0 =  95
+    ILAG =  40     CODE1 =   6     CODE2 =  84     IGSP0 =  54
+    ILAG = 108     CODE1 =  69     CODE2 =   3     IGSP0 =  43
+
+243    15    14 18 20 8 5 7 6 2 3 2 
+    ILAG =  35     CODE1 =  72     CODE2 =  37     IGSP0 =  90
+    ILAG =  63     CODE1 =  28     CODE2 = 117     IGSP0 = 234
+    ILAG =  72     CODE1 = 114     CODE2 =  69     IGSP0 =  33
+    ILAG =  35     CODE1 =  27     CODE2 =  32     IGSP0 = 231
+
+244    11    52 19 12 11 5 0 5 6 2 3 
+    ILAG =  18     CODE1 = 122     CODE2 =  21     IGSP0 =  23
+    ILAG =  34     CODE1 =  56     CODE2 = 105     IGSP0 =  36
+    ILAG =  38     CODE1 = 109     CODE2 =  55     IGSP0 =  77
+    ILAG =  70     CODE1 = 104     CODE2 =  14     IGSP0 =  83
+
+245    12    54 22 12 11 10 1 4 6 4 2 
+    ILAG =  47     CODE1 =  10     CODE2 = 109     IGSP0 = 228
+    ILAG =  37     CODE1 =  26     CODE2 =  27     IGSP0 = 153
+    ILAG =   2     CODE1 =  90     CODE2 =  12     IGSP0 = 151
+    ILAG =   3     CODE1 =  54     CODE2 =  22     IGSP0 =  94
+
+246    10    50 11 22 8 8 1 6 5 3 2 
+    ILAG = 110     CODE1 =  69     CODE2 =   7     IGSP0 =  96
+    ILAG =  55     CODE1 =  99     CODE2 =   5     IGSP0 =  98
+    ILAG =  77     CODE1 = 119     CODE2 =  83     IGSP0 = 137
+    ILAG =  91     CODE1 =  14     CODE2 =  68     IGSP0 = 140
+
+247    10    54 15 22 8 11 1 4 6 3 1 
+    ILAG =   1     CODE1 =  41     CODE2 = 126     IGSP0 = 131
+    ILAG =   5     CODE1 = 111     CODE2 =  74     IGSP0 = 194
+    ILAG =  55     CODE1 = 104     CODE2 =  49     IGSP0 = 228
+    ILAG =  41     CODE1 = 127     CODE2 =  91     IGSP0 = 151
+
+248    8    58 18 21 5 8 3 4 6 5 1 
+    ILAG =  87     CODE1 =  26     CODE2 =   1     IGSP0 = 152
+    ILAG =  61     CODE1 = 117     CODE2 =  67     IGSP0 = 149
+    ILAG = 110     CODE1 =  81     CODE2 =   6     IGSP0 = 224
+    ILAG = 120     CODE1 =  66     CODE2 = 121     IGSP0 = 192
+
+249    3    59 18 17 4 5 4 4 4 2 2 
+    ILAG = 118     CODE1 =  54     CODE2 = 105     IGSP0 = 154
+    ILAG =  97     CODE1 =  46     CODE2 =  32     IGSP0 = 150
+    ILAG =  76     CODE1 =  40     CODE2 = 100     IGSP0 = 148
+    ILAG =  44     CODE1 = 108     CODE2 = 120     IGSP0 = 170
+
+250    0    50 12 15 5 5 4 3 4 3 1 
+    ILAG =  10     CODE1 =  64     CODE2 =  94     IGSP0 =  44
+    ILAG =  10     CODE1 = 105     CODE2 =  14     IGSP0 =   0
+    ILAG =  57     CODE1 =  36     CODE2 =  42     IGSP0 =   0
+    ILAG =  92     CODE1 =  95     CODE2 =  80     IGSP0 =   0
+
+251    1    48 12 21 5 8 4 3 4 3 2 
+    ILAG = 122     CODE1 =  62     CODE2 =  61     IGSP0 =   0
+    ILAG =   0     CODE1 = 108     CODE2 = 126     IGSP0 =   0
+    ILAG =   0     CODE1 =  89     CODE2 =  97     IGSP0 =  22
+    ILAG =   1     CODE1 = 125     CODE2 =  82     IGSP0 =  40
+
+252    1    52 7 12 5 5 4 4 5 5 1 
+    ILAG =  37     CODE1 =  67     CODE2 = 125     IGSP0 =  38
+    ILAG =  36     CODE1 =  41     CODE2 = 114     IGSP0 =  96
+    ILAG =  82     CODE1 =  69     CODE2 =   7     IGSP0 =  41
+    ILAG =   4     CODE1 =  29     CODE2 =  62     IGSP0 =  28
+
+253    9    60 22 26 4 7 4 5 3 3 1 
+    ILAG =   1     CODE1 =  63     CODE2 =  66     IGSP0 = 168
+    ILAG =  71     CODE1 =  50     CODE2 =  29     IGSP0 = 144
+    ILAG =  23     CODE1 =  36     CODE2 =  89     IGSP0 =  93
+    ILAG =  30     CODE1 =  73     CODE2 =  84     IGSP0 = 156
+
+254    13    61 23 24 6 7 5 3 2 6 2 
+    ILAG =  33     CODE1 =  78     CODE2 =  21     IGSP0 = 150
+    ILAG = 108     CODE1 =  56     CODE2 =  14     IGSP0 = 228
+    ILAG =  31     CODE1 = 102     CODE2 = 108     IGSP0 =  95
+    ILAG =   2     CODE1 =  96     CODE2 =  10     IGSP0 = 152
+
+255    13    60 21 22 7 9 6 2 3 6 3 
+    ILAG =  17     CODE1 =  75     CODE2 =  35     IGSP0 = 131
+    ILAG =  60     CODE1 =  42     CODE2 = 118     IGSP0 =  94
+    ILAG =  93     CODE1 =  94     CODE2 =  10     IGSP0 = 134
+    ILAG =  86     CODE1 = 127     CODE2 =  51     IGSP0 = 141
+
+256    10    58 15 22 7 13 4 3 5 6 2 
+    ILAG = 125     CODE1 =  65     CODE2 =  10     IGSP0 = 133
+    ILAG =  14     CODE1 = 113     CODE2 =  84     IGSP0 = 144
+    ILAG =  37     CODE1 =  25     CODE2 =  90     IGSP0 = 136
+    ILAG =  25     CODE1 =  20     CODE2 =  34     IGSP0 = 230
+
+257    11    58 11 22 8 13 4 1 6 6 2 
+    ILAG =  34     CODE1 =  85     CODE2 =  13     IGSP0 = 228
+    ILAG =  11     CODE1 = 100     CODE2 = 105     IGSP0 = 136
+    ILAG =   1     CODE1 =  23     CODE2 =  25     IGSP0 =  92
+    ILAG =  87     CODE1 =  68     CODE2 =   9     IGSP0 = 154
+
+258    9    58 12 22 6 11 3 3 5 5 1 
+    ILAG =  77     CODE1 = 126     CODE2 =  54     IGSP0 = 138
+    ILAG =   8     CODE1 = 107     CODE2 =  53     IGSP0 = 149
+    ILAG =  12     CODE1 = 124     CODE2 =  99     IGSP0 = 150
+    ILAG =  85     CODE1 =  75     CODE2 =   9     IGSP0 = 147
+
+259    8    58 13 18 9 9 4 2 6 5 1 
+    ILAG =  78     CODE1 =  19     CODE2 =  50     IGSP0 =  81
+    ILAG = 117     CODE1 =  97     CODE2 =   1     IGSP0 = 165
+    ILAG =  28     CODE1 =  73     CODE2 =  20     IGSP0 =  93
+    ILAG =  30     CODE1 =  58     CODE2 =  74     IGSP0 = 157
+
+260    5    43 13 19 10 7 4 2 4 3 2 
+    ILAG = 109     CODE1 =  53     CODE2 =  62     IGSP0 = 157
+    ILAG =  30     CODE1 =  81     CODE2 =  87     IGSP0 = 131
+    ILAG =  43     CODE1 =  43     CODE2 =  90     IGSP0 = 227
+    ILAG =  13     CODE1 = 106     CODE2 =  91     IGSP0 =  82
+
+261    2    52 14 18 6 6 3 3 4 3 2 
+    ILAG =  30     CODE1 =  36     CODE2 =  73     IGSP0 =  92
+    ILAG =  34     CODE1 =  26     CODE2 =  74     IGSP0 =  77
+    ILAG =  43     CODE1 =  15     CODE2 = 114     IGSP0 = 229
+    ILAG = 112     CODE1 =  97     CODE2 =  31     IGSP0 =  85
+
+262    1    49 11 17 5 6 3 3 5 3 3 
+    ILAG =  23     CODE1 =  21     CODE2 =  98     IGSP0 =  67
+    ILAG =  85     CODE1 =  98     CODE2 = 110     IGSP0 =  73
+    ILAG =  11     CODE1 =  28     CODE2 =  14     IGSP0 = 152
+    ILAG =  82     CODE1 =  91     CODE2 =  30     IGSP0 =  88
+
+263    4    54 15 15 6 9 5 3 4 4 1 
+    ILAG =  90     CODE1 =  66     CODE2 = 117     IGSP0 =  77
+    ILAG =  82     CODE1 = 109     CODE2 =  91     IGSP0 =  67
+    ILAG =  64     CODE1 =  56     CODE2 =  66     IGSP0 =  44
+    ILAG =  59     CODE1 =  31     CODE2 =  51     IGSP0 =  39
+
+264    1    51 13 21 6 7 4 4 5 4 2 
+    ILAG =  21     CODE1 =  81     CODE2 = 109     IGSP0 = 230
+    ILAG = 121     CODE1 = 111     CODE2 =  58     IGSP0 = 137
+    ILAG =   8     CODE1 =  59     CODE2 =  96     IGSP0 = 146
+    ILAG =  25     CODE1 =  52     CODE2 =  66     IGSP0 = 144
+
+265    1    48 11 17 4 5 4 3 3 4 2 
+    ILAG = 108     CODE1 = 126     CODE2 =  36     IGSP0 = 150
+    ILAG =  21     CODE1 =  87     CODE2 =  91     IGSP0 = 138
+    ILAG =  53     CODE1 = 107     CODE2 =   7     IGSP0 =  76
+    ILAG = 109     CODE1 =  44     CODE2 =  78     IGSP0 =  39
+
+266    1    49 12 16 7 6 4 3 2 5 3 
+    ILAG =  83     CODE1 = 110     CODE2 = 122     IGSP0 =  53
+    ILAG = 107     CODE1 =  76     CODE2 = 107     IGSP0 = 194
+    ILAG = 101     CODE1 =  86     CODE2 =  91     IGSP0 = 138
+    ILAG =  65     CODE1 =  34     CODE2 = 113     IGSP0 =  96
+
+267    0    43 14 20 4 5 1 4 5 4 1 
+    ILAG =  29     CODE1 =  36     CODE2 =  12     IGSP0 =  45
+    ILAG =  81     CODE1 =  36     CODE2 =  40     IGSP0 =   0
+    ILAG =  24     CODE1 =  67     CODE2 =  23     IGSP0 =   0
+    ILAG =  93     CODE1 =  60     CODE2 = 124     IGSP0 =   0
+
+268    0    49 13 19 5 5 3 5 5 3 2 
+    ILAG = 126     CODE1 =  76     CODE2 =  49     IGSP0 =   0
+    ILAG =   0     CODE1 = 119     CODE2 =  46     IGSP0 =   0
+    ILAG =   0     CODE1 =  91     CODE2 =  19     IGSP0 =   0
+    ILAG =   0     CODE1 =  78     CODE2 =  67     IGSP0 =   0
+
+269    0    51 13 17 7 5 3 3 5 4 2 
+    ILAG =   0     CODE1 =  30     CODE2 =  47     IGSP0 =   0
+    ILAG =   0     CODE1 =  63     CODE2 =  53     IGSP0 =   0
+    ILAG =   0     CODE1 =  90     CODE2 =   6     IGSP0 =   0
+    ILAG =   0     CODE1 =  91     CODE2 =  90     IGSP0 =   0
+
+270    0    50 11 17 6 5 4 3 4 4 1 
+    ILAG =   0     CODE1 =  37     CODE2 = 118     IGSP0 =   0
+    ILAG =   0     CODE1 =  99     CODE2 =  83     IGSP0 =   0
+    ILAG =   0     CODE1 =  49     CODE2 =  18     IGSP0 =   0
+    ILAG =   0     CODE1 = 104     CODE2 =  72     IGSP0 =   0
+
+271    0    48 9 14 5 4 3 4 4 4 2 
+    ILAG =   0     CODE1 =  83     CODE2 =  87     IGSP0 =   0
+    ILAG =   0     CODE1 =  18     CODE2 =  25     IGSP0 =   0
+    ILAG =   0     CODE1 =  87     CODE2 =  85     IGSP0 =   0
+    ILAG =   0     CODE1 =  11     CODE2 =  74     IGSP0 =   0
+
+272    0    45 12 10 4 9 2 2 4 4 2 
+    ILAG =   0     CODE1 =  30     CODE2 =  23     IGSP0 =   0
+    ILAG =   0     CODE1 =  90     CODE2 = 109     IGSP0 =   0
+    ILAG =   0     CODE1 =  12     CODE2 =  50     IGSP0 =   0
+    ILAG =   0     CODE1 =  93     CODE2 =  79     IGSP0 =   0
+
+273    0    37 5 11 4 4 3 5 6 5 1 
+    ILAG =   0     CODE1 =  91     CODE2 =  65     IGSP0 =   0
+    ILAG =   0     CODE1 = 126     CODE2 =  20     IGSP0 =   0
+    ILAG =   0     CODE1 =  91     CODE2 =  31     IGSP0 =   0
+    ILAG =   0     CODE1 =  26     CODE2 = 114     IGSP0 =   0
+
+274    5    3 17 26 7 7 4 5 6 4 1 
+    ILAG =   0     CODE1 =  58     CODE2 =  80     IGSP0 =   0
+    ILAG =   0     CODE1 =  10     CODE2 =   9     IGSP0 =   0
+    ILAG =   0     CODE1 = 123     CODE2 = 118     IGSP0 = 151
+    ILAG =  26     CODE1 =  61     CODE2 =  75     IGSP0 = 142
+
+275    9    14 7 20 7 8 6 5 5 3 2 
+    ILAG =  34     CODE1 = 121     CODE2 =  75     IGSP0 =  43
+    ILAG = 103     CODE1 =  42     CODE2 =  20     IGSP0 =   6
+    ILAG =  92     CODE1 =  81     CODE2 = 118     IGSP0 =   7
+    ILAG =  65     CODE1 =  68     CODE2 = 122     IGSP0 = 136
+
+276    21    16 26 20 1 12 7 2 4 5 1 
+    ILAG =  72     CODE1 = 104     CODE2 = 115     IGSP0 = 141
+    ILAG =  15     CODE1 =  59     CODE2 =  93     IGSP0 = 102
+    ILAG =  15     CODE1 =  50     CODE2 =  80     IGSP0 =  26
+    ILAG = 123     CODE1 =  28     CODE2 =  36     IGSP0 = 157
+
+277    25    24 23 27 1 9 7 4 4 5 1 
+    ILAG =  16     CODE1 =  74     CODE2 =  76     IGSP0 = 168
+    ILAG =  52     CODE1 =  37     CODE2 =   0     IGSP0 = 149
+    ILAG =  50     CODE1 =  41     CODE2 =  78     IGSP0 = 199
+    ILAG =  50     CODE1 =  87     CODE2 = 113     IGSP0 =  53
+
+278    26    32 16 30 5 3 6 6 5 4 2 
+    ILAG =  49     CODE1 =  98     CODE2 =   7     IGSP0 = 243
+    ILAG =  45     CODE1 =  59     CODE2 =  18     IGSP0 =  25
+    ILAG =  46     CODE1 =  92     CODE2 =  79     IGSP0 = 209
+    ILAG =  45     CODE1 =  77     CODE2 =  17     IGSP0 = 208
+
+279    26    33 16 30 4 2 6 6 5 4 3 
+    ILAG = 109     CODE1 = 113     CODE2 = 105     IGSP0 =  26
+    ILAG =  44     CODE1 =  66     CODE2 =  45     IGSP0 = 187
+    ILAG =  43     CODE1 =  73     CODE2 =  29     IGSP0 = 210
+    ILAG = 105     CODE1 =  36     CODE2 =   6     IGSP0 =  55
+
+280    25    31 17 28 3 5 6 6 5 4 1 
+    ILAG =  43     CODE1 =  60     CODE2 =  27     IGSP0 = 211
+    ILAG = 104     CODE1 = 102     CODE2 =  76     IGSP0 = 206
+    ILAG = 104     CODE1 =  97     CODE2 =  30     IGSP0 =  61
+    ILAG =  42     CODE1 =  50     CODE2 =  95     IGSP0 = 218
+
+281    22    26 20 21 1 10 7 5 6 2 1 
+    ILAG =  42     CODE1 =  19     CODE2 =  66     IGSP0 = 171
+    ILAG =  43     CODE1 = 120     CODE2 =  29     IGSP0 = 180
+    ILAG =  43     CODE1 =  79     CODE2 =  73     IGSP0 = 235
+    ILAG =  42     CODE1 =  50     CODE2 =  48     IGSP0 =  84
+
+282    13    6 19 17 3 10 6 5 5 3 1 
+    ILAG =  51     CODE1 =  13     CODE2 =  19     IGSP0 =  54
+    ILAG = 119     CODE1 =  31     CODE2 =  79     IGSP0 =  60
+    ILAG =  89     CODE1 =  12     CODE2 =   8     IGSP0 = 232
+    ILAG = 118     CODE1 =  75     CODE2 =  58     IGSP0 = 169
+
+283    13    20 11 9 5 11 6 5 5 3 2 
+    ILAG =  52     CODE1 = 113     CODE2 =  34     IGSP0 = 128
+    ILAG =  54     CODE1 = 118     CODE2 =  58     IGSP0 = 160
+    ILAG =  53     CODE1 =  46     CODE2 = 122     IGSP0 = 100
+    ILAG =  55     CODE1 =  42     CODE2 =  76     IGSP0 =  98
+
+284    19    20 8 17 8 13 6 6 4 1 2 
+    ILAG = 125     CODE1 =  59     CODE2 = 102     IGSP0 = 141
+    ILAG =  52     CODE1 =  33     CODE2 =  33     IGSP0 =  77
+    ILAG =  13     CODE1 =  36     CODE2 =  81     IGSP0 = 165
+    ILAG = 109     CODE1 =  72     CODE2 =  95     IGSP0 =  52
+
+285    20    29 6 7 10 13 6 6 3 2 1 
+    ILAG =  52     CODE1 =  36     CODE2 =   1     IGSP0 = 248
+    ILAG =  91     CODE1 = 118     CODE2 =  36     IGSP0 =  44
+    ILAG =  54     CODE1 =  23     CODE2 =  66     IGSP0 = 200
+    ILAG =  57     CODE1 =  90     CODE2 = 101     IGSP0 =  20
+
+286    20    37 4 4 8 14 7 6 3 2 1 
+    ILAG =  57     CODE1 =  58     CODE2 =  74     IGSP0 = 201
+    ILAG =  61     CODE1 =  33     CODE2 =  53     IGSP0 =  21
+    ILAG =  61     CODE1 =  40     CODE2 =  98     IGSP0 = 195
+    ILAG =  63     CODE1 =  10     CODE2 =  75     IGSP0 =  20
+
+287    18    38 3 5 7 14 7 5 3 2 1 
+    ILAG =  64     CODE1 =  29     CODE2 = 126     IGSP0 = 200
+    ILAG = 100     CODE1 =  58     CODE2 = 113     IGSP0 =  21
+    ILAG =  66     CODE1 =  43     CODE2 =  55     IGSP0 = 238
+    ILAG =  66     CODE1 =  18     CODE2 =  28     IGSP0 =  55
+
+288    12    7 9 21 13 12 3 0 3 3 2 
+    ILAG =  68     CODE1 =  98     CODE2 =  89     IGSP0 = 242
+    ILAG =  65     CODE1 =  61     CODE2 =  40     IGSP0 = 141
+    ILAG =  72     CODE1 =   6     CODE2 =  42     IGSP0 =  93
+    ILAG = 124     CODE1 =  89     CODE2 =  19     IGSP0 = 174
+
+289    11    1 19 27 13 5 1 1 4 5 3 
+    ILAG =  25     CODE1 =  74     CODE2 =   7     IGSP0 =  81
+    ILAG =  72     CODE1 =  75     CODE2 =  54     IGSP0 = 153
+    ILAG =  74     CODE1 =  59     CODE2 =  36     IGSP0 =  74
+    ILAG =  74     CODE1 =  17     CODE2 =  35     IGSP0 = 241
+
+290    11    1 22 27 12 3 1 2 3 6 3 
+    ILAG =  73     CODE1 = 108     CODE2 =  28     IGSP0 =  49
+    ILAG =  72     CODE1 =  80     CODE2 =  16     IGSP0 = 172
+    ILAG =  71     CODE1 =  68     CODE2 =  59     IGSP0 =  57
+    ILAG =  71     CODE1 =  87     CODE2 =  63     IGSP0 =  57
+
+291    11    34 4 9 8 9 7 3 4 4 2 
+    ILAG =  28     CODE1 =   3     CODE2 =  35     IGSP0 = 136
+    ILAG =  25     CODE1 =   6     CODE2 =  49     IGSP0 =  54
+    ILAG =  24     CODE1 =  56     CODE2 =  32     IGSP0 =  15
+    ILAG = 120     CODE1 =  98     CODE2 =  82     IGSP0 = 148
+
+292    20    24 5 15 13 12 7 5 3 1 2 
+    ILAG =  61     CODE1 =  21     CODE2 =   8     IGSP0 = 150
+    ILAG =  66     CODE1 =  76     CODE2 =  22     IGSP0 = 147
+    ILAG = 101     CODE1 = 126     CODE2 = 120     IGSP0 =  32
+    ILAG =  46     CODE1 =  55     CODE2 =  18     IGSP0 =  94
+
+293    20    26 6 15 12 12 7 5 2 1 3 
+    ILAG =  49     CODE1 =  66     CODE2 =  15     IGSP0 = 100
+    ILAG =  48     CODE1 =  38     CODE2 =  48     IGSP0 = 193
+    ILAG =  48     CODE1 =  27     CODE2 =  25     IGSP0 = 234
+    ILAG = 118     CODE1 = 126     CODE2 =  24     IGSP0 =  43
+
+294    21    15 13 23 12 11 6 3 1 1 3 
+    ILAG =  49     CODE1 =  54     CODE2 =   8     IGSP0 = 243
+    ILAG =  49     CODE1 = 114     CODE2 =  29     IGSP0 =  53
+    ILAG =  50     CODE1 = 101     CODE2 =  64     IGSP0 = 206
+    ILAG =  51     CODE1 =  68     CODE2 = 125     IGSP0 = 174
+
+295    22    16 13 17 11 11 7 3 2 2 2 
+    ILAG =  51     CODE1 =  28     CODE2 =  58     IGSP0 = 109
+    ILAG =  52     CODE1 =   4     CODE2 =  79     IGSP0 = 205
+    ILAG =  53     CODE1 = 104     CODE2 = 127     IGSP0 =  20
+    ILAG =  55     CODE1 = 119     CODE2 = 124     IGSP0 = 122
+
+296    15    11 11 21 13 7 7 3 1 2 1 
+    ILAG =  60     CODE1 =   6     CODE2 =  48     IGSP0 =  26
+    ILAG =  89     CODE1 = 122     CODE2 = 107     IGSP0 =  80
+    ILAG =  64     CODE1 =  30     CODE2 = 124     IGSP0 = 161
+    ILAG =  94     CODE1 = 123     CODE2 = 123     IGSP0 = 151
+
+297    19    20 10 15 11 10 7 5 2 1 1 
+    ILAG =  65     CODE1 =  17     CODE2 = 109     IGSP0 = 101
+    ILAG =  63     CODE1 = 111     CODE2 = 114     IGSP0 = 157
+    ILAG =  68     CODE1 =  42     CODE2 = 109     IGSP0 =  13
+    ILAG =  64     CODE1 =  18     CODE2 =  35     IGSP0 = 243
+
+298    20    27 11 8 10 12 7 7 2 2 1 
+    ILAG =  64     CODE1 =  17     CODE2 =  40     IGSP0 =  30
+    ILAG =  66     CODE1 =  21     CODE2 =  29     IGSP0 = 240
+    ILAG =  68     CODE1 =  47     CODE2 = 114     IGSP0 = 101
+    ILAG =  68     CODE1 = 103     CODE2 =  14     IGSP0 = 101
+
+299    16    14 12 15 12 12 5 5 1 1 2 
+    ILAG =  69     CODE1 =  40     CODE2 =  34     IGSP0 = 204
+    ILAG = 115     CODE1 =  40     CODE2 =  53     IGSP0 =  32
+    ILAG =  72     CODE1 =  27     CODE2 = 110     IGSP0 = 254
+    ILAG =   5     CODE1 =  35     CODE2 = 119     IGSP0 =  31
+
+300    10    5 16 16 12 7 6 3 1 3 1 
+    ILAG =  76     CODE1 =  88     CODE2 =  68     IGSP0 =  55
+    ILAG =  80     CODE1 = 122     CODE2 =  57     IGSP0 =  88
+    ILAG =  16     CODE1 =  74     CODE2 =  95     IGSP0 =  17
+    ILAG =  84     CODE1 =  10     CODE2 =  16     IGSP0 = 139
+
+301    10    12 13 11 10 9 6 6 1 2 2 
+    ILAG =  88     CODE1 =   7     CODE2 =  29     IGSP0 = 100
+    ILAG =  96     CODE1 =  16     CODE2 =  33     IGSP0 = 103
+    ILAG =  92     CODE1 = 100     CODE2 =   9     IGSP0 = 178
+    ILAG =  91     CODE1 =  19     CODE2 =   8     IGSP0 =  46
+
+302    14    11 14 18 10 12 5 5 3 1 1 
+    ILAG =  91     CODE1 =  23     CODE2 = 110     IGSP0 = 216
+    ILAG =  90     CODE1 = 122     CODE2 =  34     IGSP0 =  77
+    ILAG =  69     CODE1 =  79     CODE2 =  10     IGSP0 =  40
+    ILAG =  75     CODE1 =  97     CODE2 =  64     IGSP0 = 153
+
+303    18    9 20 22 9 12 5 6 2 1 1 
+    ILAG =  37     CODE1 =  83     CODE2 =  21     IGSP0 =  49
+    ILAG =  69     CODE1 =  26     CODE2 =  24     IGSP0 = 157
+    ILAG = 124     CODE1 =  27     CODE2 =  55     IGSP0 =  30
+    ILAG =  68     CODE1 =  49     CODE2 =   1     IGSP0 = 248
+
+304    19    12 16 21 7 13 6 5 3 2 1 
+    ILAG =  69     CODE1 =  60     CODE2 =  20     IGSP0 =  56
+    ILAG =  70     CODE1 =  74     CODE2 =  25     IGSP0 = 248
+    ILAG =  69     CODE1 = 123     CODE2 =  74     IGSP0 =  31
+    ILAG =  72     CODE1 =  71     CODE2 =  47     IGSP0 = 161
+
+305    16    12 13 21 7 13 6 4 2 1 2 
+    ILAG =  71     CODE1 =  78     CODE2 =  95     IGSP0 = 217
+    ILAG =  51     CODE1 =  18     CODE2 =  37     IGSP0 =  27
+    ILAG =  74     CODE1 =  19     CODE2 = 108     IGSP0 = 254
+    ILAG =  35     CODE1 =  33     CODE2 =  87     IGSP0 =  41
+
+306    11    1 28 22 7 8 2 1 1 4 3 
+    ILAG =  82     CODE1 =  68     CODE2 = 123     IGSP0 =  41
+    ILAG =  87     CODE1 =  97     CODE2 =  34     IGSP0 = 139
+    ILAG = 127     CODE1 =  91     CODE2 =   7     IGSP0 = 243
+    ILAG = 123     CODE1 =  74     CODE2 = 127     IGSP0 = 151
+
+307    11    1 28 22 7 8 2 1 2 5 3 
+    ILAG =  80     CODE1 =  38     CODE2 =  36     IGSP0 =  72
+    ILAG =  81     CODE1 =  81     CODE2 =  82     IGSP0 = 204
+    ILAG =  81     CODE1 =  69     CODE2 =  27     IGSP0 = 107
+    ILAG =  35     CODE1 = 105     CODE2 =  28     IGSP0 =  23
+
+308    10    1 29 25 7 4 1 2 2 4 3 
+    ILAG =  83     CODE1 =  45     CODE2 =  19     IGSP0 = 219
+    ILAG =  82     CODE1 =  90     CODE2 =  60     IGSP0 =  63
+    ILAG =  82     CODE1 =  29     CODE2 =   8     IGSP0 = 219
+    ILAG =  82     CODE1 =  91     CODE2 =  49     IGSP0 = 202
+
+309    10    1 28 25 9 5 2 2 2 3 3 
+    ILAG =  83     CODE1 =  77     CODE2 =   6     IGSP0 =  56
+    ILAG =  83     CODE1 =   7     CODE2 =  65     IGSP0 = 220
+    ILAG =  84     CODE1 = 126     CODE2 =  45     IGSP0 = 122
+    ILAG =  85     CODE1 =  46     CODE2 = 102     IGSP0 = 107
+
+310    8    1 22 27 11 8 4 3 1 1 2 
+    ILAG =  88     CODE1 =  36     CODE2 =  42     IGSP0 = 185
+    ILAG =  87     CODE1 =   3     CODE2 =  39     IGSP0 =  72
+    ILAG =  89     CODE1 =  87     CODE2 = 100     IGSP0 = 199
+    ILAG =  90     CODE1 = 104     CODE2 =  99     IGSP0 = 130
+
+311    14    25 5 12 9 11 7 5 3 1 3 
+    ILAG =  94     CODE1 =  69     CODE2 =  27     IGSP0 = 146
+    ILAG =  16     CODE1 =  33     CODE2 =  21     IGSP0 =  24
+    ILAG =  46     CODE1 =  83     CODE2 =  63     IGSP0 = 140
+    ILAG =  60     CODE1 =  84     CODE2 =   9     IGSP0 = 169
+
+312    18    12 10 21 12 14 6 3 0 1 2 
+    ILAG =  61     CODE1 = 117     CODE2 =   2     IGSP0 =  77
+    ILAG =  68     CODE1 =  30     CODE2 =  13     IGSP0 = 165
+    ILAG =  63     CODE1 = 115     CODE2 =  13     IGSP0 = 176
+    ILAG = 121     CODE1 =  70     CODE2 =  78     IGSP0 =  41
+
+313    19    16 7 18 14 14 6 4 1 1 2 
+    ILAG =  69     CODE1 =  37     CODE2 =  63     IGSP0 = 158
+    ILAG =  69     CODE1 = 103     CODE2 =  52     IGSP0 =  65
+    ILAG =  71     CODE1 =  50     CODE2 = 100     IGSP0 = 178
+    ILAG = 107     CODE1 =  28     CODE2 =  68     IGSP0 =  66
+
+314    18    19 5 19 12 14 7 2 1 1 2 
+    ILAG =  72     CODE1 =   4     CODE2 =  70     IGSP0 = 201
+    ILAG =  72     CODE1 =  42     CODE2 = 122     IGSP0 =  49
+    ILAG =  74     CODE1 =  99     CODE2 =  42     IGSP0 = 116
+    ILAG =  74     CODE1 =  94     CODE2 =  83     IGSP0 = 195
+
+315    18    21 5 19 12 14 7 4 1 0 2 
+    ILAG =  36     CODE1 =  95     CODE2 =  61     IGSP0 =  25
+    ILAG =  75     CODE1 =  54     CODE2 =  34     IGSP0 = 242
+    ILAG =  74     CODE1 =  89     CODE2 =  21     IGSP0 =  30
+    ILAG =  77     CODE1 =  76     CODE2 = 118     IGSP0 = 201
+
+316    17    29 3 16 12 14 7 4 1 0 1 
+    ILAG =  74     CODE1 = 122     CODE2 =  47     IGSP0 = 117
+    ILAG =   2     CODE1 =  99     CODE2 =   2     IGSP0 =  40
+    ILAG =  79     CODE1 =  33     CODE2 =  11     IGSP0 = 248
+    ILAG =  77     CODE1 = 127     CODE2 =   4     IGSP0 = 102
+
+317    16    23 4 19 12 13 7 4 2 1 1 
+    ILAG =  82     CODE1 =  29     CODE2 = 118     IGSP0 = 159
+    ILAG =  80     CODE1 =  46     CODE2 =  58     IGSP0 = 117
+    ILAG =   5     CODE1 =  97     CODE2 =  55     IGSP0 =  45
+    ILAG =  85     CODE1 = 103     CODE2 =  68     IGSP0 = 248
+
+318    16    22 5 16 12 13 7 4 2 1 1 
+    ILAG =  88     CODE1 = 106     CODE2 =  12     IGSP0 =  60
+    ILAG =  86     CODE1 =  79     CODE2 =  24     IGSP0 = 115
+    ILAG =  86     CODE1 =  49     CODE2 =  32     IGSP0 = 232
+    ILAG =  87     CODE1 =  29     CODE2 = 117     IGSP0 =  45
+
+319    15    21 5 17 13 13 7 4 1 1 1 
+    ILAG =  90     CODE1 = 104     CODE2 = 124     IGSP0 = 217
+    ILAG =  90     CODE1 = 110     CODE2 = 109     IGSP0 =  53
+    ILAG =  58     CODE1 =  69     CODE2 =   1     IGSP0 =  46
+    ILAG =  94     CODE1 =  70     CODE2 =  65     IGSP0 = 250
+
+320    13    26 3 17 10 13 6 5 4 2 1 
+    ILAG =  94     CODE1 =  30     CODE2 =  73     IGSP0 =  25
+    ILAG =  95     CODE1 = 121     CODE2 =  76     IGSP0 =  25
+    ILAG = 101     CODE1 = 110     CODE2 = 127     IGSP0 = 249
+    ILAG =  17     CODE1 = 119     CODE2 =  61     IGSP0 =  67
+
+321    12    28 4 13 10 12 7 6 5 1 1 
+    ILAG = 103     CODE1 = 103     CODE2 =  27     IGSP0 =  28
+    ILAG = 107     CODE1 =  17     CODE2 = 103     IGSP0 = 242
+    ILAG = 108     CODE1 =  62     CODE2 = 120     IGSP0 = 160
+    ILAG = 106     CODE1 =  29     CODE2 =  18     IGSP0 =  67
+
+322    7    7 13 24 11 11 5 3 1 1 3 
+    ILAG = 123     CODE1 =  83     CODE2 =  72     IGSP0 =  98
+    ILAG = 126     CODE1 =  74     CODE2 =  38     IGSP0 = 147
+    ILAG = 122     CODE1 =   1     CODE2 = 114     IGSP0 = 144
+    ILAG =  36     CODE1 =  88     CODE2 = 102     IGSP0 =  22
+
+323    7    44 7 5 6 6 5 6 4 1 2 
+    ILAG =  25     CODE1 = 114     CODE2 =  27     IGSP0 =  20
+    ILAG =  27     CODE1 =  96     CODE2 =  51     IGSP0 =  32
+    ILAG =  33     CODE1 =  95     CODE2 =  64     IGSP0 =  10
+    ILAG =  65     CODE1 =  68     CODE2 =  39     IGSP0 =  14
+
+324    8    37 6 6 7 8 6 6 5 2 2 
+    ILAG = 103     CODE1 = 107     CODE2 =  68     IGSP0 = 158
+    ILAG =  55     CODE1 =  93     CODE2 =  55     IGSP0 = 193
+    ILAG =  40     CODE1 = 102     CODE2 =  88     IGSP0 =  93
+    ILAG = 117     CODE1 =  24     CODE2 =  80     IGSP0 = 156
+
+325    7    46 15 11 3 5 6 5 4 2 2 
+    ILAG =  85     CODE1 =  11     CODE2 =  64     IGSP0 = 165
+    ILAG =  37     CODE1 =  62     CODE2 = 110     IGSP0 =  96
+    ILAG =  73     CODE1 =  33     CODE2 =  17     IGSP0 = 147
+    ILAG =   4     CODE1 =  39     CODE2 =  76     IGSP0 = 164
+
+326    5    48 14 16 7 4 5 5 4 2 2 
+    ILAG =  75     CODE1 =  19     CODE2 =  64     IGSP0 = 136
+    ILAG =  86     CODE1 =   7     CODE2 = 102     IGSP0 = 138
+    ILAG = 115     CODE1 =  93     CODE2 =  15     IGSP0 = 138
+    ILAG = 120     CODE1 =  14     CODE2 =  17     IGSP0 = 153
+
+327    6    46 19 16 3 5 6 5 5 2 3 
+    ILAG =  71     CODE1 =  11     CODE2 =  22     IGSP0 = 134
+    ILAG =  13     CODE1 =   2     CODE2 =  22     IGSP0 = 147
+    ILAG =  10     CODE1 =  54     CODE2 = 111     IGSP0 = 149
+    ILAG =  90     CODE1 =  83     CODE2 =  29     IGSP0 = 144
+
+328    4    45 16 16 5 5 6 5 5 2 2 
+    ILAG =  53     CODE1 =  17     CODE2 =  67     IGSP0 = 164
+    ILAG =  71     CODE1 =  47     CODE2 = 105     IGSP0 = 194
+    ILAG = 126     CODE1 =  71     CODE2 = 113     IGSP0 = 146
+    ILAG =  79     CODE1 =  59     CODE2 =  63     IGSP0 = 152
+
+329    2    46 16 17 7 3 6 4 5 3 1 
+    ILAG =  81     CODE1 =   1     CODE2 =  82     IGSP0 = 130
+    ILAG =  92     CODE1 = 118     CODE2 =  77     IGSP0 = 135
+    ILAG =  24     CODE1 = 125     CODE2 =  98     IGSP0 = 138
+    ILAG = 114     CODE1 = 106     CODE2 =  46     IGSP0 = 150
+
+330    0    36 0 8 5 14 6 6 1 2 0 
+    ILAG =  71     CODE1 =  27     CODE2 =   1     IGSP0 = 151
+    ILAG = 111     CODE1 =  70     CODE2 = 125     IGSP0 =   0
+    ILAG =  52     CODE1 =  83     CODE2 =  19     IGSP0 =   0
+    ILAG =  64     CODE1 =  42     CODE2 = 116     IGSP0 =   0
+
+
+NUMBER OF FRAMES IN SNR COMPUTATION: 1318
+
+AVG WEIGHTED SEG SNR          -> 12.22486
+TOTAL WEIGHTED SNR            -> 13.76467
+AVG SEG SNR                   ->  8.94083
+TOTAL SNR                     -> 11.00931
