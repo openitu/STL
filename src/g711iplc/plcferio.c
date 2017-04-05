@@ -45,9 +45,9 @@ HISTORY:
   =============================================================================
 */
 
+#include <stdlib.h>
 #include "plcferio.h"
 #include "softbit.h"
-#include "error.h"
 
 /*
  * Open the file containing the packet loss concealment pattern.
@@ -59,18 +59,26 @@ void readplcmask_open (readplcmask * r, char *fname) {
   char fileformat;
   short s;
 
-  if ((r->fp = fopen (fname, "rb")) == NULL)
-    error ("Can't open PLC error pattern file: %s", fname);
+  if ((r->fp = fopen (fname, "rb")) == NULL) {
+    fprintf (stderr, "Can't open PLC error pattern file: %s", fname);
+    exit (EXIT_FAILURE);
+  }
   /* shouldn't need to check this by check_eid_format doesn't */
-  if (fread (&s, sizeof (short), 1, r->fp) != 1)
-    error ("Error pattern file %s is too short", fname);
+  if (fread (&s, sizeof (short), 1, r->fp) != 1) {
+    fprintf (stderr, "Error pattern file %s is too short", fname);
+    exit (EXIT_FAILURE);
+  }
   fseek (r->fp, 0L, SEEK_SET);
   fileformat = check_eid_format (r->fp, fname, &streamtype);
   if (fileformat == g192 || fileformat == byte) {
-    if (streamtype == BER)
-      error ("File %s contains BER instead of FER", fname);
-  } else if (fileformat != compact)
-    error ("File %s contains unknown error pattern format", fname);
+    if (streamtype == BER) {
+      fprintf (stderr, "File %s contains BER instead of FER", fname);
+      exit (EXIT_FAILURE);
+    }
+  } else if (fileformat != compact) {
+    fprintf (stderr, "File %s contains unknown error pattern format", fname);
+    exit (EXIT_FAILURE);
+  }
   if (fileformat == g192)
     r->readfunc = read_g192;
   else if (fileformat == byte)
@@ -91,11 +99,15 @@ int readplcmask_erased (readplcmask * r) {
   if ((*r->readfunc) (&s, 1L, r->fp) != 1L) {
     /* roll over at end of file */
     fseek (r->fp, 0L, SEEK_SET);
-    if ((*r->readfunc) (&s, 1L, r->fp) != 1L)
-      error ("Read on error pattern file failed");
+    if ((*r->readfunc) (&s, 1L, r->fp) != 1L) {
+      fprintf (stderr, "Read on error pattern file failed");
+      exit (EXIT_FAILURE);
+    }
   }
-  if (soft2hard (&s, &h, 1L, FER) != 0L)
-    error ("Unexpected input value in error pattern file");
+  if (soft2hard (&s, &h, 1L, FER) != 0L) {
+    fprintf (stderr, "Unexpected input value in error pattern file");
+    exit (EXIT_FAILURE);
+  }
   return (int) h;
 }
 

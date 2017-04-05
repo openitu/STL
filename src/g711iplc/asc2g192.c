@@ -35,7 +35,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "error.h"
 #include "softbit.h"
 
 char usage[] = "\
@@ -57,7 +56,7 @@ static FILE *ferasefp;
 static int frameerased (int *r);
 static char *fefileopen (char *name);
 
-int WINAPIV main (int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
   short s;
   char c;
   int dostats = 0;              /* if set print out erasure stats */
@@ -76,17 +75,25 @@ int WINAPIV main (int argc, char *argv[]) {
       g192byte = 1;
     else if (!strcmp ("-stats", arg))
       dostats = 1;
-    else
-      error (usage);
+    else {
+      fprintf (stderr, "%s", usage);
+      exit (EXIT_FAILURE);
+    }
     argc--;
     argv++;
   }
-  if (argc != 2)
-    error (usage);
-  if ((err = fefileopen (argv[0])) != 0)        /* frame erasure mask file */
-    error (err);
-  if ((fo = fopen (argv[1], "wb")) == NULL)     /* output file */
-    error ("Can't open output file: %s", argv[2]);
+  if (argc != 2) {
+    fprintf (stderr, "%s", usage);
+    exit (EXIT_FAILURE);
+  }
+  if ((err = fefileopen (argv[0])) != 0) {      /* frame erasure mask file */
+    fprintf (stderr, "%s", err);
+    exit (EXIT_FAILURE);
+  }
+  if ((fo = fopen (argv[1], "wb")) == NULL) {   /* output file */
+    fprintf (stderr, "Can't open output file: %s", argv[2]);
+    exit (EXIT_FAILURE);
+  }
   nframes = nerased = 0;
   while (frameerased (&erased)) {
     nframes++;
@@ -154,10 +161,12 @@ static int frameerased (int *r) {
       *r = 1;
       return 1;
     default:
-      error ("Non 0/1 in Frame Erasure file");
+      fprintf (stderr, "Non 0/1 in Frame Erasure file");
+      exit (EXIT_FAILURE);
       break;                    /* never reached */
     }
   }
-  error ("Frame Erasure file contains illegal data");
+  fprintf (stderr, "Frame Erasure file contains illegal data");
+  exit (EXIT_FAILURE);
   return 0;                     /* never reached */
 }

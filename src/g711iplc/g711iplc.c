@@ -30,7 +30,7 @@
 
   Prototypes:
   ~~~~~~~~~~~
-  Needs error.h, plcferio.h and lowcfe.h.
+  Needs plcferio.h and lowcfe.h.
 
   Authors:	AT&T Corp.
   ~~~~~~~~
@@ -45,7 +45,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "error.h"
 #include "plcferio.h"
 #include "lowcfe.h"
 
@@ -66,7 +65,7 @@ File Formats:\n\
 	speechout	Headerless binary 8kHz 16-bit PCM file\
 ";
 
-int WINAPIV main (int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
   int i;
   int dostats = 0;              /* if set print out erasure stats */
   int dofe = 1;                 /* if not set use silence insertion */
@@ -87,18 +86,26 @@ int WINAPIV main (int argc, char *argv[]) {
       dofe = 0;
     else if (!strcmp ("-stats", arg))
       dostats = 1;
-    else
-      error (usage);
+    else {
+      fprintf (stderr, "%s", usage);
+      exit (EXIT_FAILURE);
+    }
     argc--;
     argv++;
   }
-  if (argc != 3)
-    error (usage);
+  if (argc != 3) {
+    fprintf (stderr, "%s", usage);
+    exit (EXIT_FAILURE);
+  }
   readplcmask_open (&mask, argv[0]);    /* PLC pattern file */
-  if ((fi = fopen (argv[1], "rb")) == NULL)     /* input file */
-    error ("Can't open input file: %s", argv[1]);
-  if ((fo = fopen (argv[2], "wb")) == NULL)     /* output file */
-    error ("Can't open output file: %s", argv[2]);
+  if ((fi = fopen (argv[1], "rb")) == NULL) {   /* input file */
+    fprintf (stderr, "Can't open input file: %s", argv[1]);
+    exit (EXIT_FAILURE);
+  }
+  if ((fo = fopen (argv[2], "wb")) == NULL) {   /* output file */
+    fprintf (stderr, "Can't open output file: %s", argv[2]);
+    exit (EXIT_FAILURE);
+  }
   nframes = nerased = 0;
   g711plc_construct (&lc);
   while (fread (in, sizeof (short), FRAMESZ, fi) == FRAMESZ) {
