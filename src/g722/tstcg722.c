@@ -51,7 +51,6 @@
 /* Function prototypes */
 /***********************/
 #include "g722.h"
-#include "operg722.h"
 #include "funcg722.h"
 
 
