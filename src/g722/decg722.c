@@ -160,7 +160,7 @@ short g192_to_byte (short nb_bits, short *code_byte, short *inp_bits, short N_sa
 
 void set_index (short value, short *code, short n_shorts) {
   long i;
-  FOR (i = 0;
+  for (i = 0;
        i < n_shorts;
        i++) {
     code[i] = value;
@@ -172,7 +172,7 @@ void set_index (short value, short *code, short n_shorts) {
 
 void copy_index (short *from, short *to, short n_shorts) {
   long i;
-  FOR (i = 0;
+  for (i = 0;
        i < n_shorts;
        i++) {
     to[i] = from[i];
@@ -483,7 +483,7 @@ int main (argc, argv)
             break;
           case 2:              /* frame buffer repeat */
           case 3:              /* fall through */
-            IF (fer_cnt <= PLC_MEM_SIZE) {
+            if (fer_cnt <= PLC_MEM_SIZE) {
               copy_index (mem_code[fer_cnt - 1], code, (short) (fr_size[mem_mode[fer_cnt - 1]] / 8));
               local_mode = mem_mode[fer_cnt - 1];
             } else {
@@ -500,11 +500,9 @@ int main (argc, argv)
           /* index memory buffer mem_code is frozen during erasures */
           /* but for longer bursts all memory indexes are set to zero */
 
-          IF (L_sub (fer_cnt, PLC_MEM_SIZE) > 0) {
-            /* fprintf(stderr,"PLC: long burst, setting [fer_cnt==%ld] setting code_mem[*] to ZEROINDEX\n",fer_cnt); */
-            FOR (i = 0;
-                 i < PLC_MEM_SIZE;
-                 i++) {
+          if (L_sub (fer_cnt, PLC_MEM_SIZE) > 0) {
+            /* fprintf (stderr,"PLC: long burst, setting [fer_cnt==%ld] setting code_mem[*] to ZEROINDEX\n",fer_cnt); */
+            for (i = 0; i < PLC_MEM_SIZE; i++) {
               set_index (ZERO_INDEX, mem_code[i], (short) (fr_size[1] / 8));
               mem_mode[i] = 1;
 #ifdef WMOPS
@@ -520,7 +518,7 @@ int main (argc, argv)
 #endif
           good_cnt++;
           fer_cnt = 0;
-          FOR (i = (PLC_MEM_SIZE - 1);
+          for (i = (PLC_MEM_SIZE - 1);
                i >= 1;
                i--) {
             set_index (ZERO_INDEX, mem_code[i], (short) (fr_size[1] / 8));      /* reset all bytes */
@@ -564,7 +562,7 @@ int main (argc, argv)
 #endif
           break;
         case 3:
-          IF (fer_cnt <= (PLC_MEM_SIZE)) {
+          if (fer_cnt <= (PLC_MEM_SIZE)) {
             mem_zero = 10;      /* nb of silence samples in initial part of next good frame */
 #ifdef WMOPS
             move16 ();
