@@ -9,7 +9,7 @@ Usage is:
 
  pshar [-u shar] [[-a] [-p prefix] [-d delim] [-bcv] 
        [-f shar] files [> shar]]
- where:  
+ where:
     -a     all the options (v,c,b,-pXX)
     -b     extract absolute paths into current directory
     -c     check filesizes on extraction

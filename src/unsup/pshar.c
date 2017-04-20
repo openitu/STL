@@ -91,46 +91,12 @@
 */
 #define PSHAR 100
 
-#if defined(__MSDOS__) && !defined(MSDOS)
-#define MSDOS
-#endif
-
-#if defined (CPM)
-#include "c:stdio.h"
-#include "c:fcntl.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
-#if defined (MSDOS)
 #include <string.h>
-#else
-#include <strings.h>
-#endif
-#endif
 
-#if defined (CPM)
-#define void int
-#define fputc putc
-extern char *getenv (), *malloc (), *index (), *rindex ();
-int cpmversion;
-
-#endif
-
-#if defined (AMIGA)
-#include <exec/types.h>
-extern char *getenv (), *scdir (), *malloc (), *index ();
-#endif
-
-#if defined (ULTRIX) || defined (sparc) || defined(MSDOS) || defined(__STDC__)
 #include <sys/types.h>
 #include <time.h>
-extern char *getenv (), *scdir (), *index ();
-#if defined(MSDOS)
-extern void *malloc ();
-#else
-extern char *malloc ();
-#endif
-#endif
 
 #ifdef unix
 #include <unistd.h>
@@ -153,15 +119,9 @@ int header ARGS ((char *ppchFiles[]));
 int archive ARGS ((char *input, char *output));
 void shar ARGS ((char *file));
 int getpat ARGS ((char *pattern));
-int getopt ARGS ((int nargc, char **nargv, char *ostr));
 int local_getarg ARGS ((int nargc, char **nargv));
 int dounshar ARGS ((char *ArcNam));
 void getshpar ARGS ((char *line, char *sea, char *par));
-
-#if defined (CPM) || defined(MSDOS)
-void strlower ARGS ((char *string));
-#endif
-
 
 /* Psedo-functions and special symbols */
 #define BADCH   ((int)'?')
@@ -225,17 +185,12 @@ char *index (char *s, char c) {
 }
 #endif
 
-int header (char *ppchFiles) {
+int header (char *ppchFiles[]) {
   extern char *ctime ();
   auto long clock;
   register char **ppchList;
   char *pchOrg;
   char *pchName;
-
-#ifndef MSDOS
-  extern char *getenv (char *);
-  void time (long *tloc);
-#endif
 
   pchOrg = (char *) getenv ("ORGANIZATION");
   pchName = (char *) getenv ("NAME");

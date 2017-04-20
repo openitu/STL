@@ -1,0 +1,79 @@
+
+
+%XENCODE-INFO: This is Part 01/01 of printme.ps. Name it as "print_me.uue".
+
+ATTENTION!
+
+The original file printme.ps has been xencode'd (software
+tool xencode.c) and broken into 1 file(s).
+To decode the files back to the original, please:
+
+1. Extract each of the e-mails received with the names:
+	part 01/01	 -> print_me.uue
+
+2. Run the utility xdecode, as follows:
+   $ xdecode print_me.uue
+   and it will generate the file printme.ps.
+
+NOTE1: VMS and DOS users should explicitly use xdecode
+       option -b if the original file was a binary file
+       (eg, speech),and -t if it was a text file (eg a 
+       postscript file or a C code program). XDECODE
+       default is *binary* mode.
+
+NOTE2: no edition of the uuencoded files is needed.
+       XDECODE will get rid of all the garbage.
+
+Good luck! [simao@ctd.comsat.com]
+
+begin 644 printme.ps 
+M)2%04RU!9&]B92TR+C`*)254:71L93H@+W1M<"]X9FEG+69I9S`R-C0T.0HE
+M)4-R96%T;W(Z(&9I9S)D978*)25#<F5A=&EO;D1A=&4Z($UO;B!*86X@(#D@
+M,3$Z,S@Z,30@,3DY-0HE)49O<CH@<VEM86]`8G5G<R`H4VEM86\I"B4E0F]U
+M;F1I;F=";W@Z(#$R,R`Q.#8@-#@X(#8P-0HE)5!A9V5S.B`Q"B4E16YD0V]M
+M;65N=',*+R1&,G!S1&EC="`R,#`@9&EC="!D968@"B1&,G!S1&EC="!B96=I
+M;@HD1C)P<T1I8W0@+VUT<G@@;6%T<FEX('!U=`HO;"![;&EN971O?2!B:6YD
+M(&1E9@HO;2![;6]V971O?2!B:6YD(&1E9@HO<R![<W1R;VME?2!B:6YD(&1E
+M9@HO;B![;F5W<&%T:'T@8FEN9"!D968*+V=S('MG<V%V97T@8FEN9"!D968*
+M+V=R('MG<F5S=&]R97T@8FEN9"!D968*+V-L<"![8VQO<V5P871H?2!B:6YD
+M(&1E9@HO9W)A>6-O;"![9'5P(&1U<"!C=7)R96YT<F=B8V]L;W(@-"`M,B!R
+M;VQL(&UU;"`T("TR(')O;&P@;75L"C0@+3(@<F]L;"!M=6P@<V5T<F=B8V]L
+M;W)](&)I;F0@9&5F"B]C;VPM,2![?2!D968*+V-O;#`@>S`@,"`P('-E=')G
+M8F-O;&]R?2!B:6YD(&1E9@HO8V]L,2![,"`P(#$@<V5T<F=B8V]L;W)](&)I
+M;F0@9&5F"B]C;VPR('LP(#$@,"!S971R9V)C;VQO<GT@8FEN9"!D968*+V-O
+M;#,@>S`@,2`Q('-E=')G8F-O;&]R?2!B:6YD(&1E9@HO8V]L-"![,2`P(#`@
+M<V5T<F=B8V]L;W)](&)I;F0@9&5F"B]C;VPU('LQ(#`@,2!S971R9V)C;VQO
+M<GT@8FEN9"!D968*+V-O;#8@>S$@,2`P('-E=')G8F-O;&]R?2!B:6YD(&1E
+M9@HO8V]L-R![,2`Q(#$@<V5T<F=B8V]L;W)](&)I;F0@9&5F"@EE;F0*+R1&
+M,G!S0F5G:6X@>R1&,G!S1&EC="!B96=I;B`O)$8R<'-%;G1E<F5D4W1A=&4@
+M<V%V92!D969](&1E9@HO)$8R<'-%;F0@>R1&,G!S16YT97)E9%-T871E(')E
+M<W1O<F4@96YD?2!D968*)25%;F10<F]L;V<*"B1&,G!S0F5G:6X*,"!S971L
+M:6YE8V%P(#`@<V5T;&EN96IO:6X*-30N-2`V-S(N-2!T<F%N<VQA=&4@,"XY
+M,#`@+3`N.3`P('-C86QE"C`N-3`P('-E=&QI;F5W:61T:`HE(%!O;'EL:6YE
+M"FX@,3`Y(#0U.2!M(#0T.2`T-3D@;"!G<R!C;VPM,2!S(&=R"FX@-#0Q+C`P
+M,"`T-3<N,#`P(&T@-#0Y+C`P,"`T-3DN,#`P(&P@-#0Q+C`P,"`T-C$N,#`P
+M(&P@9W,@,B!S971L:6YE:F]I;B!C;VPM,2!S(&=R"B4@26YT97)P;VQA=&5D
+M('-P;&EN90IN(#$S.2`T,SD@;0H),38R+C(P,"`T,S8N-3(P(#$W,BXR,#`@
+M-#,U+C(W,"`Q-SD@-#,T(&-U<G9E=&\*"3$Y,BXY,3`@-#,Q+C0P,2`R,C4N
+M-C4Y(#0R-"XY,#(@,C,Y(#0Q.2!C=7)V971O"@DR-30N-34U(#0Q,BXQ,3D@
+M,C@V+C$T-R`S.#DN-3,W(#(Y.2`S-SD@8W5R=F5T;PH),S$T+C$R-2`S-C8N
+M-C`Q(#,T-BXV,#$@,S,T+C$R-2`S-3D@,S$Y(&-U<G9E=&\*"3,V.2XU,S<@
+M,S`V+C$T-R`S.3$N-C(X(#(W-"XP-S(@,SDY(#(U.2!C=7)V971O"@DT,#,N
+M.#0Y(#(T.2XP.#4@-#`X+C@T.2`R,S0N,#@U(#0Q.2`Q.3D@8W5R=F5T;PIG
+M<R!C;VPM,2!S(&=R"B4@4&]L>6QI;F4*;B`Q,3D@-#8Y(&T@,3$Y(#$Y.2!L
+M(&=S(&-O;"TQ(',@9W(*;B`Q,3<N,#`P(#(P-RXP,#`@;2`Q,3DN,#`P(#$Y
+M.2XP,#`@;"`Q,C$N,#`P(#(P-RXP,#`@;"!G<R`R('-E=&QI;F5J;VEN(&-O
+M;"TQ(',@9W(*+TAE;'9E=&EC82U";VQD(&9I;F1F;VYT(#0X+C`P('-C86QE
+M9F]N="!S971F;VYT"C(W.2`Y.2!M(`IG<R`Q("TQ('-C86QE("A51U-4(&ES
+M(&9U;B$I(&1U<"!S=')I;F=W:61T:"!P;W`@,B!D:78@;F5G(#`@<FUO=F5T
+M;R`@8V]L+3$@<VAO=R!G<@HO2&5L=F5T:6-A(&9I;F1F;VYT(#,V+C`P('-C
+M86QE9F]N="!S971F;VYT"C(W.2`U,SD@;2`*9W,@,2`M,2!S8V%L92`H0V]N
+M=')I8G5T92!Y;W4@=&]O(2D@9'5P('-T<FEN9W=I9'1H('!O<"`R(&1I=B!N
+M96<@,"!R;6]V971O("!C;VPM,2!S:&]W(&=R"B](96QV971I8V$@9FEN9&9O
+M;G0@,S8N,#`@<V-A;&5F;VYT('-E=&9O;G0*,C<Y(#$U.2!M(`IG<R`Q("TQ
+M('-C86QE("A9;W5R('!R;V1U8W1I=FET>2!I<R!G;VEN9R!T;SHI(&1U<"!S
+M=')I;F=W:61T:"!P;W`@,B!D:78@;F5G(#`@<FUO=F5T;R`@8V]L+3$@<VAO
+7=R!G<@IS:&]W<&%G90HD1C)P<T5N9`IG
+`
+end
+%XENCODE-CRC: 211 CCITT 9445 ARC 22E4 XMODEM 15F4
