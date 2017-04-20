@@ -40,8 +40,8 @@
   History:
   ~~~~~~~~
   02.Oct.1991  V1.0 First release
-  13.Mar.2000  V2.0 Corrected ideosynchrasy for MS Visual C compiler; cleaned 
-                    up code; added option for conditional byteswapping when 
+  13.Mar.2000  V2.0 Corrected ideosynchrasy for MS Visual C compiler; cleaned
+                    up code; added option for conditional byteswapping when
                     overwriting (depending on whether the system is little
                     or big-endian). <simao.campos@labs.comsat.com>
 =============================================================================
@@ -89,16 +89,14 @@ enum OVER { ANY = 0, BIG_ENDIAN = 1, LITTLE_ENDIAN = 2 };
  Display usage
  -----------------------------------------------------------------------------
 */
-void display_usage (prog)
-     char *prog;
-{
+void display_usage (char *prog) {
   printf ("SB.C Version 2.0 of 13.Mar.2000 \n");
   printf ("Usage is: %s [-ILS] [-over [-if [big|little|anyway]] filein fileout\n", prog);
   exit (2);
 }
 
 
-/* 
+/*
   -----------------------------------------------------------------------------
   Detects whether the system is little or big endian
   -----------------------------------------------------------------------------
@@ -119,10 +117,7 @@ int endian_type () {
   Swap considering MSDOS limitations
   -----------------------------------------------------------------------------
 */
-long msdos_approach (i, o)
-     FILE *i;
-     FILE *o;
-{
+long msdos_approach (FILE *i, FILE *o) {
   char ch[512], ch2;
   long j, k, total;
   short *sp0, *sp2, s0, s2;
@@ -177,10 +172,7 @@ long msdos_approach (i, o)
   Swap in a more efficient way
   -----------------------------------------------------------------------------
 */
-long decent_approach (i, o)
-     FILE *i;
-     FILE *o;
-{
+long decent_approach (FILE *i, FILE *o) {
   char *ch, *ch1, ch2;
   long total, k = 1;
   short *sp0, *sp2, s0, s2;
@@ -244,9 +236,7 @@ long decent_approach (i, o)
   Get a temporary file name, handling ideosynchrasies from different compilers
   -----------------------------------------------------------------------------
 */
-void get_tmp_name (fileout)
-     char *fileout;
-{
+void get_tmp_name (char *fileout) {
 #if defined (unix) || defined (__GNUC__) || defined(_MSC_VER)
   char *ch;
 #endif
@@ -272,10 +262,7 @@ void get_tmp_name (fileout)
 /* ..................... End of get_tmp_name() .......................... */
 
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   char overwrite = 0, conditional_swap = 0, byte_order = ANY, fileout[150];
   char *prog = argv[0];
   FILE *i, *o;

@@ -24,7 +24,7 @@ MODULE:         IIR-LIB.C, IIR FILTER MODULE
 
 ORIGINAL BY:
           Rudolf Hofmann (Parallel form)
-	  PHILIPS KOMMUNIKATIONS INDUSTRIE 
+	  PHILIPS KOMMUNIKATIONS INDUSTRIE
 	  Kommunikationssysteme         Phone : +49 911 526-2603
 	  Thurn-und-Taxis-Strasse 14    FAX   : +49 911 526-3385
 	  D-8500 Nuernberg 10 (Germany) EMail : hf@pkinbg.uucp
@@ -36,7 +36,7 @@ ORIGINAL BY:
 
 DESCRIPTION:
 
-        This file contains functions for running an IIR-filter with 
+        This file contains functions for running an IIR-filter with
         coefficients in the parallel or the cascade (bi-quad) form.
 
 FUNCTIONS    : - stdpcm_kernel(...)   =  parallel-form IIR filter (kernel)
@@ -85,7 +85,7 @@ HISTORY:
 static long scd_parallel_form_iir_down_kernel ARGS ((long lenx, float *x, float *y, long *k0, long idown, long nblocks, double direct_cof, double gain, float (*b)[3], float (*c)[2], float (*T)[2]));
 static long scd_parallel_form_iir_up_kernel ARGS ((long lenx, float *x, float *y, long iup, long nblocks, double direct_cof, double gain, float (*b)[3], float (*c)[2], float (*T)[2]));
 
-SCD_IIR *scd_stdpcm_init ARGS ((long nblocks, float (*b)[3], float (*c)[2], double direct_cof, double gain, long idown, int hswitch));
+SCD_IIR *scd_stdpcm_init ARGS ((long nblocks, float (*b)[3], float (*c)[2], double direct_cof, double gain, long idown, char hswitch));
 
 long cascade_iir_kernel ARGS ((long lseg, float *x_ptr, CASCADE_IIR * iir_ptr, float *y_ptr));
 
@@ -94,7 +94,7 @@ static long cascade_form_iir_down_kernel ARGS ((long lenx, float *x, float *y, l
 
 static long cascade_form_iir_up_kernel ARGS ((long lenx, float *x, float *y, long iup, long nblocks, double gain, float (*a)[2], float (*b)[2], float (*T)[4]));
 
-CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (*b)[2], double gain, long idown, int hswitch));
+CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (*b)[2], double gain, long idown, char hswitch));
 
 
 /* Direct-form filtering basic function prototypes */
@@ -104,7 +104,7 @@ static long direct_form_iir_down_kernel ARGS ((long lenx, float *x, float *y, lo
 
 static long direct_form_iir_up_kernel ARGS ((long lenx, float *x, float *y, long iup, long zno, long pno, double gain, float *a, float *b, float (*T)[2]));
 
-DIRECT_IIR *direct_iir_init ARGS ((long zno, long pno, float *a, float *b, double gain, long idown, int hswitch));
+DIRECT_IIR *direct_iir_init ARGS ((long zno, long pno, float *a, float *b, double gain, long idown, char hswitch));
 
 
 /*
@@ -143,9 +143,7 @@ DIRECT_IIR *direct_iir_init ARGS ((long zno, long pno, float *a, float *b, doubl
 
  ============================================================================
 */
-void stdpcm_free (iir_ptr)
-     SCD_IIR *iir_ptr;
-{
+void stdpcm_free (SCD_IIR *iir_ptr) {
   free (iir_ptr->T);            /* free state variables */
   free (iir_ptr);               /* free allocated struct */
 }
@@ -185,9 +183,7 @@ void stdpcm_free (iir_ptr)
 
  ============================================================================
 */
-void stdpcm_reset (iir_ptr)
-     SCD_IIR *iir_ptr;
-{
+void stdpcm_reset (SCD_IIR *iir_ptr) {
   long n;
   float (*T_ptr)[2];
 
@@ -238,18 +234,12 @@ void stdpcm_reset (iir_ptr)
         History:
         ~~~~~~~~
         28.Feb.92 v1.0 Release of 1st version <hf@pkinbg.uucp>
-        30.Oct.94 v2.0 Made visible (not static) after module broken into 
+        30.Oct.94 v2.0 Made visible (not static) after module broken into
                        several sub-units <simao@ctd.comsat.com>
 
  ============================================================================
 */
-SCD_IIR *scd_stdpcm_init (nblocks, b, c, direct_cof, gain, idown, hswitch)
-     long nblocks;
-     float (*b)[3], (*c)[2];
-     double direct_cof, gain;
-     long idown;
-     char hswitch;
-{
+SCD_IIR *scd_stdpcm_init (long nblocks, float (*b)[3], float (*c)[2], double direct_cof, double gain, long idown, char hswitch) {
   static SCD_IIR *ptrIIR;       /* pointer to the new struct */
   float fak;
   float (*T_ptr)[2];
@@ -333,13 +323,7 @@ SCD_IIR *scd_stdpcm_init (nblocks, b, c, direct_cof, gain, idown, hswitch)
 
  ============================================================================
 */
-long stdpcm_kernel (lseg, x_ptr, iir_ptr, y_ptr)
-     long lseg;
-     float *x_ptr;
-     SCD_IIR *iir_ptr;
-     float *y_ptr;
-{
-
+long stdpcm_kernel (long lseg, float *x_ptr, SCD_IIR *iir_ptr, float *y_ptr) {
   if (iir_ptr->hswitch == 'U')
     return scd_parallel_form_iir_up_kernel (    /* returns number of output samples */
                                              lseg,      /* In : length of input signal */
@@ -416,13 +400,7 @@ long stdpcm_kernel (lseg, x_ptr, iir_ptr, y_ptr)
 
  ============================================================================
 */
-static long scd_parallel_form_iir_down_kernel (lenx, x, y, k0, idown, nblocks, direct_cof, gain, b, c, T)
-     long lenx;
-     float *x, *y;
-     long *k0, idown, nblocks;
-     double direct_cof, gain;
-     float (*b)[3], (*c)[2], (*T)[2];
-{
+static long scd_parallel_form_iir_down_kernel (long lenx, float *x, float *y, long *k0, long idown, long nblocks, double direct_cof, double gain, float (*b)[3], float (*c)[2], float (*T)[2]) {
   long kx, ky, n;
   float Ttmp;
 
@@ -498,13 +476,7 @@ static long scd_parallel_form_iir_down_kernel (lenx, x, y, k0, idown, nblocks, d
 
  ============================================================================
 */
-static long scd_parallel_form_iir_up_kernel (lenx, x, y, iup, nblocks, direct_cof, gain, b, c, T)
-     long lenx;
-     float *x, *y;
-     long iup, nblocks;
-     double direct_cof, gain;
-     float (*b)[3], (*c)[2], (*T)[2];
-{
+static long scd_parallel_form_iir_up_kernel (long lenx, float *x, float *y, long iup, long nblocks, double direct_cof, double gain, float (*b)[3], float (*c)[2], float (*T)[2]) {
   long kx, ky, n;
   float Ttmp;
 
@@ -548,7 +520,7 @@ static long scd_parallel_form_iir_up_kernel (lenx, x, y, iup, nblocks, direct_co
 
   void cascade_iir_reset (CASCADE_IIR *iir_ptr);
   ~~~~~~~~~~~~~~~~~~~~~~
-  
+
   Description:
   ~~~~~~~~~~~~
 
@@ -557,8 +529,8 @@ static long scd_parallel_form_iir_up_kernel (lenx, x, y, iup, nblocks, direct_co
 
   Parameters:
   ~~~~~~~~~~~
-  CASCADE_IIR *iir_ptr: ... pointer to struct CASCADE_IIR previously 
-                            initialized by a call to one of the initialization 
+  CASCADE_IIR *iir_ptr: ... pointer to struct CASCADE_IIR previously
+                            initialized by a call to one of the initialization
                             routines.
 
   Return value:
@@ -574,9 +546,7 @@ static long scd_parallel_form_iir_up_kernel (lenx, x, y, iup, nblocks, direct_co
 
  ============================================================================
 */
-void cascade_iir_reset (iir_ptr)
-     CASCADE_IIR *iir_ptr;
-{
+void cascade_iir_reset (CASCADE_IIR *iir_ptr) {
   long n;
   float (*T_ptr)[4];
 
@@ -604,7 +574,7 @@ void cascade_iir_reset (iir_ptr)
   Description:
   ~~~~~~~~~~~~
 
-  Basic cascade-form IIR filtering routine, for both up- and 
+  Basic cascade-form IIR filtering routine, for both up- and
   down-sampling.
 
   Parameters:
@@ -617,22 +587,17 @@ void cascade_iir_reset (iir_ptr)
   Return value:
   ~~~~~~~~~~~~~
   Returns the number of output samples.
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   30.Oct.94 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-long cascade_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
-     long lseg;
-     float *x_ptr;
-     CASCADE_IIR *iir_ptr;
-     float *y_ptr;
-{
+long cascade_iir_kernel (long lseg, float *x_ptr, CASCADE_IIR *iir_ptr, float *y_ptr) {
   if (iir_ptr->hswitch == 'U')
     return cascade_form_iir_up_kernel ( /* returns number of output samples */
                                         lseg,   /* In : input signal leng. */
@@ -671,13 +636,13 @@ long cascade_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
                                     long idown, long nblocks,
                                     double gain, float (*a)[2],
                                     float (*b)[2], float (*T)[4]);
-  
+
   Description:
   ~~~~~~~~~~~~
 
   Function for filtering a sequence of input samples by a
   cascade-form IIR-filter with down-sampling.
-  
+
   Parameters:
   ~~~~~~~~~~~
   lenx: ........ (In) length of input array x[]
@@ -690,27 +655,21 @@ long cascade_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
   b: ........... (In) numerator coefficients
   c: ........... (In) denominator coefficients
   T: ........... (In/Out) state variables
-  
+
   Return value:
   ~~~~~~~~~~~~~
   Returns the number of samples filtered.
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   30.Oct.94 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-static long cascade_form_iir_down_kernel (lenx, x, y, k0, idown, nblocks, gain, a, b, T)
-     long lenx;
-     float *x, *y;
-     long *k0, idown, nblocks;
-     double gain;
-     float (*a)[2], (*b)[2], (*T)[4];
-{
+static long cascade_form_iir_down_kernel (long lenx, float *x, float *y, long *k0, long idown, long nblocks, double gain,float (*a)[2], float (*b)[2], float (*T)[4]) {
   long kx, ky, n;
   double xj, yj;
 
@@ -772,27 +731,21 @@ static long cascade_form_iir_down_kernel (lenx, x, y, k0, idown, nblocks, gain, 
   b: ........... (In) numerator coefficients
   c: ........... (In) denominator coefficients
   T: ........... (In/Out) state variables
-  
+
   Return value:
   ~~~~~~~~~~~~~
   Returns the number of samples filtered.
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   30.Oct.94 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-static long cascade_form_iir_up_kernel (lenx, x, y, iup, nblocks, gain, a, b, T)
-     long lenx;
-     float *x, *y;
-     long iup, nblocks;
-     double gain;
-     float (*a)[2], (*b)[2], (*T)[4];
-{
+static long cascade_form_iir_up_kernel (long lenx, float *x, float *y, long iup, long nblocks, double gain, float (*a)[2], float (*b)[2], float (*T)[4]) {
   long kx, ky, n;
   double xj, yj;
 
@@ -834,7 +787,7 @@ static long cascade_form_iir_up_kernel (lenx, x, y, iup, nblocks, gain, a, b, T)
   ============================================================================
 
   CASCADE_IIR *cascade_iir_init (long nblocks, float (*a)[2],
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  float (*b)[2], double gain, 
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  float (*b)[2], double gain,
 	                         long idwnup, char hswitch);
 
   Description:
@@ -856,20 +809,14 @@ static long cascade_form_iir_up_kernel (lenx, x, y, iup, nblocks, gain, a, b, T)
 
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   30.Oct.94 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-CASCADE_IIR *cascade_iir_init (nblocks, a, b, gain, idown, hswitch)
-     long nblocks;
-     float (*a)[2], (*b)[2];
-     double gain;
-     long idown;
-     char hswitch;
-{
+CASCADE_IIR *cascade_iir_init (long nblocks, float (*a)[2], float (*b)[2], double gain, long idown, char hswitch) {
   static CASCADE_IIR *ptrIIR;   /* pointer to the new struct */
   float fak;
   float (*T_ptr)[4];
@@ -948,16 +895,14 @@ CASCADE_IIR *cascade_iir_init (nblocks, a, b, gain, idown, hswitch)
 
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   30.Oct.94 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-void cascade_iir_free (iir_ptr)
-     CASCADE_IIR *iir_ptr;
-{
+void cascade_iir_free (CASCADE_IIR *iir_ptr) {
   free (iir_ptr->T);            /* free state variables */
   free (iir_ptr);               /* free allocated struct */
 }
@@ -972,7 +917,7 @@ void cascade_iir_free (iir_ptr)
 
   void direct_reset (DIRECT_IIR *iir_ptr);
   ~~~~~~~~~~~~~~~~~
-  
+
   Description:
   ~~~~~~~~~~~~
 
@@ -981,8 +926,8 @@ void cascade_iir_free (iir_ptr)
 
   Parameters:
   ~~~~~~~~~~~
-  DIRECT_IIR *iir_ptr: ... pointer to struct DIRECT_IIR previously 
-                           initialized by a call to one of the initialization 
+  DIRECT_IIR *iir_ptr: ... pointer to struct DIRECT_IIR previously
+                           initialized by a call to one of the initialization
                            routines.
 
   Return value:
@@ -998,9 +943,7 @@ void cascade_iir_free (iir_ptr)
 
  ============================================================================
 */
-void direct_reset (iir_ptr)
-     DIRECT_IIR *iir_ptr;
-{
+void direct_reset (DIRECT_IIR *iir_ptr) {
   long n;
   register float (*T_ptr)[2];
   long nblocks = (iir_ptr->poleno > iir_ptr->zerono)
@@ -1027,7 +970,7 @@ void direct_reset (iir_ptr)
   Description:
   ~~~~~~~~~~~~
 
-  Basic direct-form IIR filtering routine, for both up- and 
+  Basic direct-form IIR filtering routine, for both up- and
   down-sampling.
 
   Parameters:
@@ -1040,22 +983,17 @@ void direct_reset (iir_ptr)
   Return value:
   ~~~~~~~~~~~~~
   Returns the number of output samples.
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   31.Jul.95 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-long direct_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
-     long lseg;
-     float *x_ptr;
-     DIRECT_IIR *iir_ptr;
-     float *y_ptr;
-{
+long direct_iir_kernel (long lseg, float *x_ptr, DIRECT_IIR *iir_ptr, float *y_ptr) {
   if (iir_ptr->hswitch == 'U')
     return direct_form_iir_up_kernel (  /* returns number of output samples */
                                        lseg,    /* In : input signal leng. */
@@ -1096,13 +1034,13 @@ long direct_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
                                     long idown, long zerono, long poleno,
                                     double gain, float *a,
                                     float *b, float (*T)[2]);
-  
+
   Description:
   ~~~~~~~~~~~~
 
   Function for filtering a sequence of input samples by a
   direct-form IIR-filter with down-sampling.
-  
+
   Parameters:
   ~~~~~~~~~~~
   lenx: ........ (In) length of input array x[]
@@ -1115,9 +1053,9 @@ long direct_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
   gain: ........ (In) gain factor
   b: ........... (In) numerator coefficients
   c: ........... (In) denominator coefficients
-  T: ........... (In/Out) past sample memory: T[][0] store past numerator (x) 
-                      samples and T[][1] stores past denominator (y) samples. 
-                      T[0][0],T[0][1] are the most recent samples, 
+  T: ........... (In/Out) past sample memory: T[][0] store past numerator (x)
+                      samples and T[][1] stores past denominator (y) samples.
+                      T[0][0],T[0][1] are the most recent samples,
                       T[zerono-1][0],T[poleno-1][1] are the oldest.
 
   Return value:
@@ -1133,13 +1071,7 @@ long direct_iir_kernel (lseg, x_ptr, iir_ptr, y_ptr)
 
  ============================================================================
 */
-static long direct_form_iir_down_kernel (lenx, x, y, k0, idown, zerono, poleno, gain, a, b, T)
-     long lenx;
-     float *x, *y;
-     long *k0, idown, zerono, poleno;
-     double gain;
-     float *a, *b, (*T)[2];
-{
+static long direct_form_iir_down_kernel (long lenx, float *x, float *y, long *k0, long idown, long zerono, long poleno, double gain, float *a, float *b, float (*T)[2]) {
   long kx, ky, n;
   double yj;
 
@@ -1192,9 +1124,9 @@ static long direct_form_iir_down_kernel (lenx, x, y, k0, idown, zerono, poleno, 
   ~~~~~~~~~~~~
 
   Function for filtering a sequence of input samples by a
-  direct-form IIR-filter with up-sampling. Samples are taken from the 
-  input vector x only once-in-idown times; in the other times, the input 
-  sample is zero (interpolation process). 
+  direct-form IIR-filter with up-sampling. Samples are taken from the
+  input vector x only once-in-idown times; in the other times, the input
+  sample is zero (interpolation process).
 
   Parameters:
   ~~~~~~~~~~~
@@ -1207,31 +1139,25 @@ static long direct_form_iir_down_kernel (lenx, x, y, k0, idown, zerono, poleno, 
   gain: ........ (In) gain factor
   b: ........... (In) numerator coefficients
   c: ........... (In) denominator coefficients
-  T: ........... (In/Out) past sample memory: T[][0] store past numerator (x) 
-                      samples and T[][1] stores past denominator (y) samples. 
-                      T[0][0],T[0][1] are the most recent samples, 
+  T: ........... (In/Out) past sample memory: T[][0] store past numerator (x)
+                      samples and T[][1] stores past denominator (y) samples.
+                      T[0][0],T[0][1] are the most recent samples,
                       T[zerono-1][0],T[poleno-1][1] are the oldest.
 
   Return value:
   ~~~~~~~~~~~~~
   Returns the number of samples filtered.
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   31.Jul.95 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-static long direct_form_iir_up_kernel (lenx, x, y, iup, zerono, poleno, gain, a, b, T)
-     long lenx;
-     float *x, *y;
-     long iup, zerono, poleno;
-     double gain;
-     float *a, *b, (*T)[2];
-{
+static long direct_form_iir_up_kernel (long lenx, float *x, float *y, long iup, long zerono, long poleno, double gain, float *a, float *b, float (*T)[2]) {
   long kx, ky, n;
   register double yj;
 
@@ -1270,7 +1196,7 @@ static long direct_form_iir_up_kernel (lenx, x, y, iup, zerono, poleno, gain, a,
   ============================================================================
 
   DIRECT_IIR *direct_iir_init (long nblocks, float *a,
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  float *b, double gain, 
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  float *b, double gain,
 	                         long idwnup, char hswitch);
 
   Description:
@@ -1293,20 +1219,14 @@ static long direct_form_iir_up_kernel (lenx, x, y, iup, zerono, poleno, gain, a,
 
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   31.Jul.95 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-DIRECT_IIR *direct_iir_init (zerono, poleno, a, b, gain, idown, hswitch)
-     long zerono, poleno;
-     float *a, *b;
-     double gain;
-     long idown;
-     char hswitch;
-{
+DIRECT_IIR *direct_iir_init (long zerono, long poleno, float *a, float *b, double gain, long idown, char hswitch) {
   static DIRECT_IIR *ptrIIR;    /* pointer to the new struct */
   float fak;
   float (*T_ptr)[2];
@@ -1387,16 +1307,14 @@ DIRECT_IIR *direct_iir_init (zerono, poleno, a, b, gain, idown, hswitch)
 
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
-  
+
   History:
   ~~~~~~~~
   31.Jul.95 v1.0 Release of 1st version <simao@ctd.comsat.com>
 
  ============================================================================
 */
-void direct_iir_free (iir_ptr)
-     DIRECT_IIR *iir_ptr;
-{
+void direct_iir_free ( DIRECT_IIR *iir_ptr) {
   free (iir_ptr->T);            /* free state variables */
   free (iir_ptr);               /* free allocated struct */
 }

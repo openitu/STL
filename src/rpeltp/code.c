@@ -11,7 +11,7 @@
 
 #ifdef	HAS_STDLIB_H
 #include	<stdlib.h>
-#include        <string.h>
+#include  <string.h>
 #else
 #	include "proto.h"
 extern char *memcpy P ((char *, char *, int));
@@ -21,8 +21,8 @@ extern char *memcpy P ((char *, char *, int));
 #include	"gsm.h"
 #include	"proto.h"
 
-/* 
- *  4.2 FIXED POINT IMPLEMENTATION OF THE RPE-LTP CODER 
+/*
+ *  4.2 FIXED POINT IMPLEMENTATION OF THE RPE-LTP CODER
  */
 
 void Gsm_Coder P8 ((S, s, LARc, Nc, bc, Mc, xmaxc, xMc), struct gsm_state *S, word * s, /* [0..159] samples IN */
@@ -30,7 +30,7 @@ void Gsm_Coder P8 ((S, s, LARc, Nc, bc, Mc, xmaxc, xMc), struct gsm_state *S, wo
  * The RPE-LTD coder works on a frame by frame basis.  The length of
  * the frame is equal to 160 samples.  Some computations are done
  * once per frame to produce at the output of the coder the
- * LARc[1..8] parameters which are the coded LAR coefficients and 
+ * LARc[1..8] parameters which are the coded LAR coefficients and
  * also to realize the inverse filtering operation for the entire
  * frame (160 samples of signal d[0..159]).  These parts produce at
  * the output of the coder:
@@ -69,7 +69,7 @@ void Gsm_Coder P8 ((S, s, LARc, Nc, bc, Mc, xmaxc, xMc), struct gsm_state *S, wo
 
     Gsm_RPE_Encoding (S, e + 5, /* e ][0..39][ IN/OUT */
                       xmaxc++, Mc++, xMc);
-    /* 
+    /*
      * Gsm_Update_of_reconstructed_short_time_residual_signal
      *                      ( dpp, e + 5, dp );
      */

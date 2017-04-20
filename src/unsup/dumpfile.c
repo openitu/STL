@@ -16,16 +16,16 @@
 		BlkSize 	is the Block size, in samples;
 		1stBlk 		is the stating block;
 		BlkNo 		the number of blocks to be displayed;
-		Dump	 	if the dump is in integer/real [I] format 
+		Dump	 	if the dump is in integer/real [I] format
 				or if it is hexa[H];
-		Type		is the Data type: if the file contains 
+		Type		is the Data type: if the file contains
 				integer [I] or real [R] data;
         Options:
 	~~~~~~~~
 	-delay       is the number of samples to delay. If `delay'>0,
 		     the first file should be delayed in relation to
-                     the second file (samples from file 1 should be skipped). 
-                     `delay'<0, on the other hand, means that the 2nd file 
+                     the second file (samples from file 1 should be skipped).
+                     `delay'<0, on the other hand, means that the 2nd file
                      is who should be delayed (i.e., have samples skipped).
         -h           set dump in hex mode - valid for integer data types
         -i           set dump in decimal mode for integer data types [default]
@@ -44,7 +44,7 @@
 				kind of dump and data type may be specified by
 				command line options (Unix style). Simao
         10/Jan/1995 V2.1        Fixing options that don't work.
-        22/Feb/1996 v2.2        Removed compilation warnings, included headers 
+        22/Feb/1996 v2.2        Removed compilation warnings, included headers
                                 as suggested by Kirchherr (FI/DBP Telekom) to
                                 run under OpenVMS/AXP <simao@ctd.comsat.com>
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -123,11 +123,7 @@ void display_usage () {
 #undef FP
 
 
-/* ---------------------------- main routine ------------------------------ */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   char c, C[2];
   int i, j, k, l;
   FILE *fi;

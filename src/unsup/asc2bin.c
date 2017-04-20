@@ -5,8 +5,8 @@
 
   Description:
   ~~~~~~~~~~~~
-  Program for converting samples in ascii format to its binary 
-  representation. 
+  Program for converting samples in ascii format to its binary
+  representation.
 
   Usage:
   ~~~~~~
@@ -94,10 +94,7 @@ void display_usage () {
 
 
 /* ---------------------------- Main Routine ---------------------------- */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   int d;
   short hd;
   unsigned short X;

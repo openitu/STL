@@ -31,10 +31,7 @@
 static long c__1 = 1;
 
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* System generated locals */
   double d_1;
 

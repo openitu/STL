@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -34,27 +34,20 @@ Motorola Inc.
 
 int ATORC ();                   /* from paramConv.c */
                 /* FTYPE *a, FTYPE *k */
-void I_MOV ();                  /* from here */
-                /* struct coefSet defSet, int numSets, FTYPE rq0 */
-FTYPE RES_ENG ();
-                /* FTYPE rq0, FTYPE *k */
+void I_MOV (struct coefSet defSet, int numSets, FTYPE rq0);
+
+FTYPE RES_ENG (FTYPE rq0, FTYPE *k);
 
 static FTYPE *aPtr;             /* points (in I_CBUFF) to the beginning of the interpolated direct-form coefs for the current subframe */
 static FTYPE *rsPtr;            /* points (in rsBuf) to the next spot to be filled by an rs value */
 
 
 
-/*	
+/*
  *      INTERPOLATE interpolates between coef sets based on the subframe
  *	index.
  */
-int INTERPOLATE (defCoefs, numSets, oCoefs, i, rq0)
-     struct coefSet defCoefs;
-     int numSets;
-     struct coefSet oCoefs;
-     int i;
-     FTYPE rq0;
-{
+int INTERPOLATE (struct coefSet defCoefs, int numSets, struct coefSet oCoefs, int i, FTYPE rq0) {
   static FTYPE *intCoefPtr;     /* points (in I_CBUFF) to the next spot for */
   /* an interpolated coef */
   FTYPE defPct;                 /* percentage that defCoefs contribute to */
@@ -111,11 +104,7 @@ int INTERPOLATE (defCoefs, numSets, oCoefs, i, rq0)
 
 /*	I_MOV moves a set of coefs into the I_CBUFF buffer and calculates*/
 /*	an RS value based on that set*/
-void I_MOV (defSet, numSets, rq0)
-     struct coefSet defSet;
-     int numSets;
-     FTYPE rq0;
-{
+void I_MOV (struct coefSet defSet, int numSets, FTYPE rq0) {
   FTYPE *tmpPtr, *tmpPtr2, *endPtr;
 
 /*	calculate residual estimate*/

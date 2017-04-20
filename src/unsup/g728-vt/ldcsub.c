@@ -7,9 +7,7 @@
 #include <math.h>
 #include "ugstdemo.h"
 
-short round (x)
-     double x;
-{
+short round (double x) {
   return (short) (x + 0.5 * ((x > 0) ? 1 : -1));
 }
 
@@ -79,9 +77,7 @@ static long c__50 = 50;
 
 
 /* Reset decoder and distance measure states, assign constants */
-int reset_ (n)
-     long *n;
-{
+int reset_ (long *n) {
   /* System generated locals */
   long i_1, i_2, i_3;
   double d_1;
@@ -258,11 +254,7 @@ int reset_ (n)
 
 /* LDCELP encoder */
 /* Version 03.10.91 / Ftj */
-int encode_ (n, x, c)
-     long *n;
-     double *x;
-     long *c;
-{
+int encode_ (long *n, double *x, long *c) {
   /* System generated locals */
   long i_1, i_2;
 
@@ -342,12 +334,7 @@ int encode_ (n, x, c)
 
 /* Find distance measure D for a given codeword C and input vector X */
 /* Version 21.11.91 / Ftj */
-int distm_ (n, x, c, d)
-     long *n;
-     double *x;
-     long *c;
-     double *d;
-{
+int distm_ (long *n, double *x, long *c, double *d) {
   /* System generated locals */
   long i_1, i_2;
 
@@ -421,10 +408,7 @@ int distm_ (n, x, c, d)
 
 /* Compute perceptually weighted distance D between vectors X(n) and Y(n) */
 /* Version 18.11.91 / Ftj */
-int pwfilt_ (n, x, y, d)
-     long *n;
-     double *x, *y, *d;
-{
+int pwfilt_ (long *n, double *x, double *y, double *d) {
   /* System generated locals */
   long i_1, i_2, i_3, i_4;
   double d_1;
@@ -563,11 +547,7 @@ int pwfilt_ (n, x, y, d)
 
 /* LDCELP decoder */
 /* Version 29.11.91 / Ftj */
-int decode_ (n, c, y, mode)
-     long *n, *c;
-     double *y;
-     long *mode;
-{
+int decode_ (long *n, long *c, double *y, long *mode) {
   /* System generated locals */
   long i_1, i_2, i_3, i_4;
   double d_1;
@@ -756,10 +736,7 @@ int decode_ (n, c, y, mode)
 
 
 /* Version: 21.11.91 / Ftj */
-int pstflt_ (nvect, sx, sy)
-     long *nvect;
-     double *sx, *sy;
-{
+int pstflt_ (long *nvect, double *sx, double *sy) {
   /* System generated locals */
   long i_1, i_2, i_3, i_4, i_5;
   double d_1;
@@ -1223,12 +1200,7 @@ int pstflt_ (nvect, sx, sy)
 /* ......................... End of pstflt() ......................... */
 
 
-int durbin_ (r, n, a, rc, ifail)
-     double *r;
-     long *n;
-     double *a, *rc;
-     long *ifail;
-{
+int durbin_ (double *r, long *n, double *a, double *rc, long *ifail) {
   /* System generated locals */
   long i_1, i_2;
 
@@ -1297,9 +1269,7 @@ L99:
 /* ........................ End of durbin() ............................. */
 
 
-void hybws_ (ws)
-     double *ws;
-{
+void hybws_ (double *ws) {
   /* Initialized data */
 
   static long iws[105] = { 1565, 3127, 4681, 6225, 7755, 9266, 10757, 12223,
@@ -1332,9 +1302,7 @@ void hybws_ (ws)
 /* ............................ End of hybws() .......................... */
 
 
-void hybwg_ (wg)
-     double *wg;
-{
+void hybwg_ (double *wg) {
   /* Version: 03.10.91 / Ftj */
   /* Initialized data */
   static long iwg[34] = { 3026, 6025, 8973, 11845, 14615, 17261, 19759, 22088,
@@ -1353,9 +1321,7 @@ void hybwg_ (wg)
 /* .......................... End of hybwg() .............................. */
 
 
-void hybwp_ (wp)
-     double *wp;
-{
+void hybwp_ (double *wp) {
   /* Version: 03.10.91 / Ftj */
   /* Initialized data */
 
@@ -1377,9 +1343,7 @@ void hybwp_ (wp)
 /* .......................... End of hybwp() ............................... */
 
 
-void cbook_ (y)
-     double *y;
-{
+void cbook_ (double *y) {
   /* Initialized data */
 
   static short iy[640] = { 668, -2950, -1254, -1790, -2553, -5032, -4577, -1045,

@@ -24,7 +24,7 @@
    The headerless G.192 serial bitstream format is as described in
    G.192, with the exceptions listed below. The main feature is that
    the softbits and frame erasure indicators are right-aligned at
-   16-bit word boundaries (unsigned short): 
+   16-bit word boundaries (unsigned short):
    '0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20
 
    In the byte-oriented softbit serial bitstream, only the lower byte
@@ -78,7 +78,7 @@
    Where:
    in_bs ...... input encoded speech bitstream file
    err_pat .... error pattern bitstream file
-   out_bs ..... disturbed encoded speech bitstream file    
+   out_bs ..... disturbed encoded speech bitstream file
 
    Options:
    -frame # ... Set the frame size to #. Necessary for headerless G.192
@@ -152,9 +152,7 @@ void display_usage ARGS ((int level));
 /*
   Perform XOR operation on two samples
 */
-short eid_xor (a, b)
-     short a, b;
-{
+short eid_xor (int a, int b) {
   return (a ^ b ? G192_ONE : G192_ZERO);
 }
 
@@ -165,10 +163,7 @@ short eid_xor (a, b)
   Insert errors by XOR-ing the input data arrays and saving the
   disturbed data in a third array.
 */
-long insert_errors (a, b, c, n)
-     short *a, *b, *c;
-     long n;
-{
+long insert_errors (short *a, short *b, short *c, long n)  {
   long i;
   long register disturbed;
   short bit;
@@ -197,9 +192,7 @@ long insert_errors (a, b, c, n)
    --------------------------------------------------------------------------
  */
 #define P(x) printf x
-void display_usage (level)
-     int level;
-{
+void display_usage (int level) {
   P (("eid-xor.c - Version 1.2 of 02/Feb/2010 \n\n"));
 
   if (level) {
@@ -307,10 +300,7 @@ void display_usage (level)
 /* ************************************************************************* */
 /* ************************** MAIN_PROGRAM ********************************* */
 /* ************************************************************************* */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Command line parameters */
   char ep_type = BER;           /* Type of error pattern: FER or BER */
   char bs_format = g192;        /* Generic Speech bitstream format */

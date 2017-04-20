@@ -1,8 +1,8 @@
-/* 
+/*
   ===========================================================================
   SH2CHR.C
   ~~~~~~~~
-  Convert input file specified in 1st command line argument from a 16-bit word 
+  Convert input file specified in 1st command line argument from a 16-bit word
   file (whose upper MSBs are supposed to be all 0's) saving with LSBs in a
   unsigned byte-oriented file. Uses unsigned conversion for the transfer.
 
@@ -12,13 +12,13 @@
   Usage:
   ~~~~~~
   sh2chr filein fileout
-  where 
+  where
   filein ... is the input file name or "-" for the standard input (pipe)
   fileout .. is the output file name or "-" for the standard output (pipe)
 
   Original author:
   ~~~~~~~~~~~~~~~~
-  Simao Ferraz de Campos Neto  
+  Simao Ferraz de Campos Neto
   Comsat Laboratories                  Tel:    +1-301-428-4516
   22300 Comsat Drive                   Fax:    +1-301-428-9287
   Clarksburg MD 20871 - USA            E-mail: simao@ctd.comsat.com
@@ -29,10 +29,7 @@
 #include <string.h>
 #include "ugstdemo.h"
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   FILE *Fchr, *Fsh;
   unsigned short sh;
   register long MSB_set = 0;

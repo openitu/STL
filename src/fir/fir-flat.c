@@ -29,7 +29,7 @@ ORIGINAL BY:
         Simao Ferraz de Campos Neto <simao@ctd.comsat.com>
 
 DESCRIPTION:
-        This file contains procedures for flat-weighting low-pass and 
+        This file contains procedures for flat-weighting low-pass and
 	high-pass filters, with rate factors of 2 and 3 for both up-
 	and down-sampling.
 
@@ -47,7 +47,7 @@ FUNCTIONS:
          = fill_lp_2_to_1(...)   : filling filter coefficients into
                                    array for flat low pass, factor 2:1
          = fill_lp_3_to_1(...)   : idem, for flat low pass, factor 3:1
-         = fill_flat_band_pass(...): idem, for linear-phase band-pass 
+         = fill_flat_band_pass(...): idem, for linear-phase band-pass
 
 
 
@@ -86,8 +86,8 @@ void fill_lp_3_to_1 ARGS ((float **h0, long *lenh0));
 void fill_flat_band_pass ARGS ((float **h0, long *lenh0));
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -327,10 +327,7 @@ SCD_FIR *hq_up_1_to_3_init () {
 #define f24 (float)0x00800000
 #define lenh02 118
 
-void fill_lp_2_to_1 (h0, lenh0)
-     float *h0[];
-     long *lenh0;
-{
+void fill_lp_2_to_1 (float *h0[], long *lenh0) {
   static float h02[lenh02] = {
     1584. / f24, 805. / f24, -4192. / f24, -8985. / f24,
     -5987. / f24, 2583. / f24, 4657. / f24, -3035. / f24,
@@ -410,10 +407,7 @@ void fill_lp_2_to_1 (h0, lenh0)
 #define f24 (float)0x00800000
 #define lenh03 168
 
-void fill_lp_3_to_1 (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_lp_3_to_1 (float **h0, long *lenh0) {
   static float h03[lenh03] = {
     877. / f24, 3745. / f24, 6479. / f24, 8447. / f24, 7307. / f24,
     3099. / f24, -2223. / f24, -5302. / f24, -3991. / f24, 766. / f24,
@@ -502,12 +496,12 @@ void fill_lp_3_to_1 (h0, lenh0)
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
-        Filter coefficients: 
+        Filter coefficients:
           John Barnes <G.J.P.Barnes@bnr.co.uk>
           Chris Tate <c.n.tate@bnr.co.uk>
-          
+
         Routine:
           Simao Ferraz de Campos Neto
           DDS/Pr11                      Tel: +55-192-39-1396
@@ -523,11 +517,7 @@ void fill_lp_3_to_1 (h0, lenh0)
 #define f16 32768.
 #define FLAT_BAND_PASS_LEN 168
 
-void fill_flat_band_pass (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
-
+void fill_flat_band_pass (float **h0, long *lenh0) {
   static float flat_coef[FLAT_BAND_PASS_LEN] = {
     -43. / f16, -168. / f16, -156. / f16, -90. / f16, -1. / f16,
     -7. / f16, -78. / f16, -107. / f16, -55. / f16, -13. / f16,
@@ -583,7 +573,7 @@ void fill_flat_band_pass (h0, lenh0)
         Description:
         ~~~~~~~~~~~~
         Initialization routine for the linear-phase, FIR implementation of
-        the band-pass filter characteristic for data sampled at 16 kHz and 
+        the band-pass filter characteristic for data sampled at 16 kHz and
         down-sampling of 2:1. The mask resembles that of ITU-T Rec.G.712.
 
         Parameters:  none.
@@ -595,7 +585,7 @@ void fill_flat_band_pass (h0, lenh0)
 
         Author: <simao@cpqd.ansp.br>
         ~~~~~~~
-        
+
         History:
         ~~~~~~~~
         20.Apr.94 v1.0 Release of 1st version <simao>
@@ -631,7 +621,7 @@ SCD_FIR *linear_phase_pb_2_to_1_init () {
         Description:
         ~~~~~~~~~~~~
         Initialization routine for the linear-phase, FIR implementation of
-        the band-pass filter characteristic for data sampled at 16 kHz and 
+        the band-pass filter characteristic for data sampled at 16 kHz and
         down-sampling of 2:1. The mask resembles that of ITU-T Rec.G.712.
 
         Parameters:  none.
@@ -643,7 +633,7 @@ SCD_FIR *linear_phase_pb_2_to_1_init () {
 
         Author: <simao@cpqd.ansp.br>
         ~~~~~~~
-        
+
         History:
         ~~~~~~~~
         20.Apr.94 v1.0 Release of 1st version <simao>
@@ -684,7 +674,7 @@ SCD_FIR *linear_phase_pb_1_to_2_init () {
         Description:
         ~~~~~~~~~~~~
         Initialization routine for the linear-phase, FIR implementation of
-        the band-pass filter characteristic for data sampled at 16 kHz and 
+        the band-pass filter characteristic for data sampled at 16 kHz and
         no downsampling (factor is 1:1). The output signal, although at the
 	16 kHz sampling rate, will have a 4 kHz *effective* bandwidth.
 
@@ -697,7 +687,7 @@ SCD_FIR *linear_phase_pb_1_to_2_init () {
 
         Author: <simao.campos@comsat.com>
         ~~~~~~~
-        
+
         History:
         ~~~~~~~~
         16.May.97 v1.0 Release of 1st version <simao>

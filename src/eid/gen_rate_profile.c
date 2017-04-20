@@ -1,21 +1,21 @@
-/* 
-    gen_rate_profile.c   
+/*
+    gen_rate_profile.c
 
     Program for generating random rate/layer switching file.
- 
-    For every "period" a layer rate is randomly selected among a set of layer rates 
-    defined on the command line e.g. -layers 32000,36000,40000   (bps). 
+
+    For every "period" a layer rate is randomly selected among a set of layer rates
+    defined on the command line e.g. -layers 32000,36000,40000   (bps).
 	(The output rate file is a stream of long integers quantized with 1 bps resolution.)
 
 	If desired the lowest rate can be set to a minimum value "minrate",
-	(e.g. to avoid switching to lower synthesis rates for some scalable codecs.)   
-    50 Hz framerate is default. 
+	(e.g. to avoid switching to lower synthesis rates for some scalable codecs.)
+    50 Hz framerate is default.
 
-    Note: the layer rates  and minrate value can only be entered with  steps accordng to the framerate, 
- 	      e.g. minrate=37001 creates the layer setup [37000,37000,40000], 
-          with the set of layers described above 
-		   
-    Command line 
+    Note: the layer rates  and minrate value can only be entered with  steps accordng to the framerate,
+ 	      e.g. minrate=37001 creates the layer setup [37000,37000,40000],
+          with the set of layers described above
+
+    Command line
       gen_rate_profile -layers A,B,C... [-framerate X] ratefilename [period  minrate [frames [seed] ] ]
 
     where
@@ -23,15 +23,15 @@
      -framerate X   is the frame rate (default is X=50 Hz)
       ratefilename  is the output file (stream of long integers) (no default)
       period        is the repetition period in frames(default 10)
-	  minrate       is a minumum rate in integer bps in the output 
+	  minrate       is a minumum rate in integer bps in the output
       frames        is the total number of frames to produce (default 15000 frames, 300 seconds)
-      seed          is the random number generator seed(default is 314159265). 
+      seed          is the random number generator seed(default is 314159265).
 
   Compile in STL eid subdirectory :
-    gcc gen_rate_profile.c  -I ../utl -o gen_rate_profile.exe 
+    gcc gen_rate_profile.c  -I ../utl -o gen_rate_profile.exe
 
   Example execution
-  >  ./gen_rate_profile.exe -layers 32000,36000,40000 -framerate 50 ratefile.long 2 37000 10 5 
+  >  ./gen_rate_profile.exe -layers 32000,36000,40000 -framerate 50 ratefile.long 2 37000 10 5
 */
 
 #include "ugstdemo.h"           /* general UGST definitions */
@@ -58,9 +58,7 @@
 display_usage(int level);  Shows program usage.
 -------------------------------------------------------------------------*/
 #define P(x) printf x
-void display_usage (level)
-     int level;
-{
+void display_usage (int level) {
   P (("gen_rate_profile - %s\n\n", VERSION));
 
   if (level) {
@@ -97,13 +95,11 @@ void display_usage (level)
 #undef P
 /* .................... End of display_usage() ........................... */
 
-/*========================================================================== 
-double EID_random (unsigned long *seed); inherited from STL/eid.h, 
+/*==========================================================================
+double EID_random (unsigned long *seed); inherited from STL/eid.h,
 output is in the range 0 to .99
 ============================================================================ */
-double EID_random (seed)
-     unsigned long *seed;
-{
+double EID_random (unsigned long *seed) {
   /* Size in bits (=size in bytes * 8) for long variables */
   static double bits_in_long = sizeof (long) * 8;
   /* Update RNG */
@@ -118,7 +114,7 @@ double EID_random (seed)
 
 /* ************************* AUXILIARY FUNCTIONS ************************* */
 long parse_layers (char *inp_str, long *bound) {
-  /* 
+  /*
      valid layer string format is %d,%d,%d or just %d no spaces allowed !!, function returns number of read layers or returns -1 on failure */
 
   long i, index = 0;

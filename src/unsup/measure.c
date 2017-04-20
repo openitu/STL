@@ -4,7 +4,7 @@
   MEASURE.C
   ~~~~~~~~~
 
-  Program to calculate the max, min, and average values for a file, as 
+  Program to calculate the max, min, and average values for a file, as
   well as 16-bit CRCs (CCITT, XMODEM, ARC), if requested.
 
   Usage:
@@ -13,7 +13,7 @@
   where:
   file          is the name of the file to measured; - is stdin
                 process all the files specified
-        
+
   Options:
   ~~~~~~~~
   -h|-?         show program usage
@@ -29,7 +29,7 @@
   GNUC: gcc -o measure measure.c -lm
   VMS:  cc measure.c
         link measure
- 
+
   History:
   ~~~~~~~~
   10.Mar.94   1.0   1st release by simao@cpqd.ansp.br
@@ -73,17 +73,14 @@ WTYPE crc_a = 0, crc_c = 0, crc_x = 0;
 int init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
 
 
-/* 
+/*
  * --------------------------------------------------------------------------
- * ... Statistics routines ... 
+ * ... Statistics routines ...
  *     Simao 07.Mar.94
  * --------------------------------------------------------------------------
  */
 
-double get_sum (samples, count)
-     short *samples;
-     long count;
-{
+double get_sum (short *samples, long count) {
   double sum = 0;
 
   while (count > 0)
@@ -91,10 +88,7 @@ double get_sum (samples, count)
   return (sum);
 }
 
-double get_square (samples, count)
-     short *samples;
-     long count;
-{
+double get_square (short *samples, long count) {
   double sum = 0, tmp;
 
   while (count > 0) {
@@ -104,17 +98,13 @@ double get_square (samples, count)
   return (sum);
 }
 
-/* 
+/*
   --------------------------------------------------------------------------
-  Find maximum in a short array; return as a double; uses parameter 
+  Find maximum in a short array; return as a double; uses parameter
   'max' as a default, or as the so-far found, maximum value.
   --------------------------------------------------------------------------
 */
-double get_max (max, samples, count)
-     double max;
-     short *samples;
-     long count;
-{
+double get_max (double max, short *samples, long count) {
   double tmp;
 
   while (count > 0) {
@@ -125,17 +115,13 @@ double get_max (max, samples, count)
   return max;
 }
 
-/* 
+/*
   --------------------------------------------------------------------------
-  Find minimum in a short array; return as a double; uses parameter 
+  Find minimum in a short array; return as a double; uses parameter
   'min' as a default, or as the so-far found, minimum value.
   --------------------------------------------------------------------------
 */
-double get_min (min, samples, count)
-     double min;
-     short *samples;
-     long count;
-{
+double get_min (double min, short *samples, long count) {
   double tmp;
 
   while (count > 0) {
@@ -146,10 +132,7 @@ double get_min (min, samples, count)
   return min;
 }
 
-double get_var (rms_x, avg_x, count)
-     double rms_x, avg_x;
-     long count;
-{
+double get_var (double rms_x, double avg_x, long count) {
   return ((rms_x - avg_x * avg_x / (double) count) / (double) count);
 }
 
@@ -158,9 +141,9 @@ double get_var (rms_x, avg_x, count)
 
 /*
   ---------------------------------------------------------------------------
-  WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab, 
+  WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab,
   ~~~~~~~~~~~~  char swapped);
-  
+
   Description:
   ~~~~~~~~~~~~
   Calculate, intelligently, the CRC-16 of a dataset incrementally given a
@@ -313,12 +296,7 @@ static WTYPE crctab_arc[1 << B] = {
 };
 
 /* -------------- Begin of function updcrc() ---------------------- */
-WTYPE updcrc (icrc, icp, icnt, crctab, swapped)
-     WTYPE icrc, *crctab;
-     unsigned char *icp;
-     int icnt;
-     char swapped;
-{
+WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab, char swapped) {
   register WTYPE crc = icrc;
   register unsigned char *cp = icp;
   register int cnt = icnt;
@@ -337,9 +315,9 @@ WTYPE updcrc (icrc, icp, icnt, crctab, swapped)
 /* .......................... End of updcrc() ............................ */
 
 
-/* 
+/*
  * --------------------------------------------------------------------------
- * ... Display usage of program ... 
+ * ... Display usage of program ...
  *     Simao 10.Mar.94
  * --------------------------------------------------------------------------
  */
@@ -369,13 +347,7 @@ void display_usage () {
 #undef P
 /* ....................... end of display_usage() ...........................*/
 
-
-/*============================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-/*============================== */
-{
+int main (int argc, char *argv[]) {
   char display_crc = 0, print_hex = 0;
   char inpfil[50];
   long count, skip = 0;

@@ -2,12 +2,12 @@
   ===========================================================================
   CONCAT.C
   ~~~~~~~~
-  
+
   Concatenates a series of files in binary mode, irrespective of
   actual content (ASCII/binary, char, short, long, float,
-  whatever). Optionally, generates a undo script that can be used 
+  whatever). Optionally, generates a undo script that can be used
   to separate the concatenated files, assuming that the data is
-  organized in 16-bit words. 
+  organized in 16-bit words.
 
   NOTE 1: If the concatenated files are byte-oriented, however, and
           the size of at least one of the files is odd, then the
@@ -28,7 +28,7 @@
   Usage:
   ~~~~~~
   concat [options] file1 [file2 file3 ...] fileout
-  where 
+  where
   file1,2 ... filename of input file(s) to be concatenated
   fileout ... output filename
 
@@ -39,7 +39,7 @@
 
   Original author:
   ~~~~~~~~~~~~~~~~
-  Simao Ferraz de Campos Neto  
+  Simao Ferraz de Campos Neto
   Comsat Laboratories                  Tel:    +1-301-428-4516
   22300 Comsat Drive                   Fax:    +1-301-428-9287
   Clarksburg MD 20871 - USA            E-mail: simao.campos@labs.comsat.com
@@ -132,10 +132,7 @@ void display_usage () {
 /* ....................... End of display_usage() ....................... */
 
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   long nsam;                    /* Number of bytes saved */
   long cur = 1;                 /* Current offset in shorts in concatenated file (for undo) */
   char buffer[BUFF_SIZE];

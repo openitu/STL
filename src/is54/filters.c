@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -23,32 +23,26 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
- /**/
+
 /*	filters.c -- Filter routines.*/
-   /**/
+
 /*-------------------------------------------------------------*/
-   /**/
+
 /*	Written by: Matt Hartman*/
-   /**/
+
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-   /**/
+
 #include "vparams.h"
 /*#include "stdlib.h"*/
 /*--------------------------------------------------------------------------*/
-/*	inverse (analysis, all-zero) filter*/
- /**/ void I_DIR (inPtr, oPtr, stPtr, coefPtr, len)
-     FTYPE *inPtr;
-     FTYPE *oPtr;
-     FTYPE *stPtr;
-     FTYPE *coefPtr;
-     int len;
-{
+/*	inverse (analysis, all-zero) filter */
+void I_DIR (FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len) {
   FTYPE *cP, *iPtr, *endPtr, *freePtr;
   int i;
 
 /*	copy states and input into temp buffer*/
-   /**/ freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
+  freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
   iPtr = freePtr;
   iPtr--;
   for (endPtr = stPtr + NP; stPtr < endPtr; stPtr++)
@@ -58,7 +52,7 @@ Motorola Inc.
   iPtr -= len - 1;
 
 /*	perform filter*/
-   /**/ for (endPtr = iPtr + len; iPtr < endPtr; iPtr++) {
+  for (endPtr = iPtr + len; iPtr < endPtr; iPtr++) {
     *oPtr = 0.0;
     cP = coefPtr - 1;
     for (i = 1; i <= NP; i++)
@@ -68,7 +62,7 @@ Motorola Inc.
   }
 
 /*	update states*/
-   /**/ stPtr--;
+  stPtr--;
   for (endPtr = stPtr - NP; stPtr > endPtr; stPtr--)
     *stPtr = *--iPtr;
 
@@ -78,18 +72,12 @@ Motorola Inc.
 
 /*--------------------------------------------------------------------------*/
 /*	synthesis (all-pole) filter*/
- /**/ void DIR (inPtr, oPtr, stPtr, coefPtr, len)
-     FTYPE *inPtr;
-     FTYPE *oPtr;
-     FTYPE *stPtr;
-     FTYPE *coefPtr;
-     int len;
-{
+void DIR (FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len) {
   FTYPE *cP, *tmpPtr, *endPtr, *freePtr;
   int i;
 
 /*	copy states into temp output buffer*/
-   /**/ freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
+  freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
   tmpPtr = freePtr;
   for (endPtr = stPtr + NP; stPtr < endPtr; stPtr++) {
     *tmpPtr = *stPtr;
@@ -97,7 +85,7 @@ Motorola Inc.
   }
 
 /*	perform filter*/
-   /**/ for (endPtr = tmpPtr + len; tmpPtr < endPtr; tmpPtr++) {
+  for (endPtr = tmpPtr + len; tmpPtr < endPtr; tmpPtr++) {
     *tmpPtr = 0.0;
     cP = coefPtr - 1;
     for (i = 1; i <= NP; i++)
@@ -109,25 +97,19 @@ Motorola Inc.
   }
 
 /*	update states*/
-   /**/ stPtr--;
+  stPtr--;
   for (endPtr = stPtr - NP; stPtr > endPtr; stPtr--)
     *stPtr = *--tmpPtr;
 
   free (freePtr);
 }
 
-
-void ZI_DIR (oPtr, stPtr, coefPtr, len)
-     FTYPE *oPtr;
-     FTYPE *stPtr;
-     FTYPE *coefPtr;
-     int len;
-{
+void ZI_DIR (FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len) {
   FTYPE *cP, *tmpPtr, *endPtr, *freePtr;
   int i;
 
 /*	copy states into temp output buffer*/
-   /**/ freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
+  freePtr = (FTYPE *) malloc ((len + NP) * sizeof (FTYPE));
   tmpPtr = freePtr;
   for (endPtr = stPtr + NP; stPtr < endPtr; stPtr++) {
     *tmpPtr = *stPtr;
@@ -135,7 +117,7 @@ void ZI_DIR (oPtr, stPtr, coefPtr, len)
   }
 
 /*	perform filter without input*/
-   /**/ for (endPtr = tmpPtr + len; tmpPtr < endPtr; tmpPtr++) {
+  for (endPtr = tmpPtr + len; tmpPtr < endPtr; tmpPtr++) {
     *tmpPtr = 0.0;
     cP = coefPtr - 1;
     for (i = 1; i <= NP; i++)

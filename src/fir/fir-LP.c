@@ -1,4 +1,4 @@
-/*                                                              v1.1 31.Dec.08 
+/*                                                              v1.1 31.Dec.08
   =============================================================================
 
                           U    U   GGG    SSSS  TTTTT
@@ -42,7 +42,7 @@ FUNCTIONS:
 
   Local (should be used only here -- prototypes only in this file)
          = fill_lp1p5_48kHz(...): filling filter coefficients into
-                                   array for LP 1.5kHz filter, factor 1:1         
+                                   array for LP 1.5kHz filter, factor 1:1
          = fill_lp35_48kHz(...): filling filter coefficients into
                                    array for LP 3.5kHz filter, factor 1:1
          = fill_lp7_48kHz(...)	: idem, for LP 7kHz, factor 1:1
@@ -56,7 +56,7 @@ FUNCTIONS:
 HISTORY:
     10.Feb.05    v1.0   First beta-version -- Cyril Guillaume & Stephane Ragot <stephane.ragot@francetelecom.com>
     15 May 07    v1.0++ added lp1p5, lp14, lp20 -- L.M.Ericsson
-    31.Dec.08  v1.1   added LP filters (12kHz) for fs=48kHz -- Huawei 
+    31.Dec.08  v1.1   added LP filters (12kHz) for fs=48kHz -- Huawei
 
   =============================================================================
 */
@@ -88,8 +88,8 @@ void fill_LP12_48kHz ARGS ((float **h0, long *lenh0));
 // FILTER_12k48k_HW
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -108,7 +108,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for low-pass filter with a 
+        Initialization routine for low-pass filter with a
 		cut-off frequency of 1.5kHz and a sampling frequency of 48kHz.
 
         Parameters:  none.
@@ -118,7 +118,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
         ~~~~~~~~~~~~~
         Returns a pointer to struct SCD_FIR;
 
-        Author: 
+        Author:
         ~~~~~~~
 
         History:
@@ -155,7 +155,7 @@ SCD_FIR *LP1p5_48kHz_init () {
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for low-pass filter with a 
+        Initialization routine for low-pass filter with a
 		cut-off frequency of 3.5kHz and a sampling frequency of 48kHz.
 
         Parameters:  none.
@@ -204,7 +204,7 @@ SCD_FIR *LP35_48kHz_init () {
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for low-pass filter with a 
+        Initialization routine for low-pass filter with a
 		cut-off frequency of 7kHz and a sampling frequency of 48kHz.
 
         Parameters:  none.
@@ -251,7 +251,7 @@ SCD_FIR *LP7_48kHz_init () {
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for low-pass filter with a 
+        Initialization routine for low-pass filter with a
 		cut-off frequency of 10kHz and a sampling frequency of 48kHz.
 
         Parameters:  none.
@@ -298,7 +298,7 @@ SCD_FIR *LP10_48kHz_init () {
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for low-pass filter with a 
+        Initialization routine for low-pass filter with a
 		cut-off frequency of 14kHz and a sampling frequency of 48kHz.
 
         Parameters:  none.
@@ -344,7 +344,7 @@ SCD_FIR *LP14_48kHz_init () {
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for low-pass filter with a 
+        Initialization routine for low-pass filter with a
 		cut-off frequency of 20kHz and a sampling frequency of 48kHz.
 
         Parameters:  none.
@@ -390,7 +390,7 @@ SCD_FIR *LP20_48kHz_init () {
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for low-pass filter with a 
+        Initialization routine for low-pass filter with a
 		cut-off frequency of 12kHz and a sampling frequency of 48kHz.
 
         Parameters:  none.
@@ -452,7 +452,7 @@ SCD_FIR *LP12_48kHz_init () {
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
 
         History:
@@ -463,10 +463,7 @@ SCD_FIR *LP12_48kHz_init () {
 */
 #undef LP1p5_48K_LEN
 #define LP1p5_48K_LEN 645
-void fill_LP1p5_48kHz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_LP1p5_48kHz (float **h0, long *lenh0) {
   static float LP1p5_48khz_coeff[LP1p5_48K_LEN] = {
     (F) 2.43083952e-006, (F) 2.85128855e-006, (F) 3.19143482e-006, (F) 3.41625411e-006,
     (F) 3.49263608e-006, (F) 3.39160516e-006, (F) 3.09054349e-006, (F) 2.57528893e-006,
@@ -644,10 +641,7 @@ void fill_LP1p5_48kHz (h0, lenh0)
 
 #undef LP35_48K_LEN
 #define LP35_48K_LEN 465
-void fill_LP35_48kHz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_LP35_48kHz (float **h0, long *lenh0) {
   static float LP35_48khz_coeff[LP35_48K_LEN] = {
     (F) 3.0753241e-006, (F) 2.1177922e-006, (F) 3.1038207e-007, (F) - 2.0761133e-006,
     (F) - 4.5436845e-006, (F) - 6.4566332e-006, (F) - 7.1868762e-006, (F) - 6.2850774e-006,
@@ -809,10 +803,7 @@ void fill_LP35_48kHz (h0, lenh0)
 
 #undef LP7_48K_LEN
 #define LP7_48K_LEN 235
-void fill_LP7_48kHz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_LP7_48kHz (float **h0, long *lenh0) {
   static float LP7_48khz_coeff[LP7_48K_LEN] = {
     (F) 6.7620966e-006, (F) 7.9901543e-006, (F) 1.0377833e-006, (F) - 1.0839254e-005,
     (F) - 1.7259735e-005, (F) - 8.9863906e-006, (F) 1.1692637e-005, (F) 2.8840921e-005,
@@ -916,10 +907,7 @@ void fill_LP7_48kHz (h0, lenh0)
 
 #undef LP10_48K_LEN
 #define LP10_48K_LEN 165
-void fill_LP10_48kHz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_LP10_48kHz (float **h0, long *lenh0) {
   static float LP10_48khz_coeff[LP10_48K_LEN] = {
     (F) 9.0584721e-006, (F) 1.0120685e-005, (F) - 1.0969194e-005, (F) - 2.4999268e-005,
     (F) 3.0547872e-006, (F) 4.2008061e-005, (F) 2.0210846e-005, (F) - 5.1360637e-005,
@@ -993,7 +981,7 @@ void fill_LP10_48kHz (h0, lenh0)
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
 
         History:
@@ -1005,10 +993,7 @@ void fill_LP10_48kHz (h0, lenh0)
 
 #undef LP14_48K_LEN
 #define LP14_48K_LEN 469
-void fill_LP14_48kHz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_LP14_48kHz (float **h0, long *lenh0) {
   static float LP14_48khz_coeff[LP14_48K_LEN] = {
     (F) - 6.88247135e-007, (F) 4.13493912e-006, (F) - 1.60205568e-006, (F) - 4.30455779e-006, (F) 4.57461611e-006, (F) 2.64443920e-006, (F) - 7.19145207e-006, (F) 9.91494924e-007,
     (F) 8.13347584e-006, (F) - 5.93309212e-006, (F) - 6.27791864e-006, (F) 1.06914503e-005, (F) 1.24488535e-006, (F) - 1.33007295e-005, (F) 6.19474043e-006, (F) 1.19614662e-005,
@@ -1100,7 +1085,7 @@ void fill_LP14_48kHz (h0, lenh0)
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
 
         History:
@@ -1112,10 +1097,7 @@ void fill_LP14_48kHz (h0, lenh0)
 
 #undef LP20_48K_LEN
 #define LP20_48K_LEN 323
-void fill_LP20_48kHz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_LP20_48kHz (float **h0, long *lenh0) {
   static float LP20_48khz_coeff[LP20_48K_LEN] = {
     (F) 4.54990767e-006, (F) - 3.19143482e-006, (F) 7.45335082e-008, (F) 4.30659855e-006, (F) - 8.82261206e-006, (F) 1.19401821e-005, (F) - 1.21588383e-005, (F) 8.54599915e-006,
     (F) - 1.20546174e-006, (F) - 8.49706236e-006, (F) 1.80814164e-005, (F) - 2.45042270e-005, (F) 2.50161249e-005, (F) - 1.81069190e-005, (F) 4.24976617e-006, (F) 1.38343659e-005,
@@ -1189,7 +1171,7 @@ void fill_LP20_48kHz (h0, lenh0)
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
 
         History:
@@ -1200,10 +1182,7 @@ void fill_LP20_48kHz (h0, lenh0)
 */
 #undef LP12_48K_LEN
 #define LP12_48K_LEN 329
-void fill_LP12_48kHz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_LP12_48kHz (float **h0, long *lenh0) {
   static float LP12_48khz_coeff[LP12_48K_LEN] = {
     (F) 5.470766887e-006, (F) - 2.137526789e-007, (F) - 7.771705827e-006, (F) 4.674858276e-007, (F) 1.051786002e-005, (F) - 8.498761645e-007, (F) - 1.375755888e-005, (F) 1.392548734e-006,
     (F) 1.754140054e-005, (F) - 2.131460955e-006, (F) - 2.192212757e-005, (F) 3.107203629e-006, (F) 2.695448023e-005, (F) - 4.365302366e-006, (F) - 3.269502715e-005, (F) 5.956518106e-006,

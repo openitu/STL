@@ -41,7 +41,7 @@
 
 	Options:
 	~~~~~~~~
-	-skip no ... skips saving to file the first `no' processed samples 
+	-skip no ... skips saving to file the first `no' processed samples
 	-lseg l .... defines as `l' the number of samples per processing block
 
         Compilation:
@@ -222,10 +222,7 @@ void display_usage () {
  **************************************************************************
  **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
 /*
  * ......... Define symbols of type  SCD_IIR for each filter .........
  */

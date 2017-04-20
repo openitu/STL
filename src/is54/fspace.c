@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -23,16 +23,12 @@ Motorola Inc.
 
 **************************************************************************/
 /*------------------------------------------------------------------*/
- /**/
 /*	freeSpace.c -- frees allocated memory.*/
-   /**/
 /*------------------------------------------------------------------*/
-   /**/
 /*	Written by: Matt Hartman*/
-   /**/
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-   /**/
+
 #include "vparams.h"
 /*#include "stdlib.h"*/
 void freeSpace () {

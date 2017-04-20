@@ -26,12 +26,7 @@ static long c__1 = 1;
 /* NOTE: These subroutines are not strictly FORTRAN77 and */
 /*       should be modified according to the Fortran dialect used. */
 /*       IMPLICIT NONE */
-/* Subroutine */ int fopen_ (lun, name, mode, name_len)
-     long *lun;
-     char *name;
-     long *mode;
-     ftnlen name_len;
-{
+int fopen_ (long *lun, char *name, long *mode, ftnlen name_len) {
   /* System generated locals */
   olist o_1;
 
@@ -65,9 +60,8 @@ static long c__1 = 1;
 }                               /* fopen_ */
 
 /*       IMPLICIT NONE */
-/* Subroutine */ int fread_ (lun, buf, pos, x, eof)
-     long *lun, *buf, *pos, *x, *eof;
-{
+
+int fread_ (ling *lun, long *buf, long *pos, long  *x, long *eof) {
   /* System generated locals */
   long i_1;
 
@@ -111,9 +105,7 @@ L999:
 }                               /* fread_ */
 
 /*       IMPLICIT NONE */
-/* Subroutine */ int fwrite_ (lun, buf, pos, x)
-     long *lun, *buf, *pos, *x;
-{
+int fwrite_ (long *lun, long *buf, long *pos, long *x) {
   /* System generated locals */
   long i_1, i_2;
 

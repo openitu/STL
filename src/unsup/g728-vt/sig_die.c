@@ -5,10 +5,7 @@
 #define SIGIOT SIGABRT
 #endif
 
-void sig_die (s, kill)
-     register char *s;
-     int kill;
-{
+void sig_die (register char *s, int kill) {
 /* print error message, then clear buffers */
   fflush (stderr);
   fprintf (stderr, "%s\n", s);

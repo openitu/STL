@@ -17,7 +17,7 @@
 
   Usage:
   ~~~~~~
-  $ filter [-options] Flt_type InpFile OutFile 
+  $ filter [-options] Flt_type InpFile OutFile
            [BlockSize [1stBlock [NoOfBlocks]]]
 
   where:
@@ -29,14 +29,14 @@
                 to be processed;
   NoOfBlocks    is the number of blocks to be processed, starting on
                 block "1stBlock"
-        
+
   Options:
   -mod .......... uses the modified IRS characteristic instead of the
                   "regular" one.
   -down ......... filtering is downsample (for HQ2, HQ3, FLAT, IFLAT, and PCM)
   -up ........... filtering is upsample (for HQ2, HQ3, FLAT, IFLAT, and PCM)
-  -async ........ asynchronization operation (disables -down) \n"))  
-  -delay d ...... number of samples to delay the input signal for 
+  -async ........ asynchronization operation (disables -down) \n"))
+  -delay d ...... number of samples to delay the input signal for
                   asynchronous tandeming simulation. For d>0, null
                   samples are inserted in the begining of the file,
                   d<0 causes samples to be dropped. Default is d=0.
@@ -60,7 +60,7 @@
    GSM1     GSM Mobile station input response w/ factor 1:1 at 16 kHz
    P341     Send-part weighting of ITU-T Rec.P.341 (Wideband telephones)
    DC       Direct-form DC-removal IIR filter (factor 1:1)
-   IFLAT    Flat IIR low-pass with factor 1:3 (up) or 3:1 (down) using a 
+   IFLAT    Flat IIR low-pass with factor 1:3 (up) or 3:1 (down) using a
             cascade structure
    5KBP     50-5000 Hz Flat bandpass FIR filter for fs=16kHz, 1:1
    100_5KBP	100-5000 Hz Flat bandpass FIR filter for fs=16kHz, 1:1
@@ -86,7 +86,7 @@
   MSDOS Borland tcc++ 1.0, gcc 2.6.3/DJGPP
   Win95 gcc/Cygnus egcs.2.91.57
   SunOs 4.1 cc
-   
+
   Original author:
   ~~~~~~~~~~~~~~~~
   Simao Ferraz de Campos Neto
@@ -99,9 +99,9 @@
   30.Apr.1994 v1.0  Release of 1st version <tdsimao@venus.cpqd.ansp.br>
   23.Sep.1994 v2.0  Updated to accomodate changes in the name of the name and
                     splitting of module in several files, for ease of expansion.
-  12.Oct.1994 v2.1  Added US-TIA IRS coefficients @ 8kHz and half-tilt IRS 
+  12.Oct.1994 v2.1  Added US-TIA IRS coefficients @ 8kHz and half-tilt IRS
                     @16kHz. <simao>
-  01.Jul.1995 v2.2  Added ITU-T P.341 send mask characteristic, cascade-form 
+  01.Jul.1995 v2.2  Added ITU-T P.341 send mask characteristic, cascade-form
                     IIR 3:1/1:3 filter, direct-form DC-removal filter, and
                     asynchronization operation <simao@ctd.comsat.com>
   16.May.1997 v2.3  Added 50-5000 Hz band pass filter for signals sampled at
@@ -110,7 +110,7 @@
                     a 1:1 rate operation. Also changed the way some filter
                     type options are printed (rate change, mod.IRS,
                     FIR/IIR/...).
-  02.Jan.1999 v3.0  - Added option to delay or skip samples in output file  
+  02.Jan.1999 v3.0  - Added option to delay or skip samples in output file
                       when the -async option is used. This is to
                       improve the asynchronization between input and
                       output files, in particular for the wideband case
@@ -127,10 +127,10 @@
                       FIR filter 16 1:1 characteristic, after Kyrill
                       Fisher (DT/Berkom) (used in the ETSI AMR tests).
                       <simao>
-  12.Jul.2000 v3.2  - Updated display_usage() for missing option. 
+  12.Jul.2000 v3.2  - Updated display_usage() for missing option.
                     - Added hook to prevent selection of an FIR filter
                       with downsampling *and* block size N=1. In this
-                      case, there is a bug in fir_downsampling_kernel() 
+                      case, there is a bug in fir_downsampling_kernel()
 		      [in fir-lib.c] that causes the output file to be
                       one sample long. Until the function is
                       corrected, this operation is disabled in this
@@ -145,9 +145,9 @@
 					- Added 100-5000 Hz bandpass filter
 						<Cyril Guillaume & Stephane Ragot - stephane.ragot@francetelecom.com>
    15.May.2007 v3.3++  Added 20Hz-20kHz bandpass filter
-					- Added LP filters (1.5kHz,14kHz, 20kHz) for fs=48kHz 
+					- Added LP filters (1.5kHz,14kHz, 20kHz) for fs=48kHz
 				    < Ingemar Johansson & Jonas Svedberg , Ericsson>
-   31.Dec.2008 v3.4 - Added LP filters (12kHz) for fs=48kHz 
+   31.Dec.2008 v3.4 - Added LP filters (12kHz) for fs=48kHz
 				    < huawei >
 
    02.Feb.2010 v3.5 - Modified maximum string length for filenames to avoid
@@ -183,11 +183,9 @@
  * By: Simao in 30.Apr.1992
  * Return: 1 -> OK
  *         0 -> invalid choice!
- * Last update: 11.May.2007 
+ * Last update: 11.May.2007
  */
-int valid_filter (F_type, modified_IRS)
-     char *F_type, modified_IRS;
-{
+int valid_filter (char *F_type, char *modified_IRS) {
   int valid = 0;
 
   if (strncmp (F_type, "irs", 3) == 0 || strncmp (F_type, "IRS", 3) == 0
@@ -309,11 +307,7 @@ char *filter_type_str[] = { "FIR", "Parallel-form IIR",
 };
 
 /*============================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-/*============================== */
-{
+int main (int argc, char *argv[]) {
   /* DECLARATIONS */
 
   /* Algorithm variables */
@@ -538,7 +532,7 @@ int main (argc, argv)
   }
 
 /*
-  * Filter type: PSO - Psophometric wheighting filter: factor 1:1 
+  * Filter type: PSO - Psophometric wheighting filter: factor 1:1
   */
   else if (strncmp (F_type, "pso", 3) == 0 || strncmp (F_type, "PSO", 3) == 0) {
     fir_state = psophometric_8khz_init ();
@@ -609,7 +603,7 @@ int main (argc, argv)
     fir_state = bp14k_32khz_init ();
   }
 
-  /* 
+  /*
    * Filter type: 20-20000 Hz bandpass filter (fs=48kHz): factor 1:1
    */
   else if (strncmp (F_type, "20kbp", 5) == 0 || strncmp (F_type, "20KBP", 5) == 0 || strncmp (F_type, "20Kbp", 5) == 0 || strncmp (F_type, "20kBP", 5) == 0) {
@@ -642,7 +636,7 @@ int main (argc, argv)
     fir_state = LP10_48kHz_init ();
   }
 // FILTER_12k48k_HW
-  /* 
+  /*
    * Filter type: 12kHz lowpass filter (fs=48kHz): factor 1:1
    */
   else if (strncmp (F_type, "LP12", 4) == 0 || strncmp (F_type, "lp12", 4) == 0) {
@@ -741,7 +735,7 @@ int main (argc, argv)
 
 
 /*
- * ......... PRINT INFO .......... 
+ * ......... PRINT INFO ..........
  */
   if (factor == 1)
     fprintf (stderr, "No-rate change operation\n");

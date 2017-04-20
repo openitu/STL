@@ -2,10 +2,10 @@
   ----------------------------------------------------------------------------
   scaldemo.c
   ~~~~~~~~~~
-  Demo program to scale an input file by a factor A, scalar or in dB. 
-  Input data is supposed to be aligned in 16-bit, 2-complement words and 
-  containing left-adjusted samples. Default resolution is 16 bits per 
-  sample, and rounding is used as default when converting from float to 
+  Demo program to scale an input file by a factor A, scalar or in dB.
+  Input data is supposed to be aligned in 16-bit, 2-complement words and
+  containing left-adjusted samples. Default resolution is 16 bits per
+  sample, and rounding is used as default when converting from float to
   short.
 
   When resolutions different from 16 bits are used with rounding,
@@ -64,7 +64,7 @@
                    not a multiple of the frame size. The program was
                    truncating the output file size to a multiple of
                    the current block size. <simao>
-  10.Aug.99  v1.3  Corrected a bug in the initialization of the mask[] 
+  10.Aug.99  v1.3  Corrected a bug in the initialization of the mask[]
                    array; the value for 14 bit masking was
                    incorrect. Correct from 0xFFFB to 0xFFFC. Added
                    option to enable or disable that samples be
@@ -153,10 +153,7 @@ void display_usage () {
 /* ************************************************************************ */
 /* *********************** Demo program *********************************** */
 /* ************************************************************************ */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Parameters for operation */
   long N = 256, N1 = 1, N2 = 0;
   long blk_count, nsam, NrSat = 0, NrTot = 0;

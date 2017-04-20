@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -23,17 +23,17 @@ Motorola Inc.
 
 **************************************************************************/
 /*------------------------------------------------------------------*/
- /**/
+
 /*	flatv.c -- FLAT algorithm for determining reflection coefs,*/
 /*			quantization routines and tables.*/
-   /**/
+
 /*------------------------------------------------------------------*/
-   /**/
+
 /*	Written by: Matt Hartman*/
-   /**/
+
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-   /**/
+
 #include "vparams.h"
 #include <assert.h>
 #include <stdio.h>
@@ -41,8 +41,7 @@ Motorola Inc.
 #include <math.h>
 /*------------------------------------------------------------------------*/
 /*	FLATV -- calculates Rq0 and k's.*/
- /**/ static FTYPE QUANT ();
-/*FTYPE val, int i*/
+static FTYPE QUANT (FTYPE val, int i);
 
 void FLATV () {
   FTYPE *sd;                    /* points to pre-emphasized input */
@@ -68,15 +67,15 @@ void FLATV () {
   int i, j, k, end;
 
 /*	calculate autocorrelation matrix*/
-   /**/
+
 /*	The ac array is a square matrix, but only the upper triangular*/
 /*	is filled and updated.  A first-row entry, ac[0][i], is calculated*/
 /*	first, then all entries in the same diagonal are calculated in turn*/
 /*	from the previous value.*/
-     /**/
+
 /*	first pre-emphasize one analysis length of speech, and put into*/
 /*	double-precision buffer*/
-     /**/ s = inBuf + INBUFSIZ - A_LEN;
+       s = inBuf + INBUFSIZ - A_LEN;
   tp = s - 1;
   freePtr = (FTYPE *) malloc (A_LEN * sizeof (FTYPE));
   sd = freePtr;
@@ -85,7 +84,7 @@ void FLATV () {
   sd -= A_LEN;
 
 /*	now calculate ac matrix*/
-   /**/ for (i = 0; i <= NP; i++) {
+     for (i = 0; i <= NP; i++) {
     ac[0][i] = 0.0;
     for (k = NP; k < A_LEN; k++)
       ac[0][i] += sd[k] * sd[k - i];
@@ -96,18 +95,18 @@ void FLATV () {
 
 /*	calculate and quantize sqrt(S_LEN * avg R0), assign to external*/
 /*	variable.*/
-   /**/ avgR0 = sqrt ((S_LEN * (ac[0][0] + ac[NP][NP])) / (2.0 * (A_LEN - NP)));
+     avgR0 = sqrt ((S_LEN * (ac[0][0] + ac[NP][NP])) / (2.0 * (A_LEN - NP)));
   T_NEW.rq0 = QUANT (avgR0, 0);
 
 /*	initialize F, B, and C matricies from the ac matrix*/
-   /**/
+
 /*	The f and b arrays are square matricies; however, since they are*/
 /*	symmetric, only the upper triangulars are filled and updated.*/
 /*	The symmetry of the c matrix along diagonal below the main*/
 /*	diagonal is utilized in the initialization.  Spectral*/
 /*	smoothing is applied to the ac matrix before it is used to*/
 /*	initialize the f, b, and c matricies.*/
-     /**/ for (i = 0; i <= NP; i++) {
+       for (i = 0; i <= NP; i++) {
     for (j = 0; j <= NP - i; j++) {
       k = j + i;
       temp = *(sst + i) * ac[j][k];
@@ -124,42 +123,42 @@ void FLATV () {
   }
 
 /*	reflection coef loop*/
-   /**/
+
 /*	Calculates rj (checking for zero denominator and unstable result),*/
 /*	quantizes, and updates the f, b, and c matricies.  Matrix entries*/
 /*	f[i][k], b[i-1][k-1], c[i][k-1], and c[k][i-1], are updated*/
 /*	simultaneously using common terms.  The updates are done in place.*/
-     /**/ kPtr = T_NEW.k;
+       kPtr = T_NEW.k;
   for (j = 1; j <= NP; j++) {
     /* calculate denominator */
-     /**/ temp = (f[0][0] + b[0][0] + f[NP - j][NP - j] + b[NP - j][NP - j]);
+       temp = (f[0][0] + b[0][0] + f[NP - j][NP - j] + b[NP - j][NP - j]);
     if (temp == 0.0) {
       /* denominator is zero, set energy to lowest level and do nothing */
       /* with the rc's */
-       /**/ codes = codeBuf;
+         codes = codeBuf;
       T_NEW.rq0 = QUANT (0.0, 0);
       codes = codeBuf + NP + 1;
       break;
     }
 
     /* calculate numerator */
-     /**/ temp2 = -2.0 * (c[0][0] + c[NP - j][NP - j]);
+       temp2 = -2.0 * (c[0][0] + c[NP - j][NP - j]);
     if (fabs (temp2) >= temp) {
       /* reflection coef >= 1.0, fill all rc's with zero */
-       /**/ for (; codes < codeBuf + NP + 1; kPtr++)
+         for (; codes < codeBuf + NP + 1; kPtr++)
         *kPtr = QUANT (0.0, kPtr - T_NEW.k + 1);
       fprintf (stderr, "WARNING FROM FLATV: k's unstable in frame %d\n", frCnt);
       break;
     }
 
     /* calculate and quantize reflection coef */
-     /**/ temp = temp2 / temp;
+       temp = temp2 / temp;
     *kPtr = QUANT (temp, j);
     if (j == NP)                /* exit here if done */
       break;
 
     /* update matricies */
-     /**/ end = NP - j;
+       end = NP - j;
     for (i = 0; i <= end; i++) {
       for (k = i; k <= end; k++) {
         termf = f[i][k];
@@ -188,13 +187,10 @@ void FLATV () {
 
 /*------------------------------------------------------------------------*/
 /*	QUANT -- quantization routine*/
- /**/
+
 /*	Note: if value to be quantized equals boundary value, this routine*/
 /*		rounds up*/
- /**/ static FTYPE QUANT (val, i)
-     FTYPE val;
-     int i;
-{
+static FTYPE QUANT (FTYPE val, int i) {
   int offset;                   /* holds the address offset for the next binary search update */
 
   FTYPE *tmpPtr, *tmpPtr2, *begin;
@@ -219,10 +215,8 @@ void FLATV () {
 
 
 /*------------------------------------------------------------------------*/
-/*	lookup -- routine for decoding r0 and k's*/
- /**/ FTYPE lookup (i)
-     int i;
-{
+/*	lookup -- routine for decoding r0 and k's */
+FTYPE lookup (int i) {
   FTYPE rVal;
 
   rVal = *(*(r0kAddr + i) + 2 * *codes);

@@ -3,21 +3,21 @@
 
   eid8k.c
   ~~~~~~~
-  
+
   Program Description:
   ~~~~~~~~~~~~~~~~~~~~
-  This example program produces the files which are necessary to 
-  generate all error pattern for performing the Experiment 1 and 3 for 
+  This example program produces the files which are necessary to
+  generate all error pattern for performing the Experiment 1 and 3 for
   the ITU-T 8 kbit/s speech coding selection test. There, files
   that are CHAR oriented are used by the host laboratory hardware.
-  Therefore, the output of this program are *NOT* the UGST-usually 
+  Therefore, the output of this program are *NOT* the UGST-usually
   used word format!!!
 
-  This program generates a bitstream error pattern file that can be 
-  x-ored with, for example, the coded bitstream of a test or reference 
-  algorithm. The error pattern can be generated according to 3 models: 
-  Random bit errors (BER), and random (FER) and (BFER) burst frame 
-  erasure. 
+  This program generates a bitstream error pattern file that can be
+  x-ored with, for example, the coded bitstream of a test or reference
+  algorithm. The error pattern can be generated according to 3 models:
+  Random bit errors (BER), and random (FER) and (BFER) burst frame
+  erasure.
 
   Valid range for the BER and FER is [0..0.5], and for the BFER is one of
   the 3 values 1%, 3%, and 5%.
@@ -27,7 +27,7 @@
   eid8k err_pat_bs mode frno startfr state_f rate
   Where:
   err_pat_bs ... name of error pattern bitstream file
-  mode ......... a letter representing one of 4 operating modes: 
+  mode ......... a letter representing one of 4 operating modes:
                  R -> Random Bit Errors
                  F -> (Random) Frame Erasure
                  B -> Burst Frame Erasure
@@ -38,20 +38,20 @@
 
   Original Author:
   ~~~~~~~~~~~~~~~~
-  Gerhard Schroeder 		Tel: +49 6151 833973  
+  Gerhard Schroeder 		Tel: +49 6151 833973
   Deutsche Bundespost TELEKOM	Fax: +49 6151 895234
   Postfach 100003		Email: gerhard.schroeder@ties.itu.ch
   64276 Darmstadt
   Germany
-    
-  ITU-T recommendation:      
+
+  ITU-T recommendation:
   ~~~~~~~~~~~~~~~~~~~~~
   Software tools UGST G.191
 
   History:
   ~~~~~~~~
   28.Jul.1993 v1.B  Created by <gerhard.schroeder@ties.itu.ch>
-  19.Apr.1994 v1.0  Released to UGST; Added help and 
+  19.Apr.1994 v1.0  Released to UGST; Added help and
                     documentation changed by <simao@cpqd.ansp.br>
   06.Oct.1997 v3.1  Removed some compilation warnings <simao.campos@comsat.com>
   28.Mar.2000 v3.2  Added warning if module compiled in portability test
@@ -135,11 +135,8 @@ void display_usage () {
 /* ************************************************************************* */
 /* ************************** MAIN_PROGRAM ********************************* */
 /* ************************************************************************* */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
-  /* 
+int main (int argc, char *argv[]) {
+  /*
    **  Command line parameters
    */
   char mode;                    /* Processing mode Random,Frame,Burst */
@@ -150,26 +147,26 @@ int main (argc, argv)
   char ber_file_name[MAX_STRLEN];       /* File name for saving BER state */
   char fer_file_name[MAX_STRLEN];       /* File name for saving FER state */
   char burst_file_name[MAX_STRLEN];     /* File name for saving FER burst state */
-  /* 
+  /*
    **  File I/O parameter
    */
   FILE *out_file_ptr;
-  /* 
+  /*
    **  EID parameter UGST
    */
   SCD_EID *BEReid,              /* Pointer to BER EID structure */
    *FEReid;                     /* Pointer to FER EID structure */
-  /* 
+  /*
    **  EID parameter Bellcore
    */
   BURST_EID *burst_eid;         /* Pointer to FER burst EID structure */
-  /* 
+  /*
    **  Data arrays
    */
   char zero_vector[ZERO_VECTOR_LENGTH], frame_erased[EID_BUFFER_LENGTH], frame_okay[EID_BUFFER_LENGTH];
   char ybuff[512];              /* Output data buffer with 512 entries */
   short *EPbuff;                /* Bit error buffer */
-  /* 
+  /*
    **  Aux. variables
    */
   double FER;                   /* frame erasure rate */
@@ -205,7 +202,7 @@ int main (argc, argv)
   if (argc == 1)
     display_usage ();
 
-  /* 
+  /*
    **  Get command line parameters
    */
   GET_PAR_S (1, "_Output bit stream file ...........................: ", data_file_name);
@@ -219,13 +216,13 @@ int main (argc, argv)
     exit (1);
   }
 
-  /* 
+  /*
    **  Open output file
    */
   if ((out_file_ptr = fopen (data_file_name, WB)) == NULL)
     HARAKIRI ("Could not create output file\n", 1);
 
-  /* 
+  /*
    **  Select mode
    */
   switch (mode) {
@@ -233,7 +230,7 @@ int main (argc, argv)
   case 'r':
     printf (" Generate Random Bit Errors: UGST model \n");
     GET_PAR_S (5, "_File for BER state variable ...............: ", ber_file_name);
-    /* 
+    /*
      **  Try to open EID-States file.
      */
     BEReid = recall_eid_from_file (&ber_file_name[0], &BER, &BER_gamma);
@@ -241,7 +238,7 @@ int main (argc, argv)
       printf (" File with EID-states doesn't exist. Creating one.\n");
       GET_PAR_D (6, "_Bit error rate (0.0 .. 0.5) ...............: ", ber_rate);
       BER = ber_rate;
-      /* 
+      /*
        **  Setup new EID
        */
       if ((BEReid = open_eid (BER, BER_gamma)) == (SCD_EID *) 0) {
@@ -256,7 +253,7 @@ int main (argc, argv)
   case 'f':
     printf (" Generate Random Frame Erasures: UGST model \n");
     GET_PAR_S (5, "_File for FER state variable ...............: ", fer_file_name);
-    /* 
+    /*
      **  Try to open EID-States file.
      */
     FEReid = recall_eid_from_file (&fer_file_name[0], &FER, &FER_gamma);
@@ -264,7 +261,7 @@ int main (argc, argv)
       printf (" File with EID-states doesn't exist. Create one\n");
       GET_PAR_D (6, "_Frame erasure rate (0.0 .. 0.5) ..............: ", ber_rate);
       FER = ber_rate;
-      /* 
+      /*
        **  Setup new EID
        */
       if ((FEReid = open_eid (FER, FER_gamma)) == (SCD_EID *) 0) {
@@ -281,14 +278,14 @@ int main (argc, argv)
     GET_PAR_S (5, "_File for FER state variable ............: ", burst_file_name);
     GET_PAR_D (6, "_Burst erasure rate (1,3,5 pct) .........: ", ber_rate);
     index = (long) ber_rate;
-    /* 
+    /*
      **  Try to open burst eid state file
      */
     burst_eid = recall_burst_eid_from_file (&burst_file_name[0], index);
     if (burst_eid == (BURST_EID *) 0) {
       printf (" File with burst eid states doesn't exist.");
       printf (" Create one\n");
-      /* 
+      /*
        **  Setup new EID
        */
       if ((burst_eid = open_burst_eid (index)) == (BURST_EID *) 0) {
@@ -310,7 +307,7 @@ int main (argc, argv)
     break;
   }
 
-  /* 
+  /*
    **  Allocate memory for the data buffers
    */
   EPbuff = (short *) calloc (EID_BUFFER_LENGTH, sizeof (short));
@@ -318,7 +315,7 @@ int main (argc, argv)
     HARAKIRI ("Could not allocate memory for error pattern buffer\n", 1);
   }
 
-  /* 
+  /*
    **  Generate the bit streams
    */
   for (i = 0; i < ZERO_VECTOR_LENGTH; i++)
@@ -416,7 +413,7 @@ int main (argc, argv)
     }
   }
 
-  /* 
+  /*
    ** .. Save EID-status to file and print some statistics ...
    */
   switch (mode) {
@@ -454,7 +451,7 @@ int main (argc, argv)
   case 'B':
   case 'b':
     {
-      /* 
+      /*
        **  save burst eid state variable onto a file
        */
       save_burst_eid_to_file (burst_eid, &burst_file_name[0]);
@@ -479,7 +476,7 @@ int main (argc, argv)
     }
   }                             /* End switch */
 
-  /* 
+  /*
    **  Close the output file and quit
    */
   fclose (out_file_ptr);

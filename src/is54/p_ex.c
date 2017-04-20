@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -34,11 +34,7 @@ Motorola Inc.
 /*	inclusions*/
    /**/
 #include "vparams.h"
-void P_EX (oPtr, psPtr, lag)
-     FTYPE *oPtr;
-     FTYPE *psPtr;
-     int lag;
-{
+void P_EX (FTYPE *oPtr, FTYPE *psPtr, int lag) {
   FTYPE *tmpPtr, *savePtr, *savePtr2, *endPtr;
 
   savePtr = psPtr + LMAX;       /* savePtr set past end of LTP state */

@@ -134,12 +134,7 @@ void display_usage () {
 /* ....................... End of display_usage() .......................... */
 
 
-/* ==================================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-/* ==================================== */
-{
+int main (int argc, char *argv[]) {
   char out_is_file = NO, oper;
   int i, k, l, K;
   char File1[MAX_STRLEN], File2[MAX_STRLEN];

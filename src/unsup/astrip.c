@@ -5,14 +5,14 @@
   ~~~~~~~~
 
   Description:
-  ~~~~~~~~~~~~ 
+  ~~~~~~~~~~~~
   Program for stripping a segment from a given 16-bit word sample
   file, e.g. a speech file. To smooth the transition, a windowing
   may be applied.
 
   Usage:
   ~~~~~~
-  $ ASTRIP [-options] file1 file2 
+  $ ASTRIP [-options] file1 file2
            [BlockSize [1stBlock [NoOfBlocks [DataType]]]]]
   where:
    file1       is the first file name;
@@ -31,14 +31,14 @@
                 file1 (default: last)
    -sample      parameters specified are number of samples instead of
                 number of blocks.
-   -smooth      applies smoothing to the beginning and end of the 
+   -smooth      applies smoothing to the beginning and end of the
                 file segment being stripped. Default: no smoothing.
                 If specified, then Hanning window for WLEN samples
                 will be used by default. The default WLEN is defined
-                at compilation time, but set "on factory" to 1600. 
+                at compilation time, but set "on factory" to 1600.
    -window #    Parameter for windowing. Default is 0.50 (Hanning).
-   -wlen #      Length for window smoothing. "Factory" default is 
-                WLEN=1600 samples (100 ms at a 16 kHz sampling rate) 
+   -wlen #      Length for window smoothing. "Factory" default is
+                WLEN=1600 samples (100 ms at a 16 kHz sampling rate)
    (*) indicate that the default option is to work with block numbers,
        rather than with sample numbers.
 
@@ -54,7 +54,7 @@
   25/Oct/1995  v1.0  Created
   06/Sep/1996  v2.0  Added window smoothing for start/end segments <simao>
   10/Feb/1999  v2.1  Improved user messages <simao>
-  01/May/2000  v2.2  Solved file truncation problem when file size not a 
+  01/May/2000  v2.2  Solved file truncation problem when file size not a
                      multiple of the block size; solved a problem when
                      in sample mode that the end of the file was NOT
                      being smoothed out <simao.campos@labs.comsat.com>.
@@ -102,9 +102,7 @@ void display_usage ARGS ((void));
   ----------------------------------------------------------------------
 */
 #define EPS 1E-5
-char *window_type (alpha)
-     double alpha;
-{
+char *window_type (double alpha) {
   if (alpha - 0.5 < EPS)
     return "Hanning";
   else if (alpha - 0.54 < EPS)
@@ -122,7 +120,7 @@ char *window_type (alpha)
 /*
  * --------------------------------------------------------------------------
  * ... Display usage of program ...
- *     Simao 
+ *     Simao
  * --------------------------------------------------------------------------
  */
 #define P(x) printf x
@@ -170,15 +168,7 @@ void display_usage () {
 #undef P
 /* ...................... End of display_usage() ..........................*/
 
-
-
-
-/*============================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-/*============================== */
-{
+int main (int argc, char *argv[]) {
   /* segment start/end-smoothing counters */
   long start_count = 0, end_count = 0;
   /* block size, block/sample counters */

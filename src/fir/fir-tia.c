@@ -1,4 +1,4 @@
-/*                                                            28.Mar.2000 v1.1 
+/*                                                            28.Mar.2000 v1.1
   =============================================================================
 
                           U    U   GGG    SSSS  TTTTT
@@ -30,7 +30,7 @@ ORIGINAL BY:
 
 DESCRIPTION:
         This file contains procedures for IRS send part filtering for
-	several sampling rates. Up and down sampling has not been made 
+	several sampling rates. Up and down sampling has not been made
 	part of this sub-unit.
 
 FUNCTIONS:
@@ -42,8 +42,8 @@ FUNCTIONS:
 
 HISTORY:
     30.Sep.1994 v1.0 Created <simao@ctd.comsat.com>.
-    28.Mar.2000 v1.1 Added type casting to float in fill_tia_irs8khz() to 
-                     eliminate compilation warnings in MS Visual C 
+    28.Mar.2000 v1.1 Added type casting to float in fill_tia_irs8khz() to
+                     eliminate compilation warnings in MS Visual C
                      compiler <simao.campos@labs.comsat.com>
 
   =============================================================================
@@ -69,8 +69,8 @@ HISTORY:
 void fill_tia_irs8khz ARGS ((float **h0, long *lenh0));
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -158,17 +158,14 @@ SCD_FIR *tia_irs_8khz_init () {
         History:
         ~~~~~~~~
         28.Feb.1992 v1.0 Release of 1st version
-        28.Mar.2000 v1.1 Added type cast to float to avoid compilation 
+        28.Mar.2000 v1.1 Added type cast to float to avoid compilation
                          warnings with MS Visual C compiler <simao>
 
  ============================================================================
 */
 #define lenh0_TIAIRS8 151
 
-void fill_tia_irs8khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_tia_irs8khz (float **h0, long *lenh0) {
   static float h0IRS8[lenh0_TIAIRS8] = {
     (F) 8.997699E-03, (F) - 1.693536E-03, (F) - 9.467031E-03, (F) 2.947994E-03,
     (F) - 2.947994E-03, (F) - 8.290875E-04, (F) 7.650433E-04, (F) - 1.117980E-03,

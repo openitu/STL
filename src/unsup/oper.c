@@ -12,7 +12,7 @@
             A*file1 - B*file2 + C
             A*file1 * B*file2 + C
             A*file1 / B*file2 + C
- 
+
   Supported data types are short (in both decimal and hex formats) and,
   in the future, float. Both files have to be of the same type (short,
   float, etc).
@@ -43,18 +43,18 @@
   -q          operate quietly - only report total no.of differences
   -delay n    n is the number of samples to delay. If n>0,
               the first file should be delayed in relation to
-	      the second file (samples from file 1 should be skipped). 
-	      n<0, on the other hand, means that the 2nd file 
+	      the second file (samples from file 1 should be skipped).
+	      n<0, on the other hand, means that the 2nd file
 	      is who should be delayed (i.e., have samples skipped).
-  -random n   instructs the program to apply a random delay to the 
-              files (as defined for -delay) but no longer than 
+  -random n   instructs the program to apply a random delay to the
+              files (as defined for -delay) but no longer than
 	      n *seconds*. It is internally converted to number of
 	      samples. Default is no delay.
   -gain s     Specify that gains A, B are given either in dB (s=dB)
-	      *power* or in linear format (s=linear). Default is 
-	      linear. NOTE THAT the offset C is *always* linear. 
-  -size #     trim output filesize by the size of 1st file (#=1), 
-              of the 2nd file (#=2), the longest of both (#=3) 
+	      *power* or in linear format (s=linear). Default is
+	      linear. NOTE THAT the offset C is *always* linear.
+  -size #     trim output filesize by the size of 1st file (#=1),
+              of the 2nd file (#=2), the longest of both (#=3)
 	      or the shortest of both (#=0) [default: 0]
   -round      Uses rounding after integer operations [default]
   -trunc      Uses truncation after integer operations
@@ -62,7 +62,7 @@
   -double     display double numbers
   -short      display short numbers [default]
   -long       display long numbers
-        
+
   Original Author:
   ~~~~~~~~~~~~~~~~
   Simao Ferraz de Campos Neto
@@ -73,11 +73,11 @@
   History:
   ~~~~~~~~
   06/Jul/1995 v1.0 Created
-  30/Aug/1995 v1.1 RAND_MAX is not available in non-ANSI C 
-                   compilers; added a "hard-definition" if not 
+  30/Aug/1995 v1.1 RAND_MAX is not available in non-ANSI C
+                   compilers; added a "hard-definition" if not
 		   defined by stdlib.h <simao>.
-  25/Sep/1995 v1.2 Added option to trim by the size of the largest 
-                   of the input files. Added overflow protection to 
+  25/Sep/1995 v1.2 Added option to trim by the size of the largest
+                   of the input files. Added overflow protection to
 		   trim case.
   27/May/1997 v1.3 Increased maximum file name size <simao>
   02/Jul/1999 v1.4 Added hook to allow compilation with MS Visual
@@ -140,7 +140,7 @@ void display_usage ARGS ((void));
 /*
  * --------------------------------------------------------------------------
  * ... Display usage of program ...
- *     Simao 
+ *     Simao
  * --------------------------------------------------------------------------
  */
 #define P(x) printf x
@@ -202,28 +202,19 @@ void display_usage () {
 
 /* .............. definition of the operation functions ................... */
 #define FUNCS 4
-double add (x, y)
-     double x, y;
-{
+double add (double x, double y) {
   return x + y;
 }
 
-double sub (x, y)
-     double x, y;
-{
+double sub (double x, double y) {
   return x - y;
 }
 
-
-double mult (x, y)
-     double x, y;
-{
+double mult (double x, double y) {
   return x * y;
 }
 
-double divide (x, y)
-     double x, y;
-{
+double divide (double x, double y) {
   return y < 1E-38 ? 1E+38 : x / y;
 }
 
@@ -232,15 +223,10 @@ double divide (x, y)
 
 /*
   -------------------------------------------------------------------------
-  Operate over short int files 
+  Operate over short int files
   -------------------------------------------------------------------------
  */
-long operate_shorts (File1, File2, File3, fh1, fh2, fh3, N, N1, N2, A, B, C, oper_f, trim_by, round)
-     char *File1, *File2, *File3, trim_by;
-     int fh1, fh2, fh3;
-     long N, N1, N2;
-     double A, B, C, round, (*oper_f) ();
-{
+long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, int fh3, long N, long N1, long N2, double A, double B, double C,  double (*oper_f) (), char trim_by, double round) {
   long i, j, l, k, saved = 0;
   short *a, *b;
   register double tmp;
@@ -292,12 +278,7 @@ long operate_shorts (File1, File2, File3, fh1, fh2, fh3, N, N1, N2, A, B, C, ope
 
 
 
-/*============================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-/*============================== */
-{
+int main (int argc, char *argv[]) {
   char c[1], Oper;
   int fh1, fh2, fhr;
 

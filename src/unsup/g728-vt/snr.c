@@ -32,10 +32,7 @@
 static long c__256 = 256;
 
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Initialized data */
 
   static long nlow = 0;

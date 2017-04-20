@@ -19,8 +19,8 @@
        CODING STANDARDS".
        =============================================================
 
-  DESCRIPTION : 
-  Basicop counter utility. 
+  DESCRIPTION :
+  Basicop counter utility.
 
   This file contains a program ROM estimation tool for softwares
   written using STL basic operators.
@@ -58,12 +58,12 @@
 /** / #define VERBOSE_BLACKLIST_FUNC /*print on stdout each blacklist function call found (not counted in complexity)*/
 
 /* #define OLD_STL  */
-/* switch to old STL (before STL2005): "if", "do", are not counted directly as they should be 
+/* switch to old STL (before STL2005): "if", "do", are not counted directly as they should be
    coupled by test() that is counted as basicOp.
-   See ITU-T Software Tool Library 2000 User's Manual: 
-   "There is no complexity counted for any loops, subroutine calls, etc., 
-   except for the complexity for arithmetic test on data in program control statement 
-   (e.g. do while)." 
+   See ITU-T Software Tool Library 2000 User's Manual:
+   "There is no complexity counted for any loops, subroutine calls, etc.,
+   except for the complexity for arithmetic test on data in program control statement
+   (e.g. do while)."
 */
 
 const char basops[][20] = {     /* all basicop commands */
@@ -230,9 +230,7 @@ const char blacklist[][20] = {  /* to recognize standard C functions (memory all
 };
 
 /*reads a character from a file with end-of-file control*/
-char read_char (fp)
-     FILE *fp;
-{
+char read_char (FILE *fp) {
   char ch;
   if (!feof (fp)) {
     fscanf (fp, "%c", &ch);
@@ -243,11 +241,8 @@ char read_char (fp)
 }
 
 /*search a token in a list[][20], returns one if found or 0 otherwise*/
-int search_token (list, token, length)
-     char list[][20];
-     char token[];
-     int length;                /* length of the searched token */
-{
+ /* length of the searched token */
+int search_token (char list[][20], char token[], int length) {
   int ind2, eqcnt, i, found_flag;
   ind2 = 0;
   found_flag = 0;
@@ -270,10 +265,7 @@ int search_token (list, token, length)
   return (found_flag);
 }
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, *argv[]) {
   FILE *fp, *fpo, *fpr;
   char inchar;                  /* for the read input char */
   char words[200];              /* contains an alphanumerical word */

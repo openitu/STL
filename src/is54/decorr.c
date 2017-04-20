@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -34,11 +34,7 @@ Motorola Inc.
 /*	inclusions*/
    /**/
 #include "vparams.h"
-void DECORR (vecPtr, basisPtr, numBasis)
-     FTYPE *vecPtr;
-     FTYPE *basisPtr;
-     int numBasis;
-{
+void DECORR (FTYPE *vecPtr,FTYPE *basisPtr, int numBasis) {
   FTYPE gamma = 0.0;            /* Energy in the given vector (i.e. the vector from */
   /* which the basis set will be decorrelated) */
   FTYPE psi;                    /* Energy in the current basis vector */

@@ -141,10 +141,7 @@ void display_usage () {
 /* ************************************************************************* */
 /* ************************** MAIN_PROGRAM ********************************* */
 /* ************************************************************************* */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Command line parameters */
   char ep_type = FER;           /* Type of error pattern: FER or BER */
   char ep_format = g192;        /* Error pattern format */

@@ -4,7 +4,7 @@
 
   Description:
   ~~~~~~~~~~~~
-	
+
   Program to convert into binary an ASCII file (or a sequence of ASCII
   files) that follows the de-facto standard of the public-domain
   program uuencode.c. It has added the capability of automatically
@@ -91,7 +91,7 @@
   link xdecode
   SunOS:	cc -o xdecode xdecode.c
   GNU-C:  gcc -o xdecode xdecode.c
-  
+
   Known bugs:
   ~~~~~~~~~~~
   Under VMS, may not work for ASCII files encoded under any-ENCODE,
@@ -111,22 +111,22 @@
 
   Original Author:
   ~~~~~~~~~~~~~~~~
-  Simao Ferraz de Campos Neto - CPqD/Telebras 
+  Simao Ferraz de Campos Neto - CPqD/Telebras
 
   History:
   ~~~~~~~~
   15.Mar.91  1.0 Release of 1st implementation to UGST
-  08.Jun.92  1.1 Inclusion of operation option -t for forcing text 
+  08.Jun.92  1.1 Inclusion of operation option -t for forcing text
                  mode for output files; or -b, for binary ones (the
                  default). <tdsimao@cpqd.ansp.br>
-  31.Aug.92  1.2 Implemented correction of a transmission bug; see 
+  31.Aug.92  1.2 Implemented correction of a transmission bug; see
                  note in decode().
-  01.Sep.93  2.0 Implemented CRC calculation and fix stripped 
+  01.Sep.93  2.0 Implemented CRC calculation and fix stripped
                  trailing blanks (function decode()) <simao>
-  18.Sep.95  2.1 Cleaned up code for gcc warnings and for compilation 
+  18.Sep.95  2.1 Cleaned up code for gcc warnings and for compilation
                  error in MSDOS gcc (index() renamed: xd_index())
                  <simao@ctd.comsat.com>
-  04.Mar.97  2.2 Added option to create the decoded file into a 
+  04.Mar.97  2.2 Added option to create the decoded file into a
                  directory other than the current one. Tested for Unix
                  only so far. <simao>
   06.Jul.99  2.3 Removed compilation warnings in xd_index()
@@ -197,7 +197,7 @@ WTYPE updcrc ARGS ((WTYPE icrc, unsigned char *icp, int icnt, WTYPE * crctab, ch
 WTYPE crc_a = 0, crc_c = 0, crc_x = 0;
 int init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
 
-/* 
+/*
   --------------------------------------------------------------------------
   display_usage()
 
@@ -235,11 +235,7 @@ void display_usage () {
 /* .................... End of display_usage() .................... */
 
 
-/* ************************ Begin of main() ************************* */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char* argv[]) {
   FILE *in, *out;
   int mode, status, version;
   int more_to_decode = YES, first_time = YES, input_is_file = YES;
@@ -454,9 +450,9 @@ int main (argc, argv)
 
 /*
   ---------------------------------------------------------------------------
-  WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab, 
+  WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab,
   ~~~~~~~~~~~~  char swapped);
-  
+
   Description:
   ~~~~~~~~~~~~
   Calculate, intelligently, the CRC-16 of a dataset incrementally given a

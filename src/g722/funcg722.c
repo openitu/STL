@@ -17,22 +17,22 @@
        is subject to the "ITU-T General Public License". Please have
        it  read  in    the  distribution  disk,   or  in  the  ITU-T
        Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
-       CODING STANDARDS". 
+       CODING STANDARDS".
        ** This code has  (C) Copyright by CNET Lannion A TSS/CMC **
        =============================================================
 
 
-MODULE:         G722.C 7kHz ADPCM AT 64 KBIT/S MODULE ENCODER AND 
+MODULE:         G722.C 7kHz ADPCM AT 64 KBIT/S MODULE ENCODER AND
                 DECODER FUNCTIONS
 
 ORIGINAL BY:
-    J-P PETIT 
+    J-P PETIT
     CNET - Centre Lannion A
     LAA-TSS                         Tel: +33-96-05-39-41
     Route de Tregastel - BP 40      Fax: +33-96-05-13-16
     F-22301 Lannion CEDEX           Email: petitjp@lannion.cnet.fr
     FRANCE
-    
+
    History:
 History:
 ~~~~~~~~
@@ -51,20 +51,20 @@ History:
 #include "g722.h"
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : lsbcod                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     Encode lower subband of incomung speech/music.                         
-                                                                            
-    Inputs :                                                                
-      xh - Low sub-band portion of the input sample                         
-      rs - reset flag (read-only)                                           
-      s  - pointer to state variable (read/write)                           
-                                                                            
-    Return Value :                                                          
-     Encoded sample as a 16-bit word                                        
+
+    Function Name : lsbcod
+
+    Purpose :
+
+     Encode lower subband of incomung speech/music.
+
+    Inputs :
+      xh - Low sub-band portion of the input sample
+      rs - reset flag (read-only)
+      s  - pointer to state variable (read/write)
+
+    Return Value :
+     Encoded sample as a 16-bit word
  ___________________________________________________________________________
 */
 #define AL   s->al
@@ -78,11 +78,7 @@ History:
 #define SPL  s->spl
 #define SZL  s->szl
 
-Word16 lsbcod (xl, rs, s)
-     Word16 xl;
-     Word16 rs;
-     g722_state *s;
-{
+Word16 lsbcod (Word16 xl, Word16 rs, g722_state * s) {
   Word16 el, nbpl, il;
 
   if (sub (rs, 1) == 0) {
@@ -167,22 +163,22 @@ Word16 lsbcod (xl, rs, s)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : hsbcod                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     Encode upper sub-band of incoming speech or music.                     
-                                                                            
-    Inputs :                                                                
-      xh - High sub-band portion of the input sample                        
-      rs - reset flag (read-only)                                           
-      s  - pointer to state variable (read/write)                           
-                                                                            
-    Return Value :                                                          
-     ADPCM code for the high-band portion of the input sample as a          
-     16-bit word.                                                           
-                                                                            
+
+    Function Name : hsbcod
+
+    Purpose :
+
+     Encode upper sub-band of incoming speech or music.
+
+    Inputs :
+      xh - High sub-band portion of the input sample
+      rs - reset flag (read-only)
+      s  - pointer to state variable (read/write)
+
+    Return Value :
+     ADPCM code for the high-band portion of the input sample as a
+     16-bit word.
+
  ___________________________________________________________________________
 */
 #define AH   s->ah
@@ -196,11 +192,7 @@ Word16 lsbcod (xl, rs, s)
 #define SPH  s->sph
 #define SZH  s->szh
 
-Word16 hsbcod (xh, rs, s)
-     Word16 xh;
-     Word16 rs;
-     g722_state *s;
-{
+Word16 hsbcod (Word16 xh, Word16 rs, g722_state *s) {
   Word16 eh, nbph, ih;
 
   if (sub (rs, 1) == 0) {
@@ -287,21 +279,21 @@ Word16 hsbcod (xh, rs, s)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : lsbdec                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     Decode lower subband of incomung speech/music.                         
-                                                                            
-    Inputs :                                                                
-      ilr - ADPCM encoding of the low sub-band                              
-      mode - G.722 operation mode                                           
-      rs  - reset flag (read-only)                                          
-      s   - pointer to state variable (read/write)                          
-                                                                            
-    Return Value :                                                          
-     Decoded low-band portion of the recovered sample as a 16-bit word      
+
+    Function Name : lsbdec
+
+    Purpose :
+
+     Decode lower subband of incomung speech/music.
+
+    Inputs :
+      ilr - ADPCM encoding of the low sub-band
+      mode - G.722 operation mode
+      rs  - reset flag (read-only)
+      s   - pointer to state variable (read/write)
+
+    Return Value :
+     Decoded low-band portion of the recovered sample as a 16-bit word
  ___________________________________________________________________________
 */
 #define AL   s->al
@@ -315,12 +307,7 @@ Word16 hsbcod (xh, rs, s)
 #define SPL  s->spl
 #define SZL  s->szl
 
-Word16 lsbdec (ilr, mode, rs, s)
-     Word16 ilr;
-     Word16 mode;
-     Word16 rs;
-     g722_state *s;
-{
+Word16 lsbdec (Word16 ilr, Word16 mode, Word16 rs, g722_state *s) {
   Word16 dl, rl, nbpl, yl;
 
   if (sub (rs, 1) == 0) {
@@ -407,20 +394,20 @@ Word16 lsbdec (ilr, mode, rs, s)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : hsbdec                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     Decode lower subband of incomung speech/music.                         
-                                                                            
-    Inputs :                                                                
-      ih  - ADPCM encoding of the high sub-band                             
-      rs  - reset flag (read-only)                                          
-      s   - pointer to state variable (read/write)                          
-                                                                            
-    Return Value :                                                          
-     Decoded high-band portion of the recovered sample as a 16-bit word     
+
+    Function Name : hsbdec
+
+    Purpose :
+
+     Decode lower subband of incomung speech/music.
+
+    Inputs :
+      ih  - ADPCM encoding of the high sub-band
+      rs  - reset flag (read-only)
+      s   - pointer to state variable (read/write)
+
+    Return Value :
+     Decoded high-band portion of the recovered sample as a 16-bit word
  ___________________________________________________________________________
 */
 #define AH   s->ah
@@ -434,11 +421,7 @@ Word16 lsbdec (ilr, mode, rs, s)
 #define SPH  s->sph
 #define SZH  s->szh
 
-Word16 hsbdec (ih, rs, s)
-     Word16 ih;
-     Word16 rs;
-     g722_state *s;
-{
+Word16 hsbdec (Word16 ih, Word16 rs, g722_state *s) {
   Word16 nbph, yh;
 
   if (sub (rs, 1) == 0) {
@@ -521,28 +504,25 @@ Word16 hsbdec (ih, rs, s)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : quantl                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : quantl
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 quantl (el, detl)
-     Word16 el;
-     Word16 detl;
-{
+Word16 quantl (Word16 el, Word16 detl) {
   /* table to read IL frorm SIL and MIL: misil(sil(0,1),mil(1,31)) */
 
   static Word16 misil[2][32] = {
@@ -603,28 +583,25 @@ Word16 quantl (el, detl)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name quanth:                                                   
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name quanth:
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 quanth (eh, deth)
-     Word16 eh;
-     Word16 deth;
-{
+Word16 quanth (Word16 eh, Word16 deth) {
   static Word16 misih[2][3] = {
     {0, 1, 0},
     {0, 3, 2}
@@ -660,29 +637,25 @@ Word16 quanth (eh, deth)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : filtep                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : filtep
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 filtep (rlt, al)
-     Word16 rlt[];
-     Word16 al[];
-{
-
+Word16 filtep (Word16 rlt[], Word16 al[]) {
   Word16 wd1, wd2, spl;
 
   /* shift of rlt */
@@ -706,28 +679,25 @@ Word16 filtep (rlt, al)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : filtez                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : filtez
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 filtez (dlt, bl)
-     Word16 dlt[];
-     Word16 bl[];
-{
+Word16 filtez (Word16 dlt[], Word16 bl[]) {
   Word16 szl, wd;
   Word16 i;
 
@@ -750,28 +720,25 @@ Word16 filtez (dlt, bl)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : invqal                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : invqal
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 invqal (il, detl)
-     Word16 il;
-     Word16 detl;
-{
+Word16 invqal (Word16 il, Word16 detl) {
 
   /* inverse quantizer 4 bits for encoder or decoder */
   static Word16 ril4[16] = { 0, 7, 6, 5, 4, 3, 2, 1, 7, 6, 5, 4, 3, 2, 1, 0 };
@@ -805,29 +772,25 @@ Word16 invqal (il, detl)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : invqbl                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : invqbl
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 invqbl (ilr, detl, mode)
-     Word16 ilr;
-     Word16 detl;
-     Word16 mode;
-{
+Word16 invqbl (Word16 ilr, Word16 detl, Word16 mode) {
 
   /* Inverse quantizer 4, 5, and 6 bit tables for the decoder */
   static Word16 ril4[16] = { 0, 7, 6, 5, 4, 3, 2, 1, 7, 6, 5, 4, 3, 2, 1, 0 };
@@ -947,28 +910,25 @@ default:
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : invqah                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : invqah
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 invqah (ih, deth)
-     Word16 ih;
-     Word16 deth;
-{
+Word16 invqah (Word16 ih, Word16 deth) {
   static Word16 ih2[4] = { 2, 1, 2, 1 };
   static Word16 sih[4] = { -1, -1, 0, 0 };
   static Word16 oq2[3] = { 0, 202, 926 };
@@ -997,27 +957,25 @@ Word16 invqah (ih, deth)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : limit                                                   
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : limit
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 limit (rl)
-     Word16 rl;
-{
+Word16 limit (Word16 rl) {
 
   if (sub (rl, 16383) > 0) {
     rl = 16383;
@@ -1040,28 +998,25 @@ Word16 limit (rl)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : logsch                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : logsch
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 logsch (ih, nbh)
-     Word16 ih;
-     Word16 nbh;
-{
+Word16 logsch (Word16 ih, Word16 nbh) {
   static Word16 ih2[4] = { 2, 1, 2, 1 };
   static Word16 wh[3] = { 0, -214, 798 };
 
@@ -1092,28 +1047,25 @@ Word16 logsch (ih, nbh)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : logscl                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : logscl
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 logscl (il, nbl)
-     Word16 il;
-     Word16 nbl;
-{
+Word16 logscl (Word16 il, Word16 nbl) {
   static Word16 ril4[16] = { 0, 7, 6, 5, 4, 3, 2, 1, 7, 6, 5, 4, 3, 2, 1, 0 };
   static Word16 wl[8] = { -60, -30, 58, 172, 334, 538, 1198, 3042 };
 
@@ -1197,27 +1149,25 @@ static Word16 ila[353] = {
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : scalel                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : scalel
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 scalel (nbpl)
-     Word16 nbpl;
-{
+Word16 scalel (Word16 nbpl) {
   Word16 wd1, wd2;
 
   wd1 = s_and (shr (nbpl, 6), 511);
@@ -1229,27 +1179,25 @@ Word16 scalel (nbpl)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : scaleh                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-                                                                            
+
+    Function Name : scaleh
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+
  ___________________________________________________________________________
 */
-Word16 scaleh (nbph)
-     Word16 nbph;
-{
+Word16 scaleh (Word16 nbph) {
   Word16 wd;
 
   wd = s_and (shr (nbph, 6), 511);
@@ -1261,28 +1209,25 @@ Word16 scaleh (nbph)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : uppol1                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-     None.                                                                  
+
+    Function Name : uppol1
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+     None.
  ___________________________________________________________________________
 */
-void uppol1 (al, plt)
-     Word16 al[];
-     Word16 plt[];
-{
+void uppol1 (Word16 al[], Word16 plt[]) {
   Word16 sg0, sg1, wd1, wd2, wd3, apl1;
 
   sg0 = shr (plt[0], 15);
@@ -1328,28 +1273,25 @@ void uppol1 (al, plt)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : uppol2                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-     None.                                                                  
+
+    Function Name : uppol2
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+     None.
  ___________________________________________________________________________
 */
-void uppol2 (al, plt)
-     Word16 al[];
-     Word16 plt[];
-{
+void uppol2 (Word16 al[], Word16 plt[]) {
   Word16 sg0, sg1, sg2, wd1, wd2, wd3, wd4, wd5, apl2;
 
   sg0 = shr (plt[0], 15);
@@ -1396,30 +1338,26 @@ void uppol2 (al, plt)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : upzero                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     .                  
-                                                                            
-    Inputs :                                                                
-                                                                            
-                                                                            
-    Outputs :                                                               
-                                                                            
-     none                                                                   
-                                                                            
-    Return Value :                                                          
-     None.                                                                  
-                                                                            
+
+    Function Name : upzero
+
+    Purpose :
+
+     .
+
+    Inputs :
+
+
+    Outputs :
+
+     none
+
+    Return Value :
+     None.
+
  ___________________________________________________________________________
 */
-void upzero (dlt, bl)
-     Word16 dlt[];
-     Word16 bl[];
-{
-
+void upzero (Word16 dlt[], Word16 bl[]) {
   Word16 sg0, sgi, wd1, wd2, wd3;
   Word16 i;
 
@@ -1470,35 +1408,27 @@ static Word16 coef_qmf[24] = {
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : qmf_tx                                                  
-                                                                            
-    Purpose :                                                               
-                                                                            
-     G722 QMF analysis (encoder) filter. Uses coefficients in array         
-     coef_qmf[] defined above.                                              
-                                                                            
-    Inputs :                                                                
-     xin0 - first sample for the QMF filter (read-only)                     
-     xin1 - secon sample for the QMF filter (read-only)                     
-     xl   - lower band portion of samples xin0 and xin1 (write-only)        
-     xh   - higher band portion of samples xin0 and xin1 (write-only)       
-     s    - pointer to state variable structure (read/write)                
-                                                                            
-    Return Value :                                                          
-     None.                                                                  
+
+    Function Name : qmf_tx
+
+    Purpose :
+
+     G722 QMF analysis (encoder) filter. Uses coefficients in array
+     coef_qmf[] defined above.
+
+    Inputs :
+     xin0 - first sample for the QMF filter (read-only)
+     xin1 - secon sample for the QMF filter (read-only)
+     xl   - lower band portion of samples xin0 and xin1 (write-only)
+     xh   - higher band portion of samples xin0 and xin1 (write-only)
+     s    - pointer to state variable structure (read/write)
+
+    Return Value :
+     None.
  ___________________________________________________________________________
 */
 #define delayx s->qmf_tx_delayx
-void qmf_tx (xin0, xin1, xl, xh, s)
-     Word16 xin0;
-     Word16 xin1;
-     Word16 *xl;
-     Word16 *xh;
-     g722_state *s;
-{
-
-  /* Local variables */
+void qmf_tx (Word16 xin0, Word16 xin1, Word16 *xl, Word16 *xh, g722_state *s) {
   Word16 i;
   Word32 accuma, accumb;
   Word32 comp_low, comp_high;
@@ -1551,31 +1481,25 @@ void qmf_tx (xin0, xin1, xl, xh, s)
 
 
 /*___________________________________________________________________________
-                                                                            
-    Function Name : qmf_rx                                                  
-                                                                            
-     G722 QMF synthesis (decoder) filter. Uses coefficients in array        
-     coef_qmf[] defined above.                                              
-                                                                            
-    Inputs :                                                                
-     xout0 - first sample out of the QMF filter (write-only)                
-     xout1 - secon sample out of the QMF filter (write-only)                
-     rl    - lower band portion of a sample (read-only)                     
-     rh    - higher band portion of a sample (read-only)                    
-     s     - pointer to state variable structure (read/write)               
-                                                                            
-    Return Value :                                                          
-     None.                                                                  
+
+    Function Name : qmf_rx
+
+     G722 QMF synthesis (decoder) filter. Uses coefficients in array
+     coef_qmf[] defined above.
+
+    Inputs :
+     xout0 - first sample out of the QMF filter (write-only)
+     xout1 - secon sample out of the QMF filter (write-only)
+     rl    - lower band portion of a sample (read-only)
+     rh    - higher band portion of a sample (read-only)
+     s     - pointer to state variable structure (read/write)
+
+    Return Value :
+     None.
  ___________________________________________________________________________
 */
 #define delayx s->qmf_rx_delayx
-void qmf_rx (rl, rh, xout1, xout2, s)
-     Word16 rl;
-     Word16 rh;
-     Word16 *xout1;
-     Word16 *xout2;
-     g722_state *s;
-{
+void qmf_rx (Word16 rl, Word16 rh, Word16 *xout1, Word16 *xout2, g722_state *s) {
   Word16 i;
   Word32 accuma, accumb;
   Word32 comp_low, comp_high;

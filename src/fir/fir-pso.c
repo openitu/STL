@@ -24,7 +24,7 @@ MODULE:         FIRFLT, HIGH QUALITY FIR UP/DOWN-SAMPLING FILTER
                 Sub-unit: Psophometric filter function
 
 ORIGINAL BY:
-          
+
           Simao Ferraz de Campos Neto (C code)
 	  Comsat Laboratories                  Tel:    +1-301-428-4516
 	  22300 Comsat Drive                   Fax:    +1-301-428-9287
@@ -38,7 +38,7 @@ ORIGINAL BY:
           ITALY
 
 DESCRIPTION:
-        This file contains procedures for flat-weighting low-pass and 
+        This file contains procedures for flat-weighting low-pass and
 	high-pass filters, with rate factors of 2 and 3 for both up-
 	and down-sampling.
 
@@ -62,8 +62,8 @@ HISTORY:
                      <simao@cpqd.ansp.br>
     30.Sep.1994 v2.1 Updated to accomodate changes in the name of the name and
                      slitting of module in several files, for ease of expansion.
-    28.Mar.2000 v2.2 Added type casting to float in fill_psophometric_8khz() to 
-                     eliminate compilation warnings in MS Visual C 
+    28.Mar.2000 v2.2 Added type casting to float in fill_psophometric_8khz() to
+                     eliminate compilation warnings in MS Visual C
                      compiler <simao.campos@labs.comsat.com>
 
   =============================================================================
@@ -88,8 +88,8 @@ HISTORY:
 void fill_psophometric_8khz ARGS ((float **h0, long *lenh0));
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -116,9 +116,9 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
-        Filter coefficients: 
+        Filter coefficients:
           Paolo Usai
           CSELT
           Audio Coding and Transm.Quality  Tel:    +39-11-228-5697
@@ -128,7 +128,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
           Copyright Notice:
           " (C) 1994 CSELT - Centro Studi E Laboratori Telecomunicazioni SpA "
           " All rights reserved "
-          
+
         Routine:
           Simao Ferraz de Campos Neto
           DDS/Pr11                      Tel: +55-192-39-1396
@@ -138,17 +138,14 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
         History:
         ~~~~~~~~
         10.Apr.1994 v1.0 Release of 1st version <simao@cpqd.ansp.br>
-        28.Mar.2000 v1.1 Added type cast to float to avoid compilation 
+        28.Mar.2000 v1.1 Added type cast to float to avoid compilation
                          warnings with MS Visual C compiler <simao>
 
  ============================================================================
 */
 #define PSOPHOMETRIC_8K_LEN 156
 
-void fill_psophometric_8khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_psophometric_8khz (float **h0, long *lenh0) {
   static float psophometric_8khz_coeff[PSOPHOMETRIC_8K_LEN] = {
     (F) 0.445651, (F) - 0.067161, (F) - 0.399779, (F) - 0.204052, (F) - 0.116012, (F) 0.037295,
     (F) 0.087390, (F) 0.104088, (F) 0.077870, (F) 0.053150, (F) 0.023256, (F) 0.008227,
@@ -195,7 +192,7 @@ void fill_psophometric_8khz (h0, lenh0)
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for psophometric weighting filter for data 
+        Initialization routine for psophometric weighting filter for data
         sampled at 16 kHz.
 
         Parameters:  none.

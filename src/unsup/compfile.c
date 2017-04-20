@@ -11,7 +11,7 @@
 
        Usage:
        ~~~~~~
-       $ COMPFILE [-delay] [-h] [-d] [-float] [-double] [-short] [-long] 
+       $ COMPFILE [-delay] [-h] [-d] [-float] [-double] [-short] [-long]
                   file1 file2
                   [BlockSize [1stBlock [NoOfBlocks [TypeOfDump [DataType]]]]]
        where:
@@ -35,14 +35,14 @@
         -double      display double numbers
 	-short       display short numbers [default]
         -long        display long numbers
-        
+
        Compilation:
        ~~~~~~~~~~~~
        Sun:  cc -o cf compfile.c # K&R C, or [ok]
              acc -o cf compfile.c # ANSI C   [ok]
              gcc -fno-builtin -o cf compfile.c # gnu impl.of the ANSI C [ok]
        vaxc: cc compfile.c /obj=cf               !
-             link cf                             ! [ok] 
+             link cf                             ! [ok]
              cf:==$'f$environment("default")'cf  !
        tcc:  tcc compfile.c
 
@@ -62,7 +62,7 @@
        22/Feb/1996  v2.1  Removed compilation warnings, included headers as
                           suggested by Kirchherr (FI/DBP Telekom) to run under
 			  OpenVMS/AXP <simao@ctd.comsat.com>
-       06/Jan/1999  v2.2  Updated help message for delay option, corrected 
+       06/Jan/1999  v2.2  Updated help message for delay option, corrected
                           possibly wrong reported number of samples
                           compared.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -166,12 +166,7 @@ void display_usage () {
   30.Dec.93  v1.0  Simao
   --------------------------------------------------------------------------
 */
-long compare_floats (File1, File2, fh1, fh2, N, N1, N2, quiet)
-     char *File1, *File2;
-     int fh1, fh2;
-     long N, N1, N2;
-     char quiet;
-{
+long compare_floats (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char quiet) {
   long i, j, l, k, NrDiffs;
   char c;
   float *a, *b;
@@ -243,12 +238,7 @@ long compare_floats (File1, File2, fh1, fh2, N, N1, N2, quiet)
   30.Dec.93  v1.0  Simao
   --------------------------------------------------------------------------
 */
-long compare_doubles (File1, File2, fh1, fh2, N, N1, N2, quiet)
-     char *File1, *File2;
-     int fh1, fh2;
-     long N, N1, N2;
-     char quiet;
-{
+long compare_doubles (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char quiet) {
   long i, j, l, k, NrDiffs;
   char c;
   double *a, *b;
@@ -320,12 +310,7 @@ long compare_doubles (File1, File2, fh1, fh2, N, N1, N2, quiet)
   30.Dec.93  v1.0  Simao
   --------------------------------------------------------------------------
 */
-long compare_shorts (File1, File2, fh1, fh2, N, N1, N2, KindOfDump, quiet)
-     char *File1, *File2, KindOfDump;
-     int fh1, fh2;
-     long N, N1, N2;
-     char quiet;
-{
+long compare_shorts (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char KindOfDump, char quiet) {
   long i, j, l, k, NrDiffs;
   char c;
   short *a, *b;
@@ -400,12 +385,7 @@ long compare_shorts (File1, File2, fh1, fh2, N, N1, N2, KindOfDump, quiet)
   30.Dec.93  v1.0  Simao
   --------------------------------------------------------------------------
 */
-long compare_longs (File1, File2, fh1, fh2, N, N1, N2, KindOfDump, quiet)
-     char *File1, *File2, KindOfDump;
-     int fh1, fh2;
-     long N, N1, N2;
-     char quiet;
-{
+long compare_longs (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char *KindOfDump, char quiet) {
   long i, j, l, k, NrDiffs;
   char c;
   long *a, *b;
@@ -466,13 +446,7 @@ long compare_longs (File1, File2, fh1, fh2, N, N1, N2, KindOfDump, quiet)
 
 /* ...................... end of compare_longs() ..........................*/
 
-
-/*============================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-/*============================== */
-{
+int main (int argc, char *argv[]) {
   char C[1];
   int fh1, fh2;
 

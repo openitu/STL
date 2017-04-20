@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -23,27 +23,24 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------------*/
- /**/
+
 /*	makeCoefs.c -- functions for widening and spectral smoothing*/
 /*		       of coefs.*/
-   /**/
+
 /*-------------------------------------------------------------------*/
-   /**/
+
 /*	Written by: Matt Hartman*/
-   /**/
+
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-   /**/
+
 #include "vparams.h"
 /*#include "stdlib.h"*/
-/*	from paramConv.c*/
- /**/ int ATORC ();
+/*	from paramConv.c */
+int ATORC ();
 /*FTYPE *a, FTYPE *k*/
 
-void widen (lambda, side)
-     FTYPE lambda;
-     char side;
-{
+void widen (FTYPE lambda, char side) {
   FTYPE term;                   /* holds lambda**i term (widening factor for Ai) */
 
   FTYPE *tp, *tp2, *ep;
@@ -67,15 +64,15 @@ void widen (lambda, side)
 /*------------------------------------------------------------------------*/
 /*	A_SST -- performs spectral smoothing to get post-filter numerator*/
 /*		 coefficients*/
- /**/
-/*	function declarations*/
- /**/ void ATOCOR ();
+
+/*	function declarations */
+void ATOCOR ();
 /*FTYPE *k, FTYPE *ac*/
 void LEVINSON ();
 /*FTYPE *ac, FTYPE *a*/
 
 /*	function definition*/
- /**/ void A_SST (wCoefPtr, ssCoefPtr)
+   void A_SST (wCoefPtr, ssCoefPtr)
      FTYPE *wCoefPtr;
      FTYPE *ssCoefPtr;
 {
@@ -87,34 +84,31 @@ void LEVINSON ();
   tmpAcs = (FTYPE *) malloc ((NP + 1) * sizeof (FTYPE));
 
 /*	convert widened denominator coefs to reflection coefs*/
-   /**/ ATORC (wCoefPtr, tmpKs);
+     ATORC (wCoefPtr, tmpKs);
 
 /*	negate reflection coefficients*/
-   /**/ tp = tmpKs;
+     tp = tmpKs;
   for (ep = tp + NP; tp < ep; tp++)
     *tp *= -1.0;
 
 /*	convert to autocorrelation coefficients*/
-   /**/ ATOCOR (tmpKs, tmpAcs);
+     ATOCOR (tmpKs, tmpAcs);
 
 /*	do spectral smoothing (apply envelope to autocorrelations)*/
-   /**/ tp = tmpAcs;
+     tp = tmpAcs;
   tp2 = P_SST;
   for (ep = tp + NP + 1; tp < ep; tp++, tp2++)
     *tp *= *tp2;
 
 /*	convert smoothed ac coefs back to direct-form coefficients*/
-   /**/ LEVINSON (tmpAcs, ssCoefPtr);
+     LEVINSON (tmpAcs, ssCoefPtr);
 
   free (tmpKs);
   free (tmpAcs);
 }                               /* end of A_SST */
 
 
-void ATOCOR (k, ac)
-     FTYPE *k;
-     FTYPE *ac;
-{
+void ATOCOR (FTYPE *k, FTYPE *ac) {
   FTYPE e;                      /* error value, updated recursively */
   FTYPE *a, *aTmp;              /* buffers for intermediate direct-form coefs */
   FTYPE *acBegin;               /* points to beginning of autocorrelation array */
@@ -135,7 +129,7 @@ void ATOCOR (k, ac)
   k++;
   for (ep = ac + NP - 1; ac < ep; ac++, k++) {
     /* compute next autocorrelation coef */
-     /**/ sum = 0.0;
+       sum = 0.0;
     tp = a;
     tp2 = ac - 1;
     for (; tp2 > acBegin; tp++, tp2--)
@@ -143,7 +137,7 @@ void ATOCOR (k, ac)
     *ac = *k * e - sum;
 
     /* update e and a array */
-     /**/ e *= 1.0 - *k * *k;
+       e *= 1.0 - *k * *k;
 
     tp2 = a;
     tp3 = aTmp;
@@ -159,10 +153,7 @@ void ATOCOR (k, ac)
 }
 
 
-void LEVINSON (ac, a)
-     FTYPE *ac;
-     FTYPE *a;
-{
+void LEVINSON (FTYPE *ac, FTYPE *a) {
   FTYPE *aTmp, *bTmp;           /* buffers for intermediate direct-form coefs */
   FTYPE *rc;                    /* reflection coef array */
   FTYPE e;                      /* error value */
@@ -186,7 +177,7 @@ void LEVINSON (ac, a)
   rc++;
   for (ep = ac + NP - 1; ac < ep; ac++, rc++) {
     /* compute next reflection coef */
-     /**/ sum = 0.0;
+       sum = 0.0;
     tp = aTmp;
     tp2 = ac - 1;
     for (; tp2 > acBegin; tp++, tp2--)
@@ -195,7 +186,7 @@ void LEVINSON (ac, a)
     *rc = -gamma / e;
 
     /* update a array and e */
-     /**/ tp2 = aTmp;
+       tp2 = aTmp;
     tp3 = bTmp;
     for (ep2 = tp; tp2 < ep2; tp2++, tp3++)
       *tp3 = *tp2 + *rc * *--tp;
@@ -207,7 +198,7 @@ void LEVINSON (ac, a)
     e *= 1.0 - *rc * *rc;
   }
 /*	put direct-from coefs in output array*/
-   /**/ for (ep = aTmp + NP; aTmp < ep; aTmp++, a++)
+     for (ep = aTmp + NP; aTmp < ep; aTmp++, a++)
     *a = *aTmp;
 
   free (fp1);

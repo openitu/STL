@@ -1,31 +1,31 @@
 /*                     v3.0 - 10/Jan/2007
   ============================================================================
 
-  G722DEMO.C 
+  G722DEMO.C
   ~~~~~~~~~
 
-  Description: 
+  Description:
   ~~~~~~~~~~~~
-  
-  Demonstration program for UGST/ITU-T G.722 module with the G.722 
+
+  Demonstration program for UGST/ITU-T G.722 module with the G.722
   decoding function.
 
   Input data is supposed to be aligned at word boundaries, i.e.,
   organized in 16-bit words, following the operating system normal
   organization (low-byte first for VMS and DOS; high byte first for most
   Unix systems). Input linear samples are supposed to be 16-bit right-adjusted
-  and the 7kHz ADPCM bitstream is left-adjusted, i.e., the codewords are 
+  and the 7kHz ADPCM bitstream is left-adjusted, i.e., the codewords are
   located in the lower 8-bits of the encoded bitstream file. The MSB is
   always 0 for the bitstream file.
-  
+
   Usage:
   ~~~~~~
-  $ G722DEMO [-options] InpFile OutFile 
+  $ G722DEMO [-options] InpFile OutFile
              [Mode [[BlockSize [1stBlock [NoOfBlocks]]]]]
   where:
   InpFile     is the name of the file to be processed;
   OutFile     is the name with the processed data;
-  Mode        is the operation mode for the G.722 decoder (1,2, or 3). 
+  Mode        is the operation mode for the G.722 decoder (1,2, or 3).
   BlockSize   is the block size, in number of samples [default: 1024 samples]
   1stBlock    is the number of the first block of the input file
               to be processed [default: 1st block]
@@ -33,10 +33,10 @@
     	      block "1stBlock" [default: all blocks]
 
   Options:
-  -mode #     is the operation mode for the G.722 decoder. 
+  -mode #     is the operation mode for the G.722 decoder.
               Default is 64 kbit/s.
   -frame #    Number of samples per frame for switching bit rates.
-              Default is 16 samples (or 2ms) 
+              Default is 16 samples (or 2ms)
   -enc        run only the encoder [default: encoder and decoder]
   -dec        run only the decoder [default: encoder and decoder]
   -noreset    don't apply reset to the encoder/decoder
@@ -49,15 +49,15 @@
   Comsat Laboratories                  Tel:    +1-301-428-4516
   22300 Comsat Drive                   Fax:    +1-301-428-9287
   Clarksburg MD 20871 - USA            E-mail: simao@ctd.comsat.com
-    
+
   History:
   ~~~~~~~~
-  01.Jul.95    v1.0    Created based on CNET's encoder and decode demo 
+  01.Jul.95    v1.0    Created based on CNET's encoder and decode demo
                        programs version 2.0 ({enc,dec}g722.c).
-  10.Aug.95    v2.0    Fixed memory invasion bug; insufficient memory 
+  10.Aug.95    v2.0    Fixed memory invasion bug; insufficient memory
                        allocated for the output buffer
   13.Sep.96    v2.1    Fixed display_usage() <simao>
-  04.Jan.99    v2.2    Fixed bug in the claculation of the number of 
+  04.Jan.99    v2.2    Fixed bug in the claculation of the number of
                        blocks to process. Earlier version was clipping
                        the last samples in the input file if the file
                        size was not a multiple of the block size
@@ -146,10 +146,7 @@ void display_usage () {
    ***                                                                    ***
    **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
 
   /* Codec related declarations */
   Word16 mode = 1;

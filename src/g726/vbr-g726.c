@@ -1,43 +1,43 @@
 /*                                                           03.Feb.2010 v1.4
   ============================================================================
 
-  VBR-G726.C 
+  VBR-G726.C
   ~~~~~~~~~~
 
-  Description: 
+  Description:
   ~~~~~~~~~~~~
-  
+
   Demonstration program for UGST/ITU-T G.726 module using the variable
   bit rate feature. This version accepts either linear or G.711 A/u-law
   input. Since this implementation of the G.726 requires G.711 compressed
   samples, linear samples are converted to G.711 format before being
   processed. Therefore, the same ammount of quantization distortion should
   be expect either way.
-  
+
   The modules called have been originally written in Fortran, and were
   translated into C by the converter f2c, version of October 15, 1990
   at 19:58:17.
-  
+
   Input data is supposed to be aligned at word boundaries, i.e.,
   organized in 16-bit words, following the operating system normal
   organization (low-byte first for VMS and DOS; high byte first for most
-  Unix systems). Linear samples are supposed to be 16-bit right-adjusted. 
+  Unix systems). Linear samples are supposed to be 16-bit right-adjusted.
   G711 compressed data is supposed to be in the 8 LEAST
   significant bits of the word and the ADPCM data is in the LEAST 5
   bits. Both are without sign extension.
-  
+
   Output data will be generated in the same format as decribed above for
   the input data.
-  
+
   Usage:
   ~~~~~~
-  $ VBR-G726 [-options] InpFile OutFile 
+  $ VBR-G726 [-options] InpFile OutFile
              [FrameSize [1stBlock [NoOfBlocks [Reset]]]]
   where:
   InpFile     is the name of the file to be processed;
   OutFile     is the name with the processed data;
-  FrameSize   is the frame size, in number of samples; the bitrate 
-              will only change in the boundaries of a frame 
+  FrameSize   is the frame size, in number of samples; the bitrate
+              will only change in the boundaries of a frame
               [default: 16 samples]
   1stBlock    is the number of the first block of the input file
               to be processed [default: 1st block]
@@ -45,18 +45,18 @@
     	      block "1stBlock" [default: all blocks]
 
   Options:
-  -law #      the letters A or a for G.711 A-law, letter u for 
+  -law #      the letters A or a for G.711 A-law, letter u for
               G.711 u-law, or letter l for linear. If linear is
 	      chosen, A-law is used to compress/expand samples to/from
 	      the G.726 routines. Default is A-law.
-  -rate #     is the bit-rate (in kbit/s): 40, 32, 24 or 16 (in kbit/s); 
+  -rate #     is the bit-rate (in kbit/s): 40, 32, 24 or 16 (in kbit/s);
               or a combination of them using dashes (e.g. 32-24 or
 	      16-24-32). Default is 32 kbit/s.
   -frame #    Number of samples per frame for switching bit rates.
-              Default is 16 samples (or 2ms) 
-  -enc        run only the G.726 encoder on the samples 
+              Default is 16 samples (or 2ms)
+  -enc        run only the G.726 encoder on the samples
               [default: run encoder and decoder]
-  -dec        run only the G.726 decoder on the samples 
+  -dec        run only the G.726 decoder on the samples
               [default: run encoder and decoder]
   -noreset    don't apply reset to the encoder/decoder
   -?/-help    print help message
@@ -107,10 +107,10 @@
   22/Feb/1996 v1.1  Removed compilation warnings, included headers as
                     suggested by Kirchherr (FI/DBP Telekom) to run under
 		    OpenVMS/AXP <simao@ctd.comsat.com>
-  22/Jul/1997 v1.2  Changed static allocation for data arrays to allow longer 
-                    frame sizes. Fix based on modifications by R. Kirchherr 
+  22/Jul/1997 v1.2  Changed static allocation for data arrays to allow longer
+                    frame sizes. Fix based on modifications by R. Kirchherr
                     <kirchherr@tzd.telekom.de>
-  21.Mar.2000 v1.3  Corrected bug when the bitrate is not specified by 
+  21.Mar.2000 v1.3  Corrected bug when the bitrate is not specified by
                     the user. Corrected bug that made incorrect
                     calculation on total number of blocks to process
                     when the block size is not a multiple of the file
@@ -155,7 +155,7 @@
 
  Return:
  ~~~~~~~
- Returns the number of bitrates for the ADPCM operation, 0 if str is 
+ Returns the number of bitrates for the ADPCM operation, 0 if str is
  empty or improper, and -1 if there are too many rates requested.
 
  History:
@@ -163,10 +163,7 @@
  10.Mar.95 v1.0 Created <simao@ctd.comsat.com>
  -------------------------------------------------------------------------
 */
-int parse_rate (str, rate)
-     char *str;
-     short **rate;
-{
+int parse_rate (char *str, short **rate) {
   char *s = str;
   int count = 1, i;
 
@@ -295,10 +292,7 @@ void display_usage () {
    ***                                                                    ***
    **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   G726_state encoder_state, decoder_state;
   long N = 16, N1 = 1, N2 = 0, cur_blk, smpno;
   short *tmp_buf, *inp_buf, *out_buf, reset = 1;

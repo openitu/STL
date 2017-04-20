@@ -44,7 +44,7 @@
   25.Sep.1991  1.0F Release of Fortran Version to UGST
   23.Jan.1992  1.0C Compatibility of Fortran and C versions
   27.Jan.1992  1.1  Modular version
-  18.May.1992  1.2  Use of `sh2fl' and `fl2sh' with float data 
+  18.May.1992  1.2  Use of `sh2fl' and `fl2sh' with float data
                     in the normalized range <tdsimao@venus.cpqd.ansp.br>
   01.Feb.1995  2.0  Options and help added <simao@ctd.comsat.com>
   21.Mar.2000  2.1  changed memory alllocation of floating point buffers
@@ -135,10 +135,7 @@ void display_usage () {
    ***                                                                    ***
    **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* DECLARATIONS */
 
 /* File variables */
@@ -338,7 +335,7 @@ int main (argc, argv)
   }
 
 
-  /* 
+  /*
    * ........ FINALIZATIONS .........
    */
   fprintf (stderr, "\nOverflow samples: %ld", over);

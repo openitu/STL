@@ -20,7 +20,7 @@
        =============================================================
 
 MODULE:         FIRFLT, HIGH QUALITY FIR UP/DOWN-SAMPLING FILTER
-                Sub-unit: 
+                Sub-unit:
 		Wideband speech filtering functions:
 		- P.341 send-part characteristic
 		- 50 Hz to 5 kHz bandpass filter (for wideband qual.tests)
@@ -38,13 +38,13 @@ ORIGINAL BY:
 		CSELT
 		Audio Coding and Transmission Quality  Tel: +39-11-228-5697
 		Via G.Reiss Romoli, 274                Fax: +39-11-228-6207
-		10148 Torino - ITALY     
+		10148 Torino - ITALY
 		Email: rosario.drogodeiacovo@cselt.stet.it
 
 DESCRIPTION:
-        This file contains procedures for FIR filtering according to the 
+        This file contains procedures for FIR filtering according to the
 	mask in ITU-T Recommendation P.341 for wideband telephones.
-	(Additionally a 20-20khz BP filter for FB processing is defined.)       
+	(Additionally a 20-20khz BP filter for FB processing is defined.)
 
 FUNCTIONS:
   Global (have prototype in firflt.h)
@@ -69,8 +69,8 @@ FUNCTIONS:
 HISTORY:
     31.Jul.1995 v1.0 First beta-version <simao@ctd.comsat.com>
     13.May.1997 v2.0 Added 50-5000 Hz bandpass filter
-    28.Mar.2000 v2.1 Added type casting to float in fill_p341_16khz() 
-                     and fill_bp5k_16khz() to eliminate compilation warnings in 
+    28.Mar.2000 v2.1 Added type casting to float in fill_p341_16khz()
+                     and fill_bp5k_16khz() to eliminate compilation warnings in
                      MS Visual C compiler <simao.campos@labs.comsat.com>
     10.Feb.2005 v2.2 Added 50-14000 Hz bandpass filter
 					 Added 100-5000kHz bandpass filter
@@ -104,8 +104,8 @@ void fill_bp20k_48khz ARGS ((float **h0, long *lenh0));
 
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -122,7 +122,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
 
         Description:
         ~~~~~~~~~~~~
-	Fill filter coefficients for the sending mask of ITU-T 
+	Fill filter coefficients for the sending mask of ITU-T
 	Recommendation P.341 for samples at 16 kHz.
 
         Parameters:
@@ -134,9 +134,9 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
-        Filter coefficients: 
+        Filter coefficients:
           Rosario Drogo de Iacovo
           CSELT
           Audio Coding and Transm.Quality  Tel:    +39-11-228-5697
@@ -146,7 +146,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
           *** Copyright Notice: ***
           " (C) 1995 CSELT - Centro Studi E Laboratori Telecomunicazioni SpA "
           " All rights reserved "
-          
+
         Routine:
           Simao Ferraz de Campos Neto
 	  Comsat Laboratories             Tel:    +1-301-428-4516
@@ -156,17 +156,14 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
         History:
         ~~~~~~~~
         01.Jul.1995 v1.0 Release of 1st version <simao@ctd.comsat.com>
-        28.Mar.2000 v1.1 Added type cast to float to avoid compilation 
+        28.Mar.2000 v1.1 Added type cast to float to avoid compilation
                          warnings with MS Visual C compiler <simao>
 
  ============================================================================
 */
 #undef P341_16K_LEN
 #define P341_16K_LEN 592
-void fill_p341_16khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_p341_16khz (float **h0, long *lenh0) {
   static float p341_16khz_coeff[P341_16K_LEN] = {
     (F) 4.3370554e-03, (F) 4.8963084e-03, (F) - 1.0865770e-03, (F) - 2.2118514e-04,
     (F) 1.5783547e-03, (F) - 9.0371860e-04, (F) 1.0025039e-03, (F) 2.7932322e-04,
@@ -335,8 +332,8 @@ void fill_p341_16khz (h0, lenh0)
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for ITU-T Recommendation send-part mask 
-	filtering characteristic for data sampled at 16 kHz. No rate change 
+        Initialization routine for ITU-T Recommendation send-part mask
+	filtering characteristic for data sampled at 16 kHz. No rate change
 	is implemented.
 
         Parameters:  none.
@@ -395,9 +392,9 @@ SCD_FIR *p341_16khz_init () {
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
-        Filter coefficients: 
+        Filter coefficients:
           Rosario Drogo de Iacovo
           CSELT
           Audio Coding and Transm.Quality  Tel:    +39-11-228-5697
@@ -407,7 +404,7 @@ SCD_FIR *p341_16khz_init () {
           *** Copyright Notice: ***
           " (C) 1997 CSELT - Centro Studi E Laboratori Telecomunicazioni SpA "
           " All rights reserved "
-          
+
         Routine:
           Simao Ferraz de Campos Neto
 	  Comsat Laboratories             Tel:    +1-301-428-4516
@@ -417,17 +414,14 @@ SCD_FIR *p341_16khz_init () {
         History:
         ~~~~~~~~
         13.May.97 v1.0 Release of 1st version <simao@ctd.comsat.com>
-        28.Mar.2000 v1.1 Added type cast to float to avoid compilation 
+        28.Mar.2000 v1.1 Added type cast to float to avoid compilation
                          warnings with MS Visual C compiler <simao>
 
  ============================================================================
 */
 #undef BP5K_16K_LEN
 #define BP5K_16K_LEN 592
-void fill_bp5k_16khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_bp5k_16khz (float **h0, long *lenh0) {
   static float bp5k_16khz_coeff[BP5K_16K_LEN] = {
     (F) 2.0805499e-03, (F) 3.9722215e-03, (F) 3.2368711e-03, (F) 6.3445872e-05,
     (F) - 1.3358539e-03, (F) 4.8035495e-04, (F) 1.4837936e-03, (F) - 7.1432006e-05,
@@ -596,7 +590,7 @@ void fill_bp5k_16khz (h0, lenh0)
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for a band-pass filter which limits the 
+        Initialization routine for a band-pass filter which limits the
 	bandwidth of the input signal from 50 Hz to 5000 Hz (3 dB points).
         No rate change is implemented.
 
@@ -655,7 +649,7 @@ SCD_FIR *bp5k_16khz_init () {
         ~~~~~~~~~~~~~
         None.
 
-        Authors: 
+        Authors:
         ~~~~~~~
 		Cyril Guillaume & Stephane Ragot
 			<stephane.ragot@francetelecom.com>
@@ -668,10 +662,7 @@ SCD_FIR *bp5k_16khz_init () {
 */
 #undef BP100_5K_16K_LEN
 #define BP100_5K_16K_LEN 603
-void fill_bp100_5k_16khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_bp100_5k_16khz (float **h0, long *lenh0) {
   static float bp100_5k_16khz_coeff[BP100_5K_16K_LEN] = {
     (F) - 2.4460608e-003, (F) - 3.3771248e-003, (F) 1.1116177e-005, (F) 3.2518417e-003,
     (F) 1.8419679e-003, (F) 1.3311653e-005, (F) 1.2144793e-003, (F) 1.6892798e-003,
@@ -843,7 +834,7 @@ void fill_bp100_5k_16khz (h0, lenh0)
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for a band-pass filter which limits the 
+        Initialization routine for a band-pass filter which limits the
 	bandwidth of the input signal from 100 Hz to 5000 Hz (3 dB points).
         No rate change is implemented.
 
@@ -854,13 +845,13 @@ void fill_bp100_5k_16khz (h0, lenh0)
         ~~~~~~~~~~~~~
         Returns a pointer to struct SCD_FIR;
 
-        Authors: 
+        Authors:
         ~~~~~~~
 		Cyril Guillaume & Stephane Ragot <stephane.ragot@francetelecom.com>
 
         History:
         ~~~~~~~~
-        10.Feb.05 v1.0 Release of 1st version 
+        10.Feb.05 v1.0 Release of 1st version
 
  ============================================================================
 */
@@ -912,10 +903,7 @@ SCD_FIR *bp100_5k_16khz_init () {
 */
 #undef BP14K_32K_LEN
 #define BP14K_32K_LEN 1119
-void fill_bp14k_32khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_bp14k_32khz (float **h0, long *lenh0) {
   static float bp14k_32khz_coeff[BP14K_32K_LEN] = {
     (F) 5.8996636e-003, (F) 4.7872152e-003, (F) - 2.3042638e-003, (F) 9.9962794e-004,
     (F) 3.7707386e-004, (F) - 6.4166770e-004, (F) 1.1406329e-003, (F) - 7.1969112e-004,
@@ -1216,7 +1204,7 @@ void fill_bp14k_32khz (h0, lenh0)
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for a band-pass filter which limits the 
+        Initialization routine for a band-pass filter which limits the
 	bandwidth of the input signal from 50 Hz to 14000 Hz (3 dB points).
         No rate change is implemented.
 
@@ -1275,16 +1263,13 @@ SCD_FIR *bp14k_32khz_init () {
 
         History:
         ~~~~~~~~
-        1.May .07  1st version 
+        1.May .07  1st version
 
  ============================================================================
 */
 #undef BP20K_48K_LEN
 #define BP20K_48K_LEN 4001
-void fill_bp20k_48khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_bp20k_48khz (float **h0, long *lenh0) {
   static float bp20k_48khz_coeff[BP20K_48K_LEN] = {
     (F) - 7.08404110e-008, (F) 9.92110779e-008, (F) - 1.13704866e-007, (F) 1.02205097e-007, (F) - 4.62130873e-008, (F) - 6.37750990e-008, (F) 2.17565205e-007, (F) - 3.74414298e-007,
     (F) 4.70339761e-007, (F) - 4.33472857e-007, (F) 2.15780816e-007, (F) 1.80187926e-007, (F) - 6.79623522e-007, (F) 1.14179933e-006, (F) - 1.38757069e-006, (F) 1.25617016e-006,
@@ -1806,7 +1791,7 @@ void fill_bp20k_48khz (h0, lenh0)
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for a band-pass filter which limits the 
+        Initialization routine for a band-pass filter which limits the
 	bandwidth of the input signal from 20 Hz to 20000 Hz (3 dB points).
         No rate change is implemented.
 
@@ -1819,7 +1804,7 @@ void fill_bp20k_48khz (h0, lenh0)
 
         History:
         ~~~~~~~~
-        11.May 07 1st version 
+        11.May 07 1st version
 
  ============================================================================
 */

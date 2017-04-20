@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -34,11 +34,7 @@ Motorola Inc.
 /*	inclusions*/
    /**/
 #include "vparams.h"
-void B_CON (codeWord, numBits, bitArray)
-     int codeWord;
-     int numBits;
-     FTYPE *bitArray;
-{
+void B_CON (int codeWord, int numBits, FTYPE *bitArray) {
   int mask;
   FTYPE *endPtr;
 

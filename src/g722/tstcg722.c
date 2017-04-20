@@ -1,12 +1,12 @@
 /*                                                            v2.0 - 01.Jul.95
   ============================================================================
 
-  TSTCG722.C 
+  TSTCG722.C
   ~~~~~~~~~~
 
-  Description: 
+  Description:
   ~~~~~~~~~~~~
-  
+
   Demonstration program to pass the official set of test vectors
   through the G.722 encoder. This code *bypasses* the QMF filters, as
   required by the test vector.
@@ -16,7 +16,7 @@
 
   Usage:
   ~~~~~~
-  $ tstcg722 InpFile OutFile 
+  $ tstcg722 InpFile OutFile
 
   where:
   InpFile     is the name of the file to be processed;
@@ -24,19 +24,19 @@
 
   Original author:
   ~~~~~~~~~~~~~~~~
-  J-P PETIT 
+  J-P PETIT
   CNET - Centre Lannion A
   LAA-TSS                         Tel: +33-96-05-39-41
   Route de Tregastel - BP 40      Fax: +33-96-05-13-16
   F-22301 Lannion CEDEX           Email: petitjp@lannion.cnet.fr
   FRANCE
-    
+
   History:
   14.Mar.95    v1.0    Released for use ITU-T UGST software package Tool
                        based on the CNET's 07/01/90 version 2.00
-  01.Jul.95    v2.0    Changed function declarations to work with 
+  01.Jul.95    v2.0    Changed function declarations to work with
                        many compilers; reformated <simao@ctd.comsat.com>
-  ============================================================================ 
+  ============================================================================
 */
 
 
@@ -58,10 +58,7 @@
 /*************************************/
 /* Test of the G.722 coder algorithm */
 /*************************************/
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
 
 /* declarations locales */
 /************************/

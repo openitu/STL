@@ -9,8 +9,8 @@
 
    History:
    27.Jan.92	v1.0	First version <simao@cpqd.br>
-   01.Feb.95    v1.1    Smart prototypes that work with many compilers 
-                        <simao@ctd.comsat.com> 
+   01.Feb.95    v1.1    Smart prototypes that work with many compilers
+                        <simao@ctd.comsat.com>
    31.Jul.95    v2.0    MNRU conforming to new P.81. State variables changed.
   ============================================================================
 */
@@ -64,11 +64,7 @@ typedef struct {
 } MNRU_state;
 
 /* Prototype for MNRU and random function(s) */
-#ifdef NO_PROMOTION
 double *MNRU_process ARGS ((char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q));
-#else
-double *MNRU_process ARGS ((int operation, MNRU_state * s, float *input, float *output, long n, long seed, int mode, double Q));
-#endif
 float random_MNRU ARGS ((char *mode, RANDOM_state * r, long seed));
 
 /* Definitions for the MNRU algorithm */

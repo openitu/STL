@@ -1,20 +1,20 @@
 /*                                                          02.Feb.2010 v3.0
 ============================================================================
 
-DECG722.C 
+DECG722.C
 ~~~~~~~~~
 
-Description: 
+Description:
 ~~~~~~~~~~~~
 
-Demonstration program for UGST/ITU-T G.722 module with the G.722 
+Demonstration program for UGST/ITU-T G.722 module with the G.722
 decoding function.
 
-The default input bitsstream format follows the G.192 16 bit format. 
-G.722 bits in a  G.192 bistream  are ordered so that the frame can be 
+The default input bitsstream format follows the G.192 16 bit format.
+G.722 bits in a  G.192 bistream  are ordered so that the frame can be
 truncated at 56 and 48 kbps.
-The legacy non-g192 7kHz ADPCM bitstream is left-adjusted, 
-i.e., the codewords are located in the lower 8-bits of the encoded bitstream file. 
+The legacy non-g192 7kHz ADPCM bitstream is left-adjusted,
+i.e., the codewords are located in the lower 8-bits of the encoded bitstream file.
 The MSB is always 0 for the legacy bitstream file.
 
 Output data is aligned at word boundaries, i.e.,
@@ -35,20 +35,20 @@ Options:
 -mode #     is the operation mode  for the G.722 decoder.
             Default is mode 1/64 kbit/s.
             others are mode 2/56 kbps and mode3/48 kbps
--fsize #    Number of samples per frame  
-            Default is 160, 16 kHz samples (or 10ms) 
+-fsize #    Number of samples per frame
+            Default is 160, 16 kHz samples (or 10ms)
 -frames #   Number of frames to process
 -plc #      (0 = zero index insertion, no decoder state reset)
             (1 = zero index insertion, decoder state reset)
             (2 = previous frame repetition, no decoder state reset)
             (3 = previous frame repetition, a few zero_indeces in first good frame ,no decoder state reset)
-            
+
 -byte       Use legacy nonG192 G.722 format (byte oriented) without frame/synch headers.
 -h/-help    print help message
 
 Original author:
 ~~~~~~~~~~~~~~~~
-J-P PETIT 
+J-P PETIT
 CNET - Centre Lannion A
 LAA-TSS                         Tel: +33-96-05-39-41
 Route de Tregastel - BP 40      Fax: +33-96-05-13-16
@@ -61,7 +61,7 @@ History:
                       based on the CNET's 07/01/90 version 2.00
 01.Jul.95  v2.0       Changed function declarations to work with many compilers;
                       reformated <simao@ctd.comsat.com>
-22.May.06  v2.3       Updated with g192 format reading and basic index domain PLC functionality. 
+22.May.06  v2.3       Updated with g192 format reading and basic index domain PLC functionality.
                       <{nicklas.sandgren,jonas.svedberg}@ericsson.com>
 10.Jan.07  v3.0       Updated with STL2005 v2.2 basic operators and G.729.1 methodology
                       <{balazs.kovesi,stephane.ragot}@orange-ftgroup.com>
@@ -214,10 +214,7 @@ void display_usage () {
 ***                                                                    ***
 **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Local Declarations */
   short mode_arg = 1;           /* input argument mode */
   short local_mode = 1;         /* actual decoder synthesis mode */

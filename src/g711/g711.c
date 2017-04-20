@@ -16,7 +16,7 @@
        COPYRIGHT NOTE: This source code, and all of its derivations,
        is subject to the "ITU-T General Public License". Please have
        it  read  in    the  distribution  disk,   or  in  the  ITU-T
-       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO 
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
        CODING STANDARDS".
        =============================================================
 
@@ -62,7 +62,7 @@ Apr/91       1.0   First version of the G711 module
                    correction of bug in compression routines (use of 1
                    and 2 complement); Demo program inside module.
 08/Feb/1992  3.0   Demo as separate file;
-31/Jan/2000  3.01  Updated documentation text; no change in functions 
+31/Jan/2000  3.01  Updated documentation text; no change in functions
                    <simao.campos@labs.comsat.com>
 =============================================================================
 */
@@ -102,11 +102,7 @@ Apr/91       1.0   First version of the G711 module
 
   ==========================================================================
 */
-void alaw_compress (lseg, linbuf, logbuf)
-     long lseg;
-     short *linbuf;
-     short *logbuf;
-{
+void alaw_compress (long lseg, short *linbuf, short *logbuf) {
   short ix, iexp;
   long n;
 
@@ -159,11 +155,7 @@ void alaw_compress (lseg, linbuf, logbuf)
 
   ============================================================================
 */
-void alaw_expand (lseg, logbuf, linbuf)
-     long lseg;
-     short *linbuf;
-     short *logbuf;
-{
+void alaw_expand (long lseg, short *logbuf, short *linbuf) {
   short ix, mant, iexp;
   long n;
 
@@ -213,11 +205,7 @@ void alaw_expand (lseg, logbuf, linbuf)
 
   ==========================================================================
 */
-void ulaw_compress (lseg, linbuf, logbuf)
-     long lseg;
-     short *linbuf;
-     short *logbuf;
-{
+void ulaw_compress (long lseg, short *logbuf, short *linbuf) {
   long n;                       /* samples's count */
   short i;                      /* aux.var. */
   short absno;                  /* absolute value of linear (input) sample */
@@ -291,11 +279,7 @@ void ulaw_compress (lseg, linbuf, logbuf)
   ============================================================================
 */
 
-void ulaw_expand (lseg, logbuf, linbuf)
-     long lseg;
-     short *logbuf;
-     short *linbuf;
-{
+void ulaw_expand (long lseg, short *logbuf, short *linbuf) {
   long n;                       /* aux.var. */
   short segment;                /* segment (Table 2/G711, column 1) */
   short mantissa;               /* low nibble of log companded sample */

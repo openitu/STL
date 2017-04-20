@@ -13,7 +13,7 @@
    The headerless G.192 serial bitstream format is as described in
    G.192, with the exceptions listed below. The main feature is that
    the softbits and frame erasure indicators are right-aligned at
-   16-bit word boundaries (unsigned short): 
+   16-bit word boundaries (unsigned short):
    '0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20
 
    In the byte-oriented softbit serial bitstream, only the lower byte
@@ -87,7 +87,7 @@
 #include "softbit.h"
 
 
-/* 
+/*
    -------------------------------------------------------------------------
    long read_g192 (short *patt, long n, FILE *F);
    ~~~~~~~~~~~~~~
@@ -96,14 +96,14 @@
 
    Parameter:
    ~~~~~~~~~~
-   patt .... G.192 array with the softbits representing 
+   patt .... G.192 array with the softbits representing
              the bit error/frame erasure pattern
    n ....... number of softbits in the pattern
    F ....... pointer to FILE where the pattern should be readd
 
-   Return value: 
+   Return value:
    ~~~~~~~~~~~~~
-   Returns a long with the number of shorts softbits from file. On error, 
+   Returns a long with the number of shorts softbits from file. On error,
    returns -1.
 
    Original author: <simao.campos@comsat.com>
@@ -114,11 +114,7 @@
    13.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long read_g192 (patt, n, F)
-     short *patt;
-     long n;
-     FILE *F;
-{
+long read_g192 (short *patt, long n, FILE *F) {
   long i;
 
   /* Read words from file */
@@ -138,11 +134,7 @@ long read_g192 (patt, n, F)
   function.
   -------------------------------------------------------------------------
  */
-long read_bit_ber (patt, n, F)
-     short *patt;
-     long n;
-     FILE *F;
-{
+long read_bit_ber (short *patt, long n, FILE *F) {
   return (read_bit (patt, n, F, BER));
 }
 
@@ -156,18 +148,14 @@ long read_bit_ber (patt, n, F)
   function.
   -------------------------------------------------------------------------
  */
-long read_bit_fer (patt, n, F)
-     short *patt;
-     long n;
-     FILE *F;
-{
+long read_bit_fer (short *patt, long n, FILE *F) {
   return (read_bit (patt, n, F, FER));
 }
 
 /* ....................... End of read_bit_fer() ....................... */
 
 
-/* 
+/*
    -------------------------------------------------------------------------
    long read_bit (short *patt, long n, FILE *F, char type);
    ~~~~~~~~~~~~~
@@ -185,9 +173,9 @@ long read_bit_fer (patt, n, F)
              this infoprmation, since it can not be inferred from
 	     a compact binary bitstream file
 
-   Return value: 
+   Return value:
    ~~~~~~~~~~~~~
-   Returns a long with the number of softbits read from a file. On error, 
+   Returns a long with the number of softbits read from a file. On error,
    returns -1.
 
    Original author: <simao.campos@comsat.com>
@@ -196,14 +184,9 @@ long read_bit_fer (patt, n, F)
    History:
    ~~~~~~~~
    15.Aug.97  v.1.0  Created.
-   ------------------------------------------------------------------------- 
+   -------------------------------------------------------------------------
 */
-long read_bit (patt, n, F, type)
-     short *patt;
-     long n;
-     FILE *F;
-     char type;
-{
+long read_bit (short *patt, long n, FILE *F, char type) {
   char *bits;
   short *p = patt;
   long bitno, j, k, nbytes, rbytes, ret_val;
@@ -232,7 +215,7 @@ long read_bit (patt, n, F, type)
   /* Perform action according to returned no. of items */
   if (ferror (F))
     ret_val = -1l;
-  /* 
+  /*
      else if (feof(F)) ret_val = 0; */
   else {
     /* Convert compact bit oriented data to byte-oriented data */
@@ -268,7 +251,7 @@ long read_bit (patt, n, F, type)
 /* ....................... End of read_bit() ....................... */
 
 
-/* 
+/*
    -------------------------------------------------------------------------
    long read_byte (short *patt, long n, FILE *F);
    ~~~~~~~~~~~~~~~
@@ -286,14 +269,14 @@ long read_bit (patt, n, F, type)
 
    Parameter:
    ~~~~~~~~~~
-   patt .... char array with the softbits representing the 16-bit 
+   patt .... char array with the softbits representing the 16-bit
              bit error softbit/frame erasure pattern
    n ....... number of softbits to be read
    F ....... pointer to FILE where the pattern should be read
 
-   Return value: 
+   Return value:
    ~~~~~~~~~~~~~
-   Returns a long with the number of softbits read from a file. On error, 
+   Returns a long with the number of softbits read from a file. On error,
    returns -1.
 
    Original author: <simao.campos@comsat.com>
@@ -302,13 +285,9 @@ long read_bit (patt, n, F, type)
    History:
    ~~~~~~~~
    15.Aug.97  v.1.0  Created.
-   ------------------------------------------------------------------------- 
+   -------------------------------------------------------------------------
 */
-long read_byte (patt, n, F)
-     short *patt;
-     long n;
-     FILE *F;
-{
+long read_byte (short *patt, long n, FILE *F) {
   char *byte;
   long i;
   unsigned char register tmp;
@@ -348,7 +327,7 @@ long read_byte (patt, n, F)
 /* ....................... End of read_byte() ....................... */
 
 
-/* 
+/*
   -------------------------------------------------------------------------
   long save_g192 (short *patt, long n, FILE *F);
   ~~~~~~~~~~~~~~
@@ -357,14 +336,14 @@ long read_byte (patt, n, F)
 
   Parameter:
   ~~~~~~~~~~
-  patt .... headerless G.192 array with the softbits representing 
+  patt .... headerless G.192 array with the softbits representing
             the bit error/frame erasure pattern
   n ....... number of softbits in the pattern
   F ....... pointer to FILE where the pattern should be saved
 
-  Return value: 
+  Return value:
   ~~~~~~~~~~~~~
-  Returns a long with the number of shorts saved to a file. On error, 
+  Returns a long with the number of shorts saved to a file. On error,
   returns -1.
 
   Original author: <simao.campos@comsat.com>
@@ -373,15 +352,11 @@ long read_byte (patt, n, F)
   History:
   ~~~~~~~~
   13.Aug.97  v.1.0  Created.
-  5.Feb.2010 v.1.1  Corrected explicit return  type for  fwrite <visual> 
+  5.Feb.2010 v.1.1  Corrected explicit return  type for  fwrite <visual>
 
   -------------------------------------------------------------------------
 */
-long save_g192 (patt, n, F)
-     short *patt;
-     long n;
-     FILE *F;
-{
+long save_g192 (short *patt, long n, FILE *F) {
   long i;
   i = fwrite (patt, sizeof (short), n, F);
   return (i < n ? -1l : n);
@@ -390,7 +365,7 @@ long save_g192 (patt, n, F)
 /* ....................... End of save_g192() ....................... */
 
 
-/* 
+/*
   -------------------------------------------------------------------------
   long save_bit (short *patt, long n, FILE *F);
   ~~~~~~~~~~~~~
@@ -405,9 +380,9 @@ long save_g192 (patt, n, F)
   n ....... number of softbits in the pattern
   F ....... pointer to FILE where the pattern should be saved
 
-  Return value: 
+  Return value:
   ~~~~~~~~~~~~~
-  Returns a long with the number of shorts saved to a file. On error, 
+  Returns a long with the number of shorts saved to a file. On error,
   returns -1.
 
   Original author: <simao.campos@comsat.com>
@@ -419,11 +394,7 @@ long save_g192 (patt, n, F)
   -------------------------------------------------------------------------
 */
 #define IS_ONE(x)  ((x) && G192_ONE)
-long save_bit (patt, n, F)
-     short *patt;
-     long n;
-     FILE *F;
-{
+long save_bit (short *patt, long n, FILE *F) {
   char *bits;
   short one, *p = patt;
   long i, j, k, nbytes;
@@ -485,7 +456,7 @@ long save_bit (patt, n, F)
 /* ....................... End of save_bit() ....................... */
 
 
-/* 
+/*
   -------------------------------------------------------------------------
   long save_byte (short *patt, long n, FILE *F);
   ~~~~~~~~~~~~~~~
@@ -507,9 +478,9 @@ long save_bit (patt, n, F)
   n ....... number of softbits in the pattern
   F ....... pointer to FILE where the pattern should be saved
 
-  Return value: 
+  Return value:
   ~~~~~~~~~~~~~
-  Returns a long with the number of shorts saved to a file. On error, 
+  Returns a long with the number of shorts saved to a file. On error,
   returns -1.
 
   Original author: <simao.campos@comsat.com>
@@ -518,13 +489,9 @@ long save_bit (patt, n, F)
   History:
   ~~~~~~~~
   15.Aug.97  v.1.0  Created.
-  ------------------------------------------------------------------------- 
+  -------------------------------------------------------------------------
 */
-long save_byte (patt, n, F)
-     short *patt;
-     long n;
-     FILE *F;
-{
+long save_byte (short *patt, long n, FILE *F) {
   char *byte;
   long i;
 
@@ -566,7 +533,7 @@ long save_byte (patt, n, F)
   Returned value:
   ~~~~~~~~~~~~~~~
   Returns a pointer to the format string, or a NULL pointer
-  if fmt is invalid. 
+  if fmt is invalid.
 
   Original author: <simao.campos@comsat.com>
   ~~~~~~~~~~~~~~~~
@@ -576,9 +543,7 @@ long save_byte (patt, n, F)
   21.Aug.97  v1.00 created
   ---------------------------------------------------------------------------
 */
-char *format_str (fmt)
-     int fmt;
-{
+char *format_str (int fmt) {
   switch (fmt) {
   case byte:
     return "byte";
@@ -610,7 +575,7 @@ char *format_str (fmt)
   Returned value:
   ~~~~~~~~~~~~~~~
   Returns a pointer to the format string, or a NULL pointer
-  if type is invalid. 
+  if type is invalid.
 
   Original author: <simao.campos@comsat.com>
   ~~~~~~~~~~~~~~~~
@@ -620,9 +585,7 @@ char *format_str (fmt)
   21.Aug.97  v1.00 created
   ---------------------------------------------------------------------------
 */
-char *type_str (type)
-     int type;
-{
+char *type_str (int type) {
   switch (type) {
   case BER:
     return "BER";
@@ -664,13 +627,9 @@ char *type_str (type)
   15.Aug.97  v.1.0  Created.
   01.Jun.05  v.1.1  Bug correction: switch is made on the "unsigned short" value
 					(v.1.0: "unsigned" only). <Cyril Guillaume & Stephane Ragot -- stephane.ragot@rd.francetelecom.com>
-  -------------------------------------------------------------------------- 
+  --------------------------------------------------------------------------
 */
-char check_eid_format (F, file, type)
-     FILE *F;
-     char *file;
-     char *type;
-{
+char check_eid_format (FILE *F, char *file, char *type) {
   short word;
   char ret_val;
   unsigned long tmp = 0x41424344;       /* Hex version of the string ABCD */
@@ -750,23 +709,19 @@ char check_eid_format (F, file, type)
 /* ...................... End of check_eid_format() ...................... */
 
 
-/* 
+/*
   ---------------------------------------------------------------------------
   long soft2hard (short *soft, short *hard, long n, char type);
-  ~~~~~~~~~~~~~~ 
+  ~~~~~~~~~~~~~~
 
   Converts soft bits or frame sync words to hard bits. Type provides
   information on whether the buffer contains bit errors (soft bits) or
   frame erasures (frame sync). Returns the number of unexpected value
   found.
-  
+
   ---------------------------------------------------------------------------
 */
-long soft2hard (soft, hard, n, type)
-     short *soft, *hard;
-     long n;
-     char type;
-{
+long soft2hard (short *soft, short *hard, long n, char type) {
   long i, unexpected = 0;
   short register tmp;
 

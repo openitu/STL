@@ -17,7 +17,7 @@
        is subject to the "ITU-T General Public License". Please have
        it  read  in    the  distribution  disk,   or  in  the  ITU-T
        Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
-       CODING STANDARDS". 
+       CODING STANDARDS".
        ** This code has  (C) Copyright by CNET Lannion A TSS/CMC **
        =============================================================
 
@@ -29,7 +29,7 @@ ORIGINAL BY:
    COMSAT Laboratories                    Tel:    +1-301-428-4516
    22300 Comsat Drive                     Fax:    +1-301-428-9287
    Clarksburg MD 20871 - USA              E-mail: simao.campos@labs.comsat.com
-    
+
    History:
 History:
 ~~~~~~~~
@@ -44,10 +44,7 @@ History:
 #include "g722.h"
 #include "stl.h"
 
-void g722_reset_encoder (encoder)
-     g722_state *encoder;
-{
-
+void g722_reset_encoder (g722_state *encoder) {
   Word16 xl, il;
   Word16 xh, ih, j;
 
@@ -71,12 +68,7 @@ void g722_reset_encoder (encoder)
 /* .................... end of g722_reset_encoder() ....................... */
 
 
-Word32 g722_encode (incode, code, read1, encoder)
-     short *incode;
-     short *code;
-     Word32 read1;
-     g722_state *encoder;
-{
+Word32 g722_encode (short *incode, short *code, Word32 read1, g722_state *encoder) {
   /* Encoder variables */
   Word16 xl, il;
   Word16 xh, ih;
@@ -125,9 +117,7 @@ Word32 g722_encode (incode, code, read1, encoder)
 /* .................... end of g722_encode() .......................... */
 
 
-void g722_reset_decoder (decoder)
-     g722_state *decoder;
-{
+void g722_reset_decoder (g722_state *decoder) {
   Word16 il, ih;
   Word16 rl, rh;
   Word16 j;
@@ -152,13 +142,7 @@ void g722_reset_decoder (decoder)
 /* .................... end of g722_reset_decoder() ....................... */
 
 
-short g722_decode (code, outcode, mode, read1, decoder)
-     short *code;
-     short *outcode;
-     short mode;
-     short read1;
-     g722_state *decoder;
-{
+short g722_decode (short *code, short *outcode, short mode, short read1, g722_state *decoder) {
   /* Decoder variables */
   Word16 il, ih;
   Word16 rl, rh;

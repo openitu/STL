@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -23,29 +23,23 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
- /**/
+
 /*	g_quant.c -- Does GSP0 quantization.*/
-   /**/
+
 /*-------------------------------------------------------------*/
-   /**/
+
 /*	Written by: Matt Hartman*/
-   /**/
+
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-   /**/
+
 #include "vparams.h"
 /*#include "stdlib.h"*/
 /*	function declarations*/
- /**/ static FTYPE corr ();
+static FTYPE corr ();
 /*FTYPE *vec1Ptr, FTYPE *vec2Ptr*/
 
-
-int G_QUANT (lag, rs00, rs11, rs22)
-     int lag;
-     FTYPE rs00;
-     FTYPE rs11;
-     FTYPE rs22;
-{
+int G_QUANT (int lag, FTYPE rs00, FTYPE rs11, FTYPE rs22) {
   FTYPE Rpc0;                   /* correlation between the weighted speech and the */
   /* weighted pitch excitation vector */
   FTYPE Rpc1;                   /* correlation between the weighted speech and the */
@@ -75,7 +69,7 @@ int G_QUANT (lag, rs00, rs11, rs22)
   errCoefs = (FTYPE *) malloc (GSP0_TERMS * sizeof (FTYPE));
 
 /* calculate correlations*/
-   /**/ if (lag)
+     if (lag)
     Rpc0 = corr (P, W_P_VEC);
   Rpc1 = corr (P, W_X_VEC);
   Rpc2 = corr (P, W_X_A_VEC);
@@ -90,8 +84,8 @@ int G_QUANT (lag, rs00, rs11, rs22)
   Rcc22 = corr (W_X_A_VEC, W_X_A_VEC);
 
 /* compute error coefficients (factor of 2 for some coefs is figured*/
-/* into the table terms)*/
-   /**/ *errCoefs = Rpc0 * rs00;
+/* into the table terms) */
+     *errCoefs = Rpc0 * rs00;
   *(errCoefs + 1) = Rpc1 * rs11;
   *(errCoefs + 2) = Rpc2 * rs22;
   *(errCoefs + 3) = Rcc01 * rs00 * rs11;
@@ -107,13 +101,13 @@ int G_QUANT (lag, rs00, rs11, rs22)
     *(errCoefs + 6) = 0.0;
   }
 
-/*	minimum error search loop*/
-   /**/ maxVal = -50.0;
+/*	minimum error search loop */
+     maxVal = -50.0;
   tmpPtr = GSP0_TABLE;
   for (endPtr = tmpPtr + GSP0_TERMS * GSP0_NUM; tmpPtr < endPtr;) {
     /* combine error coefficients and table terms to get value to be */
     /* maximized */
-     /**/ val = 0.0;
+       val = 0.0;
     tmpPtr2 = errCoefs;
     for (endPtr2 = tmpPtr2 + GSP0_TERMS; tmpPtr2 < endPtr2; tmpPtr2++) {
       val += *tmpPtr * *tmpPtr2;
@@ -123,23 +117,20 @@ int G_QUANT (lag, rs00, rs11, rs22)
     /* test against reference code */
     /* */
     /* save pointer if max */
-     /**/ if (val > maxVal) {
+       if (val > maxVal) {
       maxVal = val;
       savePtr = tmpPtr;
     }
   }
 
 /*	get code for centroid from pointer and return*/
-   /**/ code = (savePtr - GSP0_TERMS - GSP0_TABLE) / GSP0_TERMS;
+     code = (savePtr - GSP0_TERMS - GSP0_TABLE) / GSP0_TERMS;
   free (errCoefs);
   return code;
 }                               /* end of G_QUANT */
 
 
-static FTYPE corr (vec1Ptr, vec2Ptr)
-     FTYPE *vec1Ptr;
-     FTYPE *vec2Ptr;
-{
+static FTYPE corr (FTYPE *vec1Ptr, FTYPE *vec2Ptr) {
   FTYPE *endPtr, R = 0.0;
 
   for (endPtr = vec1Ptr + S_LEN; vec1Ptr < endPtr; vec1Ptr++) {

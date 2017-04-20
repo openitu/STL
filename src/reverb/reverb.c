@@ -19,7 +19,7 @@
        CODING STANDARDS".
        =============================================================
 
-  DESCRIPTION : 
+  DESCRIPTION :
 	This file contains a demonstration program of a reverberation tool, using the functions in reverb-lib.h
 
   HISTORY :
@@ -70,15 +70,7 @@ static void display_usage () {
 
 #define tmpIRlength	512
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
-
-
-
-  /* .......... DECLARATIONS ............ */
-
+int main (int argc, char *argv[]) {
   /* File variables */
   FILE *ptr_fileIn;
   FILE *ptr_fileOut;

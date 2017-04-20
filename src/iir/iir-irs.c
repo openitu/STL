@@ -11,7 +11,7 @@
                     ITU-T - USER'S GROUP ON SOFTWARE TOOLS
                    ========================================
 
-MODULE:         IIR-IRS.C, IIR FILTER MODULE, 
+MODULE:         IIR-IRS.C, IIR FILTER MODULE,
 		Sub-unit with IRS IIR filtering for data sampled at 8kHz.
 
 ORIGINAL BY:
@@ -24,7 +24,7 @@ DESCRIPTION:
 
         This file contains functions for initializing and running an
         IIR-filter (cascade form) with a standard IRS weighting
-        (sampling frequency = 8 kHz). 
+        (sampling frequency = 8 kHz).
 
 FUNCTIONS    : - iir_irs_8khz_init = initialization of cascade-form IIR IRS
 	       - fill_iir_irs_8khz = coeffs for cascade-form IIR IRS
@@ -85,11 +85,7 @@ extern CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (
 
  ============================================================================
 */
-void fill_iir_irs_8khz (a_cof, b_cof, nblocks)
-     float ***a_cof;
-     float ***b_cof;
-     long *nblocks;
-{
+void fill_iir_irs_8khz (float ***a_cof, float ***b_cof, long *nblocks) {
 #define nblocks_8khz        8   /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
@@ -135,7 +131,7 @@ void fill_iir_irs_8khz (a_cof, b_cof, nblocks)
 
   Description:
   ~~~~~~~~~~~~
-  Initialize a 8 kHz IIR filter structure for IRS (P.48) filtering. 
+  Initialize a 8 kHz IIR filter structure for IRS (P.48) filtering.
   Coefficients init'd by fill...() & gain furnished by Bellcore for the
   ITU-T 8 kbit/s speech coder qualification tests.
 
@@ -145,7 +141,7 @@ void fill_iir_irs_8khz (a_cof, b_cof, nblocks)
   Return value:
   ~~~~~~~~~~~~~
   Returns a pointer to struct CASCADE_IIR;
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
 

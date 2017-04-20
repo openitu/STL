@@ -11,7 +11,7 @@
                     ITU-T - USER'S GROUP ON SOFTWARE TOOLS
                    ========================================
 
-MODULE:         CASCG712.C, IIR FILTER MODULE, 
+MODULE:         CASCG712.C, IIR FILTER MODULE,
                 Sub-unit with the cascade-form standard PCM filter (G.712)
 
 ORIGINAL BY:
@@ -59,8 +59,8 @@ extern CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (
 
   Initialize pointer to arrays with IIR coefficients for IIR G712
   filter, running at 8 kHz. The coefficients used were given
-  by John Rosenberger (Bellcore, USA), what are of a filter 
-  in the cascade form. 
+  by John Rosenberger (Bellcore, USA), what are of a filter
+  in the cascade form.
 
   Parameters:
   ~~~~~~~~~~~
@@ -80,11 +80,7 @@ extern CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (
 
  ============================================================================
 */
-void fill_iir_G712_8khz (a_cof, b_cof, nblocks)
-     float ***a_cof;
-     float ***b_cof;
-     long *nblocks;
-{
+void fill_iir_G712_8khz (float ***a_cof, float ***b_cof, long *nblocks) {
 #define nblocks_8khz        2   /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
@@ -115,11 +111,11 @@ void fill_iir_G712_8khz (a_cof, b_cof, nblocks)
 
   CASCADE_IIR *iir_G712_8khz_init (void);
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  
+
   Description:
   ~~~~~~~~~~~~
-  Initialize a 8 kHz IIR filter structure for G712 (P.48) filtering. 
-  Coefficients init'd by fill...() and gain furnished by Bellcore. The factor 
+  Initialize a 8 kHz IIR filter structure for G712 (P.48) filtering.
+  Coefficients init'd by fill...() and gain furnished by Bellcore. The factor
   for this function is 1:1.
 
   Parameters:  none.

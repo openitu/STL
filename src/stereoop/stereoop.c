@@ -1,21 +1,21 @@
-/* 
-stereoop.c  
+/*
+stereoop.c
 Sample program for stereo file operations
 
 Compile in STL2005r1 , e.g. from utl directory use:
-gcc stereoop.c  -I ../utl -o stereoop.exe 
+gcc stereoop.c  -I ../utl -o stereoop.exe
 */
 /* revision history
-v1.0 April 11, 2008: 
+v1.0 April 11, 2008:
  first version submitted to ITU-T, Jonas Svedberg Ericsson AB
 
-v1.01 April 23, 2008: 
+v1.01 April 23, 2008:
   corrected Mono-downmix synthesis, Jonas Svedberg Ericsson AB
 
-v1.02 Sept 4, 2009: 
+v1.02 Sept 4, 2009:
   added rounding to   Mono-downmix output, Yusuke Hiwasaki, NTT Cyber Space Labs
                                            Jonas Svedberg, Ericsson AB
-v1.03 Feb  2, 2010: 
+v1.03 Feb  2, 2010:
   modified maximum filename length to avoid buffer overruns (y.hiwasaki)
 */
 
@@ -49,9 +49,7 @@ enum Mode { NONE = -1,
 display_usage(int level);  Shows program usage.
 -------------------------------------------------------------------------*/
 #define P(x) printf x
-void display_usage (level)
-     int level;
-{
+void display_usage (int level) {
   P ((VERSION));
   P (("\n"));
   if (level) {

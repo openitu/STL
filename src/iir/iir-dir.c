@@ -20,8 +20,8 @@
        copyrights in the body of each function, when applicable.
        =============================================================
 
-MODULE:         IIR-DIR.C, IIR FILTER MODULE, 
-                Sub-unit with direct form IIR filtering for data sampled 
+MODULE:         IIR-DIR.C, IIR FILTER MODULE,
+                Sub-unit with direct form IIR filtering for data sampled
                 at up- and down-sampling.
 
 ORIGINAL BY:
@@ -40,11 +40,11 @@ ORIGINAL BY:
 DESCRIPTION:
 
         This file contains functions for initializing and running an
-        IIR-filter (direct form) with a DC removal filter (factor 1:1). 
+        IIR-filter (direct form) with a DC removal filter (factor 1:1).
 
 FUNCTIONS    : - fill_iir_dc_removal = coeffs for cascade-form IIR DC removal
                                        filter (1:1 factor)
-               - iir_dc_removal_init() = initialization of cascade-form IIR 
+               - iir_dc_removal_init() = initialization of cascade-form IIR
                                       DC removal filter (factor 1:1)
 
 NOTE: DO NOT USE CODE BETWEEN THE "UNDER_HEAVY_CONSTRUCTION" BLOCKS!!!
@@ -76,14 +76,14 @@ extern DIRECT_IIR *direct_iir_init ARGS ((long zerono, long poleno, float *a, fl
 /*
   ============================================================================
 
-  void fill_iir_lp_3_to_1 (float **a_cof, float **b_cof, long *zerono, 
+  void fill_iir_lp_3_to_1 (float **a_cof, float **b_cof, long *zerono,
   ~~~~~~~~~~~~~~~~~~~~~~~  long *poleno);
 
   Description:
   ~~~~~~~~~~~~
 
-  Initialize pointer to arrays with IIR coefficients for direct-form IIR 
-  3:1/1:3 rate change filter. The coefficients used were provided by Rosario 
+  Initialize pointer to arrays with IIR coefficients for direct-form IIR
+  3:1/1:3 rate change filter. The coefficients used were provided by Rosario
   Drogo de Iaccovo (CSELT/Italy) the ITU-T wideband speech codec qualification
   tests. The coefficients are of a filter in the direct form.
 
@@ -97,9 +97,9 @@ extern DIRECT_IIR *direct_iir_init ARGS ((long zerono, long poleno, float *a, fl
   Return value:  None.
   ~~~~~~~~~~~~~
 
-        Author: 
+        Author:
         ~~~~~~~
-        Filter coefficients: 
+        Filter coefficients:
           Rosario Drogo de Iaccovo
           CSELT
           Audio Coding and Transm.Quality  Tel:    +39-11-228-5697
@@ -108,7 +108,7 @@ extern DIRECT_IIR *direct_iir_init ARGS ((long zerono, long poleno, float *a, fl
           Copyright Notice:
           " (C) 1994 CSELT - Centro Studi E Laboratori Telecomunicazioni SpA "
           " All rights reserved "
-          
+
         Routine:
           Simao Ferraz de Campos Neto
 	  Comsat Laboratories                  Tel:    +1-301-428-4516
@@ -121,11 +121,7 @@ extern DIRECT_IIR *direct_iir_init ARGS ((long zerono, long poleno, float *a, fl
 
  ============================================================================
 */
-void fill_iir_lp_3_to_1 (a_cof, b_cof, zerono, poleno)
-     float **a_cof;
-     float **b_cof;
-     long *zerono, *poleno;
-{
+void fill_iir_lp_3_to_1 (float **a_cof, float **b_cof, long *zerono, long *poleno) {
 #define POLENO        24        /* number of poles in direct form */
 #define ZERONO        24        /* number of zeroes in direct form */
 
@@ -168,7 +164,7 @@ void fill_iir_lp_3_to_1 (a_cof, b_cof, zerono, poleno)
 
   Description:
   ~~~~~~~~~~~~
-  Initialize a direct-for IIR filter structure for 3:1 downsampling filtering. 
+  Initialize a direct-for IIR filter structure for 3:1 downsampling filtering.
   Coefficients init'd by fill...() & gain furnished by CSELT for the
   ITU-T wideband speech coder qualification tests.
 
@@ -178,7 +174,7 @@ void fill_iir_lp_3_to_1 (a_cof, b_cof, zerono, poleno)
   Return value:
   ~~~~~~~~~~~~~
   Returns a pointer to struct DIRECT_IIR;
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
 
@@ -218,7 +214,7 @@ DIRECT_IIR *iir_down_3_to_1_init () {
 
   Description:
   ~~~~~~~~~~~~
-  Initialize a direct-for IIR filter structure for 1:3 upsampling filtering. 
+  Initialize a direct-for IIR filter structure for 1:3 upsampling filtering.
   Coefficients init'd by fill...() & gain furnished by CSELT for the
   ITU-T wideband speech coder qualification tests.
 
@@ -228,7 +224,7 @@ DIRECT_IIR *iir_down_3_to_1_init () {
   Return value:
   ~~~~~~~~~~~~~
   Returns a pointer to struct DIRECT_IIR;
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
 
@@ -265,15 +261,15 @@ DIRECT_IIR *iir_up_1_to_3_init () {
 /*
   ============================================================================
 
-  void fill_iir_dc_removal (float **a_cof, float **b_cof, long *zerono, 
+  void fill_iir_dc_removal (float **a_cof, float **b_cof, long *zerono,
   ~~~~~~~~~~~~~~~~~~~~~~~~  long *poleno);
 
   Description:
   ~~~~~~~~~~~~
 
-  Initialize pointer to arrays with IIR coefficients for direct-form IIR 
-  DC removal filter based on the RPELTP algorithm DC removal filter. 
-  Alpha here is 0.985 filter. The coefficients are of a filter in the 
+  Initialize pointer to arrays with IIR coefficients for direct-form IIR
+  DC removal filter based on the RPELTP algorithm DC removal filter.
+  Alpha here is 0.985 filter. The coefficients are of a filter in the
   direct form.
                                    -1
                               1 - z
@@ -291,7 +287,7 @@ DIRECT_IIR *iir_up_1_to_3_init () {
   Return value:  None.
   ~~~~~~~~~~~~~
 
-        Author: 
+        Author:
         ~~~~~~~
           Simao Ferraz de Campos Neto
 	  Comsat Laboratories                  Tel:    +1-301-428-4516
@@ -304,11 +300,7 @@ DIRECT_IIR *iir_up_1_to_3_init () {
 
  ============================================================================
 */
-void fill_iir_dc_removal (a_cof, b_cof, zerono, poleno)
-     float **a_cof;
-     float **b_cof;
-     long *zerono, *poleno;
-{
+void fill_iir_dc_removal (float **a_cof, float **b_cof, long *zerono, long *poleno) {
 #define POLENO        2         /* number of poles in direct form + 1 */
 #define ZERONO        2         /* number of zeroes in direct form + 1 */
 
@@ -338,7 +330,7 @@ void fill_iir_dc_removal (a_cof, b_cof, zerono, poleno)
 
   Description:
   ~~~~~~~~~~~~
-  Initialize a direct-for IIR filter structure for a 1:1 DC removal filtering. 
+  Initialize a direct-for IIR filter structure for a 1:1 DC removal filtering.
 
   Parameters:  none.
   ~~~~~~~~~~~
@@ -346,7 +338,7 @@ void fill_iir_dc_removal (a_cof, b_cof, zerono, poleno)
   Return value:
   ~~~~~~~~~~~~~
   Returns a pointer to struct DIRECT_IIR;
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
 

@@ -4,11 +4,7 @@ extern void sig_die ();
 
 /* called when a subscript is out of range */
 
-void s_rnge (varn, offset, procn, line)
-     char *varn, *procn;
-     long int offset;
-     int line;
-{
+void s_rnge (char *varn, long int offset, char *procn, int line) {
   register int i;
 
   fprintf (stderr, "Subscript out of range on file line %d, procedure ", line);

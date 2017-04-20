@@ -36,7 +36,7 @@ ORIGINAL BY:
 
 DESCRIPTION:
         This file contains procedures for IRS send part filtering for
-	several sampling rates. Up and down sampling has not been made 
+	several sampling rates. Up and down sampling has not been made
 	part of this sub-unit.
 
 FUNCTIONS:
@@ -63,12 +63,12 @@ HISTORY:
   30.Sep.1994 v2.1 Updated to accomodate changes in the name of the name and
                    slitting of module in several files, for ease of expansion.
 		    <simao@ctd.comsat.com>
-  18.Nov.1996 v2.2 Modified gain in modified IRS initialization functions   
+  18.Nov.1996 v2.2 Modified gain in modified IRS initialization functions
                    mod_irs_{48,16}k_init() from 1.0 to -1.0 to fix phase
 		   inversion characteristic. <simao@ctd.comsat.com>
-  02.Jul.1999 v3.0 Added modified IRS filter RECEIVE-side characteristic 
+  02.Jul.1999 v3.0 Added modified IRS filter RECEIVE-side characteristic
                    for 8 and 16 kHz sampling-rate, as 1:1 filters. <simao>
-  13.Mar.2000 v3.1 Replaced coefficients for modified IRS receive 
+  13.Mar.2000 v3.1 Replaced coefficients for modified IRS receive
                    characteristics to get a closer match to the mask
                    <simao>.
   22.Dec.2004 v3.2 The modified IRS send-side filter (48kHz) is made symmetric. <Cyril Guillaume & Stephane Ragot - stephane.ragot@francetelecom.com>
@@ -100,8 +100,8 @@ void fill_rx_modified_irs8khz ARGS ((float **h0, long *lenh0));
 void fill_rx_modified_irs16khz ARGS ((float **h0, long *lenh0));
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -240,11 +240,7 @@ SCD_FIR *irs_16khz_init () {
 #define f24 (float)0x00800000
 #define lenh0IRS8 151
 
-void fill_irs8khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
-
+void fill_irs8khz (float **h0, long *lenh0) {
   static float h0IRS8[lenh0IRS8] = {
     75478. / f24, -14206. / f24, -79415. / f24, 24725. / f24, -12018. / f24,
     -6955. / f24, 6418. / f24, -9378. / f24, 4475. / f24, -2452. / f24,
@@ -322,10 +318,7 @@ void fill_irs8khz (h0, lenh0)
 #define f24 (float)0x00800000
 #define lenh0IRS16 209
 
-void fill_irs16khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_irs16khz (float **h0, long *lenh0) {
   static float h0IRS16[lenh0IRS16] = {
     -6550. / f24, -19590. / f24, -31126. / f24, -26048. / f24, 1228. / f24,
     34321. / f24, 45479. / f24, 24079. / f24, -8997. / f24, -22054. / f24,
@@ -411,12 +404,12 @@ void fill_irs16khz (h0, lenh0)
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
-        Filter coefficients: 
+        Filter coefficients:
           John Barnes <G.J.P.Barnes@bnr.co.uk>
           Chris Tate <c.n.tate@bnr.co.uk>
-          
+
         Routine:
           Simao Ferraz de Campos Neto
           DDS/Pr11                      Tel: +55-192-39-1396
@@ -432,11 +425,7 @@ void fill_irs16khz (h0, lenh0)
 #define f16 32768.
 #define MOD_IRS16_LEN 495
 
-void fill_modified_irs16khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
-
+void fill_modified_irs16khz (float **h0, long *lenh0) {
   static float mod_irs16_coef[MOD_IRS16_LEN] = {
     1. / f16, 1. / f16, 1. / f16, 1. / f16, 1. / f16,
     1. / f16, 1. / f16, 1. / f16, 1. / f16, 1. / f16,
@@ -571,12 +560,12 @@ void fill_modified_irs16khz (h0, lenh0)
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
-        Filter coefficients: 
+        Filter coefficients:
           John Barnes <G.J.P.Barnes@bnr.co.uk>
           Chris Tate <c.n.tate@bnr.co.uk>
-          
+
         Routine:
           Simao Ferraz de Campos Neto
           DDS/Pr11                      Tel: +55-192-39-1396
@@ -593,11 +582,7 @@ void fill_modified_irs16khz (h0, lenh0)
 #define f16 32768.
 #define MOD_IRS48_LEN 513
 
-void fill_modified_irs48khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
-
+void fill_modified_irs48khz (float **h0, long *lenh0) {
   static float mod_irs48_coef[MOD_IRS48_LEN] = {
     -2. / f16, -2. / f16, -2. / f16, -2. / f16, -2. / f16,
     -2. / f16, -2. / f16, -2. / f16, -2. / f16, -2. / f16,
@@ -772,7 +757,7 @@ SCD_FIR *mod_irs_16khz_init () {
         Description:
         ~~~~~~~~~~~~
 
-        Initialization routine for the modified IRS weighting filter for 
+        Initialization routine for the modified IRS weighting filter for
         data sampled at 48 kHz.
 
         Parameters:  none.
@@ -843,9 +828,9 @@ SCD_FIR *mod_irs_48khz_init () {
   ~~~~~~~~~~~~~
   None.
 
-  Author: 
+  Author:
   ~~~~~~~
-  Filter coefficients: 
+  Filter coefficients:
    Version 1.0: Robert Dunn <bobd@voxware.com> [donated on June 1, 1998]
    Version 2.0: Simao Campos
 
@@ -867,10 +852,7 @@ SCD_FIR *mod_irs_48khz_init () {
 */
 #define RX_MOD_IRS16_LEN 148
 
-void fill_rx_modified_irs16khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_rx_modified_irs16khz  (float **h0, long *lenh0) {
   static float rx_mod_irs16_coef[RX_MOD_IRS16_LEN] = {
     (F) - 7.58608110527E-05, (F) - 7.45618878900E-05, (F) 3.52397043534E-05,
     (F) 6.59225768920E-05, (F) - 8.37107055674E-05, (F) - 1.58207551398E-04,
@@ -941,7 +923,7 @@ void fill_rx_modified_irs16khz (h0, lenh0)
   ~~~~~~~~~~~~
 
   Initialization routine for receive-side IRS weighting filter for
-  data sampled at 16 kHz. 
+  data sampled at 16 kHz.
 
   The coefficients are set such that the conversion curve will yield
   unity gain at 1000 Hz.
@@ -961,7 +943,7 @@ void fill_rx_modified_irs16khz (h0, lenh0)
   02.Jul.1999 v1.0 Release of 1st version <simao.campos@comsat.com>
   13.Mar.2000 v1.1 Changed gain to fit new coefficients <simao>
 
-  ============================================================================ 
+  ============================================================================
 */
 SCD_FIR *rx_mod_irs_16khz_init () {
   float *h0;                    /* pointer to array with FIR coeff. */
@@ -1005,9 +987,9 @@ SCD_FIR *rx_mod_irs_16khz_init () {
   ~~~~~~~~~~~~~
   None.
 
-  Author: 
+  Author:
   ~~~~~~~
-  Filter coefficients: 
+  Filter coefficients:
    Version 1.0: Robert Dunn <bobd@voxware.com> [donated on June 1, 1998]
    Version 2.0: Simao Campos
 
@@ -1026,14 +1008,11 @@ SCD_FIR *rx_mod_irs_16khz_init () {
                    point representation, however quantized to Q24.
                    <simao>
 
- ============================================================================ 
+ ============================================================================
 */
 #define RX_MOD_IRS8_LEN 75
 
-void fill_rx_modified_irs8khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_rx_modified_irs8khz  (float **h0, long *lenh0) {
   static float rx_mod_irs8_coef[RX_MOD_IRS8_LEN] = {
     (F) - 9.29651661244e-05, (F) - 5.57106193888e-05, (F) 1.03988706315e-05,
     (F) - 1.72293166049e-04, (F) 4.47217668394e-04, (F) - 3.23797104316e-04,

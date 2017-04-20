@@ -3,15 +3,15 @@
   pshar.c
   ~~~~~~~
 
-   Portable version of the shell archive generator program avaliable 
-   for Unix systems. Pshar puts readable text files together in a 
+   Portable version of the shell archive generator program avaliable
+   for Unix systems. Pshar puts readable text files together in a
    single ascii file, for example to be e-mailed. Pshar stands
    for "Portable SHell ARchive". To pack a list of files (say
    f1.txt f2.asc f3.ps f4.dat), do:
     shar -f pack.sh f1.txt f2.asc f3.ps f4.dat
-   or, except for VMS, 
+   or, except for VMS,
     shar f1.txt f2.asc f3.ps f4.dat > pack.sh
- 
+
    To unpack, on the target system,
     shar -u pack.sh
    or, if the target is a unix machine,
@@ -20,9 +20,9 @@
 
   Usage:
   ~~~~~~
-  pshar [-u shar] [[-a] [-p prefix] [-d delim] [-bcv] 
+  pshar [-u shar] [[-a] [-p prefix] [-d delim] [-bcv]
         [-f shar] files [> shar]]
-  where:  
+  where:
     -a     all the options (v,c,b,-pXX)
     -b     extract absolute paths into current directory
     -c     check filesizes on extraction
@@ -32,9 +32,9 @@
     -u     unshar <archive>
     -v     verbose on extraction, incl. echoing filesizes
 
-    files: list of files to be packed. In Unix, wildcard expansion 
+    files: list of files to be packed. In Unix, wildcard expansion
            is performed by the operating system. With Borland products,
-           one may use wildargs.obj to allow wildcar expansion by the 
+           one may use wildargs.obj to allow wildcar expansion by the
            program. Wildcard expansion is not implemented for VMS.
 
     NOTE: redirection ([> shar] above) does NOT work for VMS!
@@ -56,26 +56,26 @@
 
    MSDOS
     Use tcc or bcc (MS-C should do as well- but not tested!):
-     tcc shar.c 
+     tcc shar.c
     or (check for the right path of wildargs.obj!)
      tcc shar.c \tc\lib\wildargs.obj
-    [ The latter is for being able to use file specs like f?.* in the 
+    [ The latter is for being able to use file specs like f?.* in the
       example above, instead of issuing all the file names!]
- 
- 
+
+
   History:
   ~~~~~~~~
 
-     v 940221 Simao F.Campos Neto (simao@cpqd.ansp.br) Ported 
-       to work in SunOS 4.1.2 (cc, acc, gcc) and up, and 
+     v 940221 Simao F.Campos Neto (simao@cpqd.ansp.br) Ported
+       to work in SunOS 4.1.2 (cc, acc, gcc) and up, and
        MSDOS (TurboC).
- 
+
      v 870307 T. Stark (h462batms@gallua.bitnet) for VAX/VMS
        - added a -f (shar) switch because of lack of > in DCL.
- 
+
      v 860716 M. Kersenbrock (tektronix!copper!michaelk) for Z80-CPM
        - enhanced usage message
- 
+
      v 860712 D. Wecker for ULTRIX and the AMIGA
        - stripped down.. does patterns but no directories
        - added a -u (unshar) switch
@@ -216,10 +216,7 @@ char Usage4[] = "                -v  verbose on extraction, incl. echoing filesi
 #endif
 
 #if (defined (VMS) || defined(MSDOS)) && !defined(__GNUC__)
-char *index (s, c)
-     char *s;
-     char c;
-{
+char *index (char *s, char c) {
   while (*s != 0 && *s != c)
     s++;
   if (*s == 0 && *s != c)
@@ -228,9 +225,7 @@ char *index (s, c)
 }
 #endif
 
-int header (ppchFiles)
-     char *ppchFiles[];
-{
+int header (char *ppchFiles) {
   extern char *ctime ();
   auto long clock;
   register char **ppchList;
@@ -267,9 +262,7 @@ int header (ppchFiles)
   return (0);
 }
 
-int archive (input, output)
-     char *input, *output;
-{
+int archive (char *input, char *output) {
   auto char line[BUFSIZ];
   register FILE *ioptr;
 
@@ -292,9 +285,7 @@ int archive (input, output)
 }
 
 
-void shar (file)
-     char *file;
-{
+void shar (char *file) {
   register char *basefile;
 /*  extern void exit(int status);*/
 
@@ -319,10 +310,7 @@ void shar (file)
   }
 }
 
-int main (argc, argv)
-     int argc;
-     char **argv;
-{
+int main (int argc, char *argv[]) {
   auto char *ppchFiles[256];
   register int C;
   register char **ppchList = ppchFiles;

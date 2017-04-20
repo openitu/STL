@@ -1,10 +1,10 @@
-/*                                                            02.Feb.2010 v3.2 
+/*                                                            02.Feb.2010 v3.2
   ============================================================================
 
   SPDEMO.C
   ~~~~~~~~~
 
-  Description: 
+  Description:
   ~~~~~~~~~~~~
 
   DEMO program to show the use of the serialization/
@@ -20,15 +20,15 @@
                       Bit '1' is represented as '0x0081'
                       A SYNC-word is defined as '0x6B21'
 
-  This bit definition was chosen to be compatible in the future 
+  This bit definition was chosen to be compatible in the future
   with the so called 'soft-bit'-format, where the  channel decoder
-  outputs probabilities that the  received bit is '0' or '1'. 
+  outputs probabilities that the  received bit is '0' or '1'.
 
   The output bit-stream will then be a binary file where the first
   word on the file is the SYNC-word, followed by LFRAME
   words with the data bits (LFRAME=number of bits in one frame);
   then the next SYNC-word, followed by the next frame, ... and so
-  on (if the sync word inclusion is selected). 
+  on (if the sync word inclusion is selected).
 
 
   Usage:
@@ -48,7 +48,7 @@
                  1: each frame begin with a SYNC_WORD in the
                     output file; this is the DEFAULT.
                  0: no SYNC_WORDs are used in the output file.
-  just ......... flag for choosing justification: 
+  just ......... flag for choosing justification:
                  left:  the parallel data is supposed to be right-
 		        justified; this is the DEFAULT.
                  right: the parallel data is supposed to be left-
@@ -69,33 +69,33 @@
   Compilation:
   ~~~~~~~~~~~~
 
-  VAX/VMS: 
+  VAX/VMS:
   $ cc spdemo
-  $ link spdemo 
-  $ spdemo   :== $scd_disk:[scd_dir]spdemo 
-  $ spdemo 
+  $ link spdemo
+  $ spdemo   :== $scd_disk:[scd_dir]spdemo
+  $ spdemo
 
-  Turbo-C, Turbo-C++: 
+  Turbo-C, Turbo-C++:
   > tcc -ml spdemo
-  > spdemo 
+  > spdemo
 
-  HighC (MetaWare, version R2.32): 
-  > hc386 -ml spdemo.c  
-  > run386 spdemo 
+  HighC (MetaWare, version R2.32):
+  > hc386 -ml spdemo.c
+  > run386 spdemo
 
   Sun-C (BSD-Unix)
   # cc -o spdemo spdemo.c
   # spdemo
 
-        
-  Original author: 
+
+  Original author:
   ~~~~~~~~~~~~~~~~
-  Simao Ferraz de Campos Neto       
-  CPqD/Telebras         		             
+  Simao Ferraz de Campos Neto
+  CPqD/Telebras
   DDS/Pr.11                             Phone : +55-192-39-6396
   Rd. Mogi Mirim-Campinas Km.118        Fax   : +55-192-53-6125
   13.088-061 - Campinas - SP (Brazil)   EMail : simao@cpqd.ansp.br
-                                          
+
   History
   ~~~~~~~
   20.Mar.92 v1.0 1st release to UGST.
@@ -111,7 +111,7 @@
 		   input & output files being both parallel - this is
 		   prevented by a previous piece of code!)
   16.Jan.98 v3.1 Added conditional compile for Ultrix with cc <simao>
-  18.Jan.99 v3.2 Fixed bug in calculation of total no.of samples 
+  18.Jan.99 v3.2 Fixed bug in calculation of total no.of samples
                  to process; fixed a bug in check_sync() which
                  unnecessarily zeroed the frame length variable fr_len
                  causing errors when the user specifies the frame length
@@ -199,14 +199,9 @@ enum BS_types { NO_HEADER, HAS_HEADER };
   History:
   ~~~~~~~~
   20.Aug.97  v.1.0  Created.
-  -------------------------------------------------------------------------- 
+  --------------------------------------------------------------------------
 */
-char check_bs_format (F, file, type)
-     FILE *F;
-     char *file;
-     char *type;
-{
-
+char check_bs_format (FILE *F, char *file, char *type) {
   short word;
   char ret_val;
 
@@ -274,12 +269,7 @@ char check_bs_format (F, file, type)
 /* ...................... End of check_bs_format() ...................... */
 
 
-int check_sync (F, file, bs_type, fr_len, bs_format)
-     FILE *F;
-     char *file;
-     char *bs_type, *bs_format;
-     long *fr_len;
-{
+int check_sync (FILE *F, char *file, char *bs_type, long *fr_len, char *bs_format) {
   long i;
   char sync_header;
 
@@ -350,9 +340,7 @@ int check_sync (F, file, bs_type, fr_len, bs_format)
   --------------------------------------------------------------------------
 */
 #define P(x) printf x
-void display_usage (level)
-     int level;
-{
+void display_usage (int level) {
   P (("spdemo.c - version 3.2 of 02.Feb.2010\n"));
 
   P (("  Demo program to convert between serial and parallel data formats.\n"));
@@ -412,9 +400,7 @@ void display_usage (level)
 #undef P
 /* .................. End of display_usage() ....................... */
 
-char *format_str (i)
-     int i;
-{
+char *format_str (int i) {
   switch (i) {
   case byte:
     return "byte";
@@ -433,10 +419,7 @@ char *format_str (i)
 /* ------------------------------------------------------------------------ */
 /*                              Main Program                                */
 /* ------------------------------------------------------------------------ */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   long N = 256, N1 = 1, N2 = 0, smpno, size, i;
   long fr_len = 0;              /* Frame length in number of bits */
   long bitno, cur_blk, resolution = 16;
@@ -456,8 +439,8 @@ int main (argc, argv)
 #ifdef VMS
   char mrs[15];                 /* for correct mrs in VMS environment */
 #endif
-  long (*serialize_f) ();       /* pointer to serialization routine */
-  long (*parallelize_f) ();     /* pointer to parallelization routine */
+  long (*serialize_f) (short *par_buf, short *bit_stm, long n, long resol, char sync);       /* pointer to serialization routine */
+  long (*parallelize_f) (short *par_buf, short *bit_stm, long n, long resol, char sync);     /* pointer to parallelization routine */
   char quiet = 0;
 
 

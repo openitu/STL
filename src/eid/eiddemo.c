@@ -90,7 +90,7 @@
 
   Compilation:
   ~~~~~~~~~~~~
-	
+
   VAX/VMS:
   $ cc eiddemo
   $ link eiddemo
@@ -113,9 +113,9 @@
   ~~~~~~~~~~~~~~~~
 
   Rudolf Hofmann
-  PHILIPS KOMMUNIKATIONS INDUSTRIE AG Phone : +49 911 526-2603 
-  Kommunikationssysteme		      FAX   : +49 911 526-3385 
-  Thurn-und-Taxis-Strasse 14	      EMail : hf@pkinbg.uucp   
+  PHILIPS KOMMUNIKATIONS INDUSTRIE AG Phone : +49 911 526-2603
+  Kommunikationssysteme		      FAX   : +49 911 526-3385
+  Thurn-und-Taxis-Strasse 14	      EMail : hf@pkinbg.uucp
   D-8500 Nuernberg 10 (Germany)
 
   History:
@@ -127,11 +127,11 @@
   06.Jun.1995  2.3  Change in self-documentation to reflect compatibility
                     modification of the definition of the softbit values
                     of bits '1' and '0'. <simao@ctd.comsat.com>
-  22.Feb.1996  2.4  Included ctype.h, fixed some small warnings, changed 
+  22.Feb.1996  2.4  Included ctype.h, fixed some small warnings, changed
                     local prototypes to smart prototypes, changed
                     read/write system calls to ANSI fread/fwrite calls
                     <simao>
-  07.Mar.1996  3.0  Modified to comply with the bitstream data 
+  07.Mar.1996  3.0  Modified to comply with the bitstream data
                     representation in Annex B of
                     G.192. <simao@ctd.comsat.com>
   06.Oct.1997  3.1  Removed some compilation warnings <simao>
@@ -171,10 +171,7 @@ long READ_c ARGS ((FILE * fp, long n, char *chr));
 /* ------------------------------------------------------------------------ */
 /*                               Main Program                               */
 /* ------------------------------------------------------------------------ */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   SCD_EID *BEReid;              /* pointer to EID-structure */
   SCD_EID *FEReid;              /* pointer to EID-structure */
   char BERfile[MAX_STRLEN];     /* file for saving bit error EID */
@@ -539,11 +536,7 @@ void display_usage () {
 
   ===========================================================================
 */
-long save_EID_to_file (EID, EIDfile, BER, GAMMA)
-     SCD_EID *EID;
-     char *EIDfile;
-     double BER, GAMMA;
-{
+long save_EID_to_file (SCD_EID *EID, char *EIDfile, double BER, double GAMMA) {
   FILE *EIDfileptr;
 
   /* open specified ASCII file for "overwriting": */
@@ -620,11 +613,7 @@ long save_EID_to_file (EID, EIDfile, BER, GAMMA)
 
  ============================================================================
 */
-SCD_EID *recall_eid_from_file (EIDfile, ber, gamma)
-     char *EIDfile;
-     double *ber;
-     double *gamma;
-{
+SCD_EID *recall_eid_from_file (char *EIDfile, double *ber, double *gamma) {
   SCD_EID *EID;
   FILE *EIDfileptr;
   char chr;
@@ -701,11 +690,7 @@ SCD_EID *recall_eid_from_file (EIDfile, ber, gamma)
 
  ============================================================================
 */
-long READ_L (fp, n, longary)
-     FILE *fp;
-     long n;
-     long *longary;
-{
+long READ_L (FILE *fp, long n, long *longary) {
   long i, ic;
   char c;
   char ch[16];
@@ -757,11 +742,7 @@ long READ_L (fp, n, longary)
 
  ============================================================================
 */
-long READ_lf (fp, n, doubleary)
-     FILE *fp;
-     long n;
-     double *doubleary;
-{
+long READ_lf (FILE *fp, long n, double *doubleary) {
   long i, ic;
   char c;
   char ch[64];
@@ -809,11 +790,7 @@ long READ_lf (fp, n, doubleary)
 
  ============================================================================
 */
-long READ_c (fp, n, chr)
-     FILE *fp;
-     long n;
-     char *chr;
-{
+long READ_c (FILE *fp, long n, char *chr) {
   long i;
   char c;
 

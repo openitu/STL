@@ -11,7 +11,7 @@
                     ITU-T - USER'S GROUP ON SOFTWARE TOOLS
                    ========================================
 
-MODULE:         IIR-FLAT.C, IIR FILTER MODULE, 
+MODULE:         IIR-FLAT.C, IIR FILTER MODULE,
 		Sub-unit with flat low-pass IIR filtering
 
 ORIGINAL BY:
@@ -23,8 +23,8 @@ ORIGINAL BY:
 DESCRIPTION:
 
         This file contains functions for initializing and running an
-        IIR-filter (cascade form) with a low-pass characteristic for 3:1 
-        and 1:3 rate change factors. 
+        IIR-filter (cascade form) with a low-pass characteristic for 3:1
+        and 1:3 rate change factors.
 
 FUNCTIONS    : - iir_casc_lp_3_to_1_init = init. of cascade-form IIR LP
 	       - fill_casc_iir_lp_3_to_1 = coeffs for cascade-form IIR LP
@@ -62,16 +62,16 @@ extern CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (
   Description:
   ~~~~~~~~~~~~
 
-  Initialize pointer to arrays with IIR coefficients for IIR flat band-pass 
-  filter for rate change factor of 1:3/3:1. The coefficients used were 
-  generated using Hypersignal for a ellyptic design and implemented in the 
+  Initialize pointer to arrays with IIR coefficients for IIR flat band-pass
+  filter for rate change factor of 1:3/3:1. The coefficients used were
+  generated using Hypersignal for a ellyptic design and implemented in the
   direct form II cascade. The filter has order 13 and have 7 sections.
 
   Filtering is implemented using:
                 N
              _______              -1        -2
                | |  {  1  +  A1i z  +  A2i z  }
-       H(z)= K | |   -------------------------- 
+       H(z)= K | |   --------------------------
                i=1                -1        -2
                     {  1  +  B1i z  +  B2i z  }
 
@@ -94,11 +94,7 @@ extern CASCADE_IIR *cascade_iir_init ARGS ((long nblocks, float (*a)[2], float (
 
  ============================================================================
 */
-void fill_casc_iir_lp_3_to_1_ravi2 (a_cof, b_cof, nblocks)
-     float ***a_cof;
-     float ***b_cof;
-     long *nblocks;
-{
+void fill_casc_iir_lp_3_to_1_ravi2 (float ***a_cof, float ***b_cof, long *nblocks) {
 #define nblocks_3_1        12   /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
@@ -142,11 +138,7 @@ void fill_casc_iir_lp_3_to_1_ravi2 (a_cof, b_cof, nblocks)
 
 #undef nblocks_3_1
 
-void fill_casc_iir_lp_3_to_1_ravi1 (a_cof, b_cof, nblocks)
-     float ***a_cof;
-     float ***b_cof;
-     long *nblocks;
-{
+void fill_casc_iir_lp_3_to_1_ravi1 (float ***a_cof, float ***b_cof, long *nblocks) {
 #define nblocks_3_1        12   /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
@@ -189,11 +181,7 @@ void fill_casc_iir_lp_3_to_1_ravi1 (a_cof, b_cof, nblocks)
 
 #undef nblocks_3_1
 
-void fill_casc_iir_lp_3_to_1 (a_cof, b_cof, nblocks)
-     float ***a_cof;
-     float ***b_cof;
-     long *nblocks;
-{
+void fill_casc_iir_lp_3_to_1 (float ***a_cof, float ***b_cof, long *nblocks) {
 #define nblocks_3_1        7    /* number of 2'nd order blocks */
 
   /* Numerator coefficients */
@@ -237,7 +225,7 @@ void fill_casc_iir_lp_3_to_1 (a_cof, b_cof, nblocks)
 
   Description:
   ~~~~~~~~~~~~
-  Initialize a 8 kHz IIR filter structure for IRS (P.48) filtering. 
+  Initialize a 8 kHz IIR filter structure for IRS (P.48) filtering.
   Coefficients init'd by fill...() & gain furnished by Bellcore for the
   ITU-T 8 kbit/s speech coder qualification tests.
 
@@ -247,7 +235,7 @@ void fill_casc_iir_lp_3_to_1 (a_cof, b_cof, nblocks)
   Return value:
   ~~~~~~~~~~~~~
   Returns a pointer to struct CASCADE_IIR;
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
 
@@ -287,7 +275,7 @@ CASCADE_IIR *iir_casc_lp_3_to_1_init () {
 
   Description:
   ~~~~~~~~~~~~
-  Initialize a 8 kHz IIR filter structure for IRS (P.48) filtering. 
+  Initialize a 8 kHz IIR filter structure for IRS (P.48) filtering.
   Coefficients init'd by fill...() & gain furnished by Bellcore for the
   ITU-T 8 kbit/s speech coder qualification tests.
 
@@ -297,7 +285,7 @@ CASCADE_IIR *iir_casc_lp_3_to_1_init () {
   Return value:
   ~~~~~~~~~~~~~
   Returns a pointer to struct CASCADE_IIR;
-  
+
   Author: <simao@ctd.comsat.com>
   ~~~~~~~
 

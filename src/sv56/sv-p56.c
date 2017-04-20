@@ -15,14 +15,14 @@
        COPYRIGHT NOTE: This source code, and all of its derivations,
        is subject to the "ITU-T General Public License". Please have
        it  read  in    the  distribution  disk,   or  in  the  ITU-T
-       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO 
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
        CODING STANDARDS".
        =============================================================
 
 
 MODULE:         SV-P56.C, FUNCTIONS RELATED TO ACTIVE LEVEL CALCULATIONS
 
-ORIGINAL BY:    
+ORIGINAL BY:
    Simao Ferraz de Campos Neto   CPqD/Telebras Brazil
 
 DATE:           19/May/2005
@@ -37,24 +37,24 @@ init_speech_voltmeter ......... initialization of the speech voltmeter state
                                 variables in a structure of type SVP56_state.
 
 speech_voltmeter .............. measurement of the active speech level of
-                                data in a buffer according to P.56. Other 
+                                data in a buffer according to P.56. Other
 				relevant statistics are also available.
 
 HISTORY:
 
    07.Oct.91 v1.0 Release of 1st version to UGST.
    28.Feb.92 v2.0 Correction of bug in speech_voltmeter; inclusion of test
-                  for extremes in bin_interp; use of structure to keep  
+                  for extremes in bin_interp; use of structure to keep
                   state variables.   <simao@cpqd.br>
    18.May.92 v2.1 Creation of init_speech_voltmeter and consequent changes;
-                  speech_voltmeter changed to operate with float data in the 
+                  speech_voltmeter changed to operate with float data in the
                   normalized range. <simao@cpqd.br>
    01.Sep.95 v2.2 Added very small constant to avoid problems first detected
                   in a DEC Alpha VMS workstation with log(0) by
                   <gerhard.schroeder@fz13.fz.dbp.de>; generalized to all
 		  platforms <simao@ctd.comsat.com>
-   19.May.05 v2.3 Bug correction in bin_interp() routine, based on changes 
-				  suggested by Mr Kabal. 
+   19.May.05 v2.3 Bug correction in bin_interp() routine, based on changes
+				  suggested by Mr Kabal.
 				  Upper and lower bounds are updated during the interpolation.
 						<Cyril Guillaume & Stephane Ragot -- stephane.ragot@francetelecom.com>
 
@@ -62,7 +62,7 @@ HISTORY:
 */
 
 /*
- * .................... INCLUDES .................... 
+ * .................... INCLUDES ....................
  */
 
 /* System includes ... */
@@ -74,7 +74,7 @@ HISTORY:
 #endif
 
 /*
- * .................... FUNCTIONS .................... 
+ * .................... FUNCTIONS ....................
  */
 
 /*
@@ -93,7 +93,7 @@ HISTORY:
         First it tests whether the extreme points are not already close
         enough to `asl'. If not, then it guesses that the  initial value
         for asl falls in the middle of the bounds, with a `tol' [dB]
-        tolerance. If this difference is higher than tol, the new 
+        tolerance. If this difference is higher than tol, the new
         bounds are taken as the upper and the middle activities and
         thresholds. If it is less than `-tol' [dB], the new bounds are
         taken to be the middle and the lower activities and thresholds.
@@ -130,16 +130,14 @@ HISTORY:
         07.Oct.91     1.0C        Translation to C.
         28.Feb.92     2.0         Included check for the extremes as
                                   interpolated values.
-		19.May.05     2.3         Bug correction, based on changes suggested 
-								  by Mr Kabal. upper and lower bounds are 
-								  updated during the interpolation. 
+		19.May.05     2.3         Bug correction, based on changes suggested
+								  by Mr Kabal. upper and lower bounds are
+								  updated during the interpolation.
 									 <Cyril Guillaume & Stephane Ragot -- stephane.ragot@francetelecom.com>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-double bin_interp (upcount, lwcount, upthr, lwthr, Margin, tol)
-     double upcount, lwcount, upthr, lwthr, Margin, tol;
-{
+double bin_interp (double upcount, double lwcount, double upthr, double lwthr, double Margin, double tol) {
   double midcount, midthr, diff;
   register long iterno;
 
@@ -189,13 +187,13 @@ double bin_interp (upcount, lwcount, upthr, lwthr, Margin, tol)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         void init_speech_voltmeter (SVP56_state *state, double sampl_freq);
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~     
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         Description:
         ~~~~~~~~~~~~
 
         Initializes state variables of a structure of type SVP56_state,
-        for use by the speech_voltmeter() routine. 
+        for use by the speech_voltmeter() routine.
 
         Other variables:
         ~~~~~~~~~~~~~~~~
@@ -225,10 +223,7 @@ double bin_interp (upcount, lwcount, upthr, lwthr, Margin, tol)
 #define M        15.9           /* in [dB] */
 #define THRES_NO 15             /* number of thresholds in the speech voltmeter */
 
-void init_speech_voltmeter (state, sampl_freq)
-     SVP56_state *state;
-     double sampl_freq;
-{
+void init_speech_voltmeter (SVP56_state *state, double sampl_freq) {
   double x;
   long I, j;
 
@@ -268,7 +263,7 @@ void init_speech_voltmeter (state, sampl_freq)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         double speech_voltmeter (float *buffer,long smpno,SVP56_state *state);
-        ~~~~~~~~~~~~~~~~~~~~~~~  
+        ~~~~~~~~~~~~~~~~~~~~~~~
 
         Description:
         ~~~~~~~~~~~~
@@ -332,14 +327,14 @@ void init_speech_voltmeter (state, sampl_freq)
         19.Feb.91     2.0       Use of one structure with all state variables,
                                 instead of passing a bunch of variables.
         18.May.92     2.1       Does not carry out initialization (see init_
-                                speech_voltmeter above); input data in 
-                                "buffer" is supposed to be in the range 
+                                speech_voltmeter above); input data in
+                                "buffer" is supposed to be in the range
                                 -1.0 .. 1.0.
-        01.Sep.95     2.2       Added a small constant to all log10() calls 
+        01.Sep.95     2.2       Added a small constant to all log10() calls
                                 to avoid problems with log(0), first detected
                                 by <gerhard.schroeder@fz13.fz.dbp.de> on a
 				DEC Alpha VMS workstation and extended
-                                to ther platforms as well. Exceptions are 
+                                to ther platforms as well. Exceptions are
                                 VMS and gcc on PC. <simao@ctd.comsat.com>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -351,11 +346,7 @@ void init_speech_voltmeter (state, sampl_freq)
 /* Hooked to eliminate sigularity with log(0.0) (happens w/all-0 data blocks */
 #define MIN_LOG_OFFSET 1.0e-20
 
-double speech_voltmeter (buffer, smpno, state)
-     float *buffer;
-     long smpno;
-     SVP56_state *state;
-{
+double speech_voltmeter (float *buffer, long smpno, SVP56_state *state) {
   int I, j;
   long k;
   double g, x, AdB, CdB, AmdB, CmdB, ActiveSpeechLevel;

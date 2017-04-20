@@ -16,7 +16,7 @@
        COPYRIGHT NOTE: This source code, and all of its derivations,
        is subject to the "ITU-T General Public License". Please have
        it read in the distribution  disk, or in ITU-T Recommendation
-       G.191   on  "SOFTWARE  TOOLS  FOR  SPEECH  AND  AUDIO  CODING 
+       G.191   on  "SOFTWARE  TOOLS  FOR  SPEECH  AND  AUDIO  CODING
        STANDARDS".
        =============================================================
 
@@ -64,33 +64,33 @@ filter.c:
      * Filter type: msin - Linear-phase highpass
      * added by KAF 27Mar98
      *
-    else if ((strncmp(F_type, "msin", 4) == 0 || 
-              strncmp(F_type, "msin", 4) == 0) && 
-	      strlen(F_type)==4)               added by KAF 27Mar98 
+    else if ((strncmp(F_type, "msin", 4) == 0 ||
+              strncmp(F_type, "msin", 4) == 0) &&
+	      strlen(F_type)==4)               added by KAF 27Mar98
     {
-      if (upsample) { 
+      if (upsample) {
            HARAKIRI("Error: cannot upsample using msin filter!\n",20);
       }
       printf("MSIN: MSIN (mobile station input) Filter with SR=1:1\n");
       fir_state = msin_init();
-    }    
+    }
     (...)
     ----snip snip --- part of "filter.c" ends here.
 
-        The function msin_init() is provided in this file "fir-msin.c". 
-        Now, the filter is initialized and will be used in the subsequent 
+        The function msin_init() is provided in this file "fir-msin.c".
+        Now, the filter is initialized and will be used in the subsequent
         call to hq_kernel(...) (which is already realized in "filter.c").
 
-	In addition to this change, the prototype of msin_init(...) has to be 
-        added to "firflt.h" (just on line):          
+	In addition to this change, the prototype of msin_init(...) has to be
+        added to "firflt.h" (just on line):
 
 firflt.h:
     ----snip snip --- part of "firflt.h" starts here:
-    SCD_FIR *msin_init ARGS((void)); 
+    SCD_FIR *msin_init ARGS((void));
     ----snip snip --- part of "firflt.h" ends here.
 
-        This completes the adaptions to be made to include the msin 1:1 
-        filter. 
+        This completes the adaptions to be made to include the msin 1:1
+        filter.
 
 
     ================================= Mar. 1998; KAF == <k.fischer@berkom.de>
@@ -102,14 +102,14 @@ FUNCTIONS:
 
   Local (should be used only here -- prototypes only in this file)
 
-	  fill_msin_filter(...) :  filling filter coeffs into msin 
-				    filter, 
+	  fill_msin_filter(...) :  filling filter coeffs into msin
+				    filter,
 				    sampling rate change factor 1:1
 
 
 HISTORY:
-    27.Mar.98 v1.0 New Module "fir-msin.c" defined for 
-                   msin filtering at 16kHz sampling frequency, 
+    27.Mar.98 v1.0 New Module "fir-msin.c" defined for
+                   msin filtering at 16kHz sampling frequency,
                    no change of sampling frequency. KAF
   =============================================================================
 */
@@ -133,8 +133,8 @@ HISTORY:
 void fill_msin_16khz ARGS ((float *h0[], long *lenh0));
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -161,7 +161,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
   - high pass filter
   - linear phase
   - 185 coefficients
-  - cuttoff frequency: ca. 200Hz (@16kHz) 
+  - cuttoff frequency: ca. 200Hz (@16kHz)
   - passband is flat above ca. 400Hz (@16kHz)
 
   @16kHz:
@@ -169,7 +169,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
   - 100Hz: ca. -12dB attenuation
   -  50Hz: ca. -30dB attenuation
 
-   
+
   Parameters:
   ~~~~~~~~~~~
   h0:    (Out) pointer to array with FIR coefficients
@@ -185,17 +185,14 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
 
   History:
   ~~~~~~~~
-  27.Feb.98 v1.0 Created. 
+  27.Feb.98 v1.0 Created.
  ============================================================================
 */
 
 #define msin_LEN 185
 #define lenh02 msin_LEN
 
-void fill_msin_16khz (h0, lenh0)
-     float *h0[];
-     long *lenh0;
-{
+void fill_msin_16khz (float *h0[], long *lenh0) {
   static float msin_coef[msin_LEN] = {
     0. / 32768, 0. / 32768, 1. / 32768, 1. / 32768, 1. / 32768,
     1. / 32768, 2. / 32768, 2. / 32768, 3. / 32768, 3. / 32768,
@@ -270,7 +267,7 @@ void fill_msin_16khz (h0, lenh0)
 
   History:
   ~~~~~~~~
-  27.Feb.98 v1.0 Created new module msin (msin without dwnsmpl.) 
+  27.Feb.98 v1.0 Created new module msin (msin without dwnsmpl.)
   ============================================================================
 */
 SCD_FIR *msin_16khz_init () {

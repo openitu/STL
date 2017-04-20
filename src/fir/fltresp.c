@@ -42,14 +42,14 @@
         fstep 		is the step in frequency from f0 to ff [Hz]
         [fs]		is the sampling frequency [Hz]; default is 8000 Hz.
         (*) may be the regular or the modified IRS!
-        
+
         Options:
         -mod .......... uses the modified IRS characteristic instead of the
                         "regular" one.
         -fs ........... set the sampling frequency, in Hz [def: 8000]
 
 	Valid combinations of filter and sampling rate:
-		
+
 	Flt_type   fs	Description
 	  IRS     8000  (regular) IRS weighting with factor 1:1.
                  16000  (regular or modified) IRS weighting with factor 1:1.
@@ -180,12 +180,7 @@ void display_usage () {
 }
 
 
-/*============================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-/*============================== */
-{
+int main (int argc, char *argv[]) {
   /* DECLARATIONS */
 
   /* Algorithm variables */
@@ -314,7 +309,7 @@ int main (argc, argv)
   }
 
 /*
-  * Filter type: PSO - Psophometric wheighting filter: factor 1:1 
+  * Filter type: PSO - Psophometric wheighting filter: factor 1:1
   */
   if (strncmp (F_type, "pso", 3) == 0 || strncmp (F_type, "PSO", 3) == 0) {
     if (fs == 8000)

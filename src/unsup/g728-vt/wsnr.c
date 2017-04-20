@@ -43,10 +43,7 @@ static long c__4 = 4;
 
 
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* System generated locals */
   float r_1;
   double d_1;

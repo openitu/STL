@@ -30,8 +30,8 @@ ORIGINAL BY:
 
 DESCRIPTION:
         This file contains procedure for IRS send part filtering for
-	the 16kHz sampling rate. Up and down sampling has not been made 
-	part of this sub-unit. 
+	the 16kHz sampling rate. Up and down sampling has not been made
+	part of this sub-unit.
 
 FUNCTIONS:
   Global (have prototype in firflt.h)
@@ -42,8 +42,8 @@ FUNCTIONS:
 
 HISTORY:
     12.Oct.1994 v1.0 Created <simao@ctd.comsat.com>.
-    28.Mar.2000 v1.1 Added type casting to float in fill_ht_irs16khz() to 
-                     eliminate compilation warnings in MS Visual C 
+    28.Mar.2000 v1.1 Added type casting to float in fill_ht_irs16khz() to
+                     eliminate compilation warnings in MS Visual C
                      compiler <simao.campos@labs.comsat.com>
 
   =============================================================================
@@ -68,8 +68,8 @@ HISTORY:
 void fill_ht_irs16khz ARGS ((float **h0, long *lenh0));
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -143,8 +143,8 @@ SCD_FIR *ht_irs_16khz_init () {
         Description:
         ~~~~~~~~~~~~
 
-        Initialize pointer to array with floating point FIR coefficients 
-	for IRS send part filter for speech sampled at 16 kHz with a 
+        Initialize pointer to array with floating point FIR coefficients
+	for IRS send part filter for speech sampled at 16 kHz with a
 	half-tilt inclination within the P.48 sending mask.
 
         Parameters:
@@ -166,17 +166,14 @@ SCD_FIR *ht_irs_16khz_init () {
         History:
         ~~~~~~~~
         12.Oct.1994 v1.0 Release of 1st version <simao>
-        28.Mar.2000 v1.1 Added type cast to float to avoid compilation 
+        28.Mar.2000 v1.1 Added type cast to float to avoid compilation
                          warnings with MS Visual C compiler <simao>
 
  ============================================================================
 */
 #define lenh0_HT_IRS16 200
 
-void fill_ht_irs16khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_ht_irs16khz (float **h0, long *lenh0) {
   static float h0_HT_IRS16[lenh0_HT_IRS16] = {
     (F) 6.48926390136748E-04, (F) 5.08374974537000E-04, (F) - 1.93741975090558E-03,
     (F) - 4.32906858044298E-03, (F) - 3.07160188232933E-03, (F) 4.07292104955264E-04,

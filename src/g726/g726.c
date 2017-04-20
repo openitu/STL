@@ -35,9 +35,9 @@ ORIGINAL BY:
 
 HISTORY:
 28.Feb.1994 v1.0c Version 1.0 in C, by translating Fortran to C (f2c)
-24.Jan.2000 v2.0  Corrected bug G726_compress() that caused incorrect 
+24.Jan.2000 v2.0  Corrected bug G726_compress() that caused incorrect
                   processing of test vector ri40fa. Corrected code
-                  provided by Jayesh Patel <jayesh@dspse.com>. 
+                  provided by Jayesh Patel <jayesh@dspse.com>.
 		  Verified by <simao.campos@labs.comsat.com>
 
 FUNCTIONS:
@@ -182,7 +182,7 @@ Private:
         reset can be stablished by making r equal to 1. The law is A if
         `law'=='1', and mu law if `law'=='0'.
 
-	
+
         Return value:
         ~~~~~~~~~~~~~
         None.
@@ -199,14 +199,7 @@ Private:
 
  ----------------------------------------------------------------------------
 */
-void G726_encode (inp_buf, out_buf, smpno, law, rate, r, state)
-     short *inp_buf, *out_buf;
-     long smpno;
-     char *law;
-     short r;
-     short rate;
-     G726_state *state;
-{
+void G726_encode (short *inp_buf, short *out_buf, long smpno, char *law, short rate, short r, G726_state *state) {
   short s;
   short d, i;
   short y;
@@ -391,7 +384,7 @@ void G726_encode (inp_buf, out_buf, smpno, law, rate, r, state)
         reset can be stablished by making r equal to 1. The law is A if
         `law'=='1', and mu law if `law'=='0'.
 
-	
+
         Return value:
         ~~~~~~~~~~~~~
         None.
@@ -408,14 +401,7 @@ void G726_encode (inp_buf, out_buf, smpno, law, rate, r, state)
 
  ----------------------------------------------------------------------------
 */
-void G726_decode (inp_buf, out_buf, smpno, law, rate, r, state)
-     short *inp_buf, *out_buf;
-     long smpno;
-     char *law;
-     short r;
-     short rate;
-     G726_state *state;
-{
+void G726_decode (short *inp_buf, short *out_buf, long smpno, char *law, short rate, short r, G726_state *state) {
   short i;
   short y;
   short sigpk;
@@ -609,11 +595,7 @@ void G726_decode (inp_buf, out_buf, smpno, law, rate, r, state)
 
  ----------------------------------------------------------------------
 */
-void G726_expand (s, law, sl)
-     short *s;
-     char *law;
-     short *sl;
-{
+void G726_expand (short *s, char *law, short *sl) {
   long mant, iexp;
   short s1, ss, sig, ssm, ssq, sss;
 
@@ -697,9 +679,7 @@ void G726_expand (s, law, sl)
 
  ----------------------------------------------------------------------
 */
-void G726_subta (sl, se, d)
-     short *sl, *se, *d;
-{
+void G726_subta (short *sl, short *se, short *d) {
   long se1;
   long sl1, sei, sli;
   short ses, sls;
@@ -748,9 +728,7 @@ void G726_subta (sl, se, d)
 
   --------------------------------------------------------------------------
 */
-void G726_log (d, dl, ds)
-     short *d, *dl, *ds;
-{
+void G726_log (short *d, short *dl, short *ds) {
   long mant;
   long d1;
   long dqm, exp_;
@@ -836,10 +814,7 @@ void G726_log (d, dl, ds)
 
  ----------------------------------------------------------------------
 */
-void G726_quan (rate, dln, ds, i)
-     short *dln, *ds, *i;
-     short rate;
-{
+void G726_quan (short rate, short *dln, short *ds, short *i) {
   if (rate == 4) {
     if (*dln >= 3972)
       *i = 1;
@@ -982,9 +957,7 @@ void G726_quan (rate, dln, ds, i)
 
  ----------------------------------------------------------------------
 */
-void G726_subtb (dl, y, dln)
-     short *dl, *y, *dln;
-{
+void G726_subtb (short *dl, short *y, short *dln) {
   *dln = (*dl + 4096 - (*y >> 2)) & 4095;
 
 }
@@ -1118,10 +1091,7 @@ void G726_antilog (dql, dqs, dq)
 
  ----------------------------------------------------------------------
 */
-void G726_reconst (rate, i, dqln, dqs)
-     short *i, *dqln, *dqs;
-     short rate;
-{
+void G726_reconst (short rate, short *i, short *dqln, short *dqs) {
   if (rate == 4) {
     /* Initialized data */
     static short tab[16] = { 2048, 4, 135, 213, 273, 323, 373, 425,
@@ -1206,9 +1176,7 @@ void G726_reconst (rate, i, dqln, dqs)
 
  ----------------------------------------------------------------------
 */
-void G726_delaya (r, x, y)
-     short *r, *x, *y;
-{
+void G726_delaya (short *r, short *x, short *y) {
   *y = (*r == 0) ? *x : 0;
 
 }
@@ -1245,9 +1213,7 @@ void G726_delaya (r, x, y)
 
  ----------------------------------------------------------------------
 */
-void G726_delayb (r, x, y)
-     short *r, *x, *y;
-{
+void G726_delayb (short *r, short *x, short *y) {
   *y = (*r == 0) ? *x : 544;
 
 }
@@ -1284,10 +1250,7 @@ void G726_delayb (r, x, y)
 
  ----------------------------------------------------------------------
 */
-void G726_delayc (r, x, y)
-     short *r;
-     long *x, *y;
-{
+void G726_delayc (short *r, long *x, long *y) {
   *y = (*r == 0) ? *x : 34816;
 
 }
@@ -1324,9 +1287,7 @@ void G726_delayc (r, x, y)
 
  ----------------------------------------------------------------------
 */
-void G726_delayd (r, x, y)
-     short *r, *x, *y;
-{
+void G726_delayd (short *r, short *x, short *y) {
   *y = (*r == 0) ? *x : 32;
 
 }
@@ -1363,9 +1324,7 @@ void G726_delayd (r, x, y)
 
  ----------------------------------------------------------------------
 */
-void G726_filtd (wi, y, yut)
-     short *wi, *y, *yut;
-{
+void G726_filtd (short *wi, short *y, short *yut) {
   long difs, difsx;
   long y1;
   long wi1, dif;
@@ -1416,10 +1375,7 @@ void G726_filtd (wi, y, yut)
 
  ----------------------------------------------------------------------
 */
-void G726_filte (yup, yl, ylp)
-     short *yup;
-     long *yl, *ylp;
-{
+void G726_filte (short *yup, long *yl, long *ylp) {
   long difs, difsx;
   long dif, dif1, yup1;
 
@@ -1469,10 +1425,7 @@ void G726_filte (yup, yl, ylp)
 
  ----------------------------------------------------------------------
 */
-void G726_functw (rate, i, wi)
-     short *i, *wi;
-     short rate;
-{
+void G726_functw (short rate, short *i, short *wi) {
   if (rate == 4) {
     /* Initialized data */
     static short tab[8] = { 4084, 18, 41, 64, 112, 198, 355, 1122 };
@@ -1578,9 +1531,7 @@ void G726_functw (rate, i, wi)
 
  ----------------------------------------------------------------------
 */
-void G726_limb (yut, yup)
-     short *yut, *yup;
-{
+void G726_limb (short *yut, short *yup) {
   short gell, geul;
 
   geul = ((*yut + 11264) & 16383) >> 13;
@@ -1629,11 +1580,7 @@ void G726_limb (yut, yup)
 
  ----------------------------------------------------------------------
 */
-void G726_mix (al, yu, yl, y)
-     short *al, *yu;
-     long *yl;
-     short *y;
-{
+void G726_mix (short *al, short *yu, long *yl, short *y) {
   long difm, difs, prod;
   long prodm, al1;
   long yu1, dif;
@@ -1691,9 +1638,7 @@ void G726_mix (al, yu, yl, y)
 
  ----------------------------------------------------------------------
 */
-void G726_filta (fi, dms, dmsp)
-     short *fi, *dms, *dmsp;
-{
+void G726_filta (short *fi, short *dms, short *dmsp) {
   short difs, difsx;
   short dif;
 
@@ -1740,9 +1685,7 @@ void G726_filta (fi, dms, dmsp)
 
  ----------------------------------------------------------------------
 */
-void G726_filtb (fi, dml, dmlp)
-     short *fi, *dml, *dmlp;
-{
+void G726_filtb (short *fi, short *dml, short *dmlp) {
   long difs, difsx;
   long fi1;
   long dif, dml1;
@@ -1794,9 +1737,7 @@ void G726_filtb (fi, dml, dmlp)
 
  ----------------------------------------------------------------------
 */
-void G726_filtc (ax, ap, app)
-     short *ax, *ap, *app;
-{
+void G726_filtc (short *ax, short *ap, short *app) {
   short difs, difsx;
   short dif;
 
@@ -1843,11 +1784,7 @@ void G726_filtc (ax, ap, app)
 
  ----------------------------------------------------------------------
 */
-void G726_functf (rate, i, fi)
-     short *i, *fi;
-     short rate;
-
-{
+void G726_functf (short rate, short *i, short *fi) {
   short im, is;
 
   if (rate == 4) {
@@ -1931,9 +1868,7 @@ void G726_functf (rate, i, fi)
 
  ----------------------------------------------------------------------
 */
-void G726_lima (ap, al)
-     short *ap, *al;
-{
+void G726_lima (short *ap, short *al) {
   *al = (*ap >= 256) ? 64 : (*ap >> 2);
 
 }
@@ -1972,9 +1907,7 @@ void G726_lima (ap, al)
 
  ----------------------------------------------------------------------
 */
-void G726_subtc (dmsp, dmlp, tdp, y, ax)
-     short *dmsp, *dmlp, *tdp, *y, *ax;
-{
+void G726_subtc (short *dmsp, short *dmlp, short *tdp, short *y, short *ax){
   long difm, difs, dthr, dmlp1, dmsp1;
   long dif;
 
@@ -2029,9 +1962,7 @@ void G726_subtc (dmsp, dmlp, tdp, y, ax)
 
  ----------------------------------------------------------------------
 */
-void G726_triga (tr, app, apr)
-     short *tr, *app, *apr;
-{
+void G726_triga (short *tr, short *app, short *apr) {
   *apr = (*tr == 0) ? (*app) : 256;
 
 }
@@ -2071,9 +2002,7 @@ void G726_triga (tr, app, apr)
 
  ----------------------------------------------------------------------
 */
-void G726_accum (wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6, se, sez)
-     short *wa1, *wa2, *wb1, *wb2, *wb3, *wb4, *wb5, *wb6, *se, *sez;
-{
+void G726_accum (short *wa1, short *wa2, short *wb1, short *wb2, short *wb3, short *wb4, short *wb5, short *wb6, short *se, short *sez) {
   unsigned long sezi;
   unsigned long wa11, wa21, wb11, wb21, wb31, wb41, wb51, wb61, sei;
 
@@ -2132,9 +2061,7 @@ void G726_accum (wa1, wa2, wb1, wb2, wb3, wb4, wb5, wb6, se, sez)
 
   ----------------------------------------------------------------------
 */
-void G726_addb (dq, se, sr)
-     short *dq, *se, *sr;
-{
+void G726_addb (short *dq, short *se, short *sr) {
   unsigned long dq1, se1;
   unsigned long dqi, sei;
   short dqs, ses;
@@ -2191,9 +2118,7 @@ void G726_addb (dq, se, sr)
 
  ----------------------------------------------------------------------
 */
-void G726_addc (dq, sez, pk0, sigpk)
-     short *dq, *sez, *pk0, *sigpk;
-{
+void G726_addc (short *dq, short *sez, short *pk0, short *sigpk) {
   unsigned long sezi;
   short sezs;
   unsigned long dqsez, dq1;
@@ -2255,9 +2180,7 @@ void G726_addc (dq, sez, pk0, sigpk)
 
  ----------------------------------------------------------------------
 */
-void G726_floata (dq, dq0)
-     short *dq, *dq0;
-{
+void G726_floata (short *dq, short *dq0) {
   long mant;
   long mag, exp_;
   long dqs;
@@ -2340,9 +2263,7 @@ void G726_floata (dq, dq0)
 
  ----------------------------------------------------------------------
 */
-void G726_floatb (sr, sr0)
-     short *sr, *sr0;
-{
+void G726_floatb (short *sr, short *sr0) {
   long mant;
   long mag, exp_, srr, srs;
 
@@ -2431,9 +2352,7 @@ void G726_floatb (sr, sr0)
 
  ----------------------------------------------------------------------
 */
-void G726_fmult (An, SRn, WAn)
-     short *An, *SRn, *WAn;
-{
+void G726_fmult (short *An, short *SRn, short *WAn) {
   long anmag, anexp, wanmag, anmant;
   long wanexp, srnexp, an, ans, wanmant, srnmant;
   long wan, wans, srns, srn1;
@@ -2535,9 +2454,7 @@ void G726_fmult (An, SRn, WAn)
  ----------------------------------------------------------------------
 */
 
-void G726_limc (a2t, a2p)
-     short *a2t, *a2p;
-{
+void G726_limc (short *a2t, short *a2p) {
   long a2p1, a2t1, a2ll, a2ul;
 
   a2t1 = *a2t & 65535;
@@ -2588,9 +2505,7 @@ void G726_limc (a2t, a2p)
 
  ----------------------------------------------------------------------
 */
-void G726_limd (a1t, a2p, a1p)
-     short *a1t, *a2p, *a1p;
-{
+void G726_limd (short *a1t, short *a2p, short *a1p) {
   long a1p1, a2p1, a1t1, ome, a1ll, a1ul;
 
   /* Preamble */
@@ -2649,9 +2564,7 @@ void G726_limd (a1t, a2p, a1p)
 
  ----------------------------------------------------------------------
 */
-void G726_trigb (tr, ap, ar)
-     short *tr, *ap, *ar;
-{
+void G726_trigb (short *tr, short *ap, short *ar) {
   *ar = (*tr == 0) ? *ap : 0;
 
 }
@@ -2688,9 +2601,7 @@ void G726_trigb (tr, ap, ar)
 
  ----------------------------------------------------------------------
 */
-void G726_upa1 (pk0, pk1, a1, sigpk, a1t)
-     short *pk0, *pk1, *a1, *sigpk, *a1t;
-{
+void G726_upa1 (short *pk0, short *pk1, short *a1, short *sigpk, short *a1t) {
   long a11, a1s, ua1;
   long ash;
   short pks;
@@ -2748,9 +2659,7 @@ void G726_upa1 (pk0, pk1, a1, sigpk, a1t)
 
  ----------------------------------------------------------------------
 */
-void G726_upa2 (pk0, pk1, pk2, a2, a1, sigpk, a2t)
-     short *pk0, *pk1, *pk2, *a2, *a1, *sigpk, *a2t;
-{
+void G726_upa2 (short *pk0, short *pk1, short *pk2, short *a2, short *a1, short *sigpk, short *a2t) {
   long uga2a, uga2b, uga2s;
   long a11, a21, fa, fa1;
   short a1s, a2s;
@@ -2826,10 +2735,7 @@ void G726_upa2 (pk0, pk1, pk2, a2, a1, sigpk, a2t)
 
  ----------------------------------------------------------------------
 */
-void G726_upb (rate, u, b, dq, bp)
-     short *u, *b, *dq, *bp;
-     short rate;
-{
+void G726_upb (short rate, short *u, short *b, short *dq, short *bp) {
   short dqmag;
   long bb, bs, ub;
   long ugb, ulb;
@@ -2898,9 +2804,7 @@ void G726_upb (rate, u, b, dq, bp)
 
  ----------------------------------------------------------------------
 */
-void G726_xor (dqn, dq, u)
-     short *dqn, *dq, *u;
-{
+void G726_xor (short *dqn, short *dq, short *u) {
   short dqns;
   short dqs;
 
@@ -2944,9 +2848,7 @@ void G726_xor (dqn, dq, u)
 
  ----------------------------------------------------------------------
 */
-void G726_tone (a2p, tdp)
-     short *a2p, *tdp;
-{
+void G726_tone (short *a2p, short *tdp) {
   long a2p1;
 
   a2p1 = *a2p & 65535;
@@ -2987,11 +2889,7 @@ void G726_tone (a2p, tdp)
 
  ----------------------------------------------------------------------
 */
-void G726_trans (td, yl, dq, tr)
-     short *td;
-     long *yl;
-     short *dq, *tr;
-{
+void G726_trans (short *td, long *yl, short *dq, short *tr) {
   short dqmag;
   long dqthr;
   short ylint;
@@ -3046,17 +2944,13 @@ void G726_trans (td, yl, dq, tr)
                         <tdsindi@venus.cpqd.ansp.br>
         13.Feb.92 v1.0c 1st version in C translated from Fortran (f2c)
                         <tdsimao@venus.cpqd.ansp.br>
-        24.Jan.00 v2.0  Corrected im calculation that caused incorrect 
+        24.Jan.00 v2.0  Corrected im calculation that caused incorrect
                         processing of test vector ri40fa. Corrected
-                        code provided by Jayesh Patel <jayesh@dspse.com>. 
+                        code provided by Jayesh Patel <jayesh@dspse.com>.
 			Verified by <simao.campos@labs.comsat.com>
  ----------------------------------------------------------------------
 */
-void G726_compress (sr, law, sp)
-     short *sr;
-     char *law;
-     short *sp;
-{
+void G726_compress (short *sr, char *law, short *sp) {
   short imag, iesp, ofst;
   short ofst1;
   long i;
@@ -3164,12 +3058,7 @@ void G726_compress (sr, law, sp)
 
  ----------------------------------------------------------------------
 */
-void G726_sync (rate, i, sp, dlnx, dsx, law, sd)
-     short *i, *sp, *dlnx, *dsx;
-     char *law;
-     short *sd;
-     short rate;
-{
+void G726_sync (short rate, short *i, short *sp, short *dlnx, short *dsx, char *law, short *sd) {
   short mask, id, im, is, ss;
 
   if (rate == 4) {

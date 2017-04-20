@@ -38,7 +38,7 @@ enum BS_types { BER, FER };
 #define EID_BUFFER_LENGTH 256
 #define OUT_RECORD_LENGTH 512
 
-/* 
+/*
    -------------------------------------------------------------------------
    long read_g192 (short *patt, long n, FILE *F);
    ~~~~~~~~~~~~~~
@@ -47,14 +47,14 @@ enum BS_types { BER, FER };
 
    Parameter:
    ~~~~~~~~~~
-   patt .... G.192 array with the softbits representing 
+   patt .... G.192 array with the softbits representing
              the bit error/frame erasure pattern
    n ....... number of softbits in the pattern
    F ....... pointer to FILE where the pattern should be readd
 
-   Return value: 
+   Return value:
    ~~~~~~~~~~~~~
-   Returns a long with the number of shorts softbits from file. On error, 
+   Returns a long with the number of shorts softbits from file. On error,
    returns -1.
 
    Original author: <simao.campos@comsat.com>
@@ -65,11 +65,7 @@ enum BS_types { BER, FER };
    13.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long read_g192 (patt, n, F)
-     short *patt;
-     long n;
-     FILE *F;
-{
+long read_g192 (short *patt, long n, FILE *F) {
   long i;
 
   /* Read words from file */
@@ -96,7 +92,7 @@ long read_g192 (patt, n, F)
   Returned value:
   ~~~~~~~~~~~~~~~
   Returns a pointer to the format string, or a NULL pointer
-  if fmt is invalid. 
+  if fmt is invalid.
 
   Original author: <simao.campos@comsat.com>
   ~~~~~~~~~~~~~~~~
@@ -106,9 +102,7 @@ long read_g192 (patt, n, F)
   21.Aug.97  v1.00 created
   ---------------------------------------------------------------------------
 */
-char *format_str (fmt)
-     int fmt;
-{
+char *format_str (int fmt) {
   switch (fmt) {
   case byte:
     return "byte";
@@ -150,14 +144,9 @@ char *format_str (fmt)
   History:
   ~~~~~~~~
   15.Aug.97  v.1.0  Created.
-  -------------------------------------------------------------------------- 
+  --------------------------------------------------------------------------
 */
-char check_eid_format (F, file, type)
-     FILE *F;
-     char *file;
-     char *type;
-{
-
+char check_eid_format (FILE *F, char *file, char *type) {
   short word;
   char ret_val;
 
@@ -226,10 +215,7 @@ char check_eid_format (F, file, type)
 
 
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Command line parameters */
   char format = g192;           /* BS format: g192, byte, bit */
   char type = FER;              /* BS type: BER or FER */

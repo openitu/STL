@@ -9,7 +9,7 @@
 
    History:
    28.Feb.92	v1.0	First version <simao@cpqd.br>
-   06.May.94    v2.0    Smart prototypes that work with many compilers <simao> 
+   06.May.94    v2.0    Smart prototypes that work with many compilers <simao>
   ============================================================================
 */
 #ifndef G726_defined
@@ -50,36 +50,30 @@ typedef struct {
   long ylp;                     /* Slow quantizer scale factor */
 } G726_state;
 
-#ifdef VAXC
-#define SHORT short
-#else
-#define SHORT int
-#endif
-
 /* Function prototypes */
-void G726_encode ARGS ((short *inp_buf, short *out_buf, long smpno, char *law, SHORT rate, SHORT r, G726_state * state));
-void G726_decode ARGS ((short *inp_buf, short *out_buf, long smpno, char *law, SHORT rate, SHORT r, G726_state * state));
+void G726_encode ARGS ((short *inp_buf, short *out_buf, long smpno, char *law, short rate, short r, G726_state * state));
+void G726_decode ARGS ((short *inp_buf, short *out_buf, long smpno, char *law, short rate, short r, G726_state * state));
 void G726_expand ARGS ((short *s, char *law, short *sl));
 void G726_subta ARGS ((short *sl, short *se, short *d));
 void G726_log ARGS ((short *d, short *dl, short *ds));
-void G726_quan ARGS ((SHORT rate, short *dln, short *ds, short *i));
+void G726_quan ARGS ((short rate, short *dln, short *ds, short *i));
 void G726_subtb ARGS ((short *dl, short *y, short *dln));
 void G726_adda ARGS ((short *dqln, short *y, short *dql));
 void G726_antilog ARGS ((short *dql, short *dqs, short *dq));
-void G726_reconst ARGS ((SHORT rate, short *i, short *dqln, short *dqs));
+void G726_reconst ARGS ((short rate, short *i, short *dqln, short *dqs));
 void G726_delaya ARGS ((short *r, short *x, short *y));
 void G726_delayb ARGS ((short *r, short *x, short *y));
 void G726_delayc ARGS ((short *r, long *x, long *y));
 void G726_delayd ARGS ((short *r, short *x, short *y));
 void G726_filtd ARGS ((short *wi, short *y, short *yut));
 void G726_filte ARGS ((short *yup, long *yl, long *ylp));
-void G726_functw ARGS ((SHORT rate, short *i, short *wi));
+void G726_functw ARGS ((short rate, short *i, short *wi));
 void G726_limb ARGS ((short *yut, short *yup));
 void G726_mix ARGS ((short *al, short *yu, long *yl, short *y));
 void G726_filta ARGS ((short *fi, short *dms, short *dmsp));
 void G726_filtb ARGS ((short *fi, short *dml, short *dmlp));
 void G726_filtc ARGS ((short *ax, short *ap, short *app));
-void G726_functf ARGS ((SHORT rate, short *i, short *fi));
+void G726_functf ARGS ((short rate, short *i, short *fi));
 void G726_lima ARGS ((short *ap, short *al));
 void G726_subtc ARGS ((short *dmsp, short *dmlp, short *tdp, short *y, short *ax));
 void G726_triga ARGS ((short *tr, short *app, short *apr));
@@ -94,12 +88,12 @@ void G726_limd ARGS ((short *a1t, short *a2p, short *a1p));
 void G726_trigb ARGS ((short *tr, short *ap, short *ar));
 void G726_upa1 ARGS ((short *pk0, short *pk1, short *a1, short *sigpk, short *a1t));
 void G726_upa2 ARGS ((short *pk0, short *pk1, short *pk2, short *a2, short *a1, short *sigpk, short *a2t));
-void G726_upb ARGS ((SHORT rate, short *u, short *b, short *dq, short *bp));
+void G726_upb ARGS ((short rate, short *u, short *b, short *dq, short *bp));
 void G726_xor ARGS ((short *dqn, short *dq, short *u));
 void G726_tone ARGS ((short *a2p, short *tdp));
 void G726_trans ARGS ((short *td, long *yl, short *dq, short *tr));
 void G726_compress ARGS ((short *sr, char *law, short *sp));
-void G726_sync ARGS ((SHORT rate, short *i, short *sp, short *dlnx, short *dsx, char *law, short *sd));
+void G726_sync ARGS ((short rate, short *i, short *sp, short *dlnx, short *dsx, char *law, short *sd));
 
 /* Definitions for better user interface (?!) */
 #ifndef IS_LOG

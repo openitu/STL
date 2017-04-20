@@ -6,15 +6,15 @@
 
    Routines for performing the EID-state I/O - used by the demo
    program eid8k.c, gen-patt.c, and eid-xor.c
- 
+
    ORIGINAL AUTHOR:
    ~~~~~~~~~~~~~~~~
    Gerhard Schroeder
-   Deutsche Bundespost TELEKOM    Tel +49 6151 833973  
+   Deutsche Bundespost TELEKOM    Tel +49 6151 833973
    Postfach 100003                FAX +49 6151 895234
    64276 Darmstadt                Email: gerhard.schroeder@ties.itu.ch
    Germany
- 
+
    HISTORY:
    ~~~~~~~~
    29.Jul.93 v1.0  Created <gerhard.schroeder@ties.itu.ch>
@@ -22,7 +22,7 @@
                    save_burst_eid_to_file() had the local variable state_ptr
 		   changed to pointer.
    15.Aug.97 v2.0  - Added magic number to save/recall eid (random/burst)
-                     state functions; 
+                     state functions;
 		   - Added functions to save bitstreams in different
                      formats <simao.campos@comsat.com>
    13.Jan.98 v2.01 Clarified ambigous syntax in save_EID_to_file() <simao>
@@ -99,11 +99,7 @@
 
   ===========================================================================
 */
-long save_EID_to_file (EID, EIDfile, BER, GAMMA)
-     SCD_EID *EID;
-     char *EIDfile;
-     double BER, GAMMA;
-{
+long save_EID_to_file (SCD_EID *EID, char *EIDfile, double BER, double GAMMA) {
   FILE *EIDfileptr;
 
   /* open specified ASCII file for "overwriting": */
@@ -422,7 +418,7 @@ long READ_c (fp, n, chr)
           Access:      read only
           Mechanism:   pointer
           Description: Name of the burst eid state file
-       
+
   Return Value:
   ~~~~~~~~~~~~~
   Pointer to BURST_EID; NULL on error (couldn't find the file, or the
@@ -432,11 +428,11 @@ long READ_c (fp, n, chr)
   Side Effects:
   ~~~~~~~~~~~~~
   None
-      
+
   History:
   ~~~~~~~~
   29.Jul.93 v1.0 Routine created <gerhard.schroeder@ites.itu.ch>
-  19.Apr.94 v1.1 Fixed error in declaration of local var. state_ptr, that 
+  19.Apr.94 v1.1 Fixed error in declaration of local var. state_ptr, that
                  has to be a pointer. <simao>
   14.Aug.97 v1.2 Added magic number <simao.campos@comsat.com>
  ============================================================================
@@ -452,14 +448,14 @@ BURST_EID *recall_burst_eid_from_file (state_file, index)
   char mrs[15] = "mrs=512";
 #endif
 
-  /* 
+  /*
    **  Open BURST EID state file
    ** Return a null pointer, if the file doesn't exists
    */
   if ((state_ptr = fopen (state_file, RB)) == NULL)
     return ((BURST_EID *) 0);
 
-  /* 
+  /*
    ** Read Magic number for Burst EID State Files.
    ** If it does not find the magic number, it returns 0
    */
@@ -467,26 +463,26 @@ BURST_EID *recall_burst_eid_from_file (state_file, index)
   if (items != sizeof (long) || magic != MAGIC_BURST)
     return ((BURST_EID *) 0);
 
-  /* 
+  /*
    **  Allocate memory for the burst eid from file
    */
   if ((eid_in = (BURST_EID *) malloc (sizeof (BURST_EID))) == 0L)
     return ((BURST_EID *) 0);
-  /* 
+  /*
    **  Read state from file
    */
   items = fread (eid_in, 1, sizeof (BURST_EID), state_ptr);
   if (items != sizeof (BURST_EID))
     return ((BURST_EID *) 0);
 
-  /* 
+  /*
    **  Open internal eid
    */
   if ((burst_eid = open_burst_eid (index)) == (BURST_EID *) 0) {
     return ((BURST_EID *) 0);
   }
 
-  /* 
+  /*
    **  Update burst eid
    */
   if ((index - 1) == eid_in->index) {
@@ -521,7 +517,7 @@ BURST_EID *recall_burst_eid_from_file (state_file, index)
           Access:      read only
           Mechanism:   pointer
           Description: Contains of the state variable
-       
+
   state_file:
           Data type:   char string
           Access:      read only
@@ -535,11 +531,11 @@ BURST_EID *recall_burst_eid_from_file (state_file, index)
   Side Effects:
   ~~~~~~~~~~~~~
   None
-      
+
   History:
   ~~~~~~~~
   29.Jul.93 v1.0 Routine created <gerhard.schroeder@ties.itu.ch>
-  19.Apr.94 v1.1 Fixed error in declaration of local var. state_ptr, that 
+  19.Apr.94 v1.1 Fixed error in declaration of local var. state_ptr, that
                  has to be a pointer. <simao>
   14.Aug.97 v1.2 Added magic number <simao.campos@comsat.com>
  ============================================================================
@@ -555,28 +551,28 @@ long save_burst_eid_to_file (burst_eid, state_file)
   long items, magic = MAGIC_BURST;
 
 
-  /* 
+  /*
    **  Open BURST EID state file
    ** Return zero, if the file doesn't exist
    */
   if ((state_ptr = fopen (state_file, WB)) == NULL)
     return (0);
 
-  /* 
+  /*
    ** Save Magic number into Burst EID State Files.
    */
   items = fwrite (&magic, 1, sizeof (long), state_ptr);
   if (items != sizeof (long))
     return (0);
 
-  /* 
+  /*
    ** Write state to file
    */
   items = fwrite (burst_eid, 1, sizeof (BURST_EID), state_ptr);
   if (items != sizeof (BURST_EID))
     return (0);
 
-  /* 
+  /*
    **  Close state file
    */
   fclose (state_ptr);

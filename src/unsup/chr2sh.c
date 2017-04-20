@@ -1,9 +1,9 @@
-/* 
+/*
   ===========================================================================
   CHR2SH.C
   ~~~~~~~~
-  Convert input file specified in 1st command line argument to a 16-bit word 
-  file with the original bytes of the input file in the LSB of the output 
+  Convert input file specified in 1st command line argument to a 16-bit word
+  file with the original bytes of the input file in the LSB of the output
   file. Uses unsigned conversion for the transfer.
 
   Input file:  ...XXYY...
@@ -11,14 +11,14 @@
 
   Usage:
   ~~~~~~
-  chr2sh filein fileout 
-  where 
+  chr2sh filein fileout
+  where
   filein ... is the input file name or "-" for the standard input (pipe)
   fileout .. is the output file name or "-" for the standard output (pipe)
 
   Original author:
   ~~~~~~~~~~~~~~~~
-  Simao Ferraz de Campos Neto  
+  Simao Ferraz de Campos Neto
   Comsat Laboratories                  Tel:    +1-301-428-4516
   22300 Comsat Drive                   Fax:    +1-301-428-9287
   Clarksburg MD 20871 - USA            E-mail: simao@ctd.comsat.com
@@ -29,10 +29,7 @@
 #include <string.h>
 #include "ugstdemo.h"
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   FILE *Fchr, *Fsh;
   unsigned short sh;
 

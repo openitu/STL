@@ -20,7 +20,7 @@
        CODING STANDARDS".
        =============================================================
 
-  DESCRIPTION : 
+  DESCRIPTION :
 	This file contains functions used for the bitstream truncation tool.
 
   FUNCTIONS :
@@ -36,12 +36,7 @@
 */
 
 /* Routine to truncate a frame */
-void trunca (syncWord, outFrameLgth, inpFrame, outFrame)
-     short syncWord;            /* Synchronisation word */
-     short outFrameLgth;        /* Length of the output frame */
-     short *inpFrame;           /* input frame */
-     short *outFrame;           /* output frame */
-{
+void trunca (short syncWord, short outFrameLgth, short *inpFrame, short *outFrame) {
   int i;
 
   outFrame[0] = syncWord;

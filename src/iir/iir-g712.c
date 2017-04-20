@@ -11,7 +11,7 @@
                     ITU-T - USER'S GROUP ON SOFTWARE TOOLS
                    ========================================
 
-MODULE:         IIR-G712.C, IIR FILTER MODULE, 
+MODULE:         IIR-G712.C, IIR FILTER MODULE,
                 Sub-unit with the parallel-form standard PCM filter (G.712)
 
 ORIGINAL BY:
@@ -270,12 +270,7 @@ SCD_IIR *stdpcm_1_to_2_init () {
 
  ============================================================================
 */
-void fill_iir_cof_16khz (b_cof, c_cof, K, nblocks)
-     float ***b_cof;
-     float ***c_cof;
-     double *K;
-     long *nblocks;
-{
+void fill_iir_cof_16khz (float ***b_cof, float ***c_cof, double *K, long *nblocks) {
 #define nblocks_16khz        4  /* number of 2'nd order blocks */
 #define f24                  (float)0x00800000
 #define K_direct_path_16khz  -0.620901  /* 'K' (direct path coefficient) */

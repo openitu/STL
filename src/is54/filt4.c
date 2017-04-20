@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -29,25 +29,22 @@ Motorola Inc.
 /*
  -------------------------------------------------------------
  void FILT4(FTYPE *inPtr, int len);
- 
+
  Description:
  High-pass filter routine.
- 
+
  Parameters:
  inPtr ... Pointer to sample buffer to be filtered.
  len ..... Number of samples to filter.
- 
+
  Return value:
  None.
- 
- History: 
+
+ History:
  ??.???.?? v.10 Created by Matt Hartman
  -------------------------------------------------------------
 */
-void FILT4 (inPtr, len)
-     FTYPE *inPtr;
-     int len;
-{
+void FILT4 ( FTYPE *inPtr, int len) {
   /* coefs of HPF */
   static double b[5] = { 0.898025036, -3.59010601, 5.38416243,
     -3.59010601, 0.898024917

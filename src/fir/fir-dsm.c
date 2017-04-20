@@ -20,9 +20,9 @@
        =============================================================
 
 MODULE:         FIRFLT, HIGH QUALITY FIR UP/DOWN-SAMPLING FILTER
-                Sub-unit: Delta-SM filtering characteristic for 
+                Sub-unit: Delta-SM filtering characteristic for
 		          far-field-to-near-field speech characteristics
-			  conversion. To be used when adding backgound 
+			  conversion. To be used when adding backgound
 			  noise to speech.
 
 ORIGINAL BY:
@@ -38,7 +38,7 @@ ORIGINAL BY:
           Suffolk, IP5 7RE - United Kingdom
 
 DESCRIPTION:
-        This file contains procedures for applying the Delta-SM weighting 
+        This file contains procedures for applying the Delta-SM weighting
 	to 16kHz sampled speech. No rate conversion is performed.
 
 FUNCTIONS:
@@ -57,8 +57,8 @@ HISTORY:
                      <simao@cpqd.ansp.br>
     30.Sep.1994 v2.1 Updated to accomodate changes in the name of the name and
                      slitting of module in several files, for ease of expansion.
-    28.Mar.2000 v2.2 Added type casting to float in fill_delta_sm_16khz() to 
-                     eliminate compilation warnings in MS Visual C 
+    28.Mar.2000 v2.2 Added type casting to float in fill_delta_sm_16khz() to
+                     eliminate compilation warnings in MS Visual C
                      compiler <simao.campos@labs.comsat.com>
   =============================================================================
 */
@@ -81,8 +81,8 @@ HISTORY:
 void fill_delta_sm_16khz ARGS ((float **h0, long *lenh0));
 
 
-/* 
- * ..... Private function prototypes defined in other sub-unit ..... 
+/*
+ * ..... Private function prototypes defined in other sub-unit .....
  */
 extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, long idwnup, int hswitch));
 
@@ -99,10 +99,10 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
 
         Description:
         ~~~~~~~~~~~~
-        The following are the coefficients for the 207 tap DSM filter. 
-        The gain needed is 2.7dB, but I think it should be checked. e.g. 
-        a sinusoid just below 1000Hz should be 0dB from in to out (see 
-        the upper curve on page 124 of the Handbook on Telephonometry 
+        The following are the coefficients for the 207 tap DSM filter.
+        The gain needed is 2.7dB, but I think it should be checked. e.g.
+        a sinusoid just below 1000Hz should be 0dB from in to out (see
+        the upper curve on page 124 of the Handbook on Telephonometry
         Geneva 1987). [Comments by Robin Cross]
 
         Parameters:
@@ -114,16 +114,16 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
         ~~~~~~~~~~~~~
         None.
 
-        Author: 
+        Author:
         ~~~~~~~
-        Filter coefficients: 
+        Filter coefficients:
           Robin Cross
           Acoustics and Vibration Laboratory Tel: +44-473-642956
           BT Laboratories - Rm.27 Bldg.B48   Fax: +44-473-649866
           Martlesham Heath, Ipswich	     Email: <cross_r_c@bt-web.bt.co.uk>
           Suffolk, IP5 7RE
           United Kingdom
-          
+
         Routine:
           Simao Ferraz de Campos Neto
           DDS/Pr11                      Tel: +55-192-39-1396
@@ -133,7 +133,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
         History:
         ~~~~~~~~
         10.Apr.1994 v1.0 Release of 1st version <simao@cpqd.ansp.br>
-        28.Mar.2000 v1.1 Added type cast to float to avoid compilation 
+        28.Mar.2000 v1.1 Added type cast to float to avoid compilation
                          warnings with MS Visual C compiler <simao>
 
  ============================================================================
@@ -141,10 +141,7 @@ extern SCD_FIR *fir_initialization ARGS ((long lenh0, float h0[], double gain, l
 #define DELTA_SM_LEN 207
 
 #define F float
-void fill_delta_sm_16khz (h0, lenh0)
-     float **h0;
-     long *lenh0;
-{
+void fill_delta_sm_16khz (float **h0, long *lenh0) {
   static float dsm_fil_coef[DELTA_SM_LEN] = {
     (F) - 2.69880325793689E-002, (F) 9.76699781947926E-004, (F) 3.73016531198107E-004,
     (F) 2.36061209990078E-004, (F) 5.60162996216139E-006, (F) - 9.03137877180616E-005,
@@ -233,7 +230,7 @@ void fill_delta_sm_16khz (h0, lenh0)
 
         Description:
         ~~~~~~~~~~~~
-        Initialization routine for the delta-SM filter characteristic for 
+        Initialization routine for the delta-SM filter characteristic for
         data sampled at 16 kHz.
 
         Parameters:  none.

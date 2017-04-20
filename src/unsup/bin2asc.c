@@ -5,7 +5,7 @@
 
   Description:
   ~~~~~~~~~~~~
-  
+
   Program for dumping a binary (short) file onto stdout, skipping the
   initial `skip' samples. This feature is useful for skipping the
   header of binary files. The default is no skip (0).
@@ -23,19 +23,19 @@
   Options:
   -h            print output as a hex number [default: decimal]
   -H            print output as a hex number preceded by 0x
-  -o            print output as an octal number preceded by 0       
+  -o            print output as an octal number preceded by 0
   -s		is the number of initial samples to skip. Default: none
 
   Example:
   ~~~~~~~~
-  $ bin2asc -s 20 speech.fil 256 1 1 
+  $ bin2asc -s 20 speech.fil 256 1 1
   Will produce a dump on the screen of 256 samples from the file
-  `speech.fil', starting at its sample number 21 (skip 20!) of its 
+  `speech.fil', starting at its sample number 21 (skip 20!) of its
   1st block (block number 1). Note that the block size is 256 samples.
 
-  $ bin2asc -s 13 speech.fil 160 10 2 
+  $ bin2asc -s 13 speech.fil 160 10 2
   Will produce a dump on the screen of 320 (160*2) samples from the file
-  `speech.fil', starting at its sample number 14 (skip 13!) of its 
+  `speech.fil', starting at its sample number 14 (skip 13!) of its
   10th block (block number 10). Note that the block size is 160 samples.
 
   Author:	Simao Ferraz de Campos Neto -- CPqD/Telebras
@@ -45,7 +45,7 @@
   ~~~~~~~~~~~~~~
   11.Nov.92 v1.0 created
   19.Nov.97 v1.1 added hex and octal outputs <simao.campos@comsat.com>
-  08.Aug.98 v1.2 fixed bug in that the output file has less samples 
+  08.Aug.98 v1.2 fixed bug in that the output file has less samples
                  than it should when the input file size is not an
                  integer multiple of the block size <simao>.
 
@@ -124,11 +124,7 @@ void display_usage () {
 
 #undef FP
 
-/* ---------------------------- Main Routine ---------------------------- */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   int i, j, l;
 
   long N, N1, N2, skip = 0;

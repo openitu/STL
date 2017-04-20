@@ -25,10 +25,7 @@
 #include <stdio.h>
 
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Local variables */
   static long ferr, nerr, n;
   static long first;

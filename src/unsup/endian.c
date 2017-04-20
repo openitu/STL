@@ -9,10 +9,7 @@
   ---------------------------------------------------------------------------
 */
 
-reverse_endian_short (a, b, n)
-     unsigned short *a, *b;
-     long n;
-{
+reverse_endian_short (unsigned short *a, unsigned short *b, long n) {
   long i;
   unsigned short register tmp;
   for (i = 0; i < n; i++) {
@@ -29,10 +26,7 @@ reverse_endian_short (a, b, n)
   06.Oct.97  v1.0 Created <simao.campos@comsat.com>
   ---------------------------------------------------------------------------
 */
-reverse_endian_long (a, b, n)
-     unsigned long *a, *b;
-     long n;
-{
+reverse_endian_long (unsigned long *a, unsigned long *b, long n) {
   long i;
   union {
     unsigned long tmp;

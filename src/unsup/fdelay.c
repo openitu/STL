@@ -31,20 +31,20 @@
 
   Options:
   -q           Operate quietly
-  -delay n     n is the number of samples to delay (default: 43) 
+  -delay n     n is the number of samples to delay (default: 43)
   -tail        Add samples to the end of the file, rather than the beginning
   -law [l|A|u] Coding law (default: linear). The default value for linear
                samples is 0, for A-law is 0xD5 (0x80 without bit
                inversion), and for u-law is 0xFF.
   -dec z       Uses the specified decimal value z
-  -hex z       Uses the specified hexadecimal value z 
+  -hex z       Uses the specified hexadecimal value z
   -file fff    Uses the provided file fff as the delay
   -blk #       Sample block size
   -n #         Number of blocks to process
   -start #     First block to process
   -end #       Last block to process (n-start+1)
   -help        Displays usage
-        
+
   Original Author:
   ~~~~~~~~~~~~~~~~
   Simao Ferraz de Campos Neto
@@ -80,7 +80,7 @@
   ~~~~~~~~~~~~~~  FILE *Fout, char *OutFile);
 
   Add delay to output file, either from a user-specified file or
-  using the user-specified values.  
+  using the user-specified values.
 
   Return value:
   ~~~~~~~~~~~~~
@@ -93,11 +93,7 @@
   -----------------------------------------------------------------------------
 */
 
-long add_delay (smp_buf, sample, delay, Fdel, Fout, OutFile)
-     short *smp_buf, sample, delay;
-     FILE *Fdel, *Fout;
-     char *OutFile;
-{
+long add_delay (short *smp_buf, short sample, short delay, FILE *Fdel, FILE *Fout, FILE *OutFile) {
   long saved = 0, smpno, i;
 
   if (Fdel) {
@@ -180,12 +176,7 @@ void display_usage () {
 /* ....................... End of display_usage() ....................... */
 
 
-/*============================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-/*============================== */
-{
+int main (int argc, char *argv[]) {
   long N = 256, N1 = 1, N2 = 0, start_byte;
   long i, smpno, saved = 0;
   long delay = 43;

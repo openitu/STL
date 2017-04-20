@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -23,23 +23,19 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
- /**/
+
 /*	v_srch.c -- VSELP codebook search.*/
-   /**/
+
 /*-------------------------------------------------------------*/
-   /**/
+
 /*	Written by: Matt Hartman*/
-   /**/
+
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-   /**/
+
 #include "vparams.h"
 /*#include "stdlib.h"*/
-int V_SRCH (wiPtr, wBasisPtr, numBasis)
-     FTYPE *wiPtr;
-     FTYPE *wBasisPtr;
-     int numBasis;
-{
+int V_SRCH (FTYPE *wiPtr, FTYPE *wBasisPtr, int numBasis) {
   FTYPE *R;                     /* array of Rm values, the cross correlations between */
   /* the weighted speech and weighted basis vectors */
   FTYPE *D;                     /* matrix of Dmj values, the cross correlations */
@@ -67,11 +63,11 @@ int V_SRCH (wiPtr, wBasisPtr, numBasis)
   fp = (FTYPE *) calloc (Ddim, sizeof (FTYPE)); /* some of these */
   R = fp;                       /* aren't used. */
   D = (FTYPE *) calloc (Ddim * Ddim, sizeof (FTYPE));
-   /**/
+
 /*	calculate correlations between weighted basis vectors and weighted*/
 /*	speech vector (Rm's), calculate C0, and calculate 0.25 * sum of Djj*/
 /*	for G0.*/
-     /**/ C = 0.0;
+       C = 0.0;
   G = 0.0;
   R++;
   tmpPtr = wBasisPtr;
@@ -90,7 +86,7 @@ int V_SRCH (wiPtr, wBasisPtr, numBasis)
 
 /*	calculate all Dmj (no diagonal terms since they aren't used in*/
 /*	recursion); finish calculating G0*/
-   /**/ for (m = 1; m < numBasis; m++) {
+     for (m = 1; m < numBasis; m++) {
     for (j = m + 1; j <= numBasis; j++) {
       Dcurrent = 0.0;
       tmpPtr = wBasisPtr + (m - 1) * S_LEN;
@@ -103,7 +99,7 @@ int V_SRCH (wiPtr, wBasisPtr, numBasis)
   }
 
 /*	initialize best vector to be code vector zero and perform search*/
-   /**/ cSave = C;
+     cSave = C;
   cSqrdBest = C * C;
   gBest = G;
   wordSave = 0;
@@ -115,13 +111,13 @@ int V_SRCH (wiPtr, wBasisPtr, numBasis)
     bitChanged++;               /* bitChanged is in [1,numBasis] */
 
     /* update C */
-     /**/ if (theta = !(!(codeWord & mask)))    /* theta is 0 or 1 */
+       if (theta = !(!(codeWord & mask)))    /* theta is 0 or 1 */
       C += *(R + bitChanged);
     else
       C -= *(R + bitChanged);
 
     /* update G */
-     /**/ tmpMask = 0x1;
+       tmpMask = 0x1;
     for (j = 1; j < bitChanged; j++) {
       if (theta == !(!(codeWord & tmpMask)))
         G += *(D + j * Ddim + bitChanged);
@@ -139,7 +135,7 @@ int V_SRCH (wiPtr, wBasisPtr, numBasis)
     }
 
     /* check for maximum */
-     /**/ if (C * C * gBest > cSqrdBest * G) {
+       if (C * C * gBest > cSqrdBest * G) {
       cSqrdBest = C * C;
       gBest = G;
       wordSave = codeWord;
@@ -148,7 +144,7 @@ int V_SRCH (wiPtr, wBasisPtr, numBasis)
   }
 
 /*	if Cbest is negative, invert codeword*/
-   /**/ if (cSave < 0.0)
+     if (cSave < 0.0)
     wordSave = wordSave ^ ((1 << numBasis) - 1);
 
   free (fp);

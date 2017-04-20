@@ -55,7 +55,7 @@
    bs-stats [Options] in_bs bs_info
    Where:
    in_bs ...... input encoded speech bitstream file
-   bs_info .... ASCII file where the frame length values found in the 
+   bs_info .... ASCII file where the frame length values found in the
                 file are reported, sequencially. Additional stats
                 printed on the screen can be saved to a file via
                 redirection of stdin.
@@ -133,9 +133,7 @@ void display_usage ARGS ((int level));
   --------------------------------------------------------------------------
 */
 #define P(x) printf x
-void display_usage (level)
-     int level;
-{
+void display_usage (int level) {
   P (("bs-stats.c - Version 1.1 of 02.Feb.2010\n"));
 
   if (level) {
@@ -217,10 +215,7 @@ void display_usage (level)
 /* ************************************************************************* */
 /* ************************** MAIN_PROGRAM ********************************* */
 /* ************************************************************************* */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Command line parameters */
   char bs_format = g192;        /* Generic Speech bitstream format */
   char ibs_file[MAX_STRLEN];    /* Input bitstream file */

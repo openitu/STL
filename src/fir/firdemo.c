@@ -25,7 +25,7 @@
         ~~~~~~
         $ firdemo !(---> HELP text is printed to screen)
         or
-        $ firdemo [-options] ifile 
+        $ firdemo [-options] ifile
                       [ ofile irs delta_sm up1 up2 down1 down2 [lseg]]
                  (---> filtering is carried out, as specified)
 
@@ -42,10 +42,10 @@
         delta_sm: Delta-SM filtering option (complement to IRS):
                    0: skip Delta-SM filtering
                    1: cascade Delta-SM filtering
-                   
+
         up1: .... upsampling option for filtering #2
                   1: no upsampling
-                  2: upsampling by 2 
+                  2: upsampling by 2
                  -2: upsampling by 2 using band-pass filter
                   3: upsampling by 3
 
@@ -182,15 +182,15 @@
         26.Feb.92 v1.0 (ILS-files removed). <hf@pkinbg.uucp>
         18.May.92 v1.1 Use of sh2fl_16bit w/ file normalization.
                        <simao@cpqd.ansp.br>
-        20.Apr.94 v1.2 Added new filtering options: modified IRS at 16kHz and 
+        20.Apr.94 v1.2 Added new filtering options: modified IRS at 16kHz and
                        48kHz, Delta-SM filtering, and band-pass (G.712-like)
                        2:1 and 1:2 filtering. <simao@cpqd.ansp.br>
         30.Sep.94 v2.0 Changes in the code/documentation to encompass changes
-                       and spliting into several files of the old-name hq 
+                       and spliting into several files of the old-name hq
 		       module, now FIRFLT. <simao@ctd.comsat.com>
         30.Oct.94 v2.1 Incorporated half-tilt IRS. <simao@ctd.comsat.com>
         06.Feb.96 v2.2 Corrected help message, included header string.h
-        06.Jul.99 v2.3 Inserted conditional compilation for CYGWIN and 
+        06.Jul.99 v2.3 Inserted conditional compilation for CYGWIN and
                        MS Visual C compiler.
         02.Feb.10 v2.5 Modified maximum filename length (y.hiwasaki)
   ============================================================================
@@ -302,10 +302,7 @@ void display_usage () {
  **************************************************************************
  **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
 /*
  * ......... Define symbols of type SCD_FIR for each filter .........
  */

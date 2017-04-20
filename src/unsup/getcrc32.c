@@ -1,13 +1,13 @@
-/* 
+/*
   *********************************************************************
-  Crc - 32 BIT ANSI X3.66 CRC checksum files 
+  Crc - 32 BIT ANSI X3.66 CRC checksum files
 
   Demonstration program to compute the 32-bit CRC used as the frame
   check sequence in ADCCP (ANSI X3.66, also known as FIPS PUB 71 and
   FED-STD-1003, the U.S. versions of ITU-T's X.25 link-level protocol).
 
   The 32-bit FCS was added via the Federal Register, 1 June 1982,
-  p.23798.  
+  p.23798.
 
   I presume but don't know for certain that this polynomial is or will
   be included in ITU-T V.41, which defines the 16-bit CRC (often called
@@ -22,7 +22,7 @@
 
   This program has been tested to produce the same CRCs for the
   following platforms/compilers:
-  - HPUX 9.05 gcc 
+  - HPUX 9.05 gcc
   - SunOs 4.1.3 cc
   - Win95/CYGWIN gcc [egcs-2.91.57]
   - ULTRIX 4.3 (MIPS) cc 2.10
@@ -167,20 +167,15 @@ static UNS_32_BITS crc_32_tab[] = {     /* CRC polynomial 0xedb88320 */
 /* ********************************************************************** */
 /* *************************** MAIN PROGRAM ***************************** */
 /* ********************************************************************** */
-int main (argc, argp)
-     int argc;
-     char **argp;
-{
+int main (int argc, char *argv[]) {
   register int errors = 0;
 
   while (--argc > 0)
-    errors |= crc32file (*++argp);
+    errors |= crc32file (*++argv);
   return (errors != 0);
 }
 
-int crc32file (name)
-     char *name;
-{
+int crc32file (char *name) {
   register FILE *fin;
   register unsigned long oldcrc32;
   register unsigned long crc32;

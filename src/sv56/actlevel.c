@@ -7,8 +7,8 @@
   Description:
   ~~~~~~~~~~~~
 
-  Example program that calculates the active speech level of a file 
-  relative to a 0 dB reference. Here, the default is 0 dB below 
+  Example program that calculates the active speech level of a file
+  relative to a 0 dB reference. Here, the default is 0 dB below
   system overload.
 
   The calculation of speech file's active power uses the algorithm
@@ -22,7 +22,7 @@
   uses `float' input data, it is necessary to convert from short (in the
   mentioned format) to float; this is carried out by the function
   `sh2fl()'. This function has the option of `normalize' the input data
-  to the range -1..+1, what is done. 
+  to the range -1..+1, what is done.
 
   The default values for the AD,DA systems resolution is 16 bits, for
   the sampling rate is 16000 Hz. To change this on-line, just specify
@@ -33,26 +33,26 @@
 
   Usage:
   ~~~~~~
-  $ actlevel [-?] (displays the help message message!) 
+  $ actlevel [-?] (displays the help message message!)
   or
   $ actlevel [-options] file [file ...]
   where:
-  file ....... is the input file to be measured; if not specified, no actions 
+  file ....... is the input file to be measured; if not specified, no actions
                are taken.
 
-  Options: 
+  Options:
   ~~~~~~~~
   -blk len  .. is the block size in number of samples;
                this parameter is optional, and the default is block size
 	       of 256 samples;
-  -start sb .. define `sb' as the first block to be measured 
-               [default: first block of the file] 
-  -n nb ...... define `nb' as the number of blocks to be measured 
+  -start sb .. define `sb' as the first block to be measured
+               [default: first block of the file]
+  -n nb ...... define `nb' as the number of blocks to be measured
                [default: whole file]
-  -end eb .... define `eb' as the last block to be measured 
+  -end eb .... define `eb' as the last block to be measured
                [default: till end of file]
   -sf f ...... sets the sampling rate to `f' Hz [default: 16000Hz]
-  -bits n .... sets the digital system resolution (AD,DA systems) to `n', 
+  -bits n .... sets the digital system resolution (AD,DA systems) to `n',
                in number of bits [default: 16 bits]
   -lev ndB ... causes the program to CALCULATE the gain necessary to
                equalize the *active* level of the input file(s) to
@@ -69,11 +69,11 @@
   ~~~~~~~~~~~~~
   > sv-P56.c:   contains the functions related to active speech
 	        level measurement according to P.56,
-	        init_speech_voltmeter(), speech_voltmeter() and 
+	        init_speech_voltmeter(), speech_voltmeter() and
 	        bin_interp(). Their prototypesare in `sv-p56.h'.
   > ugst-utl.c: utility functions; here are used the gain/loss
 	        (scaling) algorithm of scale() and the data type
-		conversion functions sh2fl() and fl2sh(). Prototypes 
+		conversion functions sh2fl() and fl2sh(). Prototypes
 		are in `ugst-utl.h'.
 
   Exit values:
@@ -88,17 +88,17 @@
 
   Compilation:
   ~~~~~~~~~~~~
-  VaxC:   cc actlevel.c 
+  VaxC:   cc actlevel.c
           link actlevel
   TurboC: tcc actlevel.c sv-p56.c ugst-utl.c
-  Sun-OS: cc -o actlevel actlevel.c sv-p56.c ugst-utl.c -lm 
-  gcc:    cc -o actlevel actlevel.c sv-p56.c ugst-utl.c -lm 
+  Sun-OS: cc -o actlevel actlevel.c sv-p56.c ugst-utl.c -lm
+  gcc:    cc -o actlevel actlevel.c sv-p56.c ugst-utl.c -lm
 
-  Author: 
-  ~~~~~~~ 
+  Author:
+  ~~~~~~~
   Simao Ferraz de Campos Neto
-  DDS/Pr11                      Tel: +55-192-39-1396                
-  CPqD/Telebras                 Fax: +55-192-53-4754                
+  DDS/Pr11                      Tel: +55-192-39-1396
+  CPqD/Telebras                 Fax: +55-192-53-4754
   13085 Campinas SP Brazil      E-mail: <tdsimao@venus.cpqd.ansp.br>
 
   Log of changes:
@@ -106,7 +106,7 @@
   01.Jun.92     1.0        1st version, based on the sv56demo.c version 2.1.
   01.Feb.95     2.0        Added options and multi-file measurement option.
   21.Aug.95     2.1        Fixed bug with zero-sample files.
-  06.Dec.96     2.2        Fixed small bug in the calculation of peak 
+  06.Dec.96     2.2        Fixed small bug in the calculation of peak
                            factors: the variable holding the absolute
                            maximum in dB was never initialized,
                            causing a wrong peak factor to be reported
@@ -115,7 +115,7 @@
                            advantage to add the reporting of the peak
                            factor when option -q is used. Updated
                            display_usage().
-  06.Apr.98     2.3        Solved small bug that occurred when the file size 
+  06.Apr.98     2.3        Solved small bug that occurred when the file size
                            was not a multiple of the frame size. The
                            program was truncating the output file size
                            to a multiple of the current block
@@ -161,7 +161,7 @@
 #define MIN_LOG_OFFSET 1.0e-20  /* To avoid sigularity with log(0.0) */
 
 
-/* 
+/*
   ============================================================================
 
         void display_usage (void)
@@ -231,7 +231,7 @@ void display_usage () {
 /* ....................... End of display_usage() .......................... */
 
 
-/* 
+/*
   ============================================================================
 
        void print_act_long_summary(char *file, SVP56_state state, double al_dB,
@@ -270,13 +270,7 @@ void display_usage () {
 
   ============================================================================
 */
-void print_act_long_summary (out, file, state, al_dB, NdB, ratio, gain, N, N1, N2, bitno)
-     FILE *out;
-     SVP56_state state;
-     char *file;
-     double ratio, gain, al_dB, NdB;
-     long N, N1, N2, bitno;
-{
+void print_act_long_summary (FILE *out, char *file, SVP56_state state, double al_dB, double NdB, double ratio, double gain, long N, long N1, long N2, long bitno) {
   static char unity[5] = "dBov";
   double abs_max_dB, max_gain, new_max;
 
@@ -347,7 +341,7 @@ void print_act_long_summary (out, file, state, al_dB, NdB, ratio, gain, N, N1, N
 /* .................... End of print_act_long_summary() ................... */
 
 
-/* 
+/*
   ============================================================================
 
        void print_act_short_summary (char *file, SVP56_state state,
@@ -379,12 +373,7 @@ void print_act_long_summary (out, file, state, al_dB, NdB, ratio, gain, N, N1, N
 
   ============================================================================
 */
-void print_act_short_summary (out, file, state, al_dB, ratio, gain)
-     FILE *out;
-     SVP56_state state;
-     char *file;
-     double ratio, al_dB, gain;
-{
+void print_act_short_summary (FILE *out, char *file, SVP56_state state, double al_dB, double ratio, double gain) {
   double abs_max_dB;
 
   /* Calculate peak in dB */
@@ -423,12 +412,7 @@ void print_act_short_summary (out, file, state, al_dB, ratio, gain)
    ***                                                                    ***
    **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
-  /* DECLARATIONS */
-
+int main (int argc, char *argv[]) {
   /* Parameters for operation */
   double Overflow;              /* Max.positive value for AD_resolution bits */
   long N = DEF_BLK_LEN, N1 = 1, N2 = 0, N2_ori, i, l;

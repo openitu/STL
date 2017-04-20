@@ -35,7 +35,7 @@ ORIGINAL BY:
                 EMail : hf@pkinbg.uucp
 
 DESCRIPTION:
-        This file contains procedures for FIR up-/down-sampling 
+        This file contains procedures for FIR up-/down-sampling
 	filtering, independently of filter characteristics initialized by
 	functions present in other sub-units of this module.
 
@@ -47,8 +47,8 @@ FUNCTIONS:
                                     be processed with the same filter)
          = hq_free(...)          :  deallocate FIR-filter memory
 
-  Local (Used by other sub-units of this module, should not be needed by 
-         the user's program. Prototypes here and in the sub-units that use 
+  Local (Used by other sub-units of this module, should not be needed by
+         the user's program. Prototypes here and in the sub-units that use
 	 it, but not in firflt.h)
          = fir_initialization(...) : common initialization function for
                                    all filter types;
@@ -69,7 +69,7 @@ HISTORY:
     22.Feb.96 v2.2 Changed inclusion of stdlib.h to inconditional, as
                    suggested by Kirchherr (FI/DBP Telekom) to run under
 				   OpenVMS/AXP <simao@ctd.comsat.com>
-    03.Dec.04 v2.3 Added correction in fir_downsampling_kernel() for sample-based 
+    03.Dec.04 v2.3 Added correction in fir_downsampling_kernel() for sample-based
 				   operation.	<Cyril Guillaume & Stephane Ragot - stephane.ragot@francetelecom.com>
 
   =============================================================================
@@ -143,13 +143,7 @@ static long fir_downsampling_kernel ARGS ((long lenx, float *x_ptr, float *y_ptr
 
  ============================================================================
 */
-long hq_kernel (lseg, x_ptr, fir_ptr, y_ptr)
-     long lseg;
-     float *x_ptr;
-     SCD_FIR *fir_ptr;
-     float *y_ptr;
-{
-
+long hq_kernel (long lseg, float *x_ptr, SCD_FIR *fir_ptr, float *y_ptr) {
   if (fir_ptr->hswitch == 'U')  /* call up-sampling procedure */
     return fir_upsampling_kernel (      /* returns number of output samples */
                                    lseg,        /* In : length of input signal */
@@ -207,9 +201,7 @@ long hq_kernel (lseg, x_ptr, fir_ptr, y_ptr)
 
  ============================================================================
 */
-void hq_free (fir_ptr)
-     SCD_FIR *fir_ptr;
-{
+void hq_free (SCD_FIR *fir_ptr) {
 
   free (fir_ptr->T);            /* free state variables */
   free (fir_ptr->h0);           /* free state impulse response */
@@ -249,9 +241,7 @@ void hq_free (fir_ptr)
 
  ============================================================================
 */
-void hq_reset (fir_ptr)
-     SCD_FIR *fir_ptr;
-{
+void hq_reset (SCD_FIR *fir_ptr) {
   long k;
   for (k = 0; k < fir_ptr->lenh0 - 1; k++)      /* clear delay line */
     fir_ptr->T[k] = 0.0;        /* (= state variables) */
@@ -296,13 +286,7 @@ void hq_reset (fir_ptr)
 
  ============================================================================
 */
-SCD_FIR *fir_initialization (lenh0, h0, gain, idwnup, hswitch)
-     long lenh0;
-     float h0[];
-     double gain;
-     long idwnup;
-     int /* char */ hswitch;
-{
+SCD_FIR *fir_initialization (long lenh0, float h0[], double gain, long idwnup, int hswitch) {
   SCD_FIR *ptrFIR;              /* pointer to the new struct */
   float fak;
   long k;
@@ -401,16 +385,7 @@ SCD_FIR *fir_initialization (lenh0, h0, gain, idwnup, hswitch)
 
  ============================================================================
 */
-static long fir_downsampling_kernel (lenx, x, y, lenh0, h0, T, downfac, k0)
-     long lenx;
-     float *x;
-     float *y;
-     long lenh0;
-     float *h0;
-     float *T;
-     long downfac;
-     long *k0;
-{
+static long fir_downsampling_kernel (long lenx, float *x, float *y, long lenh0, float *h0, float *T, long downfac, long *k0) {
   long ktrans, kx, kStart, ky, kappa;   /* loop indices */
 
 

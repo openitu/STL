@@ -34,7 +34,7 @@
   ~~~~~~~~
   -dB ........... AC level is given in dB [default: linear PCM]
   -ac ........... define AC tone level, in dB or PCM
-  -f ............ define tone frequency in Hertz 
+  -f ............ define tone frequency in Hertz
   -dc ........... define DC level for tone, as a linear PCM value [default: 0]
   -sf ........... define sampling frequency in Hertz [default: 8000 Hz]
   -phase ........ set phase in degrees for tone [default: 0 degrees]
@@ -51,7 +51,7 @@
   History:
   ~~~~~~~~
   08.Mar.1990 v1.0 created
-  07.Nov.1997 v1.1 command-line options added; PCM<->dB conversions 
+  07.Nov.1997 v1.1 command-line options added; PCM<->dB conversions
                    corrected, in particular for tones (sqrt(2) factor
 		   between level & peak). <simao>
   21.Mar.2000 v1.2 changed memory allocation of short buffer
@@ -176,10 +176,7 @@ void display_usage () {
 /* ********************************************************************** */
 /* ********************************************************************** */
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   int i, j, n;
   double t;
 #ifndef USE_FUNCTION

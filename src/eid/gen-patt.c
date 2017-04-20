@@ -19,7 +19,7 @@
    The headerless G.192 serial bitstream format is as described in
    G.192, with the exceptions listed below. The main feature is that
    the softbits and frame erasure indicators are right-aligned at
-   16-bit word boundaries (unsigned short): 
+   16-bit word boundaries (unsigned short):
    '0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20
 
    In the byte-oriented softbit serial bitstream, only the lower byte
@@ -76,13 +76,13 @@
 
    Where:
    err_pat .. name of error pattern bitstream file
-   mode ..... a letter representing one of 4 operating modes: 
+   mode ..... a letter representing one of 4 operating modes:
               R -> Random Bit Errors
               F -> (Random) Frame Erasure
               B -> Burst Frame Erasure
    frno ..... total number of bits/frames in pattern
    start .... first bit|frame to have errors|erasures introduced
-   state_f .. name of an ASCII state variable file. NOTE: The parameters 
+   state_f .. name of an ASCII state variable file. NOTE: The parameters
               saved in an existing state variable file *OVERRIDE* the
               BER/FER/Gamma values defined by the user in the
               command-line!!!
@@ -121,7 +121,7 @@
    History:
    ~~~~~~~~
    15.Aug.1997 v.1.0 Created based on gen-patt.c <simao.campos@comsat.com>
-   13.Jan.1999 v.1.1 Corrected bugs associated with the option to skip 
+   13.Jan.1999 v.1.1 Corrected bugs associated with the option to skip
                      initial bits (in BER mode) or frames (in (B)FER
                      mode) was selected <simao>:
                      - was saving 0x007F to file when the skip option
@@ -139,10 +139,10 @@
                      and specified error/erasure rate and pattern
                      length <simao>
    22.Aug.2000 v1.4  Corrected bug in calculation of minimum tolerance <simao>
-   15.May.2001 v1.5  - Corrected bug in initialization of err_patt[] when 
+   15.May.2001 v1.5  - Corrected bug in initialization of err_patt[] when
                        treating the skip section of the bit error pattern.
                        Was using memset, which works for chars, to init shorts.
-                       Replaced with a for loop. 
+                       Replaced with a for loop.
                      - Corrected error in logic in the calculation of
                        number of frames skipped, was doing one more than what
                        it should
@@ -189,7 +189,7 @@ void display_usage ARGS ((void));
 /* ************************* AUXILIARY FUNCTIONS ************************* */
 /* *********************************************************************** */
 
-/* 
+/*
    -------------------------------------------------------------------------
    Return a string with the EID operating mode:
    B: BFER
@@ -203,24 +203,20 @@ void display_usage ARGS ((void));
    <simao> 15.Aug.97
    -------------------------------------------------------------------------
  */
-char *mode_str (mode)
-     char mode;
-{
+char *mode_str (int mode) {
   mode = toupper ((int) mode);
   return (mode == 'R' ? "BER" : (mode == 'F' ? "FER" : "BFER"));
 }
 
 /* ......................... End of mode_str() ......................... */
 
-/* 
+/*
    -------------------------------------------------------------------------
    Check if the provided index refers to a valid Bellcore model entry
    (1-60) (0.5% to 30%).
    -------------------------------------------------------------------------
  */
-char check_bellcore (index)
-     long index;
-{
+char check_bellcore (long index) {
   if ((index >= 1) && (index <= 60))
     return (1);
   else
@@ -230,7 +226,7 @@ char check_bellcore (index)
 /* ....................... End of check_bellcore() ....................... */
 
 
-/* 
+/*
    -------------------------------------------------------------------------
    long run_FER_generator_random (short *patt, SCD_EID *state, long n)
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -245,7 +241,7 @@ char check_bellcore (index)
    state ...... SCD_EID structure (previously initialized by open_eid)
    n .......... number of times FER_generator_random should be run
 
-   Return value: 
+   Return value:
    ~~~~~~~~~~~~~
    The function return the number of erased frames as a long.
 
@@ -257,11 +253,7 @@ char check_bellcore (index)
    15.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long run_FER_generator_random (patt, state, n)
-     short *patt;
-     SCD_EID *state;
-     long n;
-{
+long run_FER_generator_random (short *patt, SCD_EID *state, long n) {
   long fer, i, count;
 
   for (count = i = 0; i < n; i++) {
@@ -276,7 +268,7 @@ long run_FER_generator_random (patt, state, n)
 /* .................. End of run_FER_generator_random() .................. */
 
 
-/* 
+/*
    -------------------------------------------------------------------------
    long run_FER_generator_burst (short *patt, BURST_EID *state, long n)
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -291,7 +283,7 @@ long run_FER_generator_random (patt, state, n)
    state ...... SCD_EID structure (previously initialized by open_eid)
    n .......... number of times FER_generator_burst should be run
 
-   Return value: 
+   Return value:
    ~~~~~~~~~~~~~
    The function return the number of erased frames as a long.
 
@@ -303,11 +295,7 @@ long run_FER_generator_random (patt, state, n)
    15.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long run_FER_generator_burst (patt, state, n)
-     short *patt;
-     BURST_EID *state;
-     long n;
-{
+long run_FER_generator_burst (short *patt, BURST_EID *state, long n) {
   long fer, i, count;
 
   for (count = i = 0; i < n; i++) {
@@ -389,10 +377,7 @@ void display_usage () {
 /* ************************************************************************* */
 /* ****************************  MAIN_PROGRAM ****************************** */
 /* ************************************************************************* */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Command line parameters */
   char mode = 'R';              /* Processing mode Random,Frame,Burst */
   char data_file_name[MAX_STRLEN];      /* Name of the output file */
@@ -642,14 +627,14 @@ int main (argc, argv)
     fprintf (stderr, "Warning !! Error statistics counted on [1...%ld], this includes preamble segment [1..%ld],\n even though no errors are applied in this segment.\n", number_of_frames, start_frame);
   }
 
-  /* 
+  /*
    **  Open output file
    */
   if ((out_file_ptr = fopen (data_file_name, WB)) == NULL)
     HARAKIRI ("Could not create output file\n", 1);
   out = fileno (out_file_ptr);
 
-  /* 
+  /*
    **  Select mode
    */
   switch (mode) {
@@ -705,7 +690,7 @@ int main (argc, argv)
     break;
   }
 
-  /* 
+  /*
    **  Allocate memory for G.192 data buffer
    */
   error_pat = (short *) calloc (EID_BUFFER_LENGTH, sizeof (short));
@@ -713,7 +698,7 @@ int main (argc, argv)
     HARAKIRI ("Could not allocate memory for error pattern buffer\n", 1);
   }
 
-  /* 
+  /*
    ** Initialize arrays
    */
   for (i = 0; i < EID_BUFFER_LENGTH; i++)
@@ -726,12 +711,12 @@ int main (argc, argv)
       frame_okay[i] = G192_SYNC;        /* 0x6B21 */
 
 
-  /* 
+  /*
    ** Try obtaining a pattern within the given error/erasure rate
    */
   do {
 
-    /* 
+    /*
      **  Initializations necessary for each iteraction **
      */
 
@@ -747,7 +732,7 @@ int main (argc, argv)
     generated = 0.0;
     disturbed = 0.0;
 
-    /* 
+    /*
      **  Generate the bit streams
      */
     switch (mode) {
@@ -814,7 +799,7 @@ int main (argc, argv)
         for (i = start_frame; i < number_of_frames; i += EID_BUFFER_LENGTH) {
           /* Checks how many frame erasures are necessary here. If this is not the last round of collections, then get EID_BUFFER_LENGTH frame erasure indications. If this is the last iteraction in the loop, get only the remainder of samples not all EID_BUFFER_LENGTH samples */
           k = i + EID_BUFFER_LENGTH > number_of_frames ? number_of_frames - (long) generated : EID_BUFFER_LENGTH;
-          /* 
+          /*
              k = i + EID_BUFFER_LENGTH > number_of_frames ? number_of_frames % EID_BUFFER_LENGTH : EID_BUFFER_LENGTH; */
 
           /* Run either Gilbert or Bellcore frame erasure model */
@@ -852,7 +837,7 @@ int main (argc, argv)
 
   while (tolerance >= 0 && fabs (ber_rate - percentage_used) > tolerance && iteraction < max_iteraction);
 
-  /* 
+  /*
    ** .. Print some statistics ...
    */
 
@@ -861,7 +846,7 @@ int main (argc, argv)
   percentage_proc *= 100.0;     /* Bit/Frame error rate , excluding preamble */
   percentage_gen *= 100.0;      /* Bit/Frame error rate all file */
 
-  /* 
+  /*
    **  Print summary of options on screen
    */
   fprintf (stderr, "Pattern file:   %s\n", data_file_name);
@@ -939,7 +924,7 @@ int main (argc, argv)
     }
   }                             /* End switch */
 
-  /* 
+  /*
    **  Close the output file and quit
    */
   fclose (out_file_ptr);

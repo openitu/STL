@@ -217,12 +217,7 @@ char c_global;
 WTYPE crc_a = 0, crc_c = 0, crc_x = 0;
 int init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
 
-
-/* ================================================== */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   FILE *in, *out;
   long blk = MAX_LONG;
   int filno, i;

@@ -74,7 +74,7 @@
   over ulaw to linear. It processes the input file "ifile" by
   loading segments of 233 samples and writes the result to "ofile",
   from the 3rd segment, for 47 segments.
-  
+
   Turbo-C, Turbo-C++:
   > tcc G711
   > G711 a lilo ifile ofile 39 1
@@ -227,10 +227,7 @@ void display_usage () {
    ***                                                                    ***
    **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   long i, N, N1, N2, smpno, tot_smpno, cur_blk;
   short *lin_buff;              /* linear input samples */
   short *log_buff;              /* compressed data */

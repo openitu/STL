@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -23,26 +23,23 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
- /**/
+
 /*	rs_rr.c -- Computes sqrt(RS/R(x,x)).*/
-   /**/
+
 /*-------------------------------------------------------------*/
-   /**/
+
 /*	Written by: Matt Hartman*/
-   /**/
+
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-   /**/
+
 #include "vparams.h"
 #include <math.h>
-  FTYPE RS_RR (vecPtr, rs)
-     FTYPE *vecPtr;
-     FTYPE rs;
-{
+FTYPE RS_RR ( FTYPE *vecPtr, FTYPE rs) {
   FTYPE *endPtr, Rxx = 0.0;
 
 /*	compute energy in excitation vector*/
-   /**/ for (endPtr = vecPtr + S_LEN; vecPtr < endPtr; vecPtr++)
+     for (endPtr = vecPtr + S_LEN; vecPtr < endPtr; vecPtr++)
     Rxx += *vecPtr * *vecPtr;
 
 /* return (rs / sqrt(Rxx)); */

@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -23,36 +23,31 @@ Motorola Inc.
 
 **************************************************************************/
 /*-------------------------------------------------------------*/
- /**/
+
 /*	weightedSnr.c -- Computes weighted segmental and total SNR.*/
-   /**/
+
 /*-------------------------------------------------------------*/
-   /**/
+
 /*	Written by: Matt Hartman*/
-   /**/
+
 /*-------------------------------------------------------------*/
 /*	inclusions*/
-   /**/
+
 #include "vparams.h"
 #include <math.h>
 /*#include "stdlib.h"*/
 /*	static externals*/
- /**/ static FTYPE sEngTotal, weEngTotal, eEngTotal, sumwSegSnr, sumSegSnr;
+static FTYPE sEngTotal, weEngTotal, eEngTotal, sumwSegSnr, sumSegSnr;
 static int numSegs;
 
 
 /*----------------------------------------*/
-/*	snr and weighted prediction gains*/
- /**/ void runningSnr (speech, syn, wSpeech, wsyn)
-     FTYPE *speech;
-     FTYPE *syn;
-     FTYPE *wSpeech;
-     FTYPE *wsyn;
-{
+/*	snr and weighted prediction gains */
+void runningSnr (FTYPE *speech, FTYPE *syn, FTYPE *wSpeech, FTYPE *wsyn) {
   FTYPE sEng, weEng, eEng, temp, *tfp1, *tfp2, *tfp3, *tfp4, *efp;
 
-/*	update subframe energies*/
-   /**/ sEng = 0.0;
+/*	update subframe energies */
+  sEng = 0.0;
   weEng = 0.0;
   eEng = 0.0;
   tfp1 = speech;
@@ -79,10 +74,8 @@ static int numSegs;
 
 
 /*------------------------------------------------*/
-/*	print final results*/
- /**/ void printSnr (fplog)
-     FILE *fplog;
-{
+/*	print final results */
+void printSnr (FILE *fplog) {
   fprintf (fplog, "\nNUMBER OF FRAMES IN SNR COMPUTATION: %d\n", numSegs);
   fprintf (fplog, "\nAVG WEIGHTED SEG SNR          -> %8.5f\n", sumwSegSnr / numSegs);
   fprintf (fplog, "TOTAL WEIGHTED SNR            -> %8.5f\n", 10.0 * log10 (sEngTotal / weEngTotal));

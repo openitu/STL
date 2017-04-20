@@ -1,13 +1,13 @@
 /*                     v3.0 - 10/Jan/2007
 ============================================================================
 
-ENCG722.C 
+ENCG722.C
 ~~~~~~~~~
 
-Description: 
+Description:
 ~~~~~~~~~~~~
 
-Demonstration program for UGST/ITU-T G.722 module with the G.722 
+Demonstration program for UGST/ITU-T G.722 module with the G.722
 encoding function.
 
 Input data is supposed to be aligned at word boundaries, i.e.,
@@ -15,13 +15,13 @@ organized in 16-bit words, following the operating system normal
 organization (low-byte first for VMS and DOS; high byte first for most
 Unix systems). Input linear samples are supposed to be 16-bit right-adjusted.
 
-The default bit stream is a G.192 compatible 16 bit output file 
+The default bit stream is a G.192 compatible 16 bit output file
 is provided using the  frame size specified by the -fsize command.
-Bits in a G.192 bitstream frame are ordered so that the frame can be 
+Bits in a G.192 bitstream frame are ordered so that the frame can be
 truncated at 56 and 48 kbps.
 
 A legacy g722 byte stream can be obtained using the option -byte.
-The legacy byte g722 ADPCM bitstream is left-adjusted, i.e., the codewords are 
+The legacy byte g722 ADPCM bitstream is left-adjusted, i.e., the codewords are
 located in the lower 8-bits of the encoded bitstream file. The MSB is
 always 0 for the 16 bit bitstream file.
 
@@ -30,23 +30,23 @@ the output codeword stream is truncated at the last frame boundary.
 
 Usage:
 ~~~~~~
-$ ENCG722 [-options] InpFile OutFile  
+$ ENCG722 [-options] InpFile OutFile
 where:
 InpFile     is the name of the file to be processed;
 OutFile     is the name with the processed data;
 
 Options:
--fsize  #   Number of 16 kHz input samples per frame (must be an even number). 
+-fsize  #   Number of 16 kHz input samples per frame (must be an even number).
             Default is 160 samples(16 kHz) (10 ms)
-            (NB!! -fsize must be the same on the decoder side, for g192 format.)  
+            (NB!! -fsize must be the same on the decoder side, for g192 format.)
 -mode   #   Operating mode (1,2,3) (or rate 64, 56, 48 in kbps) . Default is mode 1 (= 64 kbps)
 -frames #   number of frames to process (values -1 or 0 processes the whole file )
--byte       Provide encoder output data in legacy byte oriented format (default is g192). 			   
+-byte       Provide encoder output data in legacy byte oriented format (default is g192).
 -h/-help    print help message
 
 Original author:
 ~~~~~~~~~~~~~~~~
-J-P PETIT 
+J-P PETIT
 CNET - Centre Lannion A
 LAA-TSS                         Tel: +33-96-05-39-41
 Route de Tregastel - BP 40      Fax: +33-96-05-13-16
@@ -59,7 +59,7 @@ History:
                       based on the CNET's 07/01/90 version 2.00
 01.Jul.95  v2.0       Changed function declarations to work with many compilers;
                       reformated <simao@ctd.comsat.com>
-22.May.06  v2.3       Updated with g192 format reading and basic index domain PLC functionality. 
+22.May.06  v2.3       Updated with g192 format reading and basic index domain PLC functionality.
                       <{nicklas.sandgren,jonas.svedberg}@ericsson.com>
 10.Jan.07  v3.0       Updated with STL2005 v2.2 basic operators and G.729.1 methodology
                       Added some castings to avoid warnings
@@ -118,10 +118,7 @@ void display_usage () {
 ***                                                                    ***
 **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Local Declarations */
   g722_state encoder;
 

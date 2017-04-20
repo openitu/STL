@@ -117,9 +117,7 @@
    --------------------------------------------------------------------------
  */
 #define P(x) printf x
-void display_usage (level)
-     int level;
-{
+void display_usage (int level) {
   P (("ep-stats.c - Version 2.2 of 02.Feb.2010 \n\n"));
 
   if (level) {

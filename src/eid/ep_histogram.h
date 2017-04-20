@@ -60,10 +60,7 @@ void free_ep_histogram ARGS ((ep_histogram_state * state));
 
   ---------------------------------------------------------------------------
 */
-int init_ep_histogram (state, burst_len)
-     ep_histogram_state *state;
-     long burst_len;
-{
+int init_ep_histogram (ep_histogram_state *state, long burst_len) {
   long i;
 
   /* Reset some variables */
@@ -122,9 +119,7 @@ int init_ep_histogram (state, burst_len)
 
   ---------------------------------------------------------------------------
 */
-void free_ep_histogram (state)
-     ep_histogram_state *state;
-{
+void free_ep_histogram (ep_histogram_state *state) {
   free (state->hist);
 }
 
@@ -184,12 +179,7 @@ void free_ep_histogram (state)
 
   ---------------------------------------------------------------------------
 */
-long compute_ep_histogram (pattern, items, ep_type, s, reset)
-     short *pattern;
-     long items;
-     char ep_type, reset;
-     ep_histogram_state *s;
-{
+long compute_ep_histogram (short *pattern, long items, int ep_type, ep_histogram_state *s, int reset) {
   long i;
   long this_event;
   float delta;
@@ -287,11 +277,7 @@ long compute_ep_histogram (pattern, items, ep_type, s, reset)
             pattern type)
   limit ... max number of items to process
 */
-long get_max_items (file, format, start, limit)
-     char *file;
-     char format;
-     long start, limit;
-{
+long get_max_items (char *file, char format, long start, long limit) {
   struct stat fileinfo;
   long bytes, max_items;
 

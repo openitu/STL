@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
 
@@ -15,25 +15,21 @@ Motorola Inc.
 
 **************************************************************************/
 
-/* 
+/*
   --------------------------------------------------------------------------
   void unpack0_ (int *wrds, int *blen, char *packed);
   ~~~~~~~~~~~~~
   Description:
-  
+
   A function which accepts ascii (data) in the form of hex characters
-  what are to be unpacked into the wrds array. The number of bits in 
-  each wrd is indicated by the parallel array blen. The number of words 
-  is indicated by wrds[0]=blen[0]. The  hexidecimal numbers expressed as 
+  what are to be unpacked into the wrds array. The number of bits in
+  each wrd is indicated by the parallel array blen. The number of words
+  is indicated by wrds[0]=blen[0]. The  hexidecimal numbers expressed as
   ASCII characters '0'..'F'.
-  
+
   --------------------------------------------------------------------------
 */
-void unpack0_ (wrds, blen, packed)
-     int *wrds;
-     int *blen;
-     char *packed;
-{
+void unpack0_ (int *wrds, int *blen, char *packed) {
   int hex, bcentcnt, bhexcnt, centcnt;
 
 

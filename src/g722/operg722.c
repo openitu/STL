@@ -17,26 +17,26 @@
        is subject to the "ITU-T General Public License". Please have
        it  read  in    the  distribution  disk,   or  in  the  ITU-T
        Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
-       CODING STANDARDS". 
+       CODING STANDARDS".
        ** This code has  (C) Copyright by CNET Lannion A TSS/CMC **
        =============================================================
 
 
-MODULE:         G722.C 7kHz ADPCM AT 64 KBIT/S MODULE ENCODER AND 
+MODULE:         G722.C 7kHz ADPCM AT 64 KBIT/S MODULE ENCODER AND
                 DECODER BASIC OPERATORS
 
 ORIGINAL BY:
-    J-P PETIT 
+    J-P PETIT
     CNET - Centre Lannion A
     LAA-TSS                         Tel: +33-96-05-39-41
     Route de Tregastel - BP 40      Fax: +33-96-05-13-16
     F-22301 Lannion CEDEX           Email: petitjp@lannion.cnet.fr
     FRANCE
-    
+
    History:
    14.Mar.95    v1.0    Released for use ITU-T UGST software package Tool
                         based on the CNET's 07/01/90 version 2.00
-   01.Jul.95    v2.0    Changed function declarations to work with 
+   01.Jul.95    v2.0    Changed function declarations to work with
                         many compilers; reformated <simao@ctd.comsat.com>
   ============================================================================
 */
@@ -93,9 +93,7 @@ Word32 L_shl ARGS ((Word32 L_var1, Word16 var2));
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-Word16 sature (L_var1)
-     Word32 L_var1;
-{
+Word16 sature (Word32 L_var1) {
   Word16 var_out;
 
   if (L_var1 > 0X00007fffL) {
@@ -140,9 +138,7 @@ Word16 sature (L_var1)
  |___________________________________________________________________________|
  */
 
-Word16 extract_l (L_var1)
-     Word32 L_var1;
-{
+Word16 extract_l (Word32 L_var1) {
   Word16 var_out;
 
   var_out = (Word16) L_var1;
@@ -186,10 +182,7 @@ Word16 extract_l (L_var1)
  |___________________________________________________________________________|
  */
 
-Word16 add (var1, var2)
-     Word16 var1;
-     Word16 var2;
-{
+Word16 add (Word16 var1, Word16 var2) {
   Word16 var_out;
   Word32 L_somme;
 
@@ -235,10 +228,7 @@ Word16 add (var1, var2)
  |___________________________________________________________________________|
  */
 
-Word16 sub (var1, var2)
-     Word16 var1;
-     Word16 var2;
-{
+Word16 sub (Word16 var1, Word16 var2) {
   Word16 var_out;
   Word32 L_diff;
 
@@ -285,10 +275,7 @@ Word16 sub (var1, var2)
  |___________________________________________________________________________|
  */
 
-Word16 shl (var1, var2)
-     Word16 var1;
-     Word16 var2;
-{
+Word16 shl (Word16 var1, Word16 var2) {
   Word16 var_out;
   Word32 L_result;
 
@@ -344,10 +331,7 @@ Word16 shl (var1, var2)
  |___________________________________________________________________________|
  */
 
-Word16 shr (var1, var2)
-     Word16 var1;
-     Word16 var2;
-{
+Word16 shr (Word16 var1, Word16 var2) {
   Word16 var_out;
 
   if (var2 < 0) {
@@ -405,10 +389,7 @@ Word16 shr (var1, var2)
  |___________________________________________________________________________|
  */
 
-Word16 mult (var1, var2)
-     Word16 var1;
-     Word16 var2;
-{
+Word16 mult (Word16 var1, Word16 var2) {
   Word16 var_out;
   Word32 L_produit;
 
@@ -455,9 +436,7 @@ Word16 mult (var1, var2)
  |___________________________________________________________________________|
  */
 
-Word16 negate (var1)
-     Word16 var1;
-{
+Word16 negate (Word16 var1) {
   Word16 var_out;
 
   var_out = (var1 == MIN_16) ? MAX_16 : -var1;
@@ -499,10 +478,7 @@ Word16 negate (var1)
  |___________________________________________________________________________|
  */
 
-Word32 L_add (L_var1, L_var2)
-     Word32 L_var1;
-     Word32 L_var2;
-{
+Word32 L_add (Word32 L_var1, Word32 L_var2) {
   Word32 L_var_out;
 
   L_var_out = L_var1 + L_var2;
@@ -552,10 +528,7 @@ Word32 L_add (L_var1, L_var2)
  |___________________________________________________________________________|
  */
 
-Word32 L_shr (L_var1, var2)
-     Word32 L_var1;
-     Word16 var2;
-{
+Word32 L_shr (Word32 L_var1, Word16 var2) {
   Word32 L_var_out;
 
   if (var2 < (Word16) 0) {
@@ -611,10 +584,7 @@ Word32 L_shr (L_var1, var2)
  |___________________________________________________________________________|
  */
 
-Word32 L_shl (L_var1, var2)
-     Word32 L_var1;
-     Word16 var2;
-{
+Word32 L_shl (Word32 L_var1, Word16 var2) {
   Word32 L_var_out = 0L;
 
   if (var2 <= (Word16) 0) {

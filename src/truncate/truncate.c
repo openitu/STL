@@ -19,8 +19,8 @@
        CODING STANDARDS".
        =============================================================
 
-  DESCRIPTION : 
-	This file contains a demonstration program of a bitstream truncation tool, 
+  DESCRIPTION :
+	This file contains a demonstration program of a bitstream truncation tool,
 	using the functions in trunc-lib.h
 
   FUNCTIONS :
@@ -30,7 +30,7 @@
   HISTORY :
 	30.Mar.05	v1.0	First Beta version
 	25.May.05	v1.1	Bug correction - unjustified "Warning: incomplete last frame, ignored"
-	31.May.05	v1.2	Truncate operates on binary and G.192 byte-oriented bitstreams, 
+	31.May.05	v1.2	Truncate operates on binary and G.192 byte-oriented bitstreams,
                   using softbit.c routines.
                   <Cyril Guillaume & Stephane Ragot -- stephane.ragot@francetelecom.com>
 
@@ -93,7 +93,7 @@ static void display_usage () {
 
 #define N 1024
 
-/* 
+/*
 	Routine converting bitstreams in the G.192 (with sync header) format.
 	This routine uses the functions in softbit.c
 
@@ -139,12 +139,7 @@ static int conv_inpBst (char type, int n, char sync_header, FILE * pfile, FILE *
   return 0;
 }
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
-  /* .......... DECLARATIONS ............ */
-
+int main (int argc, char *argv[]) {
   /* File variables */
   FILE *pfilin;                 /* input bitsream file */
   FILE *pfilout;                /* output bitstream file */

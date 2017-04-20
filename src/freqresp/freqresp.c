@@ -107,11 +107,7 @@ static void display_usage () {
 
 #undef P
 
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
-
+int main (int argc, char *argv[]) {
   /* .... DECLARATIONS ..... */
   /* buffers */
   float frame[NFFT_MAX];        /* Frame of the input signal (float format) */

@@ -7,11 +7,11 @@
   Description:
   ~~~~~~~~~~~~
 
-  Demonstration program for UGST/ITU-T G.726 module (the same as the Blue 
-  Book G.726). Takes the input file and processes by the G.726 codec, 
-  depending on user's option: for encoding, input must be in either A 
-  or mu law (G711), for decoding, in ADPCM format. The modules called have 
-  been originally written in Fortran, and were translated into C by the 
+  Demonstration program for UGST/ITU-T G.726 module (the same as the Blue
+  Book G.726). Takes the input file and processes by the G.726 codec,
+  depending on user's option: for encoding, input must be in either A
+  or mu law (G711), for decoding, in ADPCM format. The modules called have
+  been originally written in Fortran, and were translated into C by the
   converter f2c, version of October 15, 1990 at 19:58:17.
 
   Input data is supposed to be aligned at word boundaries, i.e.,
@@ -26,7 +26,7 @@
 
   Usage:
   ~~~~~~
-  $ G726demo [-options] Law Transf Rate InpFile OutFile 
+  $ G726demo [-options] Law Transf Rate InpFile OutFile
   [BlockSize [1stBlock [NoOfBlocks [Reset]]]]
   where:
    Law       is the law desired (either A or u)
@@ -54,12 +54,12 @@
   Options:
   -noreset    don't apply reset to the encoder/decoder
   -?/-help    print help message
-        
+
 
   Example:
   $ G726demo u lolo  4 voice.ref voice.rel 256 3 45 *OR*
   $ G726demo u lolo 32 voice.ref voice.rel 256 3 45
-  
+
   The command above takes the samples in file "voice.ref", already
   in mu law format, processes the data through the G726 encoder
   and decoder at a rate of 32 bkit/s,  saving them into the file
@@ -87,18 +87,18 @@
   21/Mar/2000 v1.2 Changed memory allocation of floating point buffers
                    tmp_buf[], inp_buf[] and out_buf[] from static to
                    dynamic, to prevent memory invasion
-                   when block sizes larger than 256 are specified. 
+                   when block sizes larger than 256 are specified.
                    Corrected bug that made incorrect calculation on
                    total number of blocks to process when the block
                    size is not a multiple of the file
                    size. <simao.campos@labs.comsat.com>
-  20/Oct/2005 v1.3 Filtering of the rate field (if rate is different 
+  20/Oct/2005 v1.3 Filtering of the rate field (if rate is different
                    of 2/3/4/5 or 16/24/32/40, the program stops).
                    <Cyril Guillaume & Stephane Ragot -- stephane.ragot@francetelecom.com>
   03/Feb/2010 v1.4 Modified maximum string length, removed implicit
                    casting of toupper(), and type of "rate" is int
                    (y.hiwasaki)
-============================================================================ 
+============================================================================
 */
 
 
@@ -203,10 +203,7 @@ void display_usage () {
    ***                                                                    ***
    **************************************************************************
 */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   G726_state encoder_state, decoder_state;
   long N = 256, N1 = 1, N2 = 0, cur_blk, smpno;
   short *tmp_buf, *inp_buf, *out_buf, reset = 1;

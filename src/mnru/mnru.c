@@ -16,16 +16,16 @@
        COPYRIGHT NOTE: This source code, and all of its derivations,
        is subject to the "ITU-T General Public License". Please have
        it  read  in    the  distribution  disk,   or  in  the  ITU-T
-       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO 
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
        CODING STANDARDS".
        =============================================================
 
 
-MODULE:         NEW VERSION OF THE MNRU.C, MODULATED NOISE REFERENCE 
+MODULE:         NEW VERSION OF THE MNRU.C, MODULATED NOISE REFERENCE
                 UNIT'S MODULE, MNRU (ACCORDING P.81, 1995).
 
 ORIGINAL BY:    Simao Ferraz de Campos Neto <tdsimao@venus.cpqd.ansp.br>,
-                based on ITU-T STL92 MNRU, which was based on 
+                based on ITU-T STL92 MNRU, which was based on
                 CSELT's MNRU.FOR algorithm.
 
 FUNCTIONS:
@@ -58,14 +58,14 @@ HISTORY:
                         <tdsimao@venus.cpqd.ansp.br>
   27.Jan.92  v1.1       Modular version with portable RNG
                         <tdsimao@venus.cpqd.ansp.br>
-  18.May.92  v1.2       Removal of of addition of +-0.5, at the exit of 
-                        MNRU_process, needed to make it work with data in the 
+  18.May.92  v1.2       Removal of of addition of +-0.5, at the exit of
+                        MNRU_process, needed to make it work with data in the
                         normalized range. <tdsimao@venus.cpqd.ansp.br>
   31.Jul.95  v2.0       Redifinition of the module due to the revision of P.81:
                         no more 1:5 up/down-sampling, inclusion of a DC filter
                         and a low-pass (instead of a band-pass) output filter.
                         To increase speed, a new random number generator
-                        has been included. Works for both narrow-band and 
+                        has been included. Works for both narrow-band and
                         wideband speech.
 =============================================================================
 */
@@ -95,7 +95,7 @@ unsigned long ran16_32c ARGS ((void));
         Description:
         ~~~~~~~~~~~~
 
-        Random number generator based on a gaussian random 
+        Random number generator based on a gaussian random
 	number table accessed by a uniform random number generator.
 
 	The gaussian random sample table is generated at start-up time
@@ -118,9 +118,9 @@ unsigned long ran16_32c ARGS ((void));
 
         History:
         ~~~~~~~~
-        01.Jul.95  1.0	Created based on the random number generator 
-                        implemented by Aachen University and used by  
-                        the ITU-T 8kbit/s speech codec host laboratory  
+        01.Jul.95  1.0	Created based on the random number generator
+                        implemented by Aachen University and used by
+                        the ITU-T 8kbit/s speech codec host laboratory
                         (in hardware). <simao@ctd.comsat.com>
 
 =============================================================================
@@ -133,12 +133,7 @@ unsigned long ran16_32c ARGS ((void));
 #define TABLE_SIZE 8192         /* 2^13 */
 #define ITER_NO 8
 #define FACTOR 8                /* = 65536(max.no returned by ran16_32c) div.by TABLE_SIZE */
-float new_random_MNRU (mode, r, seed)
-     char *mode;
-     RANDOM_state *r;
-     long seed;
-{
-
+float new_random_MNRU (char *mode, RANDOM_state *r, long seed) {
   long i;
   double z1;                    /* white random number -8...8 */
   /* weighted with a gaussian distribution */
@@ -200,9 +195,9 @@ float new_random_MNRU (mode, r, seed)
   Description:
   ~~~~~~~~~~~~
 
-  Function that simulates the VAX Fortran function RAN(x), that returns 
-  a number uniformly distributed between 0.0 and 1.0. This implementation 
-  is based on Aachen University's randm() function of the narrow-band 
+  Function that simulates the VAX Fortran function RAN(x), that returns
+  a number uniformly distributed between 0.0 and 1.0. This implementation
+  is based on Aachen University's randm() function of the narrow-band
   MNRU table-generation program montrand.c by CA (6.3.90).
 
   Parameters: none.
@@ -214,11 +209,11 @@ float new_random_MNRU (mode, r, seed)
 
   Author:
   ~~~~~~~
-  Simao Ferraz de Campos Neto          
+  Simao Ferraz de Campos Neto
   Comsat Laboratories                  Tel:    +1-301-428-4516
   22300 Comsat Drive                   Fax:    +1-301-428-9287
   Clarksburg MD 20871 - USA            E-mail: simao@ctd.comsat.com
-  
+
   History:
   ~~~~~~~~
   01.Jul.95  v1.00  Created, adapted from montrand.c
@@ -256,8 +251,8 @@ float ran_vax () {
   Description:
   ~~~~~~~~~~~~
 
-  Function that simulates the DSP32C function RAN24(), modified to return 
-  a number between 0 and 2^16-1. This is based on Aachen University's 
+  Function that simulates the DSP32C function RAN24(), modified to return
+  a number between 0 and 2^16-1. This is based on Aachen University's
   randm() of the narrow-band MNRU program mnrusim.c by PB (08.04.1991).
 
   Parameters: none.
@@ -269,11 +264,11 @@ float ran_vax () {
 
   Author:
   ~~~~~~~
-  Simao Ferraz de Campos Neto          
+  Simao Ferraz de Campos Neto
   Comsat Laboratories                  Tel:    +1-301-428-4516
   22300 Comsat Drive                   Fax:    +1-301-428-9287
   Clarksburg MD 20871 - USA            E-mail: simao@ctd.comsat.com
-  
+
   History:
   ~~~~~~~~
   01.Jul.95  v1.00  Created, adapted from mnrusim.c
@@ -319,12 +314,12 @@ float ori_random_MNRU ARGS ((char *mode, ori_RANDOM_state * r, long seed));
 
         Random number generator based on Donald Knuth subtractive
         method [1] and in Press [2] C implementation (ran3()).
-        The core of the routine generates a uniform deviate between -0.5 
+        The core of the routine generates a uniform deviate between -0.5
         and 0.5. By calling this core several times (after the initialization
-        phase), the cumulation of the uniform noise samples leads to a 
-        gaussian noise (central limit theorem), thus generating a noise 
-        suitable for the MNRU module. Tests showed that the SNR of the 
-        signal processed by the MNRU is very close to the desired value 
+        phase), the cumulation of the uniform noise samples leads to a
+        gaussian noise (central limit theorem), thus generating a noise
+        suitable for the MNRU module. Tests showed that the SNR of the
+        signal processed by the MNRU is very close to the desired value
         of Q when the number of cumulations (defined by ITER_NO) is 47.
 
 	To (re)initialize the sequence, use mode=RANDOM_RESET (the routine
@@ -363,11 +358,7 @@ float ori_random_MNRU ARGS ((char *mode, ori_RANDOM_state * r, long seed));
 #define FAC (1.0/MBIG)
 #define ITER_NO 47
 
-float ori_random_MNRU (mode, r, seed)
-     char *mode;
-     RANDOM_state *r;
-     long seed;
-{
+float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
   long mj, mk;
   long i, ii, k, iter;
   float tmp;
@@ -503,10 +494,10 @@ float ori_random_MNRU (mode, r, seed)
         For more details on the algorithm, see the documentation related.
 
 
-        Return Value:   
+        Return Value:
         ~~~~~~~~~~~~~
-        Returns a (double *)NULL if uninitialized or if initialization 
-        failed; returns a (double *) to the 20 kHz data vector if reset was 
+        Returns a (double *)NULL if uninitialized or if initialization
+        failed; returns a (double *) to the 20 kHz data vector if reset was
         OK and/or is in "run" (MNRU_CONTINUE) operation.
 
 
@@ -514,7 +505,7 @@ float ori_random_MNRU (mode, r, seed)
         ~~~~~~~~
         05.Feb.1992     1.10 Release of the modular version.
                              <tdsimao@venus.cpqd.ansp.br>
-        05.Feb.1992     2.00 Updated according to the new P.81: 
+        05.Feb.1992     2.00 Updated according to the new P.81:
                              - no up/downsampling
 			     - input signal DC removal filter
 			     - output low-pass filter (instead of band-pass)
@@ -534,19 +525,13 @@ float ori_random_MNRU (mode, r, seed)
 #define NOISE_GAIN 0.3793
 #endif
 
-double *MNRU_process (operation, s, input, output, n, seed, mode, Q)
-     char operation, mode;
-     MNRU_state *s;
-     float *input, *output;
-     long n, seed;
-     double Q;
-{
+double *MNRU_process (char operation, MNRU_state *s, float *input, float *output, long n, long seed, char mode, double Q) {
   long count, i;
   double noise, tmp;
   register double inp_smp, out_tmp, out_flt;
 
 
-  /* 
+  /*
    *    ..... RESET PORTION .....
    */
 
@@ -618,7 +603,7 @@ double *MNRU_process (operation, s, input, output, n, seed, mode, Q)
     s->last_xk = s->last_yk = 0;
   }
 
-  /* 
+  /*
    *    ..... REAL MNRU WORK .....
    */
 

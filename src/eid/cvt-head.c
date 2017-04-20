@@ -1,10 +1,10 @@
-/*                                                            02.Feb.2010 v1.1 
+/*                                                            02.Feb.2010 v1.1
   ============================================================================
 
   CVT-HEAD.C
   ~~~~~~~~~~
 
-  Description: 
+  Description:
   ~~~~~~~~~~~~
 
   Program that converts a serial bitstream from the old STL92 format
@@ -15,11 +15,11 @@
   (a sync header is composed of a sync flag followed by the frame
   length).
 
-  Initial suppositions: 
+  Initial suppositions:
   - input file has a header (either STL92 or STL96)
 
   Usage:
-  cvt-head 
+  cvt-head
   Options:
   -n ............. number of frames to process
   -start ......... first frame to start operation
@@ -30,13 +30,13 @@
   -q ............. quiet operation
   -help, -? ...... display help message
 
-  Original author: 
+  Original author:
   ~~~~~~~~~~~~~~~~
   Simao Ferraz de Campos Neto, Sr.MTS  *All comments are strictly my own*
   COMSAT Laboratories                  Tel:    +1-301-428-4516
   22300 Comsat Drive                   Fax:    +1-301-428-9287
   Clarksburg MD 20871 - USA            E-mail: simao.campos@comsat.com
-                                          
+
   History
   ~~~~~~~
   18.Jan.99 v1.0 Created
@@ -110,7 +110,7 @@ enum STL_versions { raw, STL92, STL96 };
 
   type ... pointer to guessed data type in file:
            NO_HEADER for headerless BS
-           HAS_HEADER for sync header (sync flag followed by frame length) 
+           HAS_HEADER for sync header (sync flag followed by frame length)
            HAS_FLAG_ONLY for BS with sync flag only, but no frame length)
 
   Returned value:
@@ -124,14 +124,9 @@ enum STL_versions { raw, STL92, STL96 };
   ~~~~~~~~
   20.Aug.97  v.1.0  Created.
   18.Jan.99  v.1.1  Added case for HAS_FLAG_ONLY <simao>
-  -------------------------------------------------------------------------- 
+  --------------------------------------------------------------------------
 */
-char check_bs_format (F, file, type)
-     FILE *F;
-     char *file;
-     char *type;
-{
-
+char check_bs_format (FILE *F, char *file, char *type) {
   short word;
   char ret_val;
 
@@ -199,7 +194,7 @@ char check_bs_format (F, file, type)
 /* ...................... End of check_bs_format() ...................... */
 
 
-/* 
+/*
   ------------------------------------------------------------------------
   int check_sync (FILE *F, char *file, char *bs_type,
                  long *fr_len, *bs_format);
@@ -236,14 +231,9 @@ char check_bs_format (F, file, type)
   ~~~~~~~~
   20.Aug.97  v.1.0  Created.
   18.Jan.99  v.1.1  Added case for HAS_FLAG_ONLY <simao>
-  -------------------------------------------------------------------------- 
+  --------------------------------------------------------------------------
 */
-int check_sync (F, file, bs_type, fr_len, bs_format)
-     FILE *F;
-     char *file;
-     char *bs_type, *bs_format;
-     long *fr_len;
-{
+int check_sync (FILE *F, char *file, char *bs_type, long *fr_len, char *bs_format) {
   long i;
   char sync_header, sync_flag;
 
@@ -340,9 +330,7 @@ int check_sync (F, file, bs_type, fr_len, bs_format)
   --------------------------------------------------------------------------
 */
 #define P(x) printf x
-void display_usage (level)
-     int level;
-{
+void display_usage (int level) {
 }
 
 #undef P
@@ -377,10 +365,7 @@ char *cvt_type (i)
 /* ------------------------------------------------------------------------ */
 /*                              Main Program                                */
 /* ------------------------------------------------------------------------ */
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   long N = 256, N1 = 1, N2 = 0, size, i;
   long fr_len = 256;            /* Frame length in number of bits */
   long items, bitno, cur_blk;

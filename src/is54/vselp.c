@@ -5,7 +5,7 @@
 Note:  Reproduction and use for the development of North American digital
        cellular standards or development of digital speech coding
        standards within the International Telecommunications Union -
-       Telecommunications Standardization Sector is authorized by Motorola 
+       Telecommunications Standardization Sector is authorized by Motorola
        Inc.  No other use is intended or authorized.
 
        The availability of this material does not provide any license
@@ -53,7 +53,7 @@ Motorola Inc.
   obsfile ........ bitstream gen'd for srcfile [only w/encode_only|encode+decode]
   Options:
   -urf urffile ... use the user's response file "urffile"
-  -bin ........... coded bitstream should be saved to a binary file 
+  -bin ........... coded bitstream should be saved to a binary file
   -hex ........... coded bstream should be saved to an ascii hex file [default]
   -log logfile ... log of processing results is to be saved in file "logfile"
   -nolog ......... do not log results
@@ -66,7 +66,7 @@ Motorola Inc.
   20/Mar/94 v.1.1  Adapted to UGST format <simao@cpqd.ansp.br>
   08/Feb/95 v.1.2  Fixed error in self-documentation and help message
                    <simao@ctd.comsat.com>
-  22/Feb/96 v.1.2  Adapted code for operation in a DEC Alpha/APX (after 
+  22/Feb/96 v.1.2  Adapted code for operation in a DEC Alpha/APX (after
                    STEGMANN, FI/DBP Telekom)
   02/Feb/10 v.1.3  Modified maximum string length (y.hiwasaki)
  -------------------------------------------------------------------------
@@ -91,10 +91,7 @@ int apply_postfilter, encode_only, decode_only;
 
 
 /* ------------------------------------------------------------------------ */
-long swap_byte (shPtr, n)
-     short *shPtr;
-     long n;
-{
+long swap_byte (short *shPtr, long n) {
   short *s_Ptr;
   short register tmp;
   long register count;
@@ -180,10 +177,7 @@ void display_usage () {
 
 /*-------------------------------------------------------------------------*/
 /* main program*/
-int main (argc, argv)
-     int argc;
-     char *argv[];
-{
+int main (int argc, char *argv[]) {
   /* Main's automatic variables */
   FTYPE *coefBuf;               /* Points to memory allocated for T_NEW, T_OLD, R_NEW, and R_OLD coefficient storage */
   FTYPE RQ_HOLD;                /* Temporary storage for the R0q value to use in the middle subframe on the receive side */
@@ -662,7 +656,7 @@ int main (argc, argv)
   freeSpace ();
 
 #ifdef VMS
-  /* 
+  /*
    **  Fill the rest of the file with zeros
    */
 

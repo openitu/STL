@@ -14,16 +14,16 @@
 
         USAGE:
         ~~~~~~
-        $ cvt_h_b [-r] [-q] hex-in bin-out 
+        $ cvt_h_b [-r] [-q] hex-in bin-out
         where:
         hex-in          is the (input) hexadecimal file's name
         bin-out         is the (output) binary file's name
-        
+
         Options
         ~~~~~~~
         -q              Don't print progress indicator on the screen.
         -r              is an optional parameter; if specified as r or R,
-                        even-bit reversal of all samples is accomplished 
+                        even-bit reversal of all samples is accomplished
                         before saving the file. Default is NOT invert.
 
         Compile:
@@ -33,7 +33,7 @@
         GNUC: gcc -o cvt_h_b cvt_h_b.c
         VMS:  cc cvt_h_b.c
               link cvt_h_b
- 
+
         History:
         ~~~~~~~~
         92.01.22   1.0   1st release by tdsimao@venus.cpqd.ansp.br
@@ -100,16 +100,13 @@
 #define YES 1
 #define NO  0
 
-/* 
+/*
  * --------------------------------------------------------------------------
- * ... Calculate check-sum of a array of shorts ... 
+ * ... Calculate check-sum of a array of shorts ...
  *     Simao 07.Mar.94
  * --------------------------------------------------------------------------
  */
-short short_check_sum (s_data, n)
-     short *s_data;
-     long n;
-{
+short short_check_sum (short *s_data, long n) {
   float csum = 0;
   long i;
 
@@ -123,9 +120,9 @@ short short_check_sum (s_data, n)
 }
 
 
-/* 
+/*
  * --------------------------------------------------------------------------
- * ... Display usage of program ... 
+ * ... Display usage of program ...
  *     Simao 10.Jan.93
  * --------------------------------------------------------------------------
  */
@@ -162,12 +159,7 @@ void display_usage () {
 /* ....................... end of display_usage() ...........................*/
 
 
-/*============================== */
-main (argc, argv)
-     int argc;
-     char *argv[];
-/*============================== */
-{
+void main (int argc, char *argv[]) {
   char line[200], *lp;
   char inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
   int inp, out, itmp, count = 0;
