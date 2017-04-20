@@ -132,46 +132,43 @@ void initState () {
 /* ......................... End of initState() ............................ */
 
 /* ------------------------------------------------------------------------ */
-#define P(x) printf x
 void display_usage () {
-  P (("  vselp: version 1.10 of 14/Mar/1994 \n\n"));
+  printf ("  vselp: version 1.10 of 14/Mar/1994 \n\n");
 
-  P (("  C Language Version of the IS54 VSELP Speech Coder. Reference\n"));
-  P (("  implementation carried out by Motorola adapted to ITU-T Software\n"));
-  P (("  Tool Library by Simao F. Campos Neto\n"));
-  P (("\n"));
-  P (("  Original author: Matt Hartman\n"));
-  P (("\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  vselp [-urf urffile] [-bin obsfile] [-hex obsfile] [-log logfile] [-nolog]\n"));
-  P (("        [-nolog] [-pf] [-enc] [-dec]\n"));
-  P (("        srcfile decfile logfile obsfile, OR (WHEN -enc USED)\n"));
-  P (("        srcfile ibsfile logfile,         OR (WHEN -dec USED)\n"));
-  P (("        srcfile decfile logfile          (DEFAULT)\n\n"));
+  printf ("  C Language Version of the IS54 VSELP Speech Coder. Reference\n");
+  printf ("  implementation carried out by Motorola adapted to ITU-T Software\n");
+  printf ("  Tool Library by Simao F. Campos Neto\n");
+  printf ("\n");
+  printf ("  Original author: Matt Hartman\n");
+  printf ("\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  vselp [-urf urffile] [-bin obsfile] [-hex obsfile] [-log logfile] [-nolog]\n");
+  printf ("        [-nolog] [-pf] [-enc] [-dec]\n");
+  printf ("        srcfile decfile logfile obsfile, OR (WHEN -enc USED)\n");
+  printf ("        srcfile ibsfile logfile,         OR (WHEN -dec USED)\n");
+  printf ("        srcfile decfile logfile          (DEFAULT)\n\n");
 
-  P (("  where:\n"));
-  P (("  srcfile ........ name of input file\n"));
-  P (("  decfile ........ name of output, decoded file [ignored for encode_only mode]\n"));
-  P (("  ibsfile ........ input bitstream file [ignored for encode_only|encode+decode]\n"));
-  P (("  logfile ........ log file name\n"));
-  P (("  obsfile ........ bstream gen'd for srcfile [only w/encode_only|encode+decode]\n"));
-  P (("  Options:\n"));
-  P (("  -urf urffile ... use the user's response file \"urffile\"\n"));
-  P (("  -bin ........... coded bitstream should be saved to a binary file\n"));
-  P (("  -hex ........... coded bstream should be saved to an ascii hex file [default]\n"));
-  P (("  -log logfile ... log of processing results is to be saved in file \"logfile\"\n"));
-  P (("  -nolog ......... do not log results\n"));
-  P (("  -enc ........... run encoder only [default: run encode + decode]\n"));
-  P (("  -dec ........... run decoder only [default: run encode + decode]\n"));
-  P (("  -pf ............ use post-filter in decoder\n"));
-  P (("\n"));
+  printf ("  where:\n");
+  printf ("  srcfile ........ name of input file\n");
+  printf ("  decfile ........ name of output, decoded file [ignored for encode_only mode]\n");
+  printf ("  ibsfile ........ input bitstream file [ignored for encode_only|encode+decode]\n");
+  printf ("  logfile ........ log file name\n");
+  printf ("  obsfile ........ bstream gen'd for srcfile [only w/encode_only|encode+decode]\n");
+  printf ("  Options:\n");
+  printf ("  -urf urffile ... use the user's response file \"urffile\"\n");
+  printf ("  -bin ........... coded bitstream should be saved to a binary file\n");
+  printf ("  -hex ........... coded bstream should be saved to an ascii hex file [default]\n");
+  printf ("  -log logfile ... log of processing results is to be saved in file \"logfile\"\n");
+  printf ("  -nolog ......... do not log results\n");
+  printf ("  -enc ........... run encoder only [default: run encode + decode]\n");
+  printf ("  -dec ........... run decoder only [default: run encode + decode]\n");
+  printf ("  -pf ............ use post-filter in decoder\n\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .......................... end of displau_usage() ......................... */
 
 

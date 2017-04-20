@@ -43,7 +43,8 @@ add_test(mnrudemo11-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sin
 add_test(mnrudemo12 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/mnrudemo -q test_data/sine.src test_data/sine.q99 256 1 20 150)
 add_test(mnrudemo12-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sine-q99.unx test_data/sine.q99)
 
-#TEST: Compute SNR for MNRU files (no automatic verification data available)
+#TEST: Compute SNR for MNRU files
+#TODO: no automatic verification data available
 add_test(snr1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/snr -q test_data/sine.q99 test_data/sine.q00)
 add_test(snr2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/snr -q test_data/sine.q99 test_data/sine.q05)
 add_test(snr3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/snr -q test_data/sine.q99 test_data/sine.q10)

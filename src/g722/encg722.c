@@ -87,11 +87,7 @@ History:
 
 #include "stl.h"
 
-void display_usage ARGS ((void));
-
-#define P(x) printf x
 void display_usage () {
-  /* Print Message */
   printf ("\n\n");
   printf ("\n***************************************************************");
   printf ("\n* COPYRIGHT CNET LANNION A TSS/CMC Date 24/Aug/90             *");
@@ -99,15 +95,13 @@ void display_usage () {
   printf ("\n* COPYRIGHT France Telecom R&D     Date 23/Aug/06             *");
   printf ("\n***************************************************************\n");
 
-  /* Quit program */
-  P (("USAGE: encg722 file.inp file.adp (all binary files).\n"));
-  P (("or \n"));
-  P (("       encg722 [-mode #] [-byte] [-fsize N] [-frames N2]  file.inp file.adp.g192 \n\n"));
+  printf ("USAGE: encg722 file.inp file.adp (all binary files).\n");
+  printf ("or \n");
+  printf ("       encg722 [-mode #] [-byte] [-fsize N] [-frames N2]  file.inp file.adp.g192 \n\n");
 
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

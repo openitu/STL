@@ -103,38 +103,35 @@ void not_fer () {
   18/Nov/1997  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("EID-INT.C Version 1.1 of 02.Feb.2010 \n"));
-  P (("  Program to interpolate an error-pattern (EP) file. Usefull to generate\n"));
-  P (("  time-aligned error pattern files for codecs with a frame size\n"));
-  P (("  shorter than the frame size of the reference codec.\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("   ep-stats [Options] master_file  interp_file\n"));
-  P (("  Where:\n"));
-  P (("   master_file  ........ master error pattern bitstream file\n"));
-  P (("   interpolated_EP ... interpolated error pattern bitstream file\n"));
-  P (("\n"));
-  P (("  Options:\n"));
-  P (("   -frame # .... Set the frame size to #.\n"));
-  P (("   -start # .... First frame to start processing\n"));
-  P (("   -ep format .. Format for error pattern (g192, byte, or bit)\n"));
-  P (("   -factor # ... Interpolation factor to be used [default: 2]\n"));
-  P (("   -ber ........ Error pattern type is bit error pattern (important\n"));
-  P (("                 for bit format)\n"));
-  P (("   -fer ........ Error pattern type is frame erasure pattern (important\n"));
-  P (("                 for bit format)\n"));
-  P (("   -q .......... Quiet operation\n"));
-  P (("   -? .......... Displays this message\n"));
-  P (("   -help ....... Displays a complete help message\n"));
-  P (("\n"));
+  printf ("EID-INT.C Version 1.1 of 02.Feb.2010 \n");
+  printf ("  Program to interpolate an error-pattern (EP) file. Usefull to generate\n");
+  printf ("  time-aligned error pattern files for codecs with a frame size\n");
+  printf ("  shorter than the frame size of the reference codec.\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("   ep-stats [Options] master_file  interp_file\n");
+  printf ("  Where:\n");
+  printf ("   master_file  ........ master error pattern bitstream file\n");
+  printf ("   interpolated_EP ... interpolated error pattern bitstream file\n");
+  printf ("\n");
+  printf ("  Options:\n");
+  printf ("   -frame # .... Set the frame size to #.\n");
+  printf ("   -start # .... First frame to start processing\n");
+  printf ("   -ep format .. Format for error pattern (g192, byte, or bit)\n");
+  printf ("   -factor # ... Interpolation factor to be used [default: 2]\n");
+  printf ("   -ber ........ Error pattern type is bit error pattern (important\n");
+  printf ("                 for bit format)\n");
+  printf ("   -fer ........ Error pattern type is frame erasure pattern (important\n");
+  printf ("                 for bit format)\n");
+  printf ("   -q .......... Quiet operation\n");
+  printf ("   -? .......... Displays this message\n");
+  printf ("   -help ....... Displays a complete help message\n\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... End of display_usage() ....................... */
 
 

@@ -123,49 +123,47 @@ char *window_type (double alpha) {
  *     Simao
  * --------------------------------------------------------------------------
  */
-#define P(x) printf x
 void display_usage () {
-  P (("ASTRIP Version 2.2 of 01/May/2000 \n"));
-  P ((" Program for stripping a segment from a given 16-bit word sample\n"));
-  P ((" file, e.g. a speech file. Smoothing can be applied to file edges.\n\n"));
-  P (("Usage:\n"));
-  P (("$ ASTRIP [-options] file1 file2 \n"));
-  P (("         [BlockSize [1stBlock [NoOfBlocks [DataType]]]]]\n"));
-  P ((" where:\n"));
-  P (("  file1       is the first file name;\n"));
-  P (("  file2       is the second file name;\n"));
-  P (("  BlockSize   is the Block size, in samples [default: 256 samples];\n"));
-  P (("  1stBlock    is the starting block [default: 1st block];\n"));
-  P (("  NoOfBlocks  the number of blocks to be segmented [default: all];\n"));
-  P (("\n"));
-  P (("Hit <enter> to continue ..."));
+  printf ("ASTRIP Version 2.2 of 01/May/2000 \n");
+  printf (" Program for stripping a segment from a given 16-bit word sample\n");
+  printf (" file, e.g. a speech file. Smoothing can be applied to file edges.\n\n");
+  printf ("Usage:\n");
+  printf ("$ ASTRIP [-options] file1 file2 \n");
+  printf ("         [BlockSize [1stBlock [NoOfBlocks [DataType]]]]]\n");
+  printf (" where:\n");
+  printf ("  file1       is the first file name;\n");
+  printf ("  file2       is the second file name;\n");
+  printf ("  BlockSize   is the Block size, in samples [default: 256 samples];\n");
+  printf ("  1stBlock    is the starting block [default: 1st block];\n");
+  printf ("  NoOfBlocks  the number of blocks to be segmented [default: all];\n");
+  printf ("\n");
+  printf ("Hit <enter> to continue ...");
   fgetc (stdin);
 
-  P ((" Options:\n"));
-  P (("  -q           operate quietly, only report total no.of differences\n"));
-  P (("  -blk #       number of samples per block [default: 256]\n"));
-  P (("  -start #     starting block (*) or sample to be extracted\n"));
-  P (("  -n #         number of blocks (*) or samples to be extracted from\n"));
-  P (("               file1 (default: all)\n"));
-  P (("  -end #       last block (*) or sample to be extracted from\n"));
-  P (("               file1 (default: last)\n"));
-  P (("  -sample      parameters specified are number of samples instead\n"));
-  P (("               of number of blocks.\n"));
-  P (("  -smooth      applies smoothing to the beginning and end of the \n"));
-  P (("               file segment being stripped. Default: no smoothing.\n"));
-  P (("               If specified, then Hanning window for WLEN samples\n"));
-  P (("               will be used by default (see -wlen below).\n"));
-  P (("  -window #    Parameter for windowing. Default is 0.50 (Hanning).\n"));
-  P (("  -wlen #      Length for window smoothing. Default is %ld samples\n", WLEN));
-  P (("               (%f ms at a 16 kHz sampling rate)\n", WLEN / 16.0));
-  P (("  (*) indicates that the default option is to work with block \n"));
-  P (("      numbers, rather than with sample numbers.\n"));
+  printf (" Options:\n");
+  printf ("  -q           operate quietly, only report total no.of differences\n");
+  printf ("  -blk #       number of samples per block [default: 256]\n");
+  printf ("  -start #     starting block (*) or sample to be extracted\n");
+  printf ("  -n #         number of blocks (*) or samples to be extracted from\n");
+  printf ("               file1 (default: all)\n");
+  printf ("  -end #       last block (*) or sample to be extracted from\n");
+  printf ("               file1 (default: last)\n");
+  printf ("  -sample      parameters specified are number of samples instead\n");
+  printf ("               of number of blocks.\n");
+  printf ("  -smooth      applies smoothing to the beginning and end of the \n");
+  printf ("               file segment being stripped. Default: no smoothing.\n");
+  printf ("               If specified, then Hanning window for WLEN samples\n");
+  printf ("               will be used by default (see -wlen below).\n");
+  printf ("  -window #    Parameter for windowing. Default is 0.50 (Hanning).\n");
+  printf ("  -wlen #      Length for window smoothing. Default is %ld samples\n", WLEN);
+  printf ("               (%f ms at a 16 kHz sampling rate)\n", WLEN / 16.0);
+  printf ("  (*) indicates that the default option is to work with block \n");
+  printf ("      numbers, rather than with sample numbers.\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ...................... End of display_usage() ..........................*/
 
 int main (int argc, char *argv[]) {

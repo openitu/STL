@@ -171,42 +171,40 @@
 
  ============================================================================
 */
-#define P(x) printf x
 void display_usage () {
-  P (("PCMDEMO.C - Version 2.1 of 02.Feb.2010 \n\n"));
-  P ((" Run 3 filter in cascade with the G.712 (standard PCM) mask.\n"));
-  P (("For each filter one can select between: \n"));
-  P (("  - input signal with sf=16 kHz, output signal with 16 kHz\n"));
-  P (("  - input signal with sf= 8 kHz, output signal with 16 kHz\n"));
-  P (("  - input signal with sf=16 kHz, output signal with  8 kHz\n"));
-  P (("  - short cut \n\n"));
+  printf ("PCMDEMO.C - Version 2.1 of 02.Feb.2010 \n\n");
+  printf (" Run 3 filter in cascade with the G.712 (standard PCM) mask.\n");
+  printf ("For each filter one can select between: \n");
+  printf ("  - input signal with sf=16 kHz, output signal with 16 kHz\n");
+  printf ("  - input signal with sf= 8 kHz, output signal with 16 kHz\n");
+  printf ("  - input signal with sf=16 kHz, output signal with  8 kHz\n");
+  printf ("  - short cut \n\n");
 
-  P (("Usage:\n"));
-  P (("~~~~~~\n"));
-  P ((" $ PCMDEMO ! ---> HELP text is printed to screen\n"));
-  P (("  or\n"));
-  P ((" $ PCMDEMO [-options] ifile [ ofile typ1 typ2 typ3 [lseg]]\n"));
-  P ((" where:\n"));
-  P ((" ifile: .. INPUT  FILE with short data (binary files)\n"));
-  P ((" ofile: .. OUTPUT FILE with short data (binary files)\n"));
-  P ((" typn: ... type of filtering for filtering stage n, n = 1..3:\n"));
-  P (("           1_1: input is at 16 kHz, output at 16 kHz\n"));
-  P (("           1_2: input is at  8 kHz, output at 16 kHz\n"));
-  P (("           2_1: input is at 16 kHz, output at  8 kHz\n"));
-  P (("           0  : short cut (no filtering at all!).\n"));
-  P ((" lseg: ... number of samples per processing block "));
-  P (("(default is LSEG0=%d)\n", LSEG0));
-  P (("\n"));
-  P (("Options:\n"));
-  P (("~~~~~~~~\n"));
-  P ((" -skip no ... skips saving to file the first `no' processed samples\n"));
-  P ((" -lseg l .... set `l' as the number of samples per processing block\n"));
+  printf ("Usage:\n");
+  printf ("~~~~~~\n");
+  printf (" $ PCMDEMO ! ---> HELP text is printed to screen\n");
+  printf ("  or\n");
+  printf (" $ PCMDEMO [-options] ifile [ ofile typ1 typ2 typ3 [lseg]]\n");
+  printf (" where:\n");
+  printf (" ifile: .. INPUT  FILE with short data (binary files)\n");
+  printf (" ofile: .. OUTPUT FILE with short data (binary files)\n");
+  printf (" typn: ... type of filtering for filtering stage n, n = 1..3:\n");
+  printf ("           1_1: input is at 16 kHz, output at 16 kHz\n");
+  printf ("           1_2: input is at  8 kHz, output at 16 kHz\n");
+  printf ("           2_1: input is at 16 kHz, output at  8 kHz\n");
+  printf ("           0  : short cut (no filtering at all!).\n");
+  printf (" lseg: ... number of samples per processing block ");
+  printf ("(default is LSEG0=%d)\n", LSEG0);
+  printf ("\n");
+  printf ("Options:\n");
+  printf ("~~~~~~~~\n");
+  printf (" -skip no ... skips saving to file the first `no' processed samples\n");
+  printf (" -lseg l .... set `l' as the number of samples per processing block\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ...................... End of display_usage() ........................... */
 
 

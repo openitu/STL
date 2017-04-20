@@ -451,7 +451,6 @@ int main (int argc, char *argv[]) {
 
  ============================================================================
 */
-#define P(x) printf x
 void display_usage () {
   char prompt;
 
@@ -464,25 +463,24 @@ void display_usage () {
   prompt = '#';
 #endif
 
-  P (("eiddemo.c Version 3.3 of 02.Feb.2010\n"));
+  printf ("eiddemo.c Version 3.3 of 02.Feb.2010\n");
 
-  /* Print the proper usage */
-  P (("  Usage: %c %s%s", prompt, "EID ifile ofile BERfile FERfile ", "[ BER BER_gamma FER FER_gamma]\n\n"));
+  printf ("  Usage: %c %s%s", prompt, "EID ifile ofile BERfile FERfile ", "[ BER BER_gamma FER FER_gamma]\n\n");
 
-  P (("\tifile      : binary file with  input bitstream\n"));
-  P (("\tofile      : binary file with output bitstream\n"));
-  P (("%s%s", "\tBERfile    : File, containing the EID-status ", "for bit error rate \n"));
-  P (("%s%s", "\tFERfile    : File, containing the EID-status ", "for frame erasure module\n"));
-  P (("\tBER        : bit error rate (0.0 ... 0.50)\n"));
-  P (("\tBER_gamma  : burst factor   (0.0 ... 0.99)\n"));
-  P (("\t\t         =0.00 --> errors are totally random\n"));
-  P (("\t\t         =0.50 --> errors are slightly bursty\n"));
-  P (("\t\t         =0.99 --> errors are totally bursty\n"));
-  P (("\tFER        : frame erasure rate (0.0 ... 0.5)\n"));
-  P (("\tFER_gamma  : burst factor   (0.0 ... 0.99)\n"));
-  P (("\t\t         =0.00 --> erasures are totally random\n"));
-  P (("\t\t         =0.50 --> errsures are slightly bursty\n"));
-  P (("\t\t         =0.99 --> errsures are totally bursty\n\n"));
+  printf ("\tifile      : binary file with  input bitstream\n");
+  printf ("\tofile      : binary file with output bitstream\n");
+  printf ("%s%s", "\tBERfile    : File, containing the EID-status ", "for bit error rate \n");
+  printf ("%s%s", "\tFERfile    : File, containing the EID-status ", "for frame erasure module\n");
+  printf ("\tBER        : bit error rate (0.0 ... 0.50)\n");
+  printf ("\tBER_gamma  : burst factor   (0.0 ... 0.99)\n");
+  printf ("\t\t         =0.00 --> errors are totally random\n");
+  printf ("\t\t         =0.50 --> errors are slightly bursty\n");
+  printf ("\t\t         =0.99 --> errors are totally bursty\n");
+  printf ("\tFER        : frame erasure rate (0.0 ... 0.5)\n");
+  printf ("\tFER_gamma  : burst factor   (0.0 ... 0.99)\n");
+  printf ("\t\t         =0.00 --> erasures are totally random\n");
+  printf ("\t\t         =0.50 --> errsures are slightly bursty\n");
+  printf ("\t\t         =0.99 --> errsures are totally bursty\n\n");
 
   exit (1);
 }

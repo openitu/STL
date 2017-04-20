@@ -220,84 +220,79 @@ int valid_filter (char *F_type, char *modified_IRS) {
  * By: Simao in 1.May.1994
  * Last update: 15.May.2007 <>
  */
-#define P(x) printf x
 void display_usage () {
-  P (("FILTER.C - Version 3.5 of 02.Feb.2010 \n\n"));
+  printf ("FILTER.C - Version 3.5 of 02.Feb.2010 \n\n");
 
-  P ((" Test program to process a given file by one of the possible filter\n"));
-  P ((" characteristics of the STL. Multiple filterings (as available\n"));
-  P ((" in firdemo.c and pcmdemo.c) can be obtained by piping (cascading) \n"));
-  P ((" several runs of this program. Asynchronous tandeming simulation \n"));
-  P ((" is available for some types of filter; delay of the input file \n"));
-  P ((" or skipping samples from the input file is also available with \n"));
-  P ((" the async operation.\n"));
-  P (("\n"));
-  P ((" Usage:\n"));
-  P ((" $ filter   [-options] Flt_type InpFile OutFile \n"));
-  P (("            [BlockSize [1stBlock [NoOfBlocks]]]\n"));
-  P ((" where:\n"));
-  P (("  Flt_type:    is the filter type (see list below)\n"));
-  P (("  InpFile      is the name of the file to be processed;\n"));
-  P (("  OutFile      is the name with the processed data;\n"));
-  P (("  BlockSize    is the block size, in number of samples\n"));
-  P (("  1stBlock     is the number of the first block of the input file\n"));
-  P (("               to be processed;\n"));
-  P (("  NoOfBlocks   is the number of blocks to be processed, starting on\n"));
-  P (("               block \"1stBlock\"\n"));
-  P (("\n"));
-  P ((" Options:\n"));
-  P (("  -mod ....... uses the modified IRS characteristic instead of the\n"));
-  P (("               \"regular\" one for 16 & 48 kHz sampling.\n"));
-  P (("  -up ........ upsampling filtering (for HQ2, HQ3, FLAT, IFLAT, and PCM)\n"));
-  P (("  -down ...... downsampling filtering (HQ2, HQ3, FLAT, IFLAT and PCM)[default]\n"));
-  P (("  -async ..... asynchronization operation (disables -down) \n"));
-  P (("  -delay d ... number of samples to delay the input signal for \n"));
-  P (("               asynchronous tandeming simulation. For d>0, null\n"));
-  P (("               samples are inserted in the begining of the file,\n"));
-  P (("               d<0 causes samples to be dropped. Default is d=0.\n"));
-  P (("  -q ......... quiet processing (no progress flag)\n"));
-  P (("\n"));
-  P ((" Valid filter specifications:\n"));
-  P (("  Flt_type Description\n"));
-  P (("   IRS8    (regular) IRS weighting with factor 1:1 at 8kHz\n"));
-  P (("   IRS16   (regular or modified) IRS weighting with factor 1:1 at 16kHz\n"));
-  P (("   IRS48   (modified) IRS weighting with factor 1:1 at 48kHz\n"));
-  P (("   RXIRS8  Receive-side Modified IRS weighting with factor 1:1 at 8kHz\n"));
-  P (("   RXIRS16 Receive-side Modified IRS weighting with factor 1:1 at 16kHz\n"));
-  P (("   HIRS16  Half-tilt IRS weighting, sf=16kHz, factor 1:1.\n"));
-  P (("   TIRS    IRS weighting w/ TIA coefficients, sf=8kHz, factor 1:1.\n"));
-  P (("   DSM     Delta-SM filtering characteristic, 1:1\n"));
-  P (("   PSO     Psophometric wheighting filter, 1:1\n"));
-  P (("   HQ2     FIR (High quality) low-pass for factor 1:2 (up) or 2:1(down)\n"));
-  P (("   HQ3     FIR (High quality) low-pass for factor 1:3 (up) or 3:1(down)\n"));
-  P (("   FLAT    Linear-phase passband w/ factor 1:2 (up) or 2:1 (down)\n"));
-  P (("   FLAT1   Linear-phase pass-band FIR w/ factor 1:1 (no rate change)\n"));
-  P (("   PCM     Standard IIR PCM quality factor 1:2 (up) or 2:1 (down)\n"));
-  P (("   PCM1    Standard PCM quality with factor 1:1 at 16 kHz\n"));
-  P (("   GSM1    GSM Mobile station input FIR w/ factor 1:1 at 16 kHz\n"));
-  P (("   MSIN    Same as GSM1\n"));
-  P (("   P341    P.341 send-mask FIR with factor 1:1 at 16 kHz\n"));
-  P (("   DC      Direct-form DC-removal IIR filter (factor 1:1)\n"));
-  P (("   IFLAT   Cascade-form IIR flat low-pass with factor 1:3 (up) or 3:1 (down)\n"));
-  P (("   5KBP    50-5k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=16kHz\n"));
-  P (("   100_5KBP 100-5k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=16kHz\n"));
-  P (("   14KBP   50-14k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=32kHz\n"));
-  P (("   20KBP   20-20k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=48kHz\n"));
-  P (("   LP1p5   1.5kHz low-pass filter for fs=48kHz, w/ factor 1:1\n"));
-  P (("   LP35    3.5kHz low-pass filter for fs=48kHz, w/ factor 1:1\n"));
-  P (("   LP7     7kHz low-pass filter for fs=48kHz, w/ factor 1:1\n"));
-  P (("   LP10    10kHz low-pass filter for fs=48kHz, w/ factor 1:1\n"));
-  P (("   LP12    12kHz low-pass filter for fs=48kHz, w/ factor 1:1\n"));
-  P (("   LP14    14kHz low-pass filter for fs=48kHz, w/ factor 1:1\n"));
-  P (("   LP20    20kHz low-pass filter for fs=48kHz, w/ factor 1:1\n"));
-
-  P (("\n"));
+  printf (" Test program to process a given file by one of the possible filter\n");
+  printf (" characteristics of the STL. Multiple filterings (as available\n");
+  printf (" in firdemo.c and pcmdemo.c) can be obtained by piping (cascading) \n");
+  printf (" several runs of this program. Asynchronous tandeming simulation \n");
+  printf (" is available for some types of filter; delay of the input file \n");
+  printf (" or skipping samples from the input file is also available with \n");
+  printf (" the async operation.\n");
+  printf ("\n");
+  printf (" Usage:\n");
+  printf (" $ filter   [-options] Flt_type InpFile OutFile \n");
+  printf ("            [BlockSize [1stBlock [NoOfBlocks]]]\n");
+  printf (" where:\n");
+  printf ("  Flt_type:    is the filter type (see list below)\n");
+  printf ("  InpFile      is the name of the file to be processed;\n");
+  printf ("  OutFile      is the name with the processed data;\n");
+  printf ("  BlockSize    is the block size, in number of samples\n");
+  printf ("  1stBlock     is the number of the first block of the input file\n");
+  printf ("               to be processed;\n");
+  printf ("  NoOfBlocks   is the number of blocks to be processed, starting on\n");
+  printf ("               block \"1stBlock\"\n");
+  printf ("\n");
+  printf (" Options:\n");
+  printf ("  -mod ....... uses the modified IRS characteristic instead of the\n");
+  printf ("               \"regular\" one for 16 & 48 kHz sampling.\n");
+  printf ("  -up ........ upsampling filtering (for HQ2, HQ3, FLAT, IFLAT, and PCM)\n");
+  printf ("  -down ...... downsampling filtering (HQ2, HQ3, FLAT, IFLAT and PCM)[default]\n");
+  printf ("  -async ..... asynchronization operation (disables -down) \n");
+  printf ("  -delay d ... number of samples to delay the input signal for \n");
+  printf ("               asynchronous tandeming simulation. For d>0, null\n");
+  printf ("               samples are inserted in the begining of the file,\n");
+  printf ("               d<0 causes samples to be dropped. Default is d=0.\n");
+  printf ("  -q ......... quiet processing (no progress flag)\n");
+  printf ("\n");
+  printf (" Valid filter specifications:\n");
+  printf ("  Flt_type Description\n");
+  printf ("   IRS8    (regular) IRS weighting with factor 1:1 at 8kHz\n");
+  printf ("   IRS16   (regular or modified) IRS weighting with factor 1:1 at 16kHz\n");
+  printf ("   IRS48   (modified) IRS weighting with factor 1:1 at 48kHz\n");
+  printf ("   RXIRS8  Receive-side Modified IRS weighting with factor 1:1 at 8kHz\n");
+  printf ("   RXIRS16 Receive-side Modified IRS weighting with factor 1:1 at 16kHz\n");
+  printf ("   HIRS16  Half-tilt IRS weighting, sf=16kHz, factor 1:1.\n");
+  printf ("   TIRS    IRS weighting w/ TIA coefficients, sf=8kHz, factor 1:1.\n");
+  printf ("   DSM     Delta-SM filtering characteristic, 1:1\n");
+  printf ("   PSO     Psophometric wheighting filter, 1:1\n");
+  printf ("   HQ2     FIR (High quality) low-pass for factor 1:2 (up) or 2:1(down)\n");
+  printf ("   HQ3     FIR (High quality) low-pass for factor 1:3 (up) or 3:1(down)\n");
+  printf ("   FLAT    Linear-phase passband w/ factor 1:2 (up) or 2:1 (down)\n");
+  printf ("   FLAT1   Linear-phase pass-band FIR w/ factor 1:1 (no rate change)\n");
+  printf ("   PCM     Standard IIR PCM quality factor 1:2 (up) or 2:1 (down)\n");
+  printf ("   PCM1    Standard PCM quality with factor 1:1 at 16 kHz\n");
+  printf ("   GSM1    GSM Mobile station input FIR w/ factor 1:1 at 16 kHz\n");
+  printf ("   MSIN    Same as GSM1\n");
+  printf ("   P341    P.341 send-mask FIR with factor 1:1 at 16 kHz\n");
+  printf ("   DC      Direct-form DC-removal IIR filter (factor 1:1)\n");
+  printf ("   IFLAT   Cascade-form IIR flat low-pass with factor 1:3 (up) or 3:1 (down)\n");
+  printf ("   5KBP    50-5k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=16kHz\n");
+  printf ("   100_5KBP 100-5k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=16kHz\n");
+  printf ("   14KBP   50-14k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=32kHz\n");
+  printf ("   20KBP   20-20k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=48kHz\n");
+  printf ("   LP1p5   1.5kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP35    3.5kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP7     7kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP10    10kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP12    12kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP14    14kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP20    20kHz low-pass filter for fs=48kHz, w/ factor 1:1\n\n");
 
   /* Quit program */
   exit (-128);
 }
-
-#undef P
 
 
 /* Define filter type identifiers */

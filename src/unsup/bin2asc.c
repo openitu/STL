@@ -79,50 +79,48 @@
 #endif
 
 /* ---------------------------- Display Usage ---------------------------- */
-#define FP(x) fprintf(stderr, x)
 void display_usage () {
-  FP (" *** bin2asc.c --- 08/Aug/1998 --- Version: 1.2 *** \n\n");
+  fprintf (stderr, " *** bin2asc.c --- 08/Aug/1998 --- Version: 1.2 *** \n\n");
 
-  FP (" Program for dumping a binary (short) file onto stdout, \n");
-  FP (" skipping the initial `skip' samples. This feature is \n");
-  FP (" useful for skipping the header of binary files. The default \n");
-  FP (" is no skip (0).\n\n");
+  fprintf (stderr, " Program for dumping a binary (short) file onto stdout, \n");
+  fprintf (stderr, " skipping the initial `skip' samples. This feature is \n");
+  fprintf (stderr, " useful for skipping the header of binary files. The default \n");
+  fprintf (stderr, " is no skip (0).\n\n");
 
-  FP (" *** Usage: ***\n");
-  FP (" $ bin2asc [Options] file [blk_size [start_blk[no_of_blks]]]\n");
-  FP (" Where:\n");
-  FP (" file	is the name of the file with binary (short) data;\n");
-  FP (" blk_size 	is the block (record) size, in (short) samples;\n");
-  FP (" 		default is 256;\n");
-  FP (" start_blk   is the 1st block to dump; default is the 1st one;\n");
-  FP (" no_of_blks  is the number of blocks to dump; default is all.\n");
+  fprintf (stderr, " *** Usage: ***\n");
+  fprintf (stderr, " $ bin2asc [Options] file [blk_size [start_blk[no_of_blks]]]\n");
+  fprintf (stderr, " Where:\n");
+  fprintf (stderr, " file	is the name of the file with binary (short) data;\n");
+  fprintf (stderr, " blk_size 	is the block (record) size, in (short) samples;\n");
+  fprintf (stderr, " 		default is 256;\n");
+  fprintf (stderr, " start_blk   is the 1st block to dump; default is the 1st one;\n");
+  fprintf (stderr, " no_of_blks  is the number of blocks to dump; default is all.\n");
 
-  FP (" Options:\n");
-  FP (" -h          print numbers as Hex [Default: decimal]\n");
-  FP (" -H          print numbers as Hex (with a leading 0x)\n");
-  FP (" -o          print numbers as octal (with a leading zero)\n");
-  FP (" -s          is the number of initial samples to skip [Default: none]\n");
+  fprintf (stderr, " Options:\n");
+  fprintf (stderr, " -h          print numbers as Hex [Default: decimal]\n");
+  fprintf (stderr, " -H          print numbers as Hex (with a leading 0x)\n");
+  fprintf (stderr, " -o          print numbers as octal (with a leading zero)\n");
+  fprintf (stderr, " -s          is the number of initial samples to skip [Default: none]\n");
 
-  FP (" *** Examples: ***\n");
-  FP (" $ bin2asc -s 20 speech.fil 256 1 1 \n");
-  FP (" Will produce a dump on the screen of 256 samples from the file\n");
-  FP (" `speech.fil', starting at its sample number 21 (skip 20!) of \n");
-  FP (" its 1st block (block number 1). Note that the block size is\n");
-  FP (" 256 samples.\n\n");
+  fprintf (stderr, " *** Examples: ***\n");
+  fprintf (stderr, " $ bin2asc -s 20 speech.fil 256 1 1 \n");
+  fprintf (stderr, " Will produce a dump on the screen of 256 samples from the file\n");
+  fprintf (stderr, " `speech.fil', starting at its sample number 21 (skip 20!) of \n");
+  fprintf (stderr, " its 1st block (block number 1). Note that the block size is\n");
+  fprintf (stderr, " 256 samples.\n\n");
 
-  FP (" $ bin2asc -s 13 speech.fil 160 10 2 \n");
-  FP (" Will produce a dump on the screen of 320 (160*2) samples from \n");
-  FP (" `speech.fil', starting at its sample number 14 (skip 13!) of \n");
-  FP (" its 10th block (block number 10). Note that the block size is \n");
-  FP (" 160 samples.\n\n");
+  fprintf (stderr, " $ bin2asc -s 13 speech.fil 160 10 2 \n");
+  fprintf (stderr, " Will produce a dump on the screen of 320 (160*2) samples from \n");
+  fprintf (stderr, " `speech.fil', starting at its sample number 14 (skip 13!) of \n");
+  fprintf (stderr, " its 10th block (block number 10). Note that the block size is \n");
+  fprintf (stderr, " 160 samples.\n\n");
 
-  FP (" Author:	Simao Ferraz de Campos Neto -- CPqD/Telebras\n\n");
+  fprintf (stderr, " Author:	Simao Ferraz de Campos Neto -- CPqD/Telebras\n\n");
 
   exit (1);
 
 }
 
-#undef FP
 
 int main (int argc, char *argv[]) {
   int i, j, l;

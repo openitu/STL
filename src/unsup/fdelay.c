@@ -128,51 +128,48 @@ long add_delay (short *smp_buf, short sample, short delay, FILE * Fdel, FILE * F
   20/Apr/2000  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("FDELAY.C Version 1.0 of 20/Apr/2000 \n\n"));
+  printf ("FDELAY.C Version 1.0 of 20/Apr/2000 \n\n");
 
-  P (("A Flexible Delay program to add a specified delay (using short\n"));
-  P (("samples) to the beginning or the end of a speech file using\n"));
-  P (("short's. Samples can be a default linear, A-law, or u-law value, or\n"));
-  P (("a user-specified one. The number of samples added defaults to 43,\n"));
-  P (("but can be changed by the user. Alternatively, it can also add the\n"));
-  P (("delay from a user-provided file, which is equivalent to\n"));
-  P (("concatenating the two files in the specified order.\n"));
-  P (("Values can be specified in decimal or hex formats.\n\n"));
+  printf ("A Flexible Delay program to add a specified delay (using short\n");
+  printf ("samples) to the beginning or the end of a speech file using\n");
+  printf ("short's. Samples can be a default linear, A-law, or u-law value, or\n");
+  printf ("a user-specified one. The number of samples added defaults to 43,\n");
+  printf ("but can be changed by the user. Alternatively, it can also add the\n");
+  printf ("delay from a user-provided file, which is equivalent to\n");
+  printf ("concatenating the two files in the specified order.\n");
+  printf ("Values can be specified in decimal or hex formats.\n\n");
 
-  P (("Usage:\n"));
-  P (("$ fdelay [-options] filein fileout law\n"));
-  P (("         [BlockSize [1stBlock [NoOfBlocks]]]]\n"));
-  P (("where:\n"));
-  P ((" filein      is the input file name;\n"));
-  P ((" fileout     is the output file name;\n"));
-  P ((" law         is the coding law: l, a, or u (linear, A-law, or u-law)\n"));
-  P ((" BlockSize   is the Block size, in samples [default: 256 samples];\n"));
-  P ((" 1stBlock    is the stating block [default: 1st block];\n"));
-  P ((" NoOfBlocks  the number of blocks to be operated [default: all];\n"));
-  P (("\n"));
-  P (("Options:\n"));
-  P ((" -q           operate quietly\n"));
-  P ((" -delay n     n is the number of samples to delay (default: 43) \n"));
-  P ((" -tail        add samples to the end of the file, rather than the beginning\n"));
-  P ((" -law [l|A|u] coding law (default: linear). The default value for linear\n"));
-  P (("              samples is 0, for A-law is 0xD5 (0x80 without bit\n"));
-  P (("              inversion), and for u-law is 0xFF.\n"));
-  P ((" -dec z       Uses the specified decimal value z\n"));
-  P ((" -hex z       Uses the specified hexadecimal value z \n"));
-  P ((" -file fff    Uses the provided file fff as the delay\n"));
-  P ((" -blk #       Sample block size\n"));
-  P ((" -n #         Number of blocks to process\n"));
-  P ((" -start #     First block to process\n"));
-  P ((" -end #       Last block to process (n-start+1)\n"));
-  P ((" -help        Displays usage\n"));
-
+  printf ("Usage:\n");
+  printf ("$ fdelay [-options] filein fileout law\n");
+  printf ("         [BlockSize [1stBlock [NoOfBlocks]]]]\n");
+  printf ("where:\n");
+  printf (" filein      is the input file name;\n");
+  printf (" fileout     is the output file name;\n");
+  printf (" law         is the coding law: l, a, or u (linear, A-law, or u-law)\n");
+  printf (" BlockSize   is the Block size, in samples [default: 256 samples];\n");
+  printf (" 1stBlock    is the stating block [default: 1st block];\n");
+  printf (" NoOfBlocks  the number of blocks to be operated [default: all];\n");
+  printf ("\n");
+  printf ("Options:\n");
+  printf (" -q           operate quietly\n");
+  printf (" -delay n     n is the number of samples to delay (default: 43) \n");
+  printf (" -tail        add samples to the end of the file, rather than the beginning\n");
+  printf (" -law [l|A|u] coding law (default: linear). The default value for linear\n");
+  printf ("              samples is 0, for A-law is 0xD5 (0x80 without bit\n");
+  printf ("              inversion), and for u-law is 0xFF.\n");
+  printf (" -dec z       Uses the specified decimal value z\n");
+  printf (" -hex z       Uses the specified hexadecimal value z \n");
+  printf (" -file fff    Uses the provided file fff as the delay\n");
+  printf (" -blk #       Sample block size\n");
+  printf (" -n #         Number of blocks to process\n");
+  printf (" -start #     First block to process\n");
+  printf (" -end #       Last block to process (n-start+1)\n");
+  printf (" -help        Displays usage\n");
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... End of display_usage() ....................... */
 
 

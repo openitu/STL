@@ -93,42 +93,38 @@
  14.Apr.94 v1.0 Created. <simao>
  -------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("eid8k.c: Version 3.3 of 02.Feb.2010 \n\n"));
+  printf ("eid8k.c: Version 3.3 of 02.Feb.2010 \n\n");
 
-  P (("  This example program produces the files which are necessary to \n"));
-  P (("  generate all error pattern for performing the Experiment 1 and 3 of\n"));
-  P (("  the ITU-T 8 kbit/s speech coding selection test.\n"));
-  P (("\n"));
-  P (("  This program generates a bitstream error pattern file that can be \n"));
-  P (("  x-ored with, for example, the coded bitstream of a test or reference \n"));
-  P (("  algorithm. The error pattern can be generated according to 3 models: \n"));
-  P (("  Random bit errors (BER), and random (FER) and (BFER) burst frame \n"));
-  P (("  erasure. \n"));
-  P (("\n"));
-  P (("  Valid range for the BER and FER is [0..0.5], and for the BFER is one of\n"));
-  P (("  the 3 values 1%%, 3%%, and 5%%.\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  eid8k err_pat_bs mode startfr frno state_f rate\n"));
-  P (("  Where:\n"));
-  P (("  err_pat_bs ... name of error pattern bitstream file\n"));
-  P (("  mode ......... a letter representing one of 4 operating modes: \n"));
-  P (("                 R -> Random Bit Errors\n"));
-  P (("                 F -> (Random) Frame Erasure\n"));
-  P (("                 B -> Burst Frame Erasure\n"));
-  P (("  frno ......... the total number of error-producing frames\n"));
-  P (("  startfr ...... the first frame to have bits that may introduce errors\n"));
-  P (("  state_f ...... name of a state variable file\n"));
-  P (("  rate ......... desired BER [R], FER [F], or BFER[B]\n"));
-  P (("\n"));
+  printf ("  This example program produces the files which are necessary to \n");
+  printf ("  generate all error pattern for performing the Experiment 1 and 3 of\n");
+  printf ("  the ITU-T 8 kbit/s speech coding selection test.\n");
+  printf ("\n");
+  printf ("  This program generates a bitstream error pattern file that can be \n");
+  printf ("  x-ored with, for example, the coded bitstream of a test or reference \n");
+  printf ("  algorithm. The error pattern can be generated according to 3 models: \n");
+  printf ("  Random bit errors (BER), and random (FER) and (BFER) burst frame \n");
+  printf ("  erasure. \n");
+  printf ("\n");
+  printf ("  Valid range for the BER and FER is [0..0.5], and for the BFER is one of\n");
+  printf ("  the 3 values 1%%, 3%%, and 5%%.\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  eid8k err_pat_bs mode startfr frno state_f rate\n");
+  printf ("  Where:\n");
+  printf ("  err_pat_bs ... name of error pattern bitstream file\n");
+  printf ("  mode ......... a letter representing one of 4 operating modes: \n");
+  printf ("                 R -> Random Bit Errors\n");
+  printf ("                 F -> (Random) Frame Erasure\n");
+  printf ("                 B -> Burst Frame Erasure\n");
+  printf ("  frno ......... the total number of error-producing frames\n");
+  printf ("  startfr ...... the first frame to have bits that may introduce errors\n");
+  printf ("  state_f ...... name of a state variable file\n");
+  printf ("  rate ......... desired BER [R], FER [F], or BFER[B]\n\n");
 
-  /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

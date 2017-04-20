@@ -208,30 +208,28 @@ int init_crc_a = 0L, init_crc_c = -1L, init_crc_x = 0L;
   04.Mar.97  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("XDECODE.C - Version %1.2f of 4/Mar/1997 \n\n", (float) XDECODE / 100.0));
+  printf ("XDECODE.C - Version %1.2f of 4/Mar/1997 \n\n", (float) XDECODE / 100.0);
 
-  P ((" Program to decode (a) file(s) that follows the de-facto\n"));
-  P ((" standard of the public-domain program uuencode.c. It is also\n"));
-  P ((" capable of automatically reconstucting a file that has been broken\n"));
-  P ((" using the program xencode.c.\n"));
-  P (("\n"));
-  P ((" Usage:\n"));
-  P (("  $ xdecode [-options] [InpFile]\n"));
-  P ((" where:\n"));
-  P ((" InpFile ... is the name of the file to be decoded; if not\n"));
-  P (("             specified, stdin is assumed;\n"));
-  P ((" Options:\n"));
-  P (("  -t         forces the output file mode to \"text\" (non-binary)\n"));
-  P (("  -b         output file mode is forced to binary [Default]\n"));
-  P (("  -C path    create the output file using the given path\n"));
+  printf (" Program to decode (a) file(s) that follows the de-facto\n");
+  printf (" standard of the public-domain program uuencode.c. It is also\n");
+  printf (" capable of automatically reconstucting a file that has been broken\n");
+  printf (" using the program xencode.c.\n");
+  printf ("\n");
+  printf (" Usage:\n");
+  printf ("  $ xdecode [-options] [InpFile]\n");
+  printf (" where:\n");
+  printf (" InpFile ... is the name of the file to be decoded; if not\n");
+  printf ("             specified, stdin is assumed;\n");
+  printf (" Options:\n");
+  printf ("  -t         forces the output file mode to \"text\" (non-binary)\n");
+  printf ("  -b         output file mode is forced to binary [Default]\n");
+  printf ("  -C path    create the output file using the given path\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() .................... */
 
 

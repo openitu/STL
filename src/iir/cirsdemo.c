@@ -141,35 +141,33 @@
 
  ============================================================================
 */
-#define P(x) printf x
 void display_usage () {
-  P (("IRSDEMO.C - Version 1.1 of 02.Feb.2010 \n\n"));
+  printf ("IRSDEMO.C - Version 1.1 of 02.Feb.2010 \n\n");
 
-  P ((" Example program for testing the correct implementation of theIIR\n"));
-  P ((" IRS filtering without rate conversion using the IIR-IRS module.\n"));
-  P ((" Input signal must be at 8kHz; output signal will be at 8kHz\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  ~~~~~~\n"));
-  P (("  $ IRSDEMO ! ---> HELP text is printed to screen\n"));
-  P (("  or\n"));
-  P (("  $ IRSDEMO [-options] ifile ofile [lseg]\n"));
-  P (("  where:\n"));
-  P (("  ifile: .. INPUT  FILE with short data (binary files)\n"));
-  P (("  ofile: .. OUTPUT FILE with short data (binary files)\n"));
-  P (("  lseg: ... number of samples per processing block\n"));
-  P (("            (default is LSEG0=%d)\n", LSEG0));
-  P (("\n"));
-  P (("  Options:\n"));
-  P (("  ~~~~~~~~\n"));
-  P (("  -skip no ... skip saving to file first `no' processed samples \n"));
-  P (("  -lseg l .... set `l' as the no.of samples per processing block\n"));
+  printf (" Example program for testing the correct implementation of theIIR\n");
+  printf (" IRS filtering without rate conversion using the IIR-IRS module.\n");
+  printf (" Input signal must be at 8kHz; output signal will be at 8kHz\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  ~~~~~~\n");
+  printf ("  $ IRSDEMO ! ---> HELP text is printed to screen\n");
+  printf ("  or\n");
+  printf ("  $ IRSDEMO [-options] ifile ofile [lseg]\n");
+  printf ("  where:\n");
+  printf ("  ifile: .. INPUT  FILE with short data (binary files)\n");
+  printf ("  ofile: .. OUTPUT FILE with short data (binary files)\n");
+  printf ("  lseg: ... number of samples per processing block\n");
+  printf ("            (default is LSEG0=%d)\n", LSEG0);
+  printf ("\n");
+  printf ("  Options:\n");
+  printf ("  ~~~~~~~~\n");
+  printf ("  -skip no ... skip saving to file first `no' processed samples \n");
+  printf ("  -lseg l .... set `l' as the no.of samples per processing block\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ...................... End of display_usage() ........................... */
 
 

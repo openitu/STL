@@ -89,40 +89,38 @@
  01.Feb.95 v1.0 Created.
  -------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("MNRU.C - Version 2.2 of 02.Feb.2010 \n"));
-  P (("Demonstration program for generating files with modulated\n"));
-  P (("noise added based on UGST's MNRU module, which is based in the\n"));
-  P (("Recommendation P.81 (Blue Book).\n"));
-  P (("\n"));
-  P (("Usage:\n"));
-  P (("$ MNRUDEMO (no parameters) --> to display this help message,\n"));
-  P (("or\n"));
-  P (("$ MNRUDEMO [-options] filin filout blk 1stblk blkno desiredQ [mode]\n"));
-  P (("\n"));
-  P (("where:\n"));
-  P ((" filin      input filename [sample format: 16 bit, 2-complement]\n"));
-  P ((" filout     output filename [sample format: 16 bit, 2-complement]\n"));
-  P ((" blk        block-size, in samples [default: 256 samples/block]\n"));
-  P ((" 1stblk     number of first block to process [default: 1st]\n"));
-  P ((" blkno      total of blocks to process [default: all]\n"));
-  P ((" desiredQ   desired signal-to-modulated-noise ratio in dB [def=100]\n"));
-  P ((" mode       MNRU operation mode: `S'ignal-only, `N'oise-only,\n"));
-  P (("            or `M'odulated-noise [default: modulated-noise]\n"));
+  printf ("MNRU.C - Version 2.2 of 02.Feb.2010 \n");
+  printf ("Demonstration program for generating files with modulated\n");
+  printf ("noise added based on UGST's MNRU module, which is based in the\n");
+  printf ("Recommendation P.81 (Blue Book).\n");
+  printf ("\n");
+  printf ("Usage:\n");
+  printf ("$ MNRUDEMO (no parameters) --> to display this help message,\n");
+  printf ("or\n");
+  printf ("$ MNRUDEMO [-options] filin filout blk 1stblk blkno desiredQ [mode]\n");
+  printf ("\n");
+  printf ("where:\n");
+  printf (" filin      input filename [sample format: 16 bit, 2-complement]\n");
+  printf (" filout     output filename [sample format: 16 bit, 2-complement]\n");
+  printf (" blk        block-size, in samples [default: 256 samples/block]\n");
+  printf (" 1stblk     number of first block to process [default: 1st]\n");
+  printf (" blkno      total of blocks to process [default: all]\n");
+  printf (" desiredQ   desired signal-to-modulated-noise ratio in dB [def=100]\n");
+  printf (" mode       MNRU operation mode: `S'ignal-only, `N'oise-only,\n");
+  printf ("            or `M'odulated-noise [default: modulated-noise]\n");
 
-  P (("Options:\n"));
-  P ((" -q         quiet operation; don't print progress info\n"));
-  P ((" -Q xdB     define Q value as xdB [default: 100dB]\n"));
-  P ((" -noise     define MNRU mode as noise-only\n"));
-  P ((" -signal    define MNRU mode as signal-only\n"));
-  P ((" -mod       define MNRU mode as modulated noise (default)\n"));
+  printf ("Options:\n");
+  printf (" -q         quiet operation; don't print progress info\n");
+  printf (" -Q xdB     define Q value as xdB [default: 100dB]\n");
+  printf (" -noise     define MNRU mode as noise-only\n");
+  printf (" -signal    define MNRU mode as signal-only\n");
+  printf (" -mod       define MNRU mode as modulated noise (default)\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

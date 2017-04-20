@@ -154,7 +154,6 @@
 /* ... Local function prototypes ... */
 char check_bs_format ARGS ((FILE * F, char *file, char *type));
 int check_sync ARGS ((FILE * F, char *file, char *bs_type, long *fr_len, char *bs_format));
-void display_usage ARGS ((int level));
 /* ......... End of local function prototypes ......... */
 
 
@@ -339,65 +338,62 @@ int check_sync (FILE * F, char *file, char *bs_type, long *fr_len, char *bs_form
   20/Aug/1997  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage (int level) {
-  P (("spdemo.c - version 3.2 of 02.Feb.2010\n"));
+  printf ("spdemo.c - version 3.2 of 02.Feb.2010\n");
 
-  P (("  Demo program to convert between serial and parallel data formats.\n"));
+  printf ("  Demo program to convert between serial and parallel data formats.\n");
 
   if (level == 1) {
-    P (("  A input file in the parallel format will be converted to serial\n"));
-    P (("  in the form of 16-bit words whose least significant bits will be\n"));
-    P (("  `1' or `0', as defined below. If the inclusion of a synchronism\n"));
-    P (("  bit is requested, then at the beginning of each data frame a\n"));
-    P (("  sync word (defined below) is added.\n"));
-    P (("\n"));
-    P (("                      Bit '0' is represented as '0x007F'\n"));
-    P (("                      Bit '1' is represented as '0x0081'\n"));
-    P (("                      A SYNC-word is defined as '0x6B21'\n"));
-    P (("\n"));
-    P (("  This bit definition was chosen to be compatible in the future \n"));
-    P (("  with the so called 'soft-bit'-format, where the  channel decoder\n"));
-    P (("  outputs probabilities that the  received bit is '0' or '1'. \n"));
-    P (("\n"));
-    P (("  The output bit-stream will then be a binary file where the first\n"));
-    P (("  word on the file is the SYNC-word, followed by LFRAME\n"));
-    P (("  words with the data bits (LFRAME=number of bits in one frame);\n"));
-    P (("  then the next SYNC-word, followed by the next frame, ... and so\n"));
-    P (("  on (if the sync word inclusion is selected). \n"));
-    P (("\n"));
+    printf ("  A input file in the parallel format will be converted to serial\n");
+    printf ("  in the form of 16-bit words whose least significant bits will be\n");
+    printf ("  `1' or `0', as defined below. If the inclusion of a synchronism\n");
+    printf ("  bit is requested, then at the beginning of each data frame a\n");
+    printf ("  sync word (defined below) is added.\n");
+    printf ("\n");
+    printf ("                      Bit '0' is represented as '0x007F'\n");
+    printf ("                      Bit '1' is represented as '0x0081'\n");
+    printf ("                      A SYNC-word is defined as '0x6B21'\n");
+    printf ("\n");
+    printf ("  This bit definition was chosen to be compatible in the future \n");
+    printf ("  with the so called 'soft-bit'-format, where the  channel decoder\n");
+    printf ("  outputs probabilities that the  received bit is '0' or '1'. \n");
+    printf ("\n");
+    printf ("  The output bit-stream will then be a binary file where the first\n");
+    printf ("  word on the file is the SYNC-word, followed by LFRAME\n");
+    printf ("  words with the data bits (LFRAME=number of bits in one frame);\n");
+    printf ("  then the next SYNC-word, followed by the next frame, ... and so\n");
+    printf ("  on (if the sync word inclusion is selected). \n");
+    printf ("\n");
   }
 
-  P (("  Usage:\n"));
-  P (("  $ spdemo oper finp fout N N1 N2 resolution [sync [just]]\n"));
-  P (("  where:\n"));
-  P (("  oper ......... \"ps\": parallel -> serial; \"sp\": serial -> parallel\n"));
-  P (("  finp ......... input filename\n"));
-  P (("  fout ......... output filename\n"));
-  P (("  N ............ frame size\n"));
-  P (("  N1 ........... 1st frame to convert\n"));
-  P (("  N2 ........... number of frames from N1 on.\n"));
-  P (("  resolution ... number of bits per sample in input file.\n"));
-  P (("  sync ......... Enable (1) or disable (0) use of sync headers\n"));
-  P (("  just ......... data justification: left or right (default)\n\n"));
-  P (("  Options:\n"));
-  P (("  -n # ........... number of frames to process\n"));
-  P (("  -start # ....... first frame to start operation\n"));
-  P (("  -frame # ....... payload size in no. of softbits\n"));
-  P (("  -res # ......... bit resolution for file (default 16)\n"));
-  P (("  -left .......... data is left-justified\n"));
-  P (("  -right ......... data is right-justified (the default)\n"));
-  P (("  -nosync ........ don't use sync headers\n"));
-  P (("  -sync .......... use sync headers\n"));
-  P (("  -q ............. quiet operation\n"));
-  P (("  -? ............. display short help message\n"));
-  P (("  -help, ......... display long help message\n"));
-
+  printf ("  Usage:\n");
+  printf ("  $ spdemo oper finp fout N N1 N2 resolution [sync [just]]\n");
+  printf ("  where:\n");
+  printf ("  oper ......... \"ps\": parallel -> serial; \"sp\": serial -> parallel\n");
+  printf ("  finp ......... input filename\n");
+  printf ("  fout ......... output filename\n");
+  printf ("  N ............ frame size\n");
+  printf ("  N1 ........... 1st frame to convert\n");
+  printf ("  N2 ........... number of frames from N1 on.\n");
+  printf ("  resolution ... number of bits per sample in input file.\n");
+  printf ("  sync ......... Enable (1) or disable (0) use of sync headers\n");
+  printf ("  just ......... data justification: left or right (default)\n\n");
+  printf ("  Options:\n");
+  printf ("  -n # ........... number of frames to process\n");
+  printf ("  -start # ....... first frame to start operation\n");
+  printf ("  -frame # ....... payload size in no. of softbits\n");
+  printf ("  -res # ......... bit resolution for file (default 16)\n");
+  printf ("  -left .......... data is left-justified\n");
+  printf ("  -right ......... data is right-justified (the default)\n");
+  printf ("  -nosync ........ don't use sync headers\n");
+  printf ("  -sync .......... use sync headers\n");
+  printf ("  -q ............. quiet operation\n");
+  printf ("  -? ............. display short help message\n");
+  printf ("  -help, ......... display long help message\n");
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................. End of display_usage() ....................... */
 
 char *format_str (int i) {

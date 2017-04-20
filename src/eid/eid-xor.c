@@ -191,109 +191,107 @@ long insert_errors (short *a, short *b, short *c, long n) {
    11/Aug/1997  v1.0 Created <simao>
    --------------------------------------------------------------------------
  */
-#define P(x) printf x
 void display_usage (int level) {
-  P (("eid-xor.c - Version 1.2 of 02/Feb/2010 \n\n"));
+  printf ("eid-xor.c - Version 1.2 of 02/Feb/2010 \n\n");
 
   if (level) {
-    P (("Program Description:\n"));
-    P (("\n"));
-    P (("This example program performs a \"logical\" exclusive-or operation of\n"));
-    P (("a file (representing an encoded speech bitstream) with another file\n"));
-    P (("(representing a bit error pattern.\n"));
-    P (("\n"));
-    P (("The file containing an encoded speech bitstream can be in a compact\n"));
-    P (("binary format, in the G.192 serial bitstream format (which uses\n"));
-    P (("16-bit softbits), or in the byte-oriented G.192 format.\n"));
-    P (("\n"));
-    P (("The file containing the error pattern will be in one of three\n"));
-    P (("possible formats: G.192 16-bit softbit format (without synchronism\n"));
-    P (("header for bit errors), byte-oriented version of the G.192 format,\n"));
-    P (("and compact, hard-bit binary (bit) mode. These are described in the\n"));
-    P (("following.\n"));
-    P (("\n"));
-    P (("The headerless G.192 serial bitstream format is as described in\n"));
-    P (("G.192, with the exceptions listed below. The main feature is that\n"));
-    P (("the softbits and frame erasure indicators are right-aligned at\n"));
-    P (("16-bit word boundaries (unsigned short): \n"));
-    P (("'0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20\n"));
-    P (("\n"));
+    printf ("Program Description:\n");
+    printf ("\n");
+    printf ("This example program performs a \"logical\" exclusive-or operation of\n");
+    printf ("a file (representing an encoded speech bitstream) with another file\n");
+    printf ("(representing a bit error pattern.\n");
+    printf ("\n");
+    printf ("The file containing an encoded speech bitstream can be in a compact\n");
+    printf ("binary format, in the G.192 serial bitstream format (which uses\n");
+    printf ("16-bit softbits), or in the byte-oriented G.192 format.\n");
+    printf ("\n");
+    printf ("The file containing the error pattern will be in one of three\n");
+    printf ("possible formats: G.192 16-bit softbit format (without synchronism\n");
+    printf ("header for bit errors), byte-oriented version of the G.192 format,\n");
+    printf ("and compact, hard-bit binary (bit) mode. These are described in the\n");
+    printf ("following.\n");
+    printf ("\n");
+    printf ("The headerless G.192 serial bitstream format is as described in\n");
+    printf ("G.192, with the exceptions listed below. The main feature is that\n");
+    printf ("the softbits and frame erasure indicators are right-aligned at\n");
+    printf ("16-bit word boundaries (unsigned short): \n");
+    printf ("'0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20\n");
+    printf ("\n");
 
-    P (("In the byte-oriented softbit serial bitstream, only the lower byte\n"));
-    P (("of the softbits defined in G.192 are used. Hence:\n"));
-    P (("'0'=0x7F and '1'=0x81, and good/bad frame = 0x21/0x20\n"));
-    P (("\n"));
-    P (("In the compact (bit) mode, only hard bits are saved. Each byte will\n"));
-    P (("have information about eight bits or frames. The LBbs will refer to\n"));
-    P (("bits or frames that occur first in time. Here, '1' means that a bit\n"));
-    P (("is in error or that a frame should be erased, and a '0', otherwise.\n"));
-    P (("\n"));
-    P (("Conventions:\n"));
-    P (("~~~~~~~~~~~~\n"));
-    P (("\n"));
-    P (("Bitstreams can be disturbed in two ways: by bit errors, or by frame\n"));
-    P (("erasures. The STL EID supports three basic modes: random/bit errors\n"));
-    P (("(labeled BER), simple frame erasure (labeled FER), and Bellcore\n"));
-    P (("model burst frame erasure (labeled BFER). Here are some conventions\n"));
-    P (("that apply to the particular formats for each of these three EID\n"));
-    P (("operating modes.\n"));
-    P (("\n"));
+    printf ("In the byte-oriented softbit serial bitstream, only the lower byte\n");
+    printf ("of the softbits defined in G.192 are used. Hence:\n");
+    printf ("'0'=0x7F and '1'=0x81, and good/bad frame = 0x21/0x20\n");
+    printf ("\n");
+    printf ("In the compact (bit) mode, only hard bits are saved. Each byte will\n");
+    printf ("have information about eight bits or frames. The LBbs will refer to\n");
+    printf ("bits or frames that occur first in time. Here, '1' means that a bit\n");
+    printf ("is in error or that a frame should be erased, and a '0', otherwise.\n");
+    printf ("\n");
+    printf ("Conventions:\n");
+    printf ("~~~~~~~~~~~~\n");
+    printf ("\n");
+    printf ("Bitstreams can be disturbed in two ways: by bit errors, or by frame\n");
+    printf ("erasures. The STL EID supports three basic modes: random/bit errors\n");
+    printf ("(labeled BER), simple frame erasure (labeled FER), and Bellcore\n");
+    printf ("model burst frame erasure (labeled BFER). Here are some conventions\n");
+    printf ("that apply to the particular formats for each of these three EID\n");
+    printf ("operating modes.\n");
+    printf ("\n");
 
-    P (("BER: bitstream generated by this program are composed of bits 1/0,\n"));
-    P (("     *without* synchronism headers or any other frame delimitation\n"));
-    P (("     (i.e., only bits affecting the payload are present). Frame\n"));
-    P (("     boundaries are defined by the user's application only. The\n"));
-    P (("     following applies:\n"));
-    P (("     G.192 mode: file will contain either 0x007F (no disturbance) or\n"));
-    P (("	            0x0081 (bit error)\n"));
-    P (("     Byte mode:  file will contain either 0x7F (no disturbance) or\n"));
-    P (("	            0x81 (bit error)\n"));
-    P (("     Compact mode: each bit in the file will indicate whether a\n"));
-    P (("	            disturbance occurred (bit 1) or not (bit 0).\n"));
-    P (("		    Lower order bits apply to bits occurring first\n"));
-    P (("	            in time.\n"));
-    P (("\n"));
-    P (("FER/BFER: bitstream generate by this program is composed only by\n"));
-    P (("     the indication of whether a frame should be erased or not. No\n"));
-    P (("     payload is present. The following applies:\n"));
-    P (("     G.192 mode: file will contain either 0x6B21 (no disturbance) or\n"));
-    P (("	            0x6B20 (frame erasure)\n"));
-    P (("     Byte mode:  file will contain either 0x21 (no disturbance) or\n"));
-    P (("	            0x20 (frame erasure)\n"));
-    P (("     Compact mode: each bit in the file will indicate whether a frame\n"));
-    P (("	            erasure occurred (bit 1) or not (bit 0). Lower order\n"));
-    P (("		    bits apply to bits occurring first in time.\n"));
-    P (("\n"));
+    printf ("BER: bitstream generated by this program are composed of bits 1/0,\n");
+    printf ("     *without* synchronism headers or any other frame delimitation\n");
+    printf ("     (i.e., only bits affecting the payload are present). Frame\n");
+    printf ("     boundaries are defined by the user's application only. The\n");
+    printf ("     following applies:\n");
+    printf ("     G.192 mode: file will contain either 0x007F (no disturbance) or\n");
+    printf ("	            0x0081 (bit error)\n");
+    printf ("     Byte mode:  file will contain either 0x7F (no disturbance) or\n");
+    printf ("	            0x81 (bit error)\n");
+    printf ("     Compact mode: each bit in the file will indicate whether a\n");
+    printf ("	            disturbance occurred (bit 1) or not (bit 0).\n");
+    printf ("		    Lower order bits apply to bits occurring first\n");
+    printf ("	            in time.\n");
+    printf ("\n");
+    printf ("FER/BFER: bitstream generate by this program is composed only by\n");
+    printf ("     the indication of whether a frame should be erased or not. No\n");
+    printf ("     payload is present. The following applies:\n");
+    printf ("     G.192 mode: file will contain either 0x6B21 (no disturbance) or\n");
+    printf ("	            0x6B20 (frame erasure)\n");
+    printf ("     Byte mode:  file will contain either 0x21 (no disturbance) or\n");
+    printf ("	            0x20 (frame erasure)\n");
+    printf ("     Compact mode: each bit in the file will indicate whether a frame\n");
+    printf ("	            erasure occurred (bit 1) or not (bit 0). Lower order\n");
+    printf ("		    bits apply to bits occurring first in time.\n");
+    printf ("\n");
   } else {
-    P (("Program to insert bit errors and frame erasures in bitstream \n"));
-    P (("files using a previously generated error pattern. Three formats \n"));
-    P (("are acceptable: g192, byte, and (compact) bit.\n\n"));
+    printf ("Program to insert bit errors and frame erasures in bitstream \n");
+    printf ("files using a previously generated error pattern. Three formats \n");
+    printf ("are acceptable: g192, byte, and (compact) bit.\n\n");
   }
 
-  P (("Usage:\n"));
-  P (("eid-xor [Options] in_bs err_pat_bs out_bs\n"));
-  P (("Where:\n"));
-  P ((" in_bs ...... input encoded speech bitstream file\n"));
-  P ((" err_pat .... error pattern bitstream file\n"));
-  P ((" out_bs ..... disturbed encoded speech bitstream file    \n"));
-  P (("\n"));
-  P (("Options:\n"));
-  P ((" -frame # ... Set the frame size to # (for headerless G.192\n"));
-  P (("              bitstreams or for compact binary files).\n"));
-  P ((" -bs mode ... Mode for bitstream (g192, byte, or bit)\n"));
-  P ((" -ep mode ... Mode for error pattern (g192, byte, or bit)\n"));
-  P ((" -ber ....... Error pattern is a bit error pattern (needed for bit format)\n"));
-  P ((" -fer ....... Error pattern is a frame erasure pattern (for bit format)\n"));
-  P ((" -vbr ....... Enables variable bit rate operation (different frame sizes)\n"));
-  P ((" -q ......... Quiet operation\n"));
-  P ((" -? ......... Displays this message\n"));
-  P ((" -help ...... Displays a complete help message\n"));
+  printf ("Usage:\n");
+  printf ("eid-xor [Options] in_bs err_pat_bs out_bs\n");
+  printf ("Where:\n");
+  printf (" in_bs ...... input encoded speech bitstream file\n");
+  printf (" err_pat .... error pattern bitstream file\n");
+  printf (" out_bs ..... disturbed encoded speech bitstream file    \n");
+  printf ("\n");
+  printf ("Options:\n");
+  printf (" -frame # ... Set the frame size to # (for headerless G.192\n");
+  printf ("              bitstreams or for compact binary files).\n");
+  printf (" -bs mode ... Mode for bitstream (g192, byte, or bit)\n");
+  printf (" -ep mode ... Mode for error pattern (g192, byte, or bit)\n");
+  printf (" -ber ....... Error pattern is a bit error pattern (needed for bit format)\n");
+  printf (" -fer ....... Error pattern is a frame erasure pattern (for bit format)\n");
+  printf (" -vbr ....... Enables variable bit rate operation (different frame sizes)\n");
+  printf (" -q ......... Quiet operation\n");
+  printf (" -? ......... Displays this message\n");
+  printf (" -help ...... Displays a complete help message\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

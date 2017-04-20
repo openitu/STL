@@ -88,9 +88,6 @@ History:
 
 #include "stl.h"
 
-/* local prototypes */
-void display_usage ARGS ((void));
-
 short g192_to_byte (short nb_bits, short *code_byte, short *inp_bits, short N_samples);
 void set_index (short value, short *code, short n_bytes);
 void copy_index (short *from, short *to, short n_bytes);
@@ -178,10 +175,7 @@ void copy_index (short *from, short *to, short n_shorts) {
   }
 }
 
-
-#define P(x) printf x
 void display_usage () {
-  /* Print Message */
   printf ("\n\n");
   printf ("\n***************************************************************");
   printf ("\n* PROCESSING THE DECODER OF ITU-T G.722 WIDEBAND SPEECH CODER *");
@@ -190,18 +184,13 @@ void display_usage () {
   printf ("\n* COPYRIGHT France Telecom R&D     Date 23/Aug/06             *");
   printf ("\n***************************************************************\n\n");
 
-  /* Quit program */
-  P (("USAGE: \n"));
-  P (("  decg722 [-options] file.adp file.outp \n"));
-  P (("or \n"));
-  P (("  decg722 [-mode ] [-plc] [-fsize N] [-byte] [-frames N2] file.adp.g192 file.outp \n\n"));
+  printf ("USAGE: \n");
+  printf ("  decg722 [-options] file.adp file.outp \n");
+  printf ("or \n");
+  printf ("  decg722 [-mode ] [-plc] [-fsize N] [-byte] [-frames N2] file.adp.g192 file.outp \n\n");
 
   exit (-128);
 }
-
-#undef P
-
-
 
 /*
 **************************************************************************

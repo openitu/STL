@@ -223,79 +223,77 @@ long all_zeros (short *vector, long low, long high) {
 /*-------------------------------------------------------------------------
 display_usage(int level);  Shows program usage.
 -------------------------------------------------------------------------*/
-#define P(x) printf x
 void display_usage (int level) {
-  P (("eid-ev.c - Version 1.1 of 02.Feb.2010 \n\n"));
+  printf ("eid-ev.c - Version 1.1 of 02.Feb.2010 \n\n");
 
   if (level) {
-    P (("Program Description:\n"));
-    P (("\n"));
-    P (("This example program performs a \"logical\" error insertion into\n"));
-    P (("a file (representing an encoded speech bitstream) with another set of files\n"));
-    P (("(representing frame error patterns for each layer.\n"));
-    P (("\n"));
-    P (("The file containing an encoded speech bitstream can be \n"));
-    P (("in the G.192 serial bitstream format (which uses\n"));
-    P (("16-bit softbits) or in the byte-oriented G.192 format \n"));
-    P (("(limited to max 255 samples per frame).\n\n"));
-    P (("The file containing the error pattern will be in one of two\n"));
-    P (("possible formats: G.192 16-bit softbit format (without synchronism\n"));
-    P (("header) or the byte-oriented version of the G.192 format.\n"));
-    P (("These are described in the following.\n"));
-    P (("\n"));
-    P (("The headerless G.192 serial bitstream format is as described in\n"));
-    P (("G.192, with the exceptions listed below. The main feature is that\n"));
-    P (("the softbits and frame erasure indicators are right-aligned at\n"));
-    P (("16-bit word boundaries (unsigned short): \n"));
-    P (("'0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20\n"));
-    P (("\n"));
+    printf ("Program Description:\n");
+    printf ("\n");
+    printf ("This example program performs a \"logical\" error insertion into\n");
+    printf ("a file (representing an encoded speech bitstream) with another set of files\n");
+    printf ("(representing frame error patterns for each layer.\n");
+    printf ("\n");
+    printf ("The file containing an encoded speech bitstream can be \n");
+    printf ("in the G.192 serial bitstream format (which uses\n");
+    printf ("16-bit softbits) or in the byte-oriented G.192 format \n");
+    printf ("(limited to max 255 samples per frame).\n\n");
+    printf ("The file containing the error pattern will be in one of two\n");
+    printf ("possible formats: G.192 16-bit softbit format (without synchronism\n");
+    printf ("header) or the byte-oriented version of the G.192 format.\n");
+    printf ("These are described in the following.\n");
+    printf ("\n");
+    printf ("The headerless G.192 serial bitstream format is as described in\n");
+    printf ("G.192, with the exceptions listed below. The main feature is that\n");
+    printf ("the softbits and frame erasure indicators are right-aligned at\n");
+    printf ("16-bit word boundaries (unsigned short): \n");
+    printf ("'0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20\n");
+    printf ("\n");
 
-    P (("In the byte-oriented softbit serial bitstream, only the lower byte\n"));
-    P (("of the softbits defined in G.192 are used. Hence:\n"));
-    P (("'0'=0x7F and '1'=0x81, and good/bad frame = 0x21/0x20\n"));
-    P (("\n"));
-    P (("\n"));
-    P (("Conventions:\n"));
-    P (("~~~~~~~~~~~~\n"));
-    P (("\n"));
-    P (("Bitstreams can be disturbed by layers erasures for a predefined frame layering structure \n"));
-    P (("\n"));
+    printf ("In the byte-oriented softbit serial bitstream, only the lower byte\n");
+    printf ("of the softbits defined in G.192 are used. Hence:\n");
+    printf ("'0'=0x7F and '1'=0x81, and good/bad frame = 0x21/0x20\n");
+    printf ("\n");
+    printf ("\n");
+    printf ("Conventions:\n");
+    printf ("~~~~~~~~~~~~\n");
+    printf ("\n");
+    printf ("Bitstreams can be disturbed by layers erasures for a predefined frame layering structure \n");
+    printf ("\n");
 
-    P (("FER: bitstream generate by this program is composed only by\n"));
-    P (("     the indication of whether a frame should be erased or not. No\n"));
-    P (("     payload is present. The following applies:\n"));
-    P (("     G.192 mode: file will contain either 0x6B21 (no disturbance) or\n"));
-    P (("	            0x6B20 (frame erasure)\n"));
-    P (("     Byte mode:  file will contain either 0x21 (no disturbance) or\n"));
-    P (("	            0x20 (frame erasure)\n"));
-    P (("\n"));
+    printf ("FER: bitstream generate by this program is composed only by\n");
+    printf ("     the indication of whether a frame should be erased or not. No\n");
+    printf ("     payload is present. The following applies:\n");
+    printf ("     G.192 mode: file will contain either 0x6B21 (no disturbance) or\n");
+    printf ("	            0x6B20 (frame erasure)\n");
+    printf ("     Byte mode:  file will contain either 0x21 (no disturbance) or\n");
+    printf ("	            0x20 (frame erasure)\n");
+    printf ("\n");
   } else {
-    P (("Program to insert layer erasures into a layered bitstream frame\n"));
-    P (("files using a previously generated error pattern. Two FER channel formats \n"));
-    P (("are acceptable: g192 and byte.\n\n"));
+    printf ("Program to insert layer erasures into a layered bitstream frame\n");
+    printf ("files using a previously generated error pattern. Two FER channel formats \n");
+    printf ("are acceptable: g192 and byte.\n\n");
   }
 
-  P (("Usage:\n"));
-  P (("eid-ev [Options] in_bs e0 [e1, ..eN] out_bs\n"));
-  P (("Where:\n"));
-  P ((" in_bs ...... input encoded speech bitstream file\n"));
-  P ((" eX    ...... error pattern bitstream file (one for each layer)\n"));
-  P ((" out_bs ..... disturbed encoded speech bitstream file    \n"));
-  P (("\n"));
-  P (("Options:\n"));
-  P ((" -bs mode ... Mode for bitstream (g192 or byte)\n"));
-  P ((" -ep mode ... Mode for error pattern file (g192 or byte)\n"));
-  P ((" -ind ....... Individual layer error application, (individual intermediate layers may be erased) \n"));
-  P ((" -layers .... Set layering setup in absolute bits, default is \"-layers 160,240,320,480,640\" \n"));
-  P ((" -q ......... Quiet operation, skip statistics\n"));
-  P ((" -h ......... Displays this message\n"));
-  P ((" -help ...... Displays a complete instructive help message\n"));
+  printf ("Usage:\n");
+  printf ("eid-ev [Options] in_bs e0 [e1, ..eN] out_bs\n");
+  printf ("Where:\n");
+  printf (" in_bs ...... input encoded speech bitstream file\n");
+  printf (" eX    ...... error pattern bitstream file (one for each layer)\n");
+  printf (" out_bs ..... disturbed encoded speech bitstream file    \n");
+  printf ("\n");
+  printf ("Options:\n");
+  printf (" -bs mode ... Mode for bitstream (g192 or byte)\n");
+  printf (" -ep mode ... Mode for error pattern file (g192 or byte)\n");
+  printf (" -ind ....... Individual layer error application, (individual intermediate layers may be erased) \n");
+  printf (" -layers .... Set layering setup in absolute bits, default is \"-layers 160,240,320,480,640\" \n");
+  printf (" -q ......... Quiet operation, skip statistics\n");
+  printf (" -h ......... Displays this message\n");
+  printf (" -help ...... Displays a complete instructive help message\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

@@ -57,42 +57,38 @@
 /*-------------------------------------------------------------------------
 display_usage(int level);  Shows program usage.
 -------------------------------------------------------------------------*/
-#define P(x) printf x
 void display_usage (int level) {
-  P (("gen_rate_profile - %s\n\n", VERSION));
+  printf ("gen_rate_profile - %s\n\n", VERSION);
 
   if (level) {
-    P (("Program Description:\n"));
-    P (("\n"));
-    P (("Program generates a rate profile\n"));
-    P (("The rate profile may be used with e.g the STL truncate tool\n"));
+    printf ("Program Description:\n");
+    printf ("\n");
+    printf ("Program generates a rate profile\n");
+    printf ("The rate profile may be used with e.g the STL truncate tool\n");
 
-    P (("Command line\n"));
-    P ((" gen_rate_profile -layers A,B,C... [-framerate X] ratefilename [period  minrate [frames [seed] ] ]\n\n"));
+    printf ("Command line\n");
+    printf (" gen_rate_profile -layers A,B,C... [-framerate X] ratefilename [period  minrate [frames [seed] ] ]\n\n");
 
-    P (("where\n"));
-    P ((" -layers A,B,C.. is the layer setup, in bps, in a monotonically increasing list\n"));
-    P ((" -framerate X   is the frame rate (default is X=50 Hz)\n"));
-    P ((" ratefilename  is the output file (stream of long integers) (no default)\n"));
-    P ((" period        is the repetition period in frames(default 10)\n"));
-    P ((" minrate       is a minumum rate in integer bps in the output \n"));
-    P ((" frames        is the total number of frames to produce (default 15000 frames, 300 seconds)\n"));
-    P ((" seed          is the random number generator seed(default is 314159265).\n"));
-    P (("\n"));
+    printf ("where\n");
+    printf (" -layers A,B,C.. is the layer setup, in bps, in a monotonically increasing list\n");
+    printf (" -framerate X   is the frame rate (default is X=50 Hz)\n");
+    printf (" ratefilename  is the output file (stream of long integers) (no default)\n");
+    printf (" period        is the repetition period in frames(default 10)\n");
+    printf (" minrate       is a minumum rate in integer bps in the output \n");
+    printf (" frames        is the total number of frames to produce (default 15000 frames, 300 seconds)\n");
+    printf (" seed          is the random number generator seed(default is 314159265).\n");
+    printf ("\n");
   } else {
-    P (("Program generates a rate profile\n"));
-    P (("The rate profile may be used with e.g the STL truncate tool\n"));
-    P (("Command line\n"));
-    P ((" gen_rate_profile -layers A,B,C... [-framerate X] ratefilename [period  minrate [frames [seed] ] ]\n"));
+    printf ("Program generates a rate profile\n");
+    printf ("The rate profile may be used with e.g the STL truncate tool\n");
+    printf ("Command line\n");
+    printf (" gen_rate_profile -layers A,B,C... [-framerate X] ratefilename [period  minrate [frames [seed] ] ]\n");
   }
-
-  P (("Usage:\n"));
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 /*==========================================================================
@@ -146,7 +142,7 @@ long parse_layers (char *inp_str, long *bound) {
     }
   }
   /* parse printout */
-  /* for(i=0;i<index;i++){ fprintf(stderr,"read layer boundary[%ld]=%ld\n",i,bound[i]); } */
+  /* for(i=0;i<index;i++){ fprintf (stderr,"read layer boundary[%ld]=%ld\n",i,bound[i]); } */
   status = index;
 
   return (status);
@@ -185,7 +181,7 @@ int main (int argc, char *argv[]) {
       if (strcmp (argv[1], "-layers") == 0 || strcmp (argv[1], "-LAYERS") == 0) {
         /* find layer setup from command line */
         strncpy (layer_str, argv[2], MAX_STR);
-        /* fprintf(stderr,"Layer(Rate) string:\"%s\"\n",layer_str); */
+        /* fprintf (stderr,"Layer(Rate) string:\"%s\"\n",layer_str); */
 
         n_layers = parse_layers (layer_str, &(layer_b[0]));
 

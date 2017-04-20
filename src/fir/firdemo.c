@@ -250,43 +250,41 @@
 
  ============================================================================
 */
-#define P(x) printf x
 void display_usage () {
-  P (("\n Six filters are running in cascade: \n"));
-  P (("\t1st. Filter:  IRS Send Part Filter (none, 8 kHz, 16, or 48 kHz)\n"));
-  P (("\t2nd. Filter:  Delta-SM (16kHz only)\n"));
-  P (("\t3rd. Filter:  Up-Sampling Filter   (factor 1, 2 or 3)\n"));
-  P (("\t4th. Filter:  Up-Sampling Filter   (factor 1, 2 or 3)\n"));
-  P (("\t5th. Filter:  Down-Sampling Filter (factor 1, 2 or 3)\n"));
-  P (("\t6th. Filter:  Down-Sampling Filter (factor 1, 2 or 3)\n\n"));
+  printf ("\n Six filters are running in cascade: \n");
+  printf ("\t1st. Filter:  IRS Send Part Filter (none, 8 kHz, 16, or 48 kHz)\n");
+  printf ("\t2nd. Filter:  Delta-SM (16kHz only)\n");
+  printf ("\t3rd. Filter:  Up-Sampling Filter   (factor 1, 2 or 3)\n");
+  printf ("\t4th. Filter:  Up-Sampling Filter   (factor 1, 2 or 3)\n");
+  printf ("\t5th. Filter:  Down-Sampling Filter (factor 1, 2 or 3)\n");
+  printf ("\t6th. Filter:  Down-Sampling Filter (factor 1, 2 or 3)\n\n");
 
-  P ((" Usage: $ FIRDEMO [-options] ifile [ofile irs dsm up1 up2 down1 down2 [lseg]]\n"));
+  printf (" Usage: $ FIRDEMO [-options] ifile [ofile irs dsm up1 up2 down1 down2 [lseg]]\n");
 
-  P (("   ifile:  INPUT  FILE with short data (binary files)\n"));
-  P (("   ofile:  OUTPUT FILE with short data (binary files)\n\n"));
+  printf ("   ifile:  INPUT  FILE with short data (binary files)\n");
+  printf ("   ofile:  OUTPUT FILE with short data (binary files)\n\n");
 
-  P (("%s%s", "   irs  :  0: short cut\t 8: IRS-8kHz filter  \t ", "16: IRS-16kHz filter\n          48: IRS-48kHz\n"));
-  P (("%s", "   dsm  :  0: short cut\t 1: use 16kHz Delta-SM filter\n"));
-  P (("%s%s", "   up1  :  0: short cut\t 2: upsampling   by 2\t ", "3:  upsampling by 3 \n"));
-  P (("%s%s", "   up2  :  0: short cut\t 2: upsampling   by 2\t ", "3:  upsampling by 3 \n"));
-  P (("%s%s", "   down1:  0: short cut\t 2: downsampling by 2\t ", "3:  downsampling by 3 \n"));
-  P (("%s%s", "   down2:  0: short cut\t 2: downsampling by 2\t ", "3:  downsampling by 3 \n"));
-  P (("   lseg:   number of samples per processing block (default is %d)\n", LSEG0));
-  P (("   NOTE: if up?/down? above is -2, the filter used is the bandpass \n"));
-  P (("         FIR filter (instead of the \"default\" lowpass FIR)\n"));
+  printf ("%s%s", "   irs  :  0: short cut\t 8: IRS-8kHz filter  \t ", "16: IRS-16kHz filter\n          48: IRS-48kHz\n");
+  printf ("%s", "   dsm  :  0: short cut\t 1: use 16kHz Delta-SM filter\n");
+  printf ("%s%s", "   up1  :  0: short cut\t 2: upsampling   by 2\t ", "3:  upsampling by 3 \n");
+  printf ("%s%s", "   up2  :  0: short cut\t 2: upsampling   by 2\t ", "3:  upsampling by 3 \n");
+  printf ("%s%s", "   down1:  0: short cut\t 2: downsampling by 2\t ", "3:  downsampling by 3 \n");
+  printf ("%s%s", "   down2:  0: short cut\t 2: downsampling by 2\t ", "3:  downsampling by 3 \n");
+  printf ("   lseg:   number of samples per processing block (default is %d)\n", LSEG0);
+  printf ("   NOTE: if up?/down? above is -2, the filter used is the bandpass \n");
+  printf ("         FIR filter (instead of the \"default\" lowpass FIR)\n");
 
-  P ((" Options:\n"));
-  P (("  -mod ....... uses the modified IRS characteristic instead of the\n"));
-  P (("               \"regular\" one. For 16 and 48kHz.\n"));
-  P (("  -ht ........ uses the half-tilt for 16 kHz IRS, if IRS filtering is selected\n"));
-  P (("  -q ......... quiet processing (no progress flag)\n"));
-  P (("  -lseg ...... changes the segment (block) length (default:%d)\n", LSEG0));
+  printf (" Options:\n");
+  printf ("  -mod ....... uses the modified IRS characteristic instead of the\n");
+  printf ("               \"regular\" one. For 16 and 48kHz.\n");
+  printf ("  -ht ........ uses the half-tilt for 16 kHz IRS, if IRS filtering is selected\n");
+  printf ("  -q ......... quiet processing (no progress flag)\n");
+  printf ("  -lseg ...... changes the segment (block) length (default:%d)\n", LSEG0);
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ...................... End of display_usage() ........................... */
 
 

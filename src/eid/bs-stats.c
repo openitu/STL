@@ -115,10 +115,6 @@
 #define OUT_RECORD_LENGTH 512
 #define MAX_FRAME 32767
 
-/* Local function prototypes */
-void display_usage ARGS ((int level));
-
-
 /* ************************* AUXILIARY FUNCTIONS ************************* */
 
 /*
@@ -132,83 +128,81 @@ void display_usage ARGS ((int level));
   8/Feb/2001  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage (int level) {
-  P (("bs-stats.c - Version 1.1 of 02.Feb.2010\n"));
+  printf ("bs-stats.c - Version 1.1 of 02.Feb.2010\n");
 
   if (level) {
-    P (("\nThis example program reports in ASCII format the frame sizes\n"));
-    P (("encountered in an encoded bitstream file and some statistics.\n"));
-    P (("\n"));
-    P (("The file containing an encoded speech bitstream can be in the G.192\n"));
-    P (("serial bitstream format (which uses 16-bit softbits), or in the\n"));
-    P (("byte-oriented G.192 format. For this type of verification, the file\n"));
-    P (("cannot be in the compact binary format, nor headerless.\n"));
-    P (("\n"));
-    P (("Files in the G.192 format will contain 16-bit, right-aligned\n"));
-    P (("'short' words. The start of a frame is signalled by the synchronism\n"));
-    P (("header, which consists of two shorts: the first word is the frame\n"));
-    P (("synchronism word, 0x6B2z, z=0..F, and the second word contains the\n"));
-    P (("number N of softbits in the frame (i.e., the frame size). After the\n"));
-    P (("synchronism header, comes the frame \"payload\" that comprise N\n"));
-    P (("shorts equal to 0x007F [an 8-bit softbit representation of the\n"));
-    P (("hardbit '0'], to 0x0081 [an 8-bit softbit representation of the\n"));
-    P (("hardbit '1'], or to 0x0000 [total uncertaintly, in the case of a\n"));
-    P (("frame erasure]. Hence, a frame will occupy N+2 shorts, or 2N+4\n"));
-    P (("bytes. G.192 bitstreams need to be byte-swapped when used across\n"));
-    P (("different platforms that differ in byte-order organization (little\n"));
-    P (("and big endian systems).\n"));
-    P (("\n"));
-    P (("The byte-oriented G.192 format is similar to the G.192 format,\n"));
-    P (("except that data is organized in bytes, whereby only the least\n"));
-    P (("significat byte information is preserved. Hence, the frame\n"));
-    P (("syncronism word is represented by the char 0x2z, z=0..F; the\n"));
-    P (("payload will contain bytes 0x7F, 0x81, or 0x00. Byte-oriented G.192\n"));
-    P (("bitstreams do not need byteswapping when using them across\n"));
-    P (("platforms that have different byte-order architectires (i.e. big\n"));
-    P (("and little endian systems). However, the byte-oriented G.192 format\n"));
-    P (("has some important limitations: frame sizes are limited to 255\n"));
-    P (("(soft)bits, and true softbit usage is not recommended since the\n"));
-    P (("syncronism word is no longer unique.\n"));
-    P (("\n"));
-    P (("Limitations:\n"));
-    P (("~~~~~~~~~~~~\n"));
-    P (("\n"));
-    P (("This program will not distinguish among different channels that\n"));
-    P (("might be multiplexed in the bitstream file (identified by different\n"));
-    P (("header synchronism values), nor will separate statistics for erased\n"));
-    P (("frames. All data will be consolidated irrespective of different\n"));
-    P (("channel assignment and/or frame erasures.\n"));
-    P (("\n"));
+    printf ("\nThis example program reports in ASCII format the frame sizes\n");
+    printf ("encountered in an encoded bitstream file and some statistics.\n");
+    printf ("\n");
+    printf ("The file containing an encoded speech bitstream can be in the G.192\n");
+    printf ("serial bitstream format (which uses 16-bit softbits), or in the\n");
+    printf ("byte-oriented G.192 format. For this type of verification, the file\n");
+    printf ("cannot be in the compact binary format, nor headerless.\n");
+    printf ("\n");
+    printf ("Files in the G.192 format will contain 16-bit, right-aligned\n");
+    printf ("'short' words. The start of a frame is signalled by the synchronism\n");
+    printf ("header, which consists of two shorts: the first word is the frame\n");
+    printf ("synchronism word, 0x6B2z, z=0..F, and the second word contains the\n");
+    printf ("number N of softbits in the frame (i.e., the frame size). After the\n");
+    printf ("synchronism header, comes the frame \"payload\" that comprise N\n");
+    printf ("shorts equal to 0x007F [an 8-bit softbit representation of the\n");
+    printf ("hardbit '0'], to 0x0081 [an 8-bit softbit representation of the\n");
+    printf ("hardbit '1'], or to 0x0000 [total uncertaintly, in the case of a\n");
+    printf ("frame erasure]. Hence, a frame will occupy N+2 shorts, or 2N+4\n");
+    printf ("bytes. G.192 bitstreams need to be byte-swapped when used across\n");
+    printf ("different platforms that differ in byte-order organization (little\n");
+    printf ("and big endian systems).\n");
+    printf ("\n");
+    printf ("The byte-oriented G.192 format is similar to the G.192 format,\n");
+    printf ("except that data is organized in bytes, whereby only the least\n");
+    printf ("significat byte information is preserved. Hence, the frame\n");
+    printf ("syncronism word is represented by the char 0x2z, z=0..F; the\n");
+    printf ("payload will contain bytes 0x7F, 0x81, or 0x00. Byte-oriented G.192\n");
+    printf ("bitstreams do not need byteswapping when using them across\n");
+    printf ("platforms that have different byte-order architectires (i.e. big\n");
+    printf ("and little endian systems). However, the byte-oriented G.192 format\n");
+    printf ("has some important limitations: frame sizes are limited to 255\n");
+    printf ("(soft)bits, and true softbit usage is not recommended since the\n");
+    printf ("syncronism word is no longer unique.\n");
+    printf ("\n");
+    printf ("Limitations:\n");
+    printf ("~~~~~~~~~~~~\n");
+    printf ("\n");
+    printf ("This program will not distinguish among different channels that\n");
+    printf ("might be multiplexed in the bitstream file (identified by different\n");
+    printf ("header synchronism values), nor will separate statistics for erased\n");
+    printf ("frames. All data will be consolidated irrespective of different\n");
+    printf ("channel assignment and/or frame erasures.\n");
+    printf ("\n");
   } else {
-    P ((" Reports in ASCII format the frame sizes found in an encoded\n"));
-    P ((" bitstream file and some related statistics. The encoded bitstream\n"));
-    P ((" can be in word- or byte-oriented G.192 format, but cannot be in\n"));
-    P ((" compact or headerless format. This program will report only the\n"));
-    P ((" aggregate frame size information, irrespective of any (possible)\n"));
-    P ((" different channel multiplexing or frame erasures present in the\n"));
-    P ((" bitstream. Try option -help for full help text.\n"));
+    printf (" Reports in ASCII format the frame sizes found in an encoded\n");
+    printf (" bitstream file and some related statistics. The encoded bitstream\n");
+    printf (" can be in word- or byte-oriented G.192 format, but cannot be in\n");
+    printf (" compact or headerless format. This program will report only the\n");
+    printf (" aggregate frame size information, irrespective of any (possible)\n");
+    printf (" different channel multiplexing or frame erasures present in the\n");
+    printf (" bitstream. Try option -help for full help text.\n");
   }
-  P (("Usage:\n"));
-  P ((" bs-stats [Options] in_bs bs_info\n"));
-  P (("Where:\n"));
-  P ((" in_bs ...... input encoded speech bitstream file\n"));
-  P ((" bs_info .... ASCII file where the frame length values found in the\n"));
-  P (("              file are reported, sequencially. Additional stats\n"));
-  P (("              printed on the screen can be saved to a file via\n"));
-  P (("              redirection of stdin.\n"));
-  P (("Options:\n"));
-  P ((" -bs mode ... Mode for bitstream (g192, byte, or bit)\n"));
-  P ((" -q ......... Quiet operation\n"));
-  P ((" -qq ........ VERY Quiet operation: no ASCII file generated\n"));
-  P ((" -? ......... Displays this message\n"));
-  P ((" -help ...... Displays a complete help message\n"));
+  printf ("Usage:\n");
+  printf (" bs-stats [Options] in_bs bs_info\n");
+  printf ("Where:\n");
+  printf (" in_bs ...... input encoded speech bitstream file\n");
+  printf (" bs_info .... ASCII file where the frame length values found in the\n");
+  printf ("              file are reported, sequencially. Additional stats\n");
+  printf ("              printed on the screen can be saved to a file via\n");
+  printf ("              redirection of stdin.\n");
+  printf ("Options:\n");
+  printf (" -bs mode ... Mode for bitstream (g192, byte, or bit)\n");
+  printf (" -q ......... Quiet operation\n");
+  printf (" -qq ........ VERY Quiet operation: no ASCII file generated\n");
+  printf (" -? ......... Displays this message\n");
+  printf (" -help ...... Displays a complete help message\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... End of display_usage() ....................... */
 
 

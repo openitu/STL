@@ -97,64 +97,64 @@
 
 /* Modified 02-Feb-2010 by y.hiwasaki (explicit casting) */
 #define askc(m,v) {\
-   fprintf(stderr,m); \
+   fprintf (stderr,m); \
    scanf("%1s%*c",&v); \
    v=toupper((int)v);}
 
 /* Modified 03-Feb-2010 by y.hiwasaki (check buffer overruns) */
 #define asks(m,v) { \
-   fprintf(stderr,m);	\
+   fprintf (stderr,m);	\
    fgets(v,sizeof(v),stdin);*(v+strlen(v)-1)='\0';}
 
 /* Modified 03-Feb-2010 by y.hiwasaki (clear stream, including newline) */
 #define askl(m,v) {\
-   fprintf(stderr,m);\
+   fprintf (stderr,m);\
    scanf("%ld%*[^%\n]",&v);getchar();}
 
 #define asklu(m,v) {\
-   fprintf(stderr,m);\
+   fprintf (stderr,m);\
    scanf("%lu%*[^%\n]",&v);getchar();}
 
 #define askf(m,v) {\
-   fprintf(stderr,m);\
+   fprintf (stderr,m);\
    scanf("%f%*[^%\n]",&v);getchar();}
 
 #define asklf(m,v) {\
-   fprintf(stderr,m);\
+   fprintf (stderr,m);\
    scanf("%lf%*[^%\n]",&v);getchar();}
 
 #define aski(m,v) {\
-   fprintf(stderr,m);\
+   fprintf (stderr,m);\
    scanf(" %d%*[^\n]",&v);getchar();}
 
 #define GET_PAR_L(p,msg,i ) \
    { if(argc>p) { \
        i=atol(argv[p]); \
-       fprintf(stderr,"%s%ld\n",msg,i);}\
+       fprintf (stderr,"%s%ld\n",msg,i);}\
      else askl(msg,i);}
 
 #define GET_PAR_LU(p,msg,i ) \
    { if(argc>p) { \
        sscanf(argv[p],"%ul",&(i)); \
-       fprintf(stderr,"%s%lu\n",msg,i);}\
+       fprintf (stderr,"%s%lu\n",msg,i);}\
      else asklu(msg,i);}
 
 #define GET_PAR_I(p,msg,i ) \
    { if(argc>p) { \
        i=atoi(argv[p]); \
-       fprintf(stderr,"%s%d\n",msg,i);}\
+       fprintf (stderr,"%s%d\n",msg,i);}\
      else aski(msg,i);}
 
 #define GET_PAR_D(p,msg,r ) \
    { if(argc>p) {\
        r=(double)atof(argv[p]);\
-       fprintf(stderr,"%s%f\n",msg,r);}\
+       fprintf (stderr,"%s%f\n",msg,r);}\
      else asklf(msg,r);}
 
 #define GET_PAR_F(p,msg,r ) \
    { if(argc>p) {\
        r=atof(argv[p]);\
-       fprintf(stderr,"%s%f\n",msg,r);}\
+       fprintf (stderr,"%s%f\n",msg,r);}\
      else askf(msg,r);}
 
 /* Modified 02-Feb-2010 by y.hiwasaki (check buffer overrun) */
@@ -162,14 +162,14 @@
 #define GET_PAR_S(p,msg,sp) \
 	{ if((argc>p)&&(strlen(argv[p])<sizeof(sp))) {	\
       strcpy(sp,argv[p]); \
-      fprintf(stderr,"%s%s\n",msg,sp);}\
+      fprintf (stderr,"%s%s\n",msg,sp);}\
     else asks(msg,sp);}
 
 /* Modified 02-Feb-2010 by y.hiwasaki (explicit casting) */
 #define GET_PAR_C(p,msg,C) \
    { if(argc>p) {\
        C=(char)toupper((int)(argv[p][0]));			\
-       fprintf(stderr,"%s%c\n",msg,C);}		\
+       fprintf (stderr,"%s%c\n",msg,C);}		\
      else askc(msg,C); }
 
 /*
@@ -180,50 +180,50 @@
 */
 #define FIND_PAR_C(p,msg,C,dft) \
    { C=toupper((argc>p)?argv[p][0]:dft);\
-     fprintf(stderr,"%s%c\n",msg,C);}
+     fprintf (stderr,"%s%c\n",msg,C);}
 
 #define FIND_PAR_S(p,msg,i,dft) \
    { strcpy(i,(argc>p)?argv[p]:dft);\
-     fprintf(stderr,"%s%s\n",msg,i); }
+     fprintf (stderr,"%s%s\n",msg,i); }
 
 #define FIND_PAR_L(p,msg,i,j) \
    if(argc>p) {\
      i=atol(argv[p]);\
-     fprintf(stderr,"%s%ld\n",msg,i); }\
+     fprintf (stderr,"%s%ld\n",msg,i); }\
    else {\
      i=j; \
-     fprintf(stderr,"%s%ld\n",msg,i); }
+     fprintf (stderr,"%s%ld\n",msg,i); }
 
 #define FIND_PAR_I(p,msg,i,j) \
    if(argc>p) {\
      i=atoi(argv[p]);\
-     fprintf(stderr,"%s%d\n",msg,i); }\
+     fprintf (stderr,"%s%d\n",msg,i); }\
    else {\
      i=(int)j; \
-     fprintf(stderr,"%s%d\n",msg,i); }
+     fprintf (stderr,"%s%d\n",msg,i); }
 
 #define FIND_PAR_F(p,msg,i,j) \
    if(argc>p) {\
      i=atof(argv[p]);\
-     fprintf(stderr,"%s%f\n",msg,i); }\
+     fprintf (stderr,"%s%f\n",msg,i); }\
    else {\
      i=j; \
-     fprintf(stderr,"%s%f\n",msg,i); }
+     fprintf (stderr,"%s%f\n",msg,i); }
 
 #define FIND_PAR_D(p,msg,i,j) \
    if(argc>p) {\
      i=(double)atof(argv[p]);\
-     fprintf(stderr,"%s%f\n",msg,i); }\
+     fprintf (stderr,"%s%f\n",msg,i); }\
    else {\
      i=j; \
-     fprintf(stderr,"%s%f\n",msg,i); }
+     fprintf (stderr,"%s%f\n",msg,i); }
 
 /* GENERAL DEFINITIONS */
 
 /* -------------------------------------------- */
 /* ... Print error message and exit program ... */
 /* -------------------------------------------- */
-#define HARAKIRI(m,code) {fprintf(stderr,m); exit((int)code);}
+#define HARAKIRI(m,code) {fprintf (stderr,m); exit((int)code);}
 /* #define KILL(f,code) {perror(f); exit((int)code);} */
 #define KILL(f,code) perror(f), exit((int)code)
 

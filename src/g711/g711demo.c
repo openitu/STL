@@ -178,44 +178,42 @@
 
   --------------------------------------------------------------------------
 */
-#define FP(x) fprintf(stderr, x)
 void display_usage () {
-  FP ("\n  G711DEMO.C   --- Version v3.3 of 02.Feb.2010 \n");
-  FP ("\n");
-  FP ("  Description:\n");
-  FP ("  ~~~~~~~~~~~~\n");
-  FP ("  Example-program for converting from linear samples to A/u law log\n");
-  FP ("  compression and vice-versa, according to ITU-T Rec.G711.\n");
-  FP ("\n");
-  FP ("  Usage:\n");
-  FP ("  ~~~~~~\n");
-  FP ("  $ G711 [-r] Law Transf InpFile OutFile BlkSize 1stBlock NoOfBlocks\n");
-  FP ("\n");
-  FP ("  where:\n");
-  FP ("  Law	   is the law desired (either A or u)\n");
-  FP ("  Transf	   is the desired convertion on the input file:\n");
-  FP ("	             [lili], linear to linear: lin -> (A/u)log -> lin\n");
-  FP ("               [lilo], linear to (A/u)-log\n");
-  FP ("               [loli], (A/u) log to linear\n");
-  FP ("  InpFile	   is the name of the file to be processed;\n");
-  FP ("  OutFile	   is the name with the compressed/expanded data;\n");
-  FP ("  BlkSize    is number of samples per block [256];\n");
-  FP ("  1stBlock   is the number of the first block of the input file\n");
-  FP ("		   to be processed [1].\n");
-  FP ("  NoOfBlocks is the number of blocks to be processed, starting on\n");
-  FP ("		   block `1stBlock'. Default is til end-of-file.\n");
-  FP ("\n");
-  FP ("  Options:\n");
-  FP ("  -?         displays this message.\n");
-  FP ("  -r         disables even-bit swap by A-law encoding and decoding.\n");
-  FP ("  -skip      is the number of samples to skip.\n");
-  FP ("\n");
+  fprintf (stderr, "\n  G711DEMO.C   --- Version v3.3 of 02.Feb.2010 \n");
+  fprintf (stderr, "\n");
+  fprintf (stderr, "  Description:\n");
+  fprintf (stderr, "  ~~~~~~~~~~~~\n");
+  fprintf (stderr, "  Example-program for converting from linear samples to A/u law log\n");
+  fprintf (stderr, "  compression and vice-versa, according to ITU-T Rec.G711.\n");
+  fprintf (stderr, "\n");
+  fprintf (stderr, "  Usage:\n");
+  fprintf (stderr, "  ~~~~~~\n");
+  fprintf (stderr, "  $ G711 [-r] Law Transf InpFile OutFile BlkSize 1stBlock NoOfBlocks\n");
+  fprintf (stderr, "\n");
+  fprintf (stderr, "  where:\n");
+  fprintf (stderr, "  Law	   is the law desired (either A or u)\n");
+  fprintf (stderr, "  Transf	   is the desired convertion on the input file:\n");
+  fprintf (stderr, "	             [lili], linear to linear: lin -> (A/u)log -> lin\n");
+  fprintf (stderr, "               [lilo], linear to (A/u)-log\n");
+  fprintf (stderr, "               [loli], (A/u) log to linear\n");
+  fprintf (stderr, "  InpFile	   is the name of the file to be processed;\n");
+  fprintf (stderr, "  OutFile	   is the name with the compressed/expanded data;\n");
+  fprintf (stderr, "  BlkSize    is number of samples per block [256];\n");
+  fprintf (stderr, "  1stBlock   is the number of the first block of the input file\n");
+  fprintf (stderr, "		   to be processed [1].\n");
+  fprintf (stderr, "  NoOfBlocks is the number of blocks to be processed, starting on\n");
+  fprintf (stderr, "		   block `1stBlock'. Default is til end-of-file.\n");
+  fprintf (stderr, "\n");
+  fprintf (stderr, "  Options:\n");
+  fprintf (stderr, "  -?         displays this message.\n");
+  fprintf (stderr, "  -r         disables even-bit swap by A-law encoding and decoding.\n");
+  fprintf (stderr, "  -skip      is the number of samples to skip.\n");
+  fprintf (stderr, "\n");
 
   /* Quit program */
   exit (1);
 }
 
-#undef FP
 /* ..................... End of display_usage() .......................... */
 
 

@@ -126,36 +126,34 @@ short short_check_sum (short *s_data, long n) {
  *     Simao 10.Jan.93
  * --------------------------------------------------------------------------
  */
-#define FP(x) printf(x)
 void display_usage () {
-  FP ("Version 1.01 of 23/Nov/1993 \n");
+  printf ("Version 1.01 of 23/Nov/1993 \n");
 
-  FP (" CVT_H_B.C:\n");
-  FP (" Program to convert ITU-T test sequences in hexa formats to\n");
-  FP (" word oriented binary files. Each line is supposed to have 32 valid\n");
-  FP (" samples (16 bit, or a word), or 64 hexa characters, either upper or\n");
-  FP (" lower case. In the last line is expected one word (2 hexa chars)\n");
-  FP (" in hexadecimal representation as the checksum of all the samples of\n");
-  FP (" the file modulus 255 (sum mod 255).\n");
-  FP ("\n");
-  FP (" Usage:\n");
-  FP (" $ cvt_h_b [-r] hex-in bin-out\n");
-  FP (" where:\n");
-  FP ("  hex-in          is the (input) hexadecimal file's name\n");
-  FP ("  bin-out         is the (output) binary file's name\n\n");
+  printf (" CVT_H_B.C:\n");
+  printf (" Program to convert ITU-T test sequences in hexa formats to\n");
+  printf (" word oriented binary files. Each line is supposed to have 32 valid\n");
+  printf (" samples (16 bit, or a word), or 64 hexa characters, either upper or\n");
+  printf (" lower case. In the last line is expected one word (2 hexa chars)\n");
+  printf (" in hexadecimal representation as the checksum of all the samples of\n");
+  printf (" the file modulus 255 (sum mod 255).\n");
+  printf ("\n");
+  printf (" Usage:\n");
+  printf (" $ cvt_h_b [-r] hex-in bin-out\n");
+  printf (" where:\n");
+  printf ("  hex-in          is the (input) hexadecimal file's name\n");
+  printf ("  bin-out         is the (output) binary file's name\n\n");
 
-  FP (" Options\n");
-  FP ("  -q              Don't print progress indicator on the screen\n");
-  FP ("  -r              is an optional parameter; if specified as r or R,\n");
-  FP ("                  even-bit reversal of all samples is accomplished \n");
-  FP ("                  before saving the file. Default is NOT invert.\n");
-  FP ("\n");
+  printf (" Options\n");
+  printf ("  -q              Don't print progress indicator on the screen\n");
+  printf ("  -r              is an optional parameter; if specified as r or R,\n");
+  printf ("                  even-bit reversal of all samples is accomplished \n");
+  printf ("                  before saving the file. Default is NOT invert.\n");
+  printf ("\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef FP
 /* ....................... end of display_usage() ...........................*/
 
 

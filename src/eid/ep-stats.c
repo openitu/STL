@@ -116,65 +116,63 @@
    11/Aug/1997  v1.0 Created <simao>
    --------------------------------------------------------------------------
  */
-#define P(x) printf x
 void display_usage (int level) {
-  P (("ep-stats.c - Version 2.2 of 02.Feb.2010 \n\n"));
+  printf ("ep-stats.c - Version 2.2 of 02.Feb.2010 \n\n");
 
   if (level) {
-    P (("Program Description:\n"));
-    P (("~~~~~~~~~~~~~~~~~~~~\n"));
-    P (("\n"));
-    P (("This example program calculates the number of occurences of errors/\n"));
-    P (("frame erasures in a pattern file, as well as a short-term histogram\n"));
-    P (("to see the number of burst frame erasures.\n"));
-    P (("\n"));
-    P (("The file containing the error pattern will be in one of three\n"));
-    P (("possible formats: G.192 16-bit softbit format (without synchronism\n"));
-    P (("header for bit errors), byte-oriented version of the G.192 format,\n"));
-    P (("and compact, hard-bit binary (bit) mode. These are described in the\n"));
-    P (("following.\n"));
-    P (("\n"));
-    P (("The headerless G.192 serial bitstream format is as described in\n"));
-    P (("G.192, with the exceptions listed below. The main feature is that\n"));
-    P (("the softbits and frame erasure indicators are right-aligned at\n"));
-    P (("16-bit word boundaries (unsigned short): \n"));
-    P (("'0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20\n"));
-    P (("\n"));
-    P (("In the byte-oriented softbit serial bitstream, only the lower byte\n"));
-    P (("of the softbits defined in G.192 are used. Hence:\n"));
-    P (("'0'=0x7F and '1'=0x81, and good/bad frame = 0x21/0x20\n"));
-    P (("\n"));
-    P (("In the compact (bit) mode, only hard bits are present. Each byte will\n"));
-    P (("have information about eight bits or frames. The LBbs will refer to\n"));
-    P (("bits or frames that occur first in time. Here, '1' means that a bit\n"));
-    P (("is in error or that a frame should be erased, and a '0', otherwise.\n"));
+    printf ("Program Description:\n");
+    printf ("~~~~~~~~~~~~~~~~~~~~\n");
+    printf ("\n");
+    printf ("This example program calculates the number of occurences of errors/\n");
+    printf ("frame erasures in a pattern file, as well as a short-term histogram\n");
+    printf ("to see the number of burst frame erasures.\n");
+    printf ("\n");
+    printf ("The file containing the error pattern will be in one of three\n");
+    printf ("possible formats: G.192 16-bit softbit format (without synchronism\n");
+    printf ("header for bit errors), byte-oriented version of the G.192 format,\n");
+    printf ("and compact, hard-bit binary (bit) mode. These are described in the\n");
+    printf ("following.\n");
+    printf ("\n");
+    printf ("The headerless G.192 serial bitstream format is as described in\n");
+    printf ("G.192, with the exceptions listed below. The main feature is that\n");
+    printf ("the softbits and frame erasure indicators are right-aligned at\n");
+    printf ("16-bit word boundaries (unsigned short): \n");
+    printf ("'0'=0x007F and '1'=0x0081, and good/bad frame = 0x6B21/0x6B20\n");
+    printf ("\n");
+    printf ("In the byte-oriented softbit serial bitstream, only the lower byte\n");
+    printf ("of the softbits defined in G.192 are used. Hence:\n");
+    printf ("'0'=0x7F and '1'=0x81, and good/bad frame = 0x21/0x20\n");
+    printf ("\n");
+    printf ("In the compact (bit) mode, only hard bits are present. Each byte will\n");
+    printf ("have information about eight bits or frames. The LBbs will refer to\n");
+    printf ("bits or frames that occur first in time. Here, '1' means that a bit\n");
+    printf ("is in error or that a frame should be erased, and a '0', otherwise.\n");
   } else {
-    P (("Program that calculates the number of occurences of errors/frame\n"));
-    P (("erasures in a pattern file, as well as a short-term histogram.\n"));
+    printf ("Program that calculates the number of occurences of errors/frame\n");
+    printf ("erasures in a pattern file, as well as a short-term histogram.\n");
   }
 
-  P (("Usage:\n"));
-  P ((" ep-stats [Options] err_patt_file  burst_len\n"));
-  P (("Where:\n"));
-  P ((" err_pat .... error pattern bitstream file\n"));
-  P ((" burst_len .. maximum bust length to report\n"));
-  P (("\n"));
-  P (("Options:\n"));
-  P ((" -frame # .... Set the frame size to #\n"));
-  P ((" -start # .... First frame to start processing\n"));
-  P ((" -burst max .. Define max burst length to report\n"));
-  P ((" -ep format .. Format for error pattern (g192, byte, or bit)\n"));
-  P ((" -ber ........ Pattern type is bit error pattern\n"));
-  P ((" -fer ........ Pattern type is frame erasure pattern\n"));
-  P ((" -q .......... Quiet operation\n"));
-  P ((" -? .......... Displays this message\n"));
-  P ((" -help ....... Displays a complete help message\n"));
+  printf ("Usage:\n");
+  printf (" ep-stats [Options] err_patt_file  burst_len\n");
+  printf ("Where:\n");
+  printf (" err_pat .... error pattern bitstream file\n");
+  printf (" burst_len .. maximum bust length to report\n");
+  printf ("\n");
+  printf ("Options:\n");
+  printf (" -frame # .... Set the frame size to #\n");
+  printf (" -start # .... First frame to start processing\n");
+  printf (" -burst max .. Define max burst length to report\n");
+  printf (" -ep format .. Format for error pattern (g192, byte, or bit)\n");
+  printf (" -ber ........ Pattern type is bit error pattern\n");
+  printf (" -fer ........ Pattern type is frame erasure pattern\n");
+  printf (" -q .......... Quiet operation\n");
+  printf (" -? .......... Displays this message\n");
+  printf (" -help ....... Displays a complete help message\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

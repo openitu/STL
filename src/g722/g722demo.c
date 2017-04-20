@@ -82,9 +82,6 @@
 #include "g722.h"
 #include "ugstdemo.h"
 
-/* Local prototypes */
-void display_usage ARGS ((void));
-
 /* Local definitions */
 #define DFT_BLK 1024
 
@@ -101,40 +98,36 @@ void display_usage ARGS ((void));
  01.Jul.95 v1.0 Created <simao>.
  -------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  /* Print Message */
-  P (("G722DEMO Version 2.2 of 04/Jan/1999 \n"));
-  P (("  UGST/ITU-T G.722 wideband (50-7000Hz) encode/decode module.\n"));
-  P (("  (*) G.722 Module: COPYRIGHT CNET LANNION A TSS/CMC, 24/Aug/90\n"));
+  printf ("G722DEMO Version 2.2 of 04/Jan/1999 \n");
+  printf ("  UGST/ITU-T G.722 wideband (50-7000Hz) encode/decode module.\n");
+  printf ("  (*) G.722 Module: COPYRIGHT CNET LANNION A TSS/CMC, 24/Aug/90\n");
 
-  P (("  Usage:\n"));
-  P (("  $ G722DEMO [-options] InpFile OutFile Mode\n"));
-  P (("             [BlockSize [1stBlock [NoOfBlocks]]]\n"));
-  P (("  where:\n"));
-  P (("  %s%s\n", "InpFile     ", "name of file to be processed (16 bit, left justified)"));
-  P (("  OutFile     filename for processed data\n"));
-  P (("  Mode        operation mode for the G.722 decoder (1,2,or 3)\n"));
-  P (("              Default is 1, i.e., 64 kbit/s.\n"));
-  P (("  BlockSize   block size, in number of samples [default: 1024 samples]\n"));
-  P (("  1stBlock    first block in input file to be processed [default: 1st block]\n"));
-  P (("  NoOfBlocks  number of blocks to be processed, starting on\n"));
-  P (("    	    block \"1stBlock\" [default: all blocks]\n"));
+  printf ("  Usage:\n");
+  printf ("  $ G722DEMO [-options] InpFile OutFile Mode\n");
+  printf ("             [BlockSize [1stBlock [NoOfBlocks]]]\n");
+  printf ("  where:\n");
+  printf ("  %s%s\n", "InpFile     ", "name of file to be processed (16 bit, left justified)");
+  printf ("  OutFile     filename for processed data\n");
+  printf ("  Mode        operation mode for the G.722 decoder (1,2,or 3)\n");
+  printf ("              Default is 1, i.e., 64 kbit/s.\n");
+  printf ("  BlockSize   block size, in number of samples [default: 1024 samples]\n");
+  printf ("  1stBlock    first block in input file to be processed [default: 1st block]\n");
+  printf ("  NoOfBlocks  number of blocks to be processed, starting on\n");
+  printf ("    	    block \"1stBlock\" [default: all blocks]\n");
 
-  P (("  Options:\n"));
-  P (("  -mode #     operation mode for the G.722 decoder (1[default],2,or 3). \n"));
-  P (("  -frame #    Number of samples per frame [default: 1024]\n"));
-  P (("  -enc        run only the encoder [default: encoder and decoder]\n"));
-  P (("  -dec        run only the decoder [default: encoder and decoder]\n"));
-  P (("  -noreset    don't apply reset to the encoder/decoder\n"));
-  P (("  -?/-help    print help message\n"));
-  P (("  -q          quiet operation (don't print progress flag)\n"));
+  printf ("  Options:\n");
+  printf ("  -mode #     operation mode for the G.722 decoder (1[default],2,or 3). \n");
+  printf ("  -frame #    Number of samples per frame [default: 1024]\n");
+  printf ("  -enc        run only the encoder [default: encoder and decoder]\n");
+  printf ("  -dec        run only the decoder [default: encoder and decoder]\n");
+  printf ("  -noreset    don't apply reset to the encoder/decoder\n");
+  printf ("  -?/-help    print help message\n");
+  printf ("  -q          quiet operation (don't print progress flag)\n");
 
-  /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

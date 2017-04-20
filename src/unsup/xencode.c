@@ -434,15 +434,15 @@ int main (int argc, char *argv[]) {
 
   ----------------------------------------------------------------------------
 */
-#define FP(x) fprintf(stderr, x);
 void display_usage () {
   fprintf (stderr, "\nxencode Ver.%.2f - ", (float) XENCODE / 100.0);
-  FP ("UGST file email transmission tool compatible with uuencode\n");
-  FP ("Usage: xencode [-options] [infile [outfile [blocksize] ] ]\n");
-  FP ("Options:\n");
-  FP ("-t ... treat input data as ASCII [default: binary]\n");
-  FP ("-b ... treat input data as binary [default]\n");
-  FP ("-q ... do not produce information text header\n");
+  fprintf (stderr, "UGST file email transmission tool compatible with uuencode\n");
+  fprintf (stderr, "Usage: xencode [-options] [infile [outfile [blocksize] ] ]\n");
+  fprintf (stderr, "Options:\n");
+  fprintf (stderr, "-t ... treat input data as ASCII [default: binary]\n");
+  fprintf (stderr, "-b ... treat input data as binary [default]\n");
+  fprintf (stderr, "-q ... do not produce information text header\n");
+
   exit (-128);
 }
 

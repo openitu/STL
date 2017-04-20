@@ -66,46 +66,42 @@ static int is_little_endian () {
   return (strncmp ("DCBA", (char *) &tmp, 4));
 }
 
-#define P(x) printf x
 static void display_usage () {
-  P (("FREQRESP.C - Version 1.3 of 15.Feb.2010 \n\n"));
+  printf ("FREQRESP.C - Version 1.3 of 15.Feb.2010 \n\n");
 
-  P ((" Frequency response measure program\n"));
-  P ((" This program computes the average power spectrum \n"));
-  P ((" of two files (input and output of a codec).\n"));
-  P (("\n"));
-  P ((" Usage:\n"));
-  P ((" $ freqresp   [-options] FileInpCodec FileOutCodec ASCIIout\n"));
-  P ((" where:\n"));
-  P (("  FileInpCodec   is the input file of the codec;\n"));
-  P (("  FileOutCodec   is the output file of the codec;\n"));
-  P (("  ASCIIout       is an ASCII file containing the average power spectrum\n"));
-  P (("                 of FileInpCodec and FileOutCodec;\n"));
-  P (("\n"));
-  P ((" Options:\n"));
-  P (("  -fs  fs ....... fs is the sampling frequency of the input files (default is\n"));
-  P (("                  16000Hz);\n"));
-  P (("  -bmp bmpFile... bmpFile is a bitmap file containing the average power\n"));
-  P (("                  spectrum graphic representation;\n"));
-  P (("  -fmin  fmin ... fmin is the minimum frequency to display in bitmap (default\n"));
-  P (("                  is 0Hz);\n"));
-  P (("  -fmax  fmax ... fmax is the maximum frequency to display in bitmap (default\n"));
-  P (("                  is 8000Hz);\n"));
-  P (("  -fstep fstep .. fstep is the frequency step to display in bitmap (default\n"));
-  P (("                  is 1000Hz);\n"));
-  P (("  -pmin  pmin ... pmin is the minimum power (dB) to display in bitmap (default\n"));
-  P (("                  is -80dB);\n"));
-  P (("  -pmax  pmax ... pmax is the maximumpower (dB) to display in bitmap (default\n"));
-  P (("                  is 0dB);\n"));
-  P (("  -pstep pstep .. pstep is the power step (dB) to display in bitmap (default\n"));
-  P (("                  is 10dB);\n"));
-  P (("  -ov    ov ..... ov is the overlap (%c) between two consecutive frames for\n", '%'));
-  P (("                  computing the average power spectrum (default is 0%c);\n", '%'));
-  P (("  -nfft  nfft ... nfft is the number of samples in each FFT (default is 2048).\n"));
-  P (("\n"));
+  printf (" Frequency response measure program\n");
+  printf (" This program computes the average power spectrum \n");
+  printf (" of two files (input and output of a codec).\n");
+  printf ("\n");
+  printf (" Usage:\n");
+  printf (" $ freqresp   [-options] FileInpCodec FileOutCodec ASCIIout\n");
+  printf (" where:\n");
+  printf ("  FileInpCodec   is the input file of the codec;\n");
+  printf ("  FileOutCodec   is the output file of the codec;\n");
+  printf ("  ASCIIout       is an ASCII file containing the average power spectrum\n");
+  printf ("                 of FileInpCodec and FileOutCodec;\n");
+  printf ("\n");
+  printf (" Options:\n");
+  printf ("  -fs  fs ....... fs is the sampling frequency of the input files (default is\n");
+  printf ("                  16000Hz);\n");
+  printf ("  -bmp bmpFile... bmpFile is a bitmap file containing the average power\n");
+  printf ("                  spectrum graphic representation;\n");
+  printf ("  -fmin  fmin ... fmin is the minimum frequency to display in bitmap (default\n");
+  printf ("                  is 0Hz);\n");
+  printf ("  -fmax  fmax ... fmax is the maximum frequency to display in bitmap (default\n");
+  printf ("                  is 8000Hz);\n");
+  printf ("  -fstep fstep .. fstep is the frequency step to display in bitmap (default\n");
+  printf ("                  is 1000Hz);\n");
+  printf ("  -pmin  pmin ... pmin is the minimum power (dB) to display in bitmap (default\n");
+  printf ("                  is -80dB);\n");
+  printf ("  -pmax  pmax ... pmax is the maximumpower (dB) to display in bitmap (default\n");
+  printf ("                  is 0dB);\n");
+  printf ("  -pstep pstep .. pstep is the power step (dB) to display in bitmap (default\n");
+  printf ("                  is 10dB);\n");
+  printf ("  -ov    ov ..... ov is the overlap (%c) between two consecutive frames for\n", '%');
+  printf ("                  computing the average power spectrum (default is 0%c);\n", '%');
+  printf ("  -nfft  nfft ... nfft is the number of samples in each FFT (default is 2048).\n\n");
 }
-
-#undef P
 
 int main (int argc, char *argv[]) {
   /* .... DECLARATIONS ..... */

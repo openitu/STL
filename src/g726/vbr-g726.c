@@ -222,65 +222,62 @@ int parse_rate (char *str, short **rate) {
  10.Mar.95 v1.0 Created <simao>.
  -------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("Version 1.3 of 21/Mar/2000 \n\n"));
+  printf ("Version 1.3 of 21/Mar/2000 \n\n");
 
-  P (("  VBR-G726.C \n"));
-  P (("  Demonstration program for UGST/ITU-T G.726 module using the variable\n"));
-  P (("  bit rate feature. This version accepts either linear or G.711 A/u-law\n"));
-  P (("  input. Since this implementation of the G.726 requires G.711 compressed\n"));
-  P (("  samples, linear samples are converted to G.711 format before being\n"));
-  P (("  processed. Therefore, the same ammount of quantization distortion should\n"));
-  P (("  be expect either way.\n"));
-  P (("  Input data is supposed to be aligned at word boundaries, i.e.,\n"));
-  P (("  organized in 16-bit words, following the operating system normal\n"));
-  P (("  organization (low-byte first for VMS and DOS; high byte first for most\n"));
-  P (("  Unix systems). Linear samples are supposed to be 16-bit right-adjusted. \n"));
-  P (("  G711 compressed data is supposed to be in the 8 LEAST\n"));
-  P (("  significant bits of the word and the ADPCM data is in the LEAST 5\n"));
-  P (("  bits. Both are without sign extension.\n"));
-  P (("  \n"));
-  P (("  Output data will be generated in the same format as decribed above for\n"));
-  P (("  the input data.\n"));
-  P (("  \n"));
-  P (("  Usage:\n"));
-  P (("  VBR-G726 [-options] InpFile OutFile \n"));
-  P (("             [FrameSize [1stBlock [NoOfBlocks [Reset]]]]\n"));
-  P (("  where:\n"));
-  P (("  InpFile     is the name of the file to be processed;\n"));
-  P (("  OutFile     is the name with the processed data;\n"));
-  P (("  FrameSize   is the frame size, in number of samples; the bitrate \n"));
-  P (("              will only change in the boundaries of a frame \n"));
-  P (("              [default: 16 samples]\n"));
-  P (("  1stBlock    is the number of the first block of the input file\n"));
-  P (("              to be processed [default: 1st block]\n"));
-  P (("  NoOfBlocks  is the number of blocks to be processed, starting on\n"));
-  P (("              block \"1stBlock\" [default: all blocks]\n"));
-  P (("\n"));
-  P (("  Options:\n"));
-  P (("  -law #      the letters A or a for G.711 A-law, letter u for \n"));
-  P (("              G.711 u-law, or letter l for linear. If linear is\n"));
-  P (("              chosen, A-law is used to compress/expand samples to/from\n"));
-  P (("              the G.726 routines. Default is A-law.\n"));
-  P (("  -rate #     is the bit-rate (in kbit/s): 40, 32, 24 or 16 (in kbit/s); \n"));
-  P (("              or a combination of them using dashes (e.g. 32-24 or\n"));
-  P (("              16-24-32). Default is 32 kbit/s.\n"));
-  P (("  -frame #    Number of samples per frame for switching bit rates.\n"));
-  P (("              Default is 16 samples (or 2ms) \n"));
-  P (("  -enc        run only the G.726 encoder on the samples \n"));
-  P (("              [default: run encoder and decoder]\n"));
-  P (("  -dec        run only the G.726 decoder on the samples \n"));
-  P (("              [default: run encoder and decoder]\n"));
-  P (("  -noreset    don't apply reset to the encoder/decoder\n"));
-  P (("  -?/-help    print help message\n"));
-  P (("\n"));
+  printf ("  VBR-G726.C \n");
+  printf ("  Demonstration program for UGST/ITU-T G.726 module using the variable\n");
+  printf ("  bit rate feature. This version accepts either linear or G.711 A/u-law\n");
+  printf ("  input. Since this implementation of the G.726 requires G.711 compressed\n");
+  printf ("  samples, linear samples are converted to G.711 format before being\n");
+  printf ("  processed. Therefore, the same ammount of quantization distortion should\n");
+  printf ("  be expect either way.\n");
+  printf ("  Input data is supposed to be aligned at word boundaries, i.e.,\n");
+  printf ("  organized in 16-bit words, following the operating system normal\n");
+  printf ("  organization (low-byte first for VMS and DOS; high byte first for most\n");
+  printf ("  Unix systems). Linear samples are supposed to be 16-bit right-adjusted. \n");
+  printf ("  G711 compressed data is supposed to be in the 8 LEAST\n");
+  printf ("  significant bits of the word and the ADPCM data is in the LEAST 5\n");
+  printf ("  bits. Both are without sign extension.\n");
+  printf ("  \n");
+  printf ("  Output data will be generated in the same format as decribed above for\n");
+  printf ("  the input data.\n");
+  printf ("  \n");
+  printf ("  Usage:\n");
+  printf ("  VBR-G726 [-options] InpFile OutFile \n");
+  printf ("             [FrameSize [1stBlock [NoOfBlocks [Reset]]]]\n");
+  printf ("  where:\n");
+  printf ("  InpFile     is the name of the file to be processed;\n");
+  printf ("  OutFile     is the name with the processed data;\n");
+  printf ("  FrameSize   is the frame size, in number of samples; the bitrate \n");
+  printf ("              will only change in the boundaries of a frame \n");
+  printf ("              [default: 16 samples]\n");
+  printf ("  1stBlock    is the number of the first block of the input file\n");
+  printf ("              to be processed [default: 1st block]\n");
+  printf ("  NoOfBlocks  is the number of blocks to be processed, starting on\n");
+  printf ("              block \"1stBlock\" [default: all blocks]\n");
+  printf ("\n");
+  printf ("  Options:\n");
+  printf ("  -law #      the letters A or a for G.711 A-law, letter u for \n");
+  printf ("              G.711 u-law, or letter l for linear. If linear is\n");
+  printf ("              chosen, A-law is used to compress/expand samples to/from\n");
+  printf ("              the G.726 routines. Default is A-law.\n");
+  printf ("  -rate #     is the bit-rate (in kbit/s): 40, 32, 24 or 16 (in kbit/s); \n");
+  printf ("              or a combination of them using dashes (e.g. 32-24 or\n");
+  printf ("              16-24-32). Default is 32 kbit/s.\n");
+  printf ("  -frame #    Number of samples per frame for switching bit rates.\n");
+  printf ("              Default is 16 samples (or 2ms) \n");
+  printf ("  -enc        run only the G.726 encoder on the samples \n");
+  printf ("              [default: run encoder and decoder]\n");
+  printf ("  -dec        run only the G.726 decoder on the samples \n");
+  printf ("              [default: run encoder and decoder]\n");
+  printf ("  -noreset    don't apply reset to the encoder/decoder\n");
+  printf ("  -?/-help    print help message\n\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

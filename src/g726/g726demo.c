@@ -133,65 +133,62 @@
  8.Mar.94 v1.0 Created.
  -------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("G726DEMO - Version 1.4 of 03.Feb.2010 \n\n"));
+  printf ("G726DEMO - Version 1.4 of 03.Feb.2010 \n\n");
 
-  P (("> Description:\n"));
-  P (("   Demonstration program for UGST/ITU-T G.726 module. Takes the\n"));
-  P (("   input file and processes by the G.726 codec,\n"));
-  P (("   depending on user's option: for encoding, input must be in\n"));
-  P (("   either A or mu law (G711), for decoding, in ADPCM format. The\n"));
-  P (("   modules called have been originally written in Fortran, and were\n"));
-  P (("   translated into C by the converter f2c, version of October 15,1990\n"));
-  P (("\n"));
-  P (("   Input data is supposed to be aligned at word boundaries, i.e.,\n"));
-  P (("   organized in 16-bit words, following the operating system normal\n"));
-  P (("   organization (low-byte first for VMS and DOS; high byte first\n"));
-  P (("   for most Unix systems). G711 compressed data is supposed to be\n"));
-  P (("   in the 8 LEAST significant bits of the word and the ADPCM data\n"));
-  P (("   is in the LEAST 5 bits. Both are without sign extension.\n"));
-  P (("\n"));
-  P (("   Output data will be generated in the same format as decribed\n"));
-  P (("   above for the input data.\n"));
-  P (("\n"));
+  printf ("> Description:\n");
+  printf ("   Demonstration program for UGST/ITU-T G.726 module. Takes the\n");
+  printf ("   input file and processes by the G.726 codec,\n");
+  printf ("   depending on user's option: for encoding, input must be in\n");
+  printf ("   either A or mu law (G711), for decoding, in ADPCM format. The\n");
+  printf ("   modules called have been originally written in Fortran, and were\n");
+  printf ("   translated into C by the converter f2c, version of October 15,1990\n");
+  printf ("\n");
+  printf ("   Input data is supposed to be aligned at word boundaries, i.e.,\n");
+  printf ("   organized in 16-bit words, following the operating system normal\n");
+  printf ("   organization (low-byte first for VMS and DOS; high byte first\n");
+  printf ("   for most Unix systems). G711 compressed data is supposed to be\n");
+  printf ("   in the 8 LEAST significant bits of the word and the ADPCM data\n");
+  printf ("   is in the LEAST 5 bits. Both are without sign extension.\n");
+  printf ("\n");
+  printf ("   Output data will be generated in the same format as decribed\n");
+  printf ("   above for the input data.\n");
+  printf ("\n");
 
-  P (("> Usage:\n"));
-  P (("$ G726demo [-options] Law Transf Rate InpFile OutFile \n"));
-  P (("           [BlockSize [1stBlock [NoOfBlocks [Reset]]]]\n"));
-  P ((" where:\n"));
-  P ((" Law         is the law desired (either A or u)\n"));
-  P ((" Transf      is the desired conversion on the input file:\n"));
-  P (("              [lolo], (A/u)log -> ADPCM -> (A/u) log\n"));
-  P (("              [load], (A/u)log -> ADPCM  \n"));
-  P (("              [adlo], ADPCM    -> (A/u) log\n"));
-  P ((" Rate        is the number of ADPCM bits per sample:\n"));
-  P (("              [5],[40] -> 5 bits per sample (40 kbit/s)\n"));
-  P (("              [4],[32] -> 4 bits per sample (32 kbit/s)\n"));
-  P (("              [3],[24] -> 3 bits per sample (24 kbit/s)\n"));
-  P (("              [2],[16] -> 2 bits per sample (16 kbit/s)\n"));
-  P ((" InpFile     is the name of the file to be processed;\n"));
-  P ((" OutFile     is the name with the processed data;\n"));
-  P ((" BlockSize   is the block size, in number of samples\n"));
-  P ((" 1stBlock    is the number of the first block of the input file\n"));
-  P (("             to be processed;\n"));
-  P ((" NoOfBlocks  is the number of blocks to be processed, starting on\n"));
-  P (("             block \"1stBlock\"\n"));
-  P ((" Reset       is the optional reset. If specified as 1, the\n"));
-  P (("             coder and decoder will be  reset at the very\n"));
-  P (("             beginning of the processings. If 0, the\n"));
-  P (("             processing will start with the variables  at a\n"));
-  P (("             unknown state. It defaults to 1 (reset ON). \n"));
-  P ((" Options: \n"));
-  P ((" -noreset    don't apply reset to the encoder/decoder\n"));
-  P ((" -? or -help print this help message\n"));
-  P (("\n"));
+  printf ("> Usage:\n");
+  printf ("$ G726demo [-options] Law Transf Rate InpFile OutFile \n");
+  printf ("           [BlockSize [1stBlock [NoOfBlocks [Reset]]]]\n");
+  printf (" where:\n");
+  printf (" Law         is the law desired (either A or u)\n");
+  printf (" Transf      is the desired conversion on the input file:\n");
+  printf ("              [lolo], (A/u)log -> ADPCM -> (A/u) log\n");
+  printf ("              [load], (A/u)log -> ADPCM  \n");
+  printf ("              [adlo], ADPCM    -> (A/u) log\n");
+  printf (" Rate        is the number of ADPCM bits per sample:\n");
+  printf ("              [5],[40] -> 5 bits per sample (40 kbit/s)\n");
+  printf ("              [4],[32] -> 4 bits per sample (32 kbit/s)\n");
+  printf ("              [3],[24] -> 3 bits per sample (24 kbit/s)\n");
+  printf ("              [2],[16] -> 2 bits per sample (16 kbit/s)\n");
+  printf (" InpFile     is the name of the file to be processed;\n");
+  printf (" OutFile     is the name with the processed data;\n");
+  printf (" BlockSize   is the block size, in number of samples\n");
+  printf (" 1stBlock    is the number of the first block of the input file\n");
+  printf ("             to be processed;\n");
+  printf (" NoOfBlocks  is the number of blocks to be processed, starting on\n");
+  printf ("             block \"1stBlock\"\n");
+  printf (" Reset       is the optional reset. If specified as 1, the\n");
+  printf ("             coder and decoder will be  reset at the very\n");
+  printf ("             beginning of the processings. If 0, the\n");
+  printf ("             processing will start with the variables  at a\n");
+  printf ("             unknown state. It defaults to 1 (reset ON). \n");
+  printf (" Options: \n");
+  printf (" -noreset    don't apply reset to the encoder/decoder\n");
+  printf (" -? or -help print this help message\n\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

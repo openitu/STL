@@ -321,56 +321,54 @@ long run_FER_generator_burst (short *patt, BURST_EID * state, long n) {
    11/Aug/1997  v1.0 Created <simao>
    --------------------------------------------------------------------------
  */
-#define P(x) printf x
 void display_usage () {
-  P (("gen-patt.c Version 1.7 of 02.Feb.2010\n"));
+  printf ("gen-patt.c Version 1.7 of 02.Feb.2010\n");
 
-  P (("  This example program produces bit error pattern files for error\n"));
-  P (("  insertion in G.192-compliant serial bitstreams encoded files. Error\n"));
-  P (("  insertion must be performed by \"X-oring\" the softbits produced with\n"));
-  P (("  the softbits produced by the speech encoder. The error pattern can\n"));
-  P (("  be generated according to 3 models: Random bit errors (BER), and\n"));
-  P (("  random (FER) and (BFER) burst frame erasure.\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  gen-patt [Options] err_pat_bs mode frno start state_f rate\n"));
-  P (("  Where:\n"));
-  P (("  err_pat .. name of error pattern bitstream file\n"));
-  P (("  mode ..... a letter representing one of 4 operating modes: \n"));
-  P (("             R:Bit Errors F:Simple Frame Erasures B:Bellcore model\n"));
-  P (("  frno ..... total number of bits|frames in pattern\n"));
-  P (("  start .... first bit|frame to have errors|erasures introduced [def:1]\n"));
-  P (("  state_f .. name of an ASCII state variable file NOTE: The parameters\n"));
-  P (("             saved in an existing state variable file *OVERRIDE*\n"));
-  P (("             the BER/FER/Gamma values defined by the user in the\n"));
-  P (("             command-line!!! \n"));
-  P (("  rate ..... desired error|erasure rate (according to the mode)\n"));
-  P (("  Options:\n"));
-  P (("   -ber ..... Bit error mode\n"));
-  P (("   -fer ..... Frame erasure mode using Gilbert model\n"));
-  P (("   -bfer .... Burst frame erasure mode using the Bellcore model\n"));
-  P (("   -rate # .. Desired bit|frame error rate\n"));
-  P (("              BER/FER:  0.00 .. 0.50      BFER: 0.005 .. 0.30\n"));
-  P (("   -gamma # . Correlation for BER|FER modes (0.00 .. 1.00; default: 0)\n"));
-  P (("   -n # ..... Number of bits|frames to be produced\n"));
-  P (("   -start # . First bit|frame to start applying errors [default: 1]\n"));
-  P (("   -tailstat . Statistics performed on the tail(where errors are applied).\n"));
-  P (("               (This option excludes [1..(start-1)] from the statistics.)\n"));
-  P (("               (Default operation is to count statistics for the whole file.)\n"));
-  P (("   -byte .... Save error pattern in byte-oriented G.192 format (default)\n"));
-  P (("   -g192 .... Save error pattern in 16-bit G.192 format\n"));
-  P (("   -bit ..... Save error pattern in compact binary format (same as -compact)\n"));
-  P (("   -compact . Save error pattern in compact binary format (same as -bit)\n"));
-  P (("   -reset ... Reset EID state in between iteractions\n"));
-  P (("   -max # ... Maximum number of iteractions\n"));
-  P (("   -tol # ... Max deviation of specified BER/FER/BFER\n"));
-  P (("   -q ....... Quiet operation mode\n"));
+  printf ("  This example program produces bit error pattern files for error\n");
+  printf ("  insertion in G.192-compliant serial bitstreams encoded files. Error\n");
+  printf ("  insertion must be performed by \"X-oring\" the softbits produced with\n");
+  printf ("  the softbits produced by the speech encoder. The error pattern can\n");
+  printf ("  be generated according to 3 models: Random bit errors (BER), and\n");
+  printf ("  random (FER) and (BFER) burst frame erasure.\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  gen-patt [Options] err_pat_bs mode frno start state_f rate\n");
+  printf ("  Where:\n");
+  printf ("  err_pat .. name of error pattern bitstream file\n");
+  printf ("  mode ..... a letter representing one of 4 operating modes: \n");
+  printf ("             R:Bit Errors F:Simple Frame Erasures B:Bellcore model\n");
+  printf ("  frno ..... total number of bits|frames in pattern\n");
+  printf ("  start .... first bit|frame to have errors|erasures introduced [def:1]\n");
+  printf ("  state_f .. name of an ASCII state variable file NOTE: The parameters\n");
+  printf ("             saved in an existing state variable file *OVERRIDE*\n");
+  printf ("             the BER/FER/Gamma values defined by the user in the\n");
+  printf ("             command-line!!! \n");
+  printf ("  rate ..... desired error|erasure rate (according to the mode)\n");
+  printf ("  Options:\n");
+  printf ("   -ber ..... Bit error mode\n");
+  printf ("   -fer ..... Frame erasure mode using Gilbert model\n");
+  printf ("   -bfer .... Burst frame erasure mode using the Bellcore model\n");
+  printf ("   -rate # .. Desired bit|frame error rate\n");
+  printf ("              BER/FER:  0.00 .. 0.50      BFER: 0.005 .. 0.30\n");
+  printf ("   -gamma # . Correlation for BER|FER modes (0.00 .. 1.00; default: 0)\n");
+  printf ("   -n # ..... Number of bits|frames to be produced\n");
+  printf ("   -start # . First bit|frame to start applying errors [default: 1]\n");
+  printf ("   -tailstat . Statistics performed on the tail(where errors are applied).\n");
+  printf ("               (This option excludes [1..(start-1)] from the statistics.)\n");
+  printf ("               (Default operation is to count statistics for the whole file.)\n");
+  printf ("   -byte .... Save error pattern in byte-oriented G.192 format (default)\n");
+  printf ("   -g192 .... Save error pattern in 16-bit G.192 format\n");
+  printf ("   -bit ..... Save error pattern in compact binary format (same as -compact)\n");
+  printf ("   -compact . Save error pattern in compact binary format (same as -bit)\n");
+  printf ("   -reset ... Reset EID state in between iteractions\n");
+  printf ("   -max # ... Maximum number of iteractions\n");
+  printf ("   -tol # ... Max deviation of specified BER/FER/BFER\n");
+  printf ("   -q ....... Quiet operation mode\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

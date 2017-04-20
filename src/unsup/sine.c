@@ -118,56 +118,55 @@ double v_to_dB_f (double x) {
   7/Nov/1997  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("Version 1.2 of 22/Mar/2000 \n\n"));
+  printf ("Version 1.2 of 22/Mar/2000 \n\n");
 
-  P (("  SINE.C\n"));
-  P (("\n"));
-  P (("  Program for generating a file with a tone, given the amplitude, the\n"));
-  P (("  frequency, the sampling rate, the DC level and the phase.  In this\n"));
-  P (("  implementation, a 16 bit resolution A/D,D/A system is the default\n"));
-  P (("  (changeable by the optional parameter #9)\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  ~~~~~~\n"));
-  P (("  $ sine [-options] file\n"));
-  P (("         [BlockSize [NoOfBlocks [ACampl [f [fs [DCampl [phase [res]]]]]]]]\n"));
-  P (("  where:\n"));
-  P (("  file ........ is the file name;\n"));
-  P (("  BlockSize ... is the Block size, in samples;\n"));
-  P (("  NoOfBlocks .. the number of blocks to be displayed;\n"));
-  P (("  ACampl ...... AC amplitude of the tone; if positive, it is understood\n"));
-  P (("                as the PCM value; if negative, it considers the value\n"));
-  P (("                given as a dB value. So, if it is -20, the program\n"));
-  P (("                will generate a tone with AC amplitude equal to -20\n"));
-  P (("                dB, ie, 1638 in PCM;\n"));
-  P (("  f ........... tone frequency, in Hz;\n"));
-  P (("  fs .......... sampling frequency, in Hz;\n"));
-  P (("  DCampl ...... DC level of the tone, in PCM;\n"));
-  P (("  phase	....... the desired phase for the tone, in degrees;\n"));
-  P (("  res ......... digital system resolution; if not specified, the program\n"));
-  P (("                assumes 16 bits;\n"));
-  P (("\n"));
-  P (("  Options:\n"));
-  P (("  ~~~~~~~~\n"));
-  P (("  -dB ........... AC level is given in dB [default: linear PCM]\n"));
-  P (("  -ac ........... define AC tone level, in dB or PCM\n"));
-  P (("  -f ............ define tone frequency in Hertz \n"));
-  P (("  -dc ........... define DC level for tone, as a linear PCM value [default: 0]\n"));
-  P (("  -sf ........... define sampling frequency in Hertz [default: 8000 Hz]\n"));
-  P (("  -phase ........ set phase in degrees for tone [default: 0 degrees]\n"));
-  P (("  -blk .......... define file block size [default: 256]\n"));
-  P (("  -n ............ define no.of blocks to generate\n"));
-  P (("  -res .......... define no.of bits per sample [default: 16]\n"));
-  P (("  -q ............ quiet operation\n"));
-  P (("  -? or -help ... display on-line help message\n"));
+  printf ("  SINE.C\n");
+  printf ("\n");
+  printf ("  Program for generating a file with a tone, given the amplitude, the\n");
+  printf ("  frequency, the sampling rate, the DC level and the phase.  In this\n");
+  printf ("  implementation, a 16 bit resolution A/D,D/A system is the default\n");
+  printf ("  (changeable by the optional parameter #9)\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  ~~~~~~\n");
+  printf ("  $ sine [-options] file\n");
+  printf ("         [BlockSize [NoOfBlocks [ACampl [f [fs [DCampl [phase [res]]]]]]]]\n");
+  printf ("  where:\n");
+  printf ("  file ........ is the file name;\n");
+  printf ("  BlockSize ... is the Block size, in samples;\n");
+  printf ("  NoOfBlocks .. the number of blocks to be displayed;\n");
+  printf ("  ACampl ...... AC amplitude of the tone; if positive, it is understood\n");
+  printf ("                as the PCM value; if negative, it considers the value\n");
+  printf ("                given as a dB value. So, if it is -20, the program\n");
+  printf ("                will generate a tone with AC amplitude equal to -20\n");
+  printf ("                dB, ie, 1638 in PCM;\n");
+  printf ("  f ........... tone frequency, in Hz;\n");
+  printf ("  fs .......... sampling frequency, in Hz;\n");
+  printf ("  DCampl ...... DC level of the tone, in PCM;\n");
+  printf ("  phase	....... the desired phase for the tone, in degrees;\n");
+  printf ("  res ......... digital system resolution; if not specified, the program\n");
+  printf ("                assumes 16 bits;\n");
+  printf ("\n");
+  printf ("  Options:\n");
+  printf ("  ~~~~~~~~\n");
+  printf ("  -dB ........... AC level is given in dB [default: linear PCM]\n");
+  printf ("  -ac ........... define AC tone level, in dB or PCM\n");
+  printf ("  -f ............ define tone frequency in Hertz \n");
+  printf ("  -dc ........... define DC level for tone, as a linear PCM value [default: 0]\n");
+  printf ("  -sf ........... define sampling frequency in Hertz [default: 8000 Hz]\n");
+  printf ("  -phase ........ set phase in degrees for tone [default: 0 degrees]\n");
+  printf ("  -blk .......... define file block size [default: 256]\n");
+  printf ("  -n ............ define no.of blocks to generate\n");
+  printf ("  -res .......... define no.of bits per sample [default: 16]\n");
+  printf ("  -q ............ quiet operation\n");
+  printf ("  -? or -help ... display on-line help message\n");
+
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ..................... End of display_usage() ......................... */
 
 /* ********************************************************************** */

@@ -84,37 +84,36 @@
 #define CR	   printf("\n");
 
 /* ---------------------------- display usage ------------------------------ */
-#define P(x) printf(x)
 void display_usage () {
-  P (("\t\t\t*** DUMPFILE -- 10/Jan/1994 V2.1 ***\n\n"));
+  printf ("\t\t\t*** DUMPFILE -- 10/Jan/1994 V2.1 ***\n\n");
 
-  P ((" Description:\n"));
-  P ((" Program for dumping a file to the screen as integers or hex\n"));
-  P ((" numbers; the option for dumping float files has not been\n"));
-  P ((" implemented yet.\n\n"));
+  printf (" Description:\n");
+  printf (" Program for dumping a file to the screen as integers or hex\n");
+  printf (" numbers; the option for dumping float files has not been\n");
+  printf (" implemented yet.\n\n");
 
-  P ((" Usage:\n"));
-  P ((" $ DUMPFILE [-options] file BlkSize 1stBlk BlkNo Dump Type\n"));
-  P ((" where:\n"));
-  P (("  file        is the file name;\n"));
-  P (("  BlkSize     is the Block size, in samples;\n"));
-  P (("  1stBlk      is the stating block;\n"));
-  P (("  BlkNo       the number of blocks to be displayed;\n"));
-  P (("  Dump        if the dump is in decinal [D] format \n"));
-  P (("              or if it is hexa[H];\n"));
-  P (("  Type        is the Data type: if the file contains \n"));
-  P (("              integer [I] or real [R] data;\n"));
-  P ((" Options:\n"));
-  P ((" -delay       is the number of samples to delay.\n"));
-  P ((" -h           set dump in hex mode - valid for integer data types\n"));
-  P ((" -d           set dump in decimal mode for integer data types [default]\n"));
-  P ((" -float       display float numbers\n"));
-  P ((" -double      display double numbers\n"));
-  P ((" -short       display short numbers [default]\n"));
-  P ((" -long        display long numbers\n"));
+  printf (" Usage:\n");
+  printf (" $ DUMPFILE [-options] file BlkSize 1stBlk BlkNo Dump Type\n");
+  printf (" where:\n");
+  printf ("  file        is the file name;\n");
+  printf ("  BlkSize     is the Block size, in samples;\n");
+  printf ("  1stBlk      is the stating block;\n");
+  printf ("  BlkNo       the number of blocks to be displayed;\n");
+  printf ("  Dump        if the dump is in decinal [D] format \n");
+  printf ("              or if it is hexa[H];\n");
+  printf ("  Type        is the Data type: if the file contains \n");
+  printf ("              integer [I] or real [R] data;\n");
+  printf (" Options:\n");
+  printf (" -delay       is the number of samples to delay.\n");
+  printf (" -h           set dump in hex mode - valid for integer data types\n");
+  printf (" -d           set dump in decimal mode for integer data types [default]\n");
+  printf (" -float       display float numbers\n");
+  printf (" -double      display double numbers\n");
+  printf (" -short       display short numbers [default]\n");
+  printf (" -long        display long numbers\n");
 
-  P ((" Original Author:  Simao Ferraz de Campos Neto -- Comsat Labs\n"));
-  P (("                   <simao@ctd.comsat.com>\n\n"));
+  printf (" Original Author:  Simao Ferraz de Campos Neto -- Comsat Labs\n");
+  printf ("                   <simao@ctd.comsat.com>\n\n");
 
   /* Quit program */
   exit (1);

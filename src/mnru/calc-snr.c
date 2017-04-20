@@ -95,42 +95,40 @@
 
   ============================================================================
 */
-#define P(x) printf x
 void display_usage () {
-  P (("CALC-SNR.C - Version 2.1 of 02.Feb.2010 \n\n"));
-  P (("  Program for calculating the SNR of two files.\n"));
-  P (("  Print the results on the screen, or in a BINARY file. Supposes\n"));
-  P (("  `short' data format for input.\n"));
-  P (("  \n"));
-  P (("  Usage:\n"));
-  P (("  ~~~~~~\n"));
-  P (("  $ SNR [-options] file1 file2 [BlkSiz [1stBlock [NoOfBlocks [output]]]]\n"));
-  P (("  where:\n"));
-  P (("  file1       is the first file name;\n"));
-  P (("  file2       is the second file name;\n"));
-  P (("  BlkSiz      is block size, in samples;\n"));
-  P (("  1stBlock    is the starting block;\n"));
-  P (("  NoOfBlocks  the number of blocks to be displayed;\n"));
-  P (("  output      if specified, is the name of output\n"));
-  P (("              file, with the difference values.\n"));
-  P (("  Options:\n"));
-  P (("  ~~~~~~~~\n"));
-  P (("  -blk len  .. is the block size in number of samples;\n"));
-  P (("               this parameter is optional, and the default is block size\n"));
-  P (("	       of 256 samples;\n"));
-  P (("  -start sb .. define `sb' as the first block to be measured \n"));
-  P (("               [default: first block of the file] \n"));
-  P (("  -n nb ...... define `nb' as the number of blocks to be measured \n"));
-  P (("               [default: whole file]\n"));
-  P (("  -out of .... define `of' as the binary output filename with \n"));
-  P (("               binary float SEGSNR [default: log only onto screen]\n"));
-  P (("  -q ......... quiet operation: results printed all in one line.\n"));
+  printf ("CALC-SNR.C - Version 2.1 of 02.Feb.2010 \n\n");
+  printf ("  Program for calculating the SNR of two files.\n");
+  printf ("  Print the results on the screen, or in a BINARY file. Supposes\n");
+  printf ("  `short' data format for input.\n");
+  printf ("  \n");
+  printf ("  Usage:\n");
+  printf ("  ~~~~~~\n");
+  printf ("  $ SNR [-options] file1 file2 [BlkSiz [1stBlock [NoOfBlocks [output]]]]\n");
+  printf ("  where:\n");
+  printf ("  file1       is the first file name;\n");
+  printf ("  file2       is the second file name;\n");
+  printf ("  BlkSiz      is block size, in samples;\n");
+  printf ("  1stBlock    is the starting block;\n");
+  printf ("  NoOfBlocks  the number of blocks to be displayed;\n");
+  printf ("  output      if specified, is the name of output\n");
+  printf ("              file, with the difference values.\n");
+  printf ("  Options:\n");
+  printf ("  ~~~~~~~~\n");
+  printf ("  -blk len  .. is the block size in number of samples;\n");
+  printf ("               this parameter is optional, and the default is block size\n");
+  printf ("	       of 256 samples;\n");
+  printf ("  -start sb .. define `sb' as the first block to be measured \n");
+  printf ("               [default: first block of the file] \n");
+  printf ("  -n nb ...... define `nb' as the number of blocks to be measured \n");
+  printf ("               [default: whole file]\n");
+  printf ("  -out of .... define `of' as the binary output filename with \n");
+  printf ("               binary float SEGSNR [default: log only onto screen]\n");
+  printf ("  -q ......... quiet operation: results printed all in one line.\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... End of display_usage() .......................... */
 
 

@@ -62,34 +62,31 @@
 
 #define MAX_BST_LENGTH 2560
 
-#define P(x) printf x
 static void display_usage () {
-  P (("TRUNCATE.C - Version 1.3 of 02.Feb.2010 \n\n"));
+  printf ("TRUNCATE.C - Version 1.3 of 02.Feb.2010 \n\n");
 
-  P ((" Bitstream truncation program\n"));
-  P ((" This program truncates a bitstream to obtain intermediate bitrates\n"));
-  P ((" This tool operates on :\n"));
-  P (("       - G.192 (with or without sync header) bitstreams (16-bits words),\n"));
-  P (("       - G.192 byte-oriented (with or without sync header) bitstreams,\n"));
-  P (("       - binary (compact) bitstreams.\n"));
-  P (("\n"));
-  P ((" Usage:\n"));
-  P ((" $ truncate   [-options] BstIn BstOut\n"));
-  P ((" where:\n"));
-  P (("  BstIn        is the input bitstream;\n"));
-  P (("  BstOut       is the output bitstream;\n"));
-  P (("\n"));
-  P ((" Options:\n"));
-  P (("  -fl fl.......... fl is the frame length of the input bistream in ms (default is 20ms);\n"));
-  P (("  -b btr.......... btr is the constant bitrate of the output bistream file;\n"));
-  P (("  -bf btrF........ btrF is a bitrate file containing the bitrate;\n"));
-  P (("                   for each frame of the input bitstream (disabled for binary bitstreams);\n"));
-  P (("  -ib btr......... btr is the constant bitrate of the input bitstream file (for binary bitstreams only);\n"));
-  P (("  -q ............. quiet processing (no progress flag)\n"));
-  P (("\n"));
+  printf (" Bitstream truncation program\n");
+  printf (" This program truncates a bitstream to obtain intermediate bitrates\n");
+  printf (" This tool operates on :\n");
+  printf ("       - G.192 (with or without sync header) bitstreams (16-bits words),\n");
+  printf ("       - G.192 byte-oriented (with or without sync header) bitstreams,\n");
+  printf ("       - binary (compact) bitstreams.\n");
+  printf ("\n");
+  printf (" Usage:\n");
+  printf (" $ truncate   [-options] BstIn BstOut\n");
+  printf (" where:\n");
+  printf ("  BstIn        is the input bitstream;\n");
+  printf ("  BstOut       is the output bitstream;\n");
+  printf ("\n");
+  printf (" Options:\n");
+  printf ("  -fl fl.......... fl is the frame length of the input bistream in ms (default is 20ms);\n");
+  printf ("  -b btr.......... btr is the constant bitrate of the output bistream file;\n");
+  printf ("  -bf btrF........ btrF is a bitrate file containing the bitrate;\n");
+  printf ("                   for each frame of the input bitstream (disabled for binary bitstreams);\n");
+  printf ("  -ib btr......... btr is the constant bitrate of the input bitstream file (for binary bitstreams only);\n");
+  printf ("  -q ............. quiet processing (no progress flag)\n");
+  printf ("\n");
 }
-
-#undef P
 
 #define N 1024
 

@@ -201,55 +201,53 @@
  10.Dec.94 v1.0 Created. <simao>
  -------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("SV56DEMO.C: Version 3.5 of 02.Feb.2010 \n\n"));
-  P (("  Program to level-equalize a speech file \"NdB\" dBs below\n"));
-  P (("  the overload point for a linear n-bit (default: 16 bit) system.\n"));
-  P (("  using the P.56 speech voltmeter algorithm.\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  $ sv56demo [-options] FileIn FileOut \n"));
-  P (("             [BlockSize [1stBlock [NoOfBlocks [DesiredLevel\n"));
-  P (("             [SampleRate [Resolution] ] ] ] ] ]\n"));
-  P (("  FileIn: ..... is the input file to be analysed and equalized;\n"));
-  P (("  FileOut: .... is the output equalized file\n"));
-  P (("  BlockSize: .. is the block size [default: 256 samples]\n"));
-  P (("  1stBlock: ... the first block to be manipulated [default: 1st]\n"));
-  P (("  NoOfBlocks: . number of blocks to be manipulated [default: all]\n"));
-  P (("  DesiredLevel: level desired to the output file, in dBov\n"));
-  P (("                [default: -26 dBov].\n"));
-  P (("  SampleRate: . sampling rate used for acquiring/generating the\n"));
-  P (("                file, in Hertz [default: 16000 Hz].\n"));
-  P (("  Resolution: . the digital system resolution (AD,DA systems), in\n"));
-  P (("                number of bits [default: 16 bits].\n"));
-  P (("  Options:\n"));
-  P (("  -lev ndB .... equivalent to specifying DesiredLevel above, but\n"));
-  P (("                here don't need to specify the former 3 parameters.\n"));
-  P (("  -sf f ....... set sampling frequency to `f' Hz; equivalent to\n"));
-  P (("                parameter SampleRate above.\n"));
-  P (("  -bits n ..... change the default word length to n bits; \n"));
-  P (("                equivalent to parameter Resolution.\n"));
-  P (("  -rms ........ normalizes the output file using the RMS long-term \n"));
-  P (("                level, instead of the active speech level.\n"));
-  P (("  -blk len .... is the block size in number of samples;\n"));
-  P (("                this parameter is optional [default is block size\n"));
-  P (("                of 256 samples]. Equiv. to param. BlockSize above\n"));
-  P (("  -start sb ... define `sb' the first block to be measured; equiv.\n"));
-  P (("                to param. 1stBlock above [dft: 1st block of file]\n"));
-  P (("  -end eb ..... define `eb' as the last block to be measured\n"));
-  P (("  -n nb ....... define `nb' as the number of blocks to be measured;\n"));
-  P (("                equiv. to param.NoOfBlocks above [dft: whole file]\n"));
-  P (("  -log file ... log statistics into file rather than stdout\n"));
-  P (("  -q .......... quiet operation - does not print the progress flag.\n"));
-  P (("                Saves time and avoids trash in batch processings.\n"));
-  P (("  -qq ......... print short statistics summary; no progress flag.\n"));
+  printf ("SV56DEMO.C: Version 3.5 of 02.Feb.2010 \n\n");
+  printf ("  Program to level-equalize a speech file \"NdB\" dBs below\n");
+  printf ("  the overload point for a linear n-bit (default: 16 bit) system.\n");
+  printf ("  using the P.56 speech voltmeter algorithm.\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  $ sv56demo [-options] FileIn FileOut \n");
+  printf ("             [BlockSize [1stBlock [NoOfBlocks [DesiredLevel\n");
+  printf ("             [SampleRate [Resolution] ] ] ] ] ]\n");
+  printf ("  FileIn: ..... is the input file to be analysed and equalized;\n");
+  printf ("  FileOut: .... is the output equalized file\n");
+  printf ("  BlockSize: .. is the block size [default: 256 samples]\n");
+  printf ("  1stBlock: ... the first block to be manipulated [default: 1st]\n");
+  printf ("  NoOfBlocks: . number of blocks to be manipulated [default: all]\n");
+  printf ("  DesiredLevel: level desired to the output file, in dBov\n");
+  printf ("                [default: -26 dBov].\n");
+  printf ("  SampleRate: . sampling rate used for acquiring/generating the\n");
+  printf ("                file, in Hertz [default: 16000 Hz].\n");
+  printf ("  Resolution: . the digital system resolution (AD,DA systems), in\n");
+  printf ("                number of bits [default: 16 bits].\n");
+  printf ("  Options:\n");
+  printf ("  -lev ndB .... equivalent to specifying DesiredLevel above, but\n");
+  printf ("                here don't need to specify the former 3 parameters.\n");
+  printf ("  -sf f ....... set sampling frequency to `f' Hz; equivalent to\n");
+  printf ("                parameter SampleRate above.\n");
+  printf ("  -bits n ..... change the default word length to n bits; \n");
+  printf ("                equivalent to parameter Resolution.\n");
+  printf ("  -rms ........ normalizes the output file using the RMS long-term \n");
+  printf ("                level, instead of the active speech level.\n");
+  printf ("  -blk len .... is the block size in number of samples;\n");
+  printf ("                this parameter is optional [default is block size\n");
+  printf ("                of 256 samples]. Equiv. to param. BlockSize above\n");
+  printf ("  -start sb ... define `sb' the first block to be measured; equiv.\n");
+  printf ("                to param. 1stBlock above [dft: 1st block of file]\n");
+  printf ("  -end eb ..... define `eb' as the last block to be measured\n");
+  printf ("  -n nb ....... define `nb' as the number of blocks to be measured;\n");
+  printf ("                equiv. to param.NoOfBlocks above [dft: whole file]\n");
+  printf ("  -log file ... log statistics into file rather than stdout\n");
+  printf ("  -q .......... quiet operation - does not print the progress flag.\n");
+  printf ("                Saves time and avoids trash in batch processings.\n");
+  printf ("  -qq ......... print short statistics summary; no progress flag.\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................... End of display_usage() ........................... */
 
 

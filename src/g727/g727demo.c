@@ -8,8 +8,8 @@
   ~~~~~~~~~~~~
 
   Demonstration program for UGST/ITU-T G.727 module. Takes the input
-  file and processes by the G.727 codec, depending on user's option: 
-  for encoding, input must be in either A or mu law (G711), for 
+  file and processes by the G.727 codec, depending on user's option:
+  for encoding, input must be in either A or mu law (G711), for
   decoding, in (embedded) ADPCM format.
 
   Input data is supposed to be aligned at word boundaries, i.e.,
@@ -24,7 +24,7 @@
 
   Usage:
   ~~~~~~
-  $ G727demo [-options] InpFile OutFile 
+  $ G727demo [-options] InpFile OutFile
              [BlockSize [1stBlock [NoOfBlocks [Law [Nc [Ne]]]]]]
   where:
   InpFile     file to be processed;
@@ -50,7 +50,7 @@
   -end # ....  last block to be measured [default: last]
   -q ........ Quiet operation (don't print progress flag)
   -?/-help .. Display program usage
-        
+
   Original authors:
   ~~~~~~~~~~~~~~~~~
   Nikolai L. Birioukov
@@ -76,7 +76,7 @@
   21.Mar.2000  1.10  changed memory allocation of short buffers
                      inp_buf[], out_buf[] and tmp_buf[] from static to
                      dynamic, to prevent memory invasion when block
-                     sizes larger than 256 are specified. 
+                     sizes larger than 256 are specified.
                      <simao.campos@labs.comsat.com>
   02.Feb.2010  1.11  Modified maximum string length, and implicit
                      casting of toupper() argument removed. (y.hiwasaki)
@@ -126,45 +126,44 @@ void putWord (unsigned char word, int wordLen);
   10/Mar/1997  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("G727DEMO.C Version %.2f of 10/Mar/1997 \n\n", G727_H / 100.0));
+  printf ("G727DEMO.C Version %.2f of 10/Mar/1997 \n\n", G727_H / 100.0);
 
-  P (("  Demonstration program for UGST/ITU-T G.727 embedded ADPCM codec.\n"));
-  P (("  Files must be in linear, A- or mu-law (G711), or in ADPCM format.\n"));
-  P (("  Input data is supposed to be aligned at word boundaries, i.e.,\n"));
-  P (("  organized in 16-bit words. G711 data is supposed to be in the\n"));
-  P (("  8 LEAST significant bits of the word and the ADPCM data is in the\n"));
-  P (("  LEAST 5 bits. Both are without sign extension. Linear is 16-bit\n"));
-  P (("  linear PCM. Output data format will be as decribed above\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  $ G727demo [-options] InpFile OutFile \n"));
-  P (("             [BlockSize [1stBlock [NoOfBlocks [Law [Nc [Ne]]]]]]\n"));
-  P (("  where:\n"));
-  P (("  InpFile     file to be processed;\n"));
-  P (("  OutFile     output file with the processed data;\n"));
-  P (("  BlockSize   block size, in number of samples [default: 256]\n"));
-  P (("  1stBlock    first block of the input file to be processed [dft: 1]\n"));
-  P (("  NoOfBlocks  number of blocks to process starting at \"1stBlock\" [dft: all]\n"));
-  P (("  Law         is the law desired: A, u or l(linear) [default: A]\n"));
-  P (("  Nc          number of core bits to be used [default: 4]\n"));
-  P (("  Ne          number of enhancement bits to be used [default: 0]\n"));
-  P (("\n"));
-  P (("  Options:\n"));
-  P (("  -enc ...... Encode-only operation [default: encode & decode]\n"));
-  P (("  -dec ...... Decode-only operation [default: encode & decode]\n"));
-  P (("  -e_d ...... Encode and decode operation [the default]\n"));
-  P (("  -law l .... Law to use: A, u, l(inear) [default: A-law]\n"));
-  P (("  -core # ... Number of core bits in sample (2, 3, 4, 5) [dft: 4]\n"));
-  P (("  -enh # .... Number of enhancement bits (0, 1, 2, 3) [dft: 0]\n"));
-  P (("  -blk # .... Number of samples per processing block [def: 256]\n"));
-  P (("  -frame # .. same as block size\n"));
-  P (("  -start # ..  starting block to measure [default: first]\n"));
-  P (("  -n # ......  number of blocks to be measured [default: all]\n"));
-  P (("  -end # ....  last block to be measured [default: last]\n"));
-  P (("  -q ........ Quiet operation (don't print progress flag)\n"));
-  P (("  -?/-help .. Display program usage\n"));
+  printf ("  Demonstration program for UGST/ITU-T G.727 embedded ADPCM codec.\n");
+  printf ("  Files must be in linear, A- or mu-law (G711), or in ADPCM format.\n");
+  printf ("  Input data is supposed to be aligned at word boundaries, i.e.,\n");
+  printf ("  organized in 16-bit words. G711 data is supposed to be in the\n");
+  printf ("  8 LEAST significant bits of the word and the ADPCM data is in the\n");
+  printf ("  LEAST 5 bits. Both are without sign extension. Linear is 16-bit\n");
+  printf ("  linear PCM. Output data format will be as decribed above\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  $ G727demo [-options] InpFile OutFile \n");
+  printf ("             [BlockSize [1stBlock [NoOfBlocks [Law [Nc [Ne]]]]]]\n");
+  printf ("  where:\n");
+  printf ("  InpFile     file to be processed;\n");
+  printf ("  OutFile     output file with the processed data;\n");
+  printf ("  BlockSize   block size, in number of samples [default: 256]\n");
+  printf ("  1stBlock    first block of the input file to be processed [dft: 1]\n");
+  printf ("  NoOfBlocks  number of blocks to process starting at \"1stBlock\" [dft: all]\n");
+  printf ("  Law         is the law desired: A, u or l(linear) [default: A]\n");
+  printf ("  Nc          number of core bits to be used [default: 4]\n");
+  printf ("  Ne          number of enhancement bits to be used [default: 0]\n");
+  printf ("\n");
+  printf ("  Options:\n");
+  printf ("  -enc ...... Encode-only operation [default: encode & decode]\n");
+  printf ("  -dec ...... Decode-only operation [default: encode & decode]\n");
+  printf ("  -e_d ...... Encode and decode operation [the default]\n");
+  printf ("  -law l .... Law to use: A, u, l(inear) [default: A-law]\n");
+  printf ("  -core # ... Number of core bits in sample (2, 3, 4, 5) [dft: 4]\n");
+  printf ("  -enh # .... Number of enhancement bits (0, 1, 2, 3) [dft: 0]\n");
+  printf ("  -blk # .... Number of samples per processing block [def: 256]\n");
+  printf ("  -frame # .. same as block size\n");
+  printf ("  -start # ..  starting block to measure [default: first]\n");
+  printf ("  -n # ......  number of blocks to be measured [default: all]\n");
+  printf ("  -end # ....  last block to be measured [default: last]\n");
+  printf ("  -q ........ Quiet operation (don't print progress flag)\n");
+  printf ("  -?/-help .. Display program usage\n");
 
   /* Quit program */
   exit (-128);
@@ -208,7 +207,7 @@ int main (int argc, char **argv) {
   char mrs[15];
 #endif
 
-  /* 
+  /*
    * ......... PARAMETERS FOR PROCESSING .........
    */
 

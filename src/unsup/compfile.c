@@ -114,43 +114,41 @@ long compare_shorts ARGS ((char *File1, char *File2, int fh1, int fh2, long N, l
  *     Simao 29.Dec.93
  * --------------------------------------------------------------------------
  */
-#define FP(x) fprintf(stderr, x)
 void display_usage () {
-  FP ("*********** compfile [cf] Version 2.2 of 05/Jan/1999 **********\n");
-  FP ("Program for comparing two files and displaying the samples that\n");
-  FP ("are different at the screen as integers or hex numbers; the\n");
-  FP ("option for dumping float files has not been implemented yet.\n");
-  FP ("\n");
-  FP ("Usage:\n");
-  FP ("$ cf [-q] [-delay] [-h] [-d] [-float] [-double] [-short] [-long] file1 \n");
-  FP ("\tfile2 [BlockSize [1stBlock [NoOfBlocks [TypeOfDump [DataType]]]]]\n");
-  FP ("Where:\n");
-  FP (" file1       is the first file name;\n");
-  FP (" file2       is the second file name;\n");
-  FP (" BlockSize   is the Block size, in samples;\n");
-  FP (" 1stBlock    is the stating block;\n");
-  FP (" NoOfBlocks  the number of blocks to be displayed;\n");
-  FP (" TypeOfDump  whether the dump is decimal [D] or hexa[H];\n");
-  FP (" DataType    [I] for short and [R] float data\n\n");
+  fprintf (stderr, "*********** compfile [cf] Version 2.2 of 05/Jan/1999 **********\n");
+  fprintf (stderr, "Program for comparing two files and displaying the samples that\n");
+  fprintf (stderr, "are different at the screen as integers or hex numbers; the\n");
+  fprintf (stderr, "option for dumping float files has not been implemented yet.\n");
+  fprintf (stderr, "\n");
+  fprintf (stderr, "Usage:\n");
+  fprintf (stderr, "$ cf [-q] [-delay] [-h] [-d] [-float] [-double] [-short] [-long] file1 \n");
+  fprintf (stderr, "\tfile2 [BlockSize [1stBlock [NoOfBlocks [TypeOfDump [DataType]]]]]\n");
+  fprintf (stderr, "Where:\n");
+  fprintf (stderr, " file1       is the first file name;\n");
+  fprintf (stderr, " file2       is the second file name;\n");
+  fprintf (stderr, " BlockSize   is the Block size, in samples;\n");
+  fprintf (stderr, " 1stBlock    is the stating block;\n");
+  fprintf (stderr, " NoOfBlocks  the number of blocks to be displayed;\n");
+  fprintf (stderr, " TypeOfDump  whether the dump is decimal [D] or hexa[H];\n");
+  fprintf (stderr, " DataType    [I] for short and [R] float data\n\n");
 
-  FP ("Options:\n");
-  FP (" -q           operate quietly - only report total no.of differences\n");
-  FP (" -delay d     is the number of samples to delay. If d>0, the first\n");
-  FP ("              file should be delayed in relation to the second \n");
-  FP ("              file (samples from file 1 should be skipped). If d<0, \n");
-  FP ("              the 2nd file is delayed (i.e., samples are skipped).\n");
-  FP (" -h           set dump in hex mode - valid for integer data types\n");
-  FP (" -d           set dump in decimal mode for integer data types [default]\n");
-  FP (" -float       display float numbers\n");
-  FP (" -double      display double numbers\n");
-  FP (" -short       display short numbers [default]\n");
-  FP (" -long        display long numbers\n");
+  fprintf (stderr, "Options:\n");
+  fprintf (stderr, " -q           operate quietly - only report total no.of differences\n");
+  fprintf (stderr, " -delay d     is the number of samples to delay. If d>0, the first\n");
+  fprintf (stderr, "              file should be delayed in relation to the second \n");
+  fprintf (stderr, "              file (samples from file 1 should be skipped). If d<0, \n");
+  fprintf (stderr, "              the 2nd file is delayed (i.e., samples are skipped).\n");
+  fprintf (stderr, " -h           set dump in hex mode - valid for integer data types\n");
+  fprintf (stderr, " -d           set dump in decimal mode for integer data types [default]\n");
+  fprintf (stderr, " -float       display float numbers\n");
+  fprintf (stderr, " -double      display double numbers\n");
+  fprintf (stderr, " -short       display short numbers [default]\n");
+  fprintf (stderr, " -long        display long numbers\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef FP
 /* ....................... end of display_usage() ...........................*/
 
 /*

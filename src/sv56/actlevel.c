@@ -188,46 +188,44 @@
 
   ============================================================================
 */
-#define P(x) printf x
 void display_usage () {
-  P (("ACTLEVEL.C - Version 2.0 of 01/Feb/1995 \n"));
-  P ((" Calculate the active speech level of a file, relative to the\n"));
-  P ((" system overload point [dBov], using the P.56 algorithm.\n"));
-  P ((" Reports positive and negative peaks, RMS and active level, \n"));
-  P ((" activity factor [%%], and long-term and active peak factors \n"));
-  P ((" for the file\n"));
-  P (("\n"));
-  P ((" Usage:\n"));
-  P (("  $ actlevel [-options] file [file ...]\n"));
-  P ((" where:\n"));
-  P (("  file ....... is the input file(s) to be measured\n"));
-  P ((" Options: \n"));
-  P (("  -blk len  .. is the block size in number of samples;\n"));
-  P (("               this parameter is optional, and the default is  \n"));
-  P (("               block size of 256 samples;\n"));
-  P (("  -start sb .. define `sb' as the first block to be measured \n"));
-  P (("               [default: first block of the file] \n"));
-  P (("  -end eb .... define `eb' as the last block to be measured\n"));
-  P (("  -n nb ...... define `nb' as the number of blocks to be measured \n"));
-  P (("               [default: whole file]\n"));
-  P (("  -sf f ...... sets the sampling rate to `f' Hz [default: 16000Hz]\n"));
-  P (("  -bits n .... sets the digital system resolution (AD,DA systems) \n"));
-  P (("               to `n' bits [default: 16 bits]\n"));
-  P (("  -lev ndB ... CALCULATES the gain necessary to equalize the\n"));
-  P (("               *active* level of the input file(s) to ndB.\n"));
-  P (("               The program will NOT level-equalize the file.\n"));
-  P (("  -rms ....... when -lev is selected, reports the gain necessary\n"));
-  P (("               to normalizes to the long term level, instead of the\n"));
-  P (("               active speech level. Does NOT change the file(s).\n"));
-  P (("  -log file ... log statistics into file rather than stdout\n"));
-  P (("  -q ......... quiet operation; don't print progress flag, results\n"));
-  P (("               are printed all in one line.\n"));
+  printf ("ACTLEVEL.C - Version 2.0 of 01/Feb/1995 \n");
+  printf (" Calculate the active speech level of a file, relative to the\n");
+  printf (" system overload point [dBov], using the P.56 algorithm.\n");
+  printf (" Reports positive and negative peaks, RMS and active level, \n");
+  printf (" activity factor [%%], and long-term and active peak factors \n");
+  printf (" for the file\n");
+  printf ("\n");
+  printf (" Usage:\n");
+  printf ("  $ actlevel [-options] file [file ...]\n");
+  printf (" where:\n");
+  printf ("  file ....... is the input file(s) to be measured\n");
+  printf (" Options: \n");
+  printf ("  -blk len  .. is the block size in number of samples;\n");
+  printf ("               this parameter is optional, and the default is  \n");
+  printf ("               block size of 256 samples;\n");
+  printf ("  -start sb .. define `sb' as the first block to be measured \n");
+  printf ("               [default: first block of the file] \n");
+  printf ("  -end eb .... define `eb' as the last block to be measured\n");
+  printf ("  -n nb ...... define `nb' as the number of blocks to be measured \n");
+  printf ("               [default: whole file]\n");
+  printf ("  -sf f ...... sets the sampling rate to `f' Hz [default: 16000Hz]\n");
+  printf ("  -bits n .... sets the digital system resolution (AD,DA systems) \n");
+  printf ("               to `n' bits [default: 16 bits]\n");
+  printf ("  -lev ndB ... CALCULATES the gain necessary to equalize the\n");
+  printf ("               *active* level of the input file(s) to ndB.\n");
+  printf ("               The program will NOT level-equalize the file.\n");
+  printf ("  -rms ....... when -lev is selected, reports the gain necessary\n");
+  printf ("               to normalizes to the long term level, instead of the\n");
+  printf ("               active speech level. Does NOT change the file(s).\n");
+  printf ("  -log file ... log statistics into file rather than stdout\n");
+  printf ("  -q ......... quiet operation; don't print progress flag, results\n");
+  printf ("               are printed all in one line.\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... End of display_usage() .......................... */
 
 

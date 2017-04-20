@@ -321,30 +321,28 @@ WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE * crctab, char swa
  *     Simao 10.Mar.94
  * --------------------------------------------------------------------------
  */
-#define P(x) printf x
 void display_usage () {
-  P (("MEASURE Version 1.0 of 10/Mar/1994 \n\n"));
+  printf ("MEASURE Version 1.0 of 10/Mar/1994 \n\n");
 
-  P ((" Program to calculate the max, min, and average values for a file.\n"));
-  P ((" Usage:\n"));
-  P (("  $ measure file \n"));
-  P (("  where:\n"));
-  P (("  file          is the name of the file to measured\n"));
-  P (("\n"));
-  P ((" Options:\n"));
-  P ((" ~~~~~~~~\n"));
-  P ((" -h or -?      show program usage\n"));
-  P ((" -blk size     change the number of samples per block [default 256]\n"));
-  P ((" -skip n       number of blocks to skip [default: none]\n"));
-  P ((" -crc          also calculate crc for files\n"));
-  P ((" -hex          carry-out hex dump\n"));
-  P (("\n"));
+  printf (" Program to calculate the max, min, and average values for a file.\n");
+  printf (" Usage:\n");
+  printf ("  $ measure file \n");
+  printf ("  where:\n");
+  printf ("  file          is the name of the file to measured\n");
+  printf ("\n");
+  printf (" Options:\n");
+  printf (" ~~~~~~~~\n");
+  printf (" -h or -?      show program usage\n");
+  printf (" -blk size     change the number of samples per block [default 256]\n");
+  printf (" -skip n       number of blocks to skip [default: none]\n");
+  printf (" -crc          also calculate crc for files\n");
+  printf (" -hex          carry-out hex dump\n");
+  printf ("\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... end of display_usage() ...........................*/
 
 int main (int argc, char *argv[]) {

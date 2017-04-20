@@ -329,11 +329,9 @@ int check_sync (FILE * F, char *file, char *bs_type, long *fr_len, char *bs_form
   20/Aug/1997  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage (int level) {
 }
 
-#undef P
 /* .................. End of display_usage() ....................... */
 
 /*

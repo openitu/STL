@@ -146,42 +146,38 @@ int main ARGS ((int argc, char *argv[]));
  20.Mar.94 v1.0 Created.
  -------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("RPEDEMO: Version 1.2 of 02.Feb.2010 \n\n"));
+  printf ("RPEDEMO: Version 1.2 of 02.Feb.2010 \n\n");
 
-  P (("  Demonstration program for UGST/ITU-T RPE-LTP based on \n"));
-  P (("  module implemented  in Unix-C by Jutta Deneger and Carsten \n"));
-  P (("  Borman, within the Communications and Operating Systems \n"));
-  P (("  Research Group (KBS) of the Technishe Universitaet Berlin.\n"));
-  P (("  This demo program has been written by Simao F.Campos Neto\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  $ rpedemo [-l|-u|-A] [-enc|-dec]  InpFile OutFile BlockSize 1stBlock\n"));
-  P (("             NoOfBlocks \n"));
-  P (("  where:\n"));
-  P (("   -l .......... input data for encoding and output data for decoding\n"));
-  P (("                 are in linear format (DEFAULT).\n"));
-  P (("   -A .......... input data for encoding and output data for decoding\n"));
-  P (("                 are in A-law (G.711) format.\n"));
-  P (("   -u .......... input data for encoding and output data for decoding\n"));
-  P (("                 are in u-law (G.711) format.\n"));
-  P (("   -enc ........ run the only the decoder (default: run enc+dec)\n"));
-  P (("   -dec ........ run the only the encoder (default: run enc+dec)\n"));
-  P (("\n"));
-  P (("   InpFile ..... is the name of the file to be processed;\n"));
-  P (("   OutFile ..... is the name with the processed data;\n"));
-  P (("   BlockSize ... is the block size, in number of samples (default = 160)\n"));
-  P (("   1stBlock .... is the number of the first block of the input file\n"));
-  P (("                 to be processed;\n"));
-  P (("   NoOfBlocks .. is the number of blocks to be processed, starting on\n"));
-  P (("                 block \"1stBlock\"\n"));
+  printf ("  Demonstration program for UGST/ITU-T RPE-LTP based on \n");
+  printf ("  module implemented  in Unix-C by Jutta Deneger and Carsten \n");
+  printf ("  Borman, within the Communications and Operating Systems \n");
+  printf ("  Research Group (KBS) of the Technishe Universitaet Berlin.\n");
+  printf ("  This demo program has been written by Simao F.Campos Neto\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  $ rpedemo [-l|-u|-A] [-enc|-dec]  InpFile OutFile BlockSize 1stBlock\n");
+  printf ("             NoOfBlocks \n");
+  printf ("  where:\n");
+  printf ("   -l .......... input data for encoding and output data for decoding\n");
+  printf ("                 are in linear format (DEFAULT).\n");
+  printf ("   -A .......... input data for encoding and output data for decoding\n");
+  printf ("                 are in A-law (G.711) format.\n");
+  printf ("   -u .......... input data for encoding and output data for decoding\n");
+  printf ("                 are in u-law (G.711) format.\n");
+  printf ("   -enc ........ run the only the decoder (default: run enc+dec)\n");
+  printf ("   -dec ........ run the only the encoder (default: run enc+dec)\n");
+  printf ("\n");
+  printf ("   InpFile ..... is the name of the file to be processed;\n");
+  printf ("   OutFile ..... is the name with the processed data;\n");
+  printf ("   BlockSize ... is the block size, in number of samples (default = 160)\n");
+  printf ("   1stBlock .... is the number of the first block of the input file\n");
+  printf ("                 to be processed;\n");
+  printf ("   NoOfBlocks .. is the number of blocks to be processed, starting on\n");
+  printf ("                 block \"1stBlock\"\n");
 
-  /* Quit program */
   exit (-128);
 }
-
-#undef P
 
 /*
    **************************************************************************

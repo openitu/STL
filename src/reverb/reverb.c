@@ -42,31 +42,27 @@
 
 #include "reverb-lib.h"
 
-#define P(x) printf x
 static void display_usage () {
-  P (("REVERB.C - Version 1.02 of 02.Feb.2010 \n\n"));
+  printf ("REVERB.C - Version 1.02 of 02.Feb.2010 \n\n");
 
-  P ((" Program to add reverberation to a signal\n"));
-  P ((" This program convolves a signal with the impulse response of a room\n"));
-  P ((" Make sure that the impulse response and the input file are sampled at the same rate\n"));
-  P ((" If output saturation occurs in processing a warning message is displayed on stderr. \n"));
+  printf (" Program to add reverberation to a signal\n");
+  printf (" This program convolves a signal with the impulse response of a room\n");
+  printf (" Make sure that the impulse response and the input file are sampled at the same rate\n");
+  printf (" If output saturation occurs in processing a warning message is displayed on stderr. \n");
 
-  P (("\n"));
-  P ((" Usage:\n"));
-  P ((" $ reverb   [-options] FileIn FileIR FileOut\n"));
-  P ((" where:\n"));
-  P (("  FileIn       is the file to be processed;\n"));
-  P (("  FileIR       is the file containing the impulse response;\n"));
-  P (("  FileOut      is the file with the processed data;\n"));
-  P (("\n"));
-  P ((" Options:\n"));
-  P (("  -align A...... multiplicative factor to apply to the reverberated sound\n"));
-  P (("				   in order to align its energy level with a second file\n"));
-  P (("\n"));
+  printf ("\n");
+  printf (" Usage:\n");
+  printf (" $ reverb   [-options] FileIn FileIR FileOut\n");
+  printf (" where:\n");
+  printf ("  FileIn       is the file to be processed;\n");
+  printf ("  FileIR       is the file containing the impulse response;\n");
+  printf ("  FileOut      is the file with the processed data;\n");
+  printf ("\n");
+  printf (" Options:\n");
+  printf ("  -align A...... multiplicative factor to apply to the reverberated sound\n");
+  printf ("				   in order to align its energy level with a second file\n");
+  printf ("\n");
 }
-
-#undef P
-
 
 #define tmpIRlength	512
 

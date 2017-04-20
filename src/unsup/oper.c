@@ -143,60 +143,58 @@ void display_usage ARGS ((void));
  *     Simao
  * --------------------------------------------------------------------------
  */
-#define P(x) printf x
 void display_usage () {
-  P (("OPER.C - Version 1.5 of 5/Mar/2010 \n\n"));
-  P (("Program for implementing simple arithmetic operations over two\n"));
-  P (("*binary* speech files (+, -, *, and /):\n"));
-  P (("      A*file1 [+-*/] B*file2 + C\n"));
-  P (("Supported data types are short (in both decimal and hex formats) \n"));
-  P (("and, in the future, float. Both files have to be of the same \n"));
-  P (("type (short, float, etc).\n"));
-  P (("This program can also add the files with a fixed or a random delay\n"));
-  P (("between them, as specified in the command line [Default: no delay]\n"));
-  P (("\n"));
-  P (("Usage:\n"));
-  P (("$ OPER [-options] A file1 op B file2 C resfil\n"));
-  P (("           [BlockSize [1stBlock [NoOfBlocks [DataType]]]]]\n"));
-  P ((" A           multiplier for the first file samples (dB or linear)\n"));
-  P ((" file1       first file name;\n"));
-  P ((" B           multiplier for the second file samples (dB or linear)\n"));
-  P ((" file2       second file name;\n"));
-  P ((" C           constant to add (linear *only*!)\n"));
-  P ((" BlockSize   block size, in samples [default: 256 samples];\n"));
-  P ((" 1stBlock    starting block [default: 1st block];\n"));
-  P ((" NoOfBlocks  number of blocks to be operated [default: all];\n"));
-  P ((" DataType    file data type (float, long, ...)[default: short];\n"));
-  P (("\n"));
-  P (("Options:\n"));
-  P (("-q           operate quietly\n"));
-  P (("-delay n     n is the number of samples to delay. If n>0,\n"));
-  P (("             the first file should be delayed in relation to the\n"));
-  P (("             second file (samples from file 1 should be skipped). \n"));
-  P (("             n<0, on the other hand, means that the 2nd file \n"));
-  P (("             is who should be delayed (i.e., have samples skipped).\n"));
-  P (("-random n    instructs the program to apply a random delay to the \n"));
-  P (("             files (as defined for -delay) but no longer than \n"));
-  P (("             n *seconds*. It is internally converted to number of\n"));
-  P (("             samples. Default is no delay.\n"));
-  P (("-gain s      specify that gains A, B are given either in dB (s=dB) \n"));
-  P (("             *power* or in linear format (s=linear). Default is \n"));
-  P (("             linear. NOTE THAT the offset C is *always* linear. \n"));
-  P (("-size #      trim output filesize by the size of 1st file (#=1), \n"));
-  P (("             of the 2nd file (#=2), the longest of both (#=3) \n"));
-  P (("             or the shortest of both (#=0) [default: 0]\n"));
-  P (("-round       Uses rounding after integer operations [default]\n"));
-  P (("-trunc       Uses truncation after integer operations\n"));
-  P (("-float       display float numbers\n"));
-  P (("-double      display double numbers\n"));
-  P (("-short       display short numbers [default]\n"));
-  P (("-long        display long numbers\n"));
+  printf ("OPER.C - Version 1.5 of 5/Mar/2010 \n\n");
+  printf ("Program for implementing simple arithmetic operations over two\n");
+  printf ("*binary* speech files (+, -, *, and /):\n");
+  printf ("      A*file1 [+-*/] B*file2 + C\n");
+  printf ("Supported data types are short (in both decimal and hex formats) \n");
+  printf ("and, in the future, float. Both files have to be of the same \n");
+  printf ("type (short, float, etc).\n");
+  printf ("This program can also add the files with a fixed or a random delay\n");
+  printf ("between them, as specified in the command line [Default: no delay]\n");
+  printf ("\n");
+  printf ("Usage:\n");
+  printf ("$ OPER [-options] A file1 op B file2 C resfil\n");
+  printf ("           [BlockSize [1stBlock [NoOfBlocks [DataType]]]]]\n");
+  printf (" A           multiplier for the first file samples (dB or linear)\n");
+  printf (" file1       first file name;\n");
+  printf (" B           multiplier for the second file samples (dB or linear)\n");
+  printf (" file2       second file name;\n");
+  printf (" C           constant to add (linear *only*!)\n");
+  printf (" BlockSize   block size, in samples [default: 256 samples];\n");
+  printf (" 1stBlock    starting block [default: 1st block];\n");
+  printf (" NoOfBlocks  number of blocks to be operated [default: all];\n");
+  printf (" DataType    file data type (float, long, ...)[default: short];\n");
+  printf ("\n");
+  printf ("Options:\n");
+  printf ("-q           operate quietly\n");
+  printf ("-delay n     n is the number of samples to delay. If n>0,\n");
+  printf ("             the first file should be delayed in relation to the\n");
+  printf ("             second file (samples from file 1 should be skipped). \n");
+  printf ("             n<0, on the other hand, means that the 2nd file \n");
+  printf ("             is who should be delayed (i.e., have samples skipped).\n");
+  printf ("-random n    instructs the program to apply a random delay to the \n");
+  printf ("             files (as defined for -delay) but no longer than \n");
+  printf ("             n *seconds*. It is internally converted to number of\n");
+  printf ("             samples. Default is no delay.\n");
+  printf ("-gain s      specify that gains A, B are given either in dB (s=dB) \n");
+  printf ("             *power* or in linear format (s=linear). Default is \n");
+  printf ("             linear. NOTE THAT the offset C is *always* linear. \n");
+  printf ("-size #      trim output filesize by the size of 1st file (#=1), \n");
+  printf ("             of the 2nd file (#=2), the longest of both (#=3) \n");
+  printf ("             or the shortest of both (#=0) [default: 0]\n");
+  printf ("-round       Uses rounding after integer operations [default]\n");
+  printf ("-trunc       Uses truncation after integer operations\n");
+  printf ("-float       display float numbers\n");
+  printf ("-double      display double numbers\n");
+  printf ("-short       display short numbers [default]\n");
+  printf ("-long        display long numbers\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... end of display_usage() ...........................*/
 
 

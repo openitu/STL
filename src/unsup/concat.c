@@ -91,44 +91,42 @@ void display_usage ARGS ((void));
   12/Jul/2000  v1.0 Created <simao>
   --------------------------------------------------------------------------
 */
-#define P(x) printf x
 void display_usage () {
-  P (("CONCAT.C - Version 2.0 of 30/Jan/2001 \n\n"));
+  printf ("CONCAT.C - Version 2.0 of 30/Jan/2001 \n\n");
 
-  P (("  Concatenates a series of files in binary mode, irrespective of\n"));
-  P (("  actual content (ASCII/binary, char, short, long, float,\n"));
-  P (("  whatever). Optionally, generates a undo script that can be used \n"));
-  P (("  to separate the concatenated files, assuming that the data is\n"));
-  P (("  organized in 16-bit words. \n"));
-  P (("  NOTE1: The script will NOT work properly if data is byte-oriented\n"));
-  P (("         and at least one of the files to concatenate has an odd size.\n"));
-  P (("\n"));
-  P (("  NOTE2: Since the output file is created before any data is read, \n"));
-  P (("         using something like\n"));
-  P (("          $ concat a b c a\n"));
-  P (("         will actually create a file a = b+c since the output file\n"));
-  P (("         is reset upon creation. The original contents of file 'a' \n"));
-  P (("         are permanently lost! However, you will be prompted for\n"));
-  P (("         overwriting in this case provided that the option -f is *not* used.\n"));
-  P (("Hit <enter> to continue ..."));
+  printf ("  Concatenates a series of files in binary mode, irrespective of\n");
+  printf ("  actual content (ASCII/binary, char, short, long, float,\n");
+  printf ("  whatever). Optionally, generates a undo script that can be used \n");
+  printf ("  to separate the concatenated files, assuming that the data is\n");
+  printf ("  organized in 16-bit words. \n");
+  printf ("  NOTE1: The script will NOT work properly if data is byte-oriented\n");
+  printf ("         and at least one of the files to concatenate has an odd size.\n");
+  printf ("\n");
+  printf ("  NOTE2: Since the output file is created before any data is read, \n");
+  printf ("         using something like\n");
+  printf ("          $ concat a b c a\n");
+  printf ("         will actually create a file a = b+c since the output file\n");
+  printf ("         is reset upon creation. The original contents of file 'a' \n");
+  printf ("         are permanently lost! However, you will be prompted for\n");
+  printf ("         overwriting in this case provided that the option -f is *not* used.\n");
+  printf ("Hit <enter> to continue ...");
   fgetc (stdin);
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("   $ concat [options] file1 [file2 file3 ...] fileout\n"));
-  P (("  where \n"));
-  P (("   file1,2 ... filename of input file(s) to be concatenated\n"));
-  P (("   fileout ... output filename\n"));
-  P (("\n"));
-  P (("  Options:\n"));
-  P (("   -f ........ force overwriting output file, if it already exists\n"));
-  P (("   -i ........ asks before overwriting output file\n"));
-  P (("   -undo f ... saves undo commands into file f\n"));
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("   $ concat [options] file1 [file2 file3 ...] fileout\n");
+  printf ("  where \n");
+  printf ("   file1,2 ... filename of input file(s) to be concatenated\n");
+  printf ("   fileout ... output filename\n");
+  printf ("\n");
+  printf ("  Options:\n");
+  printf ("   -f ........ force overwriting output file, if it already exists\n");
+  printf ("   -i ........ asks before overwriting output file\n");
+  printf ("   -undo f ... saves undo commands into file f\n");
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... End of display_usage() ....................... */
 
 

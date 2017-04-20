@@ -107,46 +107,45 @@
  05.Sep.95 v1.0 Created
  -----------------------------------------------------------------------------
  */
-#define P(x) printf x
 void display_usage () {
-  P (("Scaldemo: Version 1.4 of 02.Feb.2010 \n"));
+  printf ("Scaldemo: Version 1.4 of 02.Feb.2010 \n");
 
-  P (("  Demo program to scale an input file by a factor A, scalar or dB.\n"));
-  P (("  Input data is supposed to be aligned in 16-bit,2-complement words\n"));
-  P (("  and containing left-adjusted samples. Default res. is 16 bits per\n"));
-  P (("  sample, and rounding is used as default when converting from\n"));
-  P (("  float to short.\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  scaldemo [-options] filein fileout [blklen [1stblk [blkno [gain]]]]\n"));
-  P (("  where:\n"));
-  P (("  filein     input filename\n"));
-  P (("  fileout    output (scales) filename\n"));
-  P (("  blklen     block length, in samples [default: 256 samples]\n"));
-  P (("  1stblk     first block to process [default: first]\n"));
-  P (("  blkno      number of blocks to process [default: till end of file]\n"));
-  P (("  gain       gain to be applied to the input file, dB or linear (default)\n"));
-  P (("\n"));
-  P (("  Options:\n"));
-  P (("  -dB        gain is in dB\n"));
-  P (("  -lin       gain is linear gain [default]\n"));
-  P (("  -gain #    gain value (same as parameter gain above)\n"));
-  P (("  -bits #    define a different bit resolution (16-bit default)\n"));
-  P (("  -round     round samples after scaling (default)\n"));
-  P (("  -trunc     truncate samples after scaling\n"));
-  P (("  -premask   enables bit masking before scaling\n"));
-  P (("  -nopremask disables bit masking before scaling (default)\n"));
-  P (("  -blk #     sample block size\n"));
-  P (("  -n #       number of blocks to process\n"));
-  P (("  -start #   first block to process\n"));
-  P (("  -end #     last block to process (n-start+1)\n"));
-  P (("  -q         quiet mode operation\n"));
+  printf ("  Demo program to scale an input file by a factor A, scalar or dB.\n");
+  printf ("  Input data is supposed to be aligned in 16-bit,2-complement words\n");
+  printf ("  and containing left-adjusted samples. Default res. is 16 bits per\n");
+  printf ("  sample, and rounding is used as default when converting from\n");
+  printf ("  float to short.\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  scaldemo [-options] filein fileout [blklen [1stblk [blkno [gain]]]]\n");
+  printf ("  where:\n");
+  printf ("  filein     input filename\n");
+  printf ("  fileout    output (scales) filename\n");
+  printf ("  blklen     block length, in samples [default: 256 samples]\n");
+  printf ("  1stblk     first block to process [default: first]\n");
+  printf ("  blkno      number of blocks to process [default: till end of file]\n");
+  printf ("  gain       gain to be applied to the input file, dB or linear (default)\n");
+  printf ("\n");
+  printf ("  Options:\n");
+  printf ("  -dB        gain is in dB\n");
+  printf ("  -lin       gain is linear gain [default]\n");
+  printf ("  -gain #    gain value (same as parameter gain above)\n");
+  printf ("  -bits #    define a different bit resolution (16-bit default)\n");
+  printf ("  -round     round samples after scaling (default)\n");
+  printf ("  -trunc     truncate samples after scaling\n");
+  printf ("  -premask   enables bit masking before scaling\n");
+  printf ("  -nopremask disables bit masking before scaling (default)\n");
+  printf ("  -blk #     sample block size\n");
+  printf ("  -n #       number of blocks to process\n");
+  printf ("  -start #   first block to process\n");
+  printf ("  -end #     last block to process (n-start+1)\n");
+  printf ("  -q         quiet mode operation\n");
+
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* ....................... End of display_usage() ......................... */
 
 

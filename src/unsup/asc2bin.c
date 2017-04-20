@@ -45,35 +45,33 @@
 
 #include <sys/stat.h>
 
-/* ---------------------------- Display Usage ---------------------------- */
-#define P(x) printf x
 void display_usage () {
-  P (("  asc2bin: version 1.0 of 20.Mar.94 - <simao@cpqd.ansp.br>\n\n"));
+  printf ("  asc2bin: version 1.0 of 20.Mar.94 - <simao@cpqd.ansp.br>\n\n");
 
-  P (("  Program for converting samples in ascii format to its binary\n"));
-  P (("  representation.\n"));
-  P (("\n"));
-  P (("  Usage:\n"));
-  P (("  $ asc2bin [-options] ascfile binfile\n"));
-  P (("  Where:\n"));
-  P (("  ascfile         is the name of the input file in ascii format;\n"));
-  P (("                  if ommited or if equal to \"-\", uses stdin\n"));
-  P (("  binfile         is the name of the output, binary file;\n"));
-  P (("                  if ommited or if equal to \"-\", uses stdout\n"));
-  P (("\n"));
-  P (("  Options:\n"));
-  P (("  -h  data is in hex format\n"));
-  P (("  -d              data is in decimal format (int) [default]\n"));
-  P (("  -short          data is short int\n"));
-  P (("  -long           data is long int\n"));
-  P (("  -float          data is float\n"));
-  P (("  -double         data is long double\n"));
+  printf ("  Program for converting samples in ascii format to its binary\n");
+  printf ("  representation.\n");
+  printf ("\n");
+  printf ("  Usage:\n");
+  printf ("  $ asc2bin [-options] ascfile binfile\n");
+  printf ("  Where:\n");
+  printf ("  ascfile         is the name of the input file in ascii format;\n");
+  printf ("                  if ommited or if equal to \"-\", uses stdin\n");
+  printf ("  binfile         is the name of the output, binary file;\n");
+  printf ("                  if ommited or if equal to \"-\", uses stdout\n");
+  printf ("\n");
+  printf ("  Options:\n");
+  printf ("  -h  data is in hex format\n");
+  printf ("  -d              data is in decimal format (int) [default]\n");
+  printf ("  -short          data is short int\n");
+  printf ("  -long           data is long int\n");
+  printf ("  -float          data is float\n");
+  printf ("  -double         data is long double\n");
+
 
   /* Quit program */
   exit (-128);
 }
 
-#undef P
 /* .................. end of display_usage() .......................... */
 
 

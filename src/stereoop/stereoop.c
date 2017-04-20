@@ -48,46 +48,43 @@ enum Mode { NONE = -1,
 /*-------------------------------------------------------------------------
 display_usage(int level);  Shows program usage.
 -------------------------------------------------------------------------*/
-#define P(x) printf x
 void display_usage (int level) {
-  P ((VERSION));
-  P (("\n"));
+  printf (VERSION);
+  printf ("\n");
   if (level) {
-    P (("Program Description:\n"));
-    P ((" Program to perform basic stereo operations on 16 bit (short) files \n\n"));
-    P (("\n"));
+    printf ("Program Description:\n");
+    printf (" Program to perform basic stereo operations on 16 bit (short) files \n\n");
+    printf ("\n");
   } else {
-    P (("Program to perform basic stereo operations \n\n"));
+    printf ("Program to perform basic stereo operations \n\n");
   }
 
-  P (("Usage:\n"));
-  P (("stereoop [option] file1 file2 [file3] \n"));
-  P (("\n"));
-  P (("Option:\n"));
-  P ((" -interleave. Compose a 2ch stereo file from left and right single channel files \n"));
-  P ((" -split...... Provide left and right channel files from a 2ch stereo file\n"));
-  P ((" -left....... Provide left channel from a 2ch stereo file\n"));
-  P ((" -right...... Provide right channel from a 2ch stereo file\n"));
-  P ((" -maxenval... Provide a single channel maximum energy level analysis file from a 2ch stereo file\n"));
-  P ((" -mono....... Provide mono downmix(M=(L+R)/2) single channel file from a 2ch stereo file\n"));
+  printf ("Usage:\n");
+  printf ("stereoop [option] file1 file2 [file3] \n");
+  printf ("\n");
+  printf ("Option:\n");
+  printf (" -interleave. Compose a 2ch stereo file from left and right single channel files \n");
+  printf (" -split...... Provide left and right channel files from a 2ch stereo file\n");
+  printf (" -left....... Provide left channel from a 2ch stereo file\n");
+  printf (" -right...... Provide right channel from a 2ch stereo file\n");
+  printf (" -maxenval... Provide a single channel maximum energy level analysis file from a 2ch stereo file\n");
+  printf (" -mono....... Provide mono downmix(M=(L+R)/2) single channel file from a 2ch stereo file\n");
 
-  P (("Stereoop operating examples\n"));
-  P (("          option      input(s)             output(s):\n"));
-  P (("-----------------------------------------------------------------------\n"));
-  P ((" stereoop -interleave FileL.1ch FileR.1ch  OutfileLR.2ch\n"));
-  P ((" stereoop -split      FileLR.2ch           OutfileL.1ch OutFileR.1ch\n"));
-  P ((" stereoop -left       FileLR.2ch           OutfileL.1ch\n"));
-  P ((" stereoop -right      FileLR.2ch           OutfileR.1ch\n"));
-  P ((" stereoop -maxenval   FileLR.2ch           Outfile.maxenval.1ch\n"));
-  P ((" stereoop -mono       FileLR.2ch           Outfile.mono.1ch\n"));
+  printf ("Stereoop operating examples\n");
+  printf ("          option      input(s)             output(s):\n");
+  printf ("-----------------------------------------------------------------------\n");
+  printf (" stereoop -interleave FileL.1ch FileR.1ch  OutfileLR.2ch\n");
+  printf (" stereoop -split      FileLR.2ch           OutfileL.1ch OutFileR.1ch\n");
+  printf (" stereoop -left       FileLR.2ch           OutfileL.1ch\n");
+  printf (" stereoop -right      FileLR.2ch           OutfileR.1ch\n");
+  printf (" stereoop -maxenval   FileLR.2ch           Outfile.maxenval.1ch\n");
+  printf (" stereoop -mono       FileLR.2ch           Outfile.mono.1ch\n");
 
-  P (("\n\n NB! If input files have inconsistent lengths, the program exits with a non-zero status value\n"));
+  printf ("\n\n NB! If input files have inconsistent lengths, the program exits with a non-zero status value\n");
 
   /* Quit program */
   exit (-128);
 }
-
-#undef P
 
 char *mode_str[N_MODES] = {
   "interleave",
