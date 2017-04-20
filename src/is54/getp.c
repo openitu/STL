@@ -38,7 +38,7 @@ Motorola Inc.
 #include "vparams.h"
 #include "ugstdemo.h"
 
-void getParams (FILE *fpget) {
+void getParams (FILE * fpget) {
   int choice;
   char filename[128];
 #ifdef VMS

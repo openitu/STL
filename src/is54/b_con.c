@@ -34,7 +34,7 @@ Motorola Inc.
 /*	inclusions*/
    /**/
 #include "vparams.h"
-void B_CON (int codeWord, int numBits, FTYPE *bitArray) {
+void B_CON (int codeWord, int numBits, FTYPE * bitArray) {
   int mask;
   FTYPE *endPtr;
 

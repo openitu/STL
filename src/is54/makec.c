@@ -72,7 +72,7 @@ void LEVINSON ();
 /*FTYPE *ac, FTYPE *a*/
 
 /*	function definition*/
-   void A_SST (wCoefPtr, ssCoefPtr)
+void A_SST (wCoefPtr, ssCoefPtr)
      FTYPE *wCoefPtr;
      FTYPE *ssCoefPtr;
 {
@@ -84,31 +84,31 @@ void LEVINSON ();
   tmpAcs = (FTYPE *) malloc ((NP + 1) * sizeof (FTYPE));
 
 /*	convert widened denominator coefs to reflection coefs*/
-     ATORC (wCoefPtr, tmpKs);
+  ATORC (wCoefPtr, tmpKs);
 
 /*	negate reflection coefficients*/
-     tp = tmpKs;
+  tp = tmpKs;
   for (ep = tp + NP; tp < ep; tp++)
     *tp *= -1.0;
 
 /*	convert to autocorrelation coefficients*/
-     ATOCOR (tmpKs, tmpAcs);
+  ATOCOR (tmpKs, tmpAcs);
 
 /*	do spectral smoothing (apply envelope to autocorrelations)*/
-     tp = tmpAcs;
+  tp = tmpAcs;
   tp2 = P_SST;
   for (ep = tp + NP + 1; tp < ep; tp++, tp2++)
     *tp *= *tp2;
 
 /*	convert smoothed ac coefs back to direct-form coefficients*/
-     LEVINSON (tmpAcs, ssCoefPtr);
+  LEVINSON (tmpAcs, ssCoefPtr);
 
   free (tmpKs);
   free (tmpAcs);
 }                               /* end of A_SST */
 
 
-void ATOCOR (FTYPE *k, FTYPE *ac) {
+void ATOCOR (FTYPE * k, FTYPE * ac) {
   FTYPE e;                      /* error value, updated recursively */
   FTYPE *a, *aTmp;              /* buffers for intermediate direct-form coefs */
   FTYPE *acBegin;               /* points to beginning of autocorrelation array */
@@ -129,7 +129,7 @@ void ATOCOR (FTYPE *k, FTYPE *ac) {
   k++;
   for (ep = ac + NP - 1; ac < ep; ac++, k++) {
     /* compute next autocorrelation coef */
-       sum = 0.0;
+    sum = 0.0;
     tp = a;
     tp2 = ac - 1;
     for (; tp2 > acBegin; tp++, tp2--)
@@ -137,7 +137,7 @@ void ATOCOR (FTYPE *k, FTYPE *ac) {
     *ac = *k * e - sum;
 
     /* update e and a array */
-       e *= 1.0 - *k * *k;
+    e *= 1.0 - *k * *k;
 
     tp2 = a;
     tp3 = aTmp;
@@ -153,7 +153,7 @@ void ATOCOR (FTYPE *k, FTYPE *ac) {
 }
 
 
-void LEVINSON (FTYPE *ac, FTYPE *a) {
+void LEVINSON (FTYPE * ac, FTYPE * a) {
   FTYPE *aTmp, *bTmp;           /* buffers for intermediate direct-form coefs */
   FTYPE *rc;                    /* reflection coef array */
   FTYPE e;                      /* error value */
@@ -177,7 +177,7 @@ void LEVINSON (FTYPE *ac, FTYPE *a) {
   rc++;
   for (ep = ac + NP - 1; ac < ep; ac++, rc++) {
     /* compute next reflection coef */
-       sum = 0.0;
+    sum = 0.0;
     tp = aTmp;
     tp2 = ac - 1;
     for (; tp2 > acBegin; tp++, tp2--)
@@ -186,7 +186,7 @@ void LEVINSON (FTYPE *ac, FTYPE *a) {
     *rc = -gamma / e;
 
     /* update a array and e */
-       tp2 = aTmp;
+    tp2 = aTmp;
     tp3 = bTmp;
     for (ep2 = tp; tp2 < ep2; tp2++, tp3++)
       *tp3 = *tp2 + *rc * *--tp;
@@ -198,7 +198,7 @@ void LEVINSON (FTYPE *ac, FTYPE *a) {
     e *= 1.0 - *rc * *rc;
   }
 /*	put direct-from coefs in output array*/
-     for (ep = aTmp + NP; aTmp < ep; aTmp++, a++)
+  for (ep = aTmp + NP; aTmp < ep; aTmp++, a++)
     *a = *aTmp;
 
   free (fp1);

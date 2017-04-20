@@ -133,7 +133,7 @@ unsigned long ran16_32c ARGS ((void));
 #define TABLE_SIZE 8192         /* 2^13 */
 #define ITER_NO 8
 #define FACTOR 8                /* = 65536(max.no returned by ran16_32c) div.by TABLE_SIZE */
-float new_random_MNRU (char *mode, RANDOM_state *r, long seed) {
+float new_random_MNRU (char *mode, RANDOM_state * r, long seed) {
   long i;
   double z1;                    /* white random number -8...8 */
   /* weighted with a gaussian distribution */
@@ -525,7 +525,7 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
 #define NOISE_GAIN 0.3793
 #endif
 
-double *MNRU_process (char operation, MNRU_state *s, float *input, float *output, long n, long seed, char mode, double Q) {
+double *MNRU_process (char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q) {
   long count, i;
   double noise, tmp;
   register double inp_smp, out_tmp, out_flt;

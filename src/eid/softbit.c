@@ -114,7 +114,7 @@
    13.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long read_g192 (short *patt, long n, FILE *F) {
+long read_g192 (short *patt, long n, FILE * F) {
   long i;
 
   /* Read words from file */
@@ -134,7 +134,7 @@ long read_g192 (short *patt, long n, FILE *F) {
   function.
   -------------------------------------------------------------------------
  */
-long read_bit_ber (short *patt, long n, FILE *F) {
+long read_bit_ber (short *patt, long n, FILE * F) {
   return (read_bit (patt, n, F, BER));
 }
 
@@ -148,7 +148,7 @@ long read_bit_ber (short *patt, long n, FILE *F) {
   function.
   -------------------------------------------------------------------------
  */
-long read_bit_fer (short *patt, long n, FILE *F) {
+long read_bit_fer (short *patt, long n, FILE * F) {
   return (read_bit (patt, n, F, FER));
 }
 
@@ -186,7 +186,7 @@ long read_bit_fer (short *patt, long n, FILE *F) {
    15.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
 */
-long read_bit (short *patt, long n, FILE *F, char type) {
+long read_bit (short *patt, long n, FILE * F, char type) {
   char *bits;
   short *p = patt;
   long bitno, j, k, nbytes, rbytes, ret_val;
@@ -287,7 +287,7 @@ long read_bit (short *patt, long n, FILE *F, char type) {
    15.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
 */
-long read_byte (short *patt, long n, FILE *F) {
+long read_byte (short *patt, long n, FILE * F) {
   char *byte;
   long i;
   unsigned char register tmp;
@@ -356,7 +356,7 @@ long read_byte (short *patt, long n, FILE *F) {
 
   -------------------------------------------------------------------------
 */
-long save_g192 (short *patt, long n, FILE *F) {
+long save_g192 (short *patt, long n, FILE * F) {
   long i;
   i = fwrite (patt, sizeof (short), n, F);
   return (i < n ? -1l : n);
@@ -394,7 +394,7 @@ long save_g192 (short *patt, long n, FILE *F) {
   -------------------------------------------------------------------------
 */
 #define IS_ONE(x)  ((x) && G192_ONE)
-long save_bit (short *patt, long n, FILE *F) {
+long save_bit (short *patt, long n, FILE * F) {
   char *bits;
   short one, *p = patt;
   long i, j, k, nbytes;
@@ -491,7 +491,7 @@ long save_bit (short *patt, long n, FILE *F) {
   15.Aug.97  v.1.0  Created.
   -------------------------------------------------------------------------
 */
-long save_byte (short *patt, long n, FILE *F) {
+long save_byte (short *patt, long n, FILE * F) {
   char *byte;
   long i;
 
@@ -629,7 +629,7 @@ char *type_str (int type) {
 					(v.1.0: "unsigned" only). <Cyril Guillaume & Stephane Ragot -- stephane.ragot@rd.francetelecom.com>
   --------------------------------------------------------------------------
 */
-char check_eid_format (FILE *F, char *file, char *type) {
+char check_eid_format (FILE * F, char *file, char *type) {
   short word;
   char ret_val;
   unsigned long tmp = 0x41424344;       /* Hex version of the string ABCD */

@@ -34,11 +34,11 @@ Motorola Inc.
 /*	inclusions*/
 
 #include "vparams.h"
-void V_CON (FTYPE *basisPtr, FTYPE *bitArray, int numBasis, FTYPE *oPtr) {
+void V_CON (FTYPE * basisPtr, FTYPE * bitArray, int numBasis, FTYPE * oPtr) {
   FTYPE *tmpPtr, *endPtr, *endPtr2;
 
 /*	initialize output with contribution from first basis vector*/
-     tmpPtr = oPtr;
+  tmpPtr = oPtr;
   for (endPtr = tmpPtr + S_LEN; tmpPtr < endPtr; tmpPtr++) {
     *tmpPtr = *bitArray * *basisPtr;
     basisPtr++;

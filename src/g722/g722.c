@@ -44,7 +44,7 @@ History:
 #include "g722.h"
 #include "stl.h"
 
-void g722_reset_encoder (g722_state *encoder) {
+void g722_reset_encoder (g722_state * encoder) {
   Word16 xl, il;
   Word16 xh, ih, j;
 
@@ -53,9 +53,7 @@ void g722_reset_encoder (g722_state *encoder) {
   move16 ();
   move16 ();
 #endif
-  for (j = 0;
-       j < 24;
-       j++) {
+  for (j = 0; j < 24; j++) {
     encoder->qmf_tx_delayx[j] = 0;
 #ifdef WMOPS
     move16 ();
@@ -68,7 +66,7 @@ void g722_reset_encoder (g722_state *encoder) {
 /* .................... end of g722_reset_encoder() ....................... */
 
 
-Word32 g722_encode (short *incode, short *code, Word32 read1, g722_state *encoder) {
+Word32 g722_encode (short *incode, short *code, Word32 read1, g722_state * encoder) {
   /* Encoder variables */
   Word16 xl, il;
   Word16 xh, ih;
@@ -86,9 +84,7 @@ Word32 g722_encode (short *incode, short *code, Word32 read1, g722_state *encode
 #ifdef WMOPS
   move16 ();
 #endif
-  for (i = 0;
-       i < read1;
-       i++) {
+  for (i = 0; i < read1; i++) {
     xin1 = *incode++;
     xin0 = *incode++;
 #ifdef WMOPS
@@ -117,7 +113,7 @@ Word32 g722_encode (short *incode, short *code, Word32 read1, g722_state *encode
 /* .................... end of g722_encode() .......................... */
 
 
-void g722_reset_decoder (g722_state *decoder) {
+void g722_reset_decoder (g722_state * decoder) {
   Word16 il, ih;
   Word16 rl, rh;
   Word16 j;
@@ -127,9 +123,7 @@ void g722_reset_decoder (g722_state *decoder) {
   move16 ();
   move16 ();
 #endif
-  for (j = 0;
-       j < 24;
-       j++) {
+  for (j = 0; j < 24; j++) {
     decoder->qmf_rx_delayx[j] = 0;
 #ifdef WMOPS
     move16 ();
@@ -142,7 +136,7 @@ void g722_reset_decoder (g722_state *decoder) {
 /* .................... end of g722_reset_decoder() ....................... */
 
 
-short g722_decode (short *code, short *outcode, short mode, short read1, g722_state *decoder) {
+short g722_decode (short *code, short *outcode, short mode, short read1, g722_state * decoder) {
   /* Decoder variables */
   Word16 il, ih;
   Word16 rl, rh;
@@ -152,9 +146,7 @@ short g722_decode (short *code, short *outcode, short mode, short read1, g722_st
   short i;
 
   /* Decode - reset is never applied here */
-  for (i = 0;
-       i < read1;
-       i++) {
+  for (i = 0; i < read1; i++) {
     /* Separate the input G722 codeword: bits 0 to 5 are the lower-band portion of the encoding, and bits 6 and 7 are the upper-band portion of the encoding */
     il = s_and (code[i], 0x3F); /* 6 bits of low SB */
     ih = s_and (lshr (code[i], 6), 0x03);       /* 2 bits of high SB */

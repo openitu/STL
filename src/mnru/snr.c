@@ -19,7 +19,7 @@ typedef struct {
 int get_min_max (float *x, int n, double *min, double *max);
 
 /* ---------------------- Begin of get_SNR ------------------------------*/
-float get_SNR (int mode, short *a, short *b, long N, long N2, SNR_state *s) {
+float get_SNR (int mode, short *a, short *b, long N, long N2, SNR_state * s) {
   double tmp;
   int i, j;
 

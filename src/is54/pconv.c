@@ -35,7 +35,7 @@ Motorola Inc.
 
 #include "vparams.h"
 /*#include "stdlib.h"*/
-int ATORC (FTYPE *a, FTYPE *k) {
+int ATORC (FTYPE * a, FTYPE * k) {
   FTYPE *aNew, *aOld, *tmpPtr, *endPtr, *fp1, *fp2;
   int i, j, unstableFlag = 0;
 
@@ -50,7 +50,7 @@ int ATORC (FTYPE *a, FTYPE *k) {
   aOld -= NP;
 
 /*	perform conversion from a's to k's*/
-  k += NP - 1;            /* k points to k(NP) */
+  k += NP - 1;                  /* k points to k(NP) */
   *k = *(aOld + NP - 1);
   if (*k >= 1.0 || *k < -1.0)
     unstableFlag = 1;
@@ -70,7 +70,7 @@ int ATORC (FTYPE *a, FTYPE *k) {
 }
 
 
-int RCTOA (FTYPE *k, FTYPE *a) {
+int RCTOA (FTYPE * k, FTYPE * a) {
   FTYPE ar[NP];                 /* storage for direct-form coefs from recursion */
   FTYPE *aNew;                  /* pointer to new direct-form coefs in recursion */
   FTYPE *aOld;                  /* pointer to old direct-form coefs in recursion */
@@ -79,7 +79,7 @@ int RCTOA (FTYPE *k, FTYPE *a) {
   int i, j;
 
 /*	initialize pointers*/
-     if (NP % 2 == 0) {      /* NP even... */
+  if (NP % 2 == 0) {            /* NP even... */
     aNew = ar;
     aOld = a;
   } else {
@@ -88,7 +88,7 @@ int RCTOA (FTYPE *k, FTYPE *a) {
   }
 
 /*	perform conversion recursion*/
-     for (i = 0; i <= NP - 1; i++) {
+  for (i = 0; i <= NP - 1; i++) {
     *(aNew + i) = *(k + i);
     for (j = 0; j <= i - 1; j++)
       *(aNew + j) = *(aOld + j) + *(k + i) * *(aOld + i - j - 1);

@@ -143,7 +143,7 @@ DIRECT_IIR *direct_iir_init ARGS ((long zno, long pno, float *a, float *b, doubl
 
  ============================================================================
 */
-void stdpcm_free (SCD_IIR *iir_ptr) {
+void stdpcm_free (SCD_IIR * iir_ptr) {
   free (iir_ptr->T);            /* free state variables */
   free (iir_ptr);               /* free allocated struct */
 }
@@ -183,7 +183,7 @@ void stdpcm_free (SCD_IIR *iir_ptr) {
 
  ============================================================================
 */
-void stdpcm_reset (SCD_IIR *iir_ptr) {
+void stdpcm_reset (SCD_IIR * iir_ptr) {
   long n;
   float (*T_ptr)[2];
 
@@ -323,7 +323,7 @@ SCD_IIR *scd_stdpcm_init (long nblocks, float (*b)[3], float (*c)[2], double dir
 
  ============================================================================
 */
-long stdpcm_kernel (long lseg, float *x_ptr, SCD_IIR *iir_ptr, float *y_ptr) {
+long stdpcm_kernel (long lseg, float *x_ptr, SCD_IIR * iir_ptr, float *y_ptr) {
   if (iir_ptr->hswitch == 'U')
     return scd_parallel_form_iir_up_kernel (    /* returns number of output samples */
                                              lseg,      /* In : length of input signal */
@@ -546,7 +546,7 @@ static long scd_parallel_form_iir_up_kernel (long lenx, float *x, float *y, long
 
  ============================================================================
 */
-void cascade_iir_reset (CASCADE_IIR *iir_ptr) {
+void cascade_iir_reset (CASCADE_IIR * iir_ptr) {
   long n;
   float (*T_ptr)[4];
 
@@ -597,7 +597,7 @@ void cascade_iir_reset (CASCADE_IIR *iir_ptr) {
 
  ============================================================================
 */
-long cascade_iir_kernel (long lseg, float *x_ptr, CASCADE_IIR *iir_ptr, float *y_ptr) {
+long cascade_iir_kernel (long lseg, float *x_ptr, CASCADE_IIR * iir_ptr, float *y_ptr) {
   if (iir_ptr->hswitch == 'U')
     return cascade_form_iir_up_kernel ( /* returns number of output samples */
                                         lseg,   /* In : input signal leng. */
@@ -669,7 +669,7 @@ long cascade_iir_kernel (long lseg, float *x_ptr, CASCADE_IIR *iir_ptr, float *y
 
  ============================================================================
 */
-static long cascade_form_iir_down_kernel (long lenx, float *x, float *y, long *k0, long idown, long nblocks, double gain,float (*a)[2], float (*b)[2], float (*T)[4]) {
+static long cascade_form_iir_down_kernel (long lenx, float *x, float *y, long *k0, long idown, long nblocks, double gain, float (*a)[2], float (*b)[2], float (*T)[4]) {
   long kx, ky, n;
   double xj, yj;
 
@@ -902,7 +902,7 @@ CASCADE_IIR *cascade_iir_init (long nblocks, float (*a)[2], float (*b)[2], doubl
 
  ============================================================================
 */
-void cascade_iir_free (CASCADE_IIR *iir_ptr) {
+void cascade_iir_free (CASCADE_IIR * iir_ptr) {
   free (iir_ptr->T);            /* free state variables */
   free (iir_ptr);               /* free allocated struct */
 }
@@ -943,7 +943,7 @@ void cascade_iir_free (CASCADE_IIR *iir_ptr) {
 
  ============================================================================
 */
-void direct_reset (DIRECT_IIR *iir_ptr) {
+void direct_reset (DIRECT_IIR * iir_ptr) {
   long n;
   register float (*T_ptr)[2];
   long nblocks = (iir_ptr->poleno > iir_ptr->zerono)
@@ -993,7 +993,7 @@ void direct_reset (DIRECT_IIR *iir_ptr) {
 
  ============================================================================
 */
-long direct_iir_kernel (long lseg, float *x_ptr, DIRECT_IIR *iir_ptr, float *y_ptr) {
+long direct_iir_kernel (long lseg, float *x_ptr, DIRECT_IIR * iir_ptr, float *y_ptr) {
   if (iir_ptr->hswitch == 'U')
     return direct_form_iir_up_kernel (  /* returns number of output samples */
                                        lseg,    /* In : input signal leng. */
@@ -1314,7 +1314,7 @@ DIRECT_IIR *direct_iir_init (long zerono, long poleno, float *a, float *b, doubl
 
  ============================================================================
 */
-void direct_iir_free ( DIRECT_IIR *iir_ptr) {
+void direct_iir_free (DIRECT_IIR * iir_ptr) {
   free (iir_ptr->T);            /* free state variables */
   free (iir_ptr);               /* free allocated struct */
 }

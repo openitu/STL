@@ -65,7 +65,7 @@ enum BS_types { BER, FER };
    13.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long read_g192 (short *patt, long n, FILE *F) {
+long read_g192 (short *patt, long n, FILE * F) {
   long i;
 
   /* Read words from file */
@@ -146,7 +146,7 @@ char *format_str (int fmt) {
   15.Aug.97  v.1.0  Created.
   --------------------------------------------------------------------------
 */
-char check_eid_format (FILE *F, char *file, char *type) {
+char check_eid_format (FILE * F, char *file, char *type) {
   short word;
   char ret_val;
 

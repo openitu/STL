@@ -75,7 +75,7 @@ void FLATV () {
 
 /*	first pre-emphasize one analysis length of speech, and put into*/
 /*	double-precision buffer*/
-       s = inBuf + INBUFSIZ - A_LEN;
+  s = inBuf + INBUFSIZ - A_LEN;
   tp = s - 1;
   freePtr = (FTYPE *) malloc (A_LEN * sizeof (FTYPE));
   sd = freePtr;
@@ -84,7 +84,7 @@ void FLATV () {
   sd -= A_LEN;
 
 /*	now calculate ac matrix*/
-     for (i = 0; i <= NP; i++) {
+  for (i = 0; i <= NP; i++) {
     ac[0][i] = 0.0;
     for (k = NP; k < A_LEN; k++)
       ac[0][i] += sd[k] * sd[k - i];
@@ -95,7 +95,7 @@ void FLATV () {
 
 /*	calculate and quantize sqrt(S_LEN * avg R0), assign to external*/
 /*	variable.*/
-     avgR0 = sqrt ((S_LEN * (ac[0][0] + ac[NP][NP])) / (2.0 * (A_LEN - NP)));
+  avgR0 = sqrt ((S_LEN * (ac[0][0] + ac[NP][NP])) / (2.0 * (A_LEN - NP)));
   T_NEW.rq0 = QUANT (avgR0, 0);
 
 /*	initialize F, B, and C matricies from the ac matrix*/
@@ -106,7 +106,7 @@ void FLATV () {
 /*	diagonal is utilized in the initialization.  Spectral*/
 /*	smoothing is applied to the ac matrix before it is used to*/
 /*	initialize the f, b, and c matricies.*/
-       for (i = 0; i <= NP; i++) {
+  for (i = 0; i <= NP; i++) {
     for (j = 0; j <= NP - i; j++) {
       k = j + i;
       temp = *(sst + i) * ac[j][k];
@@ -128,37 +128,37 @@ void FLATV () {
 /*	quantizes, and updates the f, b, and c matricies.  Matrix entries*/
 /*	f[i][k], b[i-1][k-1], c[i][k-1], and c[k][i-1], are updated*/
 /*	simultaneously using common terms.  The updates are done in place.*/
-       kPtr = T_NEW.k;
+  kPtr = T_NEW.k;
   for (j = 1; j <= NP; j++) {
     /* calculate denominator */
-       temp = (f[0][0] + b[0][0] + f[NP - j][NP - j] + b[NP - j][NP - j]);
+    temp = (f[0][0] + b[0][0] + f[NP - j][NP - j] + b[NP - j][NP - j]);
     if (temp == 0.0) {
       /* denominator is zero, set energy to lowest level and do nothing */
       /* with the rc's */
-         codes = codeBuf;
+      codes = codeBuf;
       T_NEW.rq0 = QUANT (0.0, 0);
       codes = codeBuf + NP + 1;
       break;
     }
 
     /* calculate numerator */
-       temp2 = -2.0 * (c[0][0] + c[NP - j][NP - j]);
+    temp2 = -2.0 * (c[0][0] + c[NP - j][NP - j]);
     if (fabs (temp2) >= temp) {
       /* reflection coef >= 1.0, fill all rc's with zero */
-         for (; codes < codeBuf + NP + 1; kPtr++)
+      for (; codes < codeBuf + NP + 1; kPtr++)
         *kPtr = QUANT (0.0, kPtr - T_NEW.k + 1);
       fprintf (stderr, "WARNING FROM FLATV: k's unstable in frame %d\n", frCnt);
       break;
     }
 
     /* calculate and quantize reflection coef */
-       temp = temp2 / temp;
+    temp = temp2 / temp;
     *kPtr = QUANT (temp, j);
     if (j == NP)                /* exit here if done */
       break;
 
     /* update matricies */
-       end = NP - j;
+    end = NP - j;
     for (i = 0; i <= end; i++) {
       for (k = i; k <= end; k++) {
         termf = f[i][k];

@@ -93,7 +93,7 @@
   -----------------------------------------------------------------------------
 */
 
-long add_delay (short *smp_buf, short sample, short delay, FILE *Fdel, FILE *Fout, FILE *OutFile) {
+long add_delay (short *smp_buf, short sample, short delay, FILE * Fdel, FILE * Fout, FILE * OutFile) {
   long saved = 0, smpno, i;
 
   if (Fdel) {

@@ -143,7 +143,7 @@ static long fir_downsampling_kernel ARGS ((long lenx, float *x_ptr, float *y_ptr
 
  ============================================================================
 */
-long hq_kernel (long lseg, float *x_ptr, SCD_FIR *fir_ptr, float *y_ptr) {
+long hq_kernel (long lseg, float *x_ptr, SCD_FIR * fir_ptr, float *y_ptr) {
   if (fir_ptr->hswitch == 'U')  /* call up-sampling procedure */
     return fir_upsampling_kernel (      /* returns number of output samples */
                                    lseg,        /* In : length of input signal */
@@ -201,7 +201,7 @@ long hq_kernel (long lseg, float *x_ptr, SCD_FIR *fir_ptr, float *y_ptr) {
 
  ============================================================================
 */
-void hq_free (SCD_FIR *fir_ptr) {
+void hq_free (SCD_FIR * fir_ptr) {
 
   free (fir_ptr->T);            /* free state variables */
   free (fir_ptr->h0);           /* free state impulse response */
@@ -241,7 +241,7 @@ void hq_free (SCD_FIR *fir_ptr) {
 
  ============================================================================
 */
-void hq_reset (SCD_FIR *fir_ptr) {
+void hq_reset (SCD_FIR * fir_ptr) {
   long k;
   for (k = 0; k < fir_ptr->lenh0 - 1; k++)      /* clear delay line */
     fir_ptr->T[k] = 0.0;        /* (= state variables) */

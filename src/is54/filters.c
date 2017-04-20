@@ -37,7 +37,7 @@ Motorola Inc.
 /*#include "stdlib.h"*/
 /*--------------------------------------------------------------------------*/
 /*	inverse (analysis, all-zero) filter */
-void I_DIR (FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len) {
+void I_DIR (FTYPE * inPtr, FTYPE * oPtr, FTYPE * stPtr, FTYPE * coefPtr, int len) {
   FTYPE *cP, *iPtr, *endPtr, *freePtr;
   int i;
 
@@ -72,7 +72,7 @@ void I_DIR (FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len) {
 
 /*--------------------------------------------------------------------------*/
 /*	synthesis (all-pole) filter*/
-void DIR (FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len) {
+void DIR (FTYPE * inPtr, FTYPE * oPtr, FTYPE * stPtr, FTYPE * coefPtr, int len) {
   FTYPE *cP, *tmpPtr, *endPtr, *freePtr;
   int i;
 
@@ -104,7 +104,7 @@ void DIR (FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len) {
   free (freePtr);
 }
 
-void ZI_DIR (FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len) {
+void ZI_DIR (FTYPE * oPtr, FTYPE * stPtr, FTYPE * coefPtr, int len) {
   FTYPE *cP, *tmpPtr, *endPtr, *freePtr;
   int i;
 

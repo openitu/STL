@@ -44,7 +44,7 @@ Motorola Inc.
  ??.???.?? v.10 Created by Matt Hartman
  -------------------------------------------------------------
 */
-void FILT4 ( FTYPE *inPtr, int len) {
+void FILT4 (FTYPE * inPtr, int len) {
   /* coefs of HPF */
   static double b[5] = { 0.898025036, -3.59010601, 5.38416243,
     -3.59010601, 0.898024917

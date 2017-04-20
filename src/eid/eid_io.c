@@ -99,7 +99,7 @@
 
   ===========================================================================
 */
-long save_EID_to_file (SCD_EID *EID, char *EIDfile, double BER, double GAMMA) {
+long save_EID_to_file (SCD_EID * EID, char *EIDfile, double BER, double GAMMA) {
   FILE *EIDfileptr;
 
   /* open specified ASCII file for "overwriting": */

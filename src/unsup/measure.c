@@ -296,7 +296,7 @@ static WTYPE crctab_arc[1 << B] = {
 };
 
 /* -------------- Begin of function updcrc() ---------------------- */
-WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE *crctab, char swapped) {
+WTYPE updcrc (WTYPE icrc, unsigned char *icp, int icnt, WTYPE * crctab, char swapped) {
   register WTYPE crc = icrc;
   register unsigned char *cp = icp;
   register int cnt = icnt;

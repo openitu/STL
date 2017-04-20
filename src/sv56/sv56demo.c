@@ -292,7 +292,7 @@ void display_usage () {
 
   ============================================================================
 */
-void print_p56_long_summary (FILE *out, char *file, SVP56_state state, double al_dB, double NdB, double ratio, double gain, long N, long N1, long N2, long bitno) {
+void print_p56_long_summary (FILE * out, char *file, SVP56_state state, double al_dB, double NdB, double ratio, double gain, long N, long N1, long N2, long bitno) {
   static char unity[5] = "dBov";
   double abs_max_dB, max_gain, new_max;
 
@@ -391,7 +391,7 @@ void print_p56_long_summary (FILE *out, char *file, SVP56_state state, double al
 
   ============================================================================
 */
-void print_p56_short_summary (FILE *out, char *file, SVP56_state state, double al_dB, double ratio, double gain) {
+void print_p56_short_summary (FILE * out, char *file, SVP56_state state, double al_dB, double ratio, double gain) {
   /* Report number of samples */
   fprintf (out, "Samples: %5ld ", state.n);
 

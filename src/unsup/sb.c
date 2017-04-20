@@ -117,7 +117,7 @@ int endian_type () {
   Swap considering MSDOS limitations
   -----------------------------------------------------------------------------
 */
-long msdos_approach (FILE *i, FILE *o) {
+long msdos_approach (FILE * i, FILE * o) {
   char ch[512], ch2;
   long j, k, total;
   short *sp0, *sp2, s0, s2;
@@ -172,7 +172,7 @@ long msdos_approach (FILE *i, FILE *o) {
   Swap in a more efficient way
   -----------------------------------------------------------------------------
 */
-long decent_approach (FILE *i, FILE *o) {
+long decent_approach (FILE * i, FILE * o) {
   char *ch, *ch1, ch2;
   long total, k = 1;
   short *sp0, *sp2, s0, s2;

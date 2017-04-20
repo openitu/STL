@@ -71,30 +71,30 @@ Int16 g727_get_dq ARGS ((Int16 y, Int8 in, short rate));
 Int16 g727_antilog ARGS ((Int16 dql, Int8 dqs));
 Int16 g727_adda ARGS ((Int16 dqln, Int16 y));
 void g727_reconst ARGS ((Int16 * dqln, Int8 * dqs, Int8 in, short rate));
-void g727_qsfa_reset ARGS ((g727_qsfa_state *st));
-Int16 g727_get_y ARGS ((g727_qsfa_state *st, Int8 al));
-Int32 g727_get_yl ARGS ((g727_qsfa_state *st));
-void g727_qsfa_transit ARGS ((g727_qsfa_state *st, Int8 in, Int16 y, short rate));
+void g727_qsfa_reset ARGS ((g727_qsfa_state * st));
+Int16 g727_get_y ARGS ((g727_qsfa_state * st, Int8 al));
+Int32 g727_get_yl ARGS ((g727_qsfa_state * st));
+void g727_qsfa_transit ARGS ((g727_qsfa_state * st, Int8 in, Int16 y, short rate));
 Int16 g727_filtd ARGS ((Int16 wi, Int16 y));
-Int32 g727_filte ARGS ((g727_qsfa_state *st, Int16 yup));
+Int32 g727_filte ARGS ((g727_qsfa_state * st, Int16 yup));
 Int16 g727_functw ARGS ((Int8 in, short rate));
 Int16 g727_limb ARGS ((Int16 yut));
-Int16 g727_mix ARGS ((g727_qsfa_state *st, Int8 al));
-void g727_asc_reset ARGS ((g727_asc_state *st));
-Int8 g727_get_al ARGS ((g727_asc_state *st));
-void g727_asc_transit ARGS ((g727_asc_state *st, Int8 in, Int16 y, Int8 tr, Int8 tdp, short rate));
-Int16 g727_filta ARGS ((g727_asc_state *st, Int8 fi));
-Int16 g727_filtb ARGS ((g727_asc_state *st, Int8 fi));
-Int16 g727_filtc ARGS ((g727_asc_state *st, Int8 ax));
+Int16 g727_mix ARGS ((g727_qsfa_state * st, Int8 al));
+void g727_asc_reset ARGS ((g727_asc_state * st));
+Int8 g727_get_al ARGS ((g727_asc_state * st));
+void g727_asc_transit ARGS ((g727_asc_state * st, Int8 in, Int16 y, Int8 tr, Int8 tdp, short rate));
+Int16 g727_filta ARGS ((g727_asc_state * st, Int8 fi));
+Int16 g727_filtb ARGS ((g727_asc_state * st, Int8 fi));
+Int16 g727_filtc ARGS ((g727_asc_state * st, Int8 ax));
 Int8 g727_functf ARGS ((Int8 in, short rate));
-Int8 g727_lima ARGS ((g727_asc_state *st));
+Int8 g727_lima ARGS ((g727_asc_state * st));
 Int8 g727_subtc ARGS ((Int16 dmsp, Int16 dmlp, Int8 tdp, Int16 y));
 Int16 g727_triga ARGS ((Int8 tr, Int16 app));
-void g727_aprsc_reset ARGS ((g727_aprsc_state *st));
+void g727_aprsc_reset ARGS ((g727_aprsc_state * st));
 Int16 g727_get_sr ARGS ((Int16 dq, Int16 se));
-void g727_get_se_sez ARGS ((g727_aprsc_state *st, Int16 * se, Int16 * sez));
-Int16 g727_get_a2p ARGS ((g727_aprsc_state *st, Int16 dq, Int16 sez, Int8 * pk0, Int8 * sigpk));
-void g727_aprsc_transit ARGS ((g727_aprsc_state *st, Int16 dq, Int8 tr, Int16 sr, Int16 a2p, Int8 pk0, Int8 sigpk));
+void g727_get_se_sez ARGS ((g727_aprsc_state * st, Int16 * se, Int16 * sez));
+Int16 g727_get_a2p ARGS ((g727_aprsc_state * st, Int16 dq, Int16 sez, Int8 * pk0, Int8 * sigpk));
+void g727_aprsc_transit ARGS ((g727_aprsc_state * st, Int16 dq, Int8 tr, Int16 sr, Int16 a2p, Int8 pk0, Int8 sigpk));
 void g727_accum ARGS ((Int16 * se, Int16 * sez, Int16 wa1, Int16 wa2, Int16 wb1, Int16 wb2, Int16 wb3, Int16 wb4, Int16 wb5, Int16 wb6));
 Int16 g727_addb ARGS ((Int16 dq, Int16 se));
 void g727_addc ARGS ((Int8 * pk0, Int8 * sigpk, Int16 dq, Int16 sez));
@@ -105,17 +105,17 @@ Int16 g727_fmult ARGS ((Int16 an, Int16 srn));
 Int16 g727_limc ARGS ((Int16 a2t));
 Int16 g727_limd ARGS ((Int16 a1t, Int16 a2p));
 Int16 g727_aprsc_trigb ARGS ((Int8 tr, Int16 anp));
-Int16 g727_upa1 ARGS ((g727_aprsc_state *st, Int8 pk0, Int8 sigpk));
-Int16 g727_upa2 ARGS ((g727_aprsc_state *st, Int8 pk0, Int8 sigpk));
+Int16 g727_upa1 ARGS ((g727_aprsc_state * st, Int8 pk0, Int8 sigpk));
+Int16 g727_upa2 ARGS ((g727_aprsc_state * st, Int8 pk0, Int8 sigpk));
 Int16 g727_upb ARGS ((Int8 un, Int16 bn, Int16 dq));
 Int8 g727_xor ARGS ((Int16 dqn, Int16 dq));
 Int16 g727_get_srff ARGS ((Int16 dqff, Int16 se));
-void g727_ttd_reset ARGS ((g727_ttd_state *st));
-Int8 g727_get_tr ARGS ((g727_ttd_state *st, Int32 yl, Int16 dq));
+void g727_ttd_reset ARGS ((g727_ttd_state * st));
+Int8 g727_get_tr ARGS ((g727_ttd_state * st, Int32 yl, Int16 dq));
 Int8 g727_get_tdp ARGS ((Int16 a2p));
-void g727_ttd_transit ARGS ((g727_ttd_state *st, Int8 tr, Int8 tdp));
+void g727_ttd_transit ARGS ((g727_ttd_state * st, Int8 tr, Int8 tdp));
 Int8 g727_tone ARGS ((Int16 a2p));
-Int8 g727_trans ARGS ((g727_ttd_state *st, Int32 yl, Int16 dq));
+Int8 g727_trans ARGS ((g727_ttd_state * st, Int32 yl, Int16 dq));
 Int8 g727_ttd_trigb ARGS ((Int8 tr, Int8 tdp));
 Int8 g727_get_sd ARGS ((Int16 sr, Int16 se, Int8 in, Int16 y, short law, short rate));
 Int8 g727_compress ARGS ((Int16 sr, short law));
@@ -198,7 +198,7 @@ static Int8 g727_fiTable16[2] = {
   10.Mar.97  1.00  Conversion to UGST format <simao.campos@comsat.com>
  ----------------------------------------------------------------------------
 */
-void g727_reset (g727_state *st) {
+void g727_reset (g727_state * st) {
   g727_qsfa_reset (&st->qsfa);
   g727_asc_reset (&st->asc);
   g727_aprsc_reset (&st->aprsc);
@@ -252,7 +252,7 @@ void g727_reset (g727_state *st) {
   10.Mar.97  1.00  Conversion to UGST format <simao.campos@comsat.com>
  ----------------------------------------------------------------------------
 */
-void g727_encode_block (short *src, short *dst, short n, short law, short cbits, short ebits, g727_state *st) {
+void g727_encode_block (short *src, short *dst, short n, short law, short cbits, short ebits, g727_state * st) {
   short *eptr = src + n;
 
   /* Fix for compatibility with g726_encode() definitions */
@@ -313,7 +313,7 @@ void g727_encode_block (short *src, short *dst, short n, short law, short cbits,
   10.Mar.97  1.00  Conversion to UGST format <simao.campos@comsat.com>
  ----------------------------------------------------------------------------
 */
-void g727_decode_block (short *src, short *dst, short n, short law, short cbits, short ebits, g727_state *st) {
+void g727_decode_block (short *src, short *dst, short n, short law, short cbits, short ebits, g727_state * st) {
   short *eptr = src + n;
 
   /* Fix for compatibility with g726_decode() definitions */
@@ -370,7 +370,7 @@ void g727_decode_block (short *src, short *dst, short n, short law, short cbits,
   10.Mar.97  1.00  Conversion to UGST format <simao.campos@comsat.com>
  ----------------------------------------------------------------------------
 */
-short g727_encode_sample (short code, short law, short cbits, short ebits, g727_state *st) {
+short g727_encode_sample (short code, short law, short cbits, short ebits, g727_state * st) {
   Int16 se;
   Int16 sez;
   Int8 al;
@@ -459,7 +459,7 @@ short g727_encode_sample (short code, short law, short cbits, short ebits, g727_
   10.Mar.97  1.00  Conversion to UGST format <simao.campos@comsat.com>
  ----------------------------------------------------------------------------
 */
-short g727_decode_sample (short code, short law, short cbits, short ebits, g727_state *st) {
+short g727_decode_sample (short code, short law, short cbits, short ebits, g727_state * st) {
   Int8 ic;
   Int8 al;
   Int16 y;
@@ -848,23 +848,23 @@ void g727_reconst (Int16 * dqln, Int8 * dqs, Int8 in, short rate) {
 
 /*---------- Quantizer Scale Factor Adaptation (G.727 6.2.5) ----------*/
 
-void g727_qsfa_reset (g727_qsfa_state *st) {
+void g727_qsfa_reset (g727_qsfa_state * st) {
   st->yl = 34816;
   st->yu = 544;
 }
 
 
-Int16 g727_get_y (g727_qsfa_state *st, Int8 al) {
+Int16 g727_get_y (g727_qsfa_state * st, Int8 al) {
   return g727_mix (st, al);
 }
 
 
-Int32 g727_get_yl (g727_qsfa_state *st) {
+Int32 g727_get_yl (g727_qsfa_state * st) {
   return st->yl;
 }
 
 
-void g727_qsfa_transit (g727_qsfa_state *st, Int8 in, Int16 y, short rate) {
+void g727_qsfa_transit (g727_qsfa_state * st, Int8 in, Int16 y, short rate) {
   Int16 yup = g727_limb (g727_filtd (g727_functw (in, rate), y));
   Int32 ylp = g727_filte (st, yup);
 
@@ -889,7 +889,7 @@ Int16 g727_filtd (Int16 wi, Int16 y) {
 }
 
 
-Int32 g727_filte (g727_qsfa_state *st, Int16 yup) {
+Int32 g727_filte (g727_qsfa_state * st, Int16 yup) {
   Int16 dif = (yup + ((1048576 - st->yl) >> 6)) & 16383;
   Int8 difs = dif >> 13;
   Int32 difsx;
@@ -974,7 +974,7 @@ Int16 g727_limb (Int16 yut) {
 }
 
 
-Int16 g727_mix (g727_qsfa_state *st, Int8 al) {
+Int16 g727_mix (g727_qsfa_state * st, Int8 al) {
   Int16 dif = (st->yu + 16384 - (st->yl >> 6)) & 16383;
   Int8 difs = dif >> 13;
   Int16 difm;
@@ -1003,19 +1003,19 @@ Int16 g727_mix (g727_qsfa_state *st, Int8 al) {
 
 /*---------- Adaptation Speed Control (G.727 6.2.6) ----------*/
 
-void g727_asc_reset (g727_asc_state *st) {
+void g727_asc_reset (g727_asc_state * st) {
   st->dms = 0;
   st->dml = 0;
   st->ap = 0;
 }
 
 
-Int8 g727_get_al (g727_asc_state *st) {
+Int8 g727_get_al (g727_asc_state * st) {
   return g727_lima (st);
 }
 
 
-void g727_asc_transit (g727_asc_state *st, Int8 in, Int16 y, Int8 tr, Int8 tdp, short rate) {
+void g727_asc_transit (g727_asc_state * st, Int8 in, Int16 y, Int8 tr, Int8 tdp, short rate) {
   Int8 fi = g727_functf (in, rate);
   Int16 dmsp = g727_filta (st, fi);
   Int16 dmlp = g727_filtb (st, fi);
@@ -1027,7 +1027,7 @@ void g727_asc_transit (g727_asc_state *st, Int8 in, Int16 y, Int8 tr, Int8 tdp, 
 }
 
 
-Int16 g727_filta (g727_asc_state *st, Int8 fi) {
+Int16 g727_filta (g727_asc_state * st, Int8 fi) {
   Int16 dif = ((fi << 9) + 8192 - st->dms) & 8191;
   Int8 difs = dif >> 12;
   Int16 difsx;
@@ -1043,7 +1043,7 @@ Int16 g727_filta (g727_asc_state *st, Int8 fi) {
 }
 
 
-Int16 g727_filtb (g727_asc_state *st, Int8 fi) {
+Int16 g727_filtb (g727_asc_state * st, Int8 fi) {
   Int16 dif = ((fi << 11) + 32768 - st->dml) & 32767;
   Int8 difs = dif >> 14;
   Int16 difsx;
@@ -1059,7 +1059,7 @@ Int16 g727_filtb (g727_asc_state *st, Int8 fi) {
 }
 
 
-Int16 g727_filtc (g727_asc_state *st, Int8 ax) {
+Int16 g727_filtc (g727_asc_state * st, Int8 ax) {
   Int16 dif = ((ax << 9) + 2048 - st->ap) & 2047;
   Int8 difs = dif >> 10;
   Int16 difsx;
@@ -1128,7 +1128,7 @@ Int8 g727_functf (Int8 in, short rate) {
 }
 
 
-Int8 g727_lima (g727_asc_state *st) {
+Int8 g727_lima (g727_asc_state * st) {
   return (st->ap >= 256) ? 64 : (st->ap >> 2);
 }
 
@@ -1169,7 +1169,7 @@ Int16 g727_triga (Int8 tr, Int16 app) {
 /*---------- Adaptive Predictor and Reconstructed  ----------*/
 /*---------- Signal Calculator (G.727 6.2.7) ----------------*/
 
-void g727_aprsc_reset (g727_aprsc_state *st) {
+void g727_aprsc_reset (g727_aprsc_state * st) {
   st->pk1 = 0;
   st->pk2 = 0;
   st->sr1 = 32;
@@ -1196,19 +1196,19 @@ Int16 g727_get_sr (Int16 dq, Int16 se) {
 }
 
 
-void g727_get_se_sez (g727_aprsc_state *st, Int16 * se, Int16 * sez) {
+void g727_get_se_sez (g727_aprsc_state * st, Int16 * se, Int16 * sez) {
   g727_accum (se, sez, g727_fmult (st->a1, st->sr1), g727_fmult (st->a2, st->sr2), g727_fmult (st->b1, st->dq1), g727_fmult (st->b2, st->dq2), g727_fmult (st->b3, st->dq3), g727_fmult (st->b4, st->dq4), g727_fmult (st->b5, st->dq5), g727_fmult (st->b6, st->dq6));
 }
 
 
-Int16 g727_get_a2p (g727_aprsc_state *st, Int16 dq, Int16 sez, Int8 * pk0, Int8 * sigpk) {
+Int16 g727_get_a2p (g727_aprsc_state * st, Int16 dq, Int16 sez, Int8 * pk0, Int8 * sigpk) {
   g727_addc (pk0, sigpk, dq, sez);
 
   return g727_limc (g727_upa2 (st, *pk0, *sigpk));
 }
 
 
-void g727_aprsc_transit (g727_aprsc_state *st, Int16 dq, Int8 tr, Int16 sr, Int16 a2p, Int8 pk0, Int8 sigpk) {
+void g727_aprsc_transit (g727_aprsc_state * st, Int16 dq, Int8 tr, Int16 sr, Int16 a2p, Int8 pk0, Int8 sigpk) {
   Int16 sr0;
   Int16 dq0;
   Int16 a1r;
@@ -1462,7 +1462,7 @@ Int16 g727_aprsc_trigb (Int8 tr, Int16 anp) {
 }
 
 
-Int16 g727_upa1 (g727_aprsc_state *st, Int8 pk0, Int8 sigpk) {
+Int16 g727_upa1 (g727_aprsc_state * st, Int8 pk0, Int8 sigpk) {
   Int8 pks = pk0 ^ st->pk1;
   Int16 uga1;
   Int8 a1s;
@@ -1493,7 +1493,7 @@ Int16 g727_upa1 (g727_aprsc_state *st, Int8 pk0, Int8 sigpk) {
 }
 
 
-Int16 g727_upa2 (g727_aprsc_state *st, Int8 pk0, Int8 sigpk) {
+Int16 g727_upa2 (g727_aprsc_state * st, Int8 pk0, Int8 sigpk) {
   Int8 pks1 = pk0 ^ st->pk1;
   Int8 pks2 = pk0 ^ st->pk2;
   Int32 uga2a;
@@ -1606,12 +1606,12 @@ Int16 g727_get_srff (Int16 dqff, Int16 se) {
 
 /*---------- Tone and Transition Detector (G.727 6.2.9) ----------*/
 
-void g727_ttd_reset (g727_ttd_state *st) {
+void g727_ttd_reset (g727_ttd_state * st) {
   st->td = 0;
 }
 
 
-Int8 g727_get_tr (g727_ttd_state *st, Int32 yl, Int16 dq) {
+Int8 g727_get_tr (g727_ttd_state * st, Int32 yl, Int16 dq) {
   return g727_trans (st, yl, dq);
 }
 
@@ -1621,7 +1621,7 @@ Int8 g727_get_tdp (Int16 a2p) {
 }
 
 
-void g727_ttd_transit (g727_ttd_state *st, Int8 tr, Int8 tdp) {
+void g727_ttd_transit (g727_ttd_state * st, Int8 tr, Int8 tdp) {
   st->td = g727_ttd_trigb (tr, tdp);
 }
 
@@ -1631,7 +1631,7 @@ Int8 g727_tone (Int16 a2p) {
 }
 
 
-Int8 g727_trans (g727_ttd_state *st, Int32 yl, Int16 dq) {
+Int8 g727_trans (g727_ttd_state * st, Int32 yl, Int16 dq) {
   Int16 dqmag = dq & 16383;
   Int8 ylint = yl >> 15;
   Int8 ylfrac = (yl >> 10) & 31;

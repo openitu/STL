@@ -35,11 +35,11 @@ Motorola Inc.
 
 #include "vparams.h"
 #include <math.h>
-FTYPE RS_RR ( FTYPE *vecPtr, FTYPE rs) {
+FTYPE RS_RR (FTYPE * vecPtr, FTYPE rs) {
   FTYPE *endPtr, Rxx = 0.0;
 
 /*	compute energy in excitation vector*/
-     for (endPtr = vecPtr + S_LEN; vecPtr < endPtr; vecPtr++)
+  for (endPtr = vecPtr + S_LEN; vecPtr < endPtr; vecPtr++)
     Rxx += *vecPtr * *vecPtr;
 
 /* return (rs / sqrt(Rxx)); */

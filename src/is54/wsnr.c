@@ -43,7 +43,7 @@ static int numSegs;
 
 /*----------------------------------------*/
 /*	snr and weighted prediction gains */
-void runningSnr (FTYPE *speech, FTYPE *syn, FTYPE *wSpeech, FTYPE *wsyn) {
+void runningSnr (FTYPE * speech, FTYPE * syn, FTYPE * wSpeech, FTYPE * wsyn) {
   FTYPE sEng, weEng, eEng, temp, *tfp1, *tfp2, *tfp3, *tfp4, *efp;
 
 /*	update subframe energies */
@@ -75,7 +75,7 @@ void runningSnr (FTYPE *speech, FTYPE *syn, FTYPE *wSpeech, FTYPE *wsyn) {
 
 /*------------------------------------------------*/
 /*	print final results */
-void printSnr (FILE *fplog) {
+void printSnr (FILE * fplog) {
   fprintf (fplog, "\nNUMBER OF FRAMES IN SNR COMPUTATION: %d\n", numSegs);
   fprintf (fplog, "\nAVG WEIGHTED SEG SNR          -> %8.5f\n", sumwSegSnr / numSegs);
   fprintf (fplog, "TOTAL WEIGHTED SNR            -> %8.5f\n", 10.0 * log10 (sEngTotal / weEngTotal));

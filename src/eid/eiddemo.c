@@ -536,7 +536,7 @@ void display_usage () {
 
   ===========================================================================
 */
-long save_EID_to_file (SCD_EID *EID, char *EIDfile, double BER, double GAMMA) {
+long save_EID_to_file (SCD_EID * EID, char *EIDfile, double BER, double GAMMA) {
   FILE *EIDfileptr;
 
   /* open specified ASCII file for "overwriting": */
@@ -690,7 +690,7 @@ SCD_EID *recall_eid_from_file (char *EIDfile, double *ber, double *gamma) {
 
  ============================================================================
 */
-long READ_L (FILE *fp, long n, long *longary) {
+long READ_L (FILE * fp, long n, long *longary) {
   long i, ic;
   char c;
   char ch[16];
@@ -742,7 +742,7 @@ long READ_L (FILE *fp, long n, long *longary) {
 
  ============================================================================
 */
-long READ_lf (FILE *fp, long n, double *doubleary) {
+long READ_lf (FILE * fp, long n, double *doubleary) {
   long i, ic;
   char c;
   char ch[64];
@@ -790,7 +790,7 @@ long READ_lf (FILE *fp, long n, double *doubleary) {
 
  ============================================================================
 */
-long READ_c (FILE *fp, long n, char *chr) {
+long READ_c (FILE * fp, long n, char *chr) {
   long i;
   char c;
 

@@ -71,10 +71,10 @@ int LAG_SEARCH () {
   r = T_P_STATE + LMAX;
 
 /*	compute truncated impulse response of H(z)*/
-     i_resp (ht);
+  i_resp (ht);
 
 /*	compute initial zl array*/
-     for (n = 0; n < LMIN; n++) {
+  for (n = 0; n < LMIN; n++) {
     for (i = 0; i <= n; i++)
       *(zl + n) += *(r + i - LMIN) * *(ht + n - i);
   }
@@ -92,9 +92,9 @@ int LAG_SEARCH () {
   }
 
 /*	lag search loop*/
-     for (lag = LMIN; lag <= LMAX; lag++) {
+  for (lag = LMIN; lag <= LMAX; lag++) {
     /* get bl from zl (overlap and add) */
-       endPtr = bl + S_LEN;
+    endPtr = bl + S_LEN;
 
     tmpPtr = bl;                /* copy zl into bl */
     tmpPtr2 = zl - 1;
@@ -112,14 +112,14 @@ int LAG_SEARCH () {
       *tmpPtr += *++tmpPtr2;
 
     /* compute cross-correlation between weighted speech and bl */
-       Cl = 0.0;
+    Cl = 0.0;
     tmpPtr = bl;
     tmpPtr2 = P;
     for (endPtr = tmpPtr + S_LEN; tmpPtr < endPtr; tmpPtr++, tmpPtr2++)
       Cl += *tmpPtr * *tmpPtr2;
 
     /* compute energy in bl (with recursion, if appilcable) */
-       Gl = 0.0;
+    Gl = 0.0;
     if (lag < S_LEN) {
       tmpPtr = bl;
       for (endPtr = tmpPtr + S_LEN; tmpPtr < endPtr; tmpPtr++)
@@ -133,7 +133,7 @@ int LAG_SEARCH () {
     } else {
       /* lag = S_LEN: initialize partial energy E, and calculate */
       /* energy in bl. */
-         E = 0.0;
+      E = 0.0;
       tmpPtr = bl + PLEN;
       for (endPtr = bl + S_LEN; tmpPtr < endPtr; tmpPtr++)
         E += *tmpPtr * *tmpPtr;
@@ -145,7 +145,7 @@ int LAG_SEARCH () {
     }
 
     /* compare C**2/G and save max */
-       if (Cl > 0.0) {
+    if (Cl > 0.0) {
       if (Cl * Cl * GlBest > ClBest * ClBest * Gl) {
         ClBest = Cl;
         GlBest = Gl;
@@ -154,7 +154,7 @@ int LAG_SEARCH () {
     }
 
     /* update zl array unless done */
-       if (lag == LMAX)
+    if (lag == LMAX)
       break;
     rVal = *(r - lag - 1);
     tmpPtr = zl + S_LEN - 1;
@@ -175,7 +175,7 @@ int LAG_SEARCH () {
 
 
 /*	truncated impulse response function */
-static void i_resp (FTYPE *htPtr) {
+static void i_resp (FTYPE * htPtr) {
   FTYPE *cP, *tmpPtr, *endPtr, *freePtr, impulse = 1.0;
   int i;
 
@@ -184,7 +184,7 @@ static void i_resp (FTYPE *htPtr) {
   tmpPtr += NP;
 
 /*	calculate response*/
-     for (endPtr = tmpPtr + PLEN; tmpPtr < endPtr; tmpPtr++) {
+  for (endPtr = tmpPtr + PLEN; tmpPtr < endPtr; tmpPtr++) {
     cP = W_COEF - 1;
     for (i = 1; i <= NP; i++)
       *tmpPtr -= *(cP + i) * *(tmpPtr - i);

@@ -199,7 +199,7 @@ Private:
 
  ----------------------------------------------------------------------------
 */
-void G726_encode (short *inp_buf, short *out_buf, long smpno, char *law, short rate, short r, G726_state *state) {
+void G726_encode (short *inp_buf, short *out_buf, long smpno, char *law, short rate, short r, G726_state * state) {
   short s;
   short d, i;
   short y;
@@ -401,7 +401,7 @@ void G726_encode (short *inp_buf, short *out_buf, long smpno, char *law, short r
 
  ----------------------------------------------------------------------------
 */
-void G726_decode (short *inp_buf, short *out_buf, long smpno, char *law, short rate, short r, G726_state *state) {
+void G726_decode (short *inp_buf, short *out_buf, long smpno, char *law, short rate, short r, G726_state * state) {
   short i;
   short y;
   short sigpk;
@@ -1907,7 +1907,7 @@ void G726_lima (short *ap, short *al) {
 
  ----------------------------------------------------------------------
 */
-void G726_subtc (short *dmsp, short *dmlp, short *tdp, short *y, short *ax){
+void G726_subtc (short *dmsp, short *dmlp, short *tdp, short *y, short *ax) {
   long difm, difs, dthr, dmlp1, dmsp1;
   long dif;
 

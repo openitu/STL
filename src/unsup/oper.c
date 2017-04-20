@@ -226,7 +226,7 @@ double divide (double x, double y) {
   Operate over short int files
   -------------------------------------------------------------------------
  */
-long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, int fh3, long N, long N1, long N2, double A, double B, double C,  double (*oper_f) (), char trim_by, double round) {
+long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, int fh3, long N, long N1, long N2, double A, double B, double C, double (*oper_f) (), char trim_by, double round) {
   long i, j, l, k, saved = 0;
   short *a, *b;
   register double tmp;

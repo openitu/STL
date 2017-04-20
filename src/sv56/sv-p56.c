@@ -223,7 +223,7 @@ double bin_interp (double upcount, double lwcount, double upthr, double lwthr, d
 #define M        15.9           /* in [dB] */
 #define THRES_NO 15             /* number of thresholds in the speech voltmeter */
 
-void init_speech_voltmeter (SVP56_state *state, double sampl_freq) {
+void init_speech_voltmeter (SVP56_state * state, double sampl_freq) {
   double x;
   long I, j;
 
@@ -346,7 +346,7 @@ void init_speech_voltmeter (SVP56_state *state, double sampl_freq) {
 /* Hooked to eliminate sigularity with log(0.0) (happens w/all-0 data blocks */
 #define MIN_LOG_OFFSET 1.0e-20
 
-double speech_voltmeter (float *buffer, long smpno, SVP56_state *state) {
+double speech_voltmeter (float *buffer, long smpno, SVP56_state * state) {
   int I, j;
   long k;
   double g, x, AdB, CdB, AmdB, CmdB, ActiveSpeechLevel;

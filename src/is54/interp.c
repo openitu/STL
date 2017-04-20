@@ -36,7 +36,7 @@ int ATORC ();                   /* from paramConv.c */
                 /* FTYPE *a, FTYPE *k */
 void I_MOV (struct coefSet defSet, int numSets, FTYPE rq0);
 
-FTYPE RES_ENG (FTYPE rq0, FTYPE *k);
+FTYPE RES_ENG (FTYPE rq0, FTYPE * k);
 
 static FTYPE *aPtr;             /* points (in I_CBUFF) to the beginning of the interpolated direct-form coefs for the current subframe */
 static FTYPE *rsPtr;            /* points (in rsBuf) to the next spot to be filled by an rs value */

@@ -230,7 +230,7 @@ const char blacklist[][20] = {  /* to recognize standard C functions (memory all
 };
 
 /*reads a character from a file with end-of-file control*/
-char read_char (FILE *fp) {
+char read_char (FILE * fp) {
   char ch;
   if (!feof (fp)) {
     fscanf (fp, "%c", &ch);

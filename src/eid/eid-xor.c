@@ -163,7 +163,7 @@ short eid_xor (int a, int b) {
   Insert errors by XOR-ing the input data arrays and saving the
   disturbed data in a third array.
 */
-long insert_errors (short *a, short *b, short *c, long n)  {
+long insert_errors (short *a, short *b, short *c, long n) {
   long i;
   long register disturbed;
   short bit;

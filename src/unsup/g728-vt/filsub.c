@@ -61,7 +61,7 @@ int fopen_ (long *lun, char *name, long *mode, ftnlen name_len) {
 
 /*       IMPLICIT NONE */
 
-int fread_ (ling *lun, long *buf, long *pos, long  *x, long *eof) {
+int fread_ (ling * lun, long *buf, long *pos, long *x, long *eof) {
   /* System generated locals */
   long i_1;
 

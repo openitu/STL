@@ -34,7 +34,7 @@ Motorola Inc.
 /*	inclusions*/
    /**/
 #include "vparams.h"
-void DECORR (FTYPE *vecPtr,FTYPE *basisPtr, int numBasis) {
+void DECORR (FTYPE * vecPtr, FTYPE * basisPtr, int numBasis) {
   FTYPE gamma = 0.0;            /* Energy in the given vector (i.e. the vector from */
   /* which the basis set will be decorrelated) */
   FTYPE psi;                    /* Energy in the current basis vector */

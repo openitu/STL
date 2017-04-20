@@ -201,7 +201,7 @@ enum BS_types { NO_HEADER, HAS_HEADER };
   20.Aug.97  v.1.0  Created.
   --------------------------------------------------------------------------
 */
-char check_bs_format (FILE *F, char *file, char *type) {
+char check_bs_format (FILE * F, char *file, char *type) {
   short word;
   char ret_val;
 
@@ -269,7 +269,7 @@ char check_bs_format (FILE *F, char *file, char *type) {
 /* ...................... End of check_bs_format() ...................... */
 
 
-int check_sync (FILE *F, char *file, char *bs_type, long *fr_len, char *bs_format) {
+int check_sync (FILE * F, char *file, char *bs_type, long *fr_len, char *bs_format) {
   long i;
   char sync_header;
 
@@ -439,8 +439,8 @@ int main (int argc, char *argv[]) {
 #ifdef VMS
   char mrs[15];                 /* for correct mrs in VMS environment */
 #endif
-  long (*serialize_f) (short *par_buf, short *bit_stm, long n, long resol, char sync);       /* pointer to serialization routine */
-  long (*parallelize_f) (short *par_buf, short *bit_stm, long n, long resol, char sync);     /* pointer to parallelization routine */
+  long (*serialize_f) (short *par_buf, short *bit_stm, long n, long resol, char sync);  /* pointer to serialization routine */
+  long (*parallelize_f) (short *par_buf, short *bit_stm, long n, long resol, char sync);        /* pointer to parallelization routine */
   char quiet = 0;
 
 

@@ -852,7 +852,7 @@ SCD_FIR *mod_irs_48khz_init () {
 */
 #define RX_MOD_IRS16_LEN 148
 
-void fill_rx_modified_irs16khz  (float **h0, long *lenh0) {
+void fill_rx_modified_irs16khz (float **h0, long *lenh0) {
   static float rx_mod_irs16_coef[RX_MOD_IRS16_LEN] = {
     (F) - 7.58608110527E-05, (F) - 7.45618878900E-05, (F) 3.52397043534E-05,
     (F) 6.59225768920E-05, (F) - 8.37107055674E-05, (F) - 1.58207551398E-04,
@@ -1012,7 +1012,7 @@ SCD_FIR *rx_mod_irs_16khz_init () {
 */
 #define RX_MOD_IRS8_LEN 75
 
-void fill_rx_modified_irs8khz  (float **h0, long *lenh0) {
+void fill_rx_modified_irs8khz (float **h0, long *lenh0) {
   static float rx_mod_irs8_coef[RX_MOD_IRS8_LEN] = {
     (F) - 9.29651661244e-05, (F) - 5.57106193888e-05, (F) 1.03988706315e-05,
     (F) - 1.72293166049e-04, (F) 4.47217668394e-04, (F) - 3.23797104316e-04,

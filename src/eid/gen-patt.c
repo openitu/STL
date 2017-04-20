@@ -253,7 +253,7 @@ char check_bellcore (long index) {
    15.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long run_FER_generator_random (short *patt, SCD_EID *state, long n) {
+long run_FER_generator_random (short *patt, SCD_EID * state, long n) {
   long fer, i, count;
 
   for (count = i = 0; i < n; i++) {
@@ -295,7 +295,7 @@ long run_FER_generator_random (short *patt, SCD_EID *state, long n) {
    15.Aug.97  v.1.0  Created.
    -------------------------------------------------------------------------
  */
-long run_FER_generator_burst (short *patt, BURST_EID *state, long n) {
+long run_FER_generator_burst (short *patt, BURST_EID * state, long n) {
   long fer, i, count;
 
   for (count = i = 0; i < n; i++) {

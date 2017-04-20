@@ -60,7 +60,7 @@ void free_ep_histogram ARGS ((ep_histogram_state * state));
 
   ---------------------------------------------------------------------------
 */
-int init_ep_histogram (ep_histogram_state *state, long burst_len) {
+int init_ep_histogram (ep_histogram_state * state, long burst_len) {
   long i;
 
   /* Reset some variables */
@@ -119,7 +119,7 @@ int init_ep_histogram (ep_histogram_state *state, long burst_len) {
 
   ---------------------------------------------------------------------------
 */
-void free_ep_histogram (ep_histogram_state *state) {
+void free_ep_histogram (ep_histogram_state * state) {
   free (state->hist);
 }
 
@@ -179,7 +179,7 @@ void free_ep_histogram (ep_histogram_state *state) {
 
   ---------------------------------------------------------------------------
 */
-long compute_ep_histogram (short *pattern, long items, int ep_type, ep_histogram_state *s, int reset) {
+long compute_ep_histogram (short *pattern, long items, int ep_type, ep_histogram_state * s, int reset) {
   long i;
   long this_event;
   float delta;

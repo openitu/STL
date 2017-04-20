@@ -192,7 +192,7 @@ Word16 lsbcod (Word16 xl, Word16 rs, g722_state * s) {
 #define SPH  s->sph
 #define SZH  s->szh
 
-Word16 hsbcod (Word16 xh, Word16 rs, g722_state *s) {
+Word16 hsbcod (Word16 xh, Word16 rs, g722_state * s) {
   Word16 eh, nbph, ih;
 
   if (sub (rs, 1) == 0) {
@@ -307,7 +307,7 @@ Word16 hsbcod (Word16 xh, Word16 rs, g722_state *s) {
 #define SPL  s->spl
 #define SZL  s->szl
 
-Word16 lsbdec (Word16 ilr, Word16 mode, Word16 rs, g722_state *s) {
+Word16 lsbdec (Word16 ilr, Word16 mode, Word16 rs, g722_state * s) {
   Word16 dl, rl, nbpl, yl;
 
   if (sub (rs, 1) == 0) {
@@ -421,7 +421,7 @@ Word16 lsbdec (Word16 ilr, Word16 mode, Word16 rs, g722_state *s) {
 #define SPH  s->sph
 #define SZH  s->szh
 
-Word16 hsbdec (Word16 ih, Word16 rs, g722_state *s) {
+Word16 hsbdec (Word16 ih, Word16 rs, g722_state * s) {
   Word16 nbph, yh;
 
   if (sub (rs, 1) == 0) {
@@ -705,9 +705,7 @@ Word16 filtez (Word16 dlt[], Word16 bl[]) {
 #ifdef WMOPS
   move16 ();
 #endif
-  for (i = 6;
-       i > 0;
-       i--) {
+  for (i = 6; i > 0; i--) {
     wd = add (dlt[i], dlt[i]);
     wd = mult (wd, bl[i]);
     szl = add (szl, wd);
@@ -1375,9 +1373,7 @@ void upzero (Word16 dlt[], Word16 bl[]) {
   }
   sg0 = shr (dlt[0], 15);
 
-  for (i = 6;
-       i > 0;
-       i--) {
+  for (i = 6; i > 0; i--) {
     sgi = shr (dlt[i], 15);
     wd2 = sub (0, wd1);
     if (sg0 == sgi) {
@@ -1428,7 +1424,7 @@ static Word16 coef_qmf[24] = {
  ___________________________________________________________________________
 */
 #define delayx s->qmf_tx_delayx
-void qmf_tx (Word16 xin0, Word16 xin1, Word16 *xl, Word16 *xh, g722_state *s) {
+void qmf_tx (Word16 xin0, Word16 xin1, Word16 * xl, Word16 * xh, g722_state * s) {
   Word16 i;
   Word32 accuma, accumb;
   Word32 comp_low, comp_high;
@@ -1451,17 +1447,13 @@ void qmf_tx (Word16 xin0, Word16 xin1, Word16 *xl, Word16 *xh, g722_state *s) {
 #endif
   accuma = L_mult0 (*pcoef++, *pdelayx++);
   accumb = L_mult0 (*pcoef++, *pdelayx++);
-  for (i = 1;
-       i < 12;
-       i++) {
+  for (i = 1; i < 12; i++) {
     accuma = L_mac0 (accuma, *pcoef++, *pdelayx++);
     accumb = L_mac0 (accumb, *pcoef++, *pdelayx++);
   }
 
   /* Descaling and shift of the delay line */
-  for (i = 0;
-       i < 22;
-       i++) {
+  for (i = 0; i < 22; i++) {
     delayx[23 - i] = delayx[21 - i];
 #ifdef WMOPS
     move16 ();
@@ -1499,7 +1491,7 @@ void qmf_tx (Word16 xin0, Word16 xin1, Word16 *xl, Word16 *xh, g722_state *s) {
  ___________________________________________________________________________
 */
 #define delayx s->qmf_rx_delayx
-void qmf_rx (Word16 rl, Word16 rh, Word16 *xout1, Word16 *xout2, g722_state *s) {
+void qmf_rx (Word16 rl, Word16 rh, Word16 * xout1, Word16 * xout2, g722_state * s) {
   Word16 i;
   Word32 accuma, accumb;
   Word32 comp_low, comp_high;
@@ -1523,17 +1515,13 @@ void qmf_rx (Word16 rl, Word16 rh, Word16 *xout1, Word16 *xout2, g722_state *s) 
 #endif
   accuma = L_mult0 (*pcoef++, *pdelayx++);
   accumb = L_mult0 (*pcoef++, *pdelayx++);
-  for (i = 1;
-       i < 12;
-       i++) {
+  for (i = 1; i < 12; i++) {
     accuma = L_mac0 (accuma, *pcoef++, *pdelayx++);
     accumb = L_mac0 (accumb, *pcoef++, *pdelayx++);
   }
 
   /* shift delay line */
-  for (i = 0;
-       i < 22;
-       i++) {
+  for (i = 0; i < 22; i++) {
     delayx[23 - i] = delayx[21 - i];
 #ifdef WMOPS
     move16 ();

@@ -235,7 +235,7 @@ void display_usage () {
 /* .................... End of display_usage() .................... */
 
 
-int main (int argc, char* argv[]) {
+int main (int argc, char *argv[]) {
   FILE *in, *out;
   int mode, status, version;
   int more_to_decode = YES, first_time = YES, input_is_file = YES;

@@ -126,7 +126,7 @@ enum STL_versions { raw, STL92, STL96 };
   18.Jan.99  v.1.1  Added case for HAS_FLAG_ONLY <simao>
   --------------------------------------------------------------------------
 */
-char check_bs_format (FILE *F, char *file, char *type) {
+char check_bs_format (FILE * F, char *file, char *type) {
   short word;
   char ret_val;
 
@@ -233,7 +233,7 @@ char check_bs_format (FILE *F, char *file, char *type) {
   18.Jan.99  v.1.1  Added case for HAS_FLAG_ONLY <simao>
   --------------------------------------------------------------------------
 */
-int check_sync (FILE *F, char *file, char *bs_type, long *fr_len, char *bs_format) {
+int check_sync (FILE * F, char *file, char *bs_type, long *fr_len, char *bs_format) {
   long i;
   char sync_header, sync_flag;
 

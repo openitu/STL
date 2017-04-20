@@ -34,7 +34,7 @@ Motorola Inc.
 /*	inclusions*/
    /**/
 #include "vparams.h"
-void P_EX (FTYPE *oPtr, FTYPE *psPtr, int lag) {
+void P_EX (FTYPE * oPtr, FTYPE * psPtr, int lag) {
   FTYPE *tmpPtr, *savePtr, *savePtr2, *endPtr;
 
   savePtr = psPtr + LMAX;       /* savePtr set past end of LTP state */

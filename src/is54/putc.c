@@ -42,7 +42,7 @@ static int size8000[28] = { 27, 6, 5, 5, 4, 4, 3, 3, 3, 3, 2, 5, 7, 8,
 };
 
 /* ------------------------------------------------------------------------ */
-long putCodesHex (FILE *fpstream, int *paramP) {
+long putCodesHex (FILE * fpstream, int *paramP) {
   unsigned int param, code, temp;
   int *sizeP, *arrangeP, sizeOfTemp, size, mask, count, *tip1, *tip2, *eip;
 
@@ -120,7 +120,7 @@ long putCodesHex (FILE *fpstream, int *paramP) {
  ---------------------------------------------------------------------------
 */
 #define IS54_FRAME_LEN 27
-long putCodesBin (FILE *fpstream, int*codePtr) {
+long putCodesBin (FILE * fpstream, int *codePtr) {
   int *tip, *eip, index, code;
   short bs[IS54_FRAME_LEN], idx = 0;
 
@@ -138,7 +138,7 @@ long putCodesBin (FILE *fpstream, int*codePtr) {
 
 /* ------------------------------------------------------------------------ */
 #define	MAXLINE	133
-long getCodesHex (FILE *fpcode, int *codePtr) {
+long getCodesHex (FILE * fpcode, int *codePtr) {
   char *packedLine;
   int *unpackedCodes, *tip, *eip;
 
@@ -182,7 +182,7 @@ long getCodesHex (FILE *fpcode, int *codePtr) {
 
 /* ------------------------------------------------------------------------ */
 #define IS54_FRAME_LEN 27
-long getCodesBin (FILE *fpcode, int *codePtr) {
+long getCodesBin (FILE * fpcode, int *codePtr) {
   int count, gotten;
   short codes[IS54_FRAME_LEN];
 
