@@ -735,7 +735,9 @@ Word16 filtez (dlt, bl)
 #ifdef WMOPS
   move16 ();
 #endif
-  FOR (i = 6; i > 0; i--) {
+  FOR (i = 6;
+       i > 0;
+       i--) {
     wd = add (dlt[i], dlt[i]);
     wd = mult (wd, bl[i]);
     szl = add (szl, wd);
@@ -1435,7 +1437,9 @@ void upzero (dlt, bl)
   }
   sg0 = shr (dlt[0], 15);
 
-  FOR (i = 6; i > 0; i--) {
+  FOR (i = 6;
+       i > 0;
+       i--) {
     sgi = shr (dlt[i], 15);
     wd2 = sub (0, wd1);
     if (sg0 == sgi) {
@@ -1517,13 +1521,17 @@ void qmf_tx (xin0, xin1, xl, xh, s)
 #endif
   accuma = L_mult0 (*pcoef++, *pdelayx++);
   accumb = L_mult0 (*pcoef++, *pdelayx++);
-  FOR (i = 1; i < 12; i++) {
+  FOR (i = 1;
+       i < 12;
+       i++) {
     accuma = L_mac0 (accuma, *pcoef++, *pdelayx++);
     accumb = L_mac0 (accumb, *pcoef++, *pdelayx++);
   }
 
   /* Descaling and shift of the delay line */
-  FOR (i = 0; i < 22; i++) {
+  FOR (i = 0;
+       i < 22;
+       i++) {
     delayx[23 - i] = delayx[21 - i];
 #ifdef WMOPS
     move16 ();
@@ -1591,13 +1599,17 @@ void qmf_rx (rl, rh, xout1, xout2, s)
 #endif
   accuma = L_mult0 (*pcoef++, *pdelayx++);
   accumb = L_mult0 (*pcoef++, *pdelayx++);
-  FOR (i = 1; i < 12; i++) {
+  FOR (i = 1;
+       i < 12;
+       i++) {
     accuma = L_mac0 (accuma, *pcoef++, *pdelayx++);
     accumb = L_mac0 (accumb, *pcoef++, *pdelayx++);
   }
 
   /* shift delay line */
-  FOR (i = 0; i < 22; i++) {
+  FOR (i = 0;
+       i < 22;
+       i++) {
     delayx[23 - i] = delayx[21 - i];
 #ifdef WMOPS
     move16 ();

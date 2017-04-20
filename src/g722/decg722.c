@@ -160,7 +160,9 @@ short g192_to_byte (short nb_bits, short *code_byte, short *inp_bits, short N_sa
 
 void set_index (short value, short *code, short n_shorts) {
   long i;
-  FOR (i = 0; i < n_shorts; i++) {
+  FOR (i = 0;
+       i < n_shorts;
+       i++) {
     code[i] = value;
 #ifdef WMOPS
     move16 ();
@@ -170,7 +172,9 @@ void set_index (short value, short *code, short n_shorts) {
 
 void copy_index (short *from, short *to, short n_shorts) {
   long i;
-  FOR (i = 0; i < n_shorts; i++) {
+  FOR (i = 0;
+       i < n_shorts;
+       i++) {
     to[i] = from[i];
 #ifdef WMOPS
     move16 ();
@@ -498,7 +502,9 @@ int main (argc, argv)
 
           IF (L_sub (fer_cnt, PLC_MEM_SIZE) > 0) {
             /* fprintf(stderr,"PLC: long burst, setting [fer_cnt==%ld] setting code_mem[*] to ZEROINDEX\n",fer_cnt); */
-            FOR (i = 0; i < PLC_MEM_SIZE; i++) {
+            FOR (i = 0;
+                 i < PLC_MEM_SIZE;
+                 i++) {
               set_index (ZERO_INDEX, mem_code[i], (short) (fr_size[1] / 8));
               mem_mode[i] = 1;
 #ifdef WMOPS
@@ -514,7 +520,9 @@ int main (argc, argv)
 #endif
           good_cnt++;
           fer_cnt = 0;
-          FOR (i = (PLC_MEM_SIZE - 1); i >= 1; i--) {
+          FOR (i = (PLC_MEM_SIZE - 1);
+               i >= 1;
+               i--) {
             set_index (ZERO_INDEX, mem_code[i], (short) (fr_size[1] / 8));      /* reset all bytes */
             copy_index (mem_code[i - 1], mem_code[i], (short) (fr_size[mem_mode[i - 1]] / 8));
             mem_mode[i] = mem_mode[i - 1];

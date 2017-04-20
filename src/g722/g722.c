@@ -56,7 +56,9 @@ void g722_reset_encoder (encoder)
   move16 ();
   move16 ();
 #endif
-  FOR (j = 0; j < 24; j++) {
+  FOR (j = 0;
+       j < 24;
+       j++) {
     encoder->qmf_tx_delayx[j] = 0;
 #ifdef WMOPS
     move16 ();
@@ -92,7 +94,9 @@ Word32 g722_encode (incode, code, read1, encoder)
 #ifdef WMOPS
   move16 ();
 #endif
-  FOR (i = 0; i < read1; i++) {
+  FOR (i = 0;
+       i < read1;
+       i++) {
     xin1 = *incode++;
     xin0 = *incode++;
 #ifdef WMOPS
@@ -133,7 +137,9 @@ void g722_reset_decoder (decoder)
   move16 ();
   move16 ();
 #endif
-  FOR (j = 0; j < 24; j++) {
+  FOR (j = 0;
+       j < 24;
+       j++) {
     decoder->qmf_rx_delayx[j] = 0;
 #ifdef WMOPS
     move16 ();
@@ -162,7 +168,9 @@ short g722_decode (code, outcode, mode, read1, decoder)
   short i;
 
   /* Decode - reset is never applied here */
-  FOR (i = 0; i < read1; i++) {
+  FOR (i = 0;
+       i < read1;
+       i++) {
     /* Separate the input G722 codeword: bits 0 to 5 are the lower-band portion of the encoding, and bits 6 and 7 are the upper-band portion of the encoding */
     il = s_and (code[i], 0x3F); /* 6 bits of low SB */
     ih = s_and (lshr (code[i], 6), 0x03);       /* 2 bits of high SB */
