@@ -8,16 +8,16 @@
             PROTOTYPES & DEFINITION FOR COUNTING OPERATIONS
 
    History
-   09.Aug.1999 V1.0.0   Input to UGST from ETSI AMR (count.h); 
+   09.Aug.1999 V1.0.0   Input to UGST from ETSI AMR (count.h);
 
-   26.Jan.2000 V1.1.0   Added counter entries for G.723.1's 
+   26.Jan.2000 V1.1.0   Added counter entries for G.723.1's
                         L_mls(), div_l(), i_mult() [from basop32.c]
 
-   05.Jul.2000 V1.2.0   Added counter entries for 32bit shiftless 
+   05.Jul.2000 V1.2.0   Added counter entries for 32bit shiftless
                         operators L_mult0(), L_mac0(), L_msu0()
 
    03 Nov 04   v2.0     Incorporation of new 32-bit / 40-bit / control
-                        operators for the ITU-T Standard Tool Library as 
+                        operators for the ITU-T Standard Tool Library as
                         described in Geneva, 20-30 January 2004 WP 3/16 Q10/16
                         TD 11 document and subsequent discussions on the
                         wp3audio@yahoogroups.com email reflector.
@@ -60,7 +60,8 @@
 #ifndef _COUNT_H
 #define _COUNT_H "$Id$"
 #define WMOPS 1                 /* enable WMOPS profiling features */
-                                                  /* #undef WMOPS *//* disable WMOPS profiling features */
+// #undef WMOPS /* disable WMOPS profiling features */
+
 #define MAXCOUNTERS (256)
 
 int getCounterId (char *objectName);
@@ -129,7 +130,7 @@ void WMOPS_output (Word16 notPrintWorstWorstCase);
 
 void WMOPS_output_avg (Word16 dtx_mode, Word32 * tot_wm, Word16 * num_frames);
 /*
- * same as WMOPS_output + returns the total wmops counter and the number of frames 
+ * same as WMOPS_output + returns the total wmops counter and the number of frames
  * to support the computation of global average.
  *
  */
@@ -149,7 +150,7 @@ Word32 fwc (void);
 
 void setFrameRate (int samplingFreq, int frameLength);
 /*
- * This function can overwrite the value of the frameRate variable that is 
+ * This function can overwrite the value of the frameRate variable that is
  * initialized by the FRAME_RATE constant.
  */
 

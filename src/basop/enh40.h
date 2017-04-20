@@ -9,11 +9,11 @@
 
    History:
    07 Nov 04   v2.0     Incorporation of new 32-bit / 40-bit / control
-                        operators for the ITU-T Standard Tool Library as 
+                        operators for the ITU-T Standard Tool Library as
                         described in Geneva, 20-30 January 2004 WP 3/16 Q10/16
                         TD 11 document and subsequent discussions on the
                         wp3audio@yahoogroups.com email reflector.
-   March 06   v2.1      Changed to improve portability.                        
+   March 06   v2.1      Changed to improve portability.
 
   ============================================================================
 */
@@ -154,7 +154,7 @@ static __inline Word40 L40_set (Word40 L40_var1) {
   return (L40_var_out);
 }
 
-                     /* #endif *//* ifdef _MSC_VER */
+// #endif /* ifdef _MSC_VER */
 
 
 
@@ -285,7 +285,7 @@ static __inline UWord32 L_Extract40 (Word40 L40_var1) {
  *
  *  Inputs :
  *
- *    var1        16 bit short signed integer (Word16) whose value falls in 
+ *    var1        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var1 <= MAX_16.
  *
  *  Outputs :
@@ -331,7 +331,7 @@ static __inline Word40 L40_deposit_h (Word16 var1) {
  *
  *  Inputs :
  *
- *    var1        16 bit short signed integer (Word16) whose value falls in 
+ *    var1        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var1 <= MAX_16.
  *
  *  Outputs :
@@ -490,7 +490,7 @@ static __inline Word40 L40_round (Word40 L40_var1) {
  *
  *  Return Value :
  *
- *    var_out     16 bit short signed integer (Word16) whose value falls in 
+ *    var_out     16 bit short signed integer (Word16) whose value falls in
  *                the range 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
@@ -524,10 +524,10 @@ static __inline Word16 round40 (Word40 L40_var1) {
  *
  *  Inputs :
  *
- *    var1        16 bit short signed integer (Word16) whose value falls in 
+ *    var1        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var1 <= MAX_16.
  *
- *    var2        16 bit short signed integer (Word16) whose value falls in 
+ *    var2        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var2 <= MAX_16.
  *
  *  Outputs :
@@ -588,10 +588,10 @@ static __inline Word40 L40_mult (Word16 var1, Word16 var2) {
  *    L40_var1    40 bit long signed integer (Word40) whose value falls in the
  *                range : MIN_40 <= L40_var1 <= MAX_40.
  *
- *    var2        16 bit short signed integer (Word16) whose value falls in 
+ *    var2        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var2 <= MAX_16.
  *
- *    var3        16 bit short signed integer (Word16) whose value falls in 
+ *    var3        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var3 <= MAX_16.
  *
  *  Outputs :
@@ -646,10 +646,10 @@ static __inline Word40 L40_mac (Word40 L40_var1, Word16 var2, Word16 var3) {
  *    L40_var1    40 bit long signed integer (Word40) whose value falls in the
  *                range : MIN_40 <= L40_var1 <= MAX_40.
  *
- *    var2        16 bit short signed integer (Word16) whose value falls in 
+ *    var2        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var2 <= MAX_16.
  *
- *    var3        16 bit short signed integer (Word16) whose value falls in 
+ *    var3        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var3 <= MAX_16.
  *
  *  Outputs :
@@ -703,10 +703,10 @@ static __inline Word16 mac_r40 (Word40 L40_var1, Word16 var2, Word16 var3) {
  *    L40_var1    40 bit long signed integer (Word40) whose value falls in the
  *                range : MIN_40 <= L40_var1 <= MAX_40.
  *
- *    var2        16 bit short signed integer (Word16) whose value falls in 
+ *    var2        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var2 <= MAX_16.
  *
- *    var3        16 bit short signed integer (Word16) whose value falls in 
+ *    var3        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var3 <= MAX_16.
  *
  *  Outputs :
@@ -761,10 +761,10 @@ static __inline Word40 L40_msu (Word40 L40_var1, Word16 var2, Word16 var3) {
  *    L40_var1    40 bit long signed integer (Word40) whose value falls in the
  *                range : MIN_40 <= L40_var1 <= MAX_40.
  *
- *    var2        16 bit short signed integer (Word16) whose value falls in 
+ *    var2        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var2 <= MAX_16.
  *
- *    var3        16 bit short signed integer (Word16) whose value falls in 
+ *    var3        16 bit short signed integer (Word16) whose value falls in
  *                the range : MIN_16 <= var3 <= MAX_16.
  *
  *  Outputs :
