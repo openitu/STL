@@ -38,7 +38,7 @@ ctest
 
 Licenses
 ---
-The STL, and all of its derivations, is subject to the "ITU-T General Public License".
+The STL, and all of its derivations, is subject to the "ITU-T General Public License", which is a modified version of the GPL2.
 Please read the file `LICENSE.md` for the terms and conditions.
 
 The code in `is54` and `rpeltp` have additional copyright issues.
