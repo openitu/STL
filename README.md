@@ -1,7 +1,7 @@
 README for the _ITU-T Software Tool Library_ (STL)
 ===
 
-The STL provides software for telephony-related speech processing.
+The STL provides software for speech- and audio-related speech processing, including narrowband (telephony), wideband ans super-wideband applications. 
 This includes codecs, noise generators, filter, etc.
 
 The STL is standardized by ITU-T.
