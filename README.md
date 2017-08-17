@@ -80,4 +80,4 @@ We distinguish between (1) the STL code development in the open source environme
 *   The Editor of ITU-T G.191 monitors the change process in the open source environment. 
 *   Upon availability of sufficient stable material in the submission branch, the Editor of ITU-T G.191 submits a TD to Q2/12 summarizing the proposed changes and related discussion, and provides a snapshot of the submission branch as basis for a revised version of ITU-T G.191.
 *   The TD is considered by Q2/12, and action is taken following the alternative approval procedure (AAP) for ITU-T Recommendations.
-*   The Editor of ITU-T G.191 provides feedback on the actions taken to the developers in the open source environment, and—upon approval of a revised version of G.191—updates the master branch of the open source environment.
+*   The Editor of ITU-T G.191 provides feedback on the actions taken to the developers in the open source environment, and, upon approval of a revised version of G.191, updates the master branch of the open source environment.
