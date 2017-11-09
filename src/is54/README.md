@@ -1,3 +1,4 @@
+```
        =============================================================
        COPYRIGHT NOTE: This source code, and all of its derivations,
        is subject to the "ITU-T General Public License". Please have
@@ -7,56 +8,67 @@
        authorized by Motorola, who keeps the original copyright. See
        file cpyright on this directory.
        =============================================================
+```
 
 The ITU-T/UGST distribution of the Motorola reference implementation
 IS54 program is built of the following files:
 
 
-C program code
-===
-The main vselp encoding PROGRAM is implemented by vselp.c (this is NOT a
+# C program code
+
+The main `vselp` encoding PROGRAM is implemented by `vselp.c` (this is NOT a
 module!). The other C programs implement its supporting functions:
-	b_con.c		calcp.c		cunpack0.c	decorr.c
-	excite.c	filt4.c		filters.c	flatv.c
-	fspace.c	g_quant.c	getp.c   	init.c
-	interp.c 	isdef.c  	lag.c   	makec.c
-	p_ex.c  	pconv.c 	putc.c  	r_sub.c
-	rs_rr.c 	split.c 	t_sub.c 	v_con.c
-	v_srch.c 	vselp.c 	wsnr.c
+```
+	b_con.c     calcp.c     cunpack0.c  decorr.c
+	excite.c    filt4.c     filters.c   flatv.c
+	fspace.c    g_quant.c   getp.c      init.c
+	interp.c    isdef.c     lag.c       makec.c
+	p_ex.c      pconv.c     putc.c      r_sub.c
+	rs_rr.c     split.c     t_sub.c     v_con.c
+	v_srch.c    vselp.c     wsnr.c
+```
 
 There are several specific header files:
-	r_sub.h 	t_sub.h		vparams.h	vselp.h
+```
+	r_sub.h     t_sub.h     vparams.h   vselp.h
+```
 
 And one UGST general header file:
+```
 	ugstdemo.h
+```
 
 There are several "inline" code files, that are either included during
 compilation (32-bit C compilers) or read by the compiled program during run
 time (16-bit C compilers):
-	basis.i 	edef.i  	gray.i  	k_table.i
+```
+    basis.i     edef.i      gray.i      k_table.i
+```
 
-Makefiles
-===
+# Makefiles
+
 Makefiles have been provided for automatic build-up of the executable program:
+```
 make-vms.com: ... DCL for VAX/VMS Vax-cc compiler or the VMS port of gcc
 makefile.tcc: ... makefile for MSDOS Borland bcc
 makefile.cl: .... makefile for MS Visual C Compiler
 makefile.djc: ... makefile for MSDOS port of gcc
 makefile.unx: ... makefile for Unix, using either cc, acc (Sun), or gcc
+```
 
-Testing
-===
+# Testing
+```
 is54-tst.zip: ... PKZIP-compatible archive with test files for the IS54
-		  implementation and makefiles to automatically carry out the
-		  tests. BECAREFUL, makefile names are equal to the ones
-		  described above, but the files are DIFFERENT! This file, and
-		  the makefiles are in the directory "bin".
+                implementation and makefiles to automatically carry out the
+                tests. BECAREFUL, makefile names are equal to the ones
+                described above, but the files are DIFFERENT! This file, and
+                the makefiles are in the directory "bin".
+```
 
 -- <simao@cpqd.ansp.br> --
 
 
-Original README
-===
+# Original README
 
 14/4/93 - IS54 US Cellular Coder
 
@@ -74,23 +86,23 @@ been claimed that it will run on a PC with Turbo C.
 
 For questions contact Peter Kroon kroon@research.att.com  MH x7000
 
-1.  General Description
+1. General Description
 
 The NADC reference coder is a C language program which implements the
 chosen standard NADC speech coding algorithm.  This document is a description
 of the program.
 
-1.1  Files
+1.1 Files
 
 The NADC reference coder comprises several C language source files.  The
-"main" function exists in the file "vselp.c".  All of the other .c files
-contain functions which are called at least indirectly from vselp.c.
+"main" function exists in the file `vselp.c`.  All of the other .c files
+contain functions which are called at least indirectly from `vselp.c`.
 
-The file "vparams.h" contains macro definitions and external variable
+The file `vparams.h` contains macro definitions and external variable
 declarations which are needed by nearly every source file, so it is included
 in nearly every source file.
 
-The files with the ".i" extension contain C code that is expanded in line
+The files with the `.i` extension contain C code that is expanded in line
 with the "include" preprocessor directive.
 
 
@@ -160,9 +172,9 @@ similar definition in your management tool.
 
 If you are on a UNIX machine, first make a subdirectory in the
 directory where you have the source code, and call the new
-subdirectory "obj".  Then type "make uvselp".  The "make" program will
+subdirectory "obj".  Then type `make uvselp`.  The "make" program will
 compile and link all the necessary object files and produce an
-executable file called "uvselp".
+executable file called `uvselp`.
 
 If you have problems compiling, first check the makefile to insure
 that the compilation statements in it make sense for your C compiler.
@@ -172,7 +184,7 @@ compilers as we could get our hands on.
 
 3.  How to Run the Coder
 
-After compiling, the coder program may be run by typing "uvselp".  The
+After compiling, the coder program may be run by typing `uvselp`.  The
 first prompt asks whether to run both the encoder and decoder or the
 decoder only.  If you want to process speech and put out a coded
 speech file, choose the encoder/decoder option.  If you want to
@@ -194,17 +206,19 @@ To use a ".prm" file, run the executable by typing "uvselp filename.prm",
 substituting your ".prm" filename.
 The following .prm files are provided
 
+```
    uvselp.prm  - runs encoded/decoder and produces a bstream file
    synpf.prm   - runs decoder and produces a postfiltered output
    synnpf.prm  - runs decoder and produces an unpostfiltered output
-
+```
  All these scripts use fixed filenames
-
+```
    INPUT - sampled input data
    OUTPUT - nonpostfiltered output
    OUTPUTPF - postfiltered output
    BSTREAM - bstream file
    LOG   - diagnostics file
+```
 
 3.1  Coder options
 
@@ -225,35 +239,36 @@ This option puts out the coded parameters in a packed ASCII-hex
 format, one frame per line.  All of the coded parameters for one frame
 are packed into a single bit-stream according to their respective bit
 allocations:
-
-Bits:			Parameter:
-	1-6 (6)				k1
-	7-11 (5)			k2
-	12-16 (5)			k3
-	17-20 (4)			k4
-	21-24 (4)			k5
-	25-27 (3)			k6
-	28-30 (3)			k7
-	31-33 (3)			k8
-	34-36 (3)			k9
-	37-38 (2)			k10
-	39-43 (5)			R0
-	44-50 (7)			lag, subframe 1
-	51-58 (8)			gsp0, s.f. 1
-	59-65 (7)			vselp code1, s.f. 1
-	66-72 (7)			vselp code2, s.f. 1
-	73-79 (7)			lag, s.f. 2
-	80-87 (8)			gsp0, s.f. 2
-	88-94 (7)			vselp code1, s.f. 2
-	95-101 (7)			vselp code2, s.f. 2
-	102-108 (7)			lag, s.f. 3
-	109-116 (8)			gsp0, s.f. 3
-	117-123 (7)			vselp code1, s.f. 3
-	124-130 (7)			vselp code2, s.f. 3
-	131-137 (7)			lag, s.f. 4
-	138-145 (8)			gsp0, s.f. 4
-	146-152 (7)			vselp code1, s.f. 4
-	153-159 (7)			vselp code2, s.f. 4
+```
+Bits:      Parameter:
+    1-6 (6)      k1
+   7-11 (5)      k2
+  12-16 (5)      k3
+  17-20 (4)      k4
+  21-24 (4)      k5
+  25-27 (3)      k6
+  28-30 (3)      k7
+  31-33 (3)      k8
+  34-36 (3)      k9
+  37-38 (2)      k10
+  39-43 (5)      R0
+  44-50 (7)      lag, subframe 1
+  51-58 (8)      gsp0, s.f. 1
+  59-65 (7)      vselp code1, s.f. 1
+  66-72 (7)      vselp code2, s.f. 1
+  73-79 (7)      lag, s.f. 2
+  80-87 (8)      gsp0, s.f. 2
+  88-94 (7)      vselp code1, s.f. 2
+  95-101 (7)     vselp code2, s.f. 2
+  102-108 (7)    lag, s.f. 3
+  109-116 (8)    gsp0, s.f. 3
+  117-123 (7)    vselp code1, s.f. 3
+  124-130 (7)    vselp code2, s.f. 3
+  131-137 (7)    lag, s.f. 4
+  138-145 (8)    gsp0, s.f. 4
+  146-152 (7)    vselp code1, s.f. 4
+  153-159 (7)    vselp code2, s.f. 4
+```
 
 The bits for each coded parameter are ordered MSB first to LSB last.
 This bit-stream is then sectioned into four bit hexadecimal
@@ -295,5 +310,5 @@ there should be no perceptual differences.
 The source files were obtained from the IS85 document. The following
 modifications were made:
 
-  1)  The option for number of frames to process has been disabled (vselp.c)
+  1)  The option for number of frames to process has been disabled (`vselp.c`)
   2)  getp.c has been modified to read also the filenames from the *.prm file

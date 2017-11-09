@@ -6,33 +6,38 @@
        CODING STANDARDS".
        =============================================================
 
-Source code:
-===
+# Source code
+```
 ugst-utl.c ... Float/short, Serial/Parallel conversion routines; scaling
                routine.
 ugst-utl.h ... Definitions for conversion and scaling routines.
+```
 
-Demo programs
-===
+# Demo programs
+```
 spdemo.c ..... Demo for use of the serial/parallel conversion routines.
 scaldemo.c ... Demo program with short/float conversion and scaling functions
 ugstdemo.h ... General UGST demo's include.
+```
 
-Makefiles:
-===
+# Makefiles
+
 Makefiles have been provided for automatic build-up of the executable program
 and to process the test files:
+```
 make-vms.com: ... DCL for VAX/VMS Vax-cc compiler or the VMS port of gcc
 makefile.tcc: ... make file for MSDOS Borland tcc
 makefile.djc: ... make file for MSDOS port of gcc
 makefile.unx: ... make file for Unix, using either cc (Sun), acc (Sun), or gcc
+```
 
-Testing:
-===
+# Testing:
+
 The provided makefiles can run a portability test on the demo program. They
 need the archive tst-sp.zip ([pk]zip compatible archive) and [pk]unzip to
 extract the proper source and reference processed files. The contents of this
 archive file is, as reported by unzip:
+```
  Length  Method   Size  Ratio   Date    Time   CRC-32     Name ("^" ==> case
  ------  ------   ----  -----   ----    ----   ------     ----   conversion)
     200  Deflate     84  58%  01-11-95  17:30  32ce01ed   spref-l.p12
@@ -52,6 +57,7 @@ archive file is, as reported by unzip:
     200  Deflate    132  34%  01-11-95  16:24  672a5c1a   spref.src
  ------          ------  ---                              -------
   22012            2245  90%                              15     
+```
 
 NOTE! These files are in the big-endian (high-byte first) format. Therefore,
       before using under MSDOS or VAX/VMS, the files need to be byte-swapped.

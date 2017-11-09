@@ -10,45 +10,46 @@
 The UGST G711 module, version 3.01 (31.Jan.2000) needs the following
 files:
 
-g711.c .......... G711 module itself; needs the prototypes in G711.H.
-g711demo.c ...... Demosntration program for the G711 module; needs the files
-                  g711.c and ugstdemo.h in the current directory.
-ugstdemo.h ...... prototypes and definitions needed by UGST demo programs.
-g711.h .......... prototypes and definitions needed by the G711 module.
+    g711.c .......... G711 module itself; needs the prototypes in G711.H.
+    g711demo.c ...... Demonstration program for the G711 module; needs the files
+                      g711.c and ugstdemo.h in the current directory.
+    ugstdemo.h ...... prototypes and definitions needed by UGST demo programs.
+    g711.h .......... prototypes and definitions needed by the G711 module.
 
-As an auxililiary program, there is:
-shiftbit.c ...... program to shift (with sign extension) to left or right the
-                  input file, saving in the output file. You may need this if
-                  you speech data file has less than 16 bit resolution and not
-                  left-justified.
+    As an auxililiary program, there is:
+    shiftbit.c ...... program to shift (with sign extension) to left or right the
+                      input file, saving in the output file. You may need this if
+                      you speech data file has less than 16 bit resolution and not
+                      left-justified.
 
-Makefiles:
-===
+## Makefiles:
+
 Makefiles have been provided for automatic build-up of the executable program
 and to process the test files:
-makefile.unx .... makefile for compiling on an Unix environment
-makefile.tcc .... makefile for compiling with MSDOS Borland [bt]cc
-makefile.cl ..... makefile for compiling with MS Visual C compiler
-makefile.djc .... makefile for compiling with DJGPP MSDOS port of gcc
-make-vms.com .... DCL for compiling in the VAX/VMS environment
 
-Testing:
-===
+    makefile.unx .... makefile for compiling on an Unix environment
+    makefile.tcc .... makefile for compiling with MSDOS Borland [bt]cc
+    makefile.cl ..... makefile for compiling with MS Visual C compiler
+    makefile.djc .... makefile for compiling with DJGPP MSDOS port of gcc
+    make-vms.com .... DCL for compiling in the VAX/VMS environment
+
+## Testing:
 The provided makefiles can run a portability test on the demo program. They
 need the archive tst-g711.zip ([pk]zip compatible archive) and [pk]unzip to
 extract the proper source and reference processed files. The contents of this
 archive file is:
-sweep.src ....... THE reference file
-sweep-r.a ....... reference file: sweep.src encoded by A-law (A lilo)
-sweep-r.a-a ..... reference file: sweep-r.a decoded by A-law (A loli)
-sweep-r.rea ..... reference file: sweep.src enc'd *and* decoded by A-law (lili)
-sweep-r.u ....... reference file: sweep.src enc'd by u-law (u lilo)
-sweep-r.u-u ..... reference file: sweep-r.u dec'd by u-law (u loli)
-sweep-r.reu ..... reference file: sweep.src enc'd *and* decoded by u-law (lili)
+
+    sweep.src ....... THE reference file
+    sweep-r.a ....... reference file: sweep.src encoded by A-law (A lilo)
+    sweep-r.a-a ..... reference file: sweep-r.a decoded by A-law (A loli)
+    sweep-r.rea ..... reference file: sweep.src enc'd *and* decoded by A-law (lili)
+    sweep-r.u ....... reference file: sweep.src enc'd by u-law (u lilo)
+    sweep-r.u-u ..... reference file: sweep-r.u dec'd by u-law (u loli)
+    sweep-r.reu ..... reference file: sweep.src enc'd *and* decoded by u-law (lili)
 
 NOTE! These files are in the big-endian (high-byte first) format. Therefore,
       before using under MSDOS or VAX/VMS, the files need to be byte-swapped.
-      See unsupported program sb in the ../unsup directory.
+      See unsupported program sb in the `../unsup` directory.
       The CRC-32 (unsup utility crc) for each of the test files are
       given below:
 
