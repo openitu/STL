@@ -175,7 +175,7 @@ char Usage4[] = "                -v  verbose on extraction, incl. echoing filesi
 #define OPTSTRING "u:ap:d:bcv:f:"
 #endif
 
-#if (defined (VMS) || defined(MSDOS)) && !defined(__GNUC__)
+#if (defined (VMS) || defined(MSDOS) || defined(_WIN32)) && !defined(__GNUC__)
 char *index (char *s, char c) {
   while (*s != 0 && *s != c)
     s++;

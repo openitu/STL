@@ -11,7 +11,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef unix
 #include <unistd.h>
+#endif
 
 #ifdef VMS
 #include <unixio.h>
