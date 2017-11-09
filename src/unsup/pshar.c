@@ -387,6 +387,7 @@ int getpat (pattern)
 }
 
 
+#ifndef unix
 /*
  * get option letter from argument vector
  */
@@ -429,6 +430,7 @@ int getopt (nargc, nargv, ostr)
   }
   return (optopt);              /* dump back option letter */
 }
+#endif
 
 
 int local_getarg (nargc, nargv)
