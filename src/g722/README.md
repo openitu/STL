@@ -1,30 +1,32 @@
-       ==============================================================
-       COPYRIGHT NOTE: This software  module  was  developed  by CNET
-       France Telecom, who holds the copyrights of the implementation
-       and its *use* was granted as per the Terms in ITU-T Rec.G.191.
+---
+COPYRIGHT NOTE: This software  module  was  developed  by CNET
+France Telecom, who holds the copyrights of the implementation
+and its *use* was granted as per the Terms in ITU-T Rec.G.191.
 
-       This module, and all of its  derivations,  is subject  to  the
-       "ITU-T General Public License".  Please have it  read  in  the
-       distribution disk, or in the ITU-T Recommendation G.191 on
-       "SOFTWARE TOOLS FOR SPEECH AND AUDIO CODING STANDARDS".
-       ==============================================================
+This module, and all of its  derivations,  is subject  to  the
+"ITU-T General Public License".  Please have it  read  in  the
+distribution disk, or in the ITU-T Recommendation G.191 on
+"SOFTWARE TOOLS FOR SPEECH AND AUDIO CODING STANDARDS".
 
-/***************************************************************************/
-/* FRANCE TELECOM/CNET ITU-T ANSI C G.722 module to be included in         */
-/* ITU-T UGST software package Tool                                        */
-/***************************************************************************/
-/*  Copyright CNET Lannion A TSS/CMC    J-P PETIT Tel 33 2 96 05 39 41     */
-/*                                                Fax 33 2 96 05 13 16     */
-/*                                   Email petitjp@lannion.cnet.fr         */
-/***************************************************************************/
-/* Revision during ITU-T 2005-2008 Study period performed by:              */
-/* - L.M. Ericsson:  Nicklas Sandgren, Jonas Svedberg                      */
-/* - France Telecom: Balazs Kovesi, Stephane Ragot        		   */
-/***************************************************************************/
+---
 
 
-==============================================================================
-History:
+    /***************************************************************************/
+    /* FRANCE TELECOM/CNET ITU-T ANSI C G.722 module to be included in         */
+    /* ITU-T UGST software package Tool                                        */
+    /***************************************************************************/
+    /*  Copyright CNET Lannion A TSS/CMC    J-P PETIT Tel 33 2 96 05 39 41     */
+    /*                                                Fax 33 2 96 05 13 16     */
+    /*                                   Email petitjp@lannion.cnet.fr         */
+    /***************************************************************************/
+    /* Revision during ITU-T 2005-2008 Study period performed by:              */
+    /* - L.M. Ericsson:  Nicklas Sandgren, Jonas Svedberg                      */
+    /* - France Telecom: Balazs Kovesi, Stephane Ragot                         */
+    /***************************************************************************/
+
+
+
+# History
 The ITU-T G.722 software tool was first released in STL96.
 During ITU-T 2005-2008 Study period, the G.722 module was updated to make it
 compliant with G.192 bitstream format and enable EID-XOR/G.192 style of frame
@@ -32,75 +34,71 @@ and bit error application to G.722. Basic reference Packet Loss Concealment
 functionality was included. STL2005 v2.2 basic operators and complexity counters
 were introduced.   
 
+    14.Mar.95  v1.0       Released for use ITU-T UGST software package Tool
+                          based on the CNET's 07/01/90 version 2.00
 
-14.Mar.95  v1.0       Released for use ITU-T UGST software package Tool
+    01.Jul.95  v2.0       Changed function declarations to work with many compilers;
+                          reformated <simao@ctd.comsat.com>
 
-                      based on the CNET's 07/01/90 version 2.00
+    22.May.06  v2.3       Updated with g192 format reading and basic index domain PLC functionality;
+                          <{nicklas.sandgren,jonas.svedberg}@ericsson.com>
 
-01.Jul.95  v2.0       Changed function declarations to work with many compilers;
-
-                      reformated <simao@ctd.comsat.com>
-
-22.May.06  v2.3       Updated with g192 format reading and basic index domain PLC functionality;
-
-                      <{nicklas.sandgren,jonas.svedberg}@ericsson.com>
-
-10.Jan.07  v3.0       Updated with STL2005 v2.2 basic operators and G.729.1 methodology;
+    10.Jan.07  v3.0       Updated with STL2005 v2.2 basic operators and G.729.1 methodology;
 
 Bit-exact changes compared to version v2.3:
  - source code instrumented with STL2005 basic operators
-    o STL2005 V2.2 (V2.1 with frame rate specified by setFrameRate())
+   + STL2005 V2.2 (V2.1 with frame rate specified by setFrameRate())
  - WMOPS counting following G.729.1 methodology
-    o basic code optimization compared to original G.722 source code
+   + basic code optimization compared to original G.722 source code
  - STL2005 basic operators v2.2
  - option -fno-built-in added in Makefile
  - compiler warnings fixed
 
+# Evaluation instructions
 
-Evaluation instructions:
+To build the executable, go to `workspace/`
+- use the makefile for gcc/cygwin or gcc/Solaris
+- use the Visual C++ 6.0 workspace in VC6.0/
 
- To build the executable, go to workspace/
- - use the makefile for gcc/cygwin or gcc/Solaris
- - use the Visual C++ 6.0 workspace in VC6.0/
+<{balazs.kovesi,stephane.ragot}@orange-ftgroup.com>
 
-                      <{balazs.kovesi,stephane.ragot}@orange-ftgroup.com>
-================================================================================
-
-
+---
 
 The ITU-T/UGST G.722 module with G192/PLC, version 3.0 (10/Jan/2007)
 contains the following files:
 
-C program code
-===
-funcg722.c ..... functions for the G.722 codec
-g722.c ......... user entry-level function definition
-g722.h ......... prototypes for the user
-operg722.c ..... operators for the G.722 codec
-funcg722.h ..... protypes and definitions for the functions of the G.722 codec
-g722.h ......... prototypes for the user
-operg722.h ..... protypes and definitions for the operators for the G.722 codec
-g722_com.h ..... definitions for the G.192 interface and the basic PLC options
-softbit.h ...... prototypes for G.192 file interfaces. Available in other directory.
-softbit.c ...... functions for the G.192 file interfaces. Available in other directory.
+# C program code
 
-Demo:
-===
-encg722.c ...... demo program for the encoder
-decg722.c ...... demo program for the decoder
-g722demo.c ..... demo program for the encoder and decoder
+    funcg722.c ..... functions for the G.722 codec
+    g722.c ......... user entry-level function definition
+    g722.h ......... prototypes for the user
+    operg722.c ..... operators for the G.722 codec
+    funcg722.h ..... protypes and definitions for the functions of the G.722 codec
+    g722.h ......... prototypes for the user
+    operg722.h ..... protypes and definitions for the operators for the G.722 codec
+    g722_com.h ..... definitions for the G.192 interface and the basic PLC options
+    softbit.h ...... prototypes for G.192 file interfaces. Available in other directory.
+    softbit.c ...... functions for the G.192 file interfaces. Available in other directory.
 
-Test programs:
-===
+# Demo
+
+    encg722.c ...... demo program for the encoder
+    decg722.c ...... demo program for the decoder
+    g722demo.c ..... demo program for the encoder and decoder
+
+# Test programs
+
 Two main programs are provided for testing the implementation using the ITU-T
 test sequences:
-tstcg722.c ..... program to pass the test sequences by the G.722
-                 encoder. QMF filter is not included. For implementation
-		 verification test purposes *only*. Needs test vectors, not
+
+`tstcg722.c` program to pass the test sequences by the G.722
+         encoder. QMF filter is not included. For implementation
+		 verification test purposes **only**. Needs test vectors, not
 		 included in the UGST distribution.
-tstdg722.c ..... program to pass the test sequences by the G.722
-                 decoder. QMF filter is not included. For implementation
-		 verification test purposes *only*. Needs test vectors, not
+
+`tstdg722.c` program to pass the test sequences by the G.722
+         decoder. QMF filter is not included. For implementation
+		 verification test purposes **only**. Needs test vectors, not
 		 included in the UGST distribution.
 
 These two programs are for testing the implementations only and are not
@@ -111,26 +109,29 @@ in pure and raw binary format for processing. The test vectors have not been
 included in the UGST distribution. QMF filter is not included in these two
 programs.
 
-Makefiles
-===
+# Makefiles
+
 Makefiles have been provided for automatic build-up of the executable program
 and to process the test sequences, WHEN made available by the user and left
-in the subdirectory "bin":
-makefile.cl: .... make file for MS Visual C compiler
-makefile.unx: ... make file for Unix, using either cc, acc (Sun), or gcc, or for Cygwin/gcc
+in the subdirectory `bin`:
+
+`makefile.cl`: make file for MS Visual C compiler
+
+`makefile.unx`: make file for Unix, using either cc, acc (Sun), or gcc, or for Cygwin/gcc
 
 The provided makefiles can run a portability test on the demo program. They
-need the archive tst-g722.zip ([pk]zip compatible archive) and [pk]unzip to
+need the archive `tst-g722.zip` ([pk]zip compatible archive) and [pk]unzip to
 extract the proper source and reference processed files.
 
-tst-g722.zip: ... ZIP-compatible archive with the test files in the Unix
+`tst-g722.zip`: ZIP-compatible archive with the test files in the Unix
                   byte orientation (high-byte first). Running
                   (pk)unzip -v produces an equivalent to the following:
- Length  Method   Size  Ratio   Date    Time   CRC-32     Name
- ------  ------   ----  -----   ----    ----   ------     ----
- 195072  Deflate 139252  29%  07-03-95  10:15  f92ed03d   bin/inpsp.bin
- 195072  Deflate 144306  26%  07-03-95  10:15  c682330c   bin/outsp1.bin
- 195072  Deflate 144413  26%  07-03-95  10:15  63bc8916   bin/outsp2.bin
- 195072  Deflate 145232  26%  07-03-95  10:15  5f2d3c6a   bin/outsp3.bin
-  97536  Deflate  52338  46%  07-03-95  11:47  0f126150   bin/codspw.cod
-  48768  Deflate  40360  17%  08-01-95  14:21  e241b6b9   bin/codsp.cod
+
+     Length  Method   Size  Ratio   Date    Time   CRC-32     Name
+     ------  ------   ----  -----   ----    ----   ------     ----
+     195072  Deflate 139252  29%  07-03-95  10:15  f92ed03d   bin/inpsp.bin
+     195072  Deflate 144306  26%  07-03-95  10:15  c682330c   bin/outsp1.bin
+     195072  Deflate 144413  26%  07-03-95  10:15  63bc8916   bin/outsp2.bin
+     195072  Deflate 145232  26%  07-03-95  10:15  5f2d3c6a   bin/outsp3.bin
+      97536  Deflate  52338  46%  07-03-95  11:47  0f126150   bin/codspw.cod
+      48768  Deflate  40360  17%  08-01-95  14:21  e241b6b9   bin/codsp.cod

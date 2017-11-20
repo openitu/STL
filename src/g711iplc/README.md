@@ -42,6 +42,7 @@ AT&T Corp.
 
 Any copies or derivative works must include this and all other
 proprietary notices.
+
 ----------------------------------------------------------------------
 
 
@@ -49,42 +50,39 @@ proprietary notices.
 The UGST G711-PLC module, version 1.0 (24.May.2005) contains the
 following files :
 
-C program code
-===
-lowcfe.c ...... PLC algorithm module file.
-lowcfe.h ...... Header for lowcfe.c
-plcferio.c .... Functions for reading FER patterns
-plcferio.h .... Headers for plcferio.c
-error.c ....... Process error codes
-error.h ....... Prototypes and definitions for error.c
-asc2g192.c .... Loss pattern convertion utility
+# C program code
 
-C++ code is also available in the g711iplc\cpp_code directory.
+    lowcfe.c ...... PLC algorithm module file.
+    lowcfe.h ...... Header for lowcfe.c
+    plcferio.c .... Functions for reading FER patterns
+    plcferio.h .... Headers for plcferio.c
+    error.c ....... Process error codes
+    error.h ....... Prototypes and definitions for error.c
+    asc2g192.c .... Loss pattern convertion utility
 
-Demo:
-===
-g711iplc.c .... Demo program for PLC module
+C++ code is also available in the `g711iplc\cpp_code` directory.
 
+# Demo
 
+    g711iplc.c .... Demo program for PLC module
 
-Makefiles:
-===
-makefile.cl ... MS-C/C++ makefile
+# Makefiles
 
-Test Vectors:
-===
-tst-g711iplc.zip ... ZIP-compatible archive with he test files in the
-                     UNIX byte orientation (high-byte first).
+    makefile.cl ... MS-C/C++ makefile
+
+# Test Vectors
+
+    tst-g711iplc.zip ... ZIP-compatible archive with he test files in the
+                         UNIX byte orientation (high-byte first).
 
 
-Description and usage:
-===
+# Description and usage:
 
 The input and output audio files should be in the native byte order
 for the machine running the simulator (big-endian on SPARC or MIPS,
 little endian on Intel). The sample program does not contain
 the G.711 encoder or decoder. If you have a G.711 bit-stream,
-it must be decoded before the g711iplc program is run.
+it must be decoded before the `g711iplc` program is run.
 
 The packet loss concealment programs takes 3 file arguments:
 
@@ -93,11 +91,11 @@ The packet loss concealment programs takes 3 file arguments:
 The mask.g192 file should be in the G.192 format as specified in the
 ITU-T G.191 software tools library (g192, byte, and compact
 representations are supported). The G.192 file should contain only the
-frame headers words (G192_SYNC or G192_FER, see softbit.h), and not
+frame headers words (G192_SYNC or G192_FER, see `softbit.h`), and not
 the data words.  A frame corresponds to 10 msec, or 80 samples. If the
-FER pattern file is shorter than the number of frames in the input.raw
+FER pattern file is shorter than the number of frames in the `input.raw`
 file, the program will roll-over back to the start of the FER pattern
-file.  For example if the mask.g192 file contains:
+file.  For example if the `mask.g192` file contains:
 
 	0x6B21 0x6B21 0x6B21 0x6B21 0x6B21,
 	0x6B21 0x6B21 0x6B21 0x6B21 0x6B20
@@ -120,18 +118,19 @@ would use:
 In other words, a 1:2 interpolation where the frame flag is
 repeated. This can be easily extended for other packetizations,
 e.g. 30ms, 40ms, etc.
+
 ====================================================================
 
 The packet loss concealment algorithm delays the output by 3.75
-msec. The g711iplc.c program compensate for this delay by not outputting
+msec. The `g711iplc.c` program compensate for this delay by not outputting
 the first 3.75 msec of the first packet. This way the input and output files
 align exactly if they are overlayed in an audio waveform editor.
 
-The -noplc will use a silence insertion algorithm for the concealed frames
+The `-noplc` will use a silence insertion algorithm for the concealed frames
 instead of running the algorithm in G.711 Appendix I. This is helpful
 if you want to use a wave editor to view the location of the missing frames.
 
-Use the -stats option to print out the number and percentage of frames
+Use the `-stats` option to print out the number and percentage of frames
 concealed in the processed file.
 
 [END]

@@ -1,15 +1,16 @@
-ANSI C Fixed-point G.728 at 16 Kpbs with Packet Loss Concealment (PLC).
+# ANSI C Fixed-point G.728 at 16 Kpbs with Packet Loss Concealment (PLC).
 
 Date: 12/10/07
 
 Contact:
-	David Kapilow
-	AT&T Labs Research
-	Rm D-157
-	180 Park Avenue
-	Florham Park, N.J. 07932-0971
-	dak@research.att.com
-	+1-973-360-8549
+
+    David Kapilow
+    AT&T Labs Research
+    Rm D-157
+    180 Park Avenue
+    Florham Park, N.J. 07932-0971
+    dak@research.att.com
+    +1-973-360-8549
 
 This directory contains the G.728 fixed-point codec with the PLC algorithm.
 The source code uses double precision floating-point arithmetic to simulate
@@ -17,7 +18,7 @@ the integer multiplies and support accumulators with more than 32 bits.
 At the time this code was developed floating-point multiplies were
 significantly faster than extended integer multiples.
 
-Byte Ordering:
+### Byte Ordering
 
 By default, the program assumes all binary 16-bit data input and output files
 are in the native byte order used by the machine running the software
@@ -27,54 +28,57 @@ If the -little or -big options are present byte swapping will be performed
 on the input and output files if needed. Use the -little option for running
 the test vectors on a big-endian machine.
 
-Speech Files:
+### Speech Files
 
-The program g728fp assumes that the input and output speech files
+The program `g728fp` assumes that the input and output speech files
 are formatted as binary 16-bit uniform PCM data without any headers.
 
-Bit-Stream Files:
+### Bit-Stream Files
 
-In bit-stream files each 10-bit index output by the g728fp encoder
+In bit-stream files each 10-bit index output by the `g728fp` encoder
 is placed in a 16-bit word. The Gain index is placed in bits 0 to 2
 (0 being the least significant bit), and the Shape index is available
 in bits 3 to 9. The upper 6 bits (10 to 15) are unused in this format.
 One 10-bit index is output for every 5 input samples.
 
-Packet-Loss files:
+### Packet-Loss files
 
 A packet loss mask file contains a series of ASCII '1's and '0's.
 New lines ('\n') and returns ('\r') in the file are ignored.
 A 1 implies that frame is missing and the packet loss concealment
 code should be called. A 0 implies the frame should be decoded normally.
 If the input bit-stream has more frames than the packet-loss mask file,
-the file will roll over and repeat itself. If a characterany other
-than [01\n\r] is found in the file, the program exists with an error.
-The size of frame by default is 10 msec. The -plcsize msec command
+the file will roll over and repeat itself. If any character other
+than `01\n\r` is found in the file, the program exists with an error.
+The size of frame by default is 10 msec. The `-plcsize msec` command
 line argument can be used to set the packet loss framesize from
 2.5 to 20 msec, in 2.5 msec intervals.
 
-Compiling:
+### Compiling
 
 To create a the fixed-point G.728 executable (g728fp), use
 the makefile for Linux and Unix:
+
 	make
+
 or Make.ms for Microsoft Visual C++:
+
 	nmake -f Make.ms
 
-Usage:
+### Usage
 
-g728fp:
-The G.278 fixed-point program g728fp has options to run the encoder,
+`g728fp`:
+The G.278 fixed-point program `g728fp` has options to run the encoder,
 decoder (with or without the postfilter), decoder with postfilter
 and packet loss concealment enabled, or encoder/decoder combination
 (with or without the postfilter). The program uses its first non-option
 argument to determine its mode. The possible values:
 
-	arg[1]	FUNCTION		OUTPUTS
-	enc	encoder			bit-stream
-	dec	decoder			speech
-	plc	decoder+plc		decoded speech with concealed losses
-	encdec	encoder/decoder		bit-stream,speech
+    arg[1]   FUNCTION          OUTPUTS
+    enc      encoder           bit-stream
+    dec      decoder           speech
+    plc      decoder+plc       decoded speech with concealed losses
+    encdec   encoder/decoder   bit-stream,speech
 	
 To run the encoder use:
 
@@ -100,40 +104,44 @@ To run the encoder/decoder combination with postfilter, use:
 
 	g728fp encdec speech.in bitstream.out speech.out
 
-Command Line Options:
+##### Command Line Options
 
--nopostf
+`-nopostf`:
   Turn the postfilter off. This option is necessary for
   many of the test vectors. The postfilter must be on to run
   the packet loss concealment code. In "plc" mode, the postfilter
-  will be enabled even if the -nopostf option is given.
+  will be enabled even if the `-nopostf` option is given.
 
--plcsize msec
+`-plcsize msec`:
   Set the packet loss frame size. Default is 10msec.
   Can be set from 2.5msec to 20 msec in 2.5msec increments.
 
--little
+`-little`:
   Binary input and output files (bitstreams, speech) are in little-endian order.
   without this option, or -big, binary input files are in the machine order
   native for the machine. Use the -little option with the test vectors on a
   big-endian machine.
 
--big
+`-big`:
   Binary input and output files (bitstreams, speech) are in big-endian order.
   without this option binary input files are in the machine order
   native for the machine.
 
--stats
+`-stats`:
   Print out then number and percentage of frames concealed if PLC mode is on.
 
-Testvectors:
+### Testvectors
 
 Test vectors available on the ITU-T web site can be used to verify proper operation
 of the coder. The testvectors are not part of this package, but can be obtained
-from the ITU-T web site as described in the file ../testvectors/README. Once
-the testvectors have been installed and the g728fp executable is compiled, the
+from the ITU-T web site as described in the file [../test_data/README.md](../test_data/README.md).
+Once the testvectors have been installed and the `g728fp` executable is compiled, the
 testvectors can be run on the Linux or Unix operating system shell with:
+
 	./testall.sh
+
 or in a command window on a Microsoft Windows machine with:
+
 	testall.bat
+
 The testvectors are bit exact, so the ouput files should exactly match.

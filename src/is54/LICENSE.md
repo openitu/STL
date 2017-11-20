@@ -1,4 +1,4 @@
-/**************************************************************************
+```
 
                 (C) Copyright 1990, Motorola Inc., U.S.A.
 
@@ -21,4 +21,5 @@ Systems Research Laboratories
 Chicago Corporate Research and Development Center
 Motorola Inc.
 
-**************************************************************************/
+```
+

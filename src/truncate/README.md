@@ -9,25 +9,30 @@
 
 The ITU-T/UGST bitstream truncation module contains the following files:
 
-C code:
-===
+# C code
+```
  truncate.c: ....... demonstration program using routines in trunc-lib.c
  trunc-lib.c: ...... Routines for bitstream truncation
  trunc-lib.h: ...... Prototypes for trunc-lib.c
+```
 
+# Makefiles
 
-Makefiles
-===
 Makefiles have been provided for automatic build-up of the executable program
 and to process the test sequences, WHEN made available by the user and left
-in the subdirectory "bin":
+in the subdirectory `bin`:
+
+```
 makefile.cl: .... make file for MS Visual C compiler
+```
 
 The provided makefiles can run a portability test on the demo program. They
 need the archive test-freqresp.zip ([pk]zip compatible archive) and [pk]unzip to
 extract the proper source and reference processed files.
 
+```
 test-trunc.zip: ...... ZIP-compatible archive with the test files in the UNIX
-			     byte orientation (high-byte first).
+                       byte orientation (high-byte first).
+```
 
 -- <Cyril Guillaume & Stephane Ragot -- stephane.ragot@francetelecom.com>
