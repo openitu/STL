@@ -243,6 +243,8 @@ void get_tmp_name (char *fileout) {
 
   tmpnam (fileout);
 
+  return;
+
 #if defined (unix) || defined (__GNUC__)
   ch = strrchr (fileout, '/');
   ch++;
