@@ -1,0 +1,590 @@
+\begin{thebibliography}{10}
+
+\bibitem{G.191}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.191, Software Tools for Speech and Audio
+  Coding Standards}}.
+\newblock ITU, Geneva, Switzerland, March 1993.
+
+\bibitem{COM-XV-R-73-E}
+Study~Group XV.
+\newblock {Report of Working Party XV/2}.
+\newblock report COM XV-R 73-E, CCITT, November 1991.
+
+\bibitem{Qual-meas-tel-sys}
+J.~Fennick.
+\newblock {\em {Quality Measures and the design of telecommunications systems
+  }}.
+\newblock Artech House, 1988.
+
+\bibitem{G.711}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.711, Pulse code molulation (PCM) of
+  voice frequencies}}, volume Fascicle III.4 of {\em Blue Book}, pages
+  175--184.
+\newblock ITU, Geneva, Switzerland, 1989.
+
+\bibitem{Jayant-Noll}
+N.~S. Jayant and P.~Noll.
+\newblock {\em {Digital Coding of Waveforms}}.
+\newblock Prentice-Hall, 1984.
+
+\bibitem{G.726}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.726, 40, 32, 24, 16 kbit/s adaptive
+  differential pulse code modulation (ADPCM)}}.
+\newblock ITU, Geneva, Switzerland, December 1990.
+
+\bibitem{G711-appendix-I}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.711/Appendix I, A high quality
+  low-complexity algorithm for packet loss concealment with G.711}}.
+\newblock ITU, Geneva, Switzerland, September 1999.
+
+\bibitem{ADPCM-theor}
+M.~Bonnet, O.~Macchi, and M.~Jaidane-Saidane.
+\newblock {Theoretical analysis of the ADPCM CCITT algorithm}.
+\newblock {\em {IEEE Trans.on Communications}}, 38(6):847--858, June 1990.
+
+\bibitem{ADPCM-over}
+W.~R. Daumer, X.~Maitre, P.~Mermelstein, and I.~Tokizawa.
+\newblock {Overview of the ADPCM coding algorithm}.
+\newblock {\em {Proc. IEEE Globecom}}, pages 774--777, 1984.
+
+\bibitem{ADPCM-Tech-Report}
+ITU Telecommunication~Standardization Sector.
+\newblock {Comparison of ADPCM Algorithms}.
+\newblock In {\em Recommendation G.726}, chapter Appendix III. ITU, Geneva,
+  Switzerland, November 1994.
+
+\bibitem{G.726:LinearIO}
+ITU Telecommunication~Standardization Sector.
+\newblock {Extensions of Recommendation ITU-T G.726 for use with uniform
+  quantized input and output}.
+\newblock In {\em Recommendation G.726}, chapter Annex A. ITU, Geneva,
+  Switzerland, November 1994.
+
+\bibitem{f2c}
+S.~I. Feldman, D.~M. Gay, M.~W. Maimone, and N.~L. Schryer.
+\newblock {A Fortran--to--C Converter}.
+\newblock Technical Report Computing Science 149, AT\&T Bell Laboratories,
+  August 1990.
+
+\bibitem{G.727}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.727, 5-, 4-, 3- and 2-bits/sample
+  embedded adaptive differential pulse code modulation (ADPCM)}}.
+\newblock ITU, Geneva, Switzerland, December 1990.
+
+\bibitem{G.727:LinearIO}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Annex A to Recommendation ITU-T G.727, Extensions of
+  Recommendation ITU-T G.727 for use with uniform-quantized input and output}}.
+\newblock ITU, Geneva, Switzerland, November 1994.
+
+\bibitem{G.728}
+CCITT.
+\newblock {\em {Recommendation ITU-T G.728, Coding of Speech at 16 kbit/s using
+  Low Delay Code Excited Linear Prediction (LD-CELP)}}.
+\newblock ITU, Geneva, Switzerland, June 2012.
+
+\bibitem{G.728G}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.728 Annex G - 16 kbit/s fixed point
+  specification}}.
+\newblock ITU, Geneva, Switzerland, November 1994.
+
+\bibitem{G.728I}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.728 Annex I - Frame or packet loss
+  concealment for the LD-CELP decoder}}.
+\newblock ITU, Geneva, Switzerland, July 1999.
+
+\bibitem{Q21-ROs}
+Study~Group XV.
+\newblock {Q.21/XV- Requirements and Objectives}.
+\newblock report COM XV-R 73-E, CCITT, July 1990.
+
+\bibitem{BNR-coder}
+{V. Iyengar and P. Kabal}.
+\newblock {A Low Delay 16 kbit/sec Speech Coder}.
+\newblock In {\em Proc. ICASSP}, 1988.
+
+\bibitem{LD-CELP-1}
+{AT\&T}.
+\newblock {Description of 16 kbit/s Low-Delay Code-Excited Linear Predictive
+  Coding (LD-CELP) algorithm}.
+\newblock contribution AH.89-D02, CCITT, March 1989.
+
+\bibitem{BNR-Letter}
+{BNR-Canada}.
+\newblock {Letter to the Chairman of CCITT Ad-hoc Group for Q.21/XV}.
+\newblock contribution AH.89-D13, CCITT, March 1989.
+
+\bibitem{Consort-Letter}
+{Consortium for Speech Coding}.
+\newblock {Letter to the Chairman of CCITT Ad-hoc Group for Q.21/XV}.
+\newblock contribution AH.89-D13, CCITT, March 1989.
+
+\bibitem{LD-VCX-HLD}
+{Consortium for Speech Coding}.
+\newblock {A High Level Description of the Consortium's Low Delay Vector
+  Excitation Coder (LD-VCX)}.
+\newblock contribution AH.89-D08, CCITT, March 1989.
+
+\bibitem{LD-VCX}
+{Consortium for Speech Coding}.
+\newblock {Description of the Consortium's Low Delay Vector Excitation Coder
+  (LD-VCX), Version 2}.
+\newblock contribution AH.89-D21, CCITT, July 1989.
+
+\bibitem{LD-VCX2}
+V.~Cuperman, A.~Gersho, R.~Pettigrew, J.~J. Shynk, and {J.-H.} Yao.
+\newblock {Backward Adaptive Configurations for Low-delay Vector Excitation
+  Coding}.
+\newblock In {\em Advances in Speech Coding}. Kluwer Academic Publishers, 1989.
+
+\bibitem{Q026}
+{C. R. South and P. Usai}.
+\newblock {Subjective Performance of CCITT's 16 kbit/s LD-CELP algorithm with
+  voice signals}.
+\newblock In {\em Proc. IEEE Globecom}, 1992.
+
+\bibitem{CELP-original}
+{M. R. Schroeder and B. S. Atal}.
+\newblock {Code-Excited Linear Prediction (CELP): high speech quality at very
+  low rates}.
+\newblock In {\em Proc. ICASSP}, 1985.
+
+\bibitem{LDCELP-VerProc}
+{R. V. Cox and F. T. Johansen}.
+\newblock {Test Verification of LD-CELP: an objective measurement approach to a
+  non-bit exact standard}.
+\newblock In {\em {Proc. IEEE Globecom}}, 1992.
+
+\bibitem{Rabiner-Schafer}
+{L. R. Rabiner and R. W. Schafer}.
+\newblock {\em {Digital Processing of Speech Signals}}.
+\newblock {Prentice-Hall}, Englewood Cliffs, 1978.
+
+\bibitem{LD-CELP-FixedPt}
+{J.-H. Chen and Y.-C. Lin and R. V. Cox}.
+\newblock {A fixed-point 16 kb/s LD-CELP algorithm}.
+\newblock In {\em Proc. ICASSP}, 1991.
+
+\bibitem{RecursWind}
+{T. P. {Barnwell III}}.
+\newblock {Recursive windowing for generating autocorrelation coefficients for
+  LPC analysis}.
+\newblock {\em {Transactions on Acoust., Speech, Signal Processing}},
+  ASSP-29(5), October 1981.
+
+\bibitem{LD-CELP-Phase2}
+{J.-H}. Chen, R.~V. Cox, {Y.-C}. Lin, N.~Jayant, and M.~J. Melchner.
+\newblock {A Low-Delay CELP Coder for the CCITT 16 kb/s Speech Coding
+  Standard}.
+\newblock {\em IEEE Journal.on Selected Areas in Communications}, 10(5), June
+  1992.
+
+\bibitem{LD-CELP-RecurWind}
+AT\&T.
+\newblock {Improvements to AT\&T's 16 kbit/s Low-Delay Code-Excited Linear
+  Predictive Coding (LD-CELP) algorithm}.
+\newblock contribution, CCITT, July 1989.
+\newblock AH.89-D26.
+
+\bibitem{LD-CELP-Phase1}
+{J.-H}. Chen.
+\newblock {A robust Low-Delay CELP Speech Coder at 16 kb/s}.
+\newblock In {\em Advances in Speech Coding}. Kluwer Academic Publishers, 1989.
+
+\bibitem{Pond-Percep}
+{{J.-H}. Yao and A. Gersho}.
+\newblock {Real-time vector APC speech coding at 4800 bps with adaptive
+  post-filtering}.
+\newblock In {\em Proc. ICASSP}, 1987.
+
+\bibitem{Expl-WeigFilt}
+{D. Grant and M. Young and A. Gersho}.
+\newblock {Real Time Vector Excitation Coding of Speech at 4800 bps}.
+\newblock In {\em Proc. ICASSP}, 1987.
+
+\bibitem{LD-CELP:Exp2-Phase1}
+{S. F. Campos Neto and H. Irii and J. Rosenberger and J. Sotcsheck and P.
+  Usai}.
+\newblock {Effect of Tandeming and Input Level}.
+\newblock technical report 2--2, CSELT, 1993.
+
+\bibitem{LD-CELP-Phase1:HQLD}
+{J.-H}. Chen and R.~V. Cox.
+\newblock {LD-CELP: A high quality 16 kb/s speech coder with low delay}.
+\newblock In {\em {Proc. IEEE Globecom}}, 1990.
+
+\bibitem{LD-CELP-Phase1:Globecom}
+{J.-H}. Chen.
+\newblock {A robust Low-Delay CELP Speech Coder at 16 kb/s}.
+\newblock In {\em {Proc. IEEE Globecom}}, 1989.
+
+\bibitem{PostFilter-Basic}
+{V. Ramamoorthy and N. S. Jayant and R. V. Cox and M. M. Sondhi}.
+\newblock {Enhancement of ADPCM Speech Coding using Backward-Adaptive
+  Algorithms for Post-Filtering and Noise Feedback}.
+\newblock {\em {Journal on Selected Areas in Communications}}, 6(2), February
+  1988.
+
+\bibitem{LD-CELP-1-rev}
+{AT\&T}.
+\newblock {Detailed description of AT\&T's LD-CELP algorithm}.
+\newblock contribution AH.89-D02, CCITT, November 1989.
+
+\bibitem{G.722}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.722, 7 kHz audio-coding within 64
+  kbit/s}}.
+\newblock ITU, Geneva, Switzerland, September 2012.
+
+\bibitem{G.725}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.725, System Aspects for the Use of the
+  7kHz Audio Codec within 64 kbit/s}}, volume Fascicle III.4 of {\em Blue
+  Book}, page~11.
+\newblock ITU, Geneva, Switzerland, 1989.
+
+\bibitem{G.722:General}
+P.~Mermelstein.
+\newblock {G.722, a new CCITT coding standard for digital transmission of
+  wideband audio signals}.
+\newblock {\em IEEE Communications Magazine}, 26(1):8--15, January 1988.
+
+\bibitem{G.722:Overview}
+{M. Taka, et. al.}
+\newblock {Overview of the 64 kbit/s (7 kHz) audio coding standard}.
+\newblock In {\em {Proc. IEEE Globecom}}, pages 593--598, Houston, Texas,
+  December 1986.
+
+\bibitem{G.722:SubjTest}
+G.~Modena, A.~Coleman, P.~{Usai}, and P.~Coverdale.
+\newblock {Subjective Performance Evaluation of the 7 KHz Audio Coder}.
+\newblock In {\em {Proc. IEEE Globecom}}, pages 599--604, Houston, Texas,
+  December 1986.
+
+\bibitem{G.722:Implementation}
+{G. Le Tourneur, et. al.}
+\newblock {Implementation of the 7 kHz Audio Codec and its Transmission
+  Characteristics}.
+\newblock In {\em {Proc. IEEE Globecom}}, pages 605--609, 1986.
+
+\bibitem{G.722:Modes}
+{M. Dietrich, et. al.}
+\newblock {Initialization and Mode Switching of 7 kHz Audio Terminals}.
+\newblock In {\em {Proc. IEEE Globecom}}, pages 610--614, 1986.
+
+\bibitem{G.722:Applications}
+{K. R. Harrison, et. al.}
+\newblock {Possible Applications for networking considerations relating to the
+  64 kbit (7 kHz) audio coding system}.
+\newblock In {\em {Proc. IEEE Globecom}}, pages 615--622, 1986.
+
+\bibitem{G.722:Summary}
+X.~Maitre.
+\newblock {7 kHz audio coding within 64 kbit/s}.
+\newblock {\em IEEE Journal on Selected Areas in Communications},
+  6(2):283--298, February 1988.
+
+\bibitem{G.722:ETSITS102527-1}
+ETSI.
+\newblock {\em {ETSI TS 102 527-1 V1.2.1 (2008-06) Digital Enhanced Cordless
+  Telecommunications (DECT); New Generation DECT; Part 1: Wideband speech}}.
+\newblock ETSI, France, June 2008.
+
+\bibitem{G.722:ETSITS102527-3}
+ETSI.
+\newblock {\em {ETSI TS 102 527-1 V1.1.1 (2008-06) Digital Enhanced Cordless
+  Telecommunications (DECT); New Generation DECT; Part 3: Extended wideband
+  speech services}}.
+\newblock ETSI, France, June 2008.
+
+\bibitem{G.722:AppIII}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.722/Appendix III, A high quality packet
+  loss concealment algorithm for G.722}}.
+\newblock ITU, Geneva, Switzerland, 2006.
+
+\bibitem{G.722:AppIV}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.722/Appendix IV, A low-complexity
+  algorithm for packet loss concealment with G.722}}.
+\newblock ITU, Geneva, Switzerland, 2006.
+
+\bibitem{G.722:RFC3551}
+H.~Schulzrinne and S.~Casner.
+\newblock {\em RTP Profile for Audio and Video Conferences with Minimal
+  Control}.
+\newblock IETF, July 2003.
+
+\bibitem{RPELTP:BasicConcept}
+P.~Kroon, R.~J. Sluyter, and E.~F. Deprettere.
+\newblock Regular-pulse excitation: a novel approach to effective and efficient
+  multipulse coding of speech.
+\newblock {\em IEEE Trans. Acoust., Speech, Signal Processing},
+  ASSP-34(5):1054--1063, October 1986.
+
+\bibitem{RPELTP:ICASSP88}
+P.~Vary et~al.
+\newblock {Speech codec for the European Mobile Radio System}.
+\newblock In {\em {Proc. ICASSP}}, pages 227--230, 1988.
+
+\bibitem{RPELTP:SpeechCommunication}
+Ulrich Reute (Guest~Editor).
+\newblock {Special Issue on Medium Rate Speech Coding for Digital Mobile
+  Technology}.
+\newblock {\em Speech Communication}, 7(2), July 1988.
+
+\bibitem{GSM-06.10}
+GSM-06.10.
+\newblock {\em {Full Rate Speech Transcoding}}.
+\newblock ETSI, France, October 1992.
+\newblock Released July 1, 1993.
+
+\bibitem{LDCELP-voitests}
+C.~South and P.~Usai.
+\newblock {Subjective Performance of CCITT's 16 kbit/s LD-CELP Algorithm with
+  Voice Signals}.
+\newblock In {\em {Proc. IEEE Globecom}}, 1992.
+
+\bibitem{ETSI-half}
+H.~J. Braun, S.~Feldes, and G.~{Schr\"{o}der}.
+\newblock {Preselection for the Half-Rate GSM Standard}.
+\newblock In {\em {IEEE Workshop on Speech Coding for Telecommunications}},
+  pages 90--92, September 11-13 1991.
+
+\bibitem{AC-05-16}
+ITU-T~Q.10/16 Rapporteur.
+\newblock {\em {ITU-T AC-05-16 Processing Test Plan of the 14kHz Low-Complexity
+  Audio Coding Algorithm at 24, 32 and 48 kbps Extension to ITU-T G.722.1}}.
+\newblock ITU, Strasbourg, France, April 2005.
+
+\bibitem{P.48}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.48, Specification for an intermediate
+  reference system}}, volume~V of {\em Blue Book}, pages 81--86.
+\newblock ITU, Geneva, Switzerland, 1989.
+
+\bibitem{BNR-ModIRS}
+Bell Northern~Research (Canada).
+\newblock {Frequency response characteristics for low bit-rate codec testing}.
+\newblock Technical report, UIT-T SG 12, Geneva, Switzerland, December 1994.
+\newblock Delayed Contribution D,38 (SG12).
+
+\bibitem{P.11}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.11, Effect of transmission
+  impairments}}.
+\newblock ITU, Geneva, Switzerland, March 1993.
+
+\bibitem{G.111}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.111, Loudness Ratings (LRs) in an
+  International Connection}}.
+\newblock ITU, Geneva, Switzerland, March 1993.
+
+\bibitem{P.830}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.830, Subjective performance assessment
+  of Telephone Band and Wideband Digital Codecs}}.
+\newblock ITU, Geneva, Switzerland, February 1996.
+
+\bibitem{HeadphoneACR}
+S.~Dimolitsas, F.~Corcoran, and C.~Ravishankar.
+\newblock Correlation between headphone and telephone-handset listener opinion
+  scores for single-stimulus voice coder performance assessments.
+\newblock {\em IEEE Signal Processing Letters}, 2(3):41--43, March 1995.
+
+\bibitem{HeadphoneDCR}
+S.~Dimolitsas, F.~Corcoran, and C.~Ravishankar.
+\newblock Dependence of opinion scores on listening sets used in degradation
+  category rating assessments.
+\newblock {\em IEEE Transactions on Speech and Audio Processing},
+  3(5):421--424, September 1995.
+
+\bibitem{P.341}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.341, Characteristics of wideband
+  terminals}}.
+\newblock ITU, Geneva, Switzerland, 1994.
+
+\bibitem{BS.1534}
+ITU-R.
+\newblock {\em {Recommendation ITU-R BS.1534-1: Method for the subjective
+  assessment of intermediate quality level of coding systems}}.
+\newblock ITU, January 2003.
+
+\bibitem{LTASS}
+{D. Byrne, et. al.}
+\newblock An international comparison of long-term average speech spectra.
+\newblock {\em Journal of the Acoutical Society of America}, 96(4):2108--2120,
+  October 1994.
+
+\bibitem{G.712}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.712, Performance Characteristics of PCM
+  channels}}.
+\newblock ITU, Geneva, Switzerland, November 2001.
+
+\bibitem{SCD-ETSI}
+Aachen University.
+\newblock {An Implementation of the Signal Conditioning Device}.
+\newblock Technical Report TD91/23, ETSI/\-TM/\-TM5/\-TCH-HS, April 1991.
+
+\bibitem{Bellcore-Model-1}
+V.~K. Varma.
+\newblock Testing speech coders for usage in wireless communications systems.
+\newblock In {\em {Second IEEE Workshop on Speech Coding for
+  Telecommunications, ``Speech Coding for the Network of the Future''}},
+  Quebec, Canada, October 13--15 1993.
+
+\bibitem{Bellcore-Model-2}
+Bellcore.
+\newblock {Proposed model for simulating radio channel burst errors}.
+\newblock Technical report, CCITT SG XII, Geneva, Switzerland, October 1992.
+\newblock Doc.SQ-15.92(Rev.).
+
+\bibitem{GEC}
+E.~N. Gilbert.
+\newblock Capacity of a burst-noise channel.
+\newblock {\em Bell Syst. Tech. J.}, pages 1253--1265, 1960.
+
+\bibitem{Knuth}
+D.~Knuth.
+\newblock {Seminumerical Algorithms}.
+\newblock In {\em {The Art of Computer Programming}}. Addison-Wesley,
+  {Massachusetts}, 1981.
+
+\bibitem{G.192}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation G.192, A Common Digital Parallel Interface for
+  Speech Standardization Activities}}.
+\newblock ITU, Geneva, Switzerland, November 1995.
+
+\bibitem{P.800}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.800, Methods for the subjective
+  determination of transmission quality}}.
+\newblock ITU, Geneva, Switzerland, 1996.
+
+\bibitem{Q001.02.04.02}
+H.~B. Law and R.~A. Seymour.
+\newblock {A reference distortion system using modulated noise}.
+\newblock {\em Proc. Institution of Electrical Engineers (IEE)}, 109B:484--485,
+  Nov 1962.
+
+\bibitem{Old-P.81}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.81, Modulated Noise Reference Unit
+  (MNRU) }}, volume~V of {\em Blue Book}, pages 198--203.
+\newblock ITU, Geneva, Switzerland, 1989.
+
+\bibitem{STL92-Manual}
+User's~Group on~Software~Tools.
+\newblock {CCITT Software Tool Library Manual}.
+\newblock report COM XV-R 87-E, CCITT SG XV, May 1992.
+
+\bibitem{P.810}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.810, Modulated Noise Reference Unit
+  (MNRU) }}.
+\newblock ITU, Geneva, Switzerland, February 1996.
+
+\bibitem{Duo-MNRU}
+S.~F.~Campos Neto.
+\newblock {Characterization of the revised implementation of the Modulated
+  Noise Reference Unit (MNRU) for the ITU-T Software Tool Library}.
+\newblock White Contribution COM 15-182-E, ITU Telecommunication
+  Standardization Sector, 1993-1996.
+
+\bibitem{Recipes}
+W.~H. Press, B.~P. Flannery, S.~A. Teukolky, and W.~T. Vetterling.
+\newblock {\em {Numerical Recipes in C: The Art of Scientific Computing }}.
+\newblock Cambridge University Press, {Cambridge}, 1990.
+
+\bibitem{P.56}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.56, Objective measurement of active
+  speech level}}, volume~V of {\em Blue Book}, pages 110--120.
+\newblock ITU, Geneva, Switzerland, 1989.
+
+\bibitem{P.56-rev}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITUT P.56, Objective measurement of active
+  speech level}}.
+\newblock ITU, Geneva, Switzerland, 2011.
+
+\bibitem{Hndbk-tel}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Handbook on Telephonometry}}.
+\newblock ITU, {Geneva}, 1992.
+\newblock 2nd. Edition.
+
+\bibitem{kuttruff}
+H.~Kuttruff.
+\newblock {\em {Room acoustics}}.
+\newblock Elsevier, 1991.
+
+\bibitem{AC-0809-Q10-26}
+France Telecom.
+\newblock {Proposed update of ITU-T reverberation software tool.}
+\newblock Input document ITU-T Q.10/16 Rapporteur meeting AC-0809-Q10-26,
+  Geneva, Switzerland, September 2008.
+
+\bibitem{STL2005}
+{ITUT}.
+\newblock {\em {Recommendation ITU-T G.191, - Software Tool Library 2005 User's
+  Manual}}.
+\newblock Geneva, Switzerland, July 2005.
+
+\bibitem{AC-0801-Q10-31}
+ITU-T~Q.10/16 Rapporteur.
+\newblock {Proposed update of ITU-T frequency response measurement tool}.
+\newblock input document Q.10/16 Rapporteur meeting AC-0801-Q10-31, ITU-T,
+  Geneva, Switzerland, January 2008.
+
+\bibitem{TD297R1}
+{ITU-T Q.10/16 Rapporteur}.
+\newblock {Report of Q10/16 Rapporteur's meeting report (Geneva, 28 January-1
+  February 2008)}.
+\newblock report {TD297R1 (WP3/16)}, Geneva, Switzerland, February 2008.
+
+\bibitem{AC-0809-Q10-35}
+{Huawei Technologies}.
+\newblock {Update of the frequency response measurement Software Tool}.
+\newblock contribution {ITU-T Q.10/16 Rapporteur meeting, AC-0809-Q10-35},
+  Geneva, Switzerland, 2008.
+
+\bibitem{P.50}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T P.50 Annex I - Artificial voices}}.
+\newblock ITU, Geneva, Switzerland, February 1998.
+
+\bibitem{AC-0801-Q10-04}
+Study~Group 12.
+\newblock Gen-431-16: Reply ls on wideband/fullband test signals and babble
+  noise (com 16-ls 242).
+\newblock input document {ITU-T Q.10/16 Rapporteur meeting, AC-0801-Q10-04},
+  Geneva, Switzerland, 2008.
+
+\bibitem{G.729.1E}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.729.1: G.729-based embedded variable
+  bit-rate coder: An 8-32 kbit/s scalable wideband coder bitstream
+  interoperable with G.729 - Annex E on superwideband scalable extension for
+  G.729.1}}.
+\newblock ITU, Geneva, Switzerland, May 2010.
+
+\bibitem{G.718B}
+ITU Telecommunication~Standardization Sector.
+\newblock {\em {Recommendation ITU-T G.718, Frame error robust narrow-band and
+  wideband embedded variable bit-rate coding of speech and audio from 8-32
+  kbit/s - Annex B on superwideband scalable extension for ITU-T G.718}}.
+\newblock ITU, Geneva, Switzerland, March 2010.
+
+\end{thebibliography}

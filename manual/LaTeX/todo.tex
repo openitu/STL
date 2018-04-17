@@ -1,0 +1,17 @@
+List of to-do items in the STL:
+\begin{itemize}
+ \item	Fix option -fmt in spdemo.c, which is not working as of the
+	STL2000.
+
+ \item	Add options -fi float|short and -fo float|short in filter.c, 
+	so that one can cascade several filtering operations without
+	additional quantization noise. A companion sh2fl.c and fl2sh.c
+	should also be written (and saved in utl or unsup) that would
+	convert files between short and float formats.
+
+ \item	Change ????\_EID to either RANDOM\_EID or maybe GILBERT\_EID
+	in eid, since there is a BURST\_EID module.
+
+ \item	Add packet loss concelament algorithm of G.711 Appendix II 
+	to the G.711 module.
+\end{itemize}
