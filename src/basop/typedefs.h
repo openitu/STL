@@ -119,6 +119,10 @@ typedef unsigned short UWord16;
 #error cannot find 16-bit type
 #endif
 
+/* Definition of Word64 */
+#ifdef ENH_64_BIT_OPERATOR
+#define Word64 long long int
+#endif /* #ifdef ENH_64_BIT_OPERATOR */
 
 /*
  ********* define 32 bit signed/unsigned types & constants
