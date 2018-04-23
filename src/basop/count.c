@@ -100,6 +100,83 @@ char *BasicOperationList[] = {
   "L40_deposit_l", "L40_deposit32", "Extract40_H", "Extract40_L", "L_Extract40",
   "L40_round", "L_saturate40", "round40", "IF", "GOTO",
   "BREAK", "SWITCH", "FOR", "WHILE", "CONTINUE", "L_mls", "div_l", "i_mult"
+    /* New complex basops */
+ #ifdef COMPLEX_OPERATOR 
+, "CL_shr",           "CL_shl",                "CL_add"
+, "CL_sub",           "CL_scale",        	   "CL_dscale"
+, "CL_msu_j",         "CL_mac_j",              "CL_move"
+, "CL_Extract_real",  "CL_Extract_imag",       "CL_form"  
+, "CL_multr_32x16",    "CL_negate",             "CL_conjugate"        
+, "CL_mul_j"
+, "CL_swap_real_imag"
+, "C_add"
+, "C_sub"
+, "C_mul_j"
+, "C_multr"
+, "C_form"
+
+, "C_scale"
+, "CL_round32_16",   "CL_scale_32",       "CL_dscale_32",        "CL_multr_32x32"
+, "C_mac_r",         "C_msu_r",           "C_Extract_real",      "C_Extract_imag"
+, "C_negate",        "C_conjugate"
+, "C_shr",           "C_shl"
+
+#endif /* #ifdef COMPLEX_OPERATOR */
+	
+ /* New 64 bit basops */
+#ifdef ENH_64_BIT_OPERATOR
+ , "move64"          , "W_add_nosat"     ,"W_sub_nosat"   
+ , "W_shl"           , "W_shr"
+ , "W_shl_nosat"     , "W_shr_nosat"
+ , "W_mac_32_16"     , "W_msu_32_16"     , "W_mult_32_16"     
+ , "W_mult0_16_16"   , "W_mac0_16_16"    , "W_msu0_16_16"     
+ , "W_mult_16_16"    , "W_mac_16_16"     , "W_msu_16_16"     
+ , "W_shl_sat_l"     , "W_sat_l"
+ , "W_sat_m"   		 , "W_deposit32_l"    ,"W_deposit32_h"
+ , "W_extract_l"     , "W_extract_h"
+ , "W_round48_L"     , "W_round32_s"
+ , "W_norm" 
+ , "W_add"   		 , "W_sub"           ,"W_neg"    ,"W_abs"
+ , "W_mult_32_32"    , "W_mult0_32_32"  
+ , "W_lshl"   		 , "W_lshr"           ,"W_round64_L"
+	
+#endif /* #ifdef ENH_64_BIT_OPERATOR */
+
+#ifdef ENH_32_BIT_OPERATOR
+ , "Mpy_32_16_1" 
+ , "Mpy_32_16_r"         
+ , "Mpy_32_32"   
+ , "Mpy_32_32_r"  
+ , "Madd_32_16"   
+ , "Madd_32_16_r" 
+ , "Msub_32_16" 
+ , "Msub_32_16_r"  
+ , "Madd_32_32"   
+ , "Madd_32_32_r"  
+ , "Msub_32_32"   
+ , "Msub_32_32_r"  
+#endif /* #ifdef ENH_32_BIT_OPERATOR */
+
+#ifdef CONTROL_CODE_OPS
+	, "LT_16"   
+ 	, "GT_16"   
+	, "LE_16"   
+ 	, "GE_16"   
+ 	, "EQ_16"   
+ 	, "NE_16"   
+	, "LT_32"   
+ 	, "GT_32"   
+	, "LE_32"   
+ 	, "GE_32"   
+ 	, "EQ_32"   
+ 	, "NE_32"   
+	, "LT_64"   
+ 	, "GT_64"   
+	, "LE_64"   
+ 	, "GE_64"   
+ 	, "EQ_64"   
+ 	, "NE_64"  	
+#endif /* #ifdef CONTROL_CODE_OPS */
 };
 #endif /* ifdef WMOPS */
 
@@ -110,25 +187,101 @@ const BASIC_OP op_weight = {
   1, 1, 1, 1, 1,
   1, 1, 1, 1, 1,
   1, 1, 2, 2, 1,
-  1, 1, 1, 3, 1,
+  1, 1, 1, 2, 1,
 
-  1, 1, 1, 3, 1,
-  4, 1, 18, 1, 1,
-  2, 1, 2, 2, 1,
+  1, 1, 1, 2, 1,
+  1, 1, 18, 1, 1,
   1, 1, 1, 1, 1,
-  3, 3, 3, 3, 1,
+  1, 1, 1, 1, 1,
+  2, 2, 2, 2, 1,
 
   1, 1, 1, 1, 1,
   1, 1, 1, 2,
-  1, 2, 2, 4, 1,
+  1, 2, 1, 1, 1,
   1, 1, 1, 1, 1,
   1, 1, 1, 1, 1,
 
   1, 1, 1, 1, 3,
-  3, 3, 3, 3, 1,
+  3, 3, 3, 1, 1,
   1, 1, 1, 1, 1,
   1, 1, 1, 4, 4,
-  4, 8, 3, 4, 4, 5, 32, 3
+  4, 8, 3, 4, 4, 1, 32, 1
+/* New complex basops */
+ #ifdef COMPLEX_OPERATOR
+, 1,     1,     1
+, 1,     1,     1
+, 1,     1,     1
+, 1,  	 1,     1  
+, 2,     1,     1        
+, 1
+, 1
+, 1
+, 1
+, 1
+, 2
+, 1
+
+, 1
+, 1,   	 1,       1,      2
+, 2,     2,       1,      1
+, 1,     1
+, 1,     1
+
+#endif /* #ifdef COMPLEX_OPERATOR */
+
+#ifdef ENH_64_BIT_OPERATOR
+  /* Weights of new 64 bit basops */
+ , 1        , 1         ,1   
+ , 1        , 1         
+ , 1        , 1          
+ , 1        , 1        , 1
+ , 1        , 1        , 1
+ , 1        , 1        , 1
+ , 1         ,1
+ , 1        , 1         ,1
+ , 1        , 1
+ , 1        , 1 
+ , 1 
+ , 1   		, 1          ,1     ,1
+ , 1        , 1  
+ , 1  		, 1           ,1
+#endif /* #ifdef ENH_64_BIT_OPERATOR */
+
+#ifdef ENH_32_BIT_OPERATOR
+ , 1
+ , 1
+ , 1
+ , 1
+ , 1
+ , 1
+ , 1
+ , 1
+ , 1
+ , 1
+ , 1
+ , 1 
+#endif /* #ifdef ENH_32_BIT_OPERATOR */
+
+#ifdef CONTROL_CODE_OPS
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1   
+ , 1    
+#endif /* #ifdef CONTROL_CODE_OPS */
 };
 #endif /* ifdef WMOPS */
 
