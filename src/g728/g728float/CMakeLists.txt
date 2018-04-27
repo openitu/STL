@@ -43,6 +43,6 @@ add_test(g728-dec6-verify ${CMAKE_COMMAND} -E compare_files ../test_data/outa6.b
 
 
 #TEST: Decoder with postfilter
-add_test(g728-dec-post ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/g728 -little enc ../test_data/cw4.bin ../test_data/cw4-post.bin.float.out)
+add_test(g728-dec-post ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/g728 -little dec ../test_data/cw4.bin ../test_data/cw4-post.bin.float.out)
 add_test(g728-dec-post-verify ${CMAKE_COMMAND} -E compare_files ../test_data/outb4.bin ../test_data/cw4-post.bin.float.out)
 
