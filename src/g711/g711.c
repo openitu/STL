@@ -168,8 +168,7 @@ void alaw_expand (long lseg, short *logbuf, short *linbuf) {
     if (iexp > 0)
       mant = mant + 16;         /* add leading '1', if exponent > 0 */
 
-    mant = (mant << 4) + (0x0008);      /* now mantissa left justified and */
-    /* 1/2 quantization step added */
+    mant = (mant << 4) + (0x0008);      /* now mantissa left justified and 1/2 quantization step added */
     if (iexp > 1)               /* now left shift according exponent */
       mant = mant << (iexp - 1);
 
@@ -218,7 +217,7 @@ void ulaw_compress (long lseg, short *linbuf, short *logbuf) {
     /* Change from 14 bit left justified to 14 bit right justified */
     /* Compute absolute value; adjust for easy processing */
     /* -------------------------------------------------------------------- */
-    absno = linbuf[n] < 0       /* compute 1's complement in case of */
+    absno = linbuf[n] < 0               /* compute 1's complement in case of */
       ? ((~linbuf[n]) >> 2) + 33        /* negative samples */
       : ((linbuf[n]) >> 2) + 33;        /* NB: 33 is the difference value */
     /* between the thresholds for */
@@ -239,7 +238,7 @@ void ulaw_compress (long lseg, short *linbuf, short *logbuf) {
 
     /* Mounting the low-nibble of the log PCM sample */
     low_nibble = (absno >> segno)       /* right shift of mantissa and */
-      &(0x000F);                /* masking away leading '1' */
+      &(0x000F);                        /* masking away leading '1' */
     low_nibble = (0x000F) - low_nibble;
 
     /* Joining the high-nibble and the low-nibble of the log PCM sample */
@@ -290,14 +289,13 @@ void ulaw_expand (long lseg, short *logbuf, short *linbuf) {
   for (n = 0; n < lseg; n++) {
     sign = logbuf[n] < (0x0080) /* sign-bit = 1 for positiv values */
       ? -1 : 1;
-    mantissa = ~logbuf[n];      /* 1's complement of input value */
-    exponent = (mantissa >> 4) & (0x0007);      /* extract exponent */
-    segment = exponent + 1;     /* compute segment number */
-    mantissa = mantissa & (0x000F);     /* extract mantissa */
+    mantissa = ~logbuf[n];                   /* 1's complement of input value */
+    exponent = (mantissa >> 4) & (0x0007);   /* extract exponent */
+    segment = exponent + 1;                  /* compute segment number */
+    mantissa = mantissa & (0x000F);          /* extract mantissa */
 
     /* Compute Quantized Sample (14 bit left justified!) */
-    step = (4) << segment;      /* position of the LSB */
-    /* = 1 quantization step) */
+    step = (4) << segment;      /* position of the LSB = 1 quantization step) */
     linbuf[n] = sign *          /* sign */
       (((0x0080) << exponent)   /* '1', preceding the mantissa */
        +step * mantissa         /* left shift of mantissa */
