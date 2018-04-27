@@ -33,7 +33,21 @@
 extern BASIC_OP multiCounter[MAXCOUNTERS];
 extern int currCounter;
 
-  /* Technical note : The following 3 variables are only used for correct complexity evaluation of the following structure : IF{ ...  } ELSE IF { ...  } ELSE IF { ...  } ...  } ELSE { ...  } */
+  /* Technical note :
+   * The following 3 variables are only used for correct complexity
+   * evaluation of the following structure :
+   *   IF{
+   *     ...
+   *   } ELSE IF {
+   *     ...
+   *   } ELSE IF {
+   *     ...
+   *   }
+   *   ...
+   *   } ELSE {
+   *     ...
+   *   }
+   */
 extern int funcId_where_last_call_to_else_occurred;
 extern long funcid_total_wmops_at_last_call_to_else;
 extern int call_occurred;
@@ -143,7 +157,10 @@ static __inline void incrWhile (void) {
 #define IF( a) if( incrIf(), a)
 
 static __inline void incrIf (void) {
-  /* Technical note : If the "IF" operator comes just after an "ELSE", its counter must not be incremented. */
+   /* Technical note :
+    * If the "IF" operator comes just after an "ELSE", its counter
+    * must not be incremented.
+    */
   if ((currCounter != funcId_where_last_call_to_else_occurred)
       || (TotalWeightedOperation () != funcid_total_wmops_at_last_call_to_else)
       || (call_occurred == 1))
