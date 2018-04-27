@@ -77,58 +77,62 @@ void setFrameRate (int samplingFreq, int frameLength) {
  * with the structure definition BASIC_OP.
  */
 char *BasicOperationList[] = {
-  "add", "sub", "abs_s", "shl", "shr",
-  "extract_h", "extract_l", "mult", "L_mult", "negate",
-  "round", "L_mac", "L_msu", "L_macNs", "L_msuNs",
-  "L_add", "L_sub", "L_add_c", "L_sub_c", "L_negate",
-  "L_shl", "L_shr", "mult_r", "shr_r", "mac_r",
+   "add",           "sub",             "abs_s",         "shl",             "shr",
+   "extract_h",     "extract_l",       "mult",          "L_mult",          "negate",
+   "round",         "L_mac",           "L_msu",         "L_macNs",         "L_msuNs",
+   "L_add",         "L_sub",           "L_add_c",       "L_sub_c",         "L_negate",
+   "L_shl",         "L_shr",           "mult_r",        "shr_r",           "mac_r",
 
-  "msu_r", "L_deposit_h", "L_deposit_l", "L_shr_r", "L_abs",
-  "L_sat", "norm_s", "div_s", "norm_l", "move16",
-  "move32", "Logic16", "Logic32", "Test", "s_max",
-  "s_min", "L_max", "L_min", "L40_max", "L40_min",
-  "shl_r", "L_shl_r", "L40_shr_r", "L40_shl_r", "norm_L40",
+   "msu_r",         "L_deposit_h",     "L_deposit_l",   "L_shr_r",         "L_abs",
+   "L_sat",         "norm_s",          "div_s",         "norm_l",          "move16",
+   "move32",        "Logic16",         "Logic32",       "Test",            "s_max",
+   "s_min",         "L_max",           "L_min",         "L40_max",         "L40_min",
+   "shl_r",         "L_shl_r",         "L40_shr_r",     "L40_shl_r",       "norm_L40",
 
-  "L40_shl", "L40_shr", "L40_negate", "L40_add", "L40_sub",
-  "L40_abs", "L40_mult", "L40_mac", "mac_r40",
-  "L40_msu", "msu_r40", "Mpy_32_16_ss", "Mpy_32_32_ss", "L_mult0",
-  "L_mac0", "L_msu0", "lshl", "lshr", "L_lshl",
-  "L_lshr", "L40_lshl", "L40_lshr", "s_and", "s_or",
+   "L40_shl",       "L40_shr",         "L40_negate",    "L40_add",         "L40_sub",
+   "L40_abs",       "L40_mult",        "L40_mac",       "mac_r40",
+   "L40_msu",       "msu_r40",         "Mpy_32_16_ss",  "Mpy_32_32_ss",    "L_mult0",
+   "L_mac0",        "L_msu0",          "lshl",          "lshr",            "L_lshl",
+   "L_lshr",        "L40_lshl",        "L40_lshr",      "s_and",           "s_or",
 
-  "s_xor", "L_and", "L_or", "L_xor", "rotl",
-  "rotr", "L_rotl", "L_rotr", "L40_set", "L40_deposit_h",
-  "L40_deposit_l", "L40_deposit32", "Extract40_H", "Extract40_L", "L_Extract40",
-  "L40_round", "L_saturate40", "round40", "IF", "GOTO",
-  "BREAK", "SWITCH", "FOR", "WHILE", "CONTINUE", "L_mls", "div_l", "i_mult"
+   "s_xor",         "L_and",           "L_or",          "L_xor",           "rotl",
+   "rotr",          "L_rotl",          "L_rotr",        "L40_set",         "L40_deposit_h",
+   "L40_deposit_l", "L40_deposit32",   "Extract40_H",   "Extract40_L",     "L_Extract40",
+   "L40_round",     "L_saturate40",    "round40",       "IF",              "GOTO",
+   "BREAK",         "SWITCH",          "FOR",           "WHILE",           "CONTINUE",
+
+   "L_mls",         "div_l",           "i_mult"
 };
 #endif /* ifdef WMOPS */
 
 
 #ifdef WMOPS
 const BASIC_OP op_weight = {
-  1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1,
-  1, 1, 2, 2, 1,
-  1, 1, 1, 3, 1,
+    1,     1,     1,     1,     1,
+    1,     1,     1,     1,     1,
+    1,     1,     1,     1,     1,
+    1,     1,     2,     2,     1,
+    1,     1,     1,     3,     1,
 
-  1, 1, 1, 3, 1,
-  4, 1, 18, 1, 1,
-  2, 1, 2, 2, 1,
-  1, 1, 1, 1, 1,
-  3, 3, 3, 3, 1,
+    1,     1,     1,     3,     1,
+    4,     1,     18,    1,     1,
+    2,     1,     2,     2,     1,
+    1,     1,     1,     1,     1,
+    3,     3,     3,     3,     1,
 
-  1, 1, 1, 1, 1,
-  1, 1, 1, 2,
-  1, 2, 2, 4, 1,
-  1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1,
+    1,     1,     1,     1,     1,
+    1,     1,     1,     2,
+    1,     2,     2,     4,     1,
+    1,     1,     1,     1,     1,
+    1,     1,     1,     1,     1,
 
-  1, 1, 1, 1, 3,
-  3, 3, 3, 3, 1,
-  1, 1, 1, 1, 1,
-  1, 1, 1, 4, 4,
-  4, 8, 3, 4, 4, 5, 32, 3
+    1,     1,     1,     1,     3,
+    3,     3,     3,     3,     1,
+    1,     1,     1,     1,     1,
+    1,     1,     1,     4,     4,
+    4,     8,     3,     4,     4,
+    
+    5,     32,    3
 };
 #endif /* ifdef WMOPS */
 
@@ -248,7 +252,9 @@ static Word32 WMOPS_frameStat () {
   /* check if fwc() was forgotten at end of last frame */
   if (tot > LastWOper[currCounter]) {
     if (!fwc_corr[currCounter]) {
-      fprintf (stderr, "count: operations counted after last fwc() for '%s'; " "-> fwc() called\n", objectName[currCounter] ? objectName[currCounter] : "");
+      fprintf (stderr, 
+        "count: operations counted after last fwc() for '%s'; " "-> fwc() called\n", 
+        objectName[currCounter] ? objectName[currCounter] : "");
     }
     fwc ();
   }
@@ -347,8 +353,8 @@ void Reset_WMOPS_counter (void) {
 
   /* increase the frame counter --> a frame is counted WHEN IT BEGINS */
   nbframe[currCounter]++;
-  /* add wmops used in last frame to count, then reset counter */
-  /* (in first frame, this is a no-op */
+  
+  /* add wmops used in last frame to count, then reset counter (in first frame, this is a no-op */
   total_wmops[currCounter] += (float) (tot * frameRate);
 
   /* clear counter before new frame starts */
@@ -382,11 +388,14 @@ void WMOPS_output (Word16 dtx_mode) {
   Word16 i;
   Word32 tot, tot_wm, tot_wc;
 
-  /* get operations since last reset (or init), but do not update the counters (except the glob_wc[] maximum) so output CAN be called in each frame without problems. The frame counter is NOT updated! */
+  /* get operations since last reset (or init), but do not update the counters (except the glob_wc[] maximum) 
+     so output CAN be called in each frame without problems. The frame counter is NOT updated! */
   tot = WMOPS_frameStat ();
   tot_wm = (Word32) (total_wmops[currCounter] + ((float) tot) * frameRate);
 
-  fprintf (stdout, "%10s:WMOPS=%.3f", objectName[currCounter] ? objectName[currCounter] : "", ((float) tot) * frameRate);
+  fprintf (stdout, 
+    "%10s:WMOPS=%.3f", objectName[currCounter] ? objectName[currCounter] : "",
+    ((float) tot) * frameRate);
 
   if (nbframe[currCounter] != 0) {
     fprintf (stdout, "  Average=%.3f", tot_wm / (float) nbframe[currCounter]);
@@ -411,7 +420,8 @@ void WMOPS_output_avg (Word16 dtx_mode, Word32 * tot_wm, Word16 * num_frames) {
   Word16 i;
   Word32 tot, tot_wc;
 
-  /* get operations since last reset (or init), but do not update the counters (except the glob_wc[] maximum) so output CAN be called in each frame without problems. The frame counter is NOT updated! */
+  /* get operations since last reset (or init), but do not update the counters (except the glob_wc[] maximum) 
+     so output CAN be called in each frame without problems. The frame counter is NOT updated! */
   tot = WMOPS_frameStat ();
   *tot_wm = (Word32) (total_wmops[currCounter] + ((float) tot) * frameRate);
   *num_frames = nbframe[currCounter];
@@ -450,7 +460,6 @@ void generic_WMOPS_output (Word16 dtx_mode, char *test_file_name) {
   for (currCounter = 0; currCounter <= maxCounter; currCounter++) {
     tot = WMOPS_frameStat ();
     grand_total += tot;
-
   }
 
 
