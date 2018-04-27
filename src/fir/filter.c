@@ -185,26 +185,39 @@
  *         0 -> invalid choice!
  * Last update: 11.May.2007
  */
-int valid_filter (char *F_type, char *modified_IRS) {
+int valid_filter (char *F_type, char modified_IRS) {
   int valid = 0;
 
-  if (strncmp (F_type, "irs", 3) == 0 || strncmp (F_type, "IRS", 3) == 0
-      || strncmp (F_type, "hirs", 4) == 0 || strncmp (F_type, "HIRS", 4) == 0
-      || strncmp (F_type, "tirs", 4) == 0 || strncmp (F_type, "TIRS", 4) == 0
-      || strncmp (F_type, "rxirs", 5) == 0 || strncmp (F_type, "RXIRS", 5) == 0
-      || strncmp (F_type, "dsm", 3) == 0 || strncmp (F_type, "DSM", 3) == 0
-      || strncmp (F_type, "pso", 3) == 0 || strncmp (F_type, "PSO", 3) == 0
-      || strncmp (F_type, "hq", 2) == 0 || strncmp (F_type, "HQ", 2) == 0
-      || strncmp (F_type, "flat", 4) == 0 || strncmp (F_type, "FLAT", 4) == 0
-      || strncmp (F_type, "gsm1", 4) == 0 || strncmp (F_type, "GSM1", 4) == 0
-      || strncmp (F_type, "msin", 4) == 0 || strncmp (F_type, "MSIN", 4) == 0
-      || strncmp (F_type, "pcm", 3) == 0 || strncmp (F_type, "PCM", 3) == 0
-      || strncmp (F_type, "p341", 4) == 0 || strncmp (F_type, "P341", 4) == 0
-      || strncmp (F_type, "dc", 2) == 0 || strncmp (F_type, "DC", 2) == 0 || strncmp (F_type, "iflat", 5) == 0 || strncmp (F_type, "IFLAT", 5) == 0 || strncmp (F_type, "5kbp", 4) == 0 || strncmp (F_type, "5KBP", 4) == 0 || strncmp (F_type, "5kBP", 4) == 0 || strncmp (F_type, "5Kbp", 4) == 0 || strncmp (F_type, "100_5kbp", 8) == 0 || strncmp (F_type, "100_5KBP", 8) == 0 || strncmp (F_type, "14kbp", 5) == 0 || strncmp (F_type, "14KBP", 5) == 0 || strncmp (F_type, "14kBP", 5) == 0 || strncmp (F_type, "14Kbp", 5) == 0 || strncmp (F_type, "20kbp", 5) == 0 || strncmp (F_type, "20KBP", 5) == 0 || strncmp (F_type, "20kBP", 5) == 0 || strncmp (F_type, "20Kbp", 5) == 0 || strncmp (F_type, "LP1P5", 5) == 0 || strncmp (F_type, "lp1p5", 5) == 0 || strncmp (F_type, "LP1p5", 5) == 0 || strncmp (F_type, "LP35", 4) == 0 || strncmp (F_type, "lp35", 4) == 0 || strncmp (F_type, "LP7", 3) == 0 || strncmp (F_type, "lp7", 3) == 0 || strncmp (F_type, "LP10", 4) == 0 || strncmp (F_type, "lp10", 4) == 0
+  if (strncmp (F_type, "irs", 3) == 0       || strncmp (F_type, "IRS", 3) == 0
+      || strncmp (F_type, "hirs", 4) == 0   || strncmp (F_type, "HIRS", 4) == 0
+      || strncmp (F_type, "tirs", 4) == 0   || strncmp (F_type, "TIRS", 4) == 0
+      || strncmp (F_type, "rxirs", 5) == 0  || strncmp (F_type, "RXIRS", 5) == 0
+      || strncmp (F_type, "dsm", 3) == 0    || strncmp (F_type, "DSM", 3) == 0
+      || strncmp (F_type, "pso", 3) == 0    || strncmp (F_type, "PSO", 3) == 0
+      || strncmp (F_type, "hq", 2) == 0     || strncmp (F_type, "HQ", 2) == 0
+      || strncmp (F_type, "flat", 4) == 0   || strncmp (F_type, "FLAT", 4) == 0
+      || strncmp (F_type, "gsm1", 4) == 0   || strncmp (F_type, "GSM1", 4) == 0
+      || strncmp (F_type, "msin", 4) == 0   || strncmp (F_type, "MSIN", 4) == 0
+      || strncmp (F_type, "pcm", 3) == 0    || strncmp (F_type, "PCM", 3) == 0
+      || strncmp (F_type, "p341", 4) == 0   || strncmp (F_type, "P341", 4) == 0
+      || strncmp (F_type, "dc", 2) == 0     || strncmp (F_type, "DC", 2) == 0
+      || strncmp (F_type, "iflat", 5) == 0  || strncmp (F_type, "IFLAT", 5) == 0 
+      || strncmp (F_type, "5kbp", 4) == 0   || strncmp (F_type, "5KBP", 4) == 0 
+      || strncmp (F_type, "5kBP", 4) == 0   || strncmp (F_type, "5Kbp", 4) == 0 
+      || strncmp (F_type, "100_5kbp", 8) == 0 || strncmp (F_type, "100_5KBP", 8) == 0 
+      || strncmp (F_type, "14kbp", 5) == 0 || strncmp (F_type, "14KBP", 5) == 0 
+      || strncmp (F_type, "14kBP", 5) == 0 || strncmp (F_type, "14Kbp", 5) == 0 
+      || strncmp (F_type, "20kbp", 5) == 0 || strncmp (F_type, "20KBP", 5) == 0 
+      || strncmp (F_type, "20kBP", 5) == 0 || strncmp (F_type, "20Kbp", 5) == 0 
+      || strncmp (F_type, "LP1P5", 5) == 0 || strncmp (F_type, "lp1p5", 5) == 0 || strncmp (F_type, "LP1p5", 5) == 0 
+      || strncmp (F_type, "LP35", 4) == 0  || strncmp (F_type, "lp35", 4) == 0 
+      || strncmp (F_type, "LP7", 3) == 0   || strncmp (F_type, "lp7", 3) == 0 
+      || strncmp (F_type, "LP10", 4) == 0  || strncmp (F_type, "lp10", 4) == 0
 // FILTER_12k48k_HW
-      || strncmp (F_type, "LP12", 4) == 0 || strncmp (F_type, "lp12", 4) == 0
+      || strncmp (F_type, "LP12", 4) == 0  || strncmp (F_type, "lp12", 4) == 0
 // FILTER_12k48k_HW
-      || strncmp (F_type, "LP14", 4) == 0 || strncmp (F_type, "lp14", 4) == 0 || strncmp (F_type, "LP20", 4) == 0 || strncmp (F_type, "lp20", 4) == 0)
+      || strncmp (F_type, "LP14", 4) == 0  || strncmp (F_type, "lp14", 4) == 0 
+      || strncmp (F_type, "LP20", 4) == 0  || strncmp (F_type, "lp20", 4) == 0)
     valid = 1;
 
   /* No MOD-IRS filter at 8 kHz */
@@ -537,7 +550,10 @@ int main (int argc, char *argv[]) {
   * Filter type: GSM Mobile Station Input - Linear-phase, high-band
   * 1:1 factor added by Simao Campos after Kyrill Fisher [27/Feb/98]
   */
-  else if (strncmp (F_type, "gsm1", 4) == 0 || strncmp (F_type, "GSM1", 4) == 0 || strncmp (F_type, "msin", 4) == 0 || strncmp (F_type, "MSIN", 4) == 0) {
+  else if (strncmp (F_type, "gsm1", 4) == 0 || 
+           strncmp (F_type, "GSM1", 4) == 0 || 
+           strncmp (F_type, "msin", 4) == 0 || 
+           strncmp (F_type, "MSIN", 4) == 0) {
     fir_state = msin_16khz_init ();
   }
 
