@@ -1,0 +1,43 @@
+%%
+%% THIS IS FILE: MNRUDESC.TEX, version of Oct/2005
+%% =================================================
+%%
+\documentclass[12pt,a4paper]{book}
+ 
+\pagestyle{myheadings}
+
+% Special Parameters 
+\evensidemargin           0mm
+\oddsidemargin            0mm
+\parindent                0mm
+\parskip                  2mm
+\textheight             250mm
+\textwidth              160mm
+\topmargin              -10mm
+
+% Define headers
+\def\ugst_title{ITU-T Software Tools Library, release 2005: MNRU }
+\markboth{  \hspace{1cm} \hfill \ugst_title }%
+         { Version: \today \hfill \hspace{1cm} }
+
+\usepackage{epsf}
+\usepackage[bookmarks=true, bookmarksopen=true, bookmarksopenlevel=0, colorlinks=true, citecolor=red]{hyperref}
+\usepackage{graphicx}
+\usepackage{ugst}
+
+%==============================================================================
+\begin{document}
+%==============================================================================
+\SF
+
+\setcounter{chapter}{10}
+%=============================================================================
+% chapter MNRU: The ITU-T Modulated Noise Reference Unity 
+%=============================================================================
+
+\input{mnru}
+
+\bibliographystyle{unsrt}
+\bibliography{ugst} %/ default extension is ".BIB" %/
+
+\end{document}

@@ -313,6 +313,124 @@ typedef struct {
   UWord32 L_mls;                /* Complexity Weight of 6 */
   UWord32 div_l;                /* Complexity Weight of 32 */
   UWord32 i_mult;               /* Complexity Weight of 3 */
+/* New complex basic operators */
+#ifdef COMPLEX_OPERATOR
+    UWord32 CL_shr;                  /* Complexity Weight of 1 */
+    UWord32 CL_shl;                  /* Complexity Weight of 1 */
+    UWord32 CL_add;                  /* Complexity Weight of 1 */
+    UWord32 CL_sub;                  /* Complexity Weight of 1 */
+    UWord32 CL_scale;          		 /* Complexity Weight of 1 */
+    UWord32 CL_dscale;          	 /* Complexity Weight of 1 */
+    UWord32 CL_msu_j;                /* Complexity Weight of 1 */
+    UWord32 CL_mac_j;                /* Complexity Weight of 1 */
+    UWord32 CL_move;                 /* Complexity Weight of 1 */
+    UWord32 CL_Extract_real;         /* Complexity Weight of 1 */
+    UWord32 CL_Extract_imag;         /* Complexity Weight of 1 */
+    UWord32 CL_form;                 /* Complexity Weight of 1 */
+    UWord32 CL_multr_32x16;           /* Complexity Weight of 2 */
+    UWord32 CL_negate;               /* Complexity Weight of 1 */
+    UWord32 CL_conjugate;            /* Complexity Weight of 1 */	
+    UWord32 CL_mul_j;                /* Complexity Weight of 1 */
+    UWord32 CL_swap_real_imag;       /* Complexity Weight of 1 */
+    UWord32 C_add;              	 /* Complexity Weight of 1 */
+    UWord32 C_sub;              	 /* Complexity Weight of 1 */
+    UWord32 C_mul_j;            	 /* Complexity Weight of 1 */
+    UWord32 C_multr;              	 /* Complexity Weight of 2 */	
+    UWord32 C_form;              	 /* Complexity Weight of 1 */	
+
+	UWord32 C_scale;				 /* Complexity Weight of 1 */
+	UWord32 CL_round32_16;	         /* Complexity Weight of 1 */
+	UWord32 CL_scale_32;             /* Complexity Weight of 1 */
+	UWord32 CL_dscale_32;            /* Complexity Weight of 1 */
+	UWord32 CL_multr_32x32;          /* Complexity Weight of 2 */
+	UWord32 C_mac_r;                 /* Complexity Weight of 2 */
+	UWord32 C_msu_r;                 /* Complexity Weight of 2 */
+	UWord32 C_Extract_real;          /* Complexity Weight of 1 */
+	UWord32 C_Extract_imag;          /* Complexity Weight of 1 */
+	UWord32 C_negate;                /* Complexity Weight of 1 */
+	UWord32 C_conjugate;             /* Complexity Weight of 1 */
+	UWord32 C_shr;                   /* Complexity Weight of 1 */
+	UWord32 C_shl;                   /* Complexity Weight of 1 */
+
+#endif /* #ifdef COMPLEX_OPERATOR */
+
+/* New 64 bit basops */
+#ifdef ENH_64_BIT_OPERATOR
+    UWord32 move64;                  /* Complexity Weight of 1 */
+    UWord32 W_add_nosat;             /* Complexity Weight of 1 */ 
+    UWord32 W_sub_nosat;             /* Complexity Weight of 1 */
+    UWord32 W_shl;                   /* Complexity Weight of 1 */
+    UWord32 W_shr;                   /* Complexity Weight of 1 */
+    UWord32 W_shl_nosat;             /* Complexity Weight of 1 */
+    UWord32 W_shr_nosat;             /* Complexity Weight of 1 */
+    UWord32 W_mac_32_16;             /* Complexity Weight of 1 */
+    UWord32 W_msu_32_16;             /* Complexity Weight of 1 */
+    UWord32 W_mult_32_16;            /* Complexity Weight of 1 */    
+    UWord32 W_mult0_16_16;           /* Complexity Weight of 1 */
+    UWord32 W_mac0_16_16;            /* Complexity Weight of 1 */
+    UWord32 W_msu0_16_16;            /* Complexity Weight of 1 */
+	UWord32 W_mult_16_16;            /* Complexity Weight of 1 */	
+	UWord32 W_mac_16_16;             /* Complexity Weight of 1 */
+    UWord32 W_msu_16_16;             /* Complexity Weight of 1 */
+	UWord32 W_shl_sat_l;             /* Complexity Weight of 1 */
+    UWord32 W_sat_l;           		 /* Complexity Weight of 1 */
+    UWord32 W_sat_m;           		 /* Complexity Weight of 1 */
+    UWord32 W_deposit32_l;           /* Complexity Weight of 1 */
+    UWord32 W_deposit32_h;           /* Complexity Weight of 1 */
+    UWord32 W_extract_l;             /* Complexity Weight of 1 */
+    UWord32 W_extract_h;             /* Complexity Weight of 1 */
+    UWord32 W_round48_L;             /* Complexity Weight of 1 */
+    UWord32 W_round32_s;             /* Complexity Weight of 1 */	
+    UWord32 W_norm;                  /* Complexity Weight of 1 */	
+	
+	UWord32 W_add;                  /* Complexity Weight of 1 */	
+	UWord32 W_sub;                  /* Complexity Weight of 1 */	
+	UWord32 W_neg;                  /* Complexity Weight of 1 */	
+	UWord32 W_abs;                  /* Complexity Weight of 1 */	
+	UWord32 W_mult_32_32;           /* Complexity Weight of 1 */	
+	UWord32 W_mult0_32_32;          /* Complexity Weight of 1 */	
+	UWord32 W_lshl;                 /* Complexity Weight of 1 */	
+	UWord32 W_lshr;                 /* Complexity Weight of 1 */	
+	UWord32 W_round64_L;            /* Complexity Weight of 1 */		
+
+#endif /* #ifdef ENH_64_BIT_OPERATOR */
+
+#ifdef ENH_32_BIT_OPERATOR
+	UWord32 Mpy_32_16_1;   			/* Complexity Weight of 1 */
+ 	UWord32 Mpy_32_16_r;   			/* Complexity Weight of 1 */
+	UWord32 Mpy_32_32;    			/* Complexity Weight of 1 */
+ 	UWord32 Mpy_32_32_r;   			/* Complexity Weight of 1 */
+ 	UWord32 Madd_32_16;     		/* Complexity Weight of 1 */
+ 	UWord32 Madd_32_16_r;     		/* Complexity Weight of 1 */	
+ 	UWord32 Msub_32_16;    			/* Complexity Weight of 1 */
+ 	UWord32 Msub_32_16_r;  			/* Complexity Weight of 1 */	
+ 	UWord32 Madd_32_32;      		/* Complexity Weight of 1 */
+ 	UWord32 Madd_32_32_r;      		/* Complexity Weight of 1 */	
+ 	UWord32 Msub_32_32;      		/* Complexity Weight of 1 */
+	UWord32 Msub_32_32_r;      		/* Complexity Weight of 1 */
+#endif /* #ifdef ENH_32_BIT_OPERATOR */
+
+#ifdef CONTROL_CODE_OPS
+	UWord32 LT_16;  				/* Complexity Weight of 1 */
+ 	UWord32 GT_16;  				/* Complexity Weight of 1 */
+	UWord32 LE_16;  				/* Complexity Weight of 1 */
+ 	UWord32 GE_16;  				/* Complexity Weight of 1 */
+ 	UWord32 EQ_16;  				/* Complexity Weight of 1 */
+ 	UWord32 NE_16;  				/* Complexity Weight of 1 */
+	UWord32 LT_32;  				/* Complexity Weight of 1 */
+ 	UWord32 GT_32;  				/* Complexity Weight of 1 */
+	UWord32 LE_32;  				/* Complexity Weight of 1 */
+ 	UWord32 GE_32;  				/* Complexity Weight of 1 */
+ 	UWord32 EQ_32;  				/* Complexity Weight of 1 */
+ 	UWord32 NE_32;  				/* Complexity Weight of 1 */
+	UWord32 LT_64;  				/* Complexity Weight of 1 */
+ 	UWord32 GT_64;  				/* Complexity Weight of 1 */
+	UWord32 LE_64;  				/* Complexity Weight of 1 */
+ 	UWord32 GE_64;  				/* Complexity Weight of 1 */
+ 	UWord32 EQ_64;  				/* Complexity Weight of 1 */
+ 	UWord32 NE_64;  				/* Complexity Weight of 1 */
+	
+#endif /* #ifdef CONTROL_CODE_OPS */
 } BASIC_OP;
 
 

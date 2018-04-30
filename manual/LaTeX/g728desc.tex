@@ -1,0 +1,58 @@
+%%
+%% THIS IS FILE: G728DESC.TEX, version of Jan/2008
+%% =================================================
+%%
+%\documentstyle[12pt,epsf,ugst]{book}
+\documentclass[12pt]{book}
+\usepackage{epsf,ugst}
+\usepackage{graphicx}
+
+ 
+\pagestyle{myheadings}
+
+% Special Parameters 
+\evensidemargin           0mm
+\oddsidemargin            0mm
+\parindent                0mm
+\parskip                  2mm
+\textheight             250mm %%% 240mm
+\textwidth              160mm
+
+%For postscript final deliverable
+\topmargin              -20mm
+% For PDF final deliverable via PS
+%%\topmargin              0mm
+
+
+
+% Special font size acronyms used in the first figure
+\def\sixsf{\footnotesize\tt}
+\def\egtsf{\small\tt}
+\def\fivsf{\tiny}
+\def\tenrm{\small\tt}
+\def\twlsf{\sf}
+
+% Define headers
+\def\ugsttitle{ ITU-T Software Tools Library, release 2008: G.728 }
+\markboth{ \ugsttitle \hfill Version: \today \hspace{1cm} }{ \hspace{1cm} }
+
+\def\TAU{$\tau_{\alpha,\nu}$}
+\def\us{$\mu$s}
+
+%==============================================================================
+\begin{document}
+%==============================================================================
+\SF
+
+\setcounter{chapter}{7}
+\setcounter{page}{55}
+%=============================================================================
+% chapter G.728: The ITU-T 16 kbit/s LD-CELP algorithm 
+%=============================================================================
+
+\input{g728}
+
+\bibliographystyle{unsrt}
+\bibliography{ugst} %/ default extension is ".BIB" %/
+
+\end{document}
