@@ -8,6 +8,10 @@
 #define Word64 long long int
 #endif
 
+#ifndef UWord64
+#define UWord64 unsigned long long int
+#endif
+
 #define MAX_64 (Word64)0x7fffffffffffffffLL
 #define MIN_64 (Word64)0x8000000000000000LL
 
