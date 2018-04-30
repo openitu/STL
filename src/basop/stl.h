@@ -33,7 +33,7 @@
 
 
 #if defined (ALLOW_ENH_UL32)
-#include "enhUL32.h"
+// #include "enhUL32.h"
 #endif
 
 #ifdef ENH_64_BIT_OPERATOR
