@@ -179,19 +179,19 @@ typedef int Bool;
 /*
  ********* Check current platform
  */
-#if defined(__MSDOS__)
+#if defined (__MSDOS__)
 #define PC
 #define PLATFORM "PC"
 #define LSBFIRST
-#elif defined(__osf__)
+#elif defined (__osf__)
 #define OSF
 #define PLATFORM "OSF"
 #define LSBFIRST
-#elif defined(__sun__) || defined(__sun)
+#elif defined (__sun__) || defined (__sun)
 #define SUN
 #define PLATFORM "SUN"
 #undef LSBFIRST
-#elif defined(linux) && defined(i386)
+#elif defined (linux) && defined (i386)
 #define PC
 #define PLATFORM "PC"
 #define LSBFIRST

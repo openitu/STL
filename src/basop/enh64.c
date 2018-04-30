@@ -75,23 +75,22 @@ extern int currCounter;
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
 |___________________________________________________________________________|
 */
-Word64 W_add_nosat (Word64 L64_var1, Word64 L64_var2)
-{
-	Word64 L64_var_out;
+Word64 W_add_nosat (Word64 L64_var1, Word64 L64_var2) { 
+  Word64 L64_var_out;
+ 
+  L64_var_out = L64_var1 + L64_var2;
 
-	L64_var_out = L64_var1 + L64_var2;
-
-#if (WMOPS)
-	multiCounter[currCounter].W_add_nosat++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_add_nosat++;
 #endif
-
-	return L64_var_out;
+ 
+  return L64_var_out;
 }
 
 
 /*___________________________________________________________________________
 |                                                                           |
-|   Function Name : W_sub_nosat                                           |
+|   Function Name : W_sub_nosat                                             |
 |                                                                           |
 |   Purpose :                                                               |
 |                                                                           |
@@ -118,23 +117,22 @@ Word64 W_add_nosat (Word64 L64_var1, Word64 L64_var2)
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
 |___________________________________________________________________________|
 */
-Word64 W_sub_nosat (Word64 L64_var1, Word64 L64_var2)
-{
-	Word64 L64_var_out;
+Word64 W_sub_nosat (Word64 L64_var1, Word64 L64_var2) { 
+  Word64 L64_var_out;
+ 
+  L64_var_out = L64_var1 - L64_var2;
 
-	L64_var_out = L64_var1 - L64_var2;
-
-#if (WMOPS)
-	multiCounter[currCounter].W_sub_nosat++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_sub_nosat++;
 #endif
-
-	return L64_var_out;
+ 
+  return L64_var_out;
 }
 
 
 /*___________________________________________________________________________
 |                                                                           |
-|   Function Name : W_shl                                                 |
+|   Function Name : W_shl                                                   |
 |                                                                           |
 |   Purpose :                                                               |
 |                                                                           |
@@ -165,54 +163,47 @@ Word64 W_sub_nosat (Word64 L64_var1, Word64 L64_var2)
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
 |___________________________________________________________________________|
 */
-Word64 W_shl (Word64 L64_var1, Word16 var2)
-{
-
-	Word64 L64_var_out = 0LL;
-
-	if (var2 <= 0)
-	{
-		if (var2 < -64)
-			var2 = -64;
-		var2 = -var2;
-		L64_var_out = L64_var1 >> var2;
-	}
-	else
-	{
-		for (; var2 > 0; var2--)
-		{
-			if (L64_var1 > (Word64)0X3fffffffffffffffLL)
-			{
-				Overflow = 1;
-				L64_var_out = (Word64)0X7fffffffffffffffLL;
-				break;
-			}
-			else
-			{
-				if (L64_var1 < (Word64) 0xc000000000000000LL)
-				{
-					Overflow = 1;
-					L64_var_out = (Word64)0x8000000000000000LL;
-					break;
-				}
-			}
-			L64_var1 *= 2;
-			L64_var_out = L64_var1;
-		}
-	}
-#if (WMOPS)
-	multiCounter[currCounter].W_shl++;
+Word64 W_shl (Word64 L64_var1, Word16 var2) {
+ 
+  Word64 L64_var_out = 0LL;
+ 
+  if (var2 <= 0) { 
+    if (var2 < -64) 
+      var2 = -64; 
+    var2 = -var2; 
+    L64_var_out = L64_var1 >> var2; 
+  } 
+  else { 
+    for (; var2 > 0; var2--) { 
+      if (L64_var1 > (Word64) 0X3fffffffffffffffLL) { 
+        Overflow = 1; 
+        L64_var_out = (Word64) 0X7fffffffffffffffLL; 
+        break; 
+      } 
+      else { 
+        if (L64_var1 < (Word64) 0xc000000000000000LL) { 
+          Overflow = 1; 
+          L64_var_out = (Word64)0x8000000000000000LL; 
+          break; 
+        } 
+      } 
+      L64_var1 *= 2; 
+      L64_var_out = L64_var1; 
+    } 
+  }
+#if (WMOPS) 
+  multiCounter[currCounter].W_shl++;
 #endif
-
-	BASOP_CHECK();
-
-	return (L64_var_out);
+ 
+  BASOP_CHECK();
+ 
+  return (L64_var_out);
 }
 
 
 /*___________________________________________________________________________
 |                                                                           |
-|   Function Name : W_shr                                                 |
+|   Function Name : W_shr                                                   |
 |                                                                           |
 |   Purpose :                                                               |
 |                                                                           |
@@ -243,27 +234,26 @@ Word64 W_shl (Word64 L64_var1, Word16 var2)
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
 |___________________________________________________________________________|
 */
-Word64 W_shr( Word64 L64_var1, Word16 var2) {
-	Word64 L64_var_out;
+Word64 W_shr (Word64 L64_var1, Word16 var2) {
+  Word64 L64_var_out;
+ 
+  if (var2 < 0) { 
+    var2 = -var2; 
+    L64_var_out  = W_shl (L64_var1, var2);
 
-	if( var2 < 0) {
-		var2 = -var2;
-		L64_var_out  = W_shl ( L64_var1, var2);
-
-#if (WMOPS)
-		multiCounter[currCounter].W_shl--;
+#if (WMOPS) 
+    multiCounter[currCounter].W_shl--;
 #endif /* if WMOPS */
+ 
+  } else { 
+    L64_var_out = L64_var1 >> var2;
+  }
 
-	} else {
-		L64_var_out = L64_var1 >> var2;
-
-	}
-
-#if (WMOPS)
-	multiCounter[currCounter].W_shr++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_shr++;
 #endif /* if WMOPS */
-
-	return( L64_var_out);
+ 
+  return (L64_var_out);
 }
 
 
@@ -275,7 +265,7 @@ Word64 W_shr( Word64 L64_var1, Word16 var2) {
 |                                                                           |
 | Arithmetically shifts left the 64-bit variable W_var1 by var2 positions.  |
 |  if var2 is negative, W_var1 is shifted to the least significant bits by  | 
-|  (–var2) positions with extension of the sign bit .                       |
+|  (ï¿½var2) positions with extension of the sign bit .                       |
 |  if var2 is positive, W_var1 is shifted to the most significant bits by   | 
 |   (var2) positions without saturation control on 64 bits.                 |
 |                                                                           |
@@ -301,27 +291,24 @@ Word64 W_shr( Word64 L64_var1, Word16 var2) {
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
 |___________________________________________________________________________|
 */
-Word64 W_shl_nosat (Word64 L64_var1, Word16 var2)
-{
-
-	Word64 L64_var_out = 0LL;
-
-	if (var2 <= 0)
-	{
-		var2 = -var2;
-		L64_var_out = L64_var1 >> var2;
-	}
-	else
-	{
-		L64_var_out = L64_var1 << var2;
-	}
-#if (WMOPS)
-	multiCounter[currCounter].W_shl_nosat++;
+Word64 W_shl_nosat (Word64 L64_var1, Word16 var2) {
+ 
+  Word64 L64_var_out = 0LL;
+ 
+  if (var2 <= 0) { 
+    var2 = -var2; 
+    L64_var_out = L64_var1 >> var2; 
+  } 
+  else { 
+    L64_var_out = L64_var1 << var2; 
+  }
+#if (WMOPS) 
+  multiCounter[currCounter].W_shl_nosat++;
 #endif
-
-	BASOP_CHECK();
-
-	return (L64_var_out);
+ 
+  BASOP_CHECK ();
+ 
+  return (L64_var_out);
 }
 
 
@@ -333,7 +320,7 @@ Word64 W_shl_nosat (Word64 L64_var1, Word16 var2)
 |                                                                           |
 | Arithmetically shifts right the 64-bit variable W_var1 by var2 positions. |
 |  if var2 is negative, W_var1 is shifted to the most significant bits by   | 
-|  (–var2) positions without saturation control on 64 bits.                 |
+|  (ï¿½var2) positions without saturation control on 64 bits.                 |
 |  if var2 is positive, W_var1 is shifted to the least significant bits by  | 
 |   (var2) positions with extension of the sign bit .                       |
 |                                                                           |
@@ -359,30 +346,28 @@ Word64 W_shl_nosat (Word64 L64_var1, Word16 var2)
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
 |___________________________________________________________________________|
 */
-Word64 W_shr_nosat ( Word64 L64_var1, Word16 var2) {
-	Word64 L64_var_out;
+Word64 W_shr_nosat (Word64 L64_var1, Word16 var2) { 
+  Word64 L64_var_out;
+ 
+  if (var2 < 0) { 
+    var2 = -var2; 
+    L64_var_out  =  L64_var1 << var2;
+ 
+  } else { 
+    L64_var_out = L64_var1 >> var2; 
+  }
 
-	if( var2 < 0) 
-	{
-		var2 = -var2;
-		L64_var_out  =  L64_var1 << var2;
-
-	} else 
-	{
-		L64_var_out = L64_var1 >> var2;
-	}
-
-#if (WMOPS)
-	multiCounter[currCounter].W_shr_nosat++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_shr_nosat++;
 #endif /* if WMOPS */
-
-	return( L64_var_out);
+ 
+  return (L64_var_out);
 }
 
 
 /*_________________________________________________________________________________________________
 |                                                                                                 |
-|   Function Name : W_mac_32_16                                                              |
+|   Function Name : W_mac_32_16                                                                   |
 |                                                                                                 |
 |   Purpose :                                                                                     |
 |                                                                                                 |
@@ -394,7 +379,7 @@ Word64 W_shr_nosat ( Word64 L64_var1, Word16 var2) {
 |   Inputs :                                                                                      |
 |                                                                                                 |
 |    L64_var1                                                                                     |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.                 |
 |                                                                                                 |
 |    L_var2                                                                                       |
@@ -412,24 +397,23 @@ Word64 W_shr_nosat ( Word64 L64_var1, Word16 var2) {
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_mac_32_16( Word64  L64_var1, Word32 L_var2, Word16 var3 )
-{
-	Word64  L64_var_out = ((Word64  )L_var2*var3) << 1;
-	L64_var_out += L64_var1;
-#if (WMOPS)
-	multiCounter[currCounter].W_mac_32_16++;
-#endif /* if WMOPS */	
-	return L64_var_out;
+Word64 W_mac_32_16 (Word64  L64_var1, Word32 L_var2, Word16 var3) { 
+  Word64  L64_var_out = ((Word64) L_var2*var3) << 1; 
+  L64_var_out += L64_var1;
+#if (WMOPS) 
+  multiCounter[currCounter].W_mac_32_16++;
+#endif /* if WMOPS */ 
+  return L64_var_out;
 } 
 
 
 /*_________________________________________________________________________________________________
 |                                                                                                 |
-|   Function Name : W_msu_32_16                                                              |
+|   Function Name : W_msu_32_16                                                                   |
 |                                                                                                 |
 |   Purpose :                                                                                     |
 |                                                                                                 |
@@ -441,7 +425,7 @@ Word64 W_mac_32_16( Word64  L64_var1, Word32 L_var2, Word16 var3 )
 |   Inputs :                                                                                      |
 |                                                                                                 |
 |    L64_var1                                                                                     |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.                 |
 |                                                                                                 |
 |    L_var2                                                                                       |
@@ -459,18 +443,17 @@ Word64 W_mac_32_16( Word64  L64_var1, Word32 L_var2, Word16 var3 )
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_msu_32_16( Word64  L64_var1, Word32 L_var2, Word16 var3 )
-{
-	Word64  L64_var_out = ((Word64  )L_var2*var3) << 1;
-	L64_var_out = L64_var1 - L64_var_out;
-#if (WMOPS)
-	multiCounter[currCounter].W_msu_32_16++;
-#endif /* if WMOPS */	
-	return L64_var_out;
+Word64 W_msu_32_16(Word64  L64_var1, Word32 L_var2, Word16 var3) { 
+  Word64  L64_var_out = ((Word64 )L_var2*var3) << 1; 
+  L64_var_out = L64_var1 - L64_var_out;
+#if (WMOPS) 
+  multiCounter[currCounter].W_msu_32_16++;
+#endif /* if WMOPS */
+  return L64_var_out;
 } 
 
 
@@ -501,17 +484,16 @@ Word64 W_msu_32_16( Word64  L64_var1, Word32 L_var2, Word16 var3 )
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_mult_32_16( Word32 L_var1, Word16 var2 )
-{
-	Word64  L64_var_out = ((Word64  )L_var1*var2) << 1;
-#if (WMOPS)
-	multiCounter[currCounter].W_mult_32_16++;
-#endif /* if WMOPS */	
-	return L64_var_out;
+Word64 W_mult_32_16(Word32 L_var1, Word16 var2) { 
+  Word64  L64_var_out = ((Word64 )L_var1*var2) << 1;
+#if (WMOPS) 
+  multiCounter[currCounter].W_mult_32_16++;
+#endif /* if WMOPS */
+  return L64_var_out;
 } 
 
 /*________________________________________________________________________________________________
@@ -541,22 +523,21 @@ Word64 W_mult_32_16( Word32 L_var1, Word16 var2 )
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_acc <= 0x7fffffff ffffffffLL.                  |
 |_________________________________________________________________________________________________|
 */
-Word64 W_mult0_16_16( Word16 var1, Word16 var2 )
-{
-	Word64  L64_var_out = (Word64  )var1*var2;
-#if (WMOPS)
-	multiCounter[currCounter].W_mult0_16_16++;
-#endif /* if WMOPS */		
-	return L64_var_out;
+Word64 W_mult0_16_16(Word16 var1, Word16 var2) { 
+  Word64  L64_var_out = (Word64 )var1*var2;
+#if (WMOPS) 
+  multiCounter[currCounter].W_mult0_16_16++;
+#endif /* if WMOPS */
+  return L64_var_out;
 } 
 
 /*________________________________________________________________________________________________
 |                                                                                                 |
-|   Function Name : W_mac0_16_16                                                             |
+|   Function Name : W_mac0_16_16                                                                  |
 |                                                                                                 |
 |   Purpose :                                                                                     |
 |                                                                                                 |
@@ -567,7 +548,7 @@ Word64 W_mult0_16_16( Word16 var1, Word16 var2 )
 |   Inputs :                                                                                      |
 |                                                                                                 |
 |    L64_var1                                                                                     |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.                 |
 |                                                                                                 |
 |    var2                                                                                         |
@@ -585,24 +566,23 @@ Word64 W_mult0_16_16( Word16 var1, Word16 var2 )
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_mac0_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
-{
-	Word64  L64_var_out = (Word64  )var2*var3;
-	L64_var_out += L64_var1;
-#if (WMOPS)
-	multiCounter[currCounter].W_mac0_16_16++;
-#endif /* if WMOPS */		
-	return L64_var_out;
+Word64 W_mac0_16_16(Word64 L64_var1, Word16 var2, Word16 var3) { 
+  Word64  L64_var_out = (Word64 )var2*var3; 
+  L64_var_out += L64_var1;
+#if (WMOPS) 
+  multiCounter[currCounter].W_mac0_16_16++;
+#endif /* if WMOPS */
+  return L64_var_out;
 } 
 
 
 /*________________________________________________________________________________________________
 |                                                                                                 |
-|   Function Name : W_msu0_16_16                                                             |
+|   Function Name : W_msu0_16_16                                                                  |
 |                                                                                                 |
 |   Purpose :                                                                                     |
 |                                                                                                 |
@@ -613,7 +593,7 @@ Word64 W_mac0_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
 |   Inputs :                                                                                      |
 |                                                                                                 |
 |    L64_var1                                                                                     |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.                 |
 |                                                                                                 |
 |    var2                                                                                         |
@@ -631,18 +611,17 @@ Word64 W_mac0_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_msu0_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
-{
-	Word64  L64_var_out = (Word64  )var2*var3;
-	L64_var_out = L64_var1 - L64_var_out;
-#if (WMOPS)
-	multiCounter[currCounter].W_msu0_16_16++;
-#endif /* if WMOPS */		
-	return L64_var_out;
+Word64 W_msu0_16_16 (Word64 L64_var1, Word16 var2, Word16 var3) { 
+  Word64  L64_var_out = (Word64) var2*var3; 
+  L64_var_out = L64_var1 - L64_var_out;
+#if (WMOPS) 
+  multiCounter[currCounter].W_msu0_16_16++;
+#endif /* if WMOPS */
+  return L64_var_out;
 } 
 
 
@@ -660,7 +639,7 @@ Word64 W_msu0_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
 |   Inputs :                                                                          |
 |                                                                                     |
 |    L64_var                                                                          |
-|             64 bit long long signed integer (Word64 ) whose value falls in the      |
+|             64 bit long long signed integer (Word64) whose value falls in the      |
 |             range : 0x80000000 00000000LL <= L64_var <= 0x7fffffff ffffffffLL.      |
 |                                                                                     |
 |   Outputs :                                                                         |
@@ -674,28 +653,24 @@ Word64 W_msu0_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
 |             range : 0x8000 0000 <= L_var_out <= 0x7fff 0000.                        |
 |_____________________________________________________________________________________|
 */
-Word32 W_sat_l( Word64 L64_var )
-{
-	Word32 L_var_out;
+Word32 W_sat_l (Word64 L64_var) {
+  Word32 L_var_out;
+ 
+  if (L64_var > 0x7FFFFFFF) { 
+    L_var_out = 0x7FFFFFFF; 
+  } 
+  else if (L64_var < (int)0x80000000) { 
+    L_var_out = 0x80000000; 
+  } 
+  else { 
+    L_var_out = (Word32)L64_var; 
+  }
 
-	if ( L64_var > 0x7FFFFFFF )
-	{
-		L_var_out = 0x7FFFFFFF;
-	}
-	else if ( L64_var < (int)0x80000000 )
-	{
-		L_var_out = 0x80000000;
-	}
-	else
-	{
-		L_var_out = (Word32)L64_var;
-	}	
-
-#if (WMOPS)
-	multiCounter[currCounter].W_sat_l++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_sat_l++;
 #endif /* if WMOPS */
-
-	return L_var_out;
+ 
+  return L_var_out;
 }
 
 
@@ -714,7 +689,7 @@ Word32 W_sat_l( Word64 L64_var )
 |   Inputs :                                                                          |
 |                                                                                     |
 |    L64_var                                                                          |
-|             64 bit long long signed integer (Word64 ) whose value falls in the      |
+|             64 bit long long signed integer (Word64) whose value falls in the      |
 |             range : 0x80000000 00000000LL <= L64_var <= 0x7fffffff ffffffffLL.      |
 |                                                                                     |
 |   Outputs :                                                                         |
@@ -728,19 +703,18 @@ Word32 W_sat_l( Word64 L64_var )
 |             range : 0x8000 0000 <= L_var_out <= 0x7fff 0000.                        |
 |_____________________________________________________________________________________|
 */
-Word32 W_sat_m( Word64 L64_var )
-{
-	Word32 L_var_out;
+Word32 W_sat_m (Word64 L64_var) {
+  Word32 L_var_out;
+ 
+  L64_var = L64_var >> 16; 
+  L_var_out = W_sat_l (L64_var);
 
-	L64_var = L64_var >> 16;
-	L_var_out = W_sat_l(L64_var);
-
-#if (WMOPS)
-	multiCounter[currCounter].W_sat_l--;
-	multiCounter[currCounter].W_sat_m++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_sat_l--; 
+  multiCounter[currCounter].W_sat_m++;
 #endif /* if WMOPS */
-
-	return L_var_out;
+ 
+  return L_var_out;
 }
 
 
@@ -771,17 +745,16 @@ Word32 W_sat_m( Word64 L64_var )
 |             range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.  |
 |__________________________________________________________________________________|
 */
-Word64 W_deposit32_l (Word32 L_var1)
-{
-	Word64 L64_var_out;
+Word64 W_deposit32_l (Word32 L_var1) { 
+  Word64 L64_var_out;
+ 
+  L64_var_out = (Word64) L_var1;
 
-	L64_var_out = (Word64) L_var1;
-
-#if (WMOPS)
-	multiCounter[currCounter].W_deposit32_l++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_deposit32_l++;
 #endif
-
-	return (L64_var_out);
+ 
+  return (L64_var_out);
 }
 
 
@@ -812,17 +785,16 @@ Word64 W_deposit32_l (Word32 L_var1)
 |             range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.  |
 |__________________________________________________________________________________|
 */
-Word64 W_deposit32_h (Word32 L_var1)
-{
-	Word64 L64_var_out;
+Word64 W_deposit32_h (Word32 L_var1) { 
+  Word64 L64_var_out;
+ 
+  L64_var_out = (Word64) L_var1 << 32;
 
-	L64_var_out = (Word64) L_var1 << 32;
-
-#if (WMOPS)
-	multiCounter[currCounter].W_deposit32_h++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_deposit32_h++;
 #endif
-
-	return (L64_var_out);
+ 
+  return (L64_var_out);
 }
 
 
@@ -853,17 +825,16 @@ Word64 W_deposit32_h (Word32 L_var1)
 |             range : 0x8000 0000 <= L_var_out <= 0x7fff 0000.                     |
 |__________________________________________________________________________________|
 */
-Word32 W_extract_l( Word64 L64_var1) 
-{
-	Word32 L_var_out;
+Word32 W_extract_l (Word64 L64_var1) {
+  Word32 L_var_out;
+ 
+  L_var_out = (Word32) L64_var1;
 
-	L_var_out = ( Word32) L64_var1;
-
-#if (WMOPS)
-	multiCounter[currCounter].W_extract_l++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_extract_l++;
 #endif /* if WMOPS */
-
-	return(L_var_out);
+ 
+  return (L_var_out);
 }
 
 
@@ -895,17 +866,16 @@ Word32 W_extract_l( Word64 L64_var1)
 |             range : 0x8000 0000 <= L_var_out <= 0x7fff 0000.                     |
 |__________________________________________________________________________________|
 */
-Word32 W_extract_h( Word64 L64_var1) 
-{
-	Word32 L_var_out;
+Word32 W_extract_h (Word64 L64_var1) {
+  Word32 L_var_out;
+ 
+  L_var_out = (Word32) (L64_var1 >> 32);
 
-	L_var_out = (Word32) (L64_var1 >> 32);
-
-#if (WMOPS)
-	multiCounter[currCounter].W_extract_h++;
+#if (WMOPS) 
+  multiCounter[currCounter].W_extract_h++;
 #endif /* if WMOPS */
-
-	return(L_var_out);
+ 
+  return (L_var_out);
 }
 
 
@@ -937,17 +907,16 @@ Word32 W_extract_h( Word64 L64_var1)
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_acc <= 0x7fffffff ffffffffLL.                  |
 |_________________________________________________________________________________________________|
 */
-Word64 W_mult_16_16( Word16 var1, Word16 var2 )
-{
-	Word64  L64_var_out = ((Word64  )var1*var2) << 1;
-#if (WMOPS)
-	multiCounter[currCounter].W_mult_16_16++;
-#endif /* if WMOPS */		
-	return L64_var_out;
+Word64 W_mult_16_16 (Word16 var1, Word16 var2) { 
+  Word64  L64_var_out = ((Word64) var1*var2) << 1;
+#if (WMOPS) 
+  multiCounter[currCounter].W_mult_16_16++;
+#endif /* if WMOPS */
+  return L64_var_out;
 } 
 /*________________________________________________________________________________________________
 |                                                                                                 |
@@ -956,14 +925,14 @@ Word64 W_mult_16_16( Word16 var1, Word16 var2 )
 |   Purpose :                                                                                     |
 |                                                                                                 |
 |   Multiply var1 by var2 and shift the result left by 1 and add the 64 bit result to L64_acc,    |
-|	 return a 64 bit result.																	   |
+|   return a 64 bit result.                                                                       |
 |                                                                                                 |
 |   Complexity weight : 1                                                                         |
 |                                                                                                 |
 |   Inputs :                                                                                      |
 |                                                                                                 |
 |    L64_acc                                                                                      |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_acc <= 0x7fffffff ffffffffLL.                  |
 |                                                                                                 |
 |    var1                                                                                         |
@@ -981,19 +950,18 @@ Word64 W_mult_16_16( Word16 var1, Word16 var2 )
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_mac_16_16( Word64  L64_acc, Word16 var1, Word16 var2 )
-{
-	Word64  L64_var_out = ((Word64  )var1*var2) << 1;
-	L64_acc = L64_acc + L64_var_out;
+Word64 W_mac_16_16 (Word64 L64_acc, Word16 var1, Word16 var2) { 
+  Word64  L64_var_out = ((Word64) var1*var2) << 1;
+  L64_acc = L64_acc + L64_var_out;
 
-#if (WMOPS)
-	multiCounter[currCounter].W_mac_16_16++;
-#endif /* if WMOPS */		
-	return L64_acc;
+#if (WMOPS) 
+  multiCounter[currCounter].W_mac_16_16++;
+#endif /* if WMOPS */
+  return L64_acc;
 } 
 
 
@@ -1005,14 +973,14 @@ Word64 W_mac_16_16( Word64  L64_acc, Word16 var1, Word16 var2 )
 |   Purpose :                                                                                     |
 |                                                                                                 |
 |   Multiply var2 by var3 and shift the result left by1 and subtract the 64 bit result            |
-|	 from L64_var1, return a 64 bit result.                                                        |
+|   from L64_var1, return a 64 bit result.                                                        |
 |                                                                                                 |
 |   Complexity weight : 1                                                                         |
 |                                                                                                 |
 |   Inputs :                                                                                      |
 |                                                                                                 |
 |    L64_var1                                                                                     |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.                 |
 |                                                                                                 |
 |    var2                                                                                         |
@@ -1030,18 +998,17 @@ Word64 W_mac_16_16( Word64  L64_acc, Word16 var1, Word16 var2 )
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_msu_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
-{
-	Word64  L64_var_out = ((Word64  )var2*var3) << 1;
-	L64_var_out = L64_var1 - L64_var_out;
-#if (WMOPS)
-	multiCounter[currCounter].W_msu_16_16++;
-#endif /* if WMOPS */		
-	return L64_var_out;
+Word64 W_msu_16_16 (Word64 L64_var1, Word16 var2, Word16 var3) { 
+  Word64  L64_var_out = ((Word64)var2*var3) << 1; 
+  L64_var_out = L64_var1 - L64_var_out;
+#if (WMOPS) 
+  multiCounter[currCounter].W_msu_16_16++;
+#endif /* if WMOPS */
+  return L64_var_out;
 } 
 
 
@@ -1059,7 +1026,7 @@ Word64 W_msu_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
 |   Inputs :                                                                |
 |                                                                           |
 |    L64_var                                                                |
-|				64 bit long signed integer (Word64) whose value falls in the |
+|       64 bit long signed integer (Word64) whose value falls in the        |
 |       range : 0x80000000 00000000LL <= L64_var <= 0x7fffffff ffffffffLL.  |
 |                                                                           |
 |    n                                                                      |
@@ -1077,21 +1044,20 @@ Word64 W_msu_16_16( Word64 L64_var1, Word16 var2, Word16 var3 )
 |             range : 0x8000 0000 <= L_result <= 0x7fff 0000.               |
 |___________________________________________________________________________|
 */
-Word32 W_shl_sat_l( Word64 L64_var, Word32 n )
-{
-	Word32 L_result;	
-	Word64 d_var_64;
+Word32 W_shl_sat_l (Word64 L64_var, Word32 n) { 
+  Word32 L_result;
+  Word64 d_var_64;
+ 
+  d_var_64 = W_shl (L64_var, n);
+  L_result = W_sat_l (d_var_64);
 
-	d_var_64 = W_shl( L64_var, n );	
-	L_result = W_sat_l( d_var_64 );	
-
-#if (WMOPS)
-	multiCounter[currCounter].W_shl_sat_l++;
-	multiCounter[currCounter].W_shl--;
-	multiCounter[currCounter].W_sat_l--;
+#if (WMOPS) 
+  multiCounter[currCounter].W_shl_sat_l++; 
+  multiCounter[currCounter].W_shl--; 
+  multiCounter[currCounter].W_sat_l--;
 #endif /* if WMOPS */
-
-	return L_result;
+ 
+  return L_result;
 }
 
 
@@ -1102,7 +1068,7 @@ Word32 W_shl_sat_l( Word64 L64_var, Word32 n )
 |   Purpose :                                                                      |
 |                                                                                  |
 |  Round asymmetrically lower 16 bits, and                                         | 
-|	saturate the 17.47-bit values to 1.31-bit values                                | 
+|  saturate the 17.47-bit values to 1.31-bit values                                | 
 |   Complexity weight : 1                                                          |
 |                                                                                  |
 |   Inputs :                                                                       |
@@ -1122,46 +1088,42 @@ Word32 W_shl_sat_l( Word64 L64_var, Word32 n )
 |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.                     |
 |__________________________________________________________________________________|
 */
-Word32 W_round48_L( Word64 L64_var1) 
-{
-	Word64 L64_var_out;
-	Word32 L_result;
-
-
-	Word64 L64_var2 = 0x80000000;
-	Word64 L64_MIN  = 0x8000000000000000LL;
-	Word64 L64_MAX  = 0x7FFFFFFFFFFFFFFFLL;
-
-	L64_var1  = W_shl( L64_var1, 16);
-
-	L64_var_out = L64_var1 + L64_var2;
-
-	if (((L64_var1 ^ L64_var2) & L64_MIN) == 0)
-	{
-		if ((L64_var_out ^ L64_var1) & L64_MIN)
-		{
-			L64_var_out = (L64_var1 < 0) ? L64_MIN : L64_MAX;
-			Overflow = 1;
-		}
-	}
-	L_result = W_extract_h( L64_var_out );
-#if (WMOPS)
-	multiCounter[currCounter].W_round48_L++;
-	multiCounter[currCounter].W_extract_h--;
-	multiCounter[currCounter].W_shl--;
+Word32 W_round48_L (Word64 L64_var1) { 
+  Word64 L64_var_out; 
+  Word32 L_result;
+ 
+  Word64 L64_var2 = 0x80000000; 
+  Word64 L64_MIN  = 0x8000000000000000LL; 
+  Word64 L64_MAX  = 0x7FFFFFFFFFFFFFFFLL;
+ 
+  L64_var1  = W_shl (L64_var1, 16);
+ 
+  L64_var_out = L64_var1 + L64_var2;
+ 
+  if ( ( (L64_var1 ^ L64_var2) & L64_MIN) == 0) { 
+    if ( (L64_var_out ^ L64_var1) & L64_MIN) { 
+      L64_var_out = (L64_var1 < 0) ? L64_MIN : L64_MAX; 
+      Overflow = 1; 
+    } 
+  }
+  L_result = W_extract_h (L64_var_out);
+#if (WMOPS) 
+  multiCounter[currCounter].W_round48_L++; 
+  multiCounter[currCounter].W_extract_h--; 
+  multiCounter[currCounter].W_shl--;
 #endif /* if WMOPS */
-
-	return(L_result);
+ 
+  return (L_result);
 }
 
 /*__________________________________________________________________________________
 |                                                                                  |
-|   Function Name : W_round32_s                                                     |
+|   Function Name : W_round32_s                                                    |
 |                                                                                  |
 |   Purpose :                                                                      |
 |                                                                                  |
 |  Round asymmetrically lower 32 bits, and                                         | 
-|	saturate the 17.47-bit values to 1.15-bit values                                | 
+|  saturate the 17.47-bit values to 1.15-bit values                                | 
 |   Complexity weight : 1                                                          |
 |                                                                                  |
 |   Inputs :                                                                       |
@@ -1176,43 +1138,40 @@ Word32 W_round48_L( Word64 L64_var1)
 |                                                                                  |
 |   Return Value :                                                                 |
 |                                                                                  |
-|    var_out                                                                |
-|             16 bit short signed integer (Word16) whose value falls in the |
-|             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
+|    var_out                                                                       |
+|             16 bit short signed integer (Word16) whose value falls in the        |
+|             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                       |
 |__________________________________________________________________________________|
 */
-Word16 W_round32_s ( Word64 L64_var1) 
-{
-	Word64 L64_var_out;
-	Word32 L_var;
-	Word16 var_out;
+Word16 W_round32_s (Word64 L64_var1) { 
+  Word64 L64_var_out; 
+  Word32 L_var; 
+  Word16 var_out;
 
-
-	Word64 L64_var2 = 0x800000000000LL;
-	Word64 L64_MIN  = 0x8000000000000000LL;
-	Word64 L64_MAX  = 0x7FFFFFFFFFFFFFFFLL;
-
-	L64_var1  = W_shl( L64_var1, 16);
-	L64_var_out = L64_var1 + L64_var2;
-
-	if (((L64_var1 ^ L64_var2) & L64_MIN) == 0)
-	{
-		if ((L64_var_out ^ L64_var1) & L64_MIN)
-		{
-			L64_var_out = (L64_var1 < 0) ? L64_MIN : L64_MAX;
-			Overflow = 1;
-		}
-	}
-	L_var = W_extract_h( L64_var_out );
-	var_out = extract_h( L_var );
-#if (WMOPS)
-	multiCounter[currCounter].W_round32_s ++;
-	multiCounter[currCounter].W_extract_h--;
-	multiCounter[currCounter].extract_h--;
-	multiCounter[currCounter].W_shl--;
+ 
+  Word64 L64_var2 = 0x800000000000LL; 
+  Word64 L64_MIN  = 0x8000000000000000LL; 
+  Word64 L64_MAX  = 0x7FFFFFFFFFFFFFFFLL;
+ 
+  L64_var1  = W_shl (L64_var1, 16);
+  L64_var_out = L64_var1 + L64_var2;
+ 
+  if (((L64_var1 ^ L64_var2) & L64_MIN) == 0) { 
+    if ((L64_var_out ^ L64_var1) & L64_MIN) { 
+      L64_var_out = (L64_var1 < 0) ? L64_MIN : L64_MAX; 
+      Overflow = 1; 
+    } 
+  } 
+  L_var = W_extract_h (L64_var_out); 
+  var_out = extract_h (L_var);
+#if (WMOPS) 
+  multiCounter[currCounter].W_round32_s ++; 
+  multiCounter[currCounter].W_extract_h--; 
+  multiCounter[currCounter].extract_h--; 
+  multiCounter[currCounter].W_shl--;
 #endif /* if WMOPS */
-
-	return(var_out);
+ 
+  return (var_out);
 }
 /*___________________________________________________________________________
 |                                                                           |
@@ -1242,35 +1201,28 @@ Word16 W_round32_s ( Word64 L64_var1)
 |             range : 0x0000 0000 <= var_out <= 0x0000 003f.                |
 |___________________________________________________________________________|
 */
-Word16 W_norm (Word64 L64_var1)
-{
-	Word16 var_out;
-	if (L64_var1 == 0)
-	{
-		var_out = 0;
-	}
-	else
-	{
-		if (L64_var1 == (Word64) 0xffffffffffffffffLL)
-		{
-			var_out = 63;
-		}
-		else
-		{
-			if (L64_var1 < 0)
-			{
-				L64_var1 = ~L64_var1;
-			}
-			for (var_out = 0; L64_var1 < (Word64) 0x4000000000000000LL; var_out++)
-			{
-				L64_var1 <<= 1;
-			}
-		}
-	}
-#if (WMOPS)
-	multiCounter[currCounter].W_norm ++;
-#endif /* if WMOPS */	
-	return (var_out);
+Word16 W_norm (Word64 L64_var1) { 
+  Word16 var_out; 
+  if (L64_var1 == 0) { 
+    var_out = 0; 
+  } 
+  else { 
+    if (L64_var1 == (Word64) 0xffffffffffffffffLL) { 
+      var_out = 63; 
+    } 
+    else { 
+      if (L64_var1 < 0) { 
+        L64_var1 = ~L64_var1; 
+      }
+      for (var_out = 0; L64_var1 < (Word64) 0x4000000000000000LL; var_out++) { 
+        L64_var1 <<= 1; 
+      } 
+    } 
+  }
+#if (WMOPS) 
+  multiCounter[currCounter].W_norm ++;
+#endif /* if WMOPS */
+  return (var_out);
 }
 
 
@@ -1306,25 +1258,22 @@ Word16 W_norm (Word64 L64_var1)
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.     |
 |_______________________________________________________________________________|
 */
-Word64 W_add (Word64 L64_var1, Word64 L64_var2)
-{
-	Word64 L64_var_out;
+Word64 W_add (Word64 L64_var1, Word64 L64_var2) { 
+  Word64 L64_var_out;
+ 
+  L64_var_out = L64_var1 + L64_var2;
 
-	L64_var_out = L64_var1 + L64_var2;
-
-    if (((L64_var1 ^ L64_var2) & MIN_64) == 0)
-    {
-        if ((L64_var_out ^ L64_var1) & MIN_64)
-        {
+    if (((L64_var1 ^ L64_var2) & MIN_64) == 0) {
+        if ((L64_var_out ^ L64_var1) & MIN_64) {
             L64_var_out = (L64_var1 < 0) ? MIN_64 : MAX_64;
             Overflow = 1;
         }
     }
 
-#if (WMOPS)
-	multiCounter[currCounter].W_add++;
-#endif
-	return L64_var_out;
+#if (WMOPS) 
+  multiCounter[currCounter].W_add++;
+#endif 
+  return L64_var_out;
 }
 
 /*______________________________________________________________________________
@@ -1358,25 +1307,22 @@ Word64 W_add (Word64 L64_var1, Word64 L64_var2)
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.     |
 |_______________________________________________________________________________|
 */
-Word64 W_sub (Word64 L64_var1, Word64 L64_var2)
-{
-	Word64 L64_var_out;
+Word64 W_sub (Word64 L64_var1, Word64 L64_var2) { 
+  Word64 L64_var_out;
+ 
+  L64_var_out = L64_var1 - L64_var2;
 
-	L64_var_out = L64_var1 - L64_var2;
-
-    if (((L64_var1 ^ L64_var2) & MIN_64) != 0)
-    {
-        if ((L64_var_out ^ L64_var1) & MIN_64)
-        {
+    if (((L64_var1 ^ L64_var2) & MIN_64) != 0) {
+        if ((L64_var_out ^ L64_var1) & MIN_64) {
             L64_var_out = (L64_var1 < 0) ? MIN_64 : MAX_64;
             Overflow = 1;
         }
     }
 
-#if (WMOPS)
-	multiCounter[currCounter].W_add++;
-#endif
-	return L64_var_out;
+#if (WMOPS) 
+  multiCounter[currCounter].W_add++;
+#endif 
+  return L64_var_out;
 }
 
 
@@ -1407,19 +1353,16 @@ Word64 W_sub (Word64 L64_var1, Word64 L64_var2)
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.     |
 |_______________________________________________________________________________|
 */
-Word64 W_neg (Word64 L64_var1)
-{
+Word64 W_neg (Word64 L64_var1) {
     Word64 L64_var_out;
-    
-	if( L64_var1 == MIN_64 )
-	{
-		L64_var_out = MAX_64;
-        Overflow = 1;
-	}
-	else
-	{
-		L64_var_out = -L64_var1;
-	}
+     
+  if (L64_var1 == MIN_64) { 
+    L64_var_out = MAX_64;
+        Overflow = 1; 
+  } 
+  else { 
+    L64_var_out = -L64_var1; 
+  }
 
 #if (WMOPS)
     multiCounter[currCounter].W_neg++;
@@ -1457,23 +1400,18 @@ Word64 W_neg (Word64 L64_var1)
  |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
  |___________________________________________________________________________|
 */
-Word64 W_abs (Word64 L64_var1)
-{
+Word64 W_abs (Word64 L64_var1) {
     Word64 L64_var_out;
 
-    if (L64_var1 == MIN_64)
-    {
-        L64_var_out = MAX_64;
-		Overflow = 1;
+    if (L64_var1 == MIN_64) {
+        L64_var_out = MAX_64; 
+    Overflow = 1;
     }
-    else
-    {
-        if (L64_var1 < 0)
-        {
+    else {
+        if (L64_var1 < 0) {
             L64_var_out = -L64_var1;
         }
-        else
-        {
+        else {
             L64_var_out = L64_var1;
         }
     }
@@ -1513,28 +1451,25 @@ Word64 W_abs (Word64 L64_var1)
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_mult_32_32( Word32 L_var1, Word32 L_var2 )
-{
-	Word64  L64_var_out;
-	
-	if ( ( L_var1 == MIN_32 ) && ( L_var2 == MIN_32 ) )
-	{
-		L64_var_out = MAX_64;
-		Overflow = 1;
-	}
-	else
-	{
-		L64_var_out = ((Word64  )L_var1*L_var2) << 1;
-	}
+Word64 W_mult_32_32(Word32 L_var1, Word32 L_var2) { 
+  Word64  L64_var_out; 
+   
+  if ((L_var1 == MIN_32) && (L_var2 == MIN_32)) { 
+    L64_var_out = MAX_64; 
+    Overflow = 1; 
+  } 
+  else { 
+    L64_var_out = ((Word64 )L_var1*L_var2) << 1; 
+  }
 
-#if (WMOPS)
-	multiCounter[currCounter].W_mult_32_32++;
-#endif /* if WMOPS */	
-	return L64_var_out;
+#if (WMOPS) 
+  multiCounter[currCounter].W_mult_32_32++;
+#endif /* if WMOPS */ 
+  return L64_var_out;
 }
 
 /*_________________________________________________________________________________________________
@@ -1564,21 +1499,20 @@ Word64 W_mult_32_32( Word32 L_var1, Word32 L_var2 )
 |   Return Value :                                                                                |
 |                                                                                                 |
 |    L64_var_out                                                                                  |
-|			   64 bit long long signed integer (Word64) whose value falls in the                   |
+|             64 bit long long signed integer (Word64) whose value falls in the                   |
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
-Word64 W_mult0_32_32( Word32 L_var1, Word32 L_var2 )
-{
-	Word64  L64_var_out;
+Word64 W_mult0_32_32 (Word32 L_var1, Word32 L_var2) { 
+  Word64  L64_var_out;
+ 
+  L64_var_out = (Word64) L_var1*L_var2;
 
-	L64_var_out = (Word64  )L_var1*L_var2;
 
-
-#if (WMOPS)
-	multiCounter[currCounter].W_mult0_32_32++;
-#endif /* if WMOPS */	
-	return L64_var_out;
+#if (WMOPS) 
+  multiCounter[currCounter].W_mult0_32_32++;
+#endif /* if WMOPS */
+  return L64_var_out;
 }
 
 
@@ -1614,24 +1548,21 @@ Word64 W_mult0_32_32( Word32 L_var1, Word32 L_var2 )
 |    in the range : 0LL <= L64_var1 <= 0xffffffff ffffffffLL.                  |
 |______________________________________________________________________________|
 */
-UWord64 W_lshl (UWord64 L64_var1, Word16 var2)
-{
-
-	UWord64 L64_var_out = 0LL;
-
-	if (var2 < 0)
-	{
-		L64_var_out = L64_var1 >> (-var2);
-	}
-	else
-	{
-		L64_var_out = L64_var1 << var2 ;
-	}
-#if (WMOPS)
-	multiCounter[currCounter].W_lshl++;
+UWord64 W_lshl (UWord64 L64_var1, Word16 var2) {
+ 
+  UWord64 L64_var_out = 0LL;
+ 
+  if (var2 < 0) { 
+    L64_var_out = L64_var1 >> (-var2); 
+  } 
+  else { 
+    L64_var_out = L64_var1 << var2 ; 
+  }
+#if (WMOPS) 
+  multiCounter[currCounter].W_lshl++;
 #endif
-
-	return (L64_var_out);
+ 
+  return (L64_var_out);
 }
 
 /*_____________________________________________________________________________
@@ -1640,9 +1571,9 @@ UWord64 W_lshl (UWord64 L64_var1, Word16 var2)
 |                                                                              |
 |   Purpose :                                                                  |
 |                                                                              |
-|   Logically shift the 64 bit unsigned input L64_var1 right by var2 positions. | 
+|   Logically shift the 64 bit unsigned input L64_var1 right by var2 positions.|
 |   Zero fill the var2 MSB of the result. If var2 is negative, logically shift |
-|   L64_var1 left by -var2 with zero fill in the LSB.                         |
+|   L64_var1 left by -var2 with zero fill in the LSB.                          |
 |                                                                              |
 |   Complexity weight : 1                                                      |
 |                                                                              |
@@ -1666,35 +1597,32 @@ UWord64 W_lshl (UWord64 L64_var1, Word16 var2)
 |    in the range : 0LL <= L64_var1 <= 0xffffffff ffffffffLL.                  |
 |______________________________________________________________________________|
 */
-UWord64 W_lshr (UWord64 L64_var1, Word16 var2)
-{
-
-	UWord64 L64_var_out = 0LL;
-
-	if (var2 < 0)
-	{
-		L64_var_out = L64_var1 << (-var2);
-	}
-	else
-	{
-		L64_var_out = L64_var1 >> var2 ;
-	}
-#if (WMOPS)
-	multiCounter[currCounter].W_lshr++;
+UWord64 W_lshr (UWord64 L64_var1, Word16 var2) {
+ 
+  UWord64 L64_var_out = 0LL;
+ 
+  if (var2 < 0) { 
+    L64_var_out = L64_var1 << (-var2); 
+  } 
+  else { 
+    L64_var_out = L64_var1 >> var2 ; 
+  }
+#if (WMOPS) 
+  multiCounter[currCounter].W_lshr++;
 #endif
-
-	return (L64_var_out);
+ 
+  return (L64_var_out);
 }
 
 
 /*__________________________________________________________________________________
 |                                                                                  |
-|   Function Name : W_round64_L                                                     |
+|   Function Name : W_round64_L                                                    |
 |                                                                                  |
 |   Purpose :                                                                      |
 |                                                                                  |
 |  Round asymmetrically lower 32 bits, and                                         | 
-|	saturate the 1.63-bit values to 1.31-bit values                                | 
+|  saturate the 1.63-bit values to 1.31-bit values                                 | 
 |   Complexity weight : 1                                                          |
 |                                                                                  |
 |   Inputs :                                                                       |
@@ -1714,23 +1642,22 @@ UWord64 W_lshr (UWord64 L64_var1, Word16 var2)
 |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.                     |
 |__________________________________________________________________________________|
 */
-Word32 W_round64_L ( Word64 L64_var1) 
-{
-	Word64 L64_var_out;
-	Word32 L_result;
+Word32 W_round64_L (Word64 L64_var1) { 
+  Word64 L64_var_out; 
+  Word32 L_result;
 
+ 
+  Word64 L64_tmp = 0x80000000; 
+  L64_var_out = W_add (L64_var1, L64_tmp);
+  L_result = W_extract_h (L64_var_out);
 
-	Word64 L64_tmp = 0x80000000;	
-	L64_var_out = W_add( L64_var1, L64_tmp);
-	L_result = W_extract_h( L64_var_out );
-
-#if (WMOPS)
-	multiCounter[currCounter].W_round64_L++;
-	multiCounter[currCounter].W_extract_h--;
-	multiCounter[currCounter].W_add--;
+#if (WMOPS) 
+  multiCounter[currCounter].W_round64_L++; 
+  multiCounter[currCounter].W_extract_h--; 
+  multiCounter[currCounter].W_add--;
 #endif /* if WMOPS */
-
-	return(L_result);
+ 
+  return (L_result);
 }
 
 #endif /* #ifdef ENH_64_BIT_OPERATOR */
