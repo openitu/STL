@@ -98,10 +98,10 @@ static __inline void incrFor (void) {
  *
  *****************************************************************************/
 #ifndef WMOPS
-#define WHILE (a) while (a)
+#define WHILE(a) while (a)
 
 #else /* ifndef WMOPS */
-#define WHILE (a) while (incrWhile(), a)
+#define WHILE(a) while (incrWhile(), a)
 
 static __inline void incrWhile (void) {
   multiCounter[currCounter].While++;
@@ -215,10 +215,10 @@ static __inline void incrElse (void) {
  *
  *****************************************************************************/
 #ifndef WMOPS
-#define SWITCH (a) switch (a)
+#define SWITCH(a) switch (a)
 
 #else /* ifndef WMOPS */
-#define SWITCH (a) switch (incrSwitch (), a)
+#define SWITCH(a) switch (incrSwitch (), a)
 
 static __inline void incrSwitch (void) {
   multiCounter[currCounter].Switch++;
