@@ -16,6 +16,7 @@ enable_testing()
 add_custom_target(test-verbose COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
 
 #Source folders
+add_subdirectory(src/basop/test_framework)
 add_subdirectory(src/basop/flc)
 add_subdirectory(src/eid)
 add_subdirectory(src/fir)
