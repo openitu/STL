@@ -195,7 +195,7 @@ Word64 W_shl (Word64 L64_var1, Word16 var2) {
   multiCounter[currCounter].W_shl++;
 #endif
  
-  BASOP_CHECK();
+//  BASOP_CHECK();
  
   return (L64_var_out);
 }
@@ -306,7 +306,7 @@ Word64 W_shl_nosat (Word64 L64_var1, Word16 var2) {
   multiCounter[currCounter].W_shl_nosat++;
 #endif
  
-  BASOP_CHECK ();
+//  BASOP_CHECK ();
  
   return (L64_var_out);
 }
