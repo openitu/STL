@@ -205,7 +205,7 @@ void alaw_expand (long lseg, short *logbuf, short *linbuf) {
 
   ==========================================================================
 */
-void ulaw_compress (long lseg, short *logbuf, short *linbuf) {
+void ulaw_compress (long lseg, short *linbuf, short *logbuf) {
   long n;                       /* samples's count */
   short i;                      /* aux.var. */
   short absno;                  /* absolute value of linear (input) sample */

@@ -246,12 +246,13 @@ void get_tmp_name (char *fileout) {
 #if defined (unix) || defined (__GNUC__)
   ch = strrchr (fileout, '/');
   ch++;
-  strcpy (fileout, ch);
+  memmove(fileout, ch, strlen(ch));
+
 #endif
 #ifdef _MSC_VER
   ch = strrchr (fileout, '\\');
   ch++;
-  strcpy (fileout, ch);
+  memmove(fileout, ch, strlen(ch));
 #endif
 
 #ifdef DEBUG
