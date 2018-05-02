@@ -279,6 +279,36 @@ static __inline void incrGoto (void) {
 #endif /* ifndef WMOPS */
 
 
+
+/*
+ *  New control code basops
+*/
+#ifdef CONTROL_CODE_OPS
+
+Flag LT_16(Word16 var1, Word16 var2);
+Flag GT_16(Word16 var1, Word16 var2); 
+Flag LE_16(Word16 var1, Word16 var2); 
+Flag GE_16(Word16 var1, Word16 var2); 
+Flag EQ_16(Word16 var1, Word16 var2); 
+Flag NE_16(Word16 var1, Word16 var2); 
+
+Flag LT_32(Word32 L_var1, Word32 L_var2); 
+Flag GT_32(Word32 L_var1, Word32 L_var2); 
+Flag LE_32(Word32 L_var1, Word32 L_var2); 
+Flag GE_32(Word32 L_var1, Word32 L_var2); 
+Flag EQ_32(Word32 L_var1, Word32 L_var2); 
+Flag NE_32(Word32 L_var1, Word32 L_var2); 
+
+Flag LT_64(Word64 L64_var1, Word64 L64_var2); 
+Flag GT_64(Word64 L64_var1, Word64 L64_var2); 
+Flag LE_64(Word64 L64_var1, Word64 L64_var2); 
+Flag GE_64(Word64 L64_var1, Word64 L64_var2); 
+Flag EQ_64(Word64 L64_var1, Word64 L64_var2); 
+Flag NE_64(Word64 L64_var1, Word64 L64_var2); 
+       
+
+#endif /* #ifdef CONTROL_CODE_OPS */
+
 #endif /* _CONTROL_H */
 
 
