@@ -7,12 +7,19 @@
 //Prototype
 int test_precision();
 int create_default_tests_prec();
+int test_sanity();
 
 int  main()
 {
     //
     int RetVal = 0;
 
+#ifdef CHECK_SANITY
+    printf("Starting Sanity Tests...\n");
+    test_sanity();
+    printf("Sanity tests Completed\n");
+
+#else // CHECK_SANITY
     printf("Starting Precision Analysis...\n");
 
     printf("Creating default test cases for precision testing...\n");
@@ -32,7 +39,7 @@ int  main()
     }
 
     printf("Tests complete \n");
-
+#endif // CHECK_SANITY
 #ifndef GCC_BUILD
     getchar();
 #endif // #ifndef GCC_BUILD
