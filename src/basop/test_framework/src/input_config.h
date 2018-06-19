@@ -153,8 +153,8 @@ typedef enum data_type {
     DATA_TYPE_FLOAT_L,           /* float */
     DATA_TYPE_DOUBLE,            /* double */
 	DATA_TYPE_DOUBLE_Q31,        /* double in ref, but this will be converted to Q31 for DUT */
-	DATA_TYPE_DOUBLE_Q47,        /* double in ref, but this will be converted to Q31 for DUT */
-	DATA_TYPE_DOUBLE_Q63,        /* double in ref, but this will be converted to Q31 for DUT */
+	DATA_TYPE_DOUBLE_Q47,        /* double in ref, but this will be converted to Q47 for DUT */
+	DATA_TYPE_DOUBLE_Q63,        /* double in ref, but this will be converted to Q63 for DUT */
     DATA_TYPE_CMPLX_S,           /* Word16 complex */
     DATA_TYPE_CMPLX_L,           /* Word32 complex */
     DATA_TYPE_INV                /* Invalid data type.*/
