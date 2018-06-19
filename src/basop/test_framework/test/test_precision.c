@@ -1,15 +1,9 @@
-/*
-* Copyright (c) 2014 by Cadence Design Systems Inc.  ALL RIGHTS RESERVED.
-* These coded instructions, statements, and computer programs are the
-* copyrighted works and confidential proprietary information of Cadence Design Systems Inc.
-* They may not be modified, copied, reproduced, distributed, or disclosed to
-* third parties in any manner, medium, or form, in whole or in part, without
-* the prior written consent of Cadence Design Systems Inc.
-*/
 
-#include <math.h>
+
+
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <complex.h>
 #include <time.h>
@@ -41,6 +35,14 @@ FILE *fp_spcl;
          }                                           \
 }
 
+// 2 input 1 output
+#define FUNC_TEST_2ISO_SHIFT_REF(func_ptr, in1, in2, out, loop_cnt){ \
+	int i;                                       \
+        for (i=0; i<loop_cnt;i++){                   \
+           out[i] = func_ptr((double)in1[i], in2[i]);                 \
+                 }                                           \
+}
+
 // 3 input 1 output
 #define FUNC_TEST_3ISO_REF(func_ptr, in1, in2, in3, out, loop_cnt){ \
 	int i;                                       \
@@ -48,6 +50,15 @@ FILE *fp_spcl;
            out[i] = func_ptr(in1[i], in2[i], in3[i]);                 \
          }                                           \
 }
+
+// 3 input 1 output
+#define FUNC_TEST_3ISO_INT_REF(func_ptr, in1, in2, in3, out, loop_cnt){ \
+	int i;                                       \
+        for (i=0; i<loop_cnt;i++){                   \
+           out[i] = func_ptr((double)in1[i], (float)in2[i], (float)in3[i]);                 \
+                 }                                           \
+}
+
 
 // Constants for float <-> fixed point conversion.
 #define DUBLE_MULT_FACT 2147483648.0
@@ -1779,10 +1790,10 @@ void run_func(int test_index, int ftype, char *fnm1, char *fnm2, void *out_dut, 
 				short int * ind2 = (short int *)in2;
 				short int * ind3 = (short int *)in3;
 
-				// Restrict the shift to 5 bits..
+				// Shifted to match presion available with mantissa of double datatype in reference code.
 				for (i = 0; i < N_PREC; i++)
 				{
-					ind1[i] = ind1[i] >> 16;
+					ind1[i] = ind1[i] >> 11;
 				}
 
                 // Execute DUT
@@ -1796,7 +1807,7 @@ void run_func(int test_index, int ftype, char *fnm1, char *fnm2, void *out_dut, 
                 {
                     double * outd_r = (double *)out_ref;
                     fptr_OD_ID_IF_IF ref_fptr = input_prec_tests[test_index].func_ptr_ref;
-                    FUNC_TEST_3ISO_REF(ref_fptr, ind1, ind2, ind3, outd_r, N_PREC_Val);
+                    FUNC_TEST_3ISO_INT_REF(ref_fptr, ind1, ind2, ind3, outd_r, N_PREC_Val);
                 }
 
                 BitsInErrFactor = 1;
@@ -1858,7 +1869,7 @@ void run_func(int test_index, int ftype, char *fnm1, char *fnm2, void *out_dut, 
                     double * outd_r = (double *)out_ref;
                     fptr_OD_ID_IS ref_fptr = input_prec_tests[test_index].func_ptr_ref;
 
-                    FUNC_TEST_2ISO_REF(ref_fptr, ind1, ind2, outd_r, N_PREC_Val);
+                    FUNC_TEST_2ISO_SHIFT_REF(ref_fptr, ind1, ind2, outd_r, N_PREC_Val);
                 }
 
                 BitsInErrFactor = 1.0;
