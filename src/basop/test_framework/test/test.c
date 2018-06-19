@@ -1,8 +1,5 @@
 #include <stdio.h>
 
-#ifndef GCC_BUILD
-	#include <conio.h>
-#endif // GCC_BUILD
 
 //Prototype
 int test_precision();
@@ -40,9 +37,6 @@ int  main()
 
     printf("Tests complete \n");
 #endif // CHECK_SANITY
-#ifndef GCC_BUILD
-    getchar();
-#endif // #ifndef GCC_BUILD
 
  	return 0 ;
 }
