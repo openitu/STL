@@ -8,7 +8,7 @@ import os
 import shutil
 #import pandas as pd
 
-basedir='../../../../bin/basop_test_out/'
+basedir='../test_data/'
 
 def read_datafile(file_name):
     # the skiprows keyword is for heading, but I don't know if trailing lines
