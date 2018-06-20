@@ -119,6 +119,10 @@ typedef unsigned short UWord16;
 #error cannot find 16-bit type
 #endif
 
+/* Definition of Word64 */
+#ifdef ENH_64_BIT_OPERATOR
+#define Word64 long long int
+#endif /* #ifdef ENH_64_BIT_OPERATOR */
 
 /*
  ********* define 32 bit signed/unsigned types & constants
@@ -175,19 +179,19 @@ typedef int Bool;
 /*
  ********* Check current platform
  */
-#if defined(__MSDOS__)
+#if defined (__MSDOS__)
 #define PC
 #define PLATFORM "PC"
 #define LSBFIRST
-#elif defined(__osf__)
+#elif defined (__osf__)
 #define OSF
 #define PLATFORM "OSF"
 #define LSBFIRST
-#elif defined(__sun__) || defined(__sun)
+#elif defined (__sun__) || defined (__sun)
 #define SUN
 #define PLATFORM "SUN"
 #undef LSBFIRST
-#elif defined(linux) && defined(i386)
+#elif defined (linux) && defined (i386)
 #define PC
 #define PLATFORM "PC"
 #define LSBFIRST

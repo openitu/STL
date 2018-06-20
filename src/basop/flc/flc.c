@@ -522,15 +522,22 @@ static void FLC_print_sum () {
 static void FLC_print_frame_sum () {
   fprintf (FLC_output, "\n===== Per Frame Summary =====\n");
 
-  fprintf (FLC_output, "Number of Frames: %ld \nAverage Ops/frame: %8.2f   Max Ops/frame: %ld\n\n", ops_total->invocations, ops_total->fn_total / (float) ops_total->invocations, ops_total->fn_max);
+  fprintf (FLC_output, 
+           "Number of Frames: %ld \nAverage Ops/frame: %8.2f   Max Ops/frame: %ld\n\n",
+            ops_total->invocations,
+            ops_total->fn_total / (float) ops_total->invocations,
+            ops_total->fn_max);
 
   fprintf (FLC_output, "\n===== ESTIMATED COMPLEXITY (Frame length is %4.2f ms) =====\n", FLC_FRAMELEN);
   fprintf (FLC_output, "Maximum complexity: %f WMOPS\n", ops_total->fn_max / (1000.0f * (float) FLC_FRAMELEN));
-  fprintf (FLC_output, "Average complexity: %f WMOPS\n", (ops_total->fn_total / (float) ops_total->invocations) / (1000.0f * (float) FLC_FRAMELEN));
+  fprintf (FLC_output, "Average complexity: %f WMOPS\n", 
+           (ops_total->fn_total / (float) ops_total->invocations) / (1000.0f * (float) FLC_FRAMELEN));
 
   fprintf (FLC_output, "\nEstimated fixed point complexity with %2.1f scaling factor: \n", FLC_SCALEFAC);
-  fprintf (FLC_output, "Maximum complexity: %f WMOPS\n", FLC_SCALEFAC * ops_total->fn_max / (1000.0f * (float) FLC_FRAMELEN));
-  fprintf (FLC_output, "Average complexity: %f WMOPS\n\n", (FLC_SCALEFAC * ops_total->fn_total / (float) ops_total->invocations) / (1000.0f * (float) FLC_FRAMELEN));
+  fprintf (FLC_output, "Maximum complexity: %f WMOPS\n",
+           FLC_SCALEFAC * ops_total->fn_max / (1000.0f * (float) FLC_FRAMELEN));
+  fprintf (FLC_output, "Average complexity: %f WMOPS\n\n",
+           (FLC_SCALEFAC * ops_total->fn_total / (float) ops_total->invocations) / (1000.0f * (float) FLC_FRAMELEN));
 
 }
 

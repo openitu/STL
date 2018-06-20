@@ -265,7 +265,7 @@ int search_token (char list[][20], char token[], int length) {
   return (found_flag);
 }
 
-int main (int argc, *argv[]) {
+int main (int argc, char *argv[]) {
   FILE *fp, *fpo, *fpr;
   char inchar;                  /* for the read input char */
   char words[200];              /* contains an alphanumerical word */

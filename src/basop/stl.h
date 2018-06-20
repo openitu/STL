@@ -32,12 +32,21 @@
 #include "enh40.h"
 
 
+#if defined (ALLOW_ENH_UL32)
+// #include "enhUL32.h"
+#endif
 
+#ifdef ENH_64_BIT_OPERATOR
+#include "enh64.h"
+#endif
 
+#ifdef ENH_32_BIT_OPERATOR
+#include "enh32.h"
+#endif
 
-
-
-
+#ifdef COMPLEX_OPERATOR
+#include "complex_basop.h"
+#endif
 
 
 #endif /* ifndef _STL_H */
