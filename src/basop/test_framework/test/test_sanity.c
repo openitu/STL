@@ -5,13 +5,20 @@
 /*
 #define MAX_NUM_SANITY_VALS 4
 
-typedef union {
-    float f[MAX_NUM_SANITY_VALS];
-    double d[MAX_NUM_SANITY_VALS];
-} ref_out;
-
-ref_out ref[2] = {
-    {.f = { 30467.14153,5910.1427,15846.23837,7271.22705 }},
+typedef union {
+
+    float f[MAX_NUM_SANITY_VALS];
+
+    double d[MAX_NUM_SANITY_VALS];
+
+} ref_out;
+
+
+
+ref_out ref[2] = {
+
+    {.f = { 30467.14153,5910.1427,15846.23837,7271.22705 }},
+
     {.d = { 30467.14153,5910.1427,15846.23837,7271.22705 }}
 };
 
@@ -427,8 +434,9 @@ int test_sanity(void)
 		
 	
     printf("BASOP Sanity test complete :  Total pass  = %d : Total fail = %d : Total test = %d !! \n", SuccessCnt, (TOTAL_NUM_FUNC-SuccessCnt), TOTAL_NUM_FUNC);
-   
-    retval = 0;
+
+    /* Returns non-zero when check fails */
+    retval = (TOTAL_NUM_FUNC-SuccessCnt);
     return retval;
 }
 
