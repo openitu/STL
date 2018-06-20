@@ -245,10 +245,10 @@ typedef struct {
   UWord32 L40_max;              /* Complexity Weight of 1 */
   UWord32 L40_min;              /* Complexity Weight of 1 */
 
-  UWord32 shl_r;                /* Complexity Weight of 3 */
-  UWord32 L_shl_r;              /* Complexity Weight of 3 */
-  UWord32 L40_shr_r;            /* Complexity Weight of 3 */
-  UWord32 L40_shl_r;            /* Complexity Weight of 3 */
+  UWord32 shl_r;                /* Complexity Weight of 2 */
+  UWord32 L_shl_r;              /* Complexity Weight of 2 */
+  UWord32 L40_shr_r;            /* Complexity Weight of 2 */
+  UWord32 L40_shl_r;            /* Complexity Weight of 2 */
   UWord32 norm_L40;             /* Complexity Weight of 1 */
 
   UWord32 L40_shl;              /* Complexity Weight of 1 */
@@ -265,7 +265,7 @@ typedef struct {
   UWord32 L40_msu;              /* Complexity Weight of 1 */
   UWord32 msu_r40;              /* Complexity Weight of 2 */
   UWord32 Mpy_32_16_ss;         /* Complexity Weight of 2 */
-  UWord32 Mpy_32_32_ss;         /* Complexity Weight of 4 */
+  UWord32 Mpy_32_32_ss;         /* Complexity Weight of 2 */
   UWord32 L_mult0;              /* Complexity Weight of 1 */
 
   UWord32 L_mac0;               /* Complexity Weight of 1 */
@@ -289,7 +289,7 @@ typedef struct {
   UWord32 rotr;                 /* Complexity Weight of 3 */
   UWord32 L_rotl;               /* Complexity Weight of 3 */
   UWord32 L_rotr;               /* Complexity Weight of 3 */
-  UWord32 L40_set;              /* Complexity Weight of 3 */
+  UWord32 L40_set;              /* Complexity Weight of 1 */
   UWord32 L40_deposit_h;        /* Complexity Weight of 1 */
 
   UWord32 L40_deposit_l;        /* Complexity Weight of 1 */
@@ -301,18 +301,18 @@ typedef struct {
   UWord32 L40_round;            /* Complexity Weight of 1 */
   UWord32 L_saturate40;         /* Complexity Weight of 1 */
   UWord32 round40;              /* Complexity Weight of 1 */
-  UWord32 If;                   /* Complexity Weight of 4 */
-  UWord32 Goto;                 /* Complexity Weight of 4 */
+  UWord32 If;                   /* Complexity Weight of 3 */
+  UWord32 Goto;                 /* Complexity Weight of 2 */
 
-  UWord32 Break;                /* Complexity Weight of 4 */
-  UWord32 Switch;               /* Complexity Weight of 8 */
+  UWord32 Break;                /* Complexity Weight of 2 */
+  UWord32 Switch;               /* Complexity Weight of 6 */
   UWord32 For;                  /* Complexity Weight of 3 */
-  UWord32 While;                /* Complexity Weight of 4 */
-  UWord32 Continue;             /* Complexity Weight of 4 */
+  UWord32 While;                /* Complexity Weight of 3 */
+  UWord32 Continue;             /* Complexity Weight of 2 */
 
-  UWord32 L_mls;                /* Complexity Weight of 6 */
+  UWord32 L_mls;                /* Complexity Weight of 1 */
   UWord32 div_l;                /* Complexity Weight of 32 */
-  UWord32 i_mult;               /* Complexity Weight of 3 */
+  UWord32 i_mult;               /* Complexity Weight of 1 */
 
 /* New complex basic operators */
 #ifdef COMPLEX_OPERATOR
