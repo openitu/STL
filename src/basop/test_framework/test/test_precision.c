@@ -2170,16 +2170,16 @@ int test_precision(void)
     int i;
     char fname[100];
 
-    fp_prec = fopen("precision_abs_err_report.csv", "w");
+    fp_prec = fopen("basop_precision_abs_err_report.csv", "w");
     if (fp_prec == NULL) {
         printf("Could not open precision_abs_err_report.csv\n");
         return retval;
     }
     fprintf(fp_prec, "DUT_FUNC,REF_FUNC,INPUT_PAT_1,INPUT_PAT_2,INPUT_PAT_3,MAX_ABS_ERR,MIN_ABS_ERR,AVG_ABS_ERR,MAX_BITS_ERR,AVG_BITS_ERR\n\n");
 
-    fp_spcl = fopen("special_values_abs_err_report.csv", "w");
+    fp_spcl = fopen("basop_special_values_abs_err_report.csv", "w");
     if (fp_spcl == NULL) {
-        printf("Could not open special_values_abs_err_report.csv\n");
+        printf("Could not open basop_special_values_abs_err_report.csv\n");
         return retval;
     }
 
@@ -2187,9 +2187,9 @@ int test_precision(void)
 
     
 
-    fp_prec_debug = fopen("precision_abs_err_debug_report.csv", "w");
+    fp_prec_debug = fopen("basop_precision_abs_err_debug_report.csv", "w");
     if (fp_prec_debug == NULL) {
-        printf("Could not open precision_abs_err_debug_report.csv\n");
+        printf("Could not open baseop_precision_abs_err_debug_report.csv\n");
         return retval;
     }
     fprintf(fp_prec_debug, "DUT_FUNC,REF_FUNC,INPUT_1,INPUT_2,INPUT_3,OUT_DUT,OUT_REF,ABS_ERR\n\n");
