@@ -18,6 +18,7 @@ FILE *fp_prec;
 FILE *fp_prec_debug;
 FILE *fp_ip_op_plot;
 FILE *fp_spcl;
+FILE *fp_test_baseop[TOTAL_NUM_FUNC][NUM_TEST_PATTERN_1];
 
 // 1 input 1 output
 #define FUNC_TEST_1ISO_REF(func_ptr, in1, out, loop_cnt) { \
@@ -71,6 +72,13 @@ FILE *fp_spcl;
 	int i;                                       \
         for (i=0; i<loop_cnt;i++){                   \
 		    out[i] = func_ptr((long long)(in1[i]*(Q63_MULT_FACT))); \
+    } \
+}
+
+#define FUNC_TEST_OS_IW_dut(func_ptr, in1, out, loop_cnt){ \
+	int i;                                       \
+        for (i=0; i<loop_cnt;i++){                   \
+		    out[i] = (short)func_ptr((long long)(in1[i]*(Q63_MULT_FACT))); \
     } \
 }
 
@@ -422,6 +430,71 @@ FILE *fp_spcl;
 }
 
 
+void print_test_out(int test_index, FILE * fp, int index, int f_type1, char *fnm1, int f_type2, char *fnm2,  void *out_dut) //void *in1_1, void *in2_1, void *in3_1, void *out_ref,
+
+{
+
+    switch (input_prec_tests[test_index].out_data)
+    {
+    case DATA_TYPE_DOUBLE:
+	case DATA_TYPE_DOUBLE_Q31:
+	case DATA_TYPE_DOUBLE_Q47:
+	case DATA_TYPE_DOUBLE_Q63:
+    {
+        double * outf_d = (double *)((char *)out_dut + (sizeof(double)*index));
+	unsigned long long * res = (unsigned long long *)outf_d;
+	fprintf(fp, "%llX,\n", *res);
+    }
+    break;
+    case DATA_TYPE_FLOAT:
+    case DATA_TYPE_FLOAT_L:
+    {
+        float * outf_d = (float *)((char *)out_dut + (sizeof(float)*index));
+	unsigned long * res = (unsigned long *)outf_d;
+	fprintf(fp, "%X,\n", *res);
+    }
+    break;
+    case DATA_TYPE_LONG:
+    {
+        int * outf_d = (int *)((char *)out_dut + (sizeof(int)*index));
+	unsigned long * res = (unsigned long *)outf_d;
+	fprintf(fp, "%X,\n", *res);
+    }
+    break;
+    case DATA_TYPE_SHORT:
+    {
+        short * outf_d = (short *)((char *)out_dut + (sizeof(short)*index));
+	fprintf(fp, "%X,\n", (unsigned int)*outf_d);
+    }
+    break;
+    case DATA_TYPE_CMPLX_S:
+    {
+        f_cmplx * outf_d = (f_cmplx *)((char *)out_dut + (sizeof(f_cmplx)*index));
+	float res = (sqrt(outf_d->re*outf_d->re + outf_d->im*outf_d->im));
+	unsigned long *res1 = (unsigned long *)&res;
+	fprintf(fp, "%X,\n", *res1);
+    }
+    break;
+    case DATA_TYPE_CMPLX_L:
+    {
+        f_cmplx * outf_d = (f_cmplx *)((char *)out_dut + (sizeof(f_cmplx)*index));
+	float res = sqrt((outf_d->re*outf_d->re + outf_d->im*outf_d->im));
+	unsigned long *res1 = (unsigned long *)&res;
+	fprintf(fp, "%X,\n", *res1);
+    }
+    break;
+    case DATA_TYPE_WORD64:
+    {
+        long long  * outf_d = (long long  *)((char *)out_dut + (sizeof(long long)*index));
+        fprintf(fp, "%llX,\n" , *outf_d);
+
+    }
+    break;
+    default:
+        printf("Error: Invalid output datatype \n");
+    }
+
+}
 
 void print_io_plot(int test_index, FILE * fp, int index, int f_type1, char *fnm1, int f_type2, char *fnm2, void *in1_1, void *in2_1, void *in3_1, void *out_dut, void *out_ref)
 
@@ -727,6 +800,7 @@ void compute_diff(int test_index, int f_type1, void * out_dut, void * out_ref, d
     {
 
     case DATA_TYPE_LONG:
+    case DATA_TYPE_SHORT:
         outi_d = (int *)(out_dut);
 
         outi_r = (int *)(out_ref);
@@ -1096,6 +1170,32 @@ void run_func(int test_index, int ftype, char *fnm1, char *fnm2, void *out_dut, 
                     FUNC_TEST_1ISO_REF(ref_fptr, ind1, outd_r, N_PREC_Val);
                 }
                 BitsInErrFactor = BITS_IN_ERR_FACTOR_L;
+
+            }
+        }
+        break;
+        case FUNC_TYPE_OS_IW:
+        {
+            {
+                double * ind1 = (double *)in1;
+
+               {
+                    // Execute DUT
+                    {
+                        short * outd_d = (short *)out_dut;
+
+                        fptr_OL_IW dut_fptr = input_prec_tests[test_index].func_ptr_dut;
+                        FUNC_TEST_OS_IW_dut(dut_fptr, ind1, outd_d, N_PREC_Val);
+                    }
+
+                    // Execute REF
+                    {
+                        short * outd_r = (short *)out_ref;
+                        fptr_OL_ID ref_fptr = input_prec_tests[test_index].func_ptr_ref;
+                        FUNC_TEST_1ISO_REF(ref_fptr, ind1, outd_r, N_PREC_Val);
+                    }
+                    BitsInErrFactor = 1;
+                }
 
             }
         }
@@ -1921,7 +2021,7 @@ void run_func(int test_index, int ftype, char *fnm1, char *fnm2, void *out_dut, 
 }
 
 //  main precision function : modify if required..
-void execute_each_prec_test(int test_index, char *fnm1, int f_type, char *fnm2, int data_pat1, int data_pat2, int data_pat3)
+void execute_each_prec_test(int test_index, char *fnm1, int f_type, char *fnm2, int data_pat1, int data_pat2, int data_pat3,int type)
 {
     double avg_bits_in_err, max_bits_in_err, abs_val;
     void * in1 = (void *)malloc((sizeof(double))*(N_PREC));
@@ -2034,7 +2134,10 @@ void execute_each_prec_test(int test_index, char *fnm1, int f_type, char *fnm2, 
         }
     }
     for (n = 0; n < N_PREC; n++) {
+      
         print_io_plot(test_index, fp_ip_op_plot, n, f_type, fnm1, f_type, fnm2, (void *)in1, (void *)in2, (void *)in3, (void *)out_dut, (void *)out_ref);
+
+        print_test_out(test_index, fp_test_baseop[test_index][type], n, f_type, fnm1, f_type, fnm2,(void *)out_dut);    //  (void *)in1, (void *)in2, (void *)in3, (void *)out_ref, 
     }
 
     fprintf(fp_prec_debug, "Number of testcases exceeding threshold err = %d\n", err_cnt);
@@ -2170,16 +2273,86 @@ int test_precision(void)
     int i;
     char fname[100];
 
-    fp_prec = fopen("basop_precision_abs_err_report.csv", "w");
+    char *test_files[TOTAL_NUM_FUNC][NUM_TEST_PATTERN_1] = {
+      {"./W_mult_16_16_random.csv", "./W_mult_16_16_sweep.csv", "./W_mult_16_16_sweep_piecewise.csv","./W_mult_16_16_custom.csv"},
+      {"./W_mac_16_16_random.csv", "./W_mac_16_16_sweep.csv","./W_mac_16_16_sweep_piecewise.csv","./W_mac_16_16_custom.csv"},
+      {"./W_msu_16_16_random.csv", "./W_msu_16_16_sweep.csv","./W_msu_16_16_sweep_piecewise.csv","./W_msu_16_16_custom.csv"},
+      {"./W_add_random.csv", "./W_add_sweep.csv","./W_add_sweep_piecewise.csv","./W_add_custom.csv"},
+      {"./W_sub_random.csv", "./W_sub_sweep.csv","./W_sub_sweep_piecewise.csv","./W_sub_custom.csv"},
+      {"./W_add_nosat_random.csv", "./W_add_nosat_sweep.csv","./W_add_nosat_sweep_piecewise.csv","./W_add_nosat_custom.csv"},
+      {"./W_sub_nosat_random.csv", "./W_sub_nosat_sweep.csv","./W_sub_nosat_sweep_piecewise.csv","./W_sub_nosat_custom.csv"},
+      {"./W_shl_random.csv", "./W_shl_sweep.csv","./W_shl_sweep_piecewise.csv","./W_shl_custom.csv"},
+      {"./W_shr_random.csv", "./W_shr_sweep.csv","./W_shr_sweep_piecewise.csv","./W_shr_custom.csv"},
+      {"./W_shl_nosat_random.csv", "./W_shl_nosat_sweep.csv","./W_shl_nosat_sweep_piecewise.csv","./W_shl_nosat_custom.csv"},
+      {"./W_shr_nosat_random.csv", "./W_shr_nosat_sweep.csv","./W_shr_nosat_sweep_piecewise.csv","./W_shr_nosat_custom.csv"},
+      {"./W_lshl_random.csv", "./W_lshl_sweep.csv","./W_lshl_sweep_piecewise.csv","./W_lshl_custom.csv"},
+      {"./W_lshr_random.csv", "./W_lshr_sweep.csv","./W_lshr_sweep_piecewise.csv","./W_lshr_custom.csv"},
+      {"./W_shl_sat_l_random.csv", "./W_shl_sat_l_sweep.csv","./W_shl_sat_l_sweep_piecewise.csv","./W_shl_sat_l_custom.csv"},
+      {"./W_sat_l_random.csv", "./W_sat_l_sweep.csv","./W_sat_l_sweep_piecewise.csv","./W_sat_l_custom.csv"},
+      {"./W_sat_m_random.csv", "./W_sat_m_sweep.csv","./W_sat_m_sweep_piecewise.csv","./W_sat_m_custom.csv"},
+      {"./W_round48_L_random.csv", "./W_round48_L_sweep.csv","./W_round48_L_sweep_piecewise.csv","./W_round48_L_custom.csv"},
+      {"./W_round64_L_random.csv", "./W_round64_L_sweep.csv","./W_round64_L_sweep_piecewise.csv","./W_round64_L_custom.csv"},
+      {"./W_round32_s_random.csv", "./W_round32_s_sweep.csv","./W_round32_s_sweep_piecewise.csv","./W_round32_s_custom.csv"},
+      {"./W_norm_random.csv", "./W_norm_sweep.csv","./W_norm_sweep_piecewise.csv","./W_norm_custom.csv"},
+      {"./W_mult0_16_16_random.csv", "./W_mult0_16_16_sweep.csv","./W_mult0_16_16_sweep_piecewise.csv","./W_mult0_16_16_custom.csv"},
+      {"./W_mac0_16_16_random.csv", "./W_mac0_16_16_sweep.csv","./W_mac0_16_16_sweep_piecewise.csv","./W_mac0_16_16_custom.csv"},
+      {"./W_msu0_16_16_random.csv", "./W_msu0_16_16_sweep.csv","./W_msu0_16_16_sweep_piecewise.csv","./W_msu0_16_16_custom.csv"},
+      {"./W_mac_32_16_random.csv", "./W_mac_32_16_sweep.csv","./W_mac_32_16_sweep_piecewise.csv","./W_mac_32_16_custom.csv"},
+      {"./W_msu_32_16_random.csv", "./W_msu_32_16_sweep.csv","./W_msu_32_16_sweep_piecewise.csv","./W_msu_32_16_custom.csv"},
+      {"./W_mult_32_16_random.csv", "./W_mult_32_16_sweep.csv","./W_mult_32_16_sweep_piecewise.csv","./W_mult_32_16_custom.csv"},
+      {"./W_mult_32_32_random.csv", "./W_mult_32_32_sweep.csv","./W_mult_32_32_sweep_piecewise.csv","./W_mult_32_32_custom.csv"},
+      {"./W_mult0_32_32_random.csv", "./W_mult0_32_32_sweep.csv","./W_mult0_32_32_sweep_piecewise.csv","./W_mult0_32_32_custom.csv"},
+      {"./W_neg_random.csv", "./W_neg_sweep.csv","./W_neg_sweep_piecewise.csv","./W_neg_custom.csv"},
+      {"./W_abs_random.csv", "./W_abs_sweep.csv","./W_abs_sweep_piecewise.csv","./W_abs_custom.csv"},
+      {"./Madd_32_16_random.csv", "./Madd_32_16_sweep.csv","./Madd_32_16_sweep_piecewise.csv","./Madd_32_16_custom.csv"},
+      {"./Madd_32_32_random.csv", "./Madd_32_32_sweep.csv","./Madd_32_32_sweep_piecewise.csv","./Madd_32_32_custom.csv"},
+      {"./Madd_32_16_r_random.csv", "./Madd_32_16_r_sweep.csv","./Madd_32_16_r_sweep_piecewise.csv","./Madd_32_16_r_custom.csv"},
+      {"./Madd_32_32_r_random.csv", "./Madd_32_32_r_sweep.csv","./Madd_32_32_r_sweep_piecewise.csv","./Madd_32_32_r_custom.csv"},
+      {"./Mpy_32_16_1_random.csv", "./Mpy_32_16_1_sweep.csv","./Mpy_32_16_1_sweep_piecewise.csv","./Mpy_32_16_1_custom.csv"},
+      {"./Mpy_32_32_random.csv", "./Mpy_32_32_sweep.csv","./Mpy_32_32_sweep_piecewise.csv","./Mpy_32_32_custom.csv"},
+      {"./Mpy_32_32_r_random.csv", "./Mpy_32_32_r_sweep.csv","./Mpy_32_32_r_sweep_piecewise.csv","./Mpy_32_32_r_custom.csv"},
+      {"./Mpy_32_16_r_random.csv", "./Mpy_32_16_r_sweep.csv","./Mpy_32_16_r_sweep_piecewise.csv","./Mpy_32_16_r_custom.csv"},
+      {"./Msub_32_16_random.csv", "./Msub_32_16_sweep.csv","./Msub_32_16_sweep_piecewise.csv","./Msub_32_16_custom.csv"},
+      {"./Msub_32_16_r_random.csv", "./Msub_32_16_r_sweep.csv","./Msub_32_16_r_sweep_piecewise.csv","./Msub_32_16_r_custom.csv"},
+      {"./Msub_32_32_random.csv", "./Msub_32_32_sweep.csv","./Msub_32_32_sweep_piecewise.csv","./Msub_32_32_custom.csv"},
+      {"./Msub_32_32_r_random.csv", "./Msub_32_32_r_sweep.csv","./Msub_32_32_r_sweep_piecewise.csv","./Msub_32_32_r_custom.csv"},
+      {"./CL_add_random.csv", "./CL_add_sweep.csv","./CL_add_sweep_piecewise.csv","./CL_add_custom.csv"},
+      {"./CL_sub_random.csv", "./CL_sub_sweep.csv","./CL_sub_sweep_piecewise.csv","./CL_sub_custom.csv"},
+      {"./CL_msu_j_random.csv", "./CL_msu_j_sweep.csv","./CL_msu_j_sweep_piecewise.csv","./CL_msu_j_custom.csv"},
+      {"./CL_mac_j_random.csv", "./CL_mac_j_sweep.csv","./CL_mac_j_sweep_piecewise.csv","./CL_mac_j_custom.csv"},
+      {"./CL_multr_32x32_random.csv", "./CL_multr_32x32_sweep.csv","./CL_multr_32x32_sweep_piecewise.csv","./CL_multr_32x32_custom.csv"},
+      {"./CL_multr_32x16_random.csv", "./CL_multr_32x16_sweep.csv","./CL_multr_32x16_sweep_piecewise.csv","./CL_multr_32x16_custom.csv"},
+      {"./C_add_random.csv", "./C_add_sweep.csv","./C_add_sweep_piecewise.csv","./C_add_custom.csv"},
+      {"./C_sub_random.csv", "./C_sub_sweep.csv","./C_sub_sweep_piecewise.csv","./C_sub_custom.csv"},
+      {"./C_multr_random.csv", "./C_multr_sweep.csv","./C_multr_sweep_piecewise.csv","./C_multr_custom.csv"},
+      {"./C_scale_random.csv", "./C_scale_sweep.csv","./C_scale_sweep_piecewise.csv","./C_scale_custom.csv"},
+      {"./CL_negate_random.csv", "./CL_negate_sweep.csv","./CL_negate_sweep_piecewise.csv","./CL_negate_custom.csv"},
+      {"./CL_mul_j_random.csv", "./CL_mul_j_sweep.csv","./CL_mul_j_sweep_piecewise.csv","./CL_mul_j_custom.csv"},
+      {"./C_negate_random.csv", "./C_negate_sweep.csv","./C_negate_sweep_piecewise.csv","./C_negate_custom.csv"},
+      {"./C_mul_j_random.csv", "./C_mul_j_sweep.csv","./C_mul_j_sweep_piecewise.csv","./C_mul_j_custom.csv"},
+      {"./C_mac_r_random.csv", "./C_mac_r_sweep.csv","./C_mac_r_sweep_piecewise.csv","./C_mac_r_custom.csv"},
+      {"./C_msu_r_random.csv", "./C_msu_r_sweep.csv","./C_msu_r_sweep_piecewise.csv","./C_msu_r_custom.csv"},
+      {"./CL_shr_random.csv", "./CL_shr_sweep.csv","./CL_shr_sweep_piecewise.csv","./CL_shr_custom.csv"},
+      {"./CL_shl_random.csv", "./CL_shl_sweep.csv","./CL_shl_sweep_piecewise.csv","./CL_shl_custom.csv"},
+      {"./C_shr_random.csv", "./C_shr_sweep.csv","./C_shr_sweep_piecewise.csv","./C_shr_custom.csv"},
+      {"./C_shl_random.csv", "./C_shl_sweep.csv","./C_shl_sweep_piecewise.csv","./C_shl_custom.csv"},
+      {"./CL_scale_32_random.csv", "./CL_scale_32_sweep.csv","./CL_scale_32_sweep_piecewise.csv","./CL_scale_32_custom.csv"},
+      {"./CL_scale_random.csv", "./CL_scale_sweep.csv","./CL_scale_sweep_piecewise.csv","./CL_scale_custom.csv"},
+      {"./CL_dscale_random.csv", "./CL_dscale_sweep.csv","./CL_dscale_sweep_piecewise.csv","./CL_dscale_custom.csv"},
+      {"./CL_dscale_32_random.csv", "./CL_dscale_32_sweep.csv","./CL_dscale_32_sweep_piecewise.csv","./CL_dscale_32_custom.csv"},
+      {"./CL_round32_16_random.csv", "./CL_round32_16_sweep.csv","./CL_round32_16_sweep_piecewise.csv","./CL_round32_16_custom.csv"}
+    };
+
+    fp_prec = fopen("precision_abs_err_report.csv", "w");
     if (fp_prec == NULL) {
         printf("Could not open precision_abs_err_report.csv\n");
         return retval;
     }
     fprintf(fp_prec, "DUT_FUNC,REF_FUNC,INPUT_PAT_1,INPUT_PAT_2,INPUT_PAT_3,MAX_ABS_ERR,MIN_ABS_ERR,AVG_ABS_ERR,MAX_BITS_ERR,AVG_BITS_ERR\n\n");
 
-    fp_spcl = fopen("basop_special_values_abs_err_report.csv", "w");
+    fp_spcl = fopen("special_values_abs_err_report.csv", "w");
     if (fp_spcl == NULL) {
-        printf("Could not open basop_special_values_abs_err_report.csv\n");
+        printf("Could not open special_values_abs_err_report.csv\n");
         return retval;
     }
 
@@ -2187,9 +2360,9 @@ int test_precision(void)
 
     
 
-    fp_prec_debug = fopen("basop_precision_abs_err_debug_report.csv", "w");
+    fp_prec_debug = fopen("precision_abs_err_debug_report.csv", "w");
     if (fp_prec_debug == NULL) {
-        printf("Could not open baseop_precision_abs_err_debug_report.csv\n");
+        printf("Could not open precision_abs_err_debug_report.csv\n");
         return retval;
     }
     fprintf(fp_prec_debug, "DUT_FUNC,REF_FUNC,INPUT_1,INPUT_2,INPUT_3,OUT_DUT,OUT_REF,ABS_ERR\n\n");
@@ -2206,23 +2379,56 @@ int test_precision(void)
     fprintf(fp_ip_op_plot, "NA, NA, NA, NA, NA, NA\n");
 
 
+
     for (i = 0; i < NUM_DEFAULT_TESTCASES; i++)
     {
         int j = 0;
         printf(" dut name = %s \n", input_prec_tests[i].fname_dut);
         strcpy(fname, input_prec_tests[i].fname_dut);
 #ifdef DEBUG_LOG
-        printf("dut name = %s\t ref name =%s\t dut type = %d\t ref type = %d\n", input_prec_tests[i].fname_dut, input_prec_tests[i].fname_ref, input_prec_tests[i].ftype, input_prec_tests[i].ftype);
+        printf("dut name = %s\t ref name =%s\t dut type = %d\t ref type = %d\n", input_prec_tests[i].fname_dut,
+              input_prec_tests[i].fname_ref, input_prec_tests[i].ftype, input_prec_tests[i].ftype);
 #endif
+
 #ifdef INPUT_PAT_COMBINATIONS
-        for (j = 0; j < (NUM_TEST_PATTERN_1 * 4); j++) {
-            execute_each_prec_test(i, input_prec_tests[i].fname_dut, input_prec_tests[i].ftype, input_prec_tests[i].fname_ref, input_prec_tests[i].dpat1[j], input_prec_tests[i].dpat2[j], input_prec_tests[i].dpat3[j]);
-    }
+       for (j = 0; j < (NUM_TEST_PATTERN_1 * 4); j++)
+       {
+
+          fp_test_baseop[i][j] = fopen(test_files[i][j],"w");
+
+          if (fp_test_baseop[i][j] == NULL)
+          {
+              printf("Could not open %s\n",test_files[i][j]);
+              return retval;
+          }
+
+            execute_each_prec_test(i, input_prec_tests[i].fname_dut, input_prec_tests[i].ftype,
+                input_prec_tests[i].fname_ref, input_prec_tests[i].dpat1[j], input_prec_tests[i].dpat2[j],
+                input_prec_tests[i].dpat3[j],j);
+
+
+          fclose(fp_test_baseop[i][j]);
+      }
 #else /* INPUT_PAT_COMBINATIONS */
         for (j = 0; j < (NUM_TEST_PATTERN_1); j++) {
-            execute_each_prec_test(i, input_prec_tests[i].fname_dut, input_prec_tests[i].ftype, input_prec_tests[i].fname_ref, input_prec_tests[i].dpat1[j], input_prec_tests[i].dpat2[j], input_prec_tests[i].dpat3[j]);
+
+
+
+    fp_test_baseop[i][j] = fopen(test_files[i][j],"w");
+
+    if (fp_test_baseop[i][j] == NULL) 
+    {
+        printf("Could not open %s\n",test_files[i][j]);
+        return retval;
+    }
+            execute_each_prec_test(i, input_prec_tests[i].fname_dut, input_prec_tests[i].ftype, input_prec_tests[i].fname_ref, input_prec_tests[i].dpat1[j], input_prec_tests[i].dpat2[j], input_prec_tests[i].dpat3[j],j);
+
+
+    fclose(fp_test_baseop[i][j]);
         }
 #endif 	/* INPUT_PAT_COMBINATIONS */
+
+
         if (i < (NUM_PREC_TESTS - 1)) {
             if (strcmp(fname, input_prec_tests[i + 1].fname_dut)) {
                 fprintf(fp_prec, "\n");
@@ -2268,7 +2474,9 @@ int test_precision(void)
 
     retval = 0;
     return retval;
+
 }
+
 
 /* End of file */
 
