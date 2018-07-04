@@ -118,6 +118,7 @@ typedef enum func_type {
     FUNC_TYPE_OW_IL_IL,     /* 2 long input :: Double output */
     FUNC_TYPE_OW_IL_IL_0,   /* 2 long input :: Double output  :  Integer version */
     FUNC_TYPE_OL_IW,            /* 1 double input :: long output */
+    FUNC_TYPE_OS_IW,            /* 1 double input :: short output */
     FUNC_TYPE_OL_IW32,          /* 1 double input in Q31 format :: long output Q31 */
     FUNC_TYPE_OL_IW32_IL,       /* 1 double input in Q31 format, 1 long input :: long output Q31 */
     FUNC_TYPE_OL_IW48,          /* 1 double input in Q47 format:: long output Q31 */

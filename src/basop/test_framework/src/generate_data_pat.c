@@ -81,7 +81,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
                 ptr_out[i] = val*22.0l / 7.0l;
                 if (cnt > MAX_TRIES)
                 {
@@ -99,7 +99,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
 #ifdef IDENTICAL_FLOAT_INP
                 ptr_out[i] = identical_double_val(val, Q_format);
 #else /* #ifdef IDENTICAL_FLOAT_INP */
@@ -144,7 +144,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
                 ptr_out[i] = val*10.0;
                 if (cnt > MAX_TRIES)
                 {
@@ -162,7 +162,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
                 ptr_out[i] = val*100.0;
                 if (cnt > MAX_TRIES)
                 {
@@ -180,7 +180,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
                 ptr_out[i] = val*1000.0;
                 if (cnt > MAX_TRIES)
                 {
@@ -198,7 +198,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
                 ptr_out[i] = val*10000.0;
                 if (cnt > MAX_TRIES)
                 {
@@ -269,7 +269,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
                 ptr_out[i] = val*100000.0;
                 if (cnt > MAX_TRIES)
                 {
@@ -287,9 +287,9 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                sign_bit = rand() & 0x1;
-                mant = rand() >> 12;
-                exp = rand() % 2048;
+                sign_bit = RANDOM_IGET32_NO[i]& 0x1;
+                mant = RANDOM_IGET32_NO[i]>> 12;
+                exp = RANDOM_IGET32_NO[i] % 2048;
 
                 ptr_out[i] = prepare_double_no(sign_bit, exp, mant);
                 if (cnt > MAX_TRIES)
@@ -306,9 +306,9 @@ void initd(int pat, double *ptr_out, int len) {
 
     case INP_DATA_PAT_EXP_LIM_D:
         for (i = 0; i < len; ++i) {
-            sign_bit = rand() & 0x1;
-            mant = rand() >> 12;
-            exp = rand() % 4;
+            sign_bit =RANDOM_IGET32_NO[i] & 0x1;
+            mant = RANDOM_IGET32_NO[i] >> 12;
+            exp = RANDOM_IGET32_NO[i] % 4;
             if (exp == 2)
             {
                 exp = 2046;
@@ -323,9 +323,9 @@ void initd(int pat, double *ptr_out, int len) {
 
     case INP_DATA_PAT_MANT_LIM_D:
         for (i = 0; i < len; ++i) {
-            sign_bit = rand() & 0x1;
-            mant = rand() % 4;
-            exp = rand() % 2048;
+            sign_bit = RANDOM_IGET32_NO[i] & 0x1;
+            mant = RANDOM_IGET32_NO[i] % 4;
+            exp = RANDOM_IGET32_NO[i] % 2048;
             if (mant == 2)
             {
                 mant = 0x8000000000000LL;
@@ -353,7 +353,7 @@ void initd(int pat, double *ptr_out, int len) {
 
     case INP_DATA_PAT_SPECIAL_D:
         for (i = 0; i < len; ++i) {
-            val = get_double_no();
+            val = RANDOM_M1_P1_double[i];
             ptr_out[i] = val;
         }
         if (len >= 27)
@@ -419,7 +419,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
                 if (val < 0.0f)
                 {
                     ptr_out[i] = -val*100000.0;
@@ -443,7 +443,7 @@ void initd(int pat, double *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_double_no();
+                val = RANDOM_M1_P1_double[i];
                 if (val > 0.0f)
                 {
                     ptr_out[i] = -val*100000.0;
@@ -605,7 +605,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
                 ptr_out[i] = val*22.0f / 7.0f;
                 if (cnt > MAX_TRIES)
                 {
@@ -624,7 +624,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no() * 0.5f;
+                val = RANDOM_M1_P1_float[i] * 0.5f;
 #ifdef IDENTICAL_FLOAT_INP
                 ptr_out[i] = identical_float_val(val, Q_format);
 #else /* #ifdef IDENTICAL_FLOAT_INP */
@@ -669,7 +669,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
 #ifdef IDENTICAL_FLOAT_INP
                 ptr_out[i] = identical_float_val((float)val, Q_format);
 #else /* #ifdef IDENTICAL_FLOAT_INP */
@@ -702,7 +702,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
                 ptr_out[i] = val*10.0f;
                 if (cnt > MAX_TRIES)
                 {
@@ -720,7 +720,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
                 ptr_out[i] = val*100.0f;
                 if (cnt > MAX_TRIES)
                 {
@@ -738,7 +738,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
                 ptr_out[i] = val*1000.0f;
                 if (cnt > MAX_TRIES)
                 {
@@ -756,7 +756,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
                 ptr_out[i] = val*10000.0f;
                 if (cnt > MAX_TRIES)
                 {
@@ -824,7 +824,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
                 ptr_out[i] = val*100000.0f;
                 if (cnt > MAX_TRIES)
                 {
@@ -842,9 +842,9 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                sign_bit = rand() & 0x1;
-                mant = rand() >> 9;
-                exp = rand() % 256;
+                sign_bit = RANDOM_IGET32_NO[i] & 0x1;
+                mant = RANDOM_IGET32_NO[i] >> 9;
+                exp = RANDOM_IGET32_NO[i] % 256;
 
                 ptr_out[i] = prepare_float_no(sign_bit, exp, mant);
                 if (cnt > MAX_TRIES)
@@ -860,9 +860,9 @@ void initf(int pat, float *ptr_out, int len) {
 
     case INP_DATA_PAT_EXP_LIM_F:
         for (i = 0; i < len; ++i) {
-            sign_bit = rand() & 0x1;
-            mant = rand() >> 9;
-            exp = rand() % 4;
+            sign_bit = RANDOM_IGET32_NO[i] & 0x1;
+            mant = RANDOM_IGET32_NO[i] >> 9;
+            exp = RANDOM_IGET32_NO[i] % 4;
             if (exp == 2)
             {
                 exp = 254;
@@ -877,9 +877,9 @@ void initf(int pat, float *ptr_out, int len) {
 
     case INP_DATA_PAT_MANT_LIM_F:
         for (i = 0; i < len; ++i) {
-            sign_bit = rand() & 0x1;
-            mant = rand() % 4;
-            exp = rand() % 256;
+            sign_bit = RANDOM_IGET32_NO[i] & 0x1;
+            mant = RANDOM_IGET32_NO[i] % 4;
+            exp = RANDOM_IGET32_NO[i] % 256;
             if (mant == 2)
             {
                 mant = 0x400000;
@@ -895,8 +895,8 @@ void initf(int pat, float *ptr_out, int len) {
     case INP_DATA_PAT_SUBNORMAL_F:
         exp = 0;
         for (i = 0; i < len; ++i) {
-            sign_bit = rand() & 0x1;
-            mant = rand() >> 23;
+            sign_bit = RANDOM_IGET32_NO[i] & 0x1;
+            mant = RANDOM_IGET32_NO[i] >> 23;
             if (mant == 0)
             {
                 mant = 0x1;
@@ -908,7 +908,7 @@ void initf(int pat, float *ptr_out, int len) {
 
     case INP_DATA_PAT_SPECIAL_F:
         for (i = 0; i < len; ++i) {
-            val = get_float_no();
+            val = RANDOM_M1_P1_float[i];
             ptr_out[i] = val;
         }
         if (len >= 27) {
@@ -973,7 +973,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
                 if (val < 0.0f)
                 {
                     ptr_out[i] = -val*100000.0f;
@@ -997,7 +997,7 @@ void initf(int pat, float *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no();
+                val = RANDOM_M1_P1_float[i];
                 if (val > 0.0f)
                 {
                     ptr_out[i] = -val*100000.0f;
@@ -1252,7 +1252,7 @@ void initfc(int pat, f_cmplx *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no() * 0.5f;
+                val = RANDOM_M1_P1_float[i] * 0.5f;
 #ifdef IDENTICAL_FLOAT_INP
                 ptr_out[i].re = identical_float_val(val, Q_format);
 #else /* #ifdef IDENTICAL_FLOAT_INP */
@@ -1269,7 +1269,7 @@ void initfc(int pat, f_cmplx *ptr_out, int len) {
             cnt = 0;
             do
             {
-                val = get_float_no() * 0.5f;
+                val = RANDOM_M1_P1_float[i] * 0.5f;
 #ifdef IDENTICAL_FLOAT_INP
                 ptr_out[i].im = identical_float_val(val, Q_format);
 #else /* #ifdef IDENTICAL_FLOAT_INP */
@@ -1378,13 +1378,14 @@ int get_i32_no(void)
 }
 
 
-
+/*
 long long int get_i64_no(void)
 {
     long long sign_bit;
     long long val;
 
-	val = ((long long)get_i32_no()<< 32) | ((long long)get_i32_no()& 0xffffffff);
+    srand(time(0));
+	val = ((long long)RANDOM_IGET32_NO[i]<< 32) | ((long long)RANDOM_IGET32_NO[i]& 0xffffffff);
 
     sign_bit = rand() & 0x1;
     if (sign_bit)
@@ -1392,7 +1393,7 @@ long long int get_i64_no(void)
         val = -val;
     }
     return(val);
-}
+}*/
 void initi16(int pat, void *ptr_out, int len) {
     int i;
     short int val;
@@ -1403,7 +1404,7 @@ void initi16(int pat, void *ptr_out, int len) {
     {
 		short int* pOut = (short int *)ptr_out;
         for (i = 0; i < len; ++i) {
-            val = (short int)(get_i32_no()>>16);
+            val = (short int)(RANDOM_IGET32_NO[i]>>16);
             pOut[i] = val;
         }
     }
@@ -1478,8 +1479,8 @@ void initi16(int pat, void *ptr_out, int len) {
     {
         short int* pOut = (short int*)ptr_out;
         for (i = 0; i < len; ++i) {
-            val = get_i32_no();
-            pOut[i] = (val << 27) >> 27; //  take only last 5 bits
+            int val32 = RANDOM_IGET32_NO[i];
+            pOut[i] = (short )((val32 << 27) >> 27); //  take only last 5 bits
         }
     }
     break;
@@ -1498,7 +1499,7 @@ void initi32(int pat, void *ptr_out, int len) {
     {
         int* pOut = (int *)ptr_out;
         for (i = 0; i < len; ++i) {
-            val = get_i32_no();
+            val = RANDOM_IGET32_NO[i];
             pOut[i] = val;
         }
     }
@@ -1571,7 +1572,7 @@ void initi32(int pat, void *ptr_out, int len) {
     {
         short* pOut = (short *)ptr_out;
         for (i = 0; i < len; ++i) {
-            val = get_i32_no();
+            val = RANDOM_IGET32_NO[i];
             pOut[i] = (val << 27) >> 27; //  take only last 5 bits
         }
     }
@@ -1591,7 +1592,7 @@ void initi64(int pat, void *ptr_out, int len) {
 	{
 		long long int* pOut = (long long int *)ptr_out;
 		for (i = 0; i < len; ++i) {
-			val = get_i64_no();
+			val = RANDOM_IGET64_NO[i];
 			pOut[i] = val;
 		}
 	}
