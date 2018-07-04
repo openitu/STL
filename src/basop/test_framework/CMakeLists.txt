@@ -21,15 +21,11 @@ foreach(file ${files})
   # Extract basename
   get_filename_component( basename ${file} NAME )
 
-  # Set all file to a common end of line style
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test/test_ref/${basename} ${CMAKE_CURRENT_SOURCE_DIR}/test_data/tmp_${basename}_ref.csv NEWLINE_STYLE CRLF)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test_data/${basename} ${CMAKE_CURRENT_SOURCE_DIR}/test_data/tmp_${basename}_test.csv NEWLINE_STYLE CRLF)
-
   # Perform diff
   add_test( basop_precision_test_${basename}
     ${CMAKE_COMMAND} -E compare_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/test_data/tmp_${basename}_ref.csv
-    ${CMAKE_CURRENT_SOURCE_DIR}/test_data/tmp_${basename}_test.csv
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/test_ref/${basename}
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_data/${basename}
   )
 
 endforeach()
