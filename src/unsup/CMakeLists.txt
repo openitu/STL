@@ -47,8 +47,6 @@ add_executable(xencode xencode.c)
 
 add_executable(xdecode xdecode.c)
 
-add_executable(pshar pshar.c)
-
 add_test(astrip1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/astrip -q -smooth -wlen 145 -sample test_data/cftest1.dat test_data/astrip.smp)
 add_test(astrip1-verify ${CMAKE_COMMAND} -E compare_files test_data/astrip.smp test_data/astrip.ref)
 
