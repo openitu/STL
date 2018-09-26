@@ -371,7 +371,7 @@ truncate.c   truncate.rme
 stl2014pre0/unsup:
 asc2bin.c     astrip.c	    bin2asc.c	  chr2sh.c    compfile.c  concat.c
 dumpfile.c    endian.c	    fdelay.c	  g728-vt     getcrc32.c  makefile.cl
-makefile.djc  makefile.tcc  makefile.unx  measure.c   oper.c	  pshar
+makefile.djc  makefile.tcc  makefile.unx  measure.c   oper.c
 rm.bat	      sb.c	    sh2chr.c	  sig-snr.h   sine.c	  sub-add.c
 swapover.bat  swapover.sh   tstunsup.zip  unsupp.rme  voice.ori   xdecode.c
 xencode.c
@@ -379,11 +379,6 @@ xencode.c
 stl2014pre0/unsup/g728-vt:
 cwcomp.c   filsub.c  ldcdec.c  ldcsub.c  makefile  read.me  run-ncw  s_rnge.c
 sig_die.c  snr.c     wsnr.c
-
-stl2014pre0/unsup/pshar:
-file1-o.txt   file2-o.txt   file3-o.txt   file4-o.txt	file5-o.txt
-make-vms.com  makefile.djc  makefile.tcc  makefile.unx	pshar.c
-pshar.rme     test.ori
 
 stl2014pre0/utl:
 makefile.cl	makefile.djc  makefile.tcc  makefile.unx  scaldemo.c

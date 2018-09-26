@@ -56,11 +56,6 @@ oper.c:     implement arithmetic operation on two files: add, subtract,
             multiply or divide two files applying scaling factors (linear
             or dB), and adding a DC level.
 
-pshar:      a directory with makefiles, readme, source code and test files
-            for a portable shell archiving/dearchiving program compatible
-            with Unix the shar utility. Very simple and useful, in especial
-            for MSDOS and VMS systems. See the directory for more details.
-
 sb.c        swap bytes for word-oriented files. For VMS/Unix/MSDOS.
 
 sh2chr.c:   convert short-oriented (16-bit words) files to char-oriented

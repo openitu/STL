@@ -47,8 +47,6 @@ add_executable(xencode xencode.c)
 
 add_executable(xdecode xdecode.c)
 
-add_executable(pshar pshar.c)
-
 add_test(astrip1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/astrip -q -smooth -wlen 145 -sample test_data/cftest1.dat test_data/astrip.smp)
 add_test(astrip1-verify ${CMAKE_COMMAND} -E compare_files test_data/astrip.smp test_data/astrip.ref)
 
@@ -81,13 +79,6 @@ add_test(fdelay5-verify ${CMAKE_COMMAND} -E compare_files test_data/delay-15.tst
 
 add_test(fdelay6 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/fdelay -hex 0xF test_data/litend.src test_data/delay-0f.tst)
 add_test(fdelay6-verify ${CMAKE_COMMAND} -E compare_files test_data/delay-0f.tst test_data/delay-15.ref)
-
-add_test(pshar1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/pshar -u test_data/test.ori)
-add_test(pshar1-1verify ${CMAKE_COMMAND} -E compare_files file1.txt test_data/file1-o.txt)
-add_test(pshar1-2verify ${CMAKE_COMMAND} -E compare_files file2.txt test_data/file2-o.txt)
-add_test(pshar1-3verify ${CMAKE_COMMAND} -E compare_files file3.txt test_data/file3-o.txt)
-add_test(pshar1-4verify ${CMAKE_COMMAND} -E compare_files file4.txt test_data/file4-o.txt)
-add_test(pshar1-5verify ${CMAKE_COMMAND} -E compare_files file5.txt test_data/file5-o.txt)
 
 add_test(NAME xdecode1 COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xdecode voicet.uue WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
 add_test(xdecode1-verify ${CMAKE_COMMAND} -E compare_files test_data/voice.rec test_data/voice.ori)
