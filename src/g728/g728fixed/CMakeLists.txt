@@ -41,6 +41,6 @@ add_test(g728fp-dec6 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/g728fp -little -nopostf d
 add_test(g728fp-dec6-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q ../test_data/outa6g.bin ../test_data/cw6.bin.fp.out)
 
 #TEST: Decoder with postfilter
-add_test(g728fp-dec-post ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/g728fp -little enc ../test_data/cw4.bin ../test_data/cw4-post.bin.fp.out)
+add_test(g728fp-dec-post ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/g728fp -little dec ../test_data/cw4.bin ../test_data/cw4-post.bin.fp.out)
 add_test(g728fp-dec-post-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q ../test_data/outb4g.bin ../test_data/cw4-post.bin.fp.out)
 

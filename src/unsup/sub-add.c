@@ -85,11 +85,17 @@ char mrs[15] = "mrs=512";
 #define NO  0
 
 /* Pseudo-functions */
-#define display_usage() (\
-  printf("Usage: %s [-options] file1 file2 %s\n", argv[0],\
-	 "[BlkSiz [1stBlock [NoOfBlocks [output] ]]]"),\
-  exit(-128) \
-)
+void display_usage(char *argv[]) {
+  printf("Usage: %s [-options] file1 file2 %s\n", argv[0], "[BlkSiz [1stBlock [NoOfBlocks [output] ]]]");
+  printf("\nOptions:\n");
+  printf("  -delay n	delay the 1st file by n samples and then compare.\n");
+  printf("            a negative n causes the 2nd file to be delayed.\n");
+  printf("  -equiv n  consider differences of upto +- to be equivalent files\n");
+  printf("            and report as such.\n");
+  printf("  -q        run in quiet mode - only report totals\n");
+  printf("  -e        exit with an error when the two files are not equivalent.\n");
+  exit(-128);
+}
 
 #define ABS(x) (x>0?(x):-(x))
 
@@ -100,6 +106,8 @@ char mrs[15] = "mrs=512";
 int main (int argc, char *argv[]) {
   char out_is_file = NO;
   int i, j, k, l, K;
+
+  char return_error = 0;
 
   char File1[50], File2[50];
   int fh1, fh2, fho;
@@ -115,7 +123,7 @@ int main (int argc, char *argv[]) {
 
   /* Check options */
   if (argc < 2)
-    display_usage ();
+    display_usage (argv);
   else {
     while (argc > 1 && argv[1][0] == '-')
       if (strcmp (argv[1], "-delay") == 0) {
@@ -139,9 +147,15 @@ int main (int argc, char *argv[]) {
         /* Move arg{c,v} over the option to the next argument */
         argc--;
         argv++;
+      } else if (strcmp (argv[1], "-e") == 0) {
+        return_error = 1;
+              
+        /* Move arg{c,v} over the option to the next argument */
+        argc--;
+        argv++;
       } else {
         fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
-        display_usage ();
+        display_usage (argv);
       }
   }
 
@@ -270,6 +284,12 @@ int main (int argc, char *argv[]) {
     printf ("(%ld equivalent at a +-%ld level) ", NrEquivs, equiv);
   printf ("found out of %ld.\n", N * N2);
 
+  if (return_error) {
+    if ( NrDiffs > NrEquivs ) {
+      return 1;
+    }
+    
+  }
   /* Finalizations */
   fclose (F1);
   fclose (F2);
