@@ -35,7 +35,10 @@
 
 #include "ugstdemo.h"
 #include <stdio.h>
+
+#ifdef unix
 #include <unistd.h>
+#endif
 
 /*
  * Includes dependent of the Operating System

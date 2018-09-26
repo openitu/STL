@@ -175,7 +175,7 @@ char Usage4[] = "                -v  verbose on extraction, incl. echoing filesi
 #define OPTSTRING "u:ap:d:bcv:f:"
 #endif
 
-#if (defined (VMS) || defined(MSDOS)) && !defined(__GNUC__)
+#if (defined (VMS) || defined(MSDOS) || defined(_WIN32)) && !defined(__GNUC__)
 char *index (char *s, char c) {
   while (*s != 0 && *s != c)
     s++;
@@ -387,6 +387,7 @@ int getpat (pattern)
 }
 
 
+#ifndef unix
 /*
  * get option letter from argument vector
  */
@@ -429,6 +430,7 @@ int getopt (nargc, nargv, ostr)
   }
   return (optopt);              /* dump back option letter */
 }
+#endif
 
 
 int local_getarg (nargc, nargv)
