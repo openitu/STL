@@ -1,5 +1,6 @@
 file(GLOB G728FLOAT_SRC *.c)
 add_executable(g728 ${G728FLOAT_SRC})
+target_compile_definitions(g728 PUBLIC USEDOUBLES=1)
 target_link_libraries(g728 ${M_LIBRARY})
 
 #TEST: Encoder
