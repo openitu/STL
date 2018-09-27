@@ -40,6 +40,6 @@ add_test(rpeltdemo-alaw2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_dat
 
 add_test(rpeltdemo-alaw3-e_d-1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/rpedemo test_data/sine.a-a test_data/sinea-e_d-a.l)
 add_test(rpeltdemo-alaw3-e_d-2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/rpedemo -a test_data/sine.a test_data/sinea-e_d-a.a)
-add_test(rpeltdemo-alaw3-e_d-g711demo ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/g711demo a lilo test_data/sinea-e_d-a.l test_data/sinea-e_d-a.a 160 1 20)
-add_test(rpeltdemo-ulaw3-e_d-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sinea-e_d-a.a test_data/sinea-e_d-al.a 160)
+add_test(rpeltdemo-alaw3-e_d-g711demo ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/g711demo a lilo test_data/sinea-e_d-a.l test_data/sinea-e_d-al.a 160 1 20)
+add_test(rpeltdemo-alaw3-e_d-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sinea-e_d-a.a test_data/sinea-e_d-al.a 160)
 
