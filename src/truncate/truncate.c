@@ -132,6 +132,7 @@ static int conv_inpBst (char type, int n, char sync_header, FILE * pfile, FILE *
     }
     break;
   }
+  free(patt);
 
   return 0;
 }
@@ -279,7 +280,7 @@ int main (int argc, char *argv[]) {
 
     /* close files */
     fclose (pfilin);
-#ifdef TMPFILE_FIX
+#ifndef TMPFILE_FIX
     fclose (pfiltmp);
 #endif
 
@@ -371,9 +372,7 @@ int main (int argc, char *argv[]) {
   /* FINALIZATIONS */
 
   /* close the opened files */
-#ifndef TMPFILE_FIX
   fclose (pfilin);
-#endif
   fclose (pfilout);
   if (pfilrate != NULL)
     fclose (pfilrate);
