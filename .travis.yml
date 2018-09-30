@@ -1,0 +1,26 @@
+
+sudo: required
+
+language: cpp
+
+services:
+  - docker
+
+before_install:
+  - docker pull ubuntu:latest;
+  - docker run -d --name ubuntu -dti ubuntu:latest bash;
+  - docker ps -a;
+  - docker exec ubuntu mkdir /STL;
+  - docker cp . ubuntu:/STL;
+  - docker exec ubuntu apt-get update;
+  - docker exec ubuntu apt-get -y upgrade;
+  - docker exec ubuntu apt-get -y install sudo build-essential cmake;
+
+script:
+  ############################################################################
+  # Build main and tests
+  ############################################################################
+  - docker exec ubuntu /bin/bash -c 'cd /STL; cmake .'
+  - docker exec ubuntu /bin/bash -c 'cd /STL; cmake --build .'
+  - docker exec ubuntu /bin/bash -c 'cd /STL; ctest'
+
