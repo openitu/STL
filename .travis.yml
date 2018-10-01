@@ -1,0 +1,11 @@
+language:
+    - c
+    - cpp 
+
+compiler:
+    - clang
+
+script:
+    - cmake .
+    - cmake --build .
+    - ctest
