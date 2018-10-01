@@ -120,7 +120,7 @@ int main (int argc, char *argv[]) {
   /* Check options */
   if (argc < 2) {
     display_usage (argv);
-    exit (-1);
+    exit (EXIT_FAILURE);
   }
   while (argc > 1 && argv[1][0] == '-') {
     if (strcmp (argv[1], "-delay") == 0) {
@@ -276,7 +276,7 @@ int main (int argc, char *argv[]) {
   printf ("found out of %ld.\n", N * N2);
 
   if (NrDiffs > NrEquivs) {
-    return 1;
+    return EXIT_FAILURE;
   }
 
   /* Finalizations */
@@ -285,6 +285,6 @@ int main (int argc, char *argv[]) {
   if (out_is_file)
     fclose (Fo);
 #ifndef VMS
-  return 0;
+  return EXIT_SUCCESS;
 #endif
 }
