@@ -2,6 +2,7 @@ include_directories(../eid)
 include_directories(../utl)
 
 add_executable(g711iplc g711iplc.c plcferio.c g711iplc.c lowcfe.c ../eid/softbit.c)
+target_compile_definitions(g711iplc PUBLIC USEDOUBLES=1)
 target_link_libraries(g711iplc ${M_LIBRARY})
 
 add_executable(asc2g192 asc2g192.c)
