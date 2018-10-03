@@ -76,7 +76,7 @@ add_test(fdelay5-verify ${CMAKE_COMMAND} -E compare_files test_data/delay-15.tst
 add_test(fdelay6 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/fdelay -hex 0xF test_data/litend.src test_data/delay-0f.tst)
 add_test(fdelay6-verify ${CMAKE_COMMAND} -E compare_files test_data/delay-0f.tst test_data/delay-15.ref)
 
-add_test(NAME xdecode1 COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xdecode voicet.uue WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
+add_test(NAME xdecode1 COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xdecode voice.uue WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
 add_test(xdecode1-verify ${CMAKE_COMMAND} -E compare_files test_data/voice.rec test_data/voice.ori)
 
 add_test(NAME xencode1 COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xencode voice.rec v.uue 7 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
