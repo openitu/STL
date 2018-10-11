@@ -85,11 +85,15 @@ char mrs[15] = "mrs=512";
 #define NO  0
 
 /* Pseudo-functions */
-#define display_usage() (\
-  printf("Usage: %s [-options] file1 file2 %s\n", argv[0],\
-	 "[BlkSiz [1stBlock [NoOfBlocks [output] ]]]"),\
-  exit(-128) \
-)
+void display_usage (char *argv[]) {
+  printf ("Usage: %s [-options] file1 file2 %s\n", argv[0], "[BlkSiz [1stBlock [NoOfBlocks [output] ]]]");
+  printf ("\nOptions:\n");
+  printf ("  -delay n	delay the 1st file by n samples and then compare.\n");
+  printf ("            a negative n causes the 2nd file to be delayed.\n");
+  printf ("  -equiv n  consider differences of upto +- to be equivalent files\n");
+  printf ("            and report as such.\n");
+  printf ("  -q        run in quiet mode - only report totals\n");
+}
 
 #define ABS(x) (x>0?(x):-(x))
 
@@ -114,35 +118,36 @@ int main (int argc, char *argv[]) {
   /* ......... GET PARAMETERS ......... */
 
   /* Check options */
-  if (argc < 2)
-    display_usage ();
-  else {
-    while (argc > 1 && argv[1][0] == '-')
-      if (strcmp (argv[1], "-delay") == 0) {
-        /* Get skip length */
-        delay = atol (argv[2]);
+  if (argc < 2) {
+    display_usage (argv);
+    exit (EXIT_FAILURE);
+  }
+  while (argc > 1 && argv[1][0] == '-') {
+    if (strcmp (argv[1], "-delay") == 0) {
+      /* Get skip length */
+      delay = atol (argv[2]);
 
-        /* Move arg{c,v} over the option to the next argument */
-        argc -= 2;
-        argv += 2;
-      } else if (strcmp (argv[1], "-equiv") == 0) {
-        /* Compare using the concept of equivalent results: differences not exceeding +-equiv */
-        equiv = atol (argv[2]);
+      /* Move arg{c,v} over the option to the next argument */
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-equiv") == 0) {
+      /* Compare using the concept of equivalent results: differences not exceeding +-equiv */
+      equiv = atol (argv[2]);
 
-        /* Move arg{c,v} over the option to the next argument */
-        argc -= 2;
-        argv += 2;
-      } else if (strcmp (argv[1], "-q") == 0) {
-        /* Set quiet compare - only log the total differences */
-        quiet = 1;
+      /* Move arg{c,v} over the option to the next argument */
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-q") == 0) {
+      /* Set quiet compare - only log the total differences */
+      quiet = 1;
 
-        /* Move arg{c,v} over the option to the next argument */
-        argc--;
-        argv++;
-      } else {
-        fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
-        display_usage ();
-      }
+      /* Move arg{c,v} over the option to the next argument */
+      argc--;
+      argv++;
+    } else {
+      fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
+      display_usage (argv);
+    }
   }
 
   /* Read parameters for processing */
@@ -270,12 +275,16 @@ int main (int argc, char *argv[]) {
     printf ("(%ld equivalent at a +-%ld level) ", NrEquivs, equiv);
   printf ("found out of %ld.\n", N * N2);
 
+  if (NrDiffs > NrEquivs) {
+    return EXIT_FAILURE;
+  }
+
   /* Finalizations */
   fclose (F1);
   fclose (F2);
   if (out_is_file)
     fclose (Fo);
 #ifndef VMS
-  return 0;
+  return EXIT_SUCCESS;
 #endif
 }
