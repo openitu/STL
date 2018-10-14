@@ -1,2 +1,0 @@
-:%s#/Color true def#/Color false def/
-:wq
