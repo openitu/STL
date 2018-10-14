@@ -1,7 +1,0 @@
--q
--dNOPAUSE
--sDEVICE=pbmraw
--sOUTPUTFILE=tmpps186.pbm
--r300x300
-tmp$$.ps
-quit.ps
