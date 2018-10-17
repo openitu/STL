@@ -36,7 +36,6 @@ sweep.[aru]*
 *testg712*
 *.tst
 !*voic*.tst
-*[cf].log
 
 src/g722/test_data/inpsp.bs
 src/g722/test_data/outsp.e-d
@@ -69,7 +68,6 @@ compile_commands.json
 CTestTestfile.cmake
 
 # LaTeX files
-!manual/LaTeX/Makefile
 *.aux
 *.bbl
 *.blg
