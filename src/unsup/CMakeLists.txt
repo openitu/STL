@@ -1,9 +1,5 @@
 include_directories(../utl)
 
-add_executable(add sub-add.c)
-target_compile_definitions(add PRIVATE ADD_FILES)
-add_executable(sub sub-add.c)
-
 add_executable(asc2bin asc2bin.c)
 target_link_libraries(asc2bin ${M_LIBRARY})
 

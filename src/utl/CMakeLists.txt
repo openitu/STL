@@ -4,6 +4,8 @@ target_link_libraries(spdemo ${M_LIBRARY})
 add_executable(scaldemo scaldemo.c ugst-utl.c)
 target_link_libraries(scaldemo ${M_LIBRARY})
 
+add_executable(signal-diff signal-diff.c)
+
 #TODO Input file is not _yet_ there.
 add_test(scaldemo1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scaldemo -q -trunc ../is54/test_data/voice.src test_data/voice.tru 256 1 0 0.5941352)
 add_test(scaldemo1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q ../sv56/test_data/voice.ltl test_data/voice.tru)
