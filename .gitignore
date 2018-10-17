@@ -4,7 +4,9 @@
 *old
 *.org
 *.swp
-bin/
+*.log
+*.tmp
+[Bb]in/
 
 # Generated test files
 *05g10.*
@@ -55,7 +57,6 @@ src/utl/test_data/voice.tru
 src/unsup/test_data/v.uue
 src/unsup/test_data/v01.uue
 
-
 # CMake generated files
 CMakeCache.txt
 CMakeFiles
@@ -74,18 +75,15 @@ CTestTestfile.cmake
 *.blg
 *.fdb_latexmk
 *.fls
-manual/LaTeX/*.log
 *.out
 *.pdf
 *.synctex.gz
 *.toc
 
-
 # Visual Studio
 *.suo
 *.user
 *.userosscache
-*.sln.docstates
 
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -94,10 +92,9 @@ manual/LaTeX/*.log
 x64/
 x86/
 bld/
-[Bb]in/
 [Oo]bj/
 [Ll]og/
 
 .vs/
 *vcxproj*
-*.sln
+*.sln*
