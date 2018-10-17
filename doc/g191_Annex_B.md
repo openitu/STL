@@ -1,4 +1,4 @@
-# Annex B - ITU-T software tools General Public License<a name="annex_b"></a>
+# Annex B - ITU-T software tools General Public License
 
 (This annex forms an integral part of this Recommendation)
 

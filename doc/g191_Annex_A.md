@@ -1,4 +1,4 @@
-# Annex A - List of software tools available<a name="annex_a"></a>
+# Annex A - List of software tools available
 
 (This annex forms an integral part of this Recommendation)
 
