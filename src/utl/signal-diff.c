@@ -88,7 +88,7 @@ char mrs[15] = "mrs=512";
 void display_usage (char *argv[]) {
   printf ("Usage: %s [-options] file1 file2 %s\n", argv[0], "[BlkSiz [1stBlock [NoOfBlocks [output] ]]]");
   printf ("\nOptions:\n");
-  printf ("  -delay n	delay the 1st file by n samples and then compare.\n");
+  printf ("  -delay n  delay the 1st file by n samples and then compare.\n");
   printf ("            a negative n causes the 2nd file to be delayed.\n");
   printf ("  -equiv n  consider differences of upto +- to be equivalent files\n");
   printf ("            and report as such.\n");
