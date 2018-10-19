@@ -11,10 +11,10 @@ add_test(scaldemo1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scaldemo -q -trunc ../is54/
 add_test(scaldemo1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q ../sv56/test_data/voice.ltl test_data/voice.tru)
 
 add_test(scaldemo2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scaldemo -q -premask -round ../is54/test_data/voice.src test_data/voice.rou 256 1 0 0.5941352)
-add_test(scaldemo2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sub -equiv 1 ../sv56/test_data/voice.ltl test_data/voice.rou)
+add_test(scaldemo2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -equiv 1 ../sv56/test_data/voice.ltl test_data/voice.rou)
 
 add_test(scaldemo3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scaldemo -q -round ../is54/test_data/voice.src test_data/voice.rnp 256 1 0 0.5941352)
-add_test(scaldemo3-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sub -equiv 1 test_data/voice.rnp test_data/voice.rou)
+add_test(scaldemo3-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -equiv 1 test_data/voice.rnp test_data/voice.rou)
 
 add_test(spdemo1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/spdemo -q -r 16 -right ps test_data/spref.src test_data/sptst-r.s16 100)
 add_test(spdemo1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/spref-r.s16 test_data/sptst-r.s16)
