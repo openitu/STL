@@ -146,23 +146,22 @@ add_test(filter20 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q PCM1 test_data/tes
 add_test(filter20-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/pcm1.flt    test_data/testpcm1.ref)
 
 add_test(filter21 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -up iflat test_data/test.src test_data/test-cas.flt)
-add_test(filter21-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-asy.flt test_data/test-asy.ref)
+add_test(filter21-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test-cas.flt test_data/test-cas.ref)
 
 add_test(filter22 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -async iflat test_data/test.src test_data/test-asy.flt)
-add_test(filter22-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-cas.flt test_data/test-cas.ref)
+add_test(filter22-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test-asy.flt test_data/test-asy.ref)
 
 add_test(filter23 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -async -delay 37 iflat test_data/test.src test_data/tst-asyd.flt)
-add_test(filter23-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-sac.flt test_data/test-sac.ref)
+add_test(filter23-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -delay 37 test_data/tst-asyd.flt test_data/test-asy.flt)
 
 add_test(filter24 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -async -delay -37 iflat test_data/test.src test_data/tst-asys.flt)
-add_test(filter24-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/testp341.flt test_data/testp341.ref)
+add_test(filter24-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -delay -37 test_data/tst-asys.flt test_data/test-asy.flt)
 
 add_test(filter25 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -down iflat test_data/test.src test_data/test-sac.flt)
-add_test(filter25-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test5kbp.flt test_data/test5kbp.ref)
+add_test(filter25-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test-sac.flt test_data/test-sac.ref)
 
 add_test(filter26 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q p341 test_data/test.src test_data/testp341.flt)
-add_test(filter26-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 -delay 37  test_data/tst-asyd.flt test_data/test-asy.flt)
+add_test(filter26-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/testp341.flt test_data/testp341.ref)
 
 add_test(filter27 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q 5kbp test_data/test.src test_data/test5kbp.flt)
-add_test(filter27-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 -delay -37 test_data/tst-asys.flt test_data/test-asy.flt)
-
+add_test(filter27-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test5kbp.flt test_data/test5kbp.ref)
