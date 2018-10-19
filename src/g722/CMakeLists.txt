@@ -44,14 +44,14 @@ add_test(tstDg722-9 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tstdg722 -q test_data/bt1d
 add_test(tstDg722-10 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tstdg722 -q test_data/bt1d3.cod test_data/bt3l3.rc2 test_data/bt3h3.rc0)
 add_test(tstDg722-11 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tstdg722 -q test_data/bt1d3.cod test_data/bt3l3.rc3 test_data/bt3h3.rc0)
 
-add_test(encg722-1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/encg722 -q test_data/inpsp.bin test_data/temp.cod)
-add_test(encg722-1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/temp.cod test_data/codspw.cod 64)
+add_test(encg722-1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/encg722 -q -byte test_data/inpsp.bin test_data/temp.cod)
+add_test(encg722-1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/temp.cod test_data/codspw.cod 64)
 
-add_test(decg722-1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/decg722 -q -byte test_data/codspw.cod test_data/temp1.out 1)
-add_test(decg722-1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/temp1.out test_data/outsp1.bin 64)
+add_test(decg722-1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/decg722 -q -mode 1 -byte test_data/codspw.cod test_data/temp1.out)
+add_test(decg722-1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/temp1.out test_data/outsp1.bin 64)
 
-add_test(decg722-2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/decg722 -q -byte test_data/codspw.cod test_data/temp2.out 2)
-add_test(decg722-2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/temp2.out test_data/outsp2.bin 64)
+add_test(decg722-2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/decg722 -q -mode 2 -byte test_data/codspw.cod test_data/temp2.out)
+add_test(decg722-2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/temp2.out test_data/outsp2.bin 64)
 
-add_test(decg722-3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/decg722 -q -byte test_data/codspw.cod test_data/temp3.out 3)
-add_test(decg722-3-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/temp3.out test_data/outsp3.bin 64)
+add_test(decg722-3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/decg722 -q -mode 3 -byte test_data/codspw.cod test_data/temp3.out)
+add_test(decg722-3-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/temp3.out test_data/outsp3.bin 64)
