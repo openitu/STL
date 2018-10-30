@@ -185,7 +185,7 @@
  *         0 -> invalid choice!
  * Last update: 11.May.2007
  */
-int valid_filter (char *F_type, char *modified_IRS) {
+int valid_filter (char *F_type, char modified_IRS) {
   int valid = 0;
 
   if (strncmp (F_type, "irs", 3) == 0 || strncmp (F_type, "IRS", 3) == 0
