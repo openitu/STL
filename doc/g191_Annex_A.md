@@ -6,7 +6,7 @@ This annex contains a list with a short description of the software tools availa
 
 ## a) Example programs available
 
-Associated header file: ugstdemo.h
+Associated header file: `ugstdemo.h`
 
 The following programs are examples of the use of the modules:
 
@@ -41,9 +41,9 @@ NOTE - The module for the Basic Operators does not have a demo program but it is
 
 ## b) Rate change module with FIR (finite impulse response) routines
 
-Name: firflt.c
+Name: `firflt.c`
 
-Associated header file: firflt.h
+Associated header file: `firflt.h`
 
 Functions included:
 
@@ -85,9 +85,9 @@ Functions included:
 
 ## c) Rate change module with IIR routines
 
-Name: iirflt.c
+Name: `iirflt.c`
 
-Associated header file: iirflt.h
+Associated header file: `iirflt.h`
 
 Functions included:
 
@@ -113,9 +113,9 @@ Functions included:
 
 ## d) Error insertion module
 
-Name: eid.c
+Name: `eid.c`
 
-Associated header file: eid.h
+Associated header file: `eid.h`
 
 Functions included:
 
@@ -133,9 +133,9 @@ Functions included:
 
 ## e) G.711 module
 
-Name: g711.c
+Name: `g711.c`
 
-Associated header file: g711.h
+Associated header file: `g711.h`
 
 Functions included:
 
@@ -148,9 +148,9 @@ Functions included:
 
 ## f) Appendix I/G.711 Packet Loss Concealment module
 
-Name: lowcfe.c
+Name: `lowcfe.c`
 
-Associated header file: lowcfe.h
+Associated header file: `lowcfe.h`
 
 Functions included:
 
@@ -162,9 +162,9 @@ Functions included:
 
 ## g) G.726 module
 
-Name: g726.c
+Name: `g726.c`
 
-Associated header file: g726.h
+Associated header file: `g726.h`
 
 Functions included:
 
@@ -175,9 +175,9 @@ Functions included:
 
 ## h) Modulated noise reference unit module
 
-Name: mnru.c
+Name: `mnru.c`
 
-Associated header file: mnru.h
+Associated header file: `mnru.h`
 
 Functions included:
 
@@ -187,9 +187,9 @@ Functions included:
 
 ## i) Speech voltmeter module
 
-Name: sv-p56.c
+Name: `sv-p56.c`
 
-Associated header file: sv-p56.h
+Associated header file: `sv-p56.h`
 
 Functions included:
 
@@ -200,9 +200,9 @@ Functions included:
 
 ## j) Module with UGST utilities
 
-Name: ugst-utl.c
+Name: `ugst-utl.c`
 
-Associated header file: ugst-utl.h
+Associated header file: `ugst-utl.h`
 
 Functions included:
 
@@ -229,9 +229,9 @@ Functions included:
 
 ## k) G.722 module
 
-Name: g722.c
+Name: `g722.c`
 
-Associated header file: g722.h
+Associated header file: `g722.h`
 
 Functions included:
 
@@ -244,9 +244,9 @@ Functions included:
 
 ## l) RPE-LTP module
 
-Name: rpeltp.c
+Name: `rpeltp.c`
 
-Associated header file: rpeltp.h
+Associated header file: `rpeltp.h`
 
 Functions included:
 
@@ -259,9 +259,9 @@ Functions included:
 
 ## m) G.727 module
 
-Name: g727.c
+Name: `g727.c`
 
-Associated header file: g727.h
+Associated header file: `g727.h`
 
 Functions included:
 
@@ -272,9 +272,9 @@ Functions included:
 
 ## n) Basic Operators
 
-Name: basop32.c, enh1632.c, enh40.c
+Name: `basop32.c`, `enh1632.c`, `enh40.c`
 
-Associated header file: stl.h
+Associated header file: `stl.h`
 
 Variable definitions:
 
@@ -383,19 +383,19 @@ The Basic Operators module is supplemented by two tools: one to evaluate program
 
 ### n.1) Program ROM estimation tool for fixed-point C code
 
-Name: basop_cnt.c
+Name: `basop_cnt.c`
 
 Associated header file: None.
 
-Usage: basop cnt input.c [result_file_name.txt]
+Usage: `basop cnt input.c [result_file_name.txt]`
 
 The basop_cnt tool estimates the program ROM of applications written using the ITU-T Basic Operator libraries. It counts the number of calls to basic operators in the input C source file, and also the number of calls to user‑defined functions. The sum of these two numbers gives an estimation of the required PROM.
 
 ### n.2) Complexity evaluation tool for floating-point C code
 
-Name: flc.c
+Name: `flc.c`
 
-Associated header file: flc.h
+Associated header file: `flc.h`
 
 Functions included:
 
@@ -409,9 +409,9 @@ Functions included:
 
 ## o) Reverberation module
 
-Name: reverb-lib.c
+Name: `reverb-lib.c`
 
-Associated header file: reverb-lib.h
+Associated header file: `reverb-lib.h`
 
 Functions included:
 
@@ -422,9 +422,9 @@ Functions included:
 
 ## p) Bit stream truncation module
 
-Name: trunc-lib.c
+Name: `trunc-lib.c`
 
-Associated header file: trunc-lib.h
+Associated header file: `trunc-lib.h`
 
 Functions included:
 
@@ -434,9 +434,9 @@ Functions included:
 
 ## q) Frequency response calculation module
 
-Name: fft.c
+Name: `fft.c`
 
-Associated header file: fft.h
+Associated header file: `fft.h`
 
 Functions included:
 
