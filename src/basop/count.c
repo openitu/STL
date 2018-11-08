@@ -77,58 +77,238 @@ void setFrameRate (int samplingFreq, int frameLength) {
  * with the structure definition BASIC_OP.
  */
 char *BasicOperationList[] = {
-  "add", "sub", "abs_s", "shl", "shr",
-  "extract_h", "extract_l", "mult", "L_mult", "negate",
-  "round", "L_mac", "L_msu", "L_macNs", "L_msuNs",
-  "L_add", "L_sub", "L_add_c", "L_sub_c", "L_negate",
-  "L_shl", "L_shr", "mult_r", "shr_r", "mac_r",
+  "add",           "sub",             "abs_s",         "shl",             "shr",
+  "extract_h",     "extract_l",       "mult",          "L_mult",          "negate",
+  "round",         "L_mac",           "L_msu",         "L_macNs",         "L_msuNs",
+  "L_add",         "L_sub",           "L_add_c",       "L_sub_c",         "L_negate",
+  "L_shl",         "L_shr",           "mult_r",        "shr_r",           "mac_r",
 
-  "msu_r", "L_deposit_h", "L_deposit_l", "L_shr_r", "L_abs",
-  "L_sat", "norm_s", "div_s", "norm_l", "move16",
-  "move32", "Logic16", "Logic32", "Test", "s_max",
-  "s_min", "L_max", "L_min", "L40_max", "L40_min",
-  "shl_r", "L_shl_r", "L40_shr_r", "L40_shl_r", "norm_L40",
+  "msu_r",         "L_deposit_h",     "L_deposit_l",   "L_shr_r",         "L_abs",
+  "L_sat",         "norm_s",          "div_s",         "norm_l",          "move16",
+  "move32",        "Logic16",         "Logic32",       "Test",            "s_max",
+  "s_min",         "L_max",           "L_min",         "L40_max",         "L40_min",
+  "shl_r",         "L_shl_r",         "L40_shr_r",     "L40_shl_r",       "norm_L40",
 
-  "L40_shl", "L40_shr", "L40_negate", "L40_add", "L40_sub",
-  "L40_abs", "L40_mult", "L40_mac", "mac_r40",
-  "L40_msu", "msu_r40", "Mpy_32_16_ss", "Mpy_32_32_ss", "L_mult0",
-  "L_mac0", "L_msu0", "lshl", "lshr", "L_lshl",
-  "L_lshr", "L40_lshl", "L40_lshr", "s_and", "s_or",
+  "L40_shl",       "L40_shr",         "L40_negate",    "L40_add",         "L40_sub",
+  "L40_abs",       "L40_mult",        "L40_mac",       "mac_r40",
+  "L40_msu",       "msu_r40",         "Mpy_32_16_ss",  "Mpy_32_32_ss",    "L_mult0",
+  "L_mac0",        "L_msu0",          "lshl",          "lshr",            "L_lshl",
+  "L_lshr",        "L40_lshl",        "L40_lshr",      "s_and",           "s_or",
 
-  "s_xor", "L_and", "L_or", "L_xor", "rotl",
-  "rotr", "L_rotl", "L_rotr", "L40_set", "L40_deposit_h",
-  "L40_deposit_l", "L40_deposit32", "Extract40_H", "Extract40_L", "L_Extract40",
-  "L40_round", "L_saturate40", "round40", "IF", "GOTO",
-  "BREAK", "SWITCH", "FOR", "WHILE", "CONTINUE", "L_mls", "div_l", "i_mult"
+  "s_xor",         "L_and",           "L_or",          "L_xor",           "rotl",
+  "rotr",          "L_rotl",          "L_rotr",        "L40_set",         "L40_deposit_h",
+  "L40_deposit_l", "L40_deposit32",   "Extract40_H",   "Extract40_L",     "L_Extract40",
+  "L40_round",     "L_saturate40",    "round40",       "IF",              "GOTO",
+  "BREAK",         "SWITCH",          "FOR",           "WHILE",           "CONTINUE",
+
+  "L_mls",         "div_l",           "i_mult"
+
+  /* New complex basops */
+ #ifdef COMPLEX_OPERATOR 
+  , "CL_shr",           "CL_shl",                "CL_add"
+  , "CL_sub",           "CL_scale",              "CL_dscale"
+  , "CL_msu_j",         "CL_mac_j",              "CL_move"
+  , "CL_Extract_real",  "CL_Extract_imag",       "CL_form"  
+  , "CL_multr_32x16",    "CL_negate",             "CL_conjugate"        
+  , "CL_mul_j"
+  , "CL_swap_real_imag"
+  , "C_add"
+  , "C_sub"
+  , "C_mul_j"
+  , "C_multr"
+  , "C_form"
+
+  , "C_scale"
+  , "CL_round32_16",   "CL_scale_32",       "CL_dscale_32",        "CL_multr_32x32"
+  , "C_mac_r",         "C_msu_r",           "C_Extract_real",      "C_Extract_imag"
+  , "C_negate",        "C_conjugate"
+  , "C_shr",           "C_shl"
+
+#endif /* #ifdef COMPLEX_OPERATOR */
+
+ /* New 64 bit basops */
+#ifdef ENH_64_BIT_OPERATOR
+  , "move64"          , "W_add_nosat"     ,"W_sub_nosat"   
+  , "W_shl"           , "W_shr"
+  , "W_shl_nosat"     , "W_shr_nosat"
+  , "W_mac_32_16"     , "W_msu_32_16"     , "W_mult_32_16"     
+  , "W_mult0_16_16"   , "W_mac0_16_16"    , "W_msu0_16_16"     
+  , "W_mult_16_16"    , "W_mac_16_16"     , "W_msu_16_16"     
+  , "W_shl_sat_l"     , "W_sat_l"
+  , "W_sat_m"         , "W_deposit32_l"    ,"W_deposit32_h"
+  , "W_extract_l"     , "W_extract_h"
+  , "W_round48_L"     , "W_round32_s"
+  , "W_norm" 
+  , "W_add"           , "W_sub"           ,"W_neg"    ,"W_abs"
+  , "W_mult_32_32"    , "W_mult0_32_32"  
+  , "W_lshl"          , "W_lshr"           ,"W_round64_L"
+
+#endif /* #ifdef ENH_64_BIT_OPERATOR */
+
+#ifdef ENH_32_BIT_OPERATOR
+  , "Mpy_32_16_1" 
+  , "Mpy_32_16_r"         
+  , "Mpy_32_32"   
+  , "Mpy_32_32_r"  
+  , "Madd_32_16"   
+  , "Madd_32_16_r" 
+  , "Msub_32_16" 
+  , "Msub_32_16_r"  
+  , "Madd_32_32"   
+  , "Madd_32_32_r"  
+  , "Msub_32_32"   
+  , "Msub_32_32_r"  
+#endif /* #ifdef ENH_32_BIT_OPERATOR */
+
+#ifdef ENH_U_32_BIT_OPERATOR
+  , "UL_addNs"
+  , "UL_subNs"
+  , "UL_Mpy_32_32"
+  , "Mpy_32_32_uu"
+  , "Mpy_32_16_uu"
+  , "norm_ul"
+  , "UL_deposit_l"  
+#endif /* #ifdef ENH_U_32_BIT_OPERATOR */
+
+#ifdef CONTROL_CODE_OPS
+  , "LT_16"   
+  , "GT_16"   
+  , "LE_16"   
+  , "GE_16"   
+  , "EQ_16" 
+  , "NE_16"   
+  , "LT_32"   
+  , "GT_32"   
+  , "LE_32"   
+  , "GE_32"   
+  , "EQ_32"   
+  , "NE_32"   
+  , "LT_64"   
+  , "GT_64"   
+  , "LE_64"   
+  , "GE_64"   
+  , "EQ_64"   
+  , "NE_64"    
+#endif /* #ifdef CONTROL_CODE_OPS */
+
 };
 #endif /* ifdef WMOPS */
 
 
 #ifdef WMOPS
 const BASIC_OP op_weight = {
-  1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1,
-  1, 1, 2, 2, 1,
-  1, 1, 1, 3, 1,
+  1,     1,     1,     1,     1,
+  1,     1,     1,     1,     1,
+  1,     1,     1,     1,     1,
+  1,     1,     2,     2,     1,
+  1,     1,     1,     2,     1,
 
-  1, 1, 1, 3, 1,
-  4, 1, 18, 1, 1,
-  2, 1, 2, 2, 1,
-  1, 1, 1, 1, 1,
-  3, 3, 3, 3, 1,
+  1,     1,     1,     2,     1,
+  1,     1,     18,    1,     1,
+  1,     1,     1,     1,     1,
+  1,     1,     1,     1,     1,
+  2,     2,     2,     2,     1,
 
-  1, 1, 1, 1, 1,
-  1, 1, 1, 2,
-  1, 2, 2, 4, 1,
-  1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1,
+  1,     1,     1,     1,     1,
+  1,     1,     1,     2,
+  1,     2,     2,     2,     1,
+  1,     1,     1,     1,     1,
+  1,     1,     1,     1,     1,
 
-  1, 1, 1, 1, 3,
-  3, 3, 3, 3, 1,
-  1, 1, 1, 1, 1,
-  1, 1, 1, 4, 4,
-  4, 8, 3, 4, 4, 5, 32, 3
+  1,     1,     1,     1,     3,
+  3,     3,     3,     1,     1,
+  1,     1,     1,     1,     1,
+  1,     1,     1,     3,     2,
+  2,     6,     3,     3,     2,
+  
+  1,     32,    1
+
+/* New complex basops */
+ #ifdef COMPLEX_OPERATOR
+  , 1,     1,     1
+  , 1,     1,     1
+  , 1,     1,     1
+  , 1,     1,     1  
+  , 2,     1,     1        
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1
+  , 2
+  , 1
+
+  , 1
+  , 1,     1,     1,      2
+  , 2,     2,     1,      1
+  , 1,     1
+  , 1,     1
+
+#endif /* #ifdef COMPLEX_OPERATOR */
+
+#ifdef ENH_64_BIT_OPERATOR
+  /* Weights of new 64 bit basops */
+  , 1        , 1        ,1   
+  , 1        , 1         
+  , 1        , 1          
+  , 1        , 1        , 1
+  , 1        , 1        , 1
+  , 1        , 1        , 1
+  , 1        , 1
+  , 1        , 1        , 1
+  , 1        , 1
+  , 1        , 1 
+  , 1 
+  , 1        , 1        , 1     , 1
+  , 1        , 1  
+  , 1        , 1        , 1
+#endif /* #ifdef ENH_64_BIT_OPERATOR */
+
+#ifdef ENH_32_BIT_OPERATOR
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1
+  , 1 
+#endif /* #ifdef ENH_32_BIT_OPERATOR */
+
+#ifdef ENH_U_32_BIT_OPERATOR
+  , 1
+  , 1
+  , 1
+  , 2
+  , 2
+  , 1
+  , 1
+#endif /* #ifdef ENH_U_32_BIT_OPERATOR */
+
+#ifdef CONTROL_CODE_OPS
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1   
+  , 1    
+#endif /* #ifdef CONTROL_CODE_OPS */
 };
 #endif /* ifdef WMOPS */
 
@@ -159,14 +339,14 @@ static Word32 LastWOper[MAXCOUNTERS];
 
 #ifdef WMOPS
 static char *my_strdup (const char *s) {
-/*
- * duplicates UNIX function strdup() which is not ANSI standard:
- * -- malloc() memory area big enough to hold the string s
- * -- copy string into new area
- * -- return pointer to new area
- *
- * returns NULL if either s==NULL or malloc() fails
- */
+  /*
+  * duplicates UNIX function strdup() which is not ANSI standard:
+  * -- malloc() memory area big enough to hold the string s
+  * -- copy string into new area
+  * -- return pointer to new area
+  *
+  * returns NULL if either s==NULL or malloc() fails
+  */
   char *dup;
 
   if (s == NULL)
@@ -248,7 +428,9 @@ static Word32 WMOPS_frameStat () {
   /* check if fwc() was forgotten at end of last frame */
   if (tot > LastWOper[currCounter]) {
     if (!fwc_corr[currCounter]) {
-      fprintf (stderr, "count: operations counted after last fwc() for '%s'; " "-> fwc() called\n", objectName[currCounter] ? objectName[currCounter] : "");
+      fprintf (stderr, 
+        "count: operations counted after last fwc() for '%s'; " "-> fwc() called\n", 
+        objectName[currCounter] ? objectName[currCounter] : "");
     }
     fwc ();
   }
@@ -347,8 +529,8 @@ void Reset_WMOPS_counter (void) {
 
   /* increase the frame counter --> a frame is counted WHEN IT BEGINS */
   nbframe[currCounter]++;
-  /* add wmops used in last frame to count, then reset counter */
-  /* (in first frame, this is a no-op */
+  
+  /* add wmops used in last frame to count, then reset counter (in first frame, this is a no-op */
   total_wmops[currCounter] += (float) (tot * frameRate);
 
   /* clear counter before new frame starts */
@@ -382,11 +564,14 @@ void WMOPS_output (Word16 dtx_mode) {
   Word16 i;
   Word32 tot, tot_wm, tot_wc;
 
-  /* get operations since last reset (or init), but do not update the counters (except the glob_wc[] maximum) so output CAN be called in each frame without problems. The frame counter is NOT updated! */
+  /* get operations since last reset (or init), but do not update the counters (except the glob_wc[] maximum) 
+     so output CAN be called in each frame without problems. The frame counter is NOT updated! */
   tot = WMOPS_frameStat ();
   tot_wm = (Word32) (total_wmops[currCounter] + ((float) tot) * frameRate);
 
-  fprintf (stdout, "%10s:WMOPS=%.3f", objectName[currCounter] ? objectName[currCounter] : "", ((float) tot) * frameRate);
+  fprintf (stdout, 
+    "%10s:WMOPS=%.3f", objectName[currCounter] ? objectName[currCounter] : "",
+    ((float) tot) * frameRate);
 
   if (nbframe[currCounter] != 0) {
     fprintf (stdout, "  Average=%.3f", tot_wm / (float) nbframe[currCounter]);
@@ -411,7 +596,8 @@ void WMOPS_output_avg (Word16 dtx_mode, Word32 * tot_wm, Word16 * num_frames) {
   Word16 i;
   Word32 tot, tot_wc;
 
-  /* get operations since last reset (or init), but do not update the counters (except the glob_wc[] maximum) so output CAN be called in each frame without problems. The frame counter is NOT updated! */
+  /* get operations since last reset (or init), but do not update the counters (except the glob_wc[] maximum) 
+     so output CAN be called in each frame without problems. The frame counter is NOT updated! */
   tot = WMOPS_frameStat ();
   *tot_wm = (Word32) (total_wmops[currCounter] + ((float) tot) * frameRate);
   *num_frames = nbframe[currCounter];
@@ -450,7 +636,6 @@ void generic_WMOPS_output (Word16 dtx_mode, char *test_file_name) {
   for (currCounter = 0; currCounter <= maxCounter; currCounter++) {
     tot = WMOPS_frameStat ();
     grand_total += tot;
-
   }
 
 

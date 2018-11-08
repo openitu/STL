@@ -18,7 +18,6 @@
   ============================================================================
 */
 
-
 #ifndef _CONTROL_H
 #define _CONTROL_H
 
@@ -33,7 +32,21 @@
 extern BASIC_OP multiCounter[MAXCOUNTERS];
 extern int currCounter;
 
-  /* Technical note : The following 3 variables are only used for correct complexity evaluation of the following structure : IF{ ...  } ELSE IF { ...  } ELSE IF { ...  } ...  } ELSE { ...  } */
+  /* Technical note :
+   * The following 3 variables are only used for correct complexity
+   * evaluation of the following structure :
+   *   IF{
+   *     ...
+   *   } ELSE IF {
+   *     ...
+   *   } ELSE IF {
+   *     ...
+   *   }
+   *   ...
+   *   } ELSE {
+   *     ...
+   *   }
+   */
 extern int funcId_where_last_call_to_else_occurred;
 extern long funcid_total_wmops_at_last_call_to_else;
 extern int call_occurred;
@@ -85,10 +98,10 @@ static __inline void incrFor (void) {
  *
  *****************************************************************************/
 #ifndef WMOPS
-#define WHILE( a) while( a)
+#define WHILE(a) while (a)
 
 #else /* ifndef WMOPS */
-#define WHILE( a) while( incrWhile(), a)
+#define WHILE(a) while (incrWhile(), a)
 
 static __inline void incrWhile (void) {
   multiCounter[currCounter].While++;
@@ -137,13 +150,16 @@ static __inline void incrWhile (void) {
  *
  *****************************************************************************/
 #ifndef WMOPS
-#define IF( a) if( a)
+#define IF (a) if (a)
 
 #else /* ifndef WMOPS */
-#define IF( a) if( incrIf(), a)
+#define IF (a) if (incrIf (), a)
 
 static __inline void incrIf (void) {
-  /* Technical note : If the "IF" operator comes just after an "ELSE", its counter must not be incremented. */
+   /* Technical note :
+    * If the "IF" operator comes just after an "ELSE", its counter
+    * must not be incremented.
+    */
   if ((currCounter != funcId_where_last_call_to_else_occurred)
       || (TotalWeightedOperation () != funcid_total_wmops_at_last_call_to_else)
       || (call_occurred == 1))
@@ -170,7 +186,7 @@ static __inline void incrIf (void) {
 #define ELSE else
 
 #else /* ifndef WMOPS */
-#define ELSE else if( incrElse(), 0) ; else
+#define ELSE else if (incrElse (), 0) ; else
 
 static __inline void incrElse (void) {
   multiCounter[currCounter].If++;
@@ -199,10 +215,10 @@ static __inline void incrElse (void) {
  *
  *****************************************************************************/
 #ifndef WMOPS
-#define SWITCH( a) switch( a)
+#define SWITCH(a) switch (a)
 
 #else /* ifndef WMOPS */
-#define SWITCH( a) switch( incrSwitch(), a)
+#define SWITCH(a) switch (incrSwitch (), a)
 
 static __inline void incrSwitch (void) {
   multiCounter[currCounter].Switch++;
@@ -225,7 +241,7 @@ static __inline void incrSwitch (void) {
 #define CONTINUE continue
 
 #else /* ifndef WMOPS */
-#define CONTINUE if( incrContinue(), 0); else continue
+#define CONTINUE if (incrContinue (), 0); else continue
 
 static __inline void incrContinue (void) {
   multiCounter[currCounter].Continue++;
@@ -248,7 +264,7 @@ static __inline void incrContinue (void) {
 #define BREAK break
 
 #else /* ifndef WMOPS */
-#define BREAK if( incrBreak(), 0); else break
+#define BREAK if (incrBreak (), 0); else break
 
 static __inline void incrBreak (void) {
   multiCounter[currCounter].Break++;
@@ -271,13 +287,43 @@ static __inline void incrBreak (void) {
 #define GOTO goto
 
 #else /* ifndef WMOPS */
-#define GOTO if( incrGoto(), 0); else goto
+#define GOTO if (incrGoto (), 0); else goto
 
 static __inline void incrGoto (void) {
   multiCounter[currCounter].Goto++;
 }
 #endif /* ifndef WMOPS */
 
+
+
+/*
+ *  New control code basops
+*/
+#ifdef CONTROL_CODE_OPS
+
+Flag LT_16 (Word16 var1, Word16 var2);
+Flag GT_16 (Word16 var1, Word16 var2);
+Flag LE_16 (Word16 var1, Word16 var2);
+Flag GE_16 (Word16 var1, Word16 var2);
+Flag EQ_16 (Word16 var1, Word16 var2);
+Flag NE_16 (Word16 var1, Word16 var2);
+
+Flag LT_32 (Word32 L_var1, Word32 L_var2);
+Flag GT_32 (Word32 L_var1, Word32 L_var2);
+Flag LE_32 (Word32 L_var1, Word32 L_var2);
+Flag GE_32 (Word32 L_var1, Word32 L_var2);
+Flag EQ_32 (Word32 L_var1, Word32 L_var2);
+Flag NE_32 (Word32 L_var1, Word32 L_var2);
+
+Flag LT_64 (Word64 L64_var1, Word64 L64_var2);
+Flag GT_64 (Word64 L64_var1, Word64 L64_var2);
+Flag LE_64 (Word64 L64_var1, Word64 L64_var2);
+Flag GE_64 (Word64 L64_var1, Word64 L64_var2);
+Flag EQ_64 (Word64 L64_var1, Word64 L64_var2);
+Flag NE_64 (Word64 L64_var1, Word64 L64_var2);
+       
+
+#endif /* #ifdef CONTROL_CODE_OPS */
 
 #endif /* _CONTROL_H */
 

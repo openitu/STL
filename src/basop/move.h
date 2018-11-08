@@ -49,6 +49,13 @@ static __inline void move32 (void) {
 }
 
 
+#ifdef ENH_64_BIT_OPERATOR
+static __inline void move64 (void) {
+#if WMOPS
+  multiCounter[currCounter].move64++;
+#endif /* if WMOPS */
+}
+#endif /* #ifdef ENH_64_BIT_OPERATOR */
 
 
 
@@ -75,10 +82,10 @@ static __inline void logic32 (void) {
 
 
 /*-------- legacy ----------*/
-#define data_move()          move16()
-#define L_data_move()        move32()
-#define data_move_external() move16()
-#define compare_zero()       test()
+#define data_move ()          move16 ()
+#define L_data_move ()        move32 ()
+#define data_move_external () move16 ()
+#define compare_zero ()       test ()
 /*-------- end legacy ----------*/
 
 
