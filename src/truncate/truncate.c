@@ -43,8 +43,6 @@
 
 */
 
-#define TMPFILE_FIX             /* temporary; only to checkout v1.3 */
-
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -132,6 +130,7 @@ static int conv_inpBst (char type, int n, char sync_header, FILE * pfile, FILE *
     }
     break;
   }
+  free(patt);
 
   return 0;
 }
@@ -144,9 +143,6 @@ int main (int argc, char *argv[]) {
   FILE *pfiltmp;                /* temporary bitstream file */
   char filin[MAX_STRLEN];       /* name of the input bitstream file */
   char filout[MAX_STRLEN];      /* name of the output bitstream file */
-#ifndef TMPFILE_FIX
-  char filtmp[9] = "~bst.tmp";  /* name of the temporary bistream file */
-#endif
 
   /* buffers */
   short bstIn[MAX_BST_LENGTH];  /* input frame */
@@ -154,7 +150,6 @@ int main (int argc, char *argv[]) {
 
   /* Algorithm variables */
   char type;                    /* type of the input bitstream */
-  char conv = 0;
   char type_ER;
   char sync_header = 0;
   short n;
@@ -258,41 +253,23 @@ int main (int argc, char *argv[]) {
     }
 
     /* Open temporary bitstream file */
-#ifdef TMPFILE_FIX
     if ((pfiltmp = tmpfile ()) == NULL) {
       fprintf (stderr, "Error creating temporary bitstream file.\n");
       exit (-1);
     }
-#else
-    if ((pfiltmp = fopen (filtmp, "wb")) == NULL) {
-      fprintf (stderr, "Error creating temporary bitstream file %s\n", filtmp);
-      exit (-1);
-    }
-#endif
 
     /* set block length for conversion */
     n = (sync_header) ? N : (short) (framelength * inprate);
 
     /* conversion */
     conv_inpBst (type, n, sync_header, pfilin, pfiltmp);
-    conv = 1;
 
     /* close files */
     fclose (pfilin);
-#ifdef TMPFILE_FIX
-    fclose (pfiltmp);
-#endif
 
     /* open converted bitstream as input bitstream file */
-#ifdef TMPFILE_FIX
+    rewind (pfiltmp);
     pfilin = pfiltmp;
-    rewind (pfilin);
-#else
-    if ((pfilin = fopen (filtmp, "rb")) == NULL) {
-      fprintf (stderr, "Error opening converted bitstream file %s\n", filtmp);
-      exit (-1);
-    }
-#endif
   }
 
   /* check output bistream file */
@@ -371,16 +348,10 @@ int main (int argc, char *argv[]) {
   /* FINALIZATIONS */
 
   /* close the opened files */
-#ifndef TMPFILE_FIX
   fclose (pfilin);
-#endif
   fclose (pfilout);
   if (pfilrate != NULL)
     fclose (pfilrate);
-#ifndef TMPFILE_FIX
-  if (conv)                     /* remove temporary bitstream file */
-    remove (filtmp);
-#endif
-
+  
   return (0);
 }
