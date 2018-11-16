@@ -51,7 +51,7 @@ add_test(spdemo11-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sptst
 add_test(spdemo12 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/spdemo -q -r 16 -right sp  test_data/sptst-r.s16 test_data/sptst-r.p16 100)
 add_test(spdemo13 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/spdemo -q -r 16 -left  sp  test_data/sptst-l.s16 test_data/sptst-l.p16 100)
 add_test(spdemo13-1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sptst-l.p16 test_data/sptst-r.p16)
-add_test(spdemo13-1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sptst-l.p16 test_data/sptst-s.p16)
+add_test(spdemo13-2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sptst-l.p16 test_data/sptst-s.p16)
 
 add_test(spdemo14 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/spdemo -q -r 12 -left  sp  test_data/sptst-l.s12 test_data/sptst-l.p12 100)
 add_test(spdemo14-1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sptst-l.p12 test_data/spref.src 100)
