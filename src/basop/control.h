@@ -150,10 +150,10 @@ static __inline void incrWhile (void) {
  *
  *****************************************************************************/
 #ifndef WMOPS
-#define IF (a) if (a)
+#define IF(a) if (a)
 
 #else /* ifndef WMOPS */
-#define IF (a) if (incrIf (), a)
+#define IF(a) if (incrIf (), a)
 
 static __inline void incrIf (void) {
    /* Technical note :
