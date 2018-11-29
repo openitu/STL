@@ -272,10 +272,6 @@ Functions included:
 
 ## n) Basic Operators
 
-Name: `basop32.c`, `enh1632.c`, `enh40.c`, `enh64.c`, `enh32.c`, `complex_basop.c`
-Associated header file: `stl.h`, `enh64.h`, `enh32.h`, `complex_basop.h` 
-
-
 ### n.1) Basic operators that use 16-bit registers/accumulators
 
 Name: `basop32.c`, `enh1632.c`
@@ -373,7 +369,7 @@ Associated header file: `stl.h`, `enhUL32.h`
 
 Variable definitions:
 
-* U_var1, U_varout_l: 16-bit unsigned variable
+* U_var1, U_varout_l: 16-bit unsigned variables
 * UL_var1, UL_var2, var1, UL_varout_h, UL_varout_l: 32-bit unsigned variables
 
 |||
