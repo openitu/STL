@@ -42,6 +42,7 @@ NOTE - The module for the Basic Operators does not have a demo program but it is
 ## b) Rate change module with FIR (finite impulse response) routines
 
 Name: `firflt.c`
+
 Associated header file: `firflt.h`
 
 Functions included:
@@ -85,6 +86,7 @@ Functions included:
 ## c) Rate change module with IIR routines
 
 Name: `iirflt.c`
+
 Associated header file: `iirflt.h`
 
 Functions included:
@@ -277,7 +279,8 @@ Associated header file: `stl.h`, `enh64.h`, `enh32.h`, `complex_basop.h`
 ### n.1) Basic operators that use 16-bit registers/accumulators
 
 Name: `basop32.c`, `enh1632.c`
-Associated header file: `stl.h` 
+
+Associated header file: `stl.h` , `basop32.h`, `enh1632.h`
 
 Variable definitions:
 
@@ -298,7 +301,8 @@ Variable definitions:
 ### n.2) Basic operators that use 32-bit registers/accumulators
 
 Name: `basop32.c`, `enh1632.c`
-Associated header file: `stl.h` 
+
+Associated header file: `stl.h`, `basop32.h`, `enh1632.h`
 
 Variable definitions:
 
@@ -364,12 +368,13 @@ Variable definitions:
 ### n.3) Basic operators for unsigned data types
 
 Name: `enhUL32.c`
-Associated header file: `enhUL32.h` 
+
+Associated header file: `stl.h`, `enhUL32.h` 
 
 Variable definitions:
 
-* v1, v2, v3_l: 16-bit variables
-* L_v1, L_v2, L_v3, L_v3_l, L_v3_h: 32-bit variables
+* U_var1, U_varout_l: 16-bit unsigned variable
+* UL_var1, UL_var2, var1, UL_varout_h, UL_varout_l: 32-bit unsigned variables
 
 |||
 |---------------------|-----------------------------------------------------------|
@@ -377,8 +382,8 @@ Variable definitions:
 | `UL_subNs(UL_var1, UL_var2, *var1)` | Subtracts the 32-bit usigned variable UL_var2 from the 32-bit unsigned variable UL_var1 with overflow control, but without saturation. Returns 32-bit unsigned result. var1 is set to 1 if wrap around (to "negative") occurred, otherwise 0. |
 | `norm_ul (UL_var1)` | Produces the number of left shifts needed to normalize the 32-bit unsigned variable UL_var1 for positive values on the interval with minimum of 0 and maximum of 0xffffffff. If UL_var1 contains 0, return 0. |
 | `UL_Mpy_32_32(UL_var1, UL_var2)` | Multiplies the two unsigned values UL_var1 and UL_var2 and returns the lower 32 bits, without saturation control. <br/>UL_var1 and UL_var2 are supposed to be in Q32 format.<br/>The result is produced in Q64 format, the 32 LS bits.<br/>Operates like a regular 32x32-bit unsigned int multiplication in ANSI-C. |
-| `Mpy_32_32_uu(UL_var1, UL_var2, *UL_var3, *UL_var4)` | Multiplies the two unsigned 32-bit variables UL_var1 and UL_var2. <br/>The operation is performed in fractional mode.<br/>UL_var1 and UL_var2 are supposed to be in Q32 format.<br/>The result is produced in Q64 format: UL_varout_h points to the 32 MS bits while UL_varout_l points to the 32 LS bits. |
-| `Mpy_32_16_uu(UL_var1, U_var1, UL_varout_h, U_varout_l)` | Multiplies the unsigned 32-bit variable UL_var1 with the unsigned 16-bit variable U_var1. <br/>The operation is performed in fractional mode :<br/>UL_var1 is supposed to be in Q32 format.<br/>U_var1 is supposed to be in Q16 format.<br/>The result is produced in Q48 format: UL_varout_h points to the 32 MS bits while U_varout_l points to the 16 LS bits. |
+| `Mpy_32_32_uu(UL_var1, UL_var2, *UL_varout_h, *UL_varout_l)` | Multiplies the two unsigned 32-bit variables UL_var1 and UL_var2. <br/>The operation is performed in fractional mode.<br/>UL_var1 and UL_var2 are supposed to be in Q32 format.<br/>The result is produced in Q64 format: UL_varout_h points to the 32 MS bits while UL_varout_l points to the 32 LS bits. |
+| `Mpy_32_16_uu(UL_var1, U_var1, *UL_varout_h, *U_varout_l)` | Multiplies the unsigned 32-bit variable UL_var1 with the unsigned 16-bit variable U_var1. <br/>The operation is performed in fractional mode :<br/>UL_var1 is supposed to be in Q32 format.<br/>U_var1 is supposed to be in Q16 format.<br/>The result is produced in Q48 format: UL_varout_h points to the 32 MS bits while U_varout_l points to the 16 LS bits. |
 | `UL_deposit_l(U_var1)` | Deposit the 16-bit U_var1 into the 16 LS bits of the 32-bit output. The 16 MS bits of the output are not sign extended. |
 
 
@@ -386,7 +391,7 @@ Variable definitions:
 
 Name: `enh40.c`
 
-Associated header file: `stl.h`
+Associated header file: `stl.h`, `enh40.h`
 
 Variable definitions:
 
@@ -478,6 +483,7 @@ Variable definitions:
 ### n.6) Basic operators which use 32-bit precision multiply
 
 Name: `enh32.c`
+
 Associated header file: `enh32.h`, `stl.h`
 
 Basic operators in this clause are useful for FFT and scaling functions where the result of a 32\*16 or 32\*32 arithmetic operation is rounded, and saturated to 32-bit value. There is no accumulation of products in these functions. In functions that accumulate products, you should use base operators in clause A.1.
@@ -504,6 +510,10 @@ Variable definitions:
 | `Msub_32_32_r(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Adds rounding offset to lower 31 bits of the product. Shifts the result left by 1 with 64-bit saturation control; gets the 32 MSB of the 64-bit result with saturation and subtracts this from 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and rounded in 1Q31 format which is then subtracted from L_var3 (in 1Q31 format), to provide result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32_r(L_var1, L_var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
 
 ### n.7) Basic operators which use complex data types
+
+Name: `complex_basop.c`
+
+Associated header file: `complex_basop.h`, `stl.h`
 
 Variable definitions:
 
@@ -557,6 +567,10 @@ Variable definitions:
 | `C_shl(C_var1,var2)` | Arithmetically shifts left the real and imaginary parts of the 16-bit complex number C_var1 by var2 positions.<br/>If var2 is negative, real and imaginary parts of C_var1 are shifted to the least significant bits by (-var2) positions with sign extension.<br/>If var2 is positive, real and imaginary parts of C_var1 are shifted to the most significant bits by (var2) positions with 16-bit saturation control. |
 
 ### n.8) Basic operators for control operation
+
+Name: `control.c`
+
+Associated header file: `control.h`, `stl.h`
 
 The following basic operators should be used in the control processing part of the reference code. They are expected to help compilers generate more efficient code for control sections of the reference C code. In addition, they also help in computing a more accurate representation of control code operations in the total WMOPs (weighted millions of operations) of the reference code.
 
