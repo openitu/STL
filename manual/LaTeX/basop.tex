@@ -2,7 +2,7 @@
 % ..... THIS IS chapter{BASOP: ITU-T Basic Operators } .....
 % ... Revision:
 % Nov.2000 - SG16 Plenary
-% Apr.2005 - STL2005 revision -- Cyril Guillaumé & Stéphane Ragot - stephane.ragot@francetelecom.com
+% Apr.2005 - STL2005 revision -- Cyril Guillaumï¿½ & Stï¿½phane Ragot - stephane.ragot@francetelecom.com
 %                                Karim Djafarian - k-djafarian@ti.com
 % Nov.2008 - STL2009 revision -- Yusuke Hiwasaki, Noboru Harada, NTT
 %                             - Balazs Kovesi, Claude Lamblin, France Telecom
@@ -18,29 +18,21 @@
 \section{Overview of basic operator libraries}
 %----------------------------------------------------------------------
 
-Since the standardization of G.729 and G.723.1\footnote{For older
-  standards (G.711, G.726, G722, G.727, G.728), their C-codes are
-  included in the software tools library.}, ANSI-C source codes
-constitute integral parts of the ITU-T speech and audio coding
-Recommendations and their specification relies on bit-exact
-fixed-point C code using library of basic operators that simulates
-DSP operations. The fixed-point descriptions of G.723.1 and G.729 are based on
-16- and 32-bit arithmetic operations defined by ETSI in 1993 for the
-standardisation of the half-rate GSM speech codec. These operations
-are also used to define the GSM enhanced full-rate (EFR) and adaptive
-multi-rate (AMR) speech codecs \cite{G.191}.
+Since the standardization of G.729 and G.723.1
+\footnote{For older standards (G.711, G.726, G722, G.727, G.728), their C-codes are included in the software tools library.},
+ANSI-C source codes constitute integral parts of the ITU-T speech and audio coding Recommendations and their specification relies on bit-exact fixed-point C code using library of basic operators that simulates DSP operations.
+The fixed-point descriptions of G.723.1 and G.729 are based on 16- and 32-bit arithmetic operations defined by ETSI in 1993 for the standardisation of the half-rate GSM speech codec.
+These operations are also used to define the GSM enhanced full-rate (EFR) and adaptive multi-rate (AMR) speech codecs \cite{G.191}.
 
-In STL2005, the version 2.0 of the ITU-T Basic Operators bears the following additional features compared to the version 1.x:
+In STL2018, the version 2.0 of the ITU-T Basic Operators bears the following additional features compared to the version 1.x:
 \begin{enumerate}
 \item New 16-bit and 32-bit operators;
 \item New 40-bit operators;
-\item New control flow operators; 
+\item New control flow operators;
 \item Revised complexity weight of version 1.x basic operators in order to reflect the evolution of processor capabilities.
 \end{enumerate}
 
-In STL2009, that is version 2.3, in addition to some minor fixes in
-the ITU-T Basic Operators and guidelines of data move counters , the
-following new additional tools were added:
+In STL2009, that is version 2.3, in addition to some minor fixes in the ITU-T Basic Operators and guidelines of data move counters, the following new additional tools were added:
 \begin{itemize}
 \item Program ROM estimation tool for fixed-point C Code;
 \item Complexity evaluation tool for floating-point C Code.
@@ -50,40 +42,40 @@ following new additional tools were added:
 In STL2014 (version 2.4) release, the following modifications were made:
 \begin{itemize}
 \item Addition of dynamic RAM counting tool
-\item Revisions on Program ROM estimation tool and complexity
-  evaluation tool for floating-point C code.
+\item Revisions on Program ROM estimation tool and complexity evaluation tool for floating-point C code.
 \end{itemize}
-It should also be noted that {\tt L\_sub\_c} operator is reported to
-have a carry problem and volunteers are seeked to correct the
-problem. Use of {\tt L\_sub\_c} and {\tt L\_msuNs} are NOT recommended.
+It should also be noted that {\tt L\_sub\_c} operator is reported to have a carry problem and volunteers are seeked to correct the problem.
+Use of {\tt L\_sub\_c} and {\tt L\_msuNs} are NOT recommended.
+}
+
+\textcolor{purple}{
+In STL2018, new operators were introduced to account for modern DSP architectures:
+\begin{enumerate}
+    \item Enhanced 32-bit operators;
+    \item New unsigned 32-bit operators;
+    \item New 64-bit operators;
+    \item New complex operators;
+    \item New control flow operators;
+    \item Revised complexity weights in order to reflect the evolution of processor capabilities.
+\end{enumerate}
 }
 
 %----------------------------------------------------------------------
-\section{Description of the 16-bit and 32-bit basic operators and 
-associated weights}
+\section{Description of the 16-bit and 32-bit basic operators and associated weights}
 %----------------------------------------------------------------------
 
-This section describes the different 16-bit and 32-bit basic operators
-available in the STL, and are organized by complexity
-(``weights''). The complexity values to be considered (since the
-publication of the STL2005) are the ones related to the version 2.0
-and subsequent versions of the module. When the basic operator had a
-different complexity value in the previous version of the library
-(version 1.x), the previous complexity value is indicated for
-information.  When the basic operator did not exist in the previous
-version of the library (version 1.x), it is highlighted as follows:
-\newop20 . In STL2009, {\tt round()} operator was renamed as {\tt
-  round\_fx()} and {\tt saturate()}, function was made unaccessible
-from applications, because it was an internal procedure.
+This section describes the different 16-bit and 32-bit basic operators available in the STL, and are organized by complexity (``weights'').
+The complexity values to be considered (since the publication of the STL2005) are the ones related to the version 2.0 and subsequent versions of the module.
+When the basic operator had a different complexity value in the previous version of the library(version 1.x), the previous complexity value is indicated for information.
+When the basic operator did not exist in the previous version of the library (version 1.x), it is highlighted as follows:
+\newop20 . In STL2009, {\tt round()} operator was renamed as {\tt round\_fx()} and {\tt saturate()}, function was made unaccessible from applications, because it was an internal procedure.
 
 \subsection{Variable definitions}
 
-The variables used in the operators are signed integers in 2's
-complements representation, defined by:
+The variables used in the operators are signed integers in 2's complements representation, defined by:
 
 {\tt v1}, {\tt v2}: 16-bit variables\\
 {\tt L\_v1}, {\tt L\_v2}, {\tt L\_v3}: 32-bit variables
-
 
 
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
@@ -93,37 +85,31 @@ complements representation, defined by:
 %........................................................
 \NewOperator{add(v1, v2)}
 
-Performs the addition ({\tt v1}+{\tt v2}) with overflow control and
-saturation; the 16-bit result is set at {\tt +32767} when overflow
-occurs or at {\tt -32768} when underflow occurs.
+Performs the addition ({\tt v1}+{\tt v2}) with overflow control and saturation; the 16-bit result is set at {\tt +32767} when overflow occurs or at {\tt -32768} when underflow occurs.
 
 %........................................................
 \NewOperator{sub(v1, v2)}
 
-Performs the subtraction ({\tt v1}-{\tt v2}) with overflow control and
-saturation; the 16-bit result is set at {\tt +32767} when overflow
-occurs or at {\tt -32768} when underflow occurs.
+Performs the subtraction ({\tt v1}-{\tt v2}) with overflow control and saturation; the 16-bit result is set at {\tt +32767} when overflow occurs or at {\tt -32768} when underflow occurs.
 
 %........................................................
 \NewOperator{abs\_s(v1)}
 
-Absolute value of v1. If {\tt v1} is {\tt -32768}, returns {\tt 32767}.
+Absolute value of v1.
+If {\tt v1} is {\tt -32768}, returns {\tt 32767}.
 
 %........................................................
 \NewOperator{shl(v1, v2)}
 
-Arithmetically shift the 16-bit input {\tt v1} left {\tt v2}
-positions. Zero fill the {\tt v2} LSB of the result. If {\tt v2} is
-negative, arithmetically shift {\tt v1} right by {\tt -v2} with sign
-extension. Saturate the result in case of underflows or overflows.
+Arithmetically shift the 16-bit input {\tt v1} left {\tt v2} positions.
+Zero fill the {\tt v2} LSB of the result. If {\tt v2} is negative, arithmetically shift {\tt v1} right by {\tt -v2} with sign extension.
+Saturate the result in case of underflows or overflows.
 
 %........................................................
 \NewOperator{shr(v1, v2)}
 
-Arithmetically shift the 16-bit input {\tt v1} right {\tt v2}
-positions with sign extension. If v2 is negative, arithemtically shift
-{\tt v1} left by {\tt -v2} and zero fill the {\tt -v2} LSB of the
-result:
+Arithmetically shift the 16-bit input {\tt v1} right {\tt v2} positions with sign extension.
+If v2 is negative, arithemtically shift {\tt v1} left by {\tt -v2} and zero fill the {\tt -v2} LSB of the result:
 
 \rulex{2mm}{\tt shr(v1, v2) = shl(v1, -v2)}
 
@@ -132,22 +118,19 @@ Saturate the result in case of underflows or overflows.
 %........................................................
 \NewOperator{negate(v1)}
 
-Negate {\tt v1} with saturation, saturate in the case when input
-is {\tt -32768}:
+Negate {\tt v1} with saturation, saturate in the case when input is {\tt -32768}:
 
 \rulex{2mm}{\tt negate(v1) = sub(0, v1)}
 
 %........................................................
 \NewOperator{s\_max(v1, v2)} \newop20
 
-Compares two 16-bit variables {\tt v1} and {\tt v2} and returns
-the maximum value. 
+Compares two 16-bit variables {\tt v1} and {\tt v2} and returns the maximum value.
 
 %........................................................
 \NewOperator{s\_min(v1, v2)} \newop20
 
-Compares two 16-bit variables {\tt v1} and {\tt v2} and returns
-the minimum value. 
+Compares two 16-bit variables {\tt v1} and {\tt v2} and returns the minimum value.
 
 %........................................................
 \NewOperator{norm\_s(v1)}
