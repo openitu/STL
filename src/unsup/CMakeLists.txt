@@ -39,10 +39,6 @@ add_executable(sh2chr sh2chr.c)
 
 add_executable(crc getcrc32.c)
 
-add_executable(xencode xencode.c)
-
-add_executable(xdecode xdecode.c)
-
 add_test(astrip1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/astrip -q -smooth -wlen 145 -sample test_data/cftest1.dat test_data/astrip.smp)
 add_test(astrip1-verify ${CMAKE_COMMAND} -E compare_files test_data/astrip.smp test_data/astrip.ref)
 
@@ -75,10 +71,3 @@ add_test(fdelay5-verify ${CMAKE_COMMAND} -E compare_files test_data/delay-15.tst
 
 add_test(fdelay6 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/fdelay -hex 0xF test_data/litend.src test_data/delay-0f.tst)
 add_test(fdelay6-verify ${CMAKE_COMMAND} -E compare_files test_data/delay-0f.tst test_data/delay-15.ref)
-
-add_test(NAME xdecode1 COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xdecode voice.uue WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
-add_test(xdecode1-verify ${CMAKE_COMMAND} -E compare_files test_data/voice.rec test_data/voice.ori)
-
-add_test(NAME xencode1 COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xencode voice.rec v.uue 7 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
-add_test(xencode1-verify ${CMAKE_COMMAND} -E compare_files test_data/v.uue test_data/voice.uue)
-add_test(xencode2-verify ${CMAKE_COMMAND} -E compare_files test_data/v01.uue test_data/voice01.uue)
