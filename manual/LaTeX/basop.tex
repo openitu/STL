@@ -64,7 +64,7 @@ In STL2018, new operators were introduced to account for modern DSP architecture
 \section{Description of the 16-bit and 32-bit basic operators and associated weights}
 %----------------------------------------------------------------------
 
-This section describes the different 16-bit and 32-bit basic operators available in the STL, and are organized by complexity (``weights'').
+This section describes the different 16-bit and 32-bit basic operators available in the STL, and are organized by complexity (weights'').
 The complexity values to be considered (since the publication of the STL2005) are the ones related to the version 2.0 and subsequent versions of the module.
 When the basic operator had a different complexity value in the previous version of the library(version 1.x), the previous complexity value is indicated for information.
 When the basic operator did not exist in the previous version of the library (version 1.x), it is highlighted as follows:
@@ -506,7 +506,7 @@ right by 16 and return the 16-bit number:
 
 \rulex{2mm}{\tt round\_fx(L\_v1) = extract\_h(L\_add(L\_v1, 32768))}
 
-Initially, this operator was named ``{\tt round()}'', however to avoid
+Initially, this operator was named {\tt round()}'', however to avoid
 the conflict with C standard libraries, this operator was renamed from
 version 2.3. There are no functionality changes.
 
@@ -1084,6 +1084,404 @@ evaluate the complexity associated to the mixing of 40-bit and
 16/32-bit operators. Subsequent versions may do so.
 \end{enumerate}
 
+%########################################################################
+\section{Description of the basic operators which use complex data types }
+
+This section describes the complex basic operators available in the STL, organized by complexity ("weights").
+
+\subsection{Variable definitions}
+
+The variables used in the operators are signed integer in 2's complements representation, defined by:
+
+{\tt var1}, {\tt var2}, {\tt var3}, {\tt re}, {\tt im}: 16-bit variables\\
+{\tt C\_var}, {\tt C\_var1}, {\tt C\_var2}, {\tt C\_coeff}: 16-bit complex variables\\
+{\tt L\_var2}, {\tt L\_var3}, {\tt L\_re}, {\tt L\_im}: 32-bit variables\\
+{\tt CL\_var}, {\tt CL\_var1}, {\tt CL\_var2}: 32-bit complex variables
+
+\subsection{Operators with complexity weight of 1}
+
+%........................................................
+\NewOperator{CL\_shr(CL\_var1, var2)}
+
+Arithmetically shifts right the real and imaginary parts of the 32-bit complex number CL\_var1 by var2 positions.\\
+If var2 is negative, real and imaginary parts of CL\_var1 are shifted to the most significant bits by (-var2) positions with 32-bit saturation control.\\
+If var2 is positive, real and imaginary parts of CL\_var1 are shifted to the least significant bits by (var2) positions with sign extension.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm}CL\_result.re = L\_shr(CL\_var1.re, L\_shift\_val);\\
+     \rulex{5mm}CL\_result.im = L\_shr(CL\_var1.im, L\_shift\_val);\\
+}
+
+%........................................................
+\NewOperator{CL\_shl(CL\_var1, var2)}
+
+Arithmetically shifts left the real and imaginary parts of the 32-bit complex number CL\_var1 by L\_shift\_val positions.\\
+If var2 is negative, real and imaginary parts of CL\_var1 are shifted to the least significant bits by ( -var2 ) positions with sign extension.\\
+If var2 is positive, real and imaginary parts of CL\_var1 are shifted to the most significant bits by (var2) positions with 32-bit saturation control.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_shl(CL\_var1.re, L\_shift\_val);\\
+     \rulex{5mm} CL\_result.im = L\_shl(CL\_var1.im, L\_shift\_val);
+}
+
+%........................................................
+\NewOperator{CL\_add(CL\_var1, CL\_var2)}
+
+Adds the two 32-bit complex numbers CL\_var1 and CL\_var2 with 32-bit saturation control.\\
+Real part of the 32-bit complex number CL\_var1 is added to Real part of the 32-bit complex number CL\_var2 with 32-bit saturation control.
+The result forms the real part of the result variable.\\
+Imaginary part of the 32-bit complex number CL\_var1 is added to Imaginary part of the 32-bit complex number CL\_var2 with 32-bit saturation control.
+The result forms the imaginary part of the result variable.\\
+Following code snippet describe the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_add(CL\_var1.re, CL\_var2.re);\\
+     \rulex{5mm} CL\_result.im = L\_add(CL\_var1.im, CL\_var2.im);
+}
+
+%........................................................
+\NewOperator{CL\_sub(CL\_var1, CL\_var2)}
+
+Subtracts the two 32-bit complex numbers CL\_var1 and CL\_var2 with 32-bit saturation control.\\
+Real part of the 32-bit complex number CL\_var2 is subtracted from Real part of the 32-bit complex number CL\_var1 with 32-bit saturation control.
+The result forms the real part of the result variable.\\
+Imaginary part of the 32-bit complex number CL\_var2 is subtracted from Imaginary part of the 32-bit complex number CL\_var1 with 32-bit saturation control.
+The result forms the imaginary part of the result variable.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_sub(CL\_var1.re, CL\_var2.re);\\
+     \rulex{5mm} CL\_result.im = L\_sub(CL\_var1.im, CL\_var2.im);
+}
+
+%........................................................
+\NewOperator{CL\_scale(CL\_var, var1)}
+
+Multiplies the real and imaginary parts of a 32-bit complex number CL\_var by a 16-bit var1.
+The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = Mpy\_32\_16\_r(CL\_var.re, var1);\\
+     \rulex{5mm} CL\_result.im = Mpy\_32\_16\_r(CL\_var.im, var1);
+}
+
+%........................................................
+\NewOperator{CL\_dscale(CL\_var3, var1, var2)}
+
+Multiplies the real parts of a 32-bit complex number CL\_var3 by a 16-bit var1 and imaginary parts of a 32-bit complex number CL\_var3 by a 16-bit var2.
+The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = Mpy\_32\_16\_r(CL\_var.re, var1);\\
+     \rulex{5mm} CL\_result.im = Mpy\_32\_16\_r(CL\_var.im, var2);
+}
+
+%........................................................
+\NewOperator{CL\_msu\_j(CL\_var1, CL\_var2)}
+
+Multiplies the 32-bit complex number CL\_var2 with j and subtracts the result from the 32-bit complex number CL\_var1 with saturation control.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_add( CL\_var1.re, CL\_var2.im );\\
+     \rulex{5mm} CL\_result.im = L\_sub( CL\_var1.im, CL\_var2.re );
+}
+
+%........................................................
+\NewOperator{CL\_mac\_j(CL\_var1, CL\_var2)}
+
+Multiplies the 32-bit complex number CL\_var2 with j and adds the result to the 32-bit complex number CL\_var1 with saturation control.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_sub( CL\_var1.re, CL\_var2.im );\\
+     \rulex{5mm} CL\_result.im = L\_add( CL\_var1.im, CL\_var2.re );
+}
+
+%........................................................
+\NewOperator{CL\_move(CL\_var1)}
+
+Copies the 32-bit complex number CL\_var1 to destination 32-bit complex number.
+
+%........................................................
+\NewOperator{CL\_Extract\_real(CL\_var1)}
+
+Returns the real part of a 32-bit complex number CL\_var1.
+
+%........................................................
+\NewOperator{CL\_scale (CL\_var, var1)}
+
+Multiplies the real and imaginary parts of a 32-bit complex number CL\_var by a 16-bit var1.
+The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = Mpy\_32\_16\_r(CL\_var.re, var1);\\
+     \rulex{5mm} CL\_result.im = Mpy\_32\_16\_r(CL\_var.im, var1);
+}
+
+%........................................................
+\NewOperator{CL\_dscale(CL\_var, var1, var2)}
+
+Multiplies the real parts of a 32-bit complex number CL\_var by a 16-bit var1 and imaginary parts of a 32-bit complex number CL\_var by a 16-bit var2.
+The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = Mpy\_32\_16\_r(CL\_var.re, var1);\\
+     \rulex{5mm} CL\_result.im = Mpy\_32\_16\_r(CL\_var.im, var2);
+}
+
+%........................................................
+\NewOperator{CL\_msu\_j(CL\_var1, CL\_var2)}
+
+Multiplies the 32-bit complex number CL\_var2 with j and subtracts the result from the 32-bit complex number CL\_var1 with saturation control.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_add( CL\_var1.re, CL\_var2.im );\\
+     \rulex{5mm} CL\_result.im = L\_sub( CL\_var1.im, CL\_var2.re );
+}
+
+%........................................................
+\NewOperator{CL\_mac\_j(CL\_var1, CL\_var2)}
+
+Multiplies the 32-bit complex number CL\_var2 with j and adds the result to the 32-bit complex number CL\_var1 with saturation control.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_sub( CL\_var1.re, CL\_var2.im );\\
+     \rulex{5mm} CL\_result.im = L\_add( CL\_var1.im, CL\_var2.re );
+}
+
+%........................................................
+\NewOperator{CL\_move(CL\_var)}
+
+Copies the 32-bit complex number CL\_var to destination 32-bit complex number.
+
+%........................................................
+\NewOperator{CL\_Extract\_real(CL\_var)}
+
+Returns the real part of a 32-bit complex number CL\_var.
+
+%........................................................
+\NewOperator{CL\_Extract\_imag(CL\_var)}
+
+Returns the imaginary part of a 32-bit complex number CL\_var.
+
+%........................................................
+\NewOperator{CL\_form(L\_re, L\_im)}
+
+Combines the two 32-bit variables L\_re and L\_im and returns a 32-bit complex number.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_re;\\
+     \rulex{5mm} CL\_result.im = L\_im;
+}
+
+%........................................................
+\NewOperator{CL\_negate(CL\_var)}
+
+Negates the 32-bit complex number, saturates and returns.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = L\_negate(CL\_var.re);\\
+     \rulex{5mm} CL\_result.im = L\_negate(CL\_var.im);
+}
+
+%........................................................
+\NewOperator{CL\_conjugate(CL\_var)}
+
+Negates only the imaginary part of complex number CL\_var with saturation.
+No change in the real part.\\
+The following code snippet describes the operations:
+
+{\tt \rulex{5mm} CL\_result.re = CL\_var.re;\\
+     \rulex{5mm} CL\_result.im = L\_negate(CL\_var.im);
+}
+
+%........................................................
+\NewOperator{CL\_mul\_j(CL\_var)}
+
+Multiplication of a 32-bit complex number CL\_var with j and return a 32-bit complex number.
+
+%........................................................
+\NewOperator{CL\_swap\_real\_imag(CL\_var)}
+
+Swaps real and imaginary parts of a 32-bit complex number CL\_var and returns a 32-bit complex number.
+
+%........................................................
+\NewOperator{C\_add(C\_var1, C\_var2)}
+
+Adds the two 16-bit complex numbers C\_var1 and C\_var2 with 16-bit saturation control.\\
+The following code snippet describe the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} C\_result.re = add(C\_var1.re, C\_var2.re);\\
+     \rulex{5mm} C\_result.im = add(C\_var1.im, C\_var2.im);
+}
+
+%........................................................
+\NewOperator{C\_sub(C\_var1, C\_var2)}
+
+Subtracts the two 16-bit complex numbers C\_var1 and C\_var2 with 16-bit saturation control.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} C\_result.re = sub(C\_var1.re, C\_var2.re);\\
+     \rulex{5mm} C\_result.im = sub(C\_var1.im, C\_var2.im);
+}
+
+%........................................................
+\NewOperator{C\_mul\_j(C\_var)}
+
+Multiplies a 16-bit complex number with j and returns a 16-bit complex number.
+
+%........................................................
+\NewOperator{C\_form(re, im)}
+
+Combines the two 16-bit variable re and im and returns a 16-bit complex number.
+
+%........................................................
+\NewOperator{CL\_scale\_32(CL\_var1, L\_var2)}
+
+Multiplies the real and imaginary parts of a 32-bit complex number CL\_var1 by a 32-bit L\_var2.\\
+The resulting 64-bit product for each part is rounded, saturated and 32-bit MSB of 64-bit result are returned.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = Mpy\_32\_32\_r(CL\_var1.re, L\_var2);\\
+     \rulex{5mm} CL\_result.im = Mpy\_32\_32\_r(CL\_var1.im, L\_var2);
+}
+
+%........................................................
+\NewOperator{CL\_dscale\_32(CL\_var1, L\_var2, L\_var3)}
+
+Multiplies the real parts of a 32-bit complex number CL\_var1 by a 32-bit L\_var2 and imaginary parts of a 32-bit complex number CL\_var1 by a 32-bit L\_var3.
+The resulting 64-bit product for each part is rounded, saturated and 32-bit MSB of 64-bit result are returned.\\
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} CL\_result.re = Mpy\_32\_32\_r(CL\_var1.re, L\_var2);\\
+     \rulex{5mm} CL\_result.im = Mpy\_32\_32\_r(CL\_var1.im, L\_var3);
+}
+
+%........................................................
+\NewOperator{CL\_round32\_16( CL\_var1)}
+
+Rounds the lower 16 bits of the 32-bit complex number CL\_var1 into the most significant 16 bits with saturation.
+Shifts the resulting bits right by 16 and returns the 16-bit complex number.\\
+If real and imaginary of CL\_var1 is in 1Q31 format, then the result returned will be rounded and saturated to 1Q15 format.
+
+%........................................................
+\NewOperator{C\_Extract\_real(C\_var1)}
+
+Returns the real part of a 16-bit complex number C\_var1.
+
+%........................................................
+\NewOperator{C\_Extract\_imag(C\_var1)}
+
+Returns the imaginary part of a 16-bit complex number C\_var1.
+
+%........................................................
+\NewOperator{C\_scale(C\_var1,var2)}
+
+Multiplies the real and imaginary parts of a 16-bit complex number C\_var1 by a 16-bit var2.
+Returns 32-bit complex number.
+
+%........................................................
+\NewOperator{C\_negate(C\_var1)}
+
+Negates the 16-bit complex number, saturates and returns a 16-bit complex number.
+
+%........................................................
+\NewOperator{C\_conjugate(C\_var1)}
+
+Negates only the imaginary part of a 16-bit complex number C\_var1 with saturation.
+No change in the real part.
+
+%........................................................
+\NewOperator{C\_shr(C\_var1, var2)}
+
+Arithmetically shifts right the real and imaginary parts of the 16-bit complex number C\_var1 by var2 positions.\\
+If var2 is negative, real and imaginary parts of C\_var1 are shifted to the most significant bits by (-var2) positions with 16-bit saturation control.\\
+If var2 is positive, real and imaginary parts of C\_var1 are shifted to the least significant bits by (var2) positions with sign extension.
+
+%........................................................
+\NewOperator{C\_shl(C\_var1,var2)}
+
+Arithmetically shifts left the real and imaginary parts of the 16-bit complex number C\_var1 by var2 positions.\\
+If var2 is negative, real and imaginary parts of C\_var1 are shifted to the least significant bits by (-var2) positions with sign extension.\\
+If var2 is positive, real and imaginary parts of C\_var1 are shifted to the most significant bits by (var2) positions with 16-bit saturation control.
+
+%______________________________________________________
+\subsection{Operators with complexity weight of 2}
+
+%........................................................
+\NewOperator{CL\_multr\_32x16(CL\_var, C\_coeff)}
+
+Multiplication of 32-bit complex number CL\_var with a 16-bit complex number C\_coeff.\\
+The formula for multiplying two complex numbers, {\tt (x+iy)} and {\tt (u+iv)} is:
+
+{\tt \rulex{5mm} (x+iy)*(u+iv) = (xu – yv) + i(xv + yu);}
+
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} W\_tmp1 = W\_mult\_32\_16(CL\_var.re, C\_coeff.re);\\
+     \rulex{5mm} W\_tmp2 = W\_mult\_32\_16(CL\_var.im, C\_coeff.im);\\
+     \rulex{5mm} W\_tmp3 = W\_mult\_32\_16(CL\_var.re, C\_coeff.im);\\
+     \rulex{5mm} W\_tmp4 = W\_mult\_32\_16(CL\_var.im, C\_coeff.re);\\
+
+     \rulex{5mm} CL\_res.re = W\_round48\_L( W\_sub\_nosat (W\_tmp1, W\_tmp2));\\
+     \rulex{5mm} CL\_res.im = W\_round48\_L( W\_add\_nosat (W\_tmp3, W\_tmp4));
+}
+
+For example, if the real and imaginary part of complex variable CL\_var are in 1Q31 format, and C\_coeff in 1Q15 format, then the intermediate products would be in 17Q47 format.
+The round operation will convert the result of addition/subtraction from 17Q47 format to 1Q31 format.
+
+%........................................................
+\NewOperator{C\_multr(C\_var1, C\_var2)}
+
+Multiplies the 16-bit complex number C\_var1 with the 16-bit complex number C\_var2 which results in a 16-bit complex number.\\
+The formula for multiplying two complex numbers, {\tt (x+iy)} and {\tt (u+iv)} is:
+
+{\tt \rulex{5mm} (x+iy)*(u+iv) = (xu – yv) + i(xv + yu);}
+
+The following code snippet describes the operations performed on real \& imaginary part of a complex number:
+
+{\tt \rulex{5mm} W\_tmp1 = W\_mult\_16\_16(C\_var1.re, C\_var2.re);\\
+     \rulex{5mm} W\_tmp2 = W\_mult\_16\_16(C\_var1.im, C\_var2.im);\\
+     \rulex{5mm} W\_tmp3 = W\_mult\_16\_16(C\_var1.re, C\_var2.im);\\
+     \rulex{5mm} W\_tmp4 = W\_mult\_16\_16(C\_var1.im, C\_var2.re);\\
+
+     \rulex{5mm} C\_result.re = round\_fx(W\_sat\_l (W\_sub\_nosat (W\_tmp1, W\_tmp2)));\\
+     \rulex{5mm} C\_result.im = round\_fx(W\_sat\_l (W\_add\_nosat (W\_tmp3, W\_tmp4)));
+}
+
+%........................................................
+\NewOperator{CL\_multr\_32x32(CL\_var1, CL\_var2)}
+
+Complex multiplication of CL\_var1 and CL\_var2.
+Multiplication is in fractional mode. Both input and outputs are in 1Q31 format.\\
+The following code snippet describes the performed operations:
+
+{\tt \rulex{5mm} W\_tmp1 = W\_mult\_32\_32(CL\_var1.re, CL\_var2.re);\\
+     \rulex{5mm} W\_tmp2 = W\_mult\_32\_32(CL\_var1.im, CL\_var2.im);\\
+     \rulex{5mm} W\_tmp3 = W\_mult\_32\_32(CL\_var1.re, CL\_var2.im);\\
+     \rulex{5mm} W\_tmp4 = W\_mult\_32\_32(CL\_var1.im, CL\_var2.re);
+
+     \rulex{5mm} CL\_res.re = W\_round64\_L( W\_sub (W\_tmp1, W\_tmp2));\\
+     \rulex{5mm} CL\_res.im = W\_round64\_L( W\_add (W\_tmp3, W\_tmp4));
+}
+
+%........................................................
+\NewOperator{C\_mac\_r(CL\_var1, C\_var2, var3)}
+
+Multiplies real and imaginary part of C\_var2 by var3 and shifts the result left by 1.
+Adds the 32-bit result to CL\_var1 with saturation.
+Rounds the 16 least significant bits of the result into the 16 most significant bits with saturation and shifts the result right by 16.
+Returns a 16-bit complex result.
+
+{\tt \rulex{5mm} C\_result = CL\_round32\_16( CL\_add( Cl\_var1, C\_scale(C\_var2, var3) ) ); }
+
+%........................................................
+\NewOperator{C\_msu\_r(CL\_var1, C\_var2, var3)}
+
+Multiplies real and imaginary part of C\_var2 by var3 and shifts the result left by 1.
+Subtracts the 32-bit result from CL\_var1 with saturation. Rounds the 16 least significant bits of the result into the 16 most significant bits with saturation and shifts the result right by 16.
+Returns a 16-bit complex result.
+
+{\tt \rulex{5mm} C\_result = CL\_round32\_16( CL\_sub( Cl\_var1, C\_scale(C\_var2, var3) ) ); }
+
+
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \section{Description of the control basic operators and associated weights}
 
@@ -1449,7 +1847,7 @@ The following code ...\\
 \ \\
 \textbf{\emph{(condition) ? (statement1) : (statement2)}}
 
-The ternary operator ``\textbf{? \ :}'' must not be used since it does
+The ternary operator \textbf{? \ :}'' must not be used since it does
 not enable the evaluation of the associated complexity. 
 
 Therefore, instead of writing: \\
@@ -1474,7 +1872,7 @@ operator} (control operator excluded), one can write:\\
 
 \textbf{\emph{for(expresion1; expression2; expression3)}}
 
-A ``\textbf{for}'' C statement must be limited to initializing,
+A \textbf{for}'' C statement must be limited to initializing,
 testing and incrementing the loop counter. The following C code
 statement is an example of incorrect usage:
 
@@ -1760,14 +2158,14 @@ defined, the list of the 8 blacklist functions found is also given:
 \\ \texttt{
 \begin{tabbing}
 line..XXX:.\=blacklist X...\=x:\kill
-line  ~86:\>blacklist \#  \>1:                          \`          return \\
-line  160:\>blacklist \#  \>2:                          \`          calloc \\
-line  160:\>blacklist \#  \>3:                          \`          sizeof \\
-line  230:\>blacklist \#  \>4:                          \`            free \\
-line  271:\>blacklist \#  \>5:                          \`          return \\
-line  303:\>blacklist \#  \>6:                          \`          calloc \\
-line  303:\>blacklist \#  \>7:                          \`          sizeof \\
-line  318:\>blacklist \#  \>8:                          \`            free \\
+line  ~86:\>blacklist \#  \>1:                          \          return \\
+line  160:\>blacklist \#  \>2:                          \          calloc \\
+line  160:\>blacklist \#  \>3:                          \          sizeof \\
+line  230:\>blacklist \#  \>4:                          \            free \\
+line  271:\>blacklist \#  \>5:                          \          return \\
+line  303:\>blacklist \#  \>6:                          \          calloc \\
+line  303:\>blacklist \#  \>7:                          \          sizeof \\
+line  318:\>blacklist \#  \>8:                          \            free \\
 \end{tabbing}
 }
 Note that the line numbers correspond to the comment free pre-processed file.
