@@ -234,6 +234,17 @@ result, the following operation must be done:
 \subsubsection{Multiplication operators}
 
 %........................................................
+\NewOperator{i\_mult(v1, v2)}
+
+Multiply two 16-bit words {\tt v1} and {\tt v2} returning a 16-bit word with overflow control.
+
+\textbf{Note:} \hfill \pbox{145mm}{
+In v1.x, the complexity weight of this operator was 1.
+The complexity update to the weight of 3 was motivated by the fact that the primitive is performing
+something equivalent to extract\_h( L\_shl( L\_mult0( v1, v2), 16)).
+}
+
+%........................................................
 \NewOperator{L\_mult(v1, v2)}
 
 Operator {\tt L\_mult} implements the 32-bit result of the
@@ -353,6 +364,13 @@ result. Generates carry and overflow values:
 
 
 \rulex{2mm}{\tt L\_msuNs(L\_v3, v1, v2) = L\_sub\_c(L\_v3, L\_mult(v1, v2))}
+
+%........................................................
+\NewOperator{L\_mls(L\_v1, v2)}
+
+Performs a multiplication of a 32-bit variable {\tt L\_v1} by a 16-bit variable {\tt v2}, returning a 32-bit value.
+
+\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  6.}
 
 %........................................................
 \NewOperator{msu\_r(L\_v3, v1, v2)}
@@ -553,8 +571,7 @@ assigned values.
 %........................................................
 \NewOperator{shr\_r(v1, v2)}
 
-Same as {\tt shr()} but with rounding. Saturate the result in case
-of underflows or overflows.
+Same as {\tt shr()} but with rounding. Saturate the result in case of underflows or overflows.
 
 {\tt
 \rulex{2mm} if (v2$>$0) then\\
@@ -573,8 +590,7 @@ of underflows or overflows.
 \NewOperator{L\_shr\_r(L\_v1, v2)}
 
 
-Same as {\tt L\_shr(v1,v2)} but with rounding. Saturate the result
-in case of underflows or overflows:
+Same as {\tt L\_shr(v1,v2)} but with rounding. Saturate the result in case of underflows or overflows:
 
 {\tt
 \rulex{2mm} if (v2 $>$ 0) then\\
@@ -587,7 +603,7 @@ in case of underflows or overflows:
 
 \textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of this operator was  3.}
 
-
+%________________________________________________________
 \subsection{Operators with complexity weight of 3}
 \subsubsection{Arithmetic operators}
 
@@ -616,17 +632,7 @@ result in case of underflows or overflows.
 In v1.x, this operator is called \textbf{L\_shift\_r(L\_v1, v2}) ;
 both names can be used.
 
-%........................................................
-\NewOperator{i\_mult(v1, v2)}
-
-Multiply two 16-bit words {\tt v1} and {\tt v2} returning a 16-bit
-word with overflow control.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of 
-this operator was  1. The complexity update to the 
-weight of 3 was motivated by the fact that the primitive is performing 
-something equivalent to extract\_h( L\_shl( L\_mult0( v1, v2), 16)).}
-
+%________________________________________________________
 \subsubsection{Logical Operators}
 
 %........................................................
@@ -669,14 +675,6 @@ The least significant bit of L\_v1 is copied to the bit 0 of v3 variable.
 \enlargethispage*{10mm}
 
 \subsection{Operators with complexity weight of 5}
-
-%........................................................
-\NewOperator{L\_mls(L\_v1, v2)}
-
-Performs a multiplication of a 32-bit variable {\tt L\_v1} by a 16-bit
-variable {\tt v2}, returning a 32-bit value.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  6.}
 
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \subsection{Operators with complexity weight of 18}
@@ -821,6 +819,10 @@ complements representation, defined by:
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \subsection{Operators with complexity weight of 1}
 \subsubsection{Arithmetic operators (multiplication excluded)}
+
+\NewOperator{L40\_set(L40\_v1)}
+
+Assigns a 40-bit constant to the returned 40-bit variable.
 
 %........................................................
 \NewOperator{L40\_add(L40\_v1, L40\_v2)}
@@ -1014,64 +1016,48 @@ end-result 16 LSBits are cleared to 0.
 
 \subsection{Operators with complexity weight of 2}
 
-%........................................................
+
 \NewOperator{mac\_r40(L40\_v1, v2, v3)}
 
 Equivalent to: \\
 {\tt round40( L40\_mac( L40\_v1, v2, v3)) }
 
-%........................................................
 \NewOperator{msu\_r40(L40\_v1, v2, v3) }
 
 Equivalent to: \\
 {\tt round40( L40\_msu( L40\_v1, v2, v3)) }
 
-%........................................................
+\NewOperator{L40\_shr\_r(L40\_v1, v2)}
+
+Arithmetically shifts the 40-bit variable L40\_v1 by v2 positions to the least significant bits and rounds the result.
+It is equivalent to {\tt L40\_shr( L40\_v1, v2)} except that if v2 is positive and the last shifted out bit is 1, then the shifted result is increment by 1\textbf{without} 40-bit saturation control.
+It will exit execution if it detects a 40-bit overflow.
+
+\NewOperator{L40\_shl\_r(L40\_v1, v2)}
+
+Arithmetically shifts the 40-bit variable L40\_v1 by v2 positions to the most significant bits and rounds the result.
+It is equivalent to {\tt L40\_shl( L40\_var1, v2)} except if v2 is negative.
+In this case, it does the same as {\tt L40\_shr\_r( L40\_v1, (-v2))}.
+
 \NewOperator{Mpy\_32\_16\_ss(L\_v1, v2, *L\_v3\_h, *v3\_l)}
 
-\textbf{Multiplies the 2 signed values} L\_v1 (32-bit) and v2 (16-bit)
-with saturation control on 48-bit. The operation is performed in
-\textbf{fractional mode}: \\ 
-When L\_v1 is in 1Q31 format, and v2 is in 1Q15 format, the result is
-produced in 1Q47 format: L\_v3\_h bears the 32 most significant bits
-while v3\_l bears the 16 least significant bits.
+\textbf{Multiplies the 2 signed values} L\_v1 (32-bit) and v2 (16-bit) with saturation control on 48-bit.
+The operation is performed in \textbf{fractional mode}: \\
+When L\_v1 is in 1Q31 format, and v2 is in 1Q15 format, the result is produced in 1Q47 format: L\_v3\_h bears the 32 most significant bits while v3\_l bears the 16 least significant bits.
+
+\NewOperator{Mpy\_32\_32\_ss(L\_v1, L\_v2, *L\_v3\_h, *L\_v3\_l)}
+
+Multiplies the two signed 32-bit values L\_v1 and L\_v2 with saturation control on 64-bit.
+The operation is performed in \textbf{fractional mode}: when L\_v1 and L\_v2 are in 1Q31 format, the result is produced in 1Q63 format; L\_v3\_h bears the 32 most significant bits while L\_v3\_l bears the 32 least significant bits.
 
 \subsection{Operators with complexity weight of 3}
 
 %........................................................
-\NewOperator{L40\_shr\_r(L40\_v1, v2)}
-
-Arithmetically shifts the 40-bit variable L40\_v1 by v2 positions to
-the least significant bits and rounds the result. It is equivalent to
-{\tt L40\_shr( L40\_v1, v2)} except that if v2 is positive and the last
-shifted out bit is 1, then the shifted result is increment by 1
-\textbf{without} 40-bit saturation control. It will exit execution if
-it detects a 40-bit overflow.
-
-%........................................................
-\newpage
-\NewOperator{L40\_shl\_r(L40\_v1, v2)}
-
-Arithmetically shifts the 40-bit variable L40\_v1 by v2 positions
-to the most significant bits and rounds the result. It is
-equivalent to {\tt L40\_shl( L40\_var1, v2)} except if v2 is negative.
-In this case, it does the same as {\tt L40\_shr\_r( L40\_v1, (-v2))}.
-
-%........................................................
-\NewOperator{L40\_set(L40\_v1)}
-
-Assigns a 40-bit constant to the returned 40-bit variable.
 
 \subsection{Operators with complexity weight of 4}
 
 %........................................................
-\NewOperator{Mpy\_32\_32\_ss(L\_v1, L\_v2, *L\_v3\_h, *L\_v3\_l)}
 
-Multiplies the two signed 32-bit values L\_v1 and L\_v2 with saturation
-control on 64-bit. The operation is performed in \textbf{fractional
-mode}: when L\_v1 and L\_v2 are in 1Q31 format, the result is produced
-in 1Q63 format; L\_v3\_h bears the 32 most significant bits while
-L\_v3\_l bears the 32 least significant bits.
 
 \subsection{Coding Guidelines}
 
