@@ -510,6 +510,19 @@ are sign-extended.
 
 \textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
 
+
+%........................................................
+\NewOperator{L\_sat(L\_v1)}
+
+The 32-bit variable L\_v1 is set to {\tt 2147483647} if an overflow
+occurred, or {\tt -2147483648} if an underflow occurred, on the
+most recent {\tt L\_add\_c()}, {\tt L\_sub\_c()}, {\tt L\_macNs()}
+or {\tt L\_msuNs()} operations. The carry and overflow values are
+binary variables which can be tested and assigned values.
+
+\textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of this operator was  4. }
+
+
 \subsection{Operators with complexity weight of 2}
 
 %........................................................
@@ -535,10 +548,7 @@ binary variables which can be tested and assigned values.
 Performs the 32-bit subtraction with carry (borrow). Generates
 carry (borrow) and overflow values. No saturation. The carry and
 overflow values are binary variables which can be tested and
-assigned values. 
-
-\subsection{Operators with complexity weight of 3}
-\subsubsection{Arithmetic operators}
+assigned values.
 
 %........................................................
 \NewOperator{shr\_r(v1, v2)}
@@ -555,18 +565,9 @@ of underflows or overflows.
 \rulex{2mm} else if (v2 $\leq$ 0) \\
    \rulex{4mm} then shr\_r(v1, v2) = shr(v1, v2)}
 
-%........................................................
-\NewOperator{shl\_r(v1, v2)}
-
-Same as {\tt shl()} but with rounding. Saturate the result in case
-of underflows or overflows:
-
-\rulex{2mm}{\tt shl\_r(v1, v2) = shr\_r(v1, -v2)}
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of
-this operator was  2. Additionally, please note that in v1.x this
-operator was called \textbf{shift\_r(v1, v2)}; in the STL2005, both
-names can be used.}
+\textcolor{purple} {
+\textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of this operator was  3.}
+}
 
 %........................................................
 \NewOperator{L\_shr\_r(L\_v1, v2)}
@@ -583,6 +584,26 @@ in case of underflows or overflows:
 
 \rulex{2mm} if (v2 $\leq$ 0) \\
   \rulex{4mm} then L\_shr\_r(L\_v1, v2) = L\_shr(L\_v1, v2)}
+
+\textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of this operator was  3.}
+
+
+\subsection{Operators with complexity weight of 3}
+\subsubsection{Arithmetic operators}
+
+%........................................................
+\NewOperator{shl\_r(v1, v2)}
+
+Same as {\tt shl()} but with rounding. Saturate the result in case
+of underflows or overflows:
+
+\rulex{2mm}{\tt shl\_r(v1, v2) = shr\_r(v1, -v2)}
+
+\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of
+this operator was  2. Additionally, please note that in v1.x this
+operator was called \textbf{shift\_r(v1, v2)}; in the STL2005, both
+names can be used.}
+
 
 %........................................................
 \NewOperator{L\_shl\_r(L\_v1, v2)}
@@ -637,22 +658,13 @@ copied to the bit 0 of v3 variable.
 %........................................................
 \NewOperator{L\_rotr(L\_v1, v2, * v3)} \newop20
 
-Rotates the 32-bit variable L\_v1 by 1 bit to the least
-significant bits. Bit 0 of v2 is copied to the most significant
-bit of the result before it is returned. The least significant bit
-of L\_v1 is copied to the bit 0 of v3 variable.
+Rotates the 32-bit variable L\_v1 by 1 bit to the least significant bits.
+Bit 0 of v2 is copied to the most significant bit of the result before it is returned.
+The least significant bit of L\_v1 is copied to the bit 0 of v3 variable.
 
 
 \subsection{Operators with complexity weight of 4}
 
-%........................................................
-\NewOperator{L\_sat(L\_v1)}
-
-The 32-bit variable L\_v1 is set to {\tt 2147483647} if an overflow
-occurred, or {\tt -2147483648} if an underflow occurred, on the
-most recent {\tt L\_add\_c()}, {\tt L\_sub\_c()}, {\tt L\_macNs()}
-or {\tt L\_msuNs()} operations. The carry and overflow values are
-binary variables which can be tested and assigned values.
 
 \enlargethispage*{10mm}
 
@@ -1499,10 +1511,10 @@ be replaced by: \\
 
 \subsection{Data moves}
 
-Each data move between two 16-bit variables (with
-\textbf{move16}() operator) has a complexity weight of 1 and each
-data move between two 32-bit variables (with \textbf{move32}()
-operator) has a complexity weight of 2.
+Each data move between two 16-bit or two 32-bit variables, \textbf{move16}() and \textbf{move32}() operators respectively, has a complexity weight of 1.
+
+\textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of \textbf{move32}() operator was  2. }
+
 \begin{enumerate}{}{}
 \item A 16-bit variable cannot be directly moved to a 32-bit or 40-bit variable.
 \item A 32-bit variable cannot be directly moved to a 16-bit or 40-bit variable.
