@@ -800,6 +800,9 @@ Operation &Weight &FR GSM &HR GSM &EFR GSM &AMR GSM &G.729 &G.723.1 &TETRA\\
 %-----------------------------------------------------------------
 \flushfloats
 
+
+
+
 %----------------------------------------------------------------------
 \section{Description of the 40-bit basic operators and associated weights}
 %----------------------------------------------------------------------
@@ -1102,6 +1105,208 @@ Current version (2.0) of the operator implementation does not
 evaluate the complexity associated to the mixing of 40-bit and
 16/32-bit operators. Subsequent versions may do so.
 \end{enumerate}
+
+
+%----------------------------------------------------------------------
+\section{Basic operators which use 32-bit precision multiply}
+
+Basic operators in this section are useful for FFT and scaling functions where the result of a 32\*16 or 32\*32 arithmetic operation is rounded, and saturated to 32-bit value. 
+There is no accumulation of products in these functions.
+In functions that accumulate products, you should use base operators in Section \ref{basop64bitoperators}.
+
+All basic operators in this section have a weight of 1.
+
+%........................................................
+\subsection{Variable definitions}
+
+The variables used in the operators are signed integers in 2's complements representation, defined by:
+
+{\tt var2}: 16-bit variables\\
+{\tt L\_var1}, {\tt L\_var2}, {\tt L\_var3}: 32-bit variables
+
+%........................................................
+\NewOperator{Mpy\_32\_16\_1(L\_var1, var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2. 
+Shifts the product left by 1 with 48-bit saturation control; 
+Returns the 32 MSB of the 48-bit result after truncation of lower 16 bits.
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated and returned in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt W\_var1 = W\_mult\_32\_16 ( L\_var1, var2 );}\\
+\rulex{2mm}{\tt L\_var\_out = W\_sat\_m( W\_var1 );}
+}
+
+%........................................................
+\NewOperator{Mpy\_32\_16\_r(L\_var1, var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; Returns the 32 MSB of the 48-bit result after rounding of the lower 16 bits.
+The operation is performed in fractional mode.
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then rounded, saturated, and returned in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt W\_var1 = W\_mult\_32\_16( L\_var1, var2 );}\\
+\rulex{2mm}{\tt L\_var\_out = W\_round48\_L (W\_var1);}
+
+%........................................................
+\NewOperator{Mpy\_32\_32(L\_var1, L\_var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 32-bit variable L\_var2. 
+Shifts the product left by 1 with 64-bit saturation control; 
+Returns the 32 MSB of the 64-bit result after truncating of the lower 32 bits.
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q31 format, then the product is produced in 1Q63 format which is then truncated, saturated, and returned in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt W\_var1 = (( Word64)L\_var1 * L\_var2);}\\
+\rulex{2mm}{\tt L\_var\_out = W\_extract\_h(W\_shl(W\_var1, 1) );}
+
+%........................................................
+\NewOperator{Mpy\_32\_32\_r(L\_var1, L\_var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 32-bit variable L\_var2. 
+Adds rounding offset to lower 31 bits of the product. 
+Shifts the result left by 1 with 64-bit saturation control; returns the 32 MSB of the 64-bit result with saturation control.
+
+The operation is performed in fractional mode.
+For example, if L\_var1 is in 1Q31 format and L\_var2 is in 1Q31 format, then the result is produced in 1Q63 format which is then rounded, saturated, and returned in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt W\_var1 = (( Word64)L\_var1 * L\_var2);}\\
+\rulex{2mm}{\tt W\_var1 = W\_var1 + 0x40000000LL;}\\
+\rulex{2mm}{\tt W\_var1 = W\_shl ( W\_var1, 1 );}\\
+\rulex{2mm}{\tt L\_var\_out = W\_extract\_h( W\_var1 );}
+
+%........................................................
+\NewOperator{Madd\_32\_16(L\_var3, L\_var1, var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2. 
+Shift the product left by 1 with 48-bit saturation control; Add the 32-bit MSB of the 48-bit result with 32-bit L\_var3 with 32-bit saturation control.
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated to 1Q31 format and added to L\_var3 in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt L\_var\_out = Mpy\_32\_16\_1(L\_var1, var2);}\\
+\rulex{2mm}{\tt L\_var\_out = L\_add(L\_var3, L\_var\_out);}
+
+%........................................................
+\NewOperator{Madd\_32\_16\_r(L\_var3, L\_var1, var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2.
+Shifts the product left by 1 with 48-bit saturation control; 
+Gets the 32-bit MSB from 48-bit result after rounding of the lower 16 bits and adds this with 32-bit L\_var3 with 32-bit saturation control.
+
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, rounded to 1Q31 format and added to L\_var3 in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt L\_var\_out = Mpy\_32\_16\_r(L\_var1, var2);}\\
+\rulex{2mm}{\tt L\_var\_out = L\_add(L\_var3, L\_var\_out);}
+
+%........................................................
+\NewOperator{Msub\_32\_16(L\_var3, L\_var1, var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2.
+Shifts the product left by 1 with 48-bit saturation control; Subtracts the 32-bit MSB of the 48-bit result from 32-bit L\_var3 with 32-bit saturation control.
+
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated to 1Q31 format and subtracted from L\_var3 in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt L\_var\_out = Mpy\_32\_16\_1(L\_var1, var2);}\\
+\rulex{2mm}{\tt L\_var\_out = L\_sub(L\_var3, L\_var\_out);}
+
+%........................................................
+\NewOperator{Msub\_32\_16\_r(L\_var3, L\_var1, var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2.
+Shifts the product left by 1 with 48-bit saturation control; Gets the 32-bit MSB from 48-bit result after rounding of the lower 16 bits and subtracts this from 32-bit L\_var3 with 32-bit saturation control.
+
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, rounded to 1Q31 format and subtracted from L\_var3 in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt L\_var\_out = Mpy\_32\_16\_r(L\_var1, var2);}\\
+\rulex{2mm}{\tt L\_var\_out = L\_sub(L\_var3, L\_var\_out);}
+
+%........................................................
+\NewOperator{Madd\_32\_32(L\_var3, L\_var1, L\_var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 32-bit variable L\_var2. 
+Shifts the product left by 1 with 64-bit saturation control; Adds the 32 MSB of the 64-bit result to 32-bit signed variable L\_var3 with 32-bit saturation control.
+
+The operation is performed in fractional mode.
+For example, if L\_var1 is in 1Q31 format and L\_var2 is in 1Q31 format, then the product is saturated and truncated in 1Q31 format which is then added to L\_var3 (in 1Q31 format), to provide result in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt L\_var\_out = Mpy\_32\_32(L\_var1, L\_var2);}\\
+\rulex{2mm}{\tt L\_var\_out = L\_add(L\_var3, L\_var\_out);}
+
+%........................................................
+\NewOperator{Madd\_32\_32\_r(L\_var3, L\_var1, L\_var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 32-bit variable L\_var2. 
+Adds rounding offset to lower 31 bits of the product. 
+Shifts the result left by 1 with 64-bit saturation control; 
+gets the 32 MSB of the 64-bit result with saturation and adds this with 32-bit signed variable L\_var3 with 32-bit saturation control.
+
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and L\_var2 is in 1Q31 format, then the product is saturated and rounded in 1Q31 format which is then added to L\_var3 (in 1Q31 format), to provide result in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt L\_var\_out = Mpy\_32\_32\_r(L\_var1, L\_var2);}\\
+\rulex{2mm}{\tt L\_var\_out = L\_add(L\_var3, L\_var\_out);}
+
+%........................................................
+\NewOperator{Msub\_32\_32(L\_var3, L\_var1, L\_var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 32-bit variable L\_var2. 
+Shifts the product left by 1 with 64-bit saturation control; 
+Subtracts the 32 MSB of the 64-bit result from 32-bit signed variable L\_var3 with 32-bit saturation control.
+
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and L\_var2 is in 1Q31 format, then the product is saturated and truncated in 1Q31 format which is then subtracted from L\_var3 (in 1Q31 format), to provide result in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt L\_var\_out = Mpy\_32\_32(L\_var1, L\_var2);}\\
+\rulex{2mm}{\tt L\_var\_out = L\_sub(L\_var3, L\_var\_out);}
+
+%........................................................
+\NewOperator{Msub\_32\_32\_r(L\_var3, L\_var1, L\_var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 32-bit variable L\_var2.
+Adds rounding offset to lower 31 bits of the product. Shifts the result left by 1 with 64-bit saturation control; 
+gets the 32 MSB of the 64-bit result with saturation and subtracts this from 32-bit signed variable L\_var3 with 32-bit saturation control.
+
+The operation is performed in fractional mode.
+
+For example, if L\_var1 is in 1Q31 format and L\_var2 is in 1Q31 format, then the product is saturated and rounded in 1Q31 format which is then subtracted from L\_var3 (in 1Q31 format), to provide result in 1Q31 format.
+
+The following code snippet describes the operations performed:
+
+\rulex{2mm}{\tt L\_var\_out = Mpy\_32\_32\_r(L\_var1, L\_var2);}\\
+\rulex{2mm}{\tt L\_var\_out = L\_sub(L\_var3, L\_var\_out);}
+
 
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \section{Description of the control basic operators and associated weights}
