@@ -2,7 +2,7 @@
 % ..... THIS IS chapter{BASOP: ITU-T Basic Operators } .....
 % ... Revision:
 % Nov.2000 - SG16 Plenary
-% Apr.2005 - STL2005 revision -- Cyril Guillaum� & St�phane Ragot - stephane.ragot@francetelecom.com
+% Apr.2005 - STL2005 revision -- Cyril Guillaumé & Stéphane Ragot - stephane.ragot@francetelecom.com
 %                                Karim Djafarian - k-djafarian@ti.com
 % Nov.2008 - STL2009 revision -- Yusuke Hiwasaki, Noboru Harada, NTT
 %                             - Balazs Kovesi, Claude Lamblin, France Telecom
@@ -799,6 +799,77 @@ Operation &Weight &FR GSM &HR GSM &EFR GSM &AMR GSM &G.729 &G.723.1 &TETRA\\
 
 %-----------------------------------------------------------------
 \flushfloats
+
+
+%----------------------------------------------------------------------
+\section{Description of the basic operators for unsigned data types}
+%----------------------------------------------------------------------
+
+This section describes the different basic operators for unsigned data types available in the STL, organized by complexity (”weights”). 
+
+\subsection{Variable definitions}
+
+The variables used in the operators are signed integers in 2's complements representation, defined by:
+
+{\tt U\_var1}, {\tt U\_varout\_l}: 16-bit unsigned variables\\
+{\tt UL\_var1}, {\tt UL\_var2}, {\tt var1}, {\tt UL\_varout\_h}, {tt UL\_varout\_l}: 32-bit unsigned variables
+
+
+%-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+\subsection{Operators with complexity weight of 1}
+
+%........................................................
+\NewOperator{UL\_addNs(UL\_var1, UL\_var2, *var1)}
+
+Adds the two unsigned 32-bit variables UL\_var1 and UL\_var2 with overflow control, but without saturation. 
+Returns 32-bit unsigned result. 
+var1 is set to 1 if wrap around occurred, otherwise 0.
+
+%........................................................
+\NewOperator{UL\_subNs(UL\_var1, UL\_var2, *var1)}
+
+Subtracts the 32-bit usigned variable UL\_var2 from the 32-bit unsigned variable UL\_var1 with overflow control, but without saturation. 
+Returns 32-bit unsigned result. 
+var1 is set to 1 if wrap around (to "negative") occurred, otherwise 0.
+
+%........................................................
+\NewOperator{norm\_ul (UL\_var1)}
+
+Produces the number of left shifts needed to normalize the 32-bit unsigned variable UL\_var1 for positive values on the interval with minimum of 0 and maximum of 0xffffffff. 
+If UL\_var1 contains 0, return 0.
+
+%........................................................
+\NewOperator{UL\_deposit\_l(U\_var1)}
+
+Deposit the 16-bit U\_var1 into the 16 LS bits of the 32-bit output. The 16 MS bits of the output are not sign extended.
+
+%........................................................
+\NewOperator{UL\_Mpy\_32\_32(UL\_var1, UL\_var2)}
+
+Multiplies the two unsigned values UL\_var1 and UL\_var2 and returns the lower 32 bits, without saturation control. 
+UL\_var1 and UL\_var2 are supposed to be in Q32 format.
+The result is produced in Q64 format, the 32 LS bits.
+Operates like a regular 32x32-bit unsigned int multiplication in ANSI-C.
+
+\subsection{Operators with complexity weight of 2}
+
+%........................................................
+\NewOperator{Mpy\_32\_32\_uu(UL\_var1, UL\_var2, *UL\_varout\_h, *UL\_varout\_l)}
+
+Multiplies the two unsigned 32-bit variables UL\_var1 and UL\_var2. 
+The operation is performed in fractional mode.
+UL\_var1 and UL\_var2 are supposed to be in Q32 format.
+The result is produced in Q64 format: UL\_varout\_h points to the 32 MS bits while UL\_varout\_l points to the 32 LS bits.
+
+%........................................................
+\NewOperator{Mpy\_32\_16\_uu(UL\_var1, U\_var1, *UL\_varout\_h, *U\_varout\_l)}
+
+Multiplies the unsigned 32-bit variable UL\_var1 with the unsigned 16-bit variable U\_var1. 
+The operation is performed in fractional mode :
+UL\_var1 is supposed to be in Q32 format.
+U\_var1 is supposed to be in Q16 format.
+The result is produced in Q48 format: UL\_varout\_h points to the 32 MS bits while U\_varout\_l points to the 16 LS bits.
+
 
 %----------------------------------------------------------------------
 \section{Description of the 40-bit basic operators and associated weights}
