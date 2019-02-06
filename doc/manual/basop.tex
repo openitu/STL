@@ -1191,59 +1191,66 @@ operators and their associated complexity.
 % Table with the control basic operators and their associated complexity.
 %-------------------------------------------------------------------------
 \begin{table}[th]
-    \Caption{14cm}{\SF Control basic operators and associated
-    complexity. \label{tbl:control-basicop}}
+    \Caption{14cm}{\SF Control basic operators and associated complexity. \label{tbl:control-basicop}}
     \begin{center}
         \footnotesize
         \begin{tabular}{|c|l|l|}
             \hline Complexity Weight  & Basic Operator  & Description\\
-            \hline \hline {0}    & \textbf{DO}\{...\} while(expression) &
-            \parbox[t]{70mm}{\SF The
-            macro DO must be used instead of the 'do' C statement.}\\
-            \hline {3} & \textbf{FOR}(expr1; expr2; expr3) \{...\} &
-            \parbox[t]{70mm}{\SF The macro FOR must be used instead of the
-            'for' C statement. The complexity is \textbf{independent} of the
-            number of loop iterations that are performed.} \\
-            \hline {0} & \parbox[t]{60mm}{\SF \textbf{if}(expression)
-            \textbf{one\_and\_only\_one\_basic\_operator (control operators
-            excluded)}} & \parbox[t]{70mm}{\SF \textbf{The macro IF must not
-            be used} when the 'if' structure does not have any 'else if' nor
-            'else' statement and it conditions only one basic operator
-            (control operators excluded)}. \\
-            \hline {4} & \parbox[t]{60mm}{\SF \textbf{IF}(expression) \{...\}}
-            &
-            \parbox[t]{70mm}{\SF The macro IF must be used instead of the 'if'
-            C statement \textbf{in every other case}: when there is an 'else'
-            or 'else if' statement, or when the 'if' conditions several basic
-            operators, or when the 'if' conditions a function call or when the
-            'if' conditions a control operator.}\\
-            \hline {4} & \parbox[t]{60mm}{\SF if(expression) \{...\} [[\\
-            \textbf{ELSE} if(expression2)\{...\}]\\ \textbf{ELSE} \{...\}]} &
-            \parbox[t]{70mm}{\SF The macro ELSE must be used instead of the
-            'else' C
-            statement.}\\
-            \hline {8} & \textbf{SWITCH}(expression) \{...\} &
-            \parbox[t]{70mm}{\SF The macro SWITCH must be used instead of the
-            'switch' C statement.}\\
-            \hline {4} & \textbf{WHILE}(expression) \{...\} &
-            \parbox[t]{70mm}{\SF The macro WHILE must be used instead of the
-            'while' C statement.\\
-            The complexity is \textbf{proportional} to the number of loop
-            iterations that are performed.}\\
-            \hline {4} & \parbox[t]{60mm}{\SF while(expression) \{ \\...
-            \textbf{CONTINUE}; ...\\ \}\\ or\\ for(expr1; expr2; expr3) \{
-            \\...\\ \textbf{CONTINUE}; \\...\\ \}\\ } &
-            \parbox[t]{70mm}{\SF The macro CONTINUE must be used instead of
-            the 'continue' C statement.}\\
-            \hline {4} & \parbox[t]{60mm}{\SF while(expression) \{ \\...
-            \textbf{BREAK}; ...\\ \}\\ or\\ for(expr1; expr2; expr3) \{
-            \\...\\ \textbf{BREAK}; \\...\\ \}\\or\\
-            switch(var) \{ \\...\\ \textbf{BREAK};\\...\\\}
-            } &
-            \parbox[t]{70mm}{\SF The macro BREAK must be used instead of
-            the 'break' C statement.}\\
-            \hline {4} &  \textbf{GOTO}  & \parbox[t]{60mm}{\SF The macro GOTO
-            must be used instead of the 'goto' C statement.}\\
+            \hline \hline {0}    &
+            \textbf{DO}\{...\} while(expression) &
+            \parbox[t]{70mm}{\SF The macro DO must be used instead of the 'do' C statement.}\\
+            \hline {3} &
+            \textbf{FOR}(expr1; expr2; expr3) \{...\} &
+            \parbox[t]{70mm}{\SF The macro FOR must be used instead of the 'for' C statement.
+            The complexity is \textbf{independent} of the number of loop iterations that are performed.} \\
+            \hline {0} &
+            \parbox[t]{60mm}{\SF \textbf{if}(expression)
+            \textbf{one\_and\_only\_one\_basic\_operator (control operators excluded)}} & \parbox[t]{70mm}{\SF \textbf{The macro IF must not be used} when the 'if' structure does not have any 'else if' nor 'else' statement and it conditions only one basic operator (control operators excluded)}. \\
+            \hline {3} &
+            \parbox[t]{60mm}{\SF \textbf{IF}(expression) \{...\}} &
+            \parbox[t]{70mm}{\SF The macro IF must be used instead of the 'if' C statement \textbf{in every other case}: when there is an 'else' or 'else if' statement, or when the 'if' conditions several basic operators, or when the 'if' conditions a function call or when the 'if' conditions a control operator.}\\
+            \hline {4} &
+            \parbox[t]{60mm}{\SF if(expression) \{...\} [[\\
+            \textbf{ELSE} if(expression2)\{...\}]\\
+            \textbf{ELSE} \{...\}]} &
+            \parbox[t]{70mm}{\SF The macro ELSE must be used instead of the 'else' C statement.}\\
+            \hline {6} &
+            \textbf{SWITCH}(expression) \{...\} &
+            \parbox[t]{70mm}{\SF The macro SWITCH must be used instead of the 'switch' C statement.}\\
+            \hline {3} &
+            \textbf{WHILE}(expression) \{...\} &
+            \parbox[t]{70mm}{\SF The macro WHILE must be used instead of the 'while' C statement.\\
+            The complexity is \textbf{proportional} to the number of loop iterations that are performed.}\\
+            \hline {2} &
+            \parbox[t]{60mm}{\SF while(expression) \{ \\
+            ... \textbf{CONTINUE}; ...\\ \}\\
+            or\\
+            for(expr1; expr2; expr3) \{ \\
+            ...\\
+            \textbf{CONTINUE}; \\
+            ...\\
+            \}} &
+            \parbox[t]{70mm}{\SF The macro CONTINUE must be used instead of the 'continue' C statement.}\\
+            \hline {2} &
+            \parbox[t]{60mm}{\SF while(expression) \{ \\
+            ...\textbf{BREAK}; ...\\
+            \}\\
+            or\\
+            for(expr1; expr2; expr3) \{\\
+            ...\\
+            \textbf{BREAK}; \\...\\
+            \}\\
+            or\\
+            switch(var) \{ \\
+            ...\\
+            \textbf{BREAK};\\
+            ...
+            \\
+            \}} &
+            \parbox[t]{70mm}{\SF The macro BREAK must be used instead of the 'break' C statement.}\\
+            \hline {2} &
+            \textbf{GOTO}  &
+            \parbox[t]{60mm}{\SF The macro GOTO must be used instead of the 'goto' C statement.}\\
             \hline
         \end{tabular}
     \end{center}
