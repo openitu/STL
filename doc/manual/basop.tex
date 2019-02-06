@@ -1998,6 +1998,114 @@ The following code snippet describes the operations performed:
 
 
 
+%----------------------------------------------------------------------
+\section{Description of the basic operators for control operations}
+%----------------------------------------------------------------------
+
+The following basic operators should be used in the control processing part of the reference code.
+They are expected to help compilers generate more efficient code for control sections of the reference C code.
+In addition, they also help in computing a more accurate representation of control code operations in the total WMOPs (weighted millions of operations) of the reference code.
+
+All operators in this section have a complexity weight of 1.
+
+\subsection{Variable definitions}
+
+The variables used in the operators are signed integers in 2's complements representation, defined by:
+
+{\tt var1}, {\tt var2}: 16-bit variables\\
+{\tt L\_var1}, {\tt L\_var2}: 32-bit variables\\
+{\tt W\_var1}, {\tt W\_var2}: 64-bit variables
+
+%........................................................
+\NewOperator{LT\_16(var1, var2)}
+
+Returns 1 if 16-bit variable var1 is less than 16-bit variable var2, else returns 0.
+
+%........................................................
+\NewOperator{GT\_16(var1, var2)}
+
+Returns 1 if 16-bit variable var1 is greater than 16-bit variable var2, else returns 0.
+
+%........................................................
+\NewOperator{LE\_16(var1, var2)}
+
+Returns 1 if 16-bit variable var1 is less than or equal to 16-bit variable var2, else return 0.
+
+%........................................................
+\NewOperator{GE\_16(var1, var2)}
+
+Returns 1 if 16-bit variable var1 is greater than or equal to 16-bit variable var2, else returns 0.
+
+%........................................................
+\NewOperator{EQ\_16(var1, var2)}
+
+Returns 1 if 16-bit variable var1 is equal to 16-bit variable var2, else returns 0.
+
+%........................................................
+\NewOperator{NE\_16(var1, var2)}
+
+Returns 1 if 16-bit variable var1 is not equal to 16-bit variable var2, else returns 0.
+
+%........................................................
+\NewOperator{LT\_32(L\_var1, L\_var2)}
+
+Returns 1 if 32-bit variable L\_var1 is less than 32-bit variable L\_var2, else returns 0.
+
+%........................................................
+\NewOperator{GT\_32(L\_var1, L\_var2)}
+
+Returns 1 if 32-bit variable L\_var1 is greater than 32-bit variable L\_var2, else returns 0.
+
+%........................................................
+\NewOperator{LE\_32(L\_var1, L\_var2)}
+
+Returns 1 if 32-bit variable L\_var1 is less than or equal to 32-bit variable L\_var2, else returns 0.
+
+%........................................................
+\NewOperator{GE\_32(L\_var1, L\_var2)}
+
+Returns 1 if 32-bit variable L\_var1 is greater than or equal to 32-bit variable L\_var2, else returns 0.
+
+%........................................................
+\NewOperator{EQ\_32(L\_var1, L\_var2)}
+
+Returns 1 if 32-bit variable L\_var1 is equal to 32-bit variable L\_var2, else returns 0.
+
+%........................................................
+\NewOperator{NE\_32(L\_var1, L\_var2)}
+
+Returns 1 if 32-bit variable L\_var1 is not equal to 32-bit variable L\_var2, else returns 0.
+
+%........................................................
+\NewOperator{LT\_64(W\_var1, W\_var2)}
+
+Returns 1 if 64-bit variable W\_var1 is less than 64-bit variable W\_var2, else returns 0.
+
+%........................................................
+\NewOperator{GT\_64(W\_var1, W\_var2)}
+
+Returns 1 if 64-bit variable W\_var1 is greater than 64-bit variable W\_var2, else returns 0.
+
+%........................................................
+\NewOperator{LE\_64(W\_var1, W\_var2)}
+
+Returns 1 if 64-bit variable W\_var1 is less than or equal to 64-bit variable W\_var2, else returns 0.
+
+%........................................................
+\NewOperator{GE\_64(W\_var1, W\_var2)}
+
+Returns 1 if 64-bit variable W\_var1 is greater than or equal to 64-bit variable W\_var2, else returns 0.
+
+%........................................................
+\NewOperator{NE\_64(W\_var1, W\_var2)}
+
+Returns 1 if 64-bit variable W\_var1 is not equal to 64-bit variable W\_var2, else returns 0.
+
+%........................................................
+\NewOperator{EQ\_64(W\_var1, W\_var2)}
+
+Returns 1 if 64-bit variable W\_var1 is equal to 64-bit variable W\_var2, else returns 0.
+
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \section{Description of the control basic operators and associated weights}
 
