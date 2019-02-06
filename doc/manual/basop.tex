@@ -54,7 +54,6 @@ In STL2019, new operators were introduced to account for modern DSP architecture
 
 This section describes the different 16-bit and 32-bit basic operators available in the STL, and are organized by complexity (``weights'').
 The complexity values to be considered (since the publication of the STL2005) are the ones related to the version 2.0 and subsequent versions of the module.
-When the basic operator had a different complexity value in the previous version of the library(version 1.x), the previous complexity value is indicated for information.
 When the basic operator did not exist in the previous version of the library (version 1.x), it is highlighted as follows:
 \newop20 . In STL2009, {\tt round()} operator was renamed as {\tt round\_fx()} and {\tt saturate()}, function was made unaccessible from applications, because it was an internal procedure.
 
@@ -64,7 +63,6 @@ The variables used in the operators are signed integers in 2's complements repre
 
 {\tt v1}, {\tt v2}: 16-bit variables\\
 {\tt L\_v1}, {\tt L\_v2}, {\tt L\_v3}: 32-bit variables
-
 
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \subsection{Operators with complexity weight of 1}
@@ -124,100 +122,68 @@ Compares two 16-bit variables {\tt v1} and {\tt v2} and returns the minimum valu
 %........................................................
 \NewOperator{norm\_s(v1)}
 
-Produces the number of left shifts needed to normalize the 16-bit
-variable {\tt v1} for positive values on the interval with minimum
-of {\tt 16384} and maximum {\tt 32767}, and for negative values on
-the interval with minimum of {\tt -32768} and maximum of {\tt
--16384}; in order to normalise the result, the following operation
-must be done:
+Produces the number of left shifts needed to normalize the 16-bit variable {\tt v1} for positive values on the interval with minimum of {\tt 16384} and maximum {\tt 32767}, and for negative values on the interval with minimum of {\tt -32768} and maximum of {\tt
+-16384};
+in order to normalise the result, the following operation must be done:
 
 \rulex{2mm}{\tt norm\_v1 = shl(v1, norm\_s(v1))}
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was 15.}
 
 %........................................................
 \NewOperator{L\_add(L\_v1, L\_v2)}
 
-This operator implements 32-bit addition of the two 32-bit
-variables ({\tt L\_v1}+{\tt L\_v2}) with overflow control and
-saturation; the result is set at {\tt +2147483647} when overflow
-occurs or at {\tt -2147483648} when underflow occurs.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
+This operator implements 32-bit addition of the two 32-bit variables ({\tt L\_v1}+{\tt L\_v2}) with overflow control and saturation;
+the result is set at {\tt +2147483647} when overflow occurs or at {\tt -2147483648} when underflow occurs.
 
 %........................................................
 \NewOperator{L\_sub(L\_v1, L\_v2)}
 
-32-bit subtraction of the two 32-bit variables ({\tt L\_v1}--{\tt
-L\_v2}) with overflow control and saturation; the result is set at
-{\tt +2147483647} when overflow occurs or at {\tt -2147483648}
-when underflow occurs.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
+32-bit subtraction of the two 32-bit variables ({\tt L\_v1}--{\tt L\_v2}) with overflow control and saturation;
+the result is set at {\tt +2147483647} when overflow occurs or at {\tt -2147483648} when underflow occurs.
 
 %........................................................
 \NewOperator{L\_abs(L\_v1)}
 
-Absolute value of {\tt L\_v1}, with {\tt
-L\_abs(-2147483648)=\-2147483647}.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
+Absolute value of {\tt L\_v1}, with {\tt L\_abs(-2147483648)=\-2147483647}.
 
 %........................................................
 \NewOperator{L\_shl(L\_v1, v2)}
 
-Arithmetically shift the 32-bit input {\tt L\_v1} left {\tt v2}
-positions. Zero fill the {\tt v2} LSB of the result. If {\tt v2}
-is negative, arithmetically shift {\tt L\_v1} right by {\tt -v2}
-with sign extension. Saturate the result in case of underflows or
-overflows.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
+Arithmetically shift the 32-bit input {\tt L\_v1} left {\tt v2} positions.
+Zero fill the {\tt v2} LSB of the result.
+If {\tt v2} is negative, arithmetically shift {\tt L\_v1} right by {\tt -v2} with sign extension.
+Saturate the result in case of underflows or overflows.
 
 %........................................................
 \NewOperator{L\_shr(L\_v1, v2)}
 
-Arithmetically shift the 32-bit input {\tt L\_v1} right {\tt v2}
-positions with sign extension. If {\tt v2} is negative,
-arithemtically shift {\tt L\_v1} left by {\tt -v2} and zero fill
-the {\tt -v2} LSB of the result. Saturate the result in case of
-underflows or overflows.
+Arithmetically shift the 32-bit input {\tt L\_v1} right {\tt v2} positions with sign extension.
+If {\tt v2} is negative, arithmetically shift {\tt L\_v1} left by {\tt -v2} and zero fill the {\tt -v2} LSB of the result.
+Saturate the result in case of underflows or overflows.
 
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
 
 %........................................................
 \NewOperator{L\_negate(L\_v1)}
 
-Negate the 32-bit {\tt L\_v1} parameter with saturation, saturate in the
-case where input is {\tt -2147483648}.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
+Negate the 32-bit {\tt L\_v1} parameter with saturation, saturate in the case where input is {\tt -2147483648}.
 
 %........................................................
 \NewOperator{L\_max(L\_v1, L\_v2)} \newop20
 
-Compares two 32-bit variables L\_v1 and L\_v2 and returns the
-maximum value.
+Compares two 32-bit variables L\_v1 and L\_v2 and returns the maximum value.
 
 %........................................................
 \NewOperator{L\_min(L\_v1, L\_v2)} \newop20
 
-Compares two 32-bit variables L\_v1 and L\_v2 and returns the
-minimum value.
+Compares two 32-bit variables L\_v1 and L\_v2 and returns the minimum value.
 
 %........................................................
 \NewOperator{norm\_l(L\_v1)}
 
-Produces the number of left shifts needed to normalise the 32-bit
-variable {\tt L\_v1} for positive values on the interval with
-minimum of {\tt 1073741824} and maximum {\tt 2147483647}, and for
-negative values on the interval with minimum of {\tt -2147483648}
-and maximum of {\tt -1073741824}; in order to normalise the
-result, the following operation must be done:
+Produces the number of left shifts needed to normalise the 32-bit variable {\tt L\_v1} for positive values on the interval with
+minimum of {\tt 1073741824} and maximum {\tt 2147483647}, and for negative values on the interval with minimum of {\tt -2147483648} and maximum of {\tt -1073741824};
+in order to normalise the result, the following operation must be done:
 
 \rulex{2mm}{\tt L\_norm\_v1 = L\_shl(L\_v1, norm\_l(L\_v1))}
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  30.}
 
 %------------------------------------------------------------------
 \subsubsection{Multiplication operators}
@@ -227,17 +193,10 @@ result, the following operation must be done:
 
 Multiply two 16-bit words {\tt v1} and {\tt v2} returning a 16-bit word with overflow control.
 
-\textbf{Note:} \hfill \pbox{145mm}{
-In v1.x, the complexity weight of this operator was 1.
-The complexity update to the weight of 3 was motivated by the fact that the primitive is performing something equivalent to extract\_h( L\_shl( L\_mult0( v1, v2), 16)).
-}
-
 %........................................................
 \NewOperator{L\_mult(v1, v2)}
 
-Operator {\tt L\_mult} implements the 32-bit result of the
-multiplication of {\tt v1} times {\tt v2} with one shift left,
-i.e.
+Operator {\tt L\_mult} implements the 32-bit result of the multiplication of {\tt v1} times {\tt v2} with one shift left, i.e.
 
 \rulex{2mm}{\tt L\_mult(v1, v2) = L\_shl((v1 $\times$ v2), 1)}
 
@@ -246,17 +205,14 @@ Note that {\tt L\_mult(-32768,-32768) = 2147483647}.
 %........................................................
 \NewOperator{L\_mult0(v1, v2)}
 
-Operator {\tt L\_mult0} implements the 32-bit result of the
-multiplication of {\tt v1} times {\tt v2} {\em without} left
-shift, i.e.
+Operator {\tt L\_mult0} implements the 32-bit result of the multiplication of {\tt v1} times {\tt v2} {\em without} left shift, i.e.
 
 \rulex{2mm}{\tt L\_mult0(v1, v2) = (v1 $\times$ v2)}
 
 %........................................................
 \NewOperator{mult(v1, v2)}
 
-Performs the multiplication of {\tt v1} by {\tt v2} and gives a 16-bit
-result which is scaled, i.e.
+Performs the multiplication of {\tt v1} by {\tt v2} and gives a 16-bit result which is scaled, i.e.
 
 \rulex{2mm}{\tt mult(v1, v2) =  extract\_l(L\_shr((v1 times v2),15))}
 
@@ -272,83 +228,72 @@ Same as {\tt mult()} but with rounding, i.e.
 
 and {\tt mult\_r(-32768, -32768) = 32767}.
 
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
-
 %........................................................
 \NewOperator{L\_mac(L\_v3, v1, v2)}
 
-Multiply {\tt v1} by {\tt v2} and shift the result left by 1. Add the
-32-bit result to {\tt L\_v3} with saturation, return a 32-bit result:
+Multiply {\tt v1} by {\tt v2} and shift the result left by 1.
+Add the 32-bit result to {\tt L\_v3} with saturation, return a 32-bit result:
 
 \rulex{2mm}{\tt L\_mac(L\_v3, v1, v2) = L\_add(L\_v3, L\_mult(v1, v2))}
 
 %........................................................
 \NewOperator{L\_mac0(L\_v3, v1, v2)}
 
-Multiply {\tt v1} by {\tt v2} {\em without} left shift. Add the 32-bit
-result to {\tt L\_v3} with saturation, returning a 32-bit result:
+Multiply {\tt v1} by {\tt v2} {\em without} left shift.
+Add the 32-bit result to {\tt L\_v3} with saturation, returning a 32-bit result:
 
-\rulex{2mm}{\tt L\_mac0(L\_v3, v1, v2) = L\_add(L\_v3, L\_mult0(v1,
-v2))}
+\rulex{2mm}{\tt L\_mac0(L\_v3, v1, v2) = L\_add(L\_v3, L\_mult0(v1, v2))}
 
 %........................................................
 \NewOperator{L\_macNs(L\_v3, v1, v2)}
 
-Multiply {\tt v1} by {\tt v2} and shift the result left by 1. Add the
-32-bit result to {\tt L\_v3} without saturation, return a 32-bit
-result. Generates carry and overflow values:
+Multiply {\tt v1} by {\tt v2} and shift the result left by 1.
+Add the 32-bit result to {\tt L\_v3} without saturation, return a 32-bit result.
+Generates carry and overflow values:
 
-\rulex{2mm}{\tt L\_macNs(L\_v3, v1, v2) = L\_add\_c(L\_v3,
-L\_mult(v1, v2))}
+\rulex{2mm}{\tt L\_macNs(L\_v3, v1, v2) = L\_add\_c(L\_v3, L\_mult(v1, v2))}
 
 %........................................................
 \NewOperator{mac\_r(L\_v3, v1, v2)}
 
-Multiply {\tt v1} by {\tt v2} and shift the result left by 1. Add
-the 32-bit result to {\tt L\_v3} with saturation. Round the 16
-least significant bits of the result into the 16 most significant
-bits with saturation and shift the result right by 16. Returns a
-16-bit result.
+Multiply {\tt v1} by {\tt v2} and shift the result left by 1.
+Add the 32-bit result to {\tt L\_v3} with saturation.
+Round the 16 least significant bits of the result into the 16 most significant bits with saturation and shift the result right by 16.
+Returns a 16-bit result.
 
 \rulex{2mm}{\tt mac\_r(L\_v3, v1, v2) = \\
 \rulex{5mm} round\_fx(L\_mac(L\_v3, v1, v2))=\\
 \rulex{5mm} extract\_h(L\_add(L\_add(L\_v3, L\_mult(v1, v2)), 32768))}
 
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
-
 %........................................................
 \NewOperator{L\_msu(L\_v3, v1, v2)}
 
-Multiply {\tt v1} by {\tt v2} and shift the result left by 1. Subtract
-the 32-bit result from {\tt L\_v3} with saturation, return a 32-bit
-result:
+Multiply {\tt v1} by {\tt v2} and shift the result left by 1.
+Subtract the 32-bit result from {\tt L\_v3} with saturation, return a 32-bit result:
 
 \rulex{2mm}{\tt L\_msu(L\_v3, v1, v2) = L\_sub(L\_v3, L\_mult(v1, v2))}.
 
 %........................................................
 \NewOperator{L\_msu0(L\_v3, v1, v2)}
 
-Multiply {\tt v1} by {\tt v2} {\em without} left shift. Subtract the
-32-bit result from {\tt L\_v3} with saturation, returning a 32-bit
-result:
+Multiply {\tt v1} by {\tt v2} {\em without} left shift.
+Subtract the 32-bit result from {\tt L\_v3} with saturation, returning a 32-bit result:
 
-\rulex{2mm}{\tt L\_msu0(L\_v3, v1, v2) = L\_sub(L\_v3, L\_mult0(v1,
-v2))}.
+\rulex{2mm}{\tt L\_msu0(L\_v3, v1, v2) = L\_sub(L\_v3, L\_mult0(v1, v2))}.
 
 %........................................................
 \NewOperator{L\_msuNs(L\_v3, v1, v2)}
 
 \textcolor{blue}{
 %
-Caution: The sub-routine {\tt L\_sub\_c} evoked from this function
-is reported to have a carry problem. Use of this operator in current
-and past release of STL is NOT recommended.
+Caution: The sub-routine {\tt L\_sub\_c} evoked from this function is reported to have a carry problem.
+Use of this operator in current and past release of STL is NOT recommended.
 %
 }
 
-Multiply {\tt v1} by {\tt v2} and shift the result left by 1. Subtract
-the 32-bit result from {\tt L\_v3} without saturation, return a 32-bit
-result. Generates carry and overflow values:
+Multiply {\tt v1} by {\tt v2} and shift the result left by 1.
+Subtract the 32-bit result from {\tt L\_v3} without saturation, return a 32-bit result.
+Generates carry and overflow values:
 
 
 \rulex{2mm}{\tt L\_msuNs(L\_v3, v1, v2) = L\_sub\_c(L\_v3, L\_mult(v1, v2))}
@@ -358,90 +303,71 @@ result. Generates carry and overflow values:
 
 Performs a multiplication of a 32-bit variable {\tt L\_v1} by a 16-bit variable {\tt v2}, returning a 32-bit value.
 
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  6.}
-
 %........................................................
 \NewOperator{msu\_r(L\_v3, v1, v2)}
 
 Multiply {\tt v1} by {\tt v2} and shift the result left by 1.
-Subtract the 32-bit result from {\tt L\_v3} with saturation. Round
-the 16 least significant bits of the result into the 16 bits with
-saturation and shift the result right by 16. Returns a 16-bit
-result.
+Subtract the 32-bit result from {\tt L\_v3} with saturation.
+Round the 16 least significant bits of the result into the 16 bits with saturation and shift the result right by 16.
+Returns a 16-bit result.
 
 \ \\
 \rulex{2mm}{\tt msu\_r(L\_v3, v1, v2) = \\
 \rulex{5mm} round\_fx(L\_msu(L\_v3, v1, v2))= \\
 \rulex{5mm} extract\_h(L\_add(L\_sub(L\_v3, L\_mult(v1, v2)), 32768))}
 
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
-
 \subsubsection{Logical operators}
 
 %........................................................
 \NewOperator{s\_and(v1, v2)} \newop20
 
-Performs a bit wise AND between the two 16-bit variables v1 and
-v2.
+Performs a bit wise AND between the two 16-bit variables v1 and v2.
 
 %........................................................
 \NewOperator{s\_or(v1, v2)} \newop20
 
-Performs a bit wise OR between the two 16-bit variables v1 and
-v2.
+Performs a bit wise OR between the two 16-bit variables v1 and v2.
 
 %........................................................
 \NewOperator{s\_xor(v1, v2)} \newop20
 
-Performs a bit wise XOR between the two 16-bit variables v1 and
-v2.
+Performs a bit wise XOR between the two 16-bit variables v1 and v2.
 
 %........................................................
 \NewOperator{lshl(v1, v2)} \newop20
 
 Logically shifts left the 16-bit variable v1 by v2 positions:
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is negative, v1 is shifted to the least
-significant bits by (-v2) positions with insertion of 0 at the
-most significant bit.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is negative, v1 is shifted to the least significant bits by (-v2) positions with insertion of 0 at the most significant bit.}
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is positive, v1 is shifted to the most
-significant bits by (v2) positions without saturation control.}
-
-
+\rulex{10mm} -- \pbox{150mm}{if v2 is positive, v1 is shifted to the most significant bits by (v2) positions without saturation control.}
 
 %........................................................
 \NewOperator{lshr(v1, v2)} \newop20
 
 Logically shifts right the 16-bit variable v1 by v2 positions:
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is positive, v1 is shifted to the least
-significant bits by (v2) positions with insertion of 0 at the most
-significant bit.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is positive, v1 is shifted to the least significant bits by (v2) positions with insertion of 0 at the most significant bit.}
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is negative, v1 is shifted to the most
-significant bits by (-v2) positions without saturation control.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is negative, v1 is shifted to the most significant bits by (-v2) positions without saturation control.}
 
 
 %........................................................
 \NewOperator{L\_and(L\_v1, L\_v2)} \newop20
 
-Performs a bit wise AND between the two 32-bit variables {\tt
-L\_v1} and {\tt L\_v2}.
+Performs a bit wise AND between the two 32-bit variables {\tt L\_v1} and {\tt L\_v2}.
 
 
 %........................................................
 \NewOperator{L\_or(L\_v1, L\_v2)} \newop20
 
-Performs a bit wise OR between the two 32-bit variables {\tt
-L\_v1} and {\tt L\_v2}.
+Performs a bit wise OR between the two 32-bit variables {\tt L\_v1} and {\tt L\_v2}.
 
 
 %........................................................
 \NewOperator{L\_xor(L\_v1, L\_v2)} \newop20
 
-Performs a bit wise XOR between the two 32-bit variables {\tt
-L\_v1} and {\tt L\_v2}.
+Performs a bit wise XOR between the two 32-bit variables {\tt L\_v1} and {\tt L\_v2}.
 
 
 %........................................................
@@ -449,28 +375,19 @@ L\_v1} and {\tt L\_v2}.
 
 Logically shifts left the 32-bit variable {\tt L\_v1} by v2 positions:
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is negative, {\tt L\_v1} is shifted
-to the least significant bits by (-v2) positions with insertion of 0
-at the most significant bit.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is negative, {\tt L\_v1} is shifted to the least significant bits by (-v2) positions with insertion of 0 at the most significant bit.}
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is positive, {\tt L\_v1} is shifted
-to the most significant bits by (v2) positions without saturation
-control.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is positive, {\tt L\_v1} is shifted to the most significant bits by (v2) positions without saturation control.}
 
 
 %........................................................
 \NewOperator{L\_lshr(L\_v1, v2)} \newop20
 
-Logically shifts right the 32-bit variable {\tt L\_v1} by v2
-positions:
+Logically shifts right the 32-bit variable {\tt L\_v1} by v2 positions:
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is positive, {\tt L\_v1} is shifted
-to the least significant bits by (v2) positions with insertion of 0 at
-the most significant bit.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is positive, {\tt L\_v1} is shifted to the least significant bits by (v2) positions with insertion of 0 at the most significant bit.}
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is negative, {\tt L\_v1} is shifted
-to the most significant bits by (-v2) positions without saturation
-control.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is negative, {\tt L\_v1} is shifted to the most significant bits by (-v2) positions without saturation control.}
 
 
 \subsubsection{Data type conversion operators}
@@ -488,33 +405,25 @@ Return the 16 LSB of {\tt L\_v1}.
 %........................................................
 \NewOperator{round\_fx(L\_v1)}
 
-Round the lower 16 bits of the 32-bit input number into the most
-significant 16 bits with saturation. Shift the resulting bits
-right by 16 and return the 16-bit number:
+Round the lower 16 bits of the 32-bit input number into the most significant 16 bits with saturation.
+Shift the resulting bits right by 16 and return the 16-bit number:
 
 \rulex{2mm}{\tt round\_fx(L\_v1) = extract\_h(L\_add(L\_v1, 32768))}
 
-Initially, this operator was named ``{\tt round()}'', however to avoid
-the conflict with C standard libraries, this operator was renamed from
-version 2.3. There are no functionality changes.
+Initially, this operator was named ``{\tt round()}'', however to avoid the conflict with C standard libraries, this operator was renamed from version 2.3. There are no functionality changes.
 
 %........................................................
 \NewOperator{L\_deposit\_h(v1)}
 
-Deposit the 16-bit {\tt v1} into the 16 most significant bits
-of the 32-bit output. The 16 least significant bits of the output
-are zeroed.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
+Deposit the 16-bit {\tt v1} into the 16 most significant bits of the 32-bit output.
+The 16 least significant bits of the output are zeroed.
 
 %........................................................
 \NewOperator{L\_deposit\_l(v1)}
 
-Deposit the 16-bit {\tt v1} into the 16 least significant bits
-of the 32-bit output. The 16 most significant bits of the output
-are sign-extended.
+Deposit the 16-bit {\tt v1} into the 16 least significant bits of the 32-bit output.
+The 16 most significant bits of the output are sign-extended.
 
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of this operator was  2.}
 
 %........................................................
 \NewOperator{L\_sat(L\_v1)}
@@ -522,17 +431,16 @@ are sign-extended.
 The 32-bit variable L\_v1 is set to {\tt 2147483647} if an overflow occurred, or {\tt -2147483648} if an underflow occurred, on the most recent {\tt L\_add\_c()}, {\tt L\_sub\_c()}, {\tt L\_macNs()} or {\tt L\_msuNs()} operations.
 The carry and overflow values are binary variables which can be tested and assigned values.
 
-\textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of this operator was  4. }
-
 
 \subsection{Operators with complexity weight of 2}
 
 %........................................................
 \NewOperator{L\_add\_c(L\_v1, L\_v2)}
 
-Performs the 32-bit addition with carry. No saturation. Generates
-carry and overflow values. The carry and overflow values are
-binary variables which can be tested and assigned values.
+Performs the 32-bit addition with carry.
+No saturation.
+Generates carry and overflow values.
+The carry and overflow values are binary variables which can be tested and assigned values.
 
 %........................................................
 \ \\
@@ -546,16 +454,16 @@ binary variables which can be tested and assigned values.
 %
 }
 
-Performs the 32-bit subtraction with carry (borrow). Generates
-carry (borrow) and overflow values. No saturation. The carry and
-overflow values are binary variables which can be tested and
-assigned values.
+Performs the 32-bit subtraction with carry (borrow).
+Generates carry (borrow) and overflow values.
+No saturation.
+The carry and overflow values are binary variables which can be tested and assigned values.
 
 %........................................................
 \NewOperator{shr\_r(v1, v2)}
 
-Same as {\tt shr()} but with rounding. Saturate the result in case
-of underflows or overflows.
+Same as {\tt shr()} but with rounding.
+Saturate the result in case of underflows or overflows.
 
 {\tt
 \rulex{2mm} if (v2$>$0) then\\
@@ -566,15 +474,11 @@ of underflows or overflows.
 \rulex{2mm} else if (v2 $\leq$ 0) \\
 \rulex{4mm} then shr\_r(v1, v2) = shr(v1, v2)}
 
-\textcolor{red} {
-\textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of this operator was  3.}
-}
-
 %........................................................
 \NewOperator{L\_shr\_r(L\_v1, v2)}
 
-
-Same as {\tt L\_shr(v1,v2)} but with rounding. Saturate the result in case of underflows or overflows:
+Same as {\tt L\_shr(v1,v2)} but with rounding.
+Saturate the result in case of underflows or overflows:
 
 {\tt
 \rulex{2mm} if (v2 $>$ 0) then\\
@@ -585,36 +489,29 @@ Same as {\tt L\_shr(v1,v2)} but with rounding. Saturate the result in case of un
 \rulex{2mm} if (v2 $\leq$ 0) \\
 \rulex{4mm} then L\_shr\_r(L\_v1, v2) = L\_shr(L\_v1, v2)}
 
-\textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of this operator was  3.}
-
-%________________________________________________________
-\subsection{Operators with complexity weight of 3}
-\subsubsection{Arithmetic operators}
-
 %........................................................
 \NewOperator{shl\_r(v1, v2)}
 
-Same as {\tt shl()} but with rounding. Saturate the result in case
-of underflows or overflows:
+Same as {\tt shl()} but with rounding.
+Saturate the result in case of underflows or overflows:
 
 \rulex{2mm}{\tt shl\_r(v1, v2) = shr\_r(v1, -v2)}
 
-\textbf{Note:} \hfill \pbox{145mm}{In v1.x, the complexity weight of
-this operator was  2. Additionally, please note that in v1.x this
-operator was called \textbf{shift\_r(v1, v2)}; in the STL2005, both
-names can be used.}
-
+\textbf{Note:} \hfill \pbox{145mm}{In v1.x this operator was called \textbf{shift\_r(v1, v2)}; in the STL2005, both names can be used.}
 
 %........................................................
 \NewOperator{L\_shl\_r(L\_v1, v2)}
 
-Same as {\tt L\_shl(L\_v1,v2)} but with rounding. Saturate the
-result in case of underflows or overflows.
+Same as {\tt L\_shl(L\_v1,v2)} but with rounding.
+Saturate the result in case of underflows or overflows.
 
 \rulex{2mm}{\tt L\_shl\_r(L\_v1, v2) = L\_shr\_r(L\_v1, -v2)}
 
-In v1.x, this operator is called \textbf{L\_shift\_r(L\_v1, v2}) ;
-both names can be used.
+In v1.x, this operator is called \textbf{L\_shift\_r(L\_v1, v2}) ; both names can be used.
+
+
+%________________________________________________________
+\subsection{Operators with complexity weight of 3}
 
 %________________________________________________________
 \subsubsection{Logical Operators}
@@ -622,28 +519,23 @@ both names can be used.
 %........................................................
 \NewOperator{rotl(v1, v2, * v3)} \newop20
 
-Rotates the 16-bit variable v1 by 1 bit to the most significant
-bits. Bit 0 of v2 is copied to the least significant bit of the
-result before it is returned. The most significant bit of v1 is
-copied to the bit 0 of v3 variable.
+Rotates the 16-bit variable v1 by 1 bit to the most significant bits.
+Bit 0 of v2 is copied to the least significant bit of the result before it is returned.
+The most significant bit of v1 is copied to the bit 0 of v3 variable.
 
 %........................................................
 \NewOperator{rotr(v1, v2, * v3)} \newop20
 
-Rotates the 16-bit variable v1 by 1 bit to the least significant
-bits. Bit 0 of v2 is copied to the most significant bit of the
-result before it is returned. The least significant bit of v1 is
-copied to the bit 0 of v3 variable.
-
+Rotates the 16-bit variable v1 by 1 bit to the least significant bits.
+Bit 0 of v2 is copied to the most significant bit of the result before it is returned.
+The least significant bit of v1 is copied to the bit 0 of v3 variable.
 
 %........................................................
 \NewOperator{L\_rotl(L\_v1, v2, * v3)} \newop20
 
-Rotates the 32-bit variable L\_v1 by 1 bit to the most significant
-bits. Bit 0 of v2 is copied to the least significant bit of the
-result before it is returned. The most significant bit of L\_v1 is
-copied to the bit 0 of v3 variable.
-
+Rotates the 32-bit variable L\_v1 by 1 bit to the most significant bits.
+Bit 0 of v2 is copied to the least significant bit of the result before it is returned.
+The most significant bit of L\_v1 is copied to the bit 0 of v3 variable.
 
 %........................................................
 \NewOperator{L\_rotr(L\_v1, v2, * v3)} \newop20
@@ -652,35 +544,30 @@ Rotates the 32-bit variable L\_v1 by 1 bit to the least significant bits.
 Bit 0 of v2 is copied to the most significant bit of the result before it is returned.
 The least significant bit of L\_v1 is copied to the bit 0 of v3 variable.
 
-
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \subsection{Operators with complexity weight of 18}
 
 %........................................................
 \NewOperator{div\_s(v1, v2)}
 
-Produces a result which is the fractional integer division of {\tt
-v1} by {\tt v2}. Values in {\tt v1} and {\tt v2} must be positive
-and {\tt v2} must be greater than or equal to {\tt v1}. The result
-is positive (leading bit equal to 0) and truncated to 16 bits. If
-{\tt v1}={\tt v2}, then {\tt div(v1, v2) = 32767}.
+Produces a result which is the fractional integer division of {\tt v1} by {\tt v2}.
+Values in {\tt v1} and {\tt v2} must be positive and {\tt v2} must be greater than or equal to {\tt v1}.
+The result is positive (leading bit equal to 0) and truncated to 16 bits.
+If {\tt v1}={\tt v2}, then {\tt div(v1, v2) = 32767}.
 
 \subsection{Operators with complexity weight of 32}
 
 %........................................................
 \NewOperator{div\_l(L\_v1, v2)} %\rulex{1mm}
 
-Produces a result which is the fractional integer division of a
-positive 32-bit value {\tt L\_v1} by a positive 16-bit value {\tt
-v2}. The result is positive (leading bit equal to 0) and truncated
-to 16 bits.
+Produces a result which is the fractional integer division of a positive 32-bit value {\tt L\_v1} by a positive 16-bit value {\tt v2}.
+The result is positive (leading bit equal to 0) and truncated to 16 bits.
 
 %--------------------------------------------------
 \subsection{Basic operator usage across standards}
 %--------------------------------------------------
 
-Table \ref{tbl:basop-in-recs} contains a survey of the 16-bit and
-32-bit basic operators which are used in various standards.
+Table \ref{tbl:basop-in-recs} contains a survey of the 16-bit and 32-bit basic operators which are used in various standards.
 Follows some notes associated to \ref{tbl:basop-in-recs}:
 
 \begin{enumerate}
@@ -843,20 +730,16 @@ The result is produced in Q48 format: UL\_varout\_h points to the 32 MS bits whi
 \section{Description of the 40-bit basic operators and associated weights}
 %----------------------------------------------------------------------
 
-This section describes the different 40-bit basic operators
-available in the STL, and are organized by complexity ("weights").
-The complexity values to be considered (since the publication of
-the STL2005) are the ones related to the version 2.0 and subsequent versions of the library. These basic operators did not exist in the previous
-version of the library (version 1.x).
+This section describes the different 40-bit basic operators available in the STL, and are organized by complexity ("weights").
+The complexity values to be considered (since the publication of the STL2005) are the ones related to the version 2.0 and subsequent versions of the library.
+These basic operators did not exist in the previous version of the library (version 1.x).
 
-A set of coding guidelines must be followed in order to avoid
-algorithm complexity miss-evaluation. This section describes also
-these guidelines.
+A set of coding guidelines must be followed in order to avoid algorithm complexity miss-evaluation.
+This section describes also these guidelines.
 
 \subsection{Variable definitions}
 
-The variables used in the operators are signed integers in 2's
-complements representation, defined by:
+The variables used in the operators are signed integers in 2's complements representation, defined by:
 
 {\tt v1}, {\tt v2}: 16-bit variables\\
 {\tt L\_v1}, {\tt L\_v2}, {\tt L\_v3}: 32-bit variables\\
@@ -873,77 +756,68 @@ Assigns a 40-bit constant to the returned 40-bit variable.
 %........................................................
 \NewOperator{L40\_add(L40\_v1, L40\_v2)}
 
-Adds the two 40-bit variables L40\_v1 and L40\_v2 \textbf{without}
-40-bit saturation control. It will exit execution if it detects a 40-bit overflow.
+Adds the two 40-bit variables L40\_v1 and L40\_v2 \textbf{without} 40-bit saturation control.
+It will exit execution if it detects a 40-bit overflow.
 
 
 %........................................................
 \NewOperator{L40\_sub(L40\_v1, L40\_v2)}
 
-Subtracts the two 40-bit variables L40\_v2 from L40\_v1
-\textbf{without} 40-bit saturation control.
+Subtracts the two 40-bit variables L40\_v2 from L40\_v1 \textbf{without} 40-bit saturation control.
 It will exit execution if it detects a 40-bit overflow.
 
 %........................................................
 \NewOperator{L40\_abs(L40\_v1)}
 
-Returns the absolute value of the 40-bit variable L40\_v1 without
-40-bit saturation control.
+Returns the absolute value of the 40-bit variable L40\_v1 without 40-bit saturation control.
 It will exit execution if it detects a 40-bit overflow.
 
 %........................................................
 \NewOperator{L40\_shl(L40\_v1, v2)}
 
-Arithmetically shifts left the 40-bit variable L40\_v1 by v2
-positions:
+Arithmetically shifts left the 40-bit variable L40\_v1 by v2 positions:
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is negative, L40\_v1 is shifted to the least
-significant bits by (-v2) positions with extension of the sign bit.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is negative, L40\_v1 is shifted to the least significant bits by (-v2) positions with extension of the sign bit.}
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is positive, L40\_v1 is shifted to the most
-significant bits by (v2) positions \textbf{without} 40-bit saturation
-control. It will exit execution if it detects a 40-bit overflow.}
+\rulex{10mm} -- \pbox{150mm}{
+if v2 is positive, L40\_v1 is shifted to the most significant bits by (v2) positions \textbf{without} 40-bit saturation control.
+It will exit execution if it detects a 40-bit overflow.
+}
 
 %........................................................
 \NewOperator{L40\_shr(L40\_v1, v2)}
 
-Arithmetically shifts right the 40-bit variable L40\_v1 by v2
-positions:
+Arithmetically shifts right the 40-bit variable L40\_v1 by v2 positions:
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is positive, L40\_v1 is shifted to the least
-significant bits by (v2) positions with extension of the sign bit.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is positive, L40\_v1 is shifted to the least significant bits by (v2) positions with extension of the sign bit.}
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is negative, L40\_v1 is shifted to the most
-significant bits by (-v2) positions \textbf{without} 40-bit saturation
-control. It will exit execution if it detects a 40-bit overflow.}
+\rulex{10mm} -- \pbox{150mm}{
+if v2 is negative, L40\_v1 is shifted to the most significant bits by (-v2) positions \textbf{without} 40-bit saturation control.
+It will exit execution if it detects a 40-bit overflow.
+}
 
 %........................................................
 \NewOperator{L40\_negate(L40\_v1)}
 
-Negates the 40-bit variable L40\_v1 \textbf{without} 40-bit saturation
-control. It will exit execution if it detects a 40-bit overflow.
+Negates the 40-bit variable L40\_v1 \textbf{without} 40-bit saturation control.
+It will exit execution if it detects a 40-bit overflow.
 
 %........................................................
 \NewOperator{L40\_max(L40\_v1, L40\_v2)}
 
-Compares two 40-bit variables L40\_v1 and L40\_v2 and returns the
-maximum value.
+Compares two 40-bit variables L40\_v1 and L40\_v2 and returns the maximum value.
 
 %........................................................
 \NewOperator{L40\_min(L40\_v1, L40\_v2)}
 
-Compares two 40-bit variables L40\_v1 and L40\_v2 and returns the
-minimum value.
+Compares two 40-bit variables L40\_v1 and L40\_v2 and returns the minimum value.
 
 %........................................................
 \NewOperator{norm\_L40(L40\_v1)}
 
-Produces the number of left shifts needed to normalize the 40-bit
-variable L40\_v1 for positive values on the interval with minimum
-of 1073741824 and maximum 2147483647, and for negative values on
-the interval with minimum of -2147483648 and maximum of
--1073741824; in order to normalize the result, the following
-operation must be done:
+Produces the number of left shifts needed to normalize the 40-bit variable L40\_v1 for positive values on the interval with minimum
+of 1073741824 and maximum 2147483647, and for negative values on the interval with minimum of -2147483648 and maximum of -1073741824;
+in order to normalize the result, the following operation must be done:
 
 \rulex{5mm}
 {\tt L40\_norm\_v1 = L40\_shl( L40\_v1, norm\_L40( L40\_v1))}
@@ -953,9 +827,9 @@ operation must be done:
 %........................................................
 \NewOperator{L40\_mult(v1, v2)}
 
-Multiplies the 2 signed 16-bit variables v1 and v2 \textbf{without}
-40-bit saturation control.  It will exit execution if it detects a 40-bit
-overflow. The operation is performed \textbf{in fractional mode}:
+Multiplies the 2 signed 16-bit variables v1 and v2 \textbf{without} 40-bit saturation control.
+It will exit execution if it detects a 40-bit overflow.
+The operation is performed \textbf{in fractional mode}:
 
 \rulex{10mm} -- \pbox{150mm}{v1 and v2 are supposed to be in 1Q15 format.}
 
@@ -978,26 +852,19 @@ Equivalent to: {\tt L40\_sub( L40\_v1, L40\_mult( v2, v3)) }
 
 Logically shifts left the 40-bit variable L40\_v1 by v2 positions:
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is negative, L40\_v1 is shifted to
-the least significant bits by (-v2) positions with insertion of 0 at
+\rulex{10mm} -- \pbox{150mm}{if v2 is negative, L40\_v1 is shifted to the least significant bits by (-v2) positions with insertion of 0 at
 the most significant bit.}
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is positive, L40\_v1 is shifted to
-the most significant bits by (v2) positions without saturation
-control.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is positive, L40\_v1 is shifted to the most significant bits by (v2) positions without saturation control.}
 
 %........................................................
 \NewOperator{L40\_lshr(L40\_v1, v2)}
 
 Logically shifts right the 40-bit variable L40\_v1 by v2 positions:
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is positive, L40\_v1 is shifted to
-the least significant bits by (v2) positions with insertion of 0 at
-the most significant bit.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is positive, L40\_v1 is shifted to the least significant bits by (v2) positions with insertion of 0 at the most significant bit.}
 
-\rulex{10mm} -- \pbox{150mm}{if v2 is negative, L40\_v1 is shifted to
-the most significant bits by (-v2) positions without saturation
-control.}
+\rulex{10mm} -- \pbox{150mm}{if v2 is negative, L40\_v1 is shifted to the most significant bits by (-v2) positions without saturation control.}
 
 \subsubsection{Data type conversion operators}
 
@@ -1033,31 +900,26 @@ Otherwise, it is equivalent to {\tt L\_Extract40(L40\_v1)}.
 %........................................................
 \NewOperator{L40\_deposit\_h(v1)}
 
-Deposits the 16-bit variable v1 in the bits [31..16] of the return
-value: the return value bits [15..0] are set to 0 and the bits
-[39..32] sign extend v1 sign bit.
+Deposits the 16-bit variable v1 in the bits [31..16] of the return value: the return value bits [15..0] are set to 0 and the bits [39..32] sign extend v1 sign bit.
 
 %........................................................
 \ \\
 \NewOperator{L40\_deposit\_l(v1)}
 
-Deposits the 16-bit variable v1 in the bits [15..0] of the return
-value: the return value bits [39..16] sign extend v1 sign bit.
+Deposits the 16-bit variable v1 in the bits [15..0] of the return value: the return value bits [39..16] sign extend v1 sign bit.
 
 %........................................................
 \NewOperator{L40\_deposit32(L\_v1)}
 
-Deposits the 32-bit variable L\_v1 in the bits [31..0] of the
-return value: the return value bits [39..32] sign extend L\_v1
-sign bit.
+Deposits the 32-bit variable L\_v1 in the bits [31..0] of the return value: the return value bits [39..32] sign extend L\_v1 sign bit.
 
 %........................................................
 \NewOperator{L40\_round(L40\_v1)}
 
-Performs a rounding to the infinite on the 40-bit variable
-L40\_v1. 32768 is added to L40\_v1 \textbf{without} 40-bit saturation
-control. It will exit execution if it detects a 40-bit overflow.  The
-end-result 16 LSBits are cleared to 0.
+Performs a rounding to the infinite on the 40-bit variable L40\_v1.
+32768 is added to L40\_v1 \textbf{without} 40-bit saturation control.
+It will exit execution if it detects a 40-bit overflow.
+The end-result 16 LSBits are cleared to 0.
 
 
 \subsection{Operators with complexity weight of 2}
@@ -2109,16 +1971,11 @@ Returns 1 if 64-bit variable W\_var1 is equal to 64-bit variable W\_var2, else r
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \section{Description of the control basic operators and associated weights}
 
-This section describes the different control basic operators
-available in the STL and their associated complexity weights. The
-complexity values to be considered (since the publication of the
-STL2005) are the ones related to 2.0 and subsequent versions of the library.
-These basic operators did not exist in the previous version of the
-library (version 1.x).
+This section describes the different control basic operators available in the STL and their associated complexity weights.
+The complexity values to be considered (since the publication of the STL2005) are the ones related to 2.0 and subsequent versions of the library.
 
-\textbf{A set of coding guidelines must be followed} in order to
-avoid algorithm complexity miss-evaluation. This section describes
-also these guidelines.
+\textbf{A set of coding guidelines must be followed} in order to avoid algorithm complexity miss-evaluation.
+This section describes also these guidelines.
 
 \subsection{Operators and complexity weights}
 Nine macros are defined to enable the evaluation of the complexity
@@ -2527,8 +2384,6 @@ be replaced by: \\
 \subsection{Data moves}
 
 Each data move between two 16-bit or two 32-bit variables, \textbf{move16}() and \textbf{move32}() operators respectively, has a complexity weight of 1.
-
-\textbf{Note:} \hfill \pbox{145mm}{In v2.3, the complexity weight of \textbf{move32}() operator was  2. }
 
 \begin{enumerate}{}{}
     \item A 16-bit variable cannot be directly moved to a 32-bit or 40-bit variable.
