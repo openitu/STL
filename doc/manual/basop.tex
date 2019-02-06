@@ -2620,20 +2620,6 @@ directive {\tt OLD\_STL}. In this case some C operators like if, do
 are not counted directly as they should be accompanied by the basic
 operator {\tt test()}, and this later is counted by the tool.
 
-\textcolor{blue}{
-%
-In STL2014 release, the following modifications were made:
-\begin{itemize}
-    \item Addition of functions in the blacklist;
-    \item Functionality that prints out PROM is added;
-    \item An update for change to {\tt round()} function to {\tt
-    round\_fx()} (introduced in STL2009); and
-    \item Bug correction in user function computation
-\end{itemize}
-%
-}
-
-
 \subsection{Tool implementation}
 The tool consists of one ANSI C file {\tt basop\_cnt.c}.
 
@@ -2895,16 +2881,6 @@ Note that once the code is instrumented using the complexity counters
 and functions, the compilation switch {\tt DONT\_COUNT} can be
 activated to suppress the functionality of the tool with no need of
 removing the complexity counters and functions from the code.
-
-\textcolor{blue}{
-%
-In STL2014, the most important modifications made to the tool is
-that incorrect instrumentation that does not match the number of
-{\tt FLC\_sub\_start()} and {\tt FLC\_sub\_end()} now halts the
-execution of the tool such that the erroneous output results or
-crash of the instrumented code is avoided.
-%
-}
 
 \subsection{Scaling factor}
 A scaling factor is used to estimate and print the complexity that
