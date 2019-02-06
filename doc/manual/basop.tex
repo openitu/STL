@@ -653,16 +653,8 @@ Bit 0 of v2 is copied to the most significant bit of the result before it is ret
 The least significant bit of L\_v1 is copied to the bit 0 of v3 variable.
 
 
-\subsection{Operators with complexity weight of 4}
-
-
-\enlargethispage*{10mm}
-
-\subsection{Operators with complexity weight of 5}
-
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \subsection{Operators with complexity weight of 18}
-
 
 %........................................................
 \NewOperator{div\_s(v1, v2)}
@@ -788,7 +780,7 @@ This section describes the different basic operators for unsigned data types ava
 The variables used in the operators are signed integers in 2's complements representation, defined by:
 
 {\tt U\_var1}, {\tt U\_varout\_l}: 16-bit unsigned variables\\
-{\tt UL\_var1}, {\tt UL\_var2}, {\tt var1}, {\tt UL\_varout\_h}, {tt UL\_varout\_l}: 32-bit unsigned variables
+{\tt UL\_var1}, {\tt UL\_var2}, {\tt var1}, {\tt UL\_varout\_h}, {\tt UL\_varout\_l}: 32-bit unsigned variables
 
 
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
@@ -1109,15 +1101,7 @@ When L\_v1 is in 1Q31 format, and v2 is in 1Q15 format, the result is produced i
 Multiplies the two signed 32-bit values L\_v1 and L\_v2 with saturation control on 64-bit.
 The operation is performed in \textbf{fractional mode}: when L\_v1 and L\_v2 are in 1Q31 format, the result is produced in 1Q63 format; L\_v3\_h bears the 32 most significant bits while L\_v3\_l bears the 32 least significant bits.
 
-\subsection{Operators with complexity weight of 3}
-
 %........................................................
-
-\subsection{Operators with complexity weight of 4}
-
-%........................................................
-
-
 \subsection{Coding Guidelines}
 
 The following recommendations must be followed in the usage of the
