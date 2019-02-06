@@ -48,6 +48,8 @@ In STL2019, new operators were introduced to account for modern DSP architecture
     \item Revised complexity weights in order to reflect the evolution of processor capabilities.
 \end{enumerate}
 
+Table \ref{tbl:operators-weight} provides an overview of the complexity weight history for each basic operator.
+
 %----------------------------------------------------------------------
 \section{Description of the 16-bit and 32-bit basic operators and associated weights}
 %----------------------------------------------------------------------
@@ -2065,8 +2067,7 @@ associated to control instructions that are frequently used in C.
     \end{verbatim}}
 \end{list}
 
-Table \ref{tbl:control-basicop} summarizes the control basic
-operators and their associated complexity.
+Table \ref{tbl:control-basicop} summarizes the control basic operators and their associated complexity.
 
 %-------------------------------------------------------------------------
 % Table with the control basic operators and their associated complexity.
@@ -3252,3 +3253,244 @@ Maximum complexity: 0.593780 WMOPS
 Average complexity: 0.593780 WMOPS
 
 \end{verbatim}
+
+%-------------------------------------------------------------------------
+% Table providing the change of complexity weight for individual operators between STL versions
+%-------------------------------------------------------------------------
+\begin{longtable}{|c|c|c|c|c|}
+\caption{Complexity weight history for each basic operator.} \label{tbl:operators-weight} \\
+
+\hline
+    \multicolumn{1}{|c|}{\textbf{Operator}} &
+    \multicolumn{1}{c|} {\textbf{STL2000}} &
+    \multicolumn{1}{c|}{\textbf{STL2005}} &
+    \multicolumn{1}{c|}{\textbf{STL2009}} &
+    \multicolumn{1}{c|}{\textbf{STL2019}}\\ \hline
+\endfirsthead
+
+\multicolumn{5}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\hline
+\multicolumn{1}{|c|}{\textbf{Operator}} &
+\multicolumn{1}{c|} {\textbf{STL2000}} &
+\multicolumn{1}{c|}{\textbf{STL2005}} &
+\multicolumn{1}{c|}{\textbf{STL2009}} &
+\multicolumn{1}{c|}{\textbf{STL2019}}\\ \hline
+\endhead
+
+\hline \multicolumn{5}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+add                     & 1       & 1       & 1       & 1        \\
+sub                     & 1       & 1       & 1       & 1        \\
+abs\_s                  & 1       & 1       & 1       & 1        \\
+shl                     & 1       & 1       & 1       & 1        \\
+shr                     & 1       & 1       & 1       & 1        \\
+extract\_h              & 1       & 1       & 1       & 1        \\
+extract\_l              & 1       & 1       & 1       & 1        \\
+mult                    & 1       & 1       & 1       & 1        \\
+L\_mult                 & 1       & 1       & 1       & 1        \\
+negate                  & 1       & 1       & 1       & 1        \\
+round / round\_fx       & 1       & 1       & 1       & 1        \\
+L\_mac                  & 1       & 1       & 1       & 1        \\
+L\_msu                  & 1       & 1       & 1       & 1        \\
+L\_macNs                & 1       & 1       & 1       & 1        \\
+L\_msuNs                & 1       & 1       & 1       & 1        \\
+L\_add                  & 2       & 1       & 1       & 1        \\
+L\_sub                  & 2       & 1       & 1       & 1        \\
+L\_add\_c               & 2       & 2       & 2       & 2        \\
+L\_sub\_c               & 2       & 2       & 2       & 2        \\
+L\_negate               & 2       & 1       & 1       & 1        \\
+L\_shl                  & 2       & 1       & 1       & 1        \\
+L\_shr                  & 2       & 1       & 1       & 1        \\
+mult\_r                 & 2       & 1       & 1       & 1        \\
+shr\_r                  & 3       & 3       & 3       & 2        \\
+mac\_r                  & 2       & 1       & 1       & 1        \\
+msu\_r                  & 2       & 1       & 1       & 1        \\
+L\_deposit\_h           & 2       & 1       & 1       & 1        \\
+L\_deposit\_l           & 2       & 1       & 1       & 1        \\
+L\_shr\_r               & 3       & 3       & 3       & 2        \\
+L\_abs                  & 2       & 1       & 1       & 1        \\
+L\_sat                  & 4       & 4       & 4       & 1        \\
+norm\_s                 & 15      & 1       & 1       & 1        \\
+div\_s                  & 18      & 18      & 18      & 18       \\
+norm\_l                 & 30      & 1       & 1       & 1        \\
+move16                  & 1       & 1       & 1       & 1        \\
+move32                  & 2       & 2       & 2       & 1        \\
+Logic16                 & 1       & 1       & 1       & 1        \\
+Logic32                 & 2       & 2       & 2       & 1        \\
+Test                    & 2       & 2       & 2       & 1        \\
+s\_max                  & -       & 1       & 1       & 1        \\
+s\_min                  & -       & 1       & 1       & 1        \\
+L\_max                  & -       & 1       & 1       & 1        \\
+L\_min                  & -       & 1       & 1       & 1        \\
+L40\_max                & -       & 1       & 1       & 1        \\
+L40\_min                & -       & 1       & 1       & 1        \\
+shl\_r / shift\_r       & 2       & 3       & 3       & 2        \\
+L\_shl\_r / L\_shift\_r & 3       & 3       & 3       & 2        \\
+L40\_shr\_r             & -       & 3       & 3       & 2        \\
+L40\_shl\_r             & -       & 3       & 3       & 2        \\
+norm\_L40               & -       & 1       & 1       & 1        \\
+L40\_shl                & -       & 1       & 1       & 1        \\
+L40\_shr                & -       & 1       & 1       & 1        \\
+L40\_negate             & -       & 1       & 1       & 1        \\
+L40\_add                & -       & 1       & 1       & 1        \\
+L40\_sub                & -       & 1       & 1       & 1        \\
+L40\_abs                & -       & 1       & 1       & 1        \\
+L40\_mult               & -       & 1       & 1       & 1        \\
+L40\_mac                & -       & 1       & 1       & 1        \\
+mac\_r40                & -       & 2       & 2       & 2        \\
+L40\_msu                & -       & 1       & 1       & 1        \\
+msu\_r40                & -       & 2       & 2       & 2        \\
+Mpy\_32\_16\_ss         & -       & 2       & 2       & 2        \\
+Mpy\_32\_32\_ss         & -       & 4       & 4       & 2        \\
+L\_mult0                & 1       & 1       & 1       & 1        \\
+L\_mac0                 & 1       & 1       & 1       & 1        \\
+L\_msu0                 & 1       & 1       & 1       & 1        \\
+lshl                    & -       & 1       & 1       & 1        \\
+lshr                    & -       & 1       & 1       & 1        \\
+L\_lshl                 & -       & 1       & 1       & 1        \\
+L\_lshr                 & -       & 1       & 1       & 1        \\
+L40\_lshl               & -       & 1       & 1       & 1        \\
+L40\_lshr               & -       & 1       & 1       & 1        \\
+s\_and                  & -       & 1       & 1       & 1        \\
+s\_or                   & -       & 1       & 1       & 1        \\
+s\_xor                  & -       & 1       & 1       & 1        \\
+L\_and                  & -       & 1       & 1       & 1        \\
+L\_or                   & -       & 1       & 1       & 1        \\
+L\_xor                  & -       & 1       & 1       & 1        \\
+rotl                    & -       & 3       & 3       & 3        \\
+rotr                    & -       & 3       & 3       & 3        \\
+L\_rotl                 & -       & 3       & 3       & 3        \\
+L\_rotr                 & -       & 3       & 3       & 3        \\
+L40\_set                & -       & 3       & 3       & 1        \\
+L40\_deposit\_h         & -       & 1       & 1       & 1        \\
+L40\_deposit\_l         & -       & 1       & 1       & 1        \\
+L40\_deposit32          & -       & 1       & 1       & 1        \\
+Extract40\_H            & -       & 1       & 1       & 1        \\
+Extract40\_L            & -       & 1       & 1       & 1        \\
+L\_Extract40            & -       & 1       & 1       & 1        \\
+L40\_round              & -       & 1       & 1       & 1        \\
+L\_saturate40           & -       & 1       & 1       & 1        \\
+round40                 & -       & 1       & 1       & 1        \\
+IF                      & -       & 4       & 4       & 3        \\
+GOTO                    & -       & 4       & 4       & 2        \\
+BREAK                   & -       & 4       & 4       & 2        \\
+SWITCH                  & -       & 8       & 8       & 6        \\
+FOR                     & -       & 3       & 3       & 3        \\
+WHILE                   & -       & 4       & 4       & 3        \\
+CONTINUE                & -       & 4       & 4       & 2        \\
+L\_mls                  & 6       & 5       & 5       & 1        \\
+div\_l                  & 32      & 32      & 32      & 32       \\
+i\_mult                 & 1       & 3       & 3       & 1        \\
+CL\_shr                 & -       & -       & -       & 1        \\
+CL\_shl                 & -       & -       & -       & 1        \\
+CL\_add                 & -       & -       & -       & 1        \\
+CL\_sub                 & -       & -       & -       & 1        \\
+CL\_scale               & -       & -       & -       & 1        \\
+CL\_dscale              & -       & -       & -       & 1        \\
+CL\_msu\_j              & -       & -       & -       & 1        \\
+CL\_mac\_j              & -       & -       & -       & 1        \\
+CL\_move                & -       & -       & -       & 1        \\
+CL\_Extract\_real       & -       & -       & -       & 1        \\
+CL\_Extract\_imag       & -       & -       & -       & 1        \\
+CL\_form                & -       & -       & -       & 1        \\
+CL\_multr\_32x16        & -       & -       & -       & 2        \\
+CL\_negate              & -       & -       & -       & 1        \\
+CL\_conjugate           & -       & -       & -       & 1        \\
+CL\_mul\_j              & -       & -       & -       & 1        \\
+CL\_swap\_real\_imag    & -       & -       & -       & 1        \\
+C\_add                  & -       & -       & -       & 1        \\
+C\_sub                  & -       & -       & -       & 1        \\
+C\_mul\_j               & -       & -       & -       & 1        \\
+C\_multr                & -       & -       & -       & 2        \\
+C\_form                 & -       & -       & -       & 1        \\
+CL\_scale\_32           & -       & -       & -       & 1        \\
+CL\_dscale\_32          & -       & -       & -       & 1        \\
+CL\_multr\_32x32        & -       & -       & -       & 2        \\
+C\_mac\_r               & -       & -       & -       & 2        \\
+C\_msu\_r               & -       & -       & -       & 2        \\
+CL\_round32\_16         & -       & -       & -       & 1        \\
+C\_Extract\_real        & -       & -       & -       & 1        \\
+C\_Extract\_imag        & -       & -       & -       & 1        \\
+C\_scale                & -       & -       & -       & 1        \\
+C\_negate               & -       & -       & -       & 1        \\
+C\_conjugate            & -       & -       & -       & 1        \\
+C\_shr                  & -       & -       & -       & 1        \\
+C\_shl                  & -       & -       & -       & 1        \\
+move64                  & -       & -       & -       & 1        \\
+W\_add\_nosat           & -       & -       & -       & 1        \\
+W\_sub\_nosat           & -       & -       & -       & 1        \\
+W\_shl                  & -       & -       & -       & 1        \\
+W\_shr                  & -       & -       & -       & 1        \\
+W\_shl\_nosat           & -       & -       & -       & 1        \\
+W\_shr\_nosat           & -       & -       & -       & 1        \\
+W\_mac\_32\_16          & -       & -       & -       & 1        \\
+W\_msu\_32\_16          & -       & -       & -       & 1        \\
+W\_mult\_32\_16         & -       & -       & -       & 1        \\
+W\_mult0\_16\_16        & -       & -       & -       & 1        \\
+W\_mac0\_16\_16         & -       & -       & -       & 1        \\
+W\_msu0\_16\_16         & -       & -       & -       & 1        \\
+W\_mult\_16\_16         & -       & -       & -       & 1        \\
+W\_mac\_16\_16          & -       & -       & -       & 1        \\
+W\_msu\_16\_16          & -       & -       & -       & 1        \\
+W\_shl\_sat\_l          & -       & -       & -       & 1        \\
+W\_sat\_l               & -       & -       & -       & 1        \\
+W\_sat\_m               & -       & -       & -       & 1        \\
+W\_deposit32\_l         & -       & -       & -       & 1        \\
+W\_deposit32\_h         & -       & -       & -       & 1        \\
+W\_extract\_l           & -       & -       & -       & 1        \\
+W\_extract\_h           & -       & -       & -       & 1        \\
+W\_round48\_L           & -       & -       & -       & 1        \\
+W\_round32\_s           & -       & -       & -       & 1        \\
+W\_norm                 & -       & -       & -       & 1        \\
+W\_add                  & -       & -       & -       & 1        \\
+W\_sub                  & -       & -       & -       & 1        \\
+W\_neg                  & -       & -       & -       & 1        \\
+W\_abs                  & -       & -       & -       & 1        \\
+W\_mult\_32\_32         & -       & -       & -       & 1        \\
+W\_mult0\_32\_32        & -       & -       & -       & 1        \\
+W\_lshl                 & -       & -       & -       & 1        \\
+W\_lshr                 & -       & -       & -       & 1        \\
+W\_round64\_L           & -       & -       & -       & 1        \\
+Mpy\_32\_16\_1          & -       & -       & -       & 1        \\
+Mpy\_32\_16\_r          & -       & -       & -       & 1        \\
+Mpy\_32\_32             & -       & -       & -       & 1        \\
+Mpy\_32\_32\_r          & -       & -       & -       & 1        \\
+Madd\_32\_16            & -       & -       & -       & 1        \\
+Madd\_32\_16\_r         & -       & -       & -       & 1        \\
+Msub\_32\_16            & -       & -       & -       & 1        \\
+Msub\_32\_16\_r         & -       & -       & -       & 1        \\
+Madd\_32\_32            & -       & -       & -       & 1        \\
+Madd\_32\_32\_r         & -       & -       & -       & 1        \\
+Msub\_32\_32            & -       & -       & -       & 1        \\
+Msub\_32\_32\_r         & -       & -       & -       & 1        \\
+UL\_addNs               & -       & -       & -       & 1        \\
+UL\_subNs               & -       & -       & -       & 1        \\
+UL\_Mpy\_32\_32         & -       & -       & -       & 1        \\
+Mpy\_32\_32\_uu         & -       & -       & -       & 2        \\
+Mpy\_32\_16\_uu         & -       & -       & -       & 2        \\
+norm\_ul                & -       & -       & -       & 1        \\
+UL\_deposit\_l          & -       & -       & -       & 1        \\
+LT\_16                  & -       & -       & -       & 1        \\
+GT\_16                  & -       & -       & -       & 1        \\
+LE\_16                  & -       & -       & -       & 1        \\
+GE\_16                  & -       & -       & -       & 1        \\
+EQ\_16                  & -       & -       & -       & 1        \\
+NE\_16                  & -       & -       & -       & 1        \\
+LT\_32                  & -       & -       & -       & 1        \\
+GT\_32                  & -       & -       & -       & 1        \\
+LE\_32                  & -       & -       & -       & 1        \\
+GE\_32                  & -       & -       & -       & 1        \\
+EQ\_32                  & -       & -       & -       & 1        \\
+NE\_32                  & -       & -       & -       & 1        \\
+LT\_64                  & -       & -       & -       & 1        \\
+GT\_64                  & -       & -       & -       & 1        \\
+LE\_64                  & -       & -       & -       & 1        \\
+GE\_64                  & -       & -       & -       & 1        \\
+EQ\_64                  & -       & -       & -       & 1        \\
+NE\_64                  & -       & -       & -       & 1        \\
+\end{longtable}
