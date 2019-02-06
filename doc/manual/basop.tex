@@ -1471,6 +1471,273 @@ Returns a 16-bit complex result.
 {\tt \rulex{5mm} C\_result = CL\_round32\_16( CL\_sub( Cl\_var1, C\_scale(C\_var2, var3) ) ); }
 
 
+%########################################################################
+\section{Description of the basic operators which use 64-bit registers/accumulators} \label{basop64bitoperators}
+
+This section describes the 64-bit basic operators available in the STL, organized by complexity ("weights").
+
+\subsection{Variable definitions}
+
+The variables used in the operators are signed integer in 2's complements representation, defined by:
+
+{\tt var1}, {\tt var2}: 16-bit variables\\
+{\tt L\_var1}, {\tt L\_var2}: 32-bit variables\\
+{\tt W\_var}, {\tt W\_var1}, {\tt W\_var2}, {\tt W\_acc}: 64-bit variables
+
+
+\subsection{Operators with complexity weight of 1}
+
+%........................................................
+\NewOperator{W\_add\_nosat(W\_var1, W\_var2)}
+
+Adds the two 64-bit variables W\_var1 and W\_var2 without saturation control on 64 bits.
+
+%........................................................
+\NewOperator{W\_sub\_nosat(W\_var1, W\_var2)}
+
+Subtracts the two 64-bit variables W\_var1 and W\_var2 without saturation control on 64 bits.
+
+
+%........................................................
+\NewOperator{W\_shl(W\_var1, var2)}
+
+Arithmetically shifts left the 64-bit variable W\_var1 by var2 positions:\\
+if var2 is negative, W\_var1 is shifted to the least significant bits by (–var2) positions with extension of the sign bit.\\
+if var2 is positive, W\_var1 is shifted to the most significant bits by (var2) positions with saturation control on 64 bits.
+
+
+%........................................................
+\NewOperator{W\_shl\_nosat(W\_var1, var2)}
+
+Arithmetically shifts left the 64-bit variable W\_var1 by var2 positions:\\
+if var2 is negative, W\_var1 is shifted to the least significant bits by (–var2) positions with extension of the sign bit.\\
+if var2 is positive, W\_var1 is shifted to the most significant bits by (var2) positions without saturation control on 64 bits.
+
+
+%........................................................
+\NewOperator{W\_shr(W\_var1, var2)}
+
+Arithmetically shifts right the 64-bit variable W\_var1 by var2 positions:\\
+if var2 is negative, W\_var1 is shifted to the most significant bits by (–var2) positions with saturation control on 64 bits .\\
+if var2 is positive, W\_var1 is shifted to the least significant bits by (var2) positions with extension of the sign bit.
+
+
+%........................................................
+\NewOperator{W\_shr\_nosat(W\_var1, var2)}
+
+Arithmetically shifts right the 64-bit variable W\_var1 by var2 positions:\\
+if var2 is negative, W\_var1 is shifted to the most significant bits by (–var2) positions without saturation control on 64 bits.\\
+if var2 is positive, W\_var1 is shifted to the least significant bits by (var2) positions with extension of the sign bit.
+
+
+%........................................................
+\NewOperator{W\_mult\_32\_16(L\_var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2.
+Shifts the product left by 1 and sign extends to 64-bits without saturation control. \\
+The operation is performed in fractional mode.\\
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the result is produced in 17Q47 format.
+
+%........................................................
+\NewOperator{W\_mac\_32\_16(W\_acc, L\_var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2.
+Shifts the product left by 1 and sign extends to 64-bits without saturation control;\\
+adds this 64 bit value to the 64 bit W\_acc without saturation control, and returns a 64 bit result.\\
+The operation is performed in fractional mode.\\
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then added to W\_acc (in 17Q47) format.
+The final result is in 17Q47 format.
+
+%........................................................
+\NewOperator{W\_msu\_32\_16(W\_acc, L\_var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 16-bit variable var2.
+Left-shift the product by 1 and sign extends to 64-bit without saturation control; subtracts this 64 bit value from the 64 bit W\_acc without saturation control, and returns a 64 bit result.\\
+The operation is performed in fractional mode.\\
+For example, if L\_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then subtracted from W\_acc (in 17Q47) format.
+The final result is in 17Q47 format.
+
+%........................................................
+\NewOperator{W\_mult0\_16\_16(var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies 16-bit var1 by 16-bit var2, sign extends to 64 bits and returns the 64 bit result.
+
+%........................................................
+\NewOperator{W\_mac0\_16\_16(W\_acc, var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies 16-bit var1 by 16-bit var2, sign extends to 64 bits; adds this 64 bit value to the 64 bit W\_acc without saturation control, and returns a 64 bit result.
+
+%........................................................
+\NewOperator{W\_msu0\_16\_16(W\_acc, var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies 16-bit var1 by 16-bit var2, sign extends to 64 bits; subtracts this 64 bit value from the 64 bit W\_acc without saturation control, and returns a 64 bit result.
+
+%........................................................
+\NewOperator{W\_mult\_16\_16(W\_acc, var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies a signed 16-bit var1 by signed 16-bit var2, shifts the product left by 1 and sign extends to 64-bits without saturation control and returns a 64 bit result.\\
+The operation is performed in fractional mode.\\
+For example, if var1 is in 1Q15 format and var2 is in 1Q15 format, then the result is produced in 33Q31 format.
+
+%........................................................
+\NewOperator{W\_mac\_16\_16(W\_acc, var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies a signed 16-bit var1 by signed 16-bit var2, shifts the result left by 1 and sign extends to 64-bits;\\
+add this 64 bit value to the 64 bit W\_acc without saturation control, and returns a 64 bit result.\\
+The operation is performed in fractional mode.\\
+For example, if var1 is in 1Q15 format and var2 is in 1Q15 format, then the product is in 33Q31 format which is then added to W\_acc (in 33Q31 format) to provide a final result in 33Q31 format.
+
+%........................................................
+\NewOperator{W\_msu\_16\_16(W\_acc, var1, var2)}
+
+\textbf{ This operator is SIMD and VLIW friendly}
+
+Multiplies a signed 16-bit var1 by signed 16-bit var2, shifts the result left by 1 and sign extends to 64-bit;\\
+subtracts this 64 bit value from the 64 bit W\_acc without saturation control, and returns a 64 bit result.\\
+The operation is performed in fractional mode.\\
+For example, if var1 is in 1Q15 format and var2 is in 1Q15 format, then the product is in 33Q31 format which is then subtracted from W\_acc (in 33Q31 format) to provide a final result in 33Q31 format.
+
+%........................................................
+\NewOperator{W\_deposit32\_l(L\_var1)}
+
+Deposits the 32 bit L\_var1 into the 32 LS bits of the 64-bit output. The 32 MS bits of the output are sign extended.
+
+%........................................................
+\NewOperator{W\_deposit32\_h(L\_var1)}
+
+Deposits the 32-bit L\_var1 into the 32 MS bits of the 64-bit output. The 32 LS bits of the output are zeroed.
+
+%........................................................
+\NewOperator{W\_sat\_l(W\_v1)}
+
+Saturates the 64-bit variable W\_v1 to 32-bit value and returns the lower 32 bits.\\
+For example, a 64-bit wide accumulator is helpful in accumulating 16*16 multiplies without checking for saturation.
+However, at the end of the multiply-and-accumulate loop, we need to return only the 32-bit value after checking for saturation.\\
+If W\_v1 is in 33Q31 format, then the result returned will be saturated to 1Q31 format.
+
+%........................................................
+\NewOperator{W\_sat\_m(W\_v1)}
+
+Arithmetically shifts right the 64-bit variable W\_v1 by 16 bits; saturates the 64-bit value to 32-bit value and returns the lower 32 bits.\\
+For example, a 64-bit wide accumulator is helpful in accumulating 32\*16 multiplies without checking for saturation.
+A 32\*16 multiply gives a 48-bit product; at the end of the multiply-and-accumulate loop, the result is in the lower 48 bits of the 64-bit accumulator.
+Now an arithmetic right shift by 16 bits will drop the LSB 16 bits.
+Now we should check for saturation and return the lower 32 bits.\\
+If W\_var is in 17Q47 format, then the result returned will be saturated to 1Q31 format.
+
+%........................................................
+\NewOperator{W\_shl\_sat\_l(W\_1, var1)}
+
+Arithmetically shifts left the 64-bit W\_v1 by v1 positions with lower 32-bit saturation and returns the 32 LSB of 64-bit result.\\
+If v1 is negative, the result is shifted to right by (-var1) positions and sign extended.
+After shift operation, returns the 32 MSB of 64-bit result.
+
+%........................................................
+\NewOperator{W\_extract\_l(W\_var1)}
+
+Returns the 32 LSB of a 64-bit variable W\_var1.
+
+%........................................................
+\NewOperator{W\_extract\_h(W\_var1)}
+
+Returns the 32 MSB of a 64-bit variable W\_var1.
+
+%........................................................
+\NewOperator{W\_round48\_L(W\_var1)}
+
+Rounds the lower 16 bits of the 64-bit input number W\_var1 into the most significant 32 bits with saturation.
+Shifts the resulting bits right by 16 and returns the 32-bit number:\\
+If W\_var1 is in 17Q47 format, then the result returned will be rounded and saturated to 1Q31 format.
+
+%........................................................
+\NewOperator{W\_round32\_s(W\_var1)}
+
+Rounds the lower 32 bits of the 64-bit input number W\_var1 into the most significant 16 bits with saturation.
+Shifts the resulting bits right by 32 and returns the 16-bit number:\\
+If W\_var1 is in 17Q47 format, then the result returned will be rounded and saturated to 1Q15 format.
+
+%........................................................
+\NewOperator{W\_norm(W\_var1)}
+
+Produces the number of left shifts needed to normalize the 64-bit variable W\_var1.
+If W\_var1 contains 0, return 0.
+
+%........................................................
+\NewOperator{W\_add(W\_var1, W\_var2)}
+
+Adds the two 64-bit variables W\_var1 and W\_var2 with 64-bit saturation control.
+Sets overflow flag. Returns 64-bit result.
+
+%........................................................
+\NewOperator{W\_sub(W\_var1, W\_var2)}
+
+Subtracts 64-bit variable W\_var2 from W\_var1 with 64-bit saturation control.
+Sets overflow flag. Returns 64-bit result.
+
+%........................................................
+\NewOperator{W\_neg(W\_var1)}
+
+Negates a 64-bit variables W\_var1 with 64-bit saturation control.
+Set overflow flag. Returns 64-bit result.
+
+%........................................................
+\NewOperator{W\_abs(W\_var1)}
+
+Returns a 64-bit absolute value of a 64-bit variable W\_var1 with saturation control.
+
+%........................................................
+\NewOperator{W\_mult\_32\_32(L\_var1, L\_var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 32-bit variable L\_var2.
+Shift the product left by 1 with saturation control.
+Returns the 64-bit result.\\
+The operation is performed in fractional mode.\\
+For example, if L\_var1 \& L\_var2 are in 1Q31 format then the result is produced in 1Q63 format.\\
+Note that {\tt W\_mult\_32\_32(-2147483648, -2147483648) = 9223372036854775807}.
+
+%........................................................
+\NewOperator{W\_mult0\_32\_32(L\_var1, L\_var2)}
+
+Multiplies the signed 32-bit variable L\_var1 with signed 32-bit variable L\_var2.
+Returns the 64-bit result.\\
+For example, if L\_var1 \& L\_var2 are in 1Q31 format then the result is produced in 2Q62 format.
+
+%........................................................
+\NewOperator{W\_lshl(W\_var1, var2)}
+
+Logically shift the 64-bit input W\_var1 left by var2 positions.
+If var2 is negative, logically shift right W\_var1 by (-var2).
+
+%........................................................
+\NewOperator{W\_lshr(W\_var1, var2)}
+
+Logically shift the 64-bit input W\_var1 right by var2 positions.
+If var2 is negative, logically shift left W\_var1 by (-var2).
+
+%........................................................
+\NewOperator{W\_round64\_L(W\_var1)}
+
+Rounds the lower 32 bits of the 64-bit input number W\_var1 into the most significant 32 bits with saturation.
+Shifts the resulting bits right by 32 and returns the 32-bit number.\\
+If W\_var1 is in 1Q63 format, then the result returned will be rounded and saturated to 1Q31 format.
+
+
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \section{Description of the control basic operators and associated weights}
 
@@ -1938,8 +2205,8 @@ Following example shows necessity:
 
     Word16 tmp;
     tmp = add((Word16 )tbl[0], (Word16 )tbl[1]); move16(); move16();
-    a = my_function((Word16 )tbl[0], (Word16 )tbl[1]); move16(); move16();
-    /* assuming my_function requires 2 Word16 parameters. */
+    a = my\_function((Word16 )tbl[0], (Word16 )tbl[1]); move16(); move16();
+    /* assuming my\_function requires 2 Word16 parameters. */
 \end{verbatim}
 }
 
@@ -1950,7 +2217,7 @@ not counted as a part of the complexity. For example:
 {\tt\small
 \begin{verbatim}
     Word16 *p;
-    p = &(array[1]); /* move16() not necessary */
+    p = \&(array[1]); /* move16() not necessary */
 \end{verbatim}
 }% \textcolor{green}{[EDNOTE: \#02]}
 
@@ -1995,7 +2262,7 @@ When copying return value of a complex macro to a variable, it does
 not require extra weight count as in a return value of a function:
 {\tt\small
 \begin{verbatim}
-    Word32 w = Mpy_32(); /* move32() not required */
+    Word32 w = Mpy\_32(); /* move32() not required */
 \end{verbatim}
 } % \textcolor{green}{[EDNOTE: \#12]}
 
@@ -2115,7 +2382,7 @@ compiled and linked. The resulted executable file has to be called for
 each C source file of the examined application, with the following
 syntax:
 \begin{verbatim}
-basop_cnt input.c [result_file_name.txt]}
+basop\_cnt input.c [result\_file\_name.txt]}
 \end{verbatim}
 where $input.c$ is an ANSI C file and $result\_file\_name.txt$ the
 ouput result file.
@@ -2218,13 +2485,13 @@ Define the following variables in a global position before the
 main function:
 }
 \begin{verbatim}
-int dyn_ram_level_cnt;
-unsigned long *dyn_ram_table_ptr;
-unsigned long dyn_ram_table[DYN_RAM_MAX_LEVEL];
-char dyn_ram_name_table[DYN_RAM_MAX_LEVEL][DYN_RAM_MAX_NAME_LENGTH];
-unsigned long dyn_ram_current_value;
-unsigned long dyn_ram_max_value;
-unsigned long dyn_ram_max_counter;
+int dyn\_ram\_level\_cnt;
+unsigned long *dyn\_ram\_table\_ptr;
+unsigned long dyn\_ram\_table[DYN\_RAM\_MAX\_LEVEL];
+char dyn\_ram\_name\_table[DYN\_RAM\_MAX\_LEVEL][DYN\_RAM\_MAX\_NAME\_LENGTH];
+unsigned long dyn\_ram\_current\_value;
+unsigned long dyn\_ram\_max\_value;
+unsigned long dyn\_ram\_max\_counter;
 \end{verbatim}
 \item \textcolor{blue}{%
 At the beginning of the main function call the init function
@@ -2242,10 +2509,10 @@ exact numbers for each type of variables:
 \begin{verbatim}
 {
 unsigned long drsize = 0;
-drsize += (UWord32) (n16 * SIZE_Word16);
-drsize += (UWord32) (n32 * SIZE_Word32);
-drsize += (UWord32) (nptr * SIZE_Ptr);
-DYN_RAM_PUSH(drsize,"identifier name");
+drsize += (UWord32) (n16 * SIZE\_Word16);
+drsize += (UWord32) (n32 * SIZE\_Word32);
+drsize += (UWord32) (nptr * SIZE\_Ptr);
+DYN\_RAM\_PUSH(drsize,"identifier name");
 }
 \end{verbatim}
 \textcolor{blue}{%
@@ -2741,16 +3008,16 @@ Function                     Calls              Ops         Ops/Call
 -----------
 ROOT                             1                0                0
 -Autocorr                      100           975900             9759
---Set_Zero                     200             4100             20.5
--Lev_dur                       100            99600              996
+--Set\_Zero                     200             4100             20.5
+-Lev\_dur                       100            99600              996
 
 ===== Program Memory Usage by Function =====\\
 
 Function            ADD  MULT   MAC  MOVE STORE LOGIC SHIFT BRNCH   DIV
 -----------
-Set_Zero              0     0     0     1     0     0     0     0     0
+Set\_Zero              0     0     0     1     0     0     0     0     0
 Autocorr              1     4    17     0    21     0     0     2     0
-Lev_dur               0     2     5     5     3     0     1     1     2
+Lev\_dur               0     2     5     5     3     0     1     1     2
 ROOT                  0     0     0     0     0     0     0     0     0
 -----------
 totals                1     6    22     6    24     0     1     3     2
@@ -2760,9 +3027,9 @@ totals                1     6    22     6    24     0     1     3     2
 
 Function           SQRT TRANC  FUNC  LOOP   IND   PTR  MISC
 -----------
-Set_Zero              0     0     0     1     0     1     0
+Set\_Zero              0     0     0     1     0     1     0
 Autocorr              0     0     2     2     1     6     0
-Lev_dur               0     0     0     3     4     5     0
+Lev\_dur               0     0     0     3     4     5     0
 ROOT                  0     0     2     0     0     0     0
 -----------
 totals                0     0     4     6     5    12     0
