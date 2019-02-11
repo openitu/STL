@@ -2076,33 +2076,34 @@ Table \ref{tbl:control-basicop} summarizes the control basic operators and their
     \Caption{14cm}{\SF Control basic operators and associated complexity. \label{tbl:control-basicop}}
     \begin{center}
         \footnotesize
-        \begin{tabular}{|c|l|l|}
+        \begin{tabularx}{\textwidth}{|c|X|X|}
             \hline Complexity Weight  & Basic Operator  & Description\\
             \hline \hline {0}    &
             \textbf{DO}\{...\} while(expression) &
-            \parbox[t]{70mm}{\SF The macro DO must be used instead of the 'do' C statement.}\\
+            \SF The macro DO must be used instead of the 'do' C statement.\\
             \hline {3} &
             \textbf{FOR}(expr1; expr2; expr3) \{...\} &
-            \parbox[t]{70mm}{\SF The macro FOR must be used instead of the 'for' C statement.
-            The complexity is \textbf{independent} of the number of loop iterations that are performed.} \\
+            \SF The macro FOR must be used instead of the 'for' C statement.
+            The complexity is \textbf{independent} of the number of loop iterations that are performed. \\
             \hline {0} &
             \parbox[t]{60mm}{\SF \textbf{if}(expression)
-            \textbf{one\_and\_only\_one\_basic\_operator (control operators excluded)}} & \parbox[t]{70mm}{\SF \textbf{The macro IF must not be used} when the 'if' structure does not have any 'else if' nor 'else' statement and it conditions only one basic operator (control operators excluded)}. \\
+            \textbf{one\_and\_only\_one\_basic\_operator (control operators excluded)}} &
+            \SF \textbf{The macro IF must not be used} when the 'if' structure does not have any 'else if' nor 'else' statement and it conditions only one basic operator (control operators excluded). \\
             \hline {3} &
             \parbox[t]{60mm}{\SF \textbf{IF}(expression) \{...\}} &
-            \parbox[t]{70mm}{\SF The macro IF must be used instead of the 'if' C statement \textbf{in every other case}: when there is an 'else' or 'else if' statement, or when the 'if' conditions several basic operators, or when the 'if' conditions a function call or when the 'if' conditions a control operator.}\\
+            \SF The macro IF must be used instead of the 'if' C statement \textbf{in every other case}: when there is an 'else' or 'else if' statement, or when the 'if' conditions several basic operators, or when the 'if' conditions a function call or when the 'if' conditions a control operator.\\
             \hline {4} &
             \parbox[t]{60mm}{\SF if(expression) \{...\} [[\\
             \textbf{ELSE} if(expression2)\{...\}]\\
             \textbf{ELSE} \{...\}]} &
-            \parbox[t]{70mm}{\SF The macro ELSE must be used instead of the 'else' C statement.}\\
+            \SF The macro ELSE must be used instead of the 'else' C statement.\\
             \hline {6} &
             \textbf{SWITCH}(expression) \{...\} &
-            \parbox[t]{70mm}{\SF The macro SWITCH must be used instead of the 'switch' C statement.}\\
+            \SF The macro SWITCH must be used instead of the 'switch' C statement.\\
             \hline {3} &
             \textbf{WHILE}(expression) \{...\} &
-            \parbox[t]{70mm}{\SF The macro WHILE must be used instead of the 'while' C statement.\\
-            The complexity is \textbf{proportional} to the number of loop iterations that are performed.}\\
+            \SF The macro WHILE must be used instead of the 'while' C statement.
+            The complexity is \textbf{proportional} to the number of loop iterations that are performed.\\
             \hline {2} &
             \parbox[t]{60mm}{\SF while(expression) \{ \\
             ... \textbf{CONTINUE}; ...\\ \}\\
@@ -2112,7 +2113,7 @@ Table \ref{tbl:control-basicop} summarizes the control basic operators and their
             \textbf{CONTINUE}; \\
             ...\\
             \}} &
-            \parbox[t]{70mm}{\SF The macro CONTINUE must be used instead of the 'continue' C statement.}\\
+            \SF The macro CONTINUE must be used instead of the 'continue' C statement.\\
             \hline {2} &
             \parbox[t]{60mm}{\SF while(expression) \{ \\
             ...\textbf{BREAK}; ...\\
@@ -2129,12 +2130,12 @@ Table \ref{tbl:control-basicop} summarizes the control basic operators and their
             ...
             \\
             \}} &
-            \parbox[t]{70mm}{\SF The macro BREAK must be used instead of the 'break' C statement.}\\
+            \SF The macro BREAK must be used instead of the 'break' C statement.\\
             \hline {2} &
             \textbf{GOTO}  &
-            \parbox[t]{60mm}{\SF The macro GOTO must be used instead of the 'goto' C statement.}\\
+            \SF The macro GOTO must be used instead of the 'goto' C statement.\\
             \hline
-        \end{tabular}
+        \end{tabularx}
     \end{center}
 \end{table}
 
@@ -2664,98 +2665,6 @@ funcg722.c & 389 & 41 & 19 \\
 \end{tabbing}
 
 
-\textcolor{blue}{
-%----------------------------------------------------------------------
-\section{Dynamic RAM counting tool}
-%----------------------------------------------------------------------
-%
-\subsection{Introduction}
-During the completion of G.729.1 Annex E \cite{G.729.1E} and
-G.718 Annex B \cite{G.718B}, another tool was developed to help
-the estimation of the dynamic random access memory (DRAM).
-\subsection{Tool Description}
-The DRAM estimation tool enables to estimate the dynamic RAM of
-software written in C. If all functions used in the software are
-instrumented using this tool, it gives the highest memory allocation
-occurred during the execution~\cite{AC-1004-Q10-15}. A resulting and
-detailed summary is printed in the file {\tt dyn\_ram\_max\_info.txt},
-containing the max dynamic ram usage in bytes and the call graph of
-the worst case path.}
-%
-\textcolor{blue}{
-\subsection{Usage}
-How to use this tool:
-}
-\begin{enumerate}
-\item \textcolor{blue}{%
-Define the preprocessor directive {\tt DYN\_RAM\_CNT}
-}
-\item \textcolor{blue}{%
-Define the following variables in a global position before the
-main function:
-}
-\begin{verbatim}
-int dyn\_ram\_level\_cnt;
-unsigned long *dyn\_ram\_table\_ptr;
-unsigned long dyn\_ram\_table[DYN\_RAM\_MAX\_LEVEL];
-char dyn\_ram\_name\_table[DYN\_RAM\_MAX\_LEVEL][DYN\_RAM\_MAX\_NAME\_LENGTH];
-unsigned long dyn\_ram\_current\_value;
-unsigned long dyn\_ram\_max\_value;
-unsigned long dyn\_ram\_max\_counter;
-\end{verbatim}
-\item \textcolor{blue}{%
-At the beginning of the main function call the init function
-{\tt DYN\_RAM\_INIT()};
-}
-\item \textcolor{blue}{%
-Include in each {\tt .c} source file the {\tt dyn\_ram\_cnt.h} file
-}
-\item \textcolor{blue}{%
-At the beginning of each function (or at the beginning of blocks
-where new dynamic RAM is allocated or after a dynamic memory
-allocation using malloc or calloc) copy this part and fill in the
-exact numbers for each type of variables:
-}
-\begin{verbatim}
-{
-unsigned long drsize = 0;
-drsize += (UWord32) (n16 * SIZE\_Word16);
-drsize += (UWord32) (n32 * SIZE\_Word32);
-drsize += (UWord32) (nptr * SIZE\_Ptr);
-DYN\_RAM\_PUSH(drsize,"identifier name");
-}
-\end{verbatim}
-\textcolor{blue}{%
-where:
-\begin{itemize}
-\item n16 is the number of Word16 variables in the function (or in the block)
-\item n32 is the number of Word32 variables in the function (or in the block)
-\item nptr is the number of pointer variables in the function (or in the block)
-\item identifier name is a text identifying the function (or the
-block).
-\item the identifier name is used in the report printed in the file
-{\tt dyn\_ram\_max\_info.txt} to describe the call graph of the worst case
-path.
-\end{itemize}
-}
-\item \textcolor{blue}{%
-At the end of each function (or at the end of blocks where new
-dynamic RAM was allocated or after the free of a dynamic memory
-allocation using free) call the function: {\tt DYN\_RAM\_POP()};
-}
-\item \textcolor{blue}{%
-Optional: At the end of the main function call the report
-function: {\tt DYN\_RAM\_REPORT()}; This prints out on the screen
-the found maximum dynamic RAM usage in bytes and some other
-information that can be useful like the verification result for
-PUSH-POP pairs or an identification number that helps to put a
-conditional breakpoint to stop the execution at the moment when the
-worst case situation happens. In this way this tool gives another
-possibility to check in which configuration the max memory need
-occurred.
-}
-\end{enumerate}
-
 %----------------------------------------------------------------------
 \section{Complexity evaluation tool for floating-point C Code}
 %----------------------------------------------------------------------
@@ -3208,16 +3117,16 @@ Function                     Calls              Ops         Ops/Call
 -----------
 ROOT                             1                0                0
 -Autocorr                      100           975900             9759
---Set\_Zero                     200             4100             20.5
--Lev\_dur                       100            99600              996
+--Set_Zero                     200             4100             20.5
+-Lev_dur                       100            99600              996
 
-===== Program Memory Usage by Function =====\\
+===== Program Memory Usage by Function =====
 
 Function            ADD  MULT   MAC  MOVE STORE LOGIC SHIFT BRNCH   DIV
 -----------
-Set\_Zero              0     0     0     1     0     0     0     0     0
+Set_Zero              0     0     0     1     0     0     0     0     0
 Autocorr              1     4    17     0    21     0     0     2     0
-Lev\_dur               0     2     5     5     3     0     1     1     2
+Lev_dur               0     2     5     5     3     0     1     1     2
 ROOT                  0     0     0     0     0     0     0     0     0
 -----------
 totals                1     6    22     6    24     0     1     3     2
@@ -3227,9 +3136,9 @@ totals                1     6    22     6    24     0     1     3     2
 
 Function           SQRT TRANC  FUNC  LOOP   IND   PTR  MISC
 -----------
-Set\_Zero              0     0     0     1     0     1     0
+Set_Zero              0     0     0     1     0     1     0
 Autocorr              0     0     2     2     1     6     0
-Lev\_dur               0     0     0     3     4     5     0
+Lev_dur               0     0     0     3     4     5     0
 ROOT                  0     0     2     0     0     0     0
 -----------
 totals                0     0     4     6     5    12     0
@@ -3269,7 +3178,7 @@ Average complexity: 0.593780 WMOPS
 \endfirsthead
 
 \multicolumn{5}{c}%
-{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+{{\small\sl (\tablename\ \thetable{} -- continued from previous page)}} \\
 \hline
 \multicolumn{1}{|c|}{\textbf{Operator}} &
 \multicolumn{1}{c|} {\textbf{STL2000}} &
@@ -3277,8 +3186,8 @@ Average complexity: 0.593780 WMOPS
 \multicolumn{1}{c|}{\textbf{STL2009}} &
 \multicolumn{1}{c|}{\textbf{STL2019}}\\ \hline
 \endhead
-
-\hline \multicolumn{5}{|r|}{{Continued on next page}} \\ \hline
+\hline
+\multicolumn{5}{r}{{\small\sl (Continued on next page)}} \\
 \endfoot
 
 \hline
