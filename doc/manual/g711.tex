@@ -15,7 +15,7 @@ multiplexing equipments and to allow the integration of communication
 and computing, increasing the efficiency in operation and maintenance
 \cite{Qual-meas-tel-sys}.
 
-In 1972, the then CCITT published the Recommendation \textcolor{blue}{ITU-T} G.711 that
+In 1972, the then CCITT published the Recommendation ITU-T G.711 that
 constitutes the principal reference as far as transmission systems
 are concerned \cite{G.711}. The basic principle of the algorithm is
 to code speech using 8 bits per sample, the input voiceband signal
@@ -163,7 +163,7 @@ is the same, therefore one factor is sufficient.
 Compliance tests to this code have been done using a ramp file having
 the full excursion of the dynamic range for each of the laws, and
 examining the compressed and expanded samples against the values
-expected in tables 1a, 1b, 2a, and 2b of Recommendation \textcolor{blue}{ITU-T} G.711 (see
+expected in tables 1a, 1b, 2a, and 2b of Recommendation ITU-T G.711 (see
 \cite{G.711}). Another test done exploits the synchronous property of
 the G.711 scheme. Only samples from column 7 of G.711 tables 1 and 2
 were used. These values are transparent to quantization. Hence, if
@@ -196,7 +196,7 @@ void ulaw\_compress
 {\bf Description: }
 
 {\tt alaw\_compress} performs A law encoding rule according to
-Recommendation \textcolor{blue}{ITU-T} G.711, and {\tt ulaw\_compress} does the same for $\mu$
+Recommendation ITU-T G.711, and {\tt ulaw\_compress} does the same for $\mu$
 law. Note that input samples shall be left-justified, and that the
 output samples are right-justified with 8 bits.
 
@@ -241,7 +241,7 @@ void alaw\_expand
 {\bf Description: }
 
 {\tt alaw\_expand} performs A law decoding rule according to
-Recommendation \textcolor{blue}{ITU-T} G.711, and {\tt ulaw\_expand} does the same for $\mu$
+Recommendation ITU-T G.711, and {\tt ulaw\_expand} does the same for $\mu$
 law. Note that output samples will be left-justified, and that the
 input samples shall be right-justified with 8 bits.
 

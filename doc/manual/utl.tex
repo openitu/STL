@@ -39,13 +39,9 @@ multi-level representation of information bits in which each of the
 ``hard'' bits {\tt `0'} or {\tt `1'} are mapped respectively to the
 so-called softbits {\tt 0x007F} and {\tt 0x0081}, to which an error
 probability is associated. These softbits are stored in 16-bit
-right-justified words. In addition, if the bitstream is compliant to
-the bitstream signal representation in Annex B of
-\textcolor{blue}{Recommendation ITU-T} 
-G.192, the serial bitstream ``payload'' described above will be
-preceed by a synchronization header. A {\em synchronization header} is
-composed by a synchronization word followed by a frame length
-word. {\em Synchronization words} are words in the bitstream in the
+right-justified words.
+In addition, if the bitstream is compliant to the bitstream signal representation in Annex B of Recommendation ITU-T G.192, the serial bitstream ``payload'' described above will be preceed by a synchronization header. A {\em synchronization header} is composed by a synchronization word followed by a frame length word.
+{\em Synchronization words} are words in the bitstream in the
 range {\tt 0x6B21} to {\tt 0x6B2F}. A synchronization word equal to
 {\tt 0x6B20} indicates a frame loss. The {\em frame length word} is a
 two-complement word representing the number of softbits in the
@@ -391,32 +387,18 @@ long serialize\_left\_justified \hfill
 
 {\bf Description: }
 
-Routines {\tt serialize\_right\_justified} and {\tt
-serialize\_left\_justified} convert a frame of {\em n} right- or
-left-justified samples with a resolution {\em resol} into a
-right-justified, serial soft bitstream of length {\em n.resol}.  If
-the parameter {\em sync} is set, a serial bitstream compliant to the
-Annex B of \textcolor{blue}{Recommendation ITU-T} G.192 will be generated.  In this
-case, the the length of the bitstream is increased to {\em
-(n+2).resol}.\footnote{\SF The option of adding only the
-synchronization word, as implemented in the STL92, is no longer
-available with this function since the STL96.}  It should be noted
-that the least significant bits of the input words are serialized
-first, such that the bitstream is a stream with less significant bits
-coming first.
+Routines {\tt serialize\_right\_justified} and {\tt serialize\_left\_justified} convert a frame of {\em n} right- or left-justified samples with a resolution {\em resol} into a right-justified, serial soft bitstream of length {\em n.resol}.
+If the parameter {\em sync} is set, a serial bitstream compliant to the Annex B of Recommendation ITU-T G.192 will be generated.
+In this case, the the length of the bitstream is increased to {\em (n+2).resol}.
+\footnote{\SF The option of adding only the synchronization word, as implemented in the STL92, is no longer available with this function since the STL96.}
+It should be noted that the least significant bits of the input words are serialized first, such that the bitstream is a stream with less significant bits coming first.
 
-The only difference between these functions is
-that function {\tt serialize\_right\_justified} serializes
-right-justified parallel data and function {\tt
-serialize\_left\_justified} serialize left-adjusted data.
+The only difference between these functions is that function {\tt serialize\_right\_justified} serializes right-justified parallel data and function {\tt serialize\_left\_justified} serialize left-adjusted data.
 
-It is supposed that all parallel samples have a
-constant number of bits, or resolution, for the whole frame. If this
-does not happen, the bitstream cannot be serialized by these
-functions. As an example, this is the case of the RPE-LTP bitstream:
-the 260 bits of the encoded bitstream are not divided equally among
-the 76 parameters of the bitstream. In cases like this, users must
-write their own serialization function.
+It is supposed that all parallel samples have a constant number of bits, or resolution, for the whole frame.
+If this does not happen, the bitstream cannot be serialized by these functions.
+As an example, this is the case of the RPE-LTP bitstream: the 260 bits of the encoded bitstream are not divided equally among the 76 parameters of the bitstream.
+In cases like this, users must write their own serialization function.
 
 
 {\bf Variables: }

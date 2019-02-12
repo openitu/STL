@@ -7,7 +7,7 @@
 % Apr.1996 - Mark Perkins
 % Feb.2000 - Convergence towards STL2000
 % Feb.2001 - Edits in example section
-% Apr.2005 - Updates for STL2005 (Cyril Guillaumé & Stéphane Ragot)
+% Apr.2005 - Updates for STL2005 (Cyril Guillaumï¿½ & Stï¿½phane Ragot)
 % Oct.2005 - Editorial changes for STL2005 (Simao Campos)
 % May.2013 - Mention about problems on applying to SWB signal
 %=============================================================================
@@ -34,7 +34,7 @@ performance of these systems and equipments is easier and more
 consistent with more objective measures. The issue of how the MNRU is
 to be used as a reference system in subjective tests has been studied
 in ITU-T Study Group 12, which is described in
-\textcolor{blue}{Recommendation ITU-T} P.830 \cite{P.830} in its Sections 8.2.2 and 11.
+Recommendation ITU-T P.830 \cite{P.830} in its Sections 8.2.2 and 11.
 
 The Modulated Noise Reference Unity (MNRU) was introduced as a means
 to controlled degradations that are representative of the non-linear
@@ -46,7 +46,7 @@ as the ITU-T G.726 (32 kbit/s), G.722, G.728, and G.729.
 The concept of such reference unit was published in
 \cite{Q001.02.04.02}.  The first system aimed at was the PCM coding
 with logarithmic compression (today world-wide available by means of
-the \textcolor{blue}{Recommendation ITU-T} G.711), whose main characteristic is to have a
+the Recommendation ITU-T G.711), whose main characteristic is to have a
 considerably uniform signal-to-noise ratio (SNR) over a wide range of
 amplitudes.  Moreover, the quantizing noise is correlated to the
 signal: if no signal is present, no quantization noise is
@@ -81,8 +81,8 @@ gains applied such that a controlled signal-to-noise ratio is obtained
 in the output, after the 300--3400Hz band-limiting filter.
 
 With the 1996 revision of the MNRU description published in 
-\textcolor{blue}{Recommendation ITU-T} P.810\footnote{\SF Formerly known as
-\textcolor{blue}{Recommendation ITU-T} P.81.}, specific guidelines were given for ``digital
+Recommendation ITU-T P.810\footnote{\SF Formerly known as
+Recommendation ITU-T P.81.}, specific guidelines were given for ``digital
 implementations''\footnote{\SF The revised P.81 define a ``digital
 implementation'' either as a digital hardware implementation or as a
 software implementation of the MNRU.}, eliminating many of the
@@ -94,10 +94,8 @@ or wideband speech, hence being known as Dual-mode MNRU, or
 ``Duo-MNRU'', for short.
 
 \textcolor{blue}{%
-  Special caution must be made when selecting frequency bandwidth of
-  the input signal. The current implementation of tool is only useful
-  for narrowband (200 -- 3400 Hz) and wideband (100 -- 7000 Hz) signal
-  only, and should not be applied to superwideband or fullband signal.
+  Special caution must be made when selecting frequency bandwidth of the input signal. T
+  he current implementation of tool is only useful for narrowband (200 -- 3400 Hz) and wideband (100 -- 7000 Hz) signal only, and should not be applied to superwideband or fullband signal.
 %
 }
 
@@ -106,8 +104,8 @@ or wideband speech, hence being known as Dual-mode MNRU, or
 The de-facto reference implementation of the MNRU\footnote{\SF
 Developed by the British Telecom and licenced to Malden
 Electronics.} is the same of the original description, whose
-specification can be found in \textcolor{blue}{Recommendation ITU-T} P.810
-\cite{P.810} (formerly \textcolor{blue}{Recommendation ITU-T} P.81 \cite{Old-P.81}).
+specification can be found in Recommendation ITU-T P.810
+\cite{P.810} (formerly Recommendation ITU-T P.81 \cite{Old-P.81}).
 This Recommendation describes two MNRU schemes, one called {\em
 Narrow-band MNRU}, and another, {\em Wideband MNRU}. Wideband MNRU
 is applicable to systems where wideband speech (70--7000Hz) is
@@ -520,7 +518,7 @@ double *MNRU\_process (\ttpbox{110mm}{
 {\bf Description: }
 
 Module for addition of modulated noise to a vector of {\it n} samples,
-according to \textcolor{blue}{Recommendation ITU-T} P.810, for either the narrowband or
+according to Recommendation ITU-T P.810, for either the narrowband or
 the wideband model. Depending on the {\it mode}, this function:
 
 \rulex{5mm}
@@ -619,7 +617,7 @@ state.
 \section{Portability and compliance} \label{MNRU-Tests}
 
 In the development of this module, several steps were taken to assure
-its compliance to \textcolor{blue}{Recommendation ITU-T} P.810, which included:
+its compliance to Recommendation ITU-T P.810, which included:
 
 \begin{itemize}
   \item agreement of expected and measured Q values for tones and
