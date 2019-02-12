@@ -18,8 +18,6 @@
 %% -        Oct/25 Simao Campos review
 %% -	    Oct/08 France Telecom STL2009 release
 %% -	    Oct/09 Yusuke Hiwasaki STL2009 release
-%% -	    May/13 Yusuke STL2014pre0 release
-%% -	    Jun/13 Yusuke STL2014pre1 release
 %% -        Apr/18 Simao  Added path in preamble for including
 %%                        graphics (\includegraphics...}
 %% -
@@ -66,6 +64,7 @@
 \usepackage{ifpdf}
 \usepackage{framed}
 \graphicspath{{graphics/}}
+\usepackage{microtype}
 
 %==============================================================================
 \begin{document}
@@ -94,25 +93,19 @@
 
 \ruley{100mm}
 
- Copyright \copyright~ 2005, 2006, 2009, and 2018 by the International
+ Copyright \copyright~ 2005, 2006, 2009, and 2019 by the International
  Telecommunication Union (ITU)
 
 \ruley{15mm}
 
-TO BE REVIEWED PRIOR TO PUBLICATION \\
-This is edition 0.99 of the ``{\em ITU-T Software Tool Library
-  Manual}'', for the 2019 release of the {\em ITU-T Software Tool
-  Library}, distribution 0.99, Feb 2019, generated using \LaTeX
-~on \today\\*[10mm]
 
-Published by the ITU and available as part of the STL distribution.
-
-Also freely downloadable via the Internet from: \\
+Published by the ITU and available as part of the STL distribution, available from: \\
 \url{http://www.itu.int/rec/T-REC-G.191/en}
 
-Permission is granted to make and distribute verbatim copies of this manual
-provided the copyright notice and this permission notice are preserved on
-all copies.\\*[10mm]
+The STL distribution is maintained on an open-source collaboration platform:\\
+\url{https://www.github.com/openitu/STL}
+
+Permission is granted to make and distribute verbatim copies of this manual provided the copyright notice and this permission notice are preserved on all copies.\\*[10mm]
 
 %==============================================================================
 \tableofcontents
@@ -247,6 +240,6 @@ all copies.\\*[10mm]
 %=============================================================================
 % Appendix: Summary of where we want to go
 %=============================================================================
-\include{future}
+%$\include{future}
 
 \end{document}
