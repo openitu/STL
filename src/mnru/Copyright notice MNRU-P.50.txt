@@ -1,0 +1,6 @@
+Copyright Notice and Copyright Waiver 
+QualQual AG/Rohde & Schwarz (contact: Dr Jens Berger; address: Allmendweg 8, CH-4528, Zuchwil, Switzerland; Telephone: +4132 686 6565) (hereinafter the "Software Copyright Holder") makes the accompanying software (hereinafter the “Software”) available free from copyright restriction. 
+The Software Copyright Holder represents and warrants that to the best of its knowledge, it has the necessary copyright rights to waive all of the copyright rights as permissible under national law in the Software such that the Software can be used by implementers without further licensing concerns. 
+No patent licence is granted, nor is a patent licensing commitment made, by implication, estoppel or otherwise. 
+Disclaimer: Other than as expressly provided herein, (1) the Software is provided “AS IS” WITH NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGMENT OF INTELLECTUAL PROPERTY RIGHTS and (2) neither the Software Copyright Holder (or its affiliates) nor the ITU shall be held liable in any event for any damages whatsoever (including, without limitation, damages for loss of profits, business interruption, loss of information, or any other pecuniary loss) arising out of or related to the use of or inability to use the Software.” 
+
