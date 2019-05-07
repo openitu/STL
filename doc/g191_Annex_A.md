@@ -2,7 +2,7 @@
 
 (This annex forms an integral part of this Recommendation)
 
-This annex contains a list with a short description of the software tools available in the ITU‑T Software Tool Library. This is referred to in the associated documentation as the Software Tool Library release 2018, or STL2018. All the routines in the modules are written in C.
+This annex contains a list with a short description of the software tools available in the ITU‑T Software Tool Library (STL). The 2019 release is referred to in the associated documentation as STL2019. All the routines in the modules are written in C.
 
 ## a) Example programs available
 
@@ -23,21 +23,21 @@ The following programs are examples of the use of the modules:
 | `rpedemo.c` | on the use of the full-rate GSM 06.10 speech codec module. |
 | `sv56demo.c` | on the use of the speech voltmeter module, and also the gain/loss routine. |
 | `eiddemo.c` | on the use of the error insertion device for bit error insertion and frame erasure. |
-| `eid-ev.c` | on the use of the error insertion device for bit error insertion for layered bitstreams, which can be used to apply errors to individual layers in layered bitstreams such as ITU‑T G.718 or ITU‑T G.729.1. |
-| `gen-patt.c` | on the use of generating bit error pattern files for error insertion in ITU‑T G.192-compliant serial bitstreams encoded files. |
-| `gen_rate_profile.c` | on the use of fast switching rate profile generation tool. |
-| `firdemo.c` | on the use of the FIR (finite impulse response) high-quality low-pass and band-pass filters and of the FIR-IRS filters, associated with the rate change module. |
+| `eid-ev.c` | on the use of the error insertion device for bit error insertion for layered bitstreams, which can be used to apply errors to individual layers in layered bitstreams, such as [ITU‑T G.718] or [ITU‑T G.729.1]. |
+| `gen-patt.c` | on the use of generating bit error pattern files for error insertion in serial bitstreams encoded files that comply with [ITU‑T G.192]. |
+| `gen_rate_profile.c` | on the use of the fast switching rate profile generation tool. |
+| `firdemo.c` | on the use of the finite impulse response (FIR) high-quality low-pass and band-pass filters and of the FIR-IRS filters, associated with the rate change module. |
 | `pcmdemo.c` | on the use of the ITU‑T G.712 (standard PCM) IIR (infinite impulse response) filters, associated with the rate change module. |
 | `filter.c` | on the use of both the IIR and the FIR filters available in the rate change module. |
-| `mnrudemo.c` | on the use of the narrow-band and wideband modulated noise reference unity (ITU‑T P.81) module. |
+| `mnrudemo.c` | on the use of the narrow-band and wideband modulated noise reference unity (ITU‑T P.810) module. |
 | `spdemo.c` | on the use of the serialization and parallelization routines of the utility module. |
-| `g711iplc.c` | on the use of Appendix I/G.711 Packet Loss Concealment module. |
+| `g711iplc.c` | on the use of the packet loss concealment module of Appendix I of [G.711]. |
 | `reverb.c` | on the use of the reverberation module. |
 | `truncate.c` | on the use of the bitstream truncation module. |
 | `freqresp.c` | on the use of the frequency response computation tool. |
 | `stereoop.c` | on the use of stereo file operations. |
 
-NOTE - The module for the Basic Operators does not have a demo program but it is supplemented by two tools: one to evaluate program ROM complexity for fixed-point code (`basop_cnt.c`), and another to evaluate complexity (including program ROM) of floating-point implementations (`flc_example.c`). Both reside in the Basic Operators module.
+NOTE - The module for the basic operators does not have a demo program but it is supplemented by two tools: one to evaluate program read only memory (ROM) complexity for fixed-point code (`basop_cnt.c`), and another to evaluate complexity (including program ROM) of floating-point implementations (`flc_example.c`). Both reside in the basic operators module.
 
 ## b) Rate change module with FIR (finite impulse response) routines
 
@@ -45,17 +45,17 @@ Name: `firflt.c`
 
 Associated header file: `firflt.h`
 
-Functions included:
+The functions included are as follows:
 
 |||
 |---------------------|-----------------------------------------------------------|
-| `delta_sm_16khz_init` | initialize 16 kHz 1:1 ÄSM weighting filter. |
+| `delta_sm_16khz_init` | initialize 16 kHz 1:1 delta<sub>SM</sub> weighting filter. |
 | `hq_down_2_to_1_init` | initialize 2:1 low-pass down-sampling filter. |
 | `hq_down_3_to_1_init` | initialize 3:1 low-pass down-sampling filter. |
 | `hq_up_1_to_2_init` | initialize 1:2 low-pass up-sampling filter. |
 | `hq_up_1_to_3_init` | initialize 1:3 low-pass up-sampling filter. |
-| `irs_8khz_init` | initialize 8-kHz P.48 IRS weighting filter. |
-| `irs_16khz_init` | initialize 16-kHz P.48 IRS weighting filter. |
+| `irs_8khz_init` | initialize 8-kHz ITU-T P.48 IRS weighting filter. |
+| `irs_16khz_init` | initialize 16-kHz ITU-T P.48 IRS weighting filter. |
 | `linear_phase_pb_2_to_1_init` | initialize 2:1 bandpass down-sampling filter. |
 | `linear_phase_pb_1_to_2_init` | initialize 1:2 bandpass up-sampling filter. |
 | `linear_phase_pb_1_to_1_init` | initialize 1:1 bandpass filter. |
@@ -83,13 +83,13 @@ Functions included:
 | `hq_reset` | clear state variables. |
 | `hq_free` | deallocate FIR-filter memory. |
 
-## c) Rate change module with IIR routines
+## c) Rate change module with infinite impulse response routines
 
 Name: `iirflt.c`
 
 Associated header file: `iirflt.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
@@ -101,7 +101,7 @@ Functions included:
 | `stdpcm_free` | deallocate filter memory for a parallel-form state variable structure. |
 | `cascade_iir_kernel` | cascade-form IIR filtering routine. |
 | `iir_G712_8khz init` | initialization of a cascade-form IIR standard PCM filter for data sampled at 8 kHz. |
-| `iir_irs_8khz_init` | initialization of a cascade-form IIR P.48 IRS filter for data sampled at 8 kHz. |
+| `iir_irs_8khz_init` | initialization of a cascade-form IIR ITU-T P.48 IRS filter for data sampled at 8 kHz. |
 | `iir_casc_1p_3_to_1_init` | initialization of a cascade-form IIR low-pass filter for asynchronization filtering of data and downsampling by a factor of 3:1. |
 | `iir_casc_1p_1_to_3_init` | initialization of a cascade-form IIR low-pass filter for asynchronization filtering of data and upsampling by a factor of 3:1. |
 | `cascade_iir_reset` | clear state variables (needed only if another signal should be processed with the same filter) for a cascade-form structure. |
@@ -117,7 +117,7 @@ Name: `eid.c`
 
 Associated header file: `eid.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
@@ -131,28 +131,28 @@ Functions included:
 | `FER_module` | frame erasure module. |
 | `close_eid` | frees memory allocated to the EID state variable buffer. |
 
-## e) G.711 module
+## e) ITU-T G.711 module
 
 Name: `g711.c`
 
 Associated header file: `g711.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
-| `alaw_compress` | compands 1 vector of linear PCM samples to A-law; uses 13 Most Significant Bits (MSBs) from input and 8 Least Significant Bits (LSBs) on output. |
-| `alaw_expand` | expands 1 vector of A-law samples to linear PCM; uses 8 LSBs from input and 13 MSBs on output. |
-| `ulaw_compress` | compands 1 vector of linear PCM samples to µ-law; uses 14 MSBs from input and 8 LSBs on output. |
-| `ulaw_expand` | expands 1 vector of µ-law samples to linear PCM; uses 8 LSBs from input and 14 MSBs on output. |
+| `alaw_compress` | compands one vector of linear PCM samples to A-law; uses 13 most significant bits (MSBs) from input and 8 least significant bits (LSBs) on output. |
+| `alaw_expand` | expands one vector of A-law samples to linear PCM; uses 8 LSBs from input and 13 MSBs on output. |
+| `ulaw_compress` | compands one vector of linear PCM samples to µ-law; uses 14 MSBs from input and 8 LSBs on output. |
+| `ulaw_expand` | expands one vector of µ-law samples to linear PCM; uses 8 LSBs from input and 14 MSBs on output. |
 
-## f) Appendix I/G.711 Packet Loss Concealment module
+## f) Packet loss concealment module of Appendix I of [ITU-T G.711] 
 
 Name: `lowcfe.c`
 
 Associated header file: `lowcfe.h`
 
-Functions included:
+The functions included are as follows:
 
 |||
 |---------------------|-----------------------------------------------------------|
@@ -160,13 +160,13 @@ Functions included:
 | `g711plc_dofe` | generate the synthetic signal. |
 | `g711plc_addtohistory` | a good frame was received and decoded, add the frame to history buffer. |
 
-## g) G.726 module
+## g) ITU-T G.726 module
 
 Name: `g726.c`
 
 Associated header file: `g726.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
@@ -179,11 +179,11 @@ Name: `mnru.c`
 
 Associated header file: `mnru.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
-| `MNRU_process` | module for addition of modulated noise to a vector of samples, according to Rec. ITU-T P.810, for both the narrow-band and the wideband models. |
+| `MNRU_process` | module for addition of modulated noise to a vector of samples, according to [ITU-T P.810], for both the narrow-band and the wideband models. |
 
 ## i) Speech voltmeter module
 
@@ -191,20 +191,20 @@ Name: `sv-p56.c`
 
 Associated header file: `sv-p56.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
 | `init_speech_voltmeter` | initializes a speech voltmeter state variable. |
-| `speech_voltmeter` | measurement of the active speech level of data in a buffer according to Rec. ITU-T P.56. |
+| `speech_voltmeter` | measurement of the active speech level of data in a buffer according to [ITU-T P.56]. |
 
-## j) Module with UGST utilities
+## j) Module with Users' Group on Software Tools utilities
 
 Name: `ugst-utl.c`
 
 Associated header file: `ugst-utl.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
@@ -227,13 +227,13 @@ Functions included:
 | `parallelize_left_justified` | parallelization for left-justified data. |
 | `parallelize_right_justified` | parallelization for right-justified data. |
 
-## k) G.722 module
+## k) ITU-T G.722 module
 
 Name: `g722.c`
 
 Associated header file: `g722.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
@@ -248,29 +248,29 @@ Name: `rpeltp.c`
 
 Associated header file: `rpeltp.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------|----------------------------------------------------------------------|
-| `rpeltp_encode` | GSM 06.10 full-rate RPE-LTP speech encoder at 13 kbit/s. |
+| `rpeltp_encode` | GSM 06.10 full-rate regular pulse excitation-long term prediction (RPE-LTP) speech encoder at 13 kbit/s. |
 | `rpeltp_decode` | GSM 06.10 full-rate RPE-LTP speech decoder at 13 kbit/s. |
 | `rpeltp_init  ` | initialize memory for the RPE-LTP state variables. |
 | `rpeltp_delete` | release memory previously allocated for the RPE-LTP state variables. |
 
-## m) G.727 module
+## m) ITU-T G.727 module
 
 Name: `g727.c`
 
 Associated header file: `g727.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |-------------|-----------------------------------------------------------|
 | `G727_encode` | ITU‑T G.727 encoder at 40, 32, 24 and 16 kbit/s. |
 | `G727_decode` | ITU‑T G.727 decoder at 40, 32, 24 and 16 kbit/s. |
 
-## n) Basic Operators
+## n) Basic operators
 
 ### n.1) Basic operators that use 16-bit registers/accumulators
 
@@ -315,19 +315,19 @@ Variable definitions:
 | `L_negate(L_v1)` | Negates the 32-bit L_v1 with saturation, saturate in the case where input is –2147483648. |
 | `L_max(L_v1, L_v2)` | Compares two 32-bit variables L_v1 and L_v2 and returns the maximum value. |
 | `L_min(L_v1, L_v2)` | Compares two 32-bit variables L_v1 and L_v2 and returns the minimum value. |
-| `norm_l(L_v1)` | Produces the number of left shifts needed to normalize the 32-bit variable L_v1 for positive values on the interval with minimum of 1073741824 and maximum 2147483647, and for negative values on the interval with minimum of –2147483648 and maximum of –1073741824; in order to normalize the result, the following operation must be done:<br/>`L_norm_v1 = L_shl( L_v1, norm_l( L_v1))` |
-| `L_mult(v1, v2)` | L_mult implements the 32-bit result of the multiplication of v1 times v2 with one shift left, i.e.,<br/>`L_mult(v1, v2) = L_shl( (v1 * v2), 1)` <br/>Note that L_mult(–32768,–32768) = 2147483647. |
+| `norm_l(L_v1)` | Produces the number of left shifts needed to normalize the 32-bit variable L_v1 for positive values on the interval with minimum of 1073741824 and maximum 2147483647, and for negative values on the interval with minimum of –2147483648 and maximum of –1073741824; in order to normalize the result, the following operation must be done:<br/>`L_norm_v1 = L_shl(L_v1, norm_l( L_v1))` |
+| `L_mult(v1, v2)` | L_mult implements the 32-bit result of the multiplication of v1 times v2 with one shift left, i.e.,<br/>`L_mult(v1, v2) = L_shl((v1 * v2), 1)` <br/>Note that L_mult(–32768,–32768) = 2147483647. |
 | `L_mult0(v1, v2)` | L_mult0 implements the 32-bit result of the multiplication of v1 times v2 without left shift, i.e.,<br/>`L_mult(v1, v2) = (v1 * v2)`|
-| `mult(v1, v2)` | Performs the multiplication of v1 by v2 and gives a 16-bit result which is scaled, i.e.,<br/>`mult(v1, v2) = extract_l( L_shr( (v1 times v2), 15))`<br/>Note that mult(–32768,–32768) = 32767. |
-| `mult_r(v1, v2)` | Same as mult() but with rounding, i.e.,<br/>`mult_r( v1, v2) = extract_l( L_shr( ((v1 * v2) + 16384), 15))` <br/>and<br/>`mult_r(–32768, –32768) = 32767.` |
-| `L_mac(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Adds the 32-bit result to L_v3 with saturation, returns a 32-bit result:<br/>`L_mac( L_v3, v1, v2) = L_add(L_v3, L_mult( v1, v2))`|
+| `mult(v1, v2)` | Performs the multiplication of v1 by v2 and gives a 16-bit result which is scaled, i.e.,<br/>`mult(v1, v2) = extract_l(L_shr((v1 times v2), 15))`<br/>Note that mult(–32768,–32768) = 32767. |
+| `mult_r(v1, v2)` | Same as mult() but with rounding, i.e.,<br/>`mult_r( v1, v2) = extract_l(L_shr(((v1 * v2) + 16384), 15))` <br/>and<br/>`mult_r(–32768, –32768) = 32767.` |
+| `L_mac(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Adds the 32-bit result to L_v3 with saturation, returns a 32-bit result:<br/>`L_mac( L_v3, v1, v2) = L_add(L_v3, L_mult(v1, v2))`|
 | `L_mac0(L_v3, v1, v2)` | Multiplies v1 by v2 without left shift. Adds the 32-bit result to L_v3 with saturation, returning a 32-bit result:<br/>`L_mac(L_v3, v1, v2) = L_add(vL_v3, L_mult0(vv1, v2))`|
-| `L_macNs(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Adds the 32-bit result to L_v3 without saturation, returns a 32-bit result. Generates carry and overflow values:<br/> `L_macNs( L_v3, v1, v2) = L_add_c( L_v3, L_mult(v1, v2))` |
-| `mac_r(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Adds the 32-bit result to L_v3 with saturation. Rounds the 16 least significant bits of the result into the 16 most significant bits with saturation and shifts the result right by 16. Returns a 16‑bit result.<br/> `mac_r( L_v3, v1, v2) = round( L_mac( L_v3, v1, v2)) = extract_h( L_add( L_add( L_v3, L_mult( v1, v2)), 32768))` |
+| `L_macNs(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Adds the 32-bit result to L_v3 without saturation, returns a 32-bit result. Generates carry and overflow values:<br/> `L_macNs(L_v3, v1, v2) = L_add_c(L_v3, L_mult(v1, v2))` |
+| `mac_r(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Adds the 32-bit result to L_v3 with saturation. Rounds the 16 least significant bits of the result into the 16 most significant bits with saturation and shifts the result right by 16. Returns a 16‑bit result.<br/> `mac_r( L_v3, v1, v2) = round( L_mac( L_v3, v1, v2)) = extract_h( L_add(L_add(L_v3, L_mult(v1, v2)), 32768))` |
 | `L_msu(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Subtracts the 32-bit result from L_v3 with saturation, returns a 32-bit result:<br/>`L_msu(L_v3, v1, v2) = L_sub(L_v3, L_mult(v1, v2))`  |
-| `L_msu0(L_v3, v1, v2)` | Multiplies v1 by v2 without left shift. Subtracts the 32-bit result from L_v3 with saturation, returning a 32-bit result:<br/>`L_msu(L_v3, v1, v2) = L_sub(L_v3, L_mult0( v1, v2))` |
-| `L_msuNs(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Subtracts the 32-bit result from L_v3 without saturation, returns a 32‑bit result. Generates carry and overflow values:<br/>`L_msuNs( L_v3, v1, v2) = L_sub_c(L_v3, L_mult( v1, v2))` |
-| `msu_r(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Subtracts the 32-bit result from L_v3 with saturation. Rounds the 16 least significant bits of the result into the 16 bits with saturation and shifts the result right by 16. Returns a 16-bit result.<br/>`msu_r( L_v3, v1, v2) = round( L_msu( L_v3, v1, v2)) = extract_h( L_add( L_sub( L_v3, L_mult( v1, v2)), 32768))` |
+| `L_msu0(L_v3, v1, v2)` | Multiplies v1 by v2 without left shift. Subtracts the 32-bit result from L_v3 with saturation, returning a 32-bit result:<br/>`L_msu(L_v3, v1, v2) = L_sub(L_v3, L_mult0(v1, v2))` |
+| `L_msuNs(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Subtracts the 32-bit result from L_v3 without saturation, returns a 32‑bit result. Generates carry and overflow values:<br/>`L_msuNs(L_v3, v1, v2) = L_sub_c(L_v3, L_mult(v1, v2))` |
+| `msu_r(L_v3, v1, v2)` | Multiplies v1 by v2 and shifts the result left by 1. Subtracts the 32-bit result from L_v3 with saturation. Rounds the 16 least significant bits of the result into the 16 bits with saturation and shifts the result right by 16. Returns a 16-bit result.<br/>`msu_r( L_v3, v1, v2) = round( L_msu( L_v3, v1, v2)) = extract_h( L_add(L_sub(L_v3, L_mult(v1, v2)), 32768))` |
 | `s_and(v1, v2)` | Performs a bit wise AND between the two 16-bit variables v1 and v2. |
 | `s_or(v1, v2)` | Performs a bit wise OR between the two 16-bit variables v1 and v2. |
 | `s_xor(v1, v2)` | Performs a bit wise XOR between the two 16-bit variables v1 and v2. |
@@ -340,15 +340,15 @@ Variable definitions:
 | `L_lshr(L_v1, v2)` | Logically shifts right the 32-bit variable L_v1 by v2 positions:<br/>if v2 is positive, L_v1 is shifted to the least significant bits by (v2) positions with insertion of 0 at the most significant bit.<br/>if v2 is negative, L_v1 is shifted to the most significant bits by (–v2) positions without saturation control. |
 | `extract_h(L_v1)` | Returns the 16 most significant bits of L_v1. |
 | `extract_l(L_v1)` | Returns the 16 least significant bits of L_v1. |
-| `round(L_v1)` | Rounds the lower 16 bits of the 32-bit input number into the most significant 16 bits with saturation. Shifts the resulting bits right by 16 and returns the 16-bit number:<br/>`round(L_v1) = extract_h( L_add( L_v1, 32768))` |
+| `round(L_v1)` | Rounds the lower 16 bits of the 32-bit input number into the most significant 16 bits with saturation. Shifts the resulting bits right by 16 and returns the 16-bit number:<br/>`round(L_v1) = extract_h(L_add(L_v1, 32768))` |
 | `L_deposit_h(v1)` | Deposits the 16-bit v1 into the 16-bit most significant bits of the 32‑bit output. The 16 least significant bits of the output are zeroed. |
 | `L_deposit_l(v1)` | Deposits the 16-bit v1 into the 16-bit least significant bits of the 32‑bit output. The 16 most significant bits of the output are sign extended. |
 | `L_add_c(L_v1, L_v2)` | Performs the 32-bit addition with carry. No saturation. Generates carry and overflow values. The carry and overflow values are binary variables which can be tested and assigned values. |
 | `L_sub_c(L_v1, L_v2)` | Performs the 32-bit subtraction with carry (borrow). Generates carry (borrow) and overflow values. No saturation. The carry and overflow values are binary variables which can be tested and assigned values. |
-| `shr_r(v1, v2)` | Same as shr( v1, v2) but with rounding. Saturates the result in case of underflows or overflows.<br/>if v2 is strictly greater than zero, then `if (sub( shl ( shr( v1,v2), 1), shr( v1, sub(v2, 1))) == 0)`<br/>`then shr_r(v1, v2) = shr(v1, v2)`<br/>`else shr_r(v1, v2) = add(shr(v1, v2), 1)` <br/>On the other hand, if v2 is lower than or equal to zero, then<br/>`shr_r(v1, v2) = shr(v1, v2)` |
+| `shr_r(v1, v2)` | Same as shr( v1, v2) but with rounding. Saturates the result in case of underflows or overflows.<br/>if v2 is strictly greater than zero, then `if (sub(shl(shr(v1, v2), 1), shr(v1, sub(v2, 1))) == 0)`<br/>`then shr_r(v1, v2) = shr(v1, v2)`<br/>`else shr_r(v1, v2) = add(shr(v1, v2), 1)` <br/>On the other hand, if v2 is lower than or equal to zero, then<br/>`shr_r(v1, v2) = shr(v1, v2)` |
 | `shl_r(v1, v2)` | Same as shl( v1, v2) but with rounding. Saturates the result in case of underflows or overflows:<br/>`shl_r( v1, v2) = shr_r( v1, –v2)`<br/>In the previous version of the STL-basic operators, this operator is called shift_r(v1, v2); both names can be used. |
-| `L_shr_r(L_v1, v2)` | Same as L_shr( v1, v2) but with rounding. Saturates the result in case of underflows or overflows:<br/> if v2 is strictly greater than zero, then<br/> `if( L_sub( L_shl( L_shr( L_v1, v2), 1), L_shr( L_v1, sub( v2, 1)))) == 0`<br/>`then L_shr_r( L_v1, v2) = L_shr( L_v1, v2)`<br/> `else L_shr_r( L_v1, v2) = L_add( L_shr( L_v1, v2), 1)`<br/>On the other hand, if v2 is less than or equal to zero, then<br/>`L_shr_r( L_v1, v2) = L_shr( L_v1, v2)` |
-| `L_shl_r(L_v1, v2)` | Same as L_shl( L_v1, v2) but with rounding. Saturates the result in case of underflows or overflows.<br/>`L_shift_r( L_v1, v2) = L_shr_r( L_v1, –v2)`<br/>In the previous version of the STL-basic operators, this operator is called L_shift_r(L_v1, v2); both names can be used. |
+| `L_shr_r(L_v1, v2)` | Same as L_shr( v1, v2) but with rounding. Saturates the result in case of underflows or overflows:<br/> if v2 is strictly greater than zero, then<br/> `if(L_sub( L_shl(L_shr(L_v1, v2), 1), L_shr(L_v1, sub(v2, 1)))) == 0`<br/>`then L_shr_r(L_v1, v2) = L_shr(L_v1, v2)`<br/> `else L_shr_r(L_v1, v2) = L_add(L_shr(L_v1, v2), 1)`<br/>On the other hand, if v2 is less than or equal to zero, then<br/>`L_shr_r(L_v1, v2) = L_shr(L_v1, v2)` |
+| `L_shl_r(L_v1, v2)` | Same as L_shl( L_v1, v2) but with rounding. Saturates the result in case of underflows or overflows.<br/>`L_shift_r( L_v1, v2) = L_shr_r(L_v1, –v2)`<br/>In the previous version of the STL-basic operators, this operator is called L_shift_r(L_v1, v2); both names can be used. |
 | `i_mult(v1, v2)` | Multiplies two 16-bit variables v1 and v2 returning a 16-bit value with overflow control. |
 | `rotl(v1, v2, *v3)` | Rotates the 16-bit variable v1 by 1 bit to the most significant bits. Bit 0 of v2 is copied to the least significant bit of the result before it is returned. The most significant bit of v1 is copied to the bit 0 of v3 variable. |
 | `rotr(v1, v2, *v3)` | Rotates the 16-bit variable v1 by 1 bit to the least significant bits. Bit 0 of v2 is copied to the most significant bit of the result before it is returned. The least significant bit of v1 is copied to the bit 0 of v3 variable. |
@@ -375,7 +375,7 @@ Variable definitions:
 |||
 |---------------------|-----------------------------------------------------------|
 | `UL_addNs(UL_var1, UL_var2, *var1)` | Adds the two unsigned 32-bit variables UL_var1 and UL_var2 with overflow control, but without saturation. Returns 32-bit unsigned result. var1 is set to 1 if wrap around occurred, otherwise 0. |
-| `UL_subNs(UL_var1, UL_var2, *var1)` | Subtracts the 32-bit usigned variable UL_var2 from the 32-bit unsigned variable UL_var1 with overflow control, but without saturation. Returns 32-bit unsigned result. var1 is set to 1 if wrap around (to "negative") occurred, otherwise 0. |
+| `UL_subNs(UL_var1, UL_var2, *var1)` | Subtracts the 32-bit unsigned variable UL_var2 from the 32-bit unsigned variable UL_var1 with overflow control, but without saturation. Returns 32-bit unsigned result. var1 is set to 1 if wrap around (to "negative") occurred, otherwise 0. |
 | `norm_ul (UL_var1)` | Produces the number of left shifts needed to normalize the 32-bit unsigned variable UL_var1 for positive values on the interval with minimum of 0 and maximum of 0xffffffff. If UL_var1 contains 0, return 0. |
 | `UL_Mpy_32_32(UL_var1, UL_var2)` | Multiplies the two unsigned values UL_var1 and UL_var2 and returns the lower 32 bits, without saturation control. <br/>UL_var1 and UL_var2 are supposed to be in Q32 format.<br/>The result is produced in Q64 format, the 32 LS bits.<br/>Operates like a regular 32x32-bit unsigned int multiplication in ANSI-C. |
 | `Mpy_32_32_uu(UL_var1, UL_var2, *UL_varout_h, *UL_varout_l)` | Multiplies the two unsigned 32-bit variables UL_var1 and UL_var2. <br/>The operation is performed in fractional mode.<br/>UL_var1 and UL_var2 are supposed to be in Q32 format.<br/>The result is produced in Q64 format: UL_varout_h points to the 32 MS bits while UL_varout_l points to the 32 LS bits. |
@@ -405,23 +405,23 @@ Variable definitions:
 | `L40_negate(L40_v1)` | Negates the 40-bit variable L40_v1 without saturation control on 40 bits. Any detected overflow on 40 bits will exit execution. |
 | `L40_max(L40_v1, L40_v2)` | Compares two 40-bit variables L40_v1 and L40_v2 and returns the maximum value. |
 | `L40_min(L40_v1, L40_v2)` | Compares two 40-bit variables L40_v1 and L40_v2 and returns the minimum value. |
-| `norm_L40(L40_v1)` | Produces the number of left shifts needed to normalize the 40-bit variable L40_v1 for positive values on the interval with minimum of 1073741824 and maximum 2147483647, and for negative values on the interval with minimum of –2147483648 and maximum of –1073741824; in order to normalize the result, the following operation must be done:<br/> `L40_norm_v1 = L40_shl( L40_v1, norm_L40( L40_v1))` |
+| `norm_L40(L40_v1)` | Produces the number of left shifts needed to normalize the 40-bit variable L40_v1 for positive values on the interval with minimum of 1073741824 and maximum 2147483647, and for negative values on the interval with minimum of –2147483648 and maximum of –1073741824; in order to normalize the result, the following operation must be done:<br/> `L40_norm_v1 = L40_shl(L40_v1, norm_L40(L40_v1))` |
 | `L40_mult(v1, v2)` | Multiplies the 2 signed 16-bit variables v1 and v2 without saturation control on 40 bits. Any detected overflow on 40 bits will exit execution.<br/>The operation is performed in fractional mode:<br/>v1 and v2 are supposed to be in 1Q15 format.<br/>The result is produced in 9Q31 format. |
-| `L40_mac(L40_v1, v2, v3)` | Equivalent to:<br/>`L40_add( L40_v1, L40_mult( v2, v3))` |
-| `L40_msu(L40_v1, v2, v3)` | Equivalent to:<br/>`L40_sub( L40_v1, L40_mult( v2, v3))` |
+| `L40_mac(L40_v1, v2, v3)` | Equivalent to:<br/>`L40_add(L40_v1, L40_mult(v2, v3))` |
+| `L40_msu(L40_v1, v2, v3)` | Equivalent to:<br/>`L40_sub(L40_v1, L40_mult(v2, v3))` |
 | `L40_lshl(L40_v1, v2)` | Logically shifts left the 40-bit variable L40_v1 by v2 positions:<br/>if v2 is negative, L40_v1 is shifted to the least significant bits by (–v2) positions with insertion of 0 at the most significant bit.<br/>if v2 is positive, L40_v1 is shifted to the most significant bits by (v2) positions without saturation control. |
 | `L40_lshr(L40_v1, v2)` | Logically shifts right the 40-bit variable L40_v1 by v2 positions:<br/>if v2 is positive, L40_v1 is shifted to the least significant bits by (v2) positions with insertion of 0 at the most significant bit.<br/>if v2 is negative, L40_v1 is shifted to the most significant bits by (–v2) positions without saturation control. |
 | `Extract40_H(L40_v1)` | Returns the bits [31..16] of L40_v1. |
 | `Extract40_L(L40_v1)` | Returns the bits [15..00] of L40_v1. |
-| `round40(L40_v1)` | Equivalent to:<br/>`extract_h( L_saturate40( L40_round( L40_v1)))` |
+| `round40(L40_v1)` | Equivalent to:<br/>`extract_h(L_saturate40(L40_round(L40_v1)))` |
 | `L_Extract40(L40_v1)` | Returns the bits [31..00] of L40_v1. |
 | `L_saturate40(L40_v1)` | If L40_v1 is greater than 2147483647,returns 2147483647.<br/>If L40_v1 is lower than –2147483648,returns –2147483648.<br/>If not,equivalent to: `L_Extract40( L40_v1)` |
 | `L40_deposit_h(v1)` | Deposits the 16-bit variable v1 in the bits [31..16] of the return value: the return value bits [15..0] are set to 0 and the bits [39..32] sign extend v1 sign bit. |
 | `L40_deposit_l(v1)` | Deposits the 16-bit variable v1 in the bits [15..0] of the return value: the return value bits [39..16] sign extend v1 sign bit. |
 | `L40_deposit32(L_v1)` | Deposits the 32-bit variable L_v1 in the bits [31..0] of the return value: the return value bits [39..32] sign extend L_v1 sign bit. |
 | `L40_round(L40_v1)` | Performs a rounding to the infinite on the 40-bit variable L40_v1. 32768 is added to L40_v1 without saturation control on 40 bits. Any detected overflow on 40 bits will exit execution.The end-result 16 LSB are cleared to 0. |
-| `mac_r40(L40_v1, v2, v3)` | Equivalent to:<br/>`round40( L40_mac( L40_v1, v2, v3))` |
-| `msu_r40(L40_v1, v2, v3)` | Equivalent to:<br/>`round40( L40_msu( L40_v1, v2, v3))` |
+| `mac_r40(L40_v1, v2, v3)` | Equivalent to:<br/>`round40(L40_mac(L40_v1, v2, v3))` |
+| `msu_r40(L40_v1, v2, v3)` | Equivalent to:<br/>`round40(L40_msu(L40_v1, v2, v3))` |
 | `L40_shr_r(L40_v1, v2)` | Arithmetically shifts the 40-bit variable L40_v1 by v2 positions to the least significant bits and rounds the result.<br/>It is equivalent to L40_shr( L40_v1, v2) except that if v2 is positive and the last shifted out bit is 1, then the shifted result is incremented by 1 without saturation control on 40 bits.<br/>Any detected overflow on 40 bits will exit execution. |
 | `L40_shl_r(L40_v1, v2)` | Arithmetically shifts the 40-bit variable L40_v1 by v2 positions to the most significant bits and rounds the result.<br/>It is equivalent to L40_shl( L40_v1, v2) except if v2 is negative.In this case, it does the same as L40_shr_r( L40_v1, (–v2)). |
 | `L40_set(L40_v1)` | Assigns a 40-bit constant to the returned 40-bit variable. |
@@ -443,13 +443,13 @@ Variable definitions:
 |---------------------|-----------------------------------------------------------|
 | `W_add_nosat(W_var1, W_var2)` | Adds the two 64-bit variables W_var1 and W_var2 without saturation control on 64 bits. |
 | `W_sub_nosat(W_var1, W_var2)` | Subtracts the two 64-bit variables W_var1 and W_var2 without saturation control on 64 bits. |
-| `W_shl(W_var1, var2)` | Arithmetically shifts left the 64-bit variable W_var1 by var2 positions:<br/>if var2 is negative, W_var1 is shifted to the least significant bits by (–var2) positions with extension of the sign bit.<br/>if var2 is positive, W_var1 is shifted to the most significant bits by (var2) positions with saturation control on 64 bits. |
-| `W_shl_nosat(W_var1, var2)` | Arithmetically shifts left the 64-bit variable W_var1 by var2 positions:<br/>if var2 is negative, W_var1 is shifted to the least significant bits by (–var2) positions with extension of the sign bit.<br/>if var2 is positive, W_var1 is shifted to the most significant bits by (var2) positions without saturation control on 64 bits. |
-| `W_shr(W_var1, var2)` | Arithmetically shifts right the 64-bit variable W_var1 by var2 positions:<br/>if var2 is negative, W_var1 is shifted to the most significant bits by (–var2) positions with saturation control on 64 bits .<br/>if var2 is positive, W_var1 is shifted to the least significant bits by (var2) positions with extension of the sign bit. |
-| `W_shr_nosat(W_var1, var2)` | Arithmetically shifts right the 64-bit variable W_var1 by var2 positions:<br/>if var2 is negative, W_var1 is shifted to the most significant bits by (–var2) positions without saturation control on 64 bits.<br/>if var2 is positive, W_var1 is shifted to the least significant bits by (var2) positions with extension of the sign bit. |
+| `W_shl(W_var1, var2)` | Arithmetically shifts left the 64-bit variable W_var1 by var2 positions:<br/>if var2 is negative, W_var1 is shifted to the least significant bits by (–var2) positions with extension of the sign bit;<br/>if var2 is positive, W_var1 is shifted to the most significant bits by (var2) positions with saturation control on 64 bits. |
+| `W_shl_nosat(W_var1, var2)` | Arithmetically shifts left the 64-bit variable W_var1 by var2 positions:<br/>if var2 is negative, W_var1 is shifted to the least significant bits by (–var2) positions with extension of the sign bit;<br/>if var2 is positive, W_var1 is shifted to the most significant bits by (var2) positions without saturation control on 64 bits. |
+| `W_shr(W_var1, var2)` | Arithmetically shifts right the 64-bit variable W_var1 by var2 positions:<br/>if var2 is negative, W_var1 is shifted to the most significant bits by (–var2) positions with saturation control on 64 bits;<br/>if var2 is positive, W_var1 is shifted to the least significant bits by (var2) positions with extension of the sign bit. |
+| `W_shr_nosat(W_var1, var2)` | Arithmetically shifts right the 64-bit variable W_var1 by var2 positions:<br/>if var2 is negative, W_var1 is shifted to the most significant bits by (–var2) positions without saturation control on 64 bits;<br/>if var2 is positive, W_var1 is shifted to the least significant bits by (var2) positions with extension of the sign bit. |
 | `W_mult_32_16(L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 and sign extends to 64-bits without saturation control. <br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the result is produced in 17Q47 format. |
 | `W_mac_32_16(W_acc, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 and sign extends to 64-bits without saturation control;<br/>adds this 64 bit value to the 64 bit W_acc without saturation control, and returns a 64 bit result.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then added to W_acc (in 17Q47) format. The final result is in 17Q47 format. |
-| `W_msu_32_16(W_acc, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Left-shift the product by 1 and sign extends to 64-bit without saturation control; subtracts this 64 bit value from the 64 bit W_acc without saturation control, and returns a 64 bit result.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then subtracted from W_acc (in 17Q47) format. The final result is in 17Q47 format. |
+| `W_msu_32_16(W_acc, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Left-shifts the product by 1 and sign extends to 64-bit without saturation control; subtracts this 64 bit value from the 64 bit W_acc without saturation control, and returns a 64 bit result.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then subtracted from W_acc (in 17Q47) format. The final result is in 17Q47 format. |
 | `W_mult0_16_16(var1, var2)` | Multiplies 16-bit var1 by 16-bit var2, sign extends to 64 bits and returns the 64 bit result. |
 | `W_mac0_16_16(W_acc, var1, var2)` | Multiplies 16-bit var1 by 16-bit var2, sign extends to 64 bits; adds this 64 bit value to the 64 bit W_acc without saturation control, and returns a 64 bit result. |
 | `W_msu0_16_16(W_acc, var1, var2)` | Multiplies 16-bit var1 by 16-bit var2, sign extends to 64 bits; subtracts this 64 bit value from the 64 bit W_acc without saturation control, and returns a 64 bit result. |
@@ -463,17 +463,17 @@ Variable definitions:
 | `W_shl_sat_l(W_1, var1)` | Arithmetically shifts left the 64-bit W_v1 by v1 positions with lower 32-bit saturation and returns the 32 LSB of 64-bit result.<br/>If v1 is negative, the result is shifted to right by (-var1) positions and sign extended. After shift operation, returns the 32 MSB of 64-bit result. |
 | `W_extract_l(W_var1)` | Returns the 32 LSB of a 64-bit variable W_var1. |
 | `W_extract_h(W_var1)` | Returns the 32 MSB of a 64-bit variable W_var1. |
-| `W_round48_L(W_var1)` | Rounds the lower 16 bits of the 64-bit input number W_var1 into the most significant 32 bits with saturation. Shifts the resulting bits right by 16 and returns the 32-bit number:<br/>If W_var1 is in 17Q47 format, then the result returned will be rounded and saturated to 1Q31 format. |
-| `W_round32_s(W_var1)` | Rounds the lower 32 bits of the 64-bit input number W_var1 into the most significant 16 bits with saturation. Shifts the resulting bits right by 32 and returns the 16-bit number:<br/>If W_var1 is in 17Q47 format, then the result returned will be rounded and saturated to 1Q15 format. |
+| `W_round48_L(W_var1)` | Rounds the lower 16 bits of the 64-bit input number W_var1 into the most significant 32 bits with saturation. Shifts the resulting bits right by 16 and returns the 32-bit number:<br/>if W_var1 is in 17Q47 format, then the result returned will be rounded and saturated to 1Q31 format. |
+| `W_round32_s(W_var1)` | Rounds the lower 32 bits of the 64-bit input number W_var1 into the most significant 16 bits with saturation. Shifts the resulting bits right by 32 and returns the 16-bit number:<br/>if W_var1 is in 17Q47 format, then the result returned will be rounded and saturated to 1Q15 format. |
 | `W_norm(W_var1)` | Produces the number of left shifts needed to normalize the 64-bit variable W_var1. If W_var1 contains 0, return 0. |
 | `W_add(W_var1, W_var2)` | Adds the two 64-bit variables W_var1 and W_var2 with 64-bit saturation control. Sets overflow flag. Returns 64-bit result. |
 | `W_sub(W_var1, W_var2)` | Subtracts 64-bit variable W_var2 from W_var1 with 64-bit saturation control. Sets overflow flag. Returns 64-bit result. |
-| `W_neg(W_var1)` | Negates a 64-bit variables W_var1 with 64-bit saturation control. Set overflow flag. Returns 64-bit result. |
+| `W_neg(W_var1)` | Negates a 64-bit variables W_var1 with 64-bit saturation control. Sets overflow flag. Returns 64-bit result. |
 | `W_abs(W_var1)` | Returns a 64-bit absolute value of a 64-bit variable W_var1 with saturation control. |
-| `W_mult_32_32(L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Shift the product left by 1 with saturation control. Returns the 64-bit result.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 & L_var2 are in 1Q31 format then the result is produced in 1Q63 format.<br/>Note that `W_mult_32_32(-2147483648, -2147483648) = 9223372036854775807`. |
-| `W_mult0_32_32(L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Returns the 64-bit result.<br/>For example, if L_var1 & L_var2 are in 1Q31 format then the result is produced in 2Q62 format. |
-| `W_lshl(W_var1, var2)` | Logically shift the 64-bit input W_var1 left by var2 positions. If var2 is negative, logically shift right W_var1 by (-var2). |
-| `W_lshr(W_var1, var2)` | Logically shift the 64-bit input W_var1 right by var2 positions. If var2 is negative, logically shift left W_var1 by (-var2). |
+| `W_mult_32_32(L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Shifts the product left by 1 with saturation control. Returns the 64-bit result.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 and L_var2 are in 1Q31 format then the result is produced in 1Q63 format.<br/>Note that `W_mult_32_32(-2147483648, -2147483648) = 9223372036854775807`. |
+| `W_mult0_32_32(L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Returns the 64-bit result.<br/>For example, if L_var1 and L_var2 are in 1Q31 format then the result is produced in 2Q62 format. |
+| `W_lshl(W_var1, var2)` | Logically shifts the 64-bit input W_var1 left by var2 positions. If var2 is negative, logically shifts right W_var1 by (-var2). |
+| `W_lshr(W_var1, var2)` | Logically shifts the 64-bit input W_var1 right by var2 positions. If var2 is negative, logically shifts left W_var1 by (-var2). |
 | `W_round64_L(W_var1)` | Rounds the lower 32 bits of the 64-bit input number W_var1 into the most significant 32 bits with saturation. Shifts the resulting bits right by 32 and returns the 32-bit number.<br/>If W_var1 is in 1Q63 format, then the result returned will be rounded and saturated to 1Q31 format. |
 
 ### n.6) Basic operators which use 32-bit precision multiply
@@ -482,7 +482,7 @@ Name: `enh32.c`
 
 Associated header file: `enh32.h`, `stl.h`
 
-Basic operators in this clause are useful for FFT and scaling functions where the result of a 32\*16 or 32\*32 arithmetic operation is rounded, and saturated to 32-bit value. There is no accumulation of products in these functions. In functions that accumulate products, you should use base operators in clause A.1.
+Basic operators in this clause are useful for fast Fourier transform (FFT) and scaling functions where the result of a 32\*16 or 32\*32 arithmetic operation is rounded, and saturated to a 32-bit value. There is no accumulation of products in these functions. In functions that accumulate products, you should use basic operators in Section n.5.
 
 Variable definitions:
 
@@ -492,20 +492,20 @@ Variable definitions:
 
 |||
 |---------------------|-----------------------------------------------------------|
-| `Mpy_32_16_1(L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; Returns the 32 MSB of the 48-bit result after truncation of lower 16 bits.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated and returned in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`W_var1 = W_mult_32_16 ( L_var1, var2 );`<br/>`L_var_out = W_sat_m( W_var1 );` |
-| `Mpy_32_16_r(L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; Returns the 32 MSB of the 48-bit result after rounding of the lower 16 bits<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then rounded, saturated, and returned in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`W_var1 = W_mult_32_16( L_var1, var2 );`<br/>`L_var_out = W_round48_L (W_var1);` |
-| `Mpy_32_32(L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Shifts the product left by 1 with 64-bit saturation control; Returns the 32 MSB of the 64-bit result after truncating of the lower 32 bits.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q31 format, then the product is produced in 1Q63 format which is then truncated, saturated, and returned in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`W_var1 = (( Word64)L_var1 * L_var2);`<br/>`L_var_out = W_extract_h(W_shl(W_var1, 1) );` |
-| `Mpy_32_32_r(L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Adds rounding offset to lower 31 bits of the product. Shifts the result left by 1 with 64-bit saturation control; returns the 32 MSB of the 64-bit result with saturation control. <br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the result is produced in 1Q63 format which is then rounded, saturated, and returned in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`W_var1 = (( Word64)L_var1 * L_var2);`<br/>`W_var1 = W_var1 + 0x40000000LL;`<br/>`W_var1 = W_shl ( W_var1, 1 );`<br/>`L_var_out = W_extract_h( W_var1 );` |
-| `Madd_32_16(L_var3, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shift the product left by 1 with 48-bit saturation control; Add the 32-bit MSB of the 48-bit result with 32-bit L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated to 1Q31 format and added to L_var3 in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_16_1(L_var1, var2);`<br/>`L_var_out = L_add(L_var3, L_var_out);` |
-| `Madd_32_16_r(L_var3, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; Gets the 32-bit MSB from 48-bit result after rounding of the lower 16 bits and adds this with 32-bit L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, rounded to 1Q31 format and added to L_var3 in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_16_r(L_var1, var2);`<br/>`L_var_out = L_add(L_var3, L_var_out);` |
-| `Msub_32_16(L_var3, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; Subtracts the 32-bit MSB of the 48-bit result from 32-bit L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated to 1Q31 format and subtracted from L_var3 in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_16_1(L_var1, var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
-| `Msub_32_16_r(L_var3, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; Gets the 32-bit MSB from 48-bit result after rounding of the lower 16 bits and subtracts this from 32-bit L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, rounded to 1Q31 format and subtracted from L_var3 in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_16_r(L_var1, var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
-| `Madd_32_32(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Shifts the product left by 1 with 64-bit saturation control; Adds the 32 MSB of the 64-bit result to 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and truncated in 1Q31 format which is then added to L_var3 (in 1Q31 format), to provide result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32(L_var1, L_var2);`<br/>`L_var_out = L_add(L_var3, L_var_out);` |
-| `Madd_32_32_r(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Adds rounding offset to lower 31 bits of the product. Shifts the result left by 1 with 64-bit saturation control; gets the 32 MSB of the 64-bit result with saturation and adds this with 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and rounded in 1Q31 format which is then added to L_var3 (in 1Q31 format), to provide result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32_r(L_var1, L_var2);`<br/>`L_var_out = L_add(L_var3, L_var_out);` |
-| `Msub_32_32(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Shifts the product left by 1 with 64-bit saturation control; Subtracts the 32 MSB of the 64-bit result from 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and truncated in 1Q31 format which is then subtracted from L_var3 (in 1Q31 format), to provide result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32(L_var1, L_var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
-| `Msub_32_32_r(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Adds rounding offset to lower 31 bits of the product. Shifts the result left by 1 with 64-bit saturation control; gets the 32 MSB of the 64-bit result with saturation and subtracts this from 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and rounded in 1Q31 format which is then subtracted from L_var3 (in 1Q31 format), to provide result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32_r(L_var1, L_var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
+| `Mpy_32_16_1(L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; returns the 32 MSB of the 48-bit result after truncation of lower 16 bits.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated and returned in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`W_var1 = W_mult_32_16(L_var1, var2 );`<br/>`L_var_out = W_sat_m(W_var1 );` |
+| `Mpy_32_16_r(L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; returns the 32 MSB of the 48-bit result after rounding of the lower 16 bits<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then rounded, saturated, and returned in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`W_var1 = W_mult_32_16(L_var1, var2 );`<br/>`L_var_out = W_round48_L(W_var1);` |
+| `Mpy_32_32(L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Shifts the product left by 1 with 64-bit saturation control; Returns the 32 MSB of the 64-bit result after truncating of the lower 32 bits.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q31 format, then the product is produced in 1Q63 format which is then truncated, saturated, and returned in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`W_var1 = (( Word64) L_var1 * L_var2);`<br/>`L_var_out = W_extract_h(W_shl(W_var1, 1));` |
+| `Mpy_32_32_r(L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Adds rounding offset to lower 31 bits of the product. Shifts the result left by 1 with 64-bit saturation control; returns the 32 MSB of the 64-bit result with saturation control. <br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the result is produced in 1Q63 format which is then rounded, saturated, and returned in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`W_var1 = (( Word64)L_var1 * L_var2);`<br/>`W_var1 = W_var1 + 0x40000000LL;`<br/>`W_var1 = W_shl( W_var1, 1 );`<br/>`L_var_out = W_extract_h(W_var1 );` |
+| `Madd_32_16(L_var3, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; adds the 32-bit MSB of the 48-bit result with 32-bit L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated to 1Q31 format and added to L_var3 in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_16_1(L_var1, var2);`<br/>`L_var_out = L_add(L_var3, L_var_out);` |
+| `Madd_32_16_r(L_var3, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; gets the 32-bit MSB from 48-bit result after rounding of the lower 16 bits and adds this with 32-bit L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, rounded to 1Q31 format and added to L_var3 in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_16_r(L_var1, var2);`<br/>`L_var_out = L_add(L_var3, L_var_out);` |
+| `Msub_32_16(L_var3, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; subtracts the 32-bit MSB of the 48-bit result from 32-bit L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, truncated to 1Q31 format and subtracted from L_var3 in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_16_1(L_var1, var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
+| `Msub_32_16_r(L_var3, L_var1, var2)` | Multiplies the signed 32-bit variable L_var1 with signed 16-bit variable var2. Shifts the product left by 1 with 48-bit saturation control; gets the 32-bit MSB from 48-bit result after rounding of the lower 16 bits and subtracts this from 32-bit L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and var2 is in 1Q15 format, then the product is produced in 17Q47 format which is then saturated, rounded to 1Q31 format and subtracted from L_var3 in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_16_r(L_var1, var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
+| `Madd_32_32(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Shifts the product left by 1 with 64-bit saturation control; Adds the 32 MSB of the 64-bit result to 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and truncated in 1Q31 format which is then added to L_var3 (in 1Q31 format), to provide a result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32(L_var1, L_var2);`<br/>`L_var_out = L_add(L_var3, L_var_out);` |
+| `Madd_32_32_r(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Adds rounding offset to lower 31 bits of the product. Shifts the result left by 1 with 64-bit saturation control; gets the 32 MSB of the 64-bit result with saturation and adds this with 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and rounded in 1Q31 format which is then added to L_var3 (in 1Q31 format), to provide a result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32_r(L_var1, L_var2);`<br/>`L_var_out = L_add(L_var3, L_var_out);` |
+| `Msub_32_32(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Shifts the product left by 1 with 64-bit saturation control; Subtracts the 32 MSB of the 64-bit result from 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and truncated in 1Q31 format which is then subtracted from L_var3 (in 1Q31 format), to provide a result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32(L_var1, L_var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
+| `Msub_32_32_r(L_var3, L_var1, L_var2)` | Multiplies the signed 32-bit variable L_var1 with signed 32-bit variable L_var2. Adds rounding offset to lower 31 bits of the product. Shifts the result left by 1 with 64-bit saturation control; gets the 32 MSB of the 64-bit result with saturation and subtracts this from 32-bit signed variable L_var3 with 32-bit saturation control.<br/>The operation is performed in fractional mode.<br/>For example, if L_var1 is in 1Q31 format and L_var2 is in 1Q31 format, then the product is saturated and rounded in 1Q31 format which is then subtracted from L_var3 (in 1Q31 format), to provide a result in 1Q31 format.<br/>The following code snippet describes the operations performed:<br/>`L_var_out = Mpy_32_32_r(L_var1, L_var2);`<br/>`L_var_out = L_sub(L_var3, L_var_out);` |
 
-### n.7) Basic operators which use complex data types
+### n.7) Basic operators that use complex data types
 
 Name: `complex_basop.c`
 
@@ -520,47 +520,47 @@ Variable definitions:
 
 |||
 |---------------------|-----------------------------------------------------------|
-| `CL_shr(CL_var1, var2)` | Arithmetically shifts right the real and imaginary parts of the 32-bit complex number CL_var1 by var2 positions.<br/>If var2 is negative, real and imaginary parts of CL_var1 are shifted to the most significant bits by (-var2) positions with 32-bit saturation control.<br/>If var2 is positive, real and imaginary parts of CL_var1 are shifted to the least significant bits by ( var2 ) positions with sign extension.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_shr(CL_var1.re, L_shift_val);`<br/>`CL_result.im = L_shr(CL_var1.im, L_shift_val);` |
-| `CL_shl(CL_var1, var2)` | Arithmetically shifts left the real and imaginary parts of the 32-bit complex number CL_var1 by L_shift_val positions.<br/>If var2 is negative, real and imaginary parts of CL_var1 are shifted to the least significant bits by ( -var2 ) positions with sign extension.<br/>If var2 is positive, real and imaginary parts of CL_var1 are shifted to the most significant bits by (var2) positions with 32-bit saturation control.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_shl(CL_var1.re, L_shift_val);`<br/>`CL_result.im = L_shl(CL_var1.im, L_shift_val);` |
-| `CL_add(CL_var1, CL_var2)` | Adds the two 32-bit complex numbers CL_var1 and CL_var2 with 32-bit saturation control.<br/>Real part of the 32-bit complex number CL_var1 is added to Real part of the 32-bit complex number CL_var2 with 32-bit saturation control. The result forms the real part of the result variable.<br/>Imaginary part of the 32-bit complex number CL_var1 is added to Imaginary part of the 32-bit complex number CL_var2 with 32-bit saturation control. The result forms the imaginary part of the result variable.<br/>Following code snippet describe the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_add(CL_var1.re, CL_var2.re);`<br/>`CL_result.im = L_add(CL_var1.im, CL_var2.im);` |
-| `CL_sub(CL_var1, CL_var2)` | Subtracts the two 32-bit complex numbers CL_var1 and CL_var2 with 32-bit saturation control.<br/>Real part of the 32-bit complex number CL_var2 is subtracted from Real part of the 32-bit complex number CL_var1 with 32-bit saturation control. The result forms the real part of the result variable.<br/>Imaginary part of the 32-bit complex number CL_var2 is subtracted from Imaginary part of the 32-bit complex number CL_var1 with 32-bit saturation control. The result forms the imaginary part of the result variable.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_sub(CL_var1.re, CL_var2.re);`<br/>`CL_result.im = L_sub(CL_var1.im, CL_var2.im);` |
+| `CL_shr(CL_var1, var2)` | Arithmetically shifts right the real and imaginary parts of the 32-bit complex number CL_var1 by var2 positions.<br/>If var2 is negative, real and imaginary parts of CL_var1 are shifted to the most significant bits by (-var2) positions with 32-bit saturation control.<br/>If var2 is positive, real and imaginary parts of CL_var1 are shifted to the least significant bits by ( var2 ) positions with sign extension.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_shr(CL_var1.re, L_shift_val);`<br/>`CL_result.im = L_shr(CL_var1.im, L_shift_val);` |
+| `CL_shl(CL_var1, var2)` | Arithmetically shifts left the real and imaginary parts of the 32-bit complex number CL_var1 by L_shift_val positions.<br/>If var2 is negative, real and imaginary parts of CL_var1 are shifted to the least significant bits by ( -var2 ) positions with sign extension.<br/>If var2 is positive, real and imaginary parts of CL_var1 are shifted to the most significant bits by (var2) positions with 32-bit saturation control.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_shl(CL_var1.re, L_shift_val);`<br/>`CL_result.im = L_shl(CL_var1.im, L_shift_val);` |
+| `CL_add(CL_var1, CL_var2)` | Adds the two 32-bit complex numbers CL_var1 and CL_var2 with 32-bit saturation control.<br/>Real part of the 32-bit complex number CL_var1 is added to real part of the 32-bit complex number CL_var2 with 32-bit saturation control. The result forms the real part of the result variable.<br/>Imaginary part of the 32-bit complex number CL_var1 is added to Imaginary part of the 32-bit complex number CL_var2 with 32-bit saturation control. The result forms the imaginary part of the result variable.<br/>Following code snippet describe the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_add(CL_var1.re, CL_var2.re);`<br/>`CL_result.im = L_add(CL_var1.im, CL_var2.im);` |
+| `CL_sub(CL_var1, CL_var2)` | Subtracts the two 32-bit complex numbers CL_var1 and CL_var2 with 32-bit saturation control.<br/>Real part of the 32-bit complex number CL_var2 is subtracted from real part of the 32-bit complex number CL_var1 with 32-bit saturation control. The result forms the real part of the result variable.<br/>Imaginary part of the 32-bit complex number CL_var2 is subtracted from imaginary part of the 32-bit complex number CL_var1 with 32-bit saturation control. The result forms the imaginary part of the result variable.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_sub(CL_var1.re, CL_var2.re);`<br/>`CL_result.im = L_sub(CL_var1.im, CL_var2.im);` |
 | `CL_scale(CL_var, var1)` | Multiplies the real and imaginary parts of a 32-bit complex number CL_var by a 16-bit var1. The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = Mpy_32_16_r(CL_var.re, var1);`<br/>`CL_result.im = Mpy_32_16_r(CL_var.im, var1);` |
-| `CL_dscale(CL_var3, var1, var2)` | Multiplies the real parts of a 32-bit complex number CL_var3 by a 16-bit var1 and imaginary parts of a 32-bit complex number CL_var3 by a 16-bit var2. The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = Mpy_32_16_r(CL_var.re, var1);`<br/>`CL_result.im = Mpy_32_16_r(CL_var.im, var2);` |
-| `CL_msu_j(CL_var1, CL_var2)` | Multiplies the 32-bit complex number CL_var2 with j and subtracts the result from the 32-bit complex number CL_var1 with saturation control.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_add( CL_var1.re, CL_var2.im );`<br/>`CL_result.im = L_sub( CL_var1.im, CL_var2.re );` |
-| `CL_mac_j(CL_var1, CL_var2)` | Multiplies the 32-bit complex number CL_var2 with j and adds the result to the 32-bit complex number CL_var1 with saturation control.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_sub( CL_var1.re, CL_var2.im );`<br/>`CL_result.im = L_add( CL_var1.im, CL_var2.re );` |
+| `CL_dscale(CL_var3, var1, var2)` | Multiplies the real parts of a 32-bit complex number CL_var3 by a 16-bit var1 and imaginary parts of a 32-bit complex number CL_var3 by a 16-bit var2. The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = Mpy_32_16_r(CL_var.re, var1);`<br/>`CL_result.im = Mpy_32_16_r(CL_var.im, var2);` |
+| `CL_msu_j(CL_var1, CL_var2)` | Multiplies the 32-bit complex number CL_var2 with j and subtracts the result from the 32-bit complex number CL_var1 with saturation control.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_add( CL_var1.re, CL_var2.im);`<br/>`CL_result.im = L_sub(CL_var1.im, CL_var2.re);` |
+| `CL_mac_j(CL_var1, CL_var2)` | Multiplies the 32-bit complex number CL_var2 with j and adds the result to the 32-bit complex number CL_var1 with saturation control.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_sub( CL_var1.re, CL_var2.im);`<br/>`CL_result.im = L_add(CL_var1.im, CL_var2.re);` |
 | `CL_move(CL_var1)` | Copies the 32-bit complex number CL_var1 to destination 32-bit complex number. |
 | `CL_Extract_real(CL_var1)` | Returns the real part of a 32-bit complex number CL_var1. |
-| `CL_scale (CL_var, var1)` | Multiplies the real and imaginary parts of a 32-bit complex number CL_var by a 16-bit var1. The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = Mpy_32_16_r(CL_var.re, var1);`<br/>`CL_result.im = Mpy_32_16_r(CL_var.im, var1);` |
-| `CL_dscale(CL_var, var1, var2)` | Multiplies the real parts of a 32-bit complex number CL_var by a 16-bit var1 and imaginary parts of a 32-bit complex number CL_var by a 16-bit var2. The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = Mpy_32_16_r(CL_var.re, var1);`<br/>`CL_result.im = Mpy_32_16_r(CL_var.im, var2);` |
-| `CL_msu_j(CL_var1, CL_var2)` | Multiplies the 32-bit complex number CL_var2 with j and subtracts the result from the 32-bit complex number CL_var1 with saturation control.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_add( CL_var1.re, CL_var2.im );`<br/>`CL_result.im = L_sub( CL_var1.im, CL_var2.re );` |
-| `CL_mac_j(CL_var1, CL_var2)` | Multiplies the 32-bit complex number CL_var2 with j and adds the result to the 32-bit complex number CL_var1 with saturation control.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_sub( CL_var1.re, CL_var2.im );`<br/>`CL_result.im = L_add( CL_var1.im, CL_var2.re );` |
+| `CL_scale (CL_var, var1)` | Multiplies the real and imaginary parts of a 32-bit complex number CL_var by a 16-bit var1. The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = Mpy_32_16_r(CL_var.re, var1);`<br/>`CL_result.im = Mpy_32_16_r(CL_var.im, var1);` |
+| `CL_dscale(CL_var, var1, var2)` | Multiplies the real parts of a 32-bit complex number CL_var by a 16-bit var1 and imaginary parts of a 32-bit complex number CL_var by a 16-bit var2. The resulting 48-bit product for each part is rounded, saturated and 32-bit MSB of 48-bit result are returned.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = Mpy_32_16_r(CL_var.re, var1);`<br/>`CL_result.im = Mpy_32_16_r(CL_var.im, var2);` |
+| `CL_msu_j(CL_var1, CL_var2)` | Multiplies the 32-bit complex number CL_var2 with j and subtracts the result from the 32-bit complex number CL_var1 with saturation control.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_add(CL_var1.re, CL_var2.im);`<br/>`CL_result.im = L_sub(CL_var1.im, CL_var2.re);` |
+| `CL_mac_j(CL_var1, CL_var2)` | Multiplies the 32-bit complex number CL_var2 with j and adds the result to the 32-bit complex number CL_var1 with saturation control.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_sub(CL_var1.re, CL_var2.im);`<br/>`CL_result.im = L_add(CL_var1.im, CL_var2.re);` |
 | `CL_move(CL_var)` | Copies the 32-bit complex number CL_var to destination 32-bit complex number. |
 | `CL_Extract_real(CL_var)` | Returns the real part of a 32-bit complex number CL_var |
 | `CL_Extract_imag(CL_var)` | Returns the imaginary part of a 32-bit complex number CL_var |
-| `CL_form(L_re, L_im)` | Combines the two 32-bit variables L_re and L_im and returns a 32-bit complex number.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_re;`<br/>`CL_result.im = L_im;` |
-| `CL_multr_32x16(CL_var, C_coeff)` | Multiplication of 32-bit complex number CL_var with a 16-bit complex number C_coeff.<br/>The formula for multiplying two complex numbers, (x+iy) and (u+iv) is:<br/>`(x+iy)*(u+iv) = (xu – yv) + i(xv + yu);`<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`W_tmp1 = W_mult_32_16(CL_var.re, C_coeff.re);`<br/>`W_tmp2 = W_mult_32_16(CL_var.im, C_coeff.im);`<br/>`W_tmp3 = W_mult_32_16(CL_var.re, C_coeff.im);`<br/>`W_tmp4 = W_mult_32_16(CL_var.im, C_coeff.re);`<br/>`CL_res.re = W_round48_L( W_sub_nosat (W_tmp1, W_tmp2));`<br/>`CL_res.im = W_round48_L( W_add_nosat (W_tmp3, W_tmp4));`<br/>For example, if the real and imaginary part of complex variable CL_var are in 1Q31 format, and C_coeff in 1Q15 format, then the intermediate products would be in 17Q47 format. The round operation will convert the result of addition/subtraction from 17Q47 format to 1Q31 format. |
+| `CL_form(L_re, L_im)` | Combines the two 32-bit variables L_re and L_im and returns a 32-bit complex number.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = L_re;`<br/>`CL_result.im = L_im;` |
+| `CL_multr_32x16(CL_var, C_coeff)` | Multiplication of 32-bit complex number CL_var with a 16-bit complex number C_coeff.<br/>The formula for multiplying two complex numbers, (x+iy) and (u+iv) is:<br/>`(x+iy)*(u+iv) = (xu – yv) + i(xv + yu);`<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`W_tmp1 = W_mult_32_16(CL_var.re, C_coeff.re);`<br/>`W_tmp2 = W_mult_32_16(CL_var.im, C_coeff.im);`<br/>`W_tmp3 = W_mult_32_16(CL_var.re, C_coeff.im);`<br/>`W_tmp4 = W_mult_32_16(CL_var.im, C_coeff.re);`<br/>`CL_res.re = W_round48_L( W_sub_nosat (W_tmp1, W_tmp2));`<br/>`CL_res.im = W_round48_L(W_add_nosat(W_tmp3, W_tmp4));`<br/>For example, if the real and the imaginary parts of a complex variable CL_var are in 1Q31 format, and C_coeff is in 1Q15 format, then the intermediate products would be in the 17Q47 format. The round operation will convert the result of addition/subtraction from 17Q47 format to 1Q31 format. |
 | `CL_negate(CL_var)` | Negates the 32-bit complex number, saturates and returns.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = L_negate(CL_var.re);`<br/>`CL_result.im = L_negate(CL_var.im);` |
 | `CL_conjugate(CL_var)` | Negates only the imaginary part of complex number CL_var with saturation. No change in the real part.<br/>The following code snippet describes the operations:<br/>`CL_result.re = CL_var.re;`<br/>`CL_result.im = L_negate(CL_var.im);` |
 | `CL_mul_j(CL_var)` | Multiplication of a 32-bit complex number CL_var with j and return a 32-bit complex number. |
 | `CL_swap_real_imag(CL_var)` | Swaps real and imaginary parts of a 32-bit complex number CL_var and returns a 32-bit complex number. |
-| `C_add(C_var1, C_var2)` | Adds the two 16-bit complex numbers C_var1 and C_var2 with 16-bit saturation control.<br/>The following code snippet describe the operations performed on real & imaginary part of a complex number.<br/>`C_result.re = add(C_var1.re, C_var2.re);`<br/>`C_result.im = add(C_var1.im, C_var2.im);`<br/> |
-| `C_sub(C_var1, C_var2)` | Subtracts the two 16-bit complex numbers C_var1 and C_var2 with 16-bit saturation control.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`C_result.re = sub(C_var1.re, C_var2.re);`<br/>`C_result.im = sub(C_var1.im, C_var2.im);` |
+| `C_add(C_var1, C_var2)` | Adds the two 16-bit complex numbers C_var1 and C_var2 with 16-bit saturation control.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number.<br/>`C_result.re = add(C_var1.re, C_var2.re);`<br/>`C_result.im = add(C_var1.im, C_var2.im);`<br/> |
+| `C_sub(C_var1, C_var2)` | Subtracts the two 16-bit complex numbers C_var1 and C_var2 with 16-bit saturation control.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`C_result.re = sub(C_var1.re, C_var2.re);`<br/>`C_result.im = sub(C_var1.im, C_var2.im);` |
 | `C_mul_j(C_var)` | Multiplies a 16-bit complex number with j and returns a 16-bit complex number |
-| `C_multr(C_var1, C_var2)` | Multiplies the 16-bit complex number C_var1 with the 16-bit complex number C_var2 which results in a 16-bit complex number.<br/>The formula for multiplying two complex numbers, (x+iy) and (u+iv) is:<br/>`(x+iy)*(u+iv) = (xu – yv) + i(xv + yu);`<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`W_tmp1 = W_mult_16_16(C_var1.re, C_var2.re);`<br/>`W_tmp2 = W_mult_16_16(C_var1.im, C_var2.im);`<br/>`W_tmp3 = W_mult_16_16(C_var1.re, C_var2.im);`<br/>`W_tmp4 = W_mult_16_16(C_var1.im, C_var2.re);`<br/><br/>`C_result.re = round_fx(W_sat_l (W_sub_nosat (W_tmp1, W_tmp2)));`<br/>`C_result.im = round_fx(W_sat_l (W_add_nosat (W_tmp3, W_tmp4)));` |
+| `C_multr(C_var1, C_var2)` | Multiplies the 16-bit complex number C_var1 with the 16-bit complex number C_var2 which results in a 16-bit complex number.<br/>The formula for multiplying two complex numbers, (x+iy) and (u+iv) is:<br/>`(x+iy)*(u+iv) = (xu – yv) + i(xv + yu);`<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`W_tmp1 = W_mult_16_16(C_var1.re, C_var2.re);`<br/>`W_tmp2 = W_mult_16_16(C_var1.im, C_var2.im);`<br/>`W_tmp3 = W_mult_16_16(C_var1.re, C_var2.im);`<br/>`W_tmp4 = W_mult_16_16(C_var1.im, C_var2.re);`<br/><br/>`C_result.re = round_fx(W_sat_l(W_sub_nosat(W_tmp1, W_tmp2)));`<br/>`C_result.im = round_fx(W_sat_l(W_add_nosat(W_tmp3, W_tmp4)));` |
 | `C_form(re, im)` | Combines the two 16-bit variable re and im and returns a 16-bit complex number |
-| `CL_scale_32(CL_var1, L_var2)` | Multiplies the real and imaginary parts of a 32-bit complex number CL_var1 by a 32-bit L_var2.<br/>The resulting 64-bit product for each part is rounded, saturated and 32-bit MSB of 64-bit result are returned.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = Mpy_32_32_r(CL_var1.re, L_var2);`<br/>`CL_result.im = Mpy_32_32_r(CL_var1.im, L_var2);` |
-| `CL_dscale_32(CL_var1, L_var2, L_var3)` | Multiplies the real parts of a 32-bit complex number CL_var1 by a 32-bit L_var2 and imaginary parts of a 32-bit complex number CL_var1 by a 32-bit L_var3. The resulting 64-bit product for each part is rounded, saturated and 32-bit MSB of 64-bit result are returned.<br/>The following code snippet describes the operations performed on real & imaginary part of a complex number:<br/>`CL_result.re = Mpy_32_32_r(CL_var1.re, L_var2);`<br/>`CL_result.im = Mpy_32_32_r(CL_var1.im, L_var3);` |
-| `CL_multr_32x32(CL_var1, CL_var2)` | Complex multiplication of CL_var1 and CL_var2. Multiplication is in fractional mode. Both input and outputs are in 1Q31 format.<br/>The following code snippet describes the performed operations:<br/>`W_tmp1 = W_mult_32_32(CL_var1.re, CL_var2.re);`<br/>`W_tmp2 = W_mult_32_32(CL_var1.im, CL_var2.im);`<br/>`W_tmp3 = W_mult_32_32(CL_var1.re, CL_var2.im);`<br/>`W_tmp4 = W_mult_32_32(CL_var1.im, CL_var2.re);`<br/><br/>`CL_res.re = W_round64_L( W_sub (W_tmp1, W_tmp2));`<br/>`CL_res.im = W_round64_L( W_add (W_tmp3, W_tmp4));` |
-| `C_mac_r(CL_var1, C_var2, var3)` | Multiplies real and imaginary part of C_var2 by var3 and shifts the result left by 1. Adds the 32-bit result to CL_var1 with saturation. Rounds the 16 least significant bits of the result into the 16 most significant bits with saturation and shifts the result right by 16. Returns a 16-bit complex result.<br/>`C_result = CL_round32_16( CL_add( Cl_var1, C_scale(C_var2, var3) ) );` |
-| `C_msu_r(CL_var1, C_var2, var3)` | Multiplies real and imaginary part of C_var2 by var3 and shifts the result left by 1. Subtracts the 32-bit result from CL_var1 with saturation. Rounds the 16 least significant bits of the result into the 16 most significant bits with saturation and shifts the result right by 16. Returns a 16-bit complex result.<br/>`C_result = CL_round32_16( CL_sub( Cl_var1, C_scale(C_var2, var3) ) );` |
-| `CL_round32_16( CL_var1)` | Rounds the lower 16 bits of the 32-bit complex number CL_var1 into the most significant 16 bits with saturation. Shifts the resulting bits right by 16 and returns the 16-bit complex number.<br/>If real and imaginary of CL_var1 is in 1Q31 format, then the result returned will be rounded and saturated to 1Q15 format. |
+| `CL_scale_32(CL_var1, L_var2)` | Multiplies the real and imaginary parts of a 32-bit complex number CL_var1 by a 32-bit L_var2.<br/>The resulting 64-bit product for each part is rounded, saturated and 32-bit MSB of 64-bit result are returned.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = Mpy_32_32_r(CL_var1.re, L_var2);`<br/>`CL_result.im = Mpy_32_32_r(CL_var1.im, L_var2);` |
+| `CL_dscale_32(CL_var1, L_var2, L_var3)` | Multiplies the real parts of a 32-bit complex number CL_var1 by a 32-bit L_var2 and imaginary parts of a 32-bit complex number CL_var1 by a 32-bit L_var3. The resulting 64-bit product for each part is rounded, saturated and 32-bit MSB of 64-bit result are returned.<br/>The following code snippet describes the operations performed on the real and the imaginary parts of a complex number:<br/>`CL_result.re = Mpy_32_32_r(CL_var1.re, L_var2);`<br/>`CL_result.im = Mpy_32_32_r(CL_var1.im, L_var3);` |
+| `CL_multr_32x32(CL_var1, CL_var2)` | Complex multiplication of CL_var1 and CL_var2. Multiplication is in fractional mode. Both input and outputs are in 1Q31 format.<br/>The following code snippet describes the performed operations:<br/>`W_tmp1 = W_mult_32_32(CL_var1.re, CL_var2.re);`<br/>`W_tmp2 = W_mult_32_32(CL_var1.im, CL_var2.im);`<br/>`W_tmp3 = W_mult_32_32(CL_var1.re, CL_var2.im);`<br/>`W_tmp4 = W_mult_32_32(CL_var1.im, CL_var2.re);`<br/><br/>`CL_res.re = W_round64_L(W_sub(W_tmp1, W_tmp2));`<br/>`CL_res.im = W_round64_L(W_add(W_tmp3, W_tmp4));` |
+| `C_mac_r(CL_var1, C_var2, var3)` | Multiplies real and imaginary parts of C_var2 by var3 and shifts the result left by 1. Adds the 32-bit result to CL_var1 with saturation. Rounds the 16 least significant bits of the result into the 16 most significant bits with saturation and shifts the result right by 16. Returns a 16-bit complex result.<br/>`C_result = CL_round32_16(CL_add(Cl_var1, C_scale(C_var2, var3)));` |
+| `C_msu_r(CL_var1, C_var2, var3)` | Multiplies real and imaginary parts of C_var2 by var3 and shifts the result left by 1. Subtracts the 32-bit result from CL_var1 with saturation. Rounds the 16 least significant bits of the result into the 16 most significant bits with saturation and shifts the result right by 16. Returns a 16-bit complex result.<br/>`C_result = CL_round32_16(CL_sub(Cl_var1, C_scale(C_var2, var3)));` |
+| `CL_round32_16(CL_var1)` | Rounds the lower 16 bits of the 32-bit complex number CL_var1 into the most significant 16 bits with saturation. Shifts the resulting bits right by 16 and returns the 16-bit complex number.<br/>If the real and the imaginary parts of CL_var1 are in 1Q31 format, then the result returned will be rounded and saturated to the 1Q15 format. |
 | `C_Extract_real(C_var1)` | Returns the real part of a 16-bit complex number C_var1. |
 | `C_Extract_imag(C_var1)` | Returns the imaginary part of a 16-bit complex number C_var1. |
 | `C_scale(C_var1,var2)` | Multiplies the real and imaginary parts of a 16-bit complex number C_var1 by a 16-bit var2. Returns 32-bit complex number. |
 | `C_negate(C_var1)` | Negates the 16-bit complex number, saturates and returns a 16-bit complex number. |
 | `C_conjugate(C_var1)` | Negates only the imaginary part of a 16-bit complex number C_var1 with saturation. No change in the real part. |
-| `C_shr(C_var1, var2)` | Arithmetically shifts right the real and imaginary parts of the 16-bit complex number C_var1 by var2 positions.<br/>If var2 is negative, real and imaginary parts of C_var1 are shifted to the most significant bits by (-var2) positions with 16-bit saturation control.<br/>If var2 is positive, real and imaginary parts of C_var1 are shifted to the least significant bits by (var2) positions with sign extension. |
-| `C_shl(C_var1,var2)` | Arithmetically shifts left the real and imaginary parts of the 16-bit complex number C_var1 by var2 positions.<br/>If var2 is negative, real and imaginary parts of C_var1 are shifted to the least significant bits by (-var2) positions with sign extension.<br/>If var2 is positive, real and imaginary parts of C_var1 are shifted to the most significant bits by (var2) positions with 16-bit saturation control. |
+| `C_shr(C_var1, var2)` | Arithmetically shifts right the real and imaginary parts of the 16-bit complex number C_var1 by var2 positions.<br/>If var2 is negative, the real and imaginary parts of C_var1 are shifted to the most significant bits by (-var2) positions with 16-bit saturation control.<br/>If var2 is positive, the real and imaginary parts of C_var1 are shifted to the least significant bits by (var2) positions with sign extension. |
+| `C_shl(C_var1,var2)` | Arithmetically shifts left the real and imaginary parts of the 16-bit complex number C_var1 by var2 positions.<br/>If var2 is negative, the real and imaginary parts of C_var1 are shifted to the least significant bits by (-var2) positions with sign extension.<br/>If var2 is positive, the real and imaginary parts of C_var1 are shifted to the most significant bits by (var2) positions with 16-bit saturation control. |
 
 ### n.8) Basic operators for control operation
 
@@ -598,7 +598,7 @@ Variable definitions:
 | `EQ_64(W_var1, W_var2)` | Returns 1 if 64-bit variable W_var1 is equal to 64-bit variable W_var2, else returns 0. |
 
 
-The Basic Operators module is supplemented by two tools: one to evaluate program ROM complexity for fixed-point code, and another to evaluate complexity (including program ROM) of floating-point implementations.
+The basic operators module is supplemented by two tools: one to evaluate program ROM complexity for fixed-point code, and another to evaluate complexity (including program ROM) of floating-point implementations.
 
 ### n.9) Program ROM estimation tool for fixed-point C code
 
@@ -608,7 +608,7 @@ Associated header file: None.
 
 Usage: `basop cnt input.c [result_file_name.txt]`
 
-The basop_cnt tool estimates the program ROM of applications written using the ITU-T Basic Operator libraries. It counts the number of calls to basic operators in the input C source file, and also the number of calls to user‑defined functions. The sum of these two numbers gives an estimation of the required PROM.
+The basop_cnt tool estimates the program ROM of applications written using the ITU-T basic operators libraries. It counts the number of calls to basic operators in the input C source file, and also the number of calls to user‑defined functions. The sum of these two numbers gives an estimation of the required PROM.
 
 ### n.10) Complexity evaluation tool for floating-point C code
 
@@ -616,7 +616,7 @@ Name: `flc.c`
 
 Associated header file: `flc.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |-----------|--------------------------------------------------------------|
@@ -632,7 +632,7 @@ Name: `reverb-lib.c`
 
 Associated header file: `reverb-lib.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 | --- | --- |
@@ -645,7 +645,7 @@ Name: `trunc-lib.c`
 
 Associated header file: `trunc-lib.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
@@ -657,10 +657,10 @@ Name: `fft.c`
 
 Associated header file: `fft.h`
 
-Functions included:
+The functions included are as follows.
 
 |||
 |---------------------|-----------------------------------------------------------|
-| `rdft` | Discrete Fourier Transform for real signals. |
+| `rdft` | Discrete Fourier transform for real signals. |
 | `genHanning` | Hanning window generation routine. |
 | `powSpect` | Power spectrum computation routine. |
