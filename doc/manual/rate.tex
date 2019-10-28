@@ -10,7 +10,7 @@
 % Feb.2000 - Convergence towards STL2000
 % Nov.2000 - SG16 Plenary
 % Feb.2001 - Edits in example section
-% Apr.2005 - STL2005 revision -- Cyril Guillaumé & Stephane Smith
+% Apr.2005 - STL2005 revision -- Cyril Guillaumï¿½ & Stephane Smith
 % Nov 2009 - STL2009 revision -- Adrien Cormier, Claude Lamblin and Yusuke Hiwasaki
 %=============================================================================
 \chapter{RATE-CHANGE: Up- and down-sampling module}
@@ -90,11 +90,8 @@ STL, three different groups of characteristics were defined:
                super-wideband videoconferencing terminals
                 has been derived as an extension of ITU-T Rec. P.341.}\\*[5mm]
  $\bullet$ \parbox[t]{140mm}{
-               {\bf PCM quality}: Change in rate accompanied with
-               modification of the frequency response of
-               the input signal according to the mask specified
-               in \textcolor{blue}{Recommendation ITU-T} G.712. This is accomplished
-               with a non-linear phase low-pass IIR filter.}\\
+   {\bf PCM quality}: Change in rate accompanied with modification of the frequency response of the input signal according to the mask specified in Recommendation ITU-T G.712.
+   This is accomplished with a non-linear phase low-pass IIR filter.}\\
 \end{minipage}
 
 
@@ -138,7 +135,7 @@ Linear phase is guaranteed if the filter is symmetric, i.e.:
 \subsubsection{IRS weighting}
 
 The IRS weighting corresponds to a bandpass filtering characteristic
-whose mask can be found in \textcolor{blue}{Recommendation ITU-T} P.48 \cite{P.48}.
+whose mask can be found in Recommendation ITU-T P.48 \cite{P.48}.
 The send and receive spectral shapes of the IRS weighting were
 obtained in a round-robin series of measurements made on a number of
 analog telephones in the early 1970's
@@ -159,8 +156,7 @@ Because the P.48 IRS weighting used to be considered to model an
 average narrow-band telephone handset deployed in the PSTN, the IRS
 weighting has been chosen to simulate speech signals obtained from a
 regular handset. Examples of standardization efforts using the P.48
-weighting characteristic are the \textcolor{blue}{Recommendations
-  ITU-T} G.711,
+weighting characteristic are the Recommendations ITU-T G.711,
 G.721, and G.728. This weighting, as defined in P.48, is sometimes
 called ``full-IRS'' weighting.
 
@@ -175,9 +171,9 @@ the coder is located in the telephone handset, a better
 characteristic can be obtained by modifying the P.48 full-IRS
 response to remove the SRAEN filter as shown in columns 5 and 6 of
 Table \ref{tbl:IRS}. These values are specified in Annex D of
-\textcolor{blue}{ITU-T Recommendation} P.830 \cite{P.830} and define the so-called
+ITU-T Recommendation P.830 \cite{P.830} and define the so-called
 ``modified'' IRS weighting. The modified IRS has been used in the
-development of \textcolor{blue}{Recommendations ITU-T} G.723.1 and G.729.
+development of Recommendations ITU-T G.723.1 and G.729.
 
 \begin{table}
 \Caption{14cm}{\SF \label{tbl:IRS} Send and receive amplitude
@@ -254,7 +250,7 @@ one of the available FIR IRS implementations. Therefore, the IRS
 filters are implemented as FIR filters, as depicted in Figure
 \ref{FIR-filter}.
 
-\textcolor{blue}{Recommendation ITU-T} P.48 presents the nominal values for the
+Recommendation ITU-T P.48 presents the nominal values for the
 amplitude response in column 2 of its Table 1 (here reproduced in
 column 2 of Table \ref{tbl:IRS}) and then the upper and lower
 tolerances listed in its Table 2. For the STL approach, it was decided
@@ -283,7 +279,7 @@ frequency and impulse responses for the filter.
 
 While the IRS filter is applicable to telephony bandwidth (or
 narrowband) speech, for wideband speech the specification for the send
-and receive sides is given in \textcolor{blue}{Recommendation ITU-T} P.341
+and receive sides is given in Recommendation ITU-T P.341
 \cite{P.341}. The mask specified in P.341 is rather wide, and an
 implementation of the send-side mask agreed on by the experts has been
 incorporated in the STL.
@@ -335,8 +331,7 @@ responses are also given in Figures \ref{LP1p5-ir}, \ref{LP35-ir},
 Two weighting filters are available in this version of the STL,
 the psophometric and the $\Delta_{SM}$ weighting filters.
 
-The psophometric weighting curve defined by
-\textcolor{blue}{Recommendation ITU-T} O.41
+The psophometric weighting curve defined by Recommendation ITU-T O.41
 is used for measuring the noise level in telephone circuits,
 accounting for the subjective perception of noise. The psophometric
 noise measure (given in dBmp) is related to the North-American
@@ -372,11 +367,9 @@ described before, cannot be used for arbitrary rate ratio conversion.
 
 There are applications requiring the simulation of the response of
 filters found in the A/D and D/A interfaces of current transmission
-systems, which are in general PCM systems satisfying
-\textcolor{blue}{Recommendation ITU-T} 
-G.711. The filters associated with G.711 are specified in Recommendation
-\textcolor{blue}{ITU-T} G.712 \cite{G.712}. The main characteristic of these filters is the
-low out-of-band rejection of 25 dB.
+systems, which are in general PCM systems satisfying Recommendation ITU-T G.711.
+The filters associated with G.711 are specified in Recommendation ITU-T G.712 \cite{G.712}.
+The main characteristic of these filters is the low out-of-band rejection of 25 dB.
 
 %------------------ Begin of parallel-form IIR filter --------------------
 \begin{figure}[h]

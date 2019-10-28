@@ -16,81 +16,48 @@
 %==============================================================================
 \chapter{Introduction}
 
-In July 1990, Study Group XV of the then CCITT (Comit\'e Consultatif
-International T\'el\'ephonique et T\'el\'egraphique) decided to set up
-a group to deal with the development of common software tools to help
-in the development of speech coding standards. In the same period,
-cooperation was requested with SG XII Speech Quality Experts Group
-(SQEG), and a group called `{U}ser's Group on Software Tools' (UGST)
-was initially established with almost 20 corresponding members. The
-basic means of interaction were the then incipient electronic mail
-(e-mail) messages, for the exchange of files and experiences -- UGST
-was actually one of the pioneer groups in ITU collaborating via
-electronic means. In addition to this, there were meetings held mainly
-during regular Working Party XV/2 (Signal Processing) sessions, where
-most of the decisions were made.
+In July 1990, Study Group XV of the then CCITT (Comit\'e Consultatif International T\'el\'epho\-nique et T\'el\'egraphique) decided to set up a group to deal with the development of common software tools to help in the development of speech coding standards.
+In the same period, cooperation was requested with SG XII Speech Quality Experts Group (SQEG), and a group called `{U}ser's Group on Software Tools' (UGST) was initially established with almost 20 corresponding members.
+The basic means of interaction were the then incipient electronic mail (e-mail) messages, for the exchange of files and experiences -- UGST was actually one of the pioneer groups in ITU collaborating via electronic means.
+In addition to this, there were meetings held mainly during regular Working Party XV/2 (Signal Processing) sessions, where most of the decisions were made.
 
-As result of that very intensive work, several software tools evolved
-forming the `{\em 1992 ITU-T Software Tool Library}' (STL92) which
-included, as its first application, the Qualification Test for a
-Speech Coder at 8 kbit/s. After this initial release, another release
-was approved by ITU-T Study Group 15 in May, 1996, and called
-STL96. The STL96 introduced substantive improvement and new features
-to the STL92. In November 2000, ITU-T Study Group 16 approved an
-updated version to the STL, the STL2000. In 2005, another updated
-version of the STL, STL2005, was accepted.  In 2009, a new version of
-the STL, ({\bf STL2009}) was developed. STL2009 corrects bugs and
-brings revisions (such as G.722 codec software, basic operators
-C-code, or reverberation tool), and adds new tools (more FIR filters,
-new EID tool, basic operator counters, floating-point complexity
-counters, and a stereo operator tool). Note that for STL2009 release,
-non-ASCII (American Standard Code for Information Interchange) encoded
-characters were substituted by ones in ASCII, for wider compiler
-portability. A potential bug related to memory leak in
-\texttt{ugst-demo.h} possibly caused by very long filenames is
-fixed. All files that make use of \texttt{GET\_PAR\_C()} macro is
-affected. STL2009 is described in this document. Terms and
-conditions on the usage of the ITU-T STL are found in
-\textcolor{blue}{Recommendation ITU-T} G.191 \cite{G.191}.
+As result of that very intensive work, several software tools evolved forming the `{\em 1992 ITU-T Software Tool Library}' (STL92) which
+included, as its first application, the Qualification Test for a Speech Coder at 8 kbit/s.
+After this initial release, another release was approved by ITU-T Study Group 15 in May, 1996, and called STL96.
+The STL96 introduced substantive improvement and new features to the STL92.
+In November 2000, ITU-T Study Group 16 approved an updated version to the STL, the STL2000.
+In 2005, another updated version of the STL, STL2005, was accepted.
 
-The remaining chapters of this document describe the principles that
-guided the generation of the ITU-T STL, as well as the description of its
-organization. The various tools are described in separate chapters. These
-descriptions have the following general outline:
+In 2009, a new version of the STL, STL2009 was developed.
+STL2009 corrects bugs and brings revisions (such as G.722 codec software, basic operators C-code, or reverberation tool), and adds new tools (more FIR filters, new EID tool, basic operator counters, floating-point complexity counters, and a stereo operator tool).
+Note that for STL2009 release, non-ASCII (American Standard Code for Information Interchange) encoded characters were substituted by ones in ASCII, for wider compiler portability.
+A potential bug related to memory leak in \texttt{ugst-demo.h} possibly caused by very long filenames is fixed.
+All files that make use of \texttt{GET\_PAR\_C()} macro is affected.
+
+Approved in January 2019 under the responsibility of ITU-T Study Group 12, STL2019 incorporated new basic operators to accommodate state-of-the-art processor architectures which supports wide accumulators, SIMD (Single Instruction Multiple Data) and VLIW (Very Long Instruction Word).
+Thus the new operators provide support for 64-bit accumulator, complex numbers, as well as enhanced 32-bit operations and additional control code operators.
+The software package was reworked to make it available as a truly open-source project hosted on an open-source collaboration platform: \url{https://www.github.com/openitu/STL}.
+
+The STL2019 build toolchain is using CMake to generate platform-dependent and tool-dependent build scripts as well as to execute regression tests for each module in the STL.
+STL2019 modules have been tested on Windows, MacOS and several Linux flavors.
+
+Terms and conditions on the usage of the ITU-T STL are found in Recommendation ITU-T G.191 \cite{G.191}.
+
+The remaining chapters of this document describe the principles that guided the generation of the ITU-T STL, as well as the description of its organization.
+The various tools are described in separate chapters.
+These descriptions have the following general outline:
 
 \rulex{5mm} a. \parbox[t]{140mm}{
                technical description of the method or algorithm involved;}
 
 \rulex{5mm} b. \parbox[t]{140mm}{
-               description of the algorithm implementation in this
-               release (including prototypes, parameters, returned value,
-               etc.); and }
+               description of the algorithm implementation in this release (including prototypes, parameters, returned value, etc.); and }
 
 \rulex{5mm} c. \parbox[t]{140mm}{
                testing, applications and examples.}
 
-All the STL2000 modules had their portability tested for
-MS-DOS/Windows and several Unix flavors. In MS-DOS, all modules were
-tested with the MS-DOS port of the GNU {\tt gcc} compiler (a.k.a.
-DJCPP) and with at least one of these Borland compilers: Turbo C
-2.0, Turbo C++ 2.0, or Borland C++ 3.1. In the Windows environment,
-the code was tested using MS Visual C version 6.1 SP3 as well as
-using the gcc compiler available in the Cygnus CYGWIN development
-environment ({\tt \url{www.cygnus.com}}). The VAX/VMS environment
-was fully supported in the STL96 (VAXC and gcc), however it was not
-possible to continue it for the STL2000 due to operational reasons;
-nevertheless, compilation under gcc should provide the expected
-results, and some tools were tested for Ultrix. For the Unix
-operating system, portability was verified for three workstation
-platforms: Sun Solaris 5.7 (SPARC or Intel CPUs, using gcc), HP 9000
-Series 700 HP-UX 9.05 or 10.20 (using gcc), and Silicon Graphics. On
-Silicon Graphics
-systems, the standard cc compiler was used. \\
-The tools of the STL2005 were compiled and tested with a Windows 
-environment using MS Visual C++ 6.0.
-The new tools and the revised portions of the STL2009 were compiled and tested with a
-Windows environment using MS Visual C++ 8.0, and in Cygwin with gcc
-(version 3.4.4).
+
+
 
 %-----------------------------------------------------------------------------
 \section{Organization of the Software Library}
@@ -102,86 +69,58 @@ the present version, there are several of these modules:
 
 \begin{quote}
 \begin{enumerate}
-\item {\bf G.711}: The 64 kbit/s PCM algorithm with A and $\mu$ law of
-  ITU-T Rec. G.711.
+\item {\bf G.711}: The 64 kbit/s PCM algorithm with A and $\mu$ law of ITU-T Rec. G.711.
 
-\item {\bf G.711-PLC}: The high-quality, low complexity packet-loss
-  concealment specified in ITU-T Rec. G.711 Appendix I.
+\item {\bf G.711-PLC}: The high-quality, low complexity packet-loss concealment specified in ITU-T Rec. G.711 Appendix I.
 
-\item {\bf G.726}: 40, 32, 24, and 16 kbit/s ADPCM algorithm of ITU-T
-  Rec. G.726.
+\item {\bf G.726}: 40, 32, 24, and 16 kbit/s ADPCM algorithm of ITU-T Rec. G.726.
 
-\item {\bf G.727}: 40, 32, 24, and 16 kbit/s embedded ADPCM
-  algorithm of ITU-T Rec. G.727.
+\item {\bf G.727}: 40, 32, 24, and 16 kbit/s embedded ADPCM algorithm of ITU-T Rec. G.727.
  
-\item {\bf G.728}: Low-delay CELP algorithm at 16~kbit/s of ITU-T
-  Rec. G.728 \emph{(new in STL2009)}.
+\item {\bf G.728}: Low-delay CELP algorithm at 16~kbit/s of ITU-T Rec. G.728.
 
-\item {\bf G.722}: 64, 56, and 48 kbit/s wideband speech ADPCM
-  algorithm of ITU-T Rec. G.722 \emph{(revised in STL2009)}.
+\item {\bf G.722}: 64, 56, and 48 kbit/s wideband speech ADPCM algorithm of ITU-T Rec. G.722.
 
-\item {\bf RPE-LTP}: The 13 kbit/s RPE-LTP algorithm of the full-rate
-  GSM system (GSM Rec. 06.10).
+\item {\bf RPE-LTP}: The 13 kbit/s RPE-LTP algorithm of the full-rate GSM system (GSM Rec. 06.10).
         
-\item {\bf RATE-CHANGE:} An up- and down-sampling algorithm with
-  embedded filtering:
+\item {\bf RATE-CHANGE:} An up- and down-sampling algorithm with embedded filtering:
   \begin{itemize}
   \item ITU-T Rec. G.712 filter for factors of 1:2, 2:1 and 1:1
   \item High-quality filter for factors 1:2, 2:1, 1:3, and 3:1
-  \item IRS send-side weighting filter, for several sampling rates: 8,
-    16, and 48 kHz. This includes the ``full-IRS'' as in ITU-T
-    Rec. P.48 as well as the ``modified'' IRS as in Annex D of ITU-T
-    Rec. P.830.
-  \item Modified-IRS receive-side filter is also available for
-    8 and 16 kHz sampled data.
+  \item IRS send-side weighting filter, for several sampling rates: 8, 16, and 48 kHz. This includes the ``full-IRS'' as in ITU-T Rec. P.48 as well as the ``modified'' IRS as in Annex D of ITU-T Rec. P.830.
+  \item Modified-IRS receive-side filter is also available for 8 and 16 kHz sampled data.
   \item $\Delta_{SM}$ weighting filter for near-to-far field conversion
-  \item Psophometric weighting filter of ITU-T Rec. O.41 for noise
-    measurements
+  \item Psophometric weighting filter of ITU-T Rec. O.41 for noise measurements
   \item ITU-T P.341 weighting filter for wideband signal (50-7000 Hz)
   \item  100-5000 Hz bandpass filter
-  \item  50-14000 Hz bandpass filter (P341 extension for
-    super-wideband signal)
-  \item  20-20000 Hz bandpass filter \emph{(new in STL2009)}
-  \item MUSHRA anchors (1.5~kHz, 3.5~kHz, 7~kHz, 10~kHz, 12~kHz
-    and 14~kHz low-pass filters) \emph{(new in STL2009)}.
+  \item  50-14000 Hz bandpass filter (P341 extension for super-wideband signal)
+  \item  20-20000 Hz bandpass filter
+  \item MUSHRA anchors (1.5~kHz, 3.5~kHz, 7~kHz, 10~kHz, 12~kHz and 14~kHz low-pass filters).
   \end{itemize}
 
-\item {\bf EID}: Error insertion algorithm, with routines for
-  generation of bit error patterns (random or burst) as well as random
-  and burst frame erasure, and adaptation to layered bitstream
-  \emph{(revised in STL2009)}.
+\item {\bf EID}: Error insertion algorithm, with routines for generation of bit error patterns (random or burst) as well as random and burst frame erasure, and adaptation to layered bitstream.
 
-\item {\bf MNRU}: The modulated noise reference unit of ITU-T
-  Rec. P.810 (formerly ITU-T Rec. P.81).
+\item {\bf MNRU}: The modulated noise reference unit of ITU-T Rec. P.810 (formerly ITU-T Rec. P.81).
 
-\item {\bf SVP56}: The Speech Voltmeter for measuring the active
-  speech level (which skips over silence in a utterance) of ITU-T
-  Rec. P.56.
+\item {\bf SVP56}: The Speech Voltmeter for measuring the active speech level (which skips over silence in a utterance) of ITU-T Rec. P.56.
         
-\item {\bf REVERB}: Tool to add reverberation to both mono and stereo
-  speech and audio \emph{(revised in STL2009)}.
+\item {\bf REVERB}: Tool to add reverberation to both mono and stereo speech and audio.
         
 \item {\bf TRUNCATE}: Bitstream truncation tool.
         
-\item {\bf FREQRESP}: Frequency response measurement tool
-  \emph{(revised in STL2009)}.
+\item {\bf FREQRESP}: Frequency response measurement tool.
         
-\item {\bf STEREOOP}: Stereo processing tool \emph{(new in STL2009)}.
+\item {\bf STEREOOP}: Stereo processing tool.
         
-\item {\bf BASOP}: The set of basic digital signal processing (DSP)
-  operators that represent the set of instructions typically available
-  in digital signal processors \emph{(revised in STL2009, added new
-  basic-operator counters for program ROM estimation, and
-  floating-point complexity counter)}.
+\item {\bf BASOP}: The set of basic digital signal processing (DSP) operators that represent instructions typically available in digital signal processors \emph{(revised in STL2019)}.
         
-\item {\bf UTILITIES}: Tools that have been developed to assure proper
-  interfacing between the various tools. These tools do not relate to
-  any ITU-T Recommendation. Included are tools for conversion between
-  float and short data representations, between parallel and serial
-  (bit-stream) formats, and for scaling of data.
+\item {\bf UTILITIES}: Tools that have been developed to assure proper interfacing between the various tools.
+These tools do not relate to any ITU-T Recommendation.
+Included are tools for conversion between float and short data representations, between parallel and serial (bit-stream) formats, and for scaling of data.
 
 \end{enumerate}
 \end{quote}
+
 It should be noted that C code is available for a number of codecs as
 a normative part of the respective standards, e.g. ITU-T G.711.0,
 G.711.1, G.718, G.719, G.722.1, G.722.2, G.723.1, G.729, G.729.1,
@@ -196,126 +135,62 @@ appropriate SDO.
 
 \section{Whom to contact}
 
-In case of problems with any of the tools, please contact the ITU-T
-Study Group 16 secretariat at {\tt <tsbsg16@itu.int>}. Please provide
-a precise description of the problem with proper reference to the
-C-code, and possible solution(s), if known.
+In case of problems with any of the tools, please contact the ITU-T Study Group 12 secretariat at {\tt <tsbsg12@itu.int>}.
+Please provide a precise description of the problem with proper reference to the C-code, and possible solution(s), if known.
 
 \section{Acknowledgements}
 
-Several organizations which participate in ITU-T Study Groups 12, 15
-and 16 have substantially contributed to the completion of this
-release of the ITU-T STL.
+Several organizations which participate in ITU-T Study Groups 12, 15 and 16 have substantially contributed to the completion of this release of the ITU-T STL.
 
-First and foremost, UGST wishes to thank CPqD/Telebr\'as (Brazil)
-for its support of the early coordination (1990-1993) of the
-activity and of the development of the following tools: Utilities,
-G.711, G.726, MNRU, and SVP56. For the first two, the work was
-shared with PKI (Germany), which also provided the initial version
-of the modules EID and RATE-CHANGE, as well as basic material that
-supported the initial organization of the work, together with
-Telenor (formerly NTA, Norway) and the DBP-Telekom (Germany).
-DBP-Telekom also collaborated in providing several software tools
-used in the Host Laboratory for the ITU-T 8 kbit/s speech coder:
-modified IRS filters, adaptation of the Bellcore burst frame erasure
-model, and $\Delta_{SM}$ filter. UGST also wants to thank CSELT
-(Italy) for making available its Fortran MNRU program, which was the
-starting point of the present implementation, and for the
-implementation of the psophometric filter.
-%
-CNET (France) provided the G.722 tool, which was greatly
-appreciated. UGST kindly thanks Mr~Jutta Deneger for allowing the
-incorporation of his implementation of the RPE-LTP algorithm in the
-STL. Also, Bellcore provided several programs in Fortran and C that,
-while not used directly in the present version of the STL, were
-important in various stages of the development of the Library,
-especially a version of the Red Book G.721.
-%
-PTT Ukraine graciously provided the G.727 implementation, which was
-warmly welcomed. 
-%
-COMSAT Labs (subsequently, part of Lockheed Martin Global
-Telecommunications, LMGT), in turn, provided essential help in funding
-the coordination work and the harmonization and
-documentation of the tools during an important consolidation period (1994-2001). 
-Also important was the testing work done by the Research Institute of
-the Deutsche Telekom (now T-Nova/DT), as well as PKI, Telebr\'{a}s,
-AT\&T (USA), and CNET.
+First and foremost, UGST wishes to thank CPqD/Telebr\'as (Brazil) for its support of the early coordination (1990-1993) of the activity and of the development of the following tools: Utilities, G.711, G.726, MNRU, and SVP56.
+For the first two, the work was shared with PKI (Germany), which also provided the initial version of the modules EID and RATE-CHANGE, as well as basic material that supported the initial organization of the work, together with Telenor (formerly NTA, Norway) and the DBP-Telekom (Germany).
 
-Several parts of this manual were possible only by the contribution of
-several individuals: Mr~Pierre Combescure (CNET) for the description
-of the G.722 algorithm, Mr~Rudolf Hofmann (PKI), for description the
-Gilbert-Elliot channel implemented in the EID module, Mr~Peter Kroon
-(AT\&T) for the description of the RPE-LTP algorithm, and Mr~Vijay
-Varma (Bellcore) for the text describing the Bellcore Burst Error
-Model.
+DBP-Telekom also collaborated in providing several software tools used in the Host Laboratory for the ITU-T 8 kbit/s speech coder: modified IRS filters, adaptation of the Bellcore burst frame erasure model, and $\Delta_{SM}$ filter.
+UGST also wants to thank CSELT (Italy) for making available its Fortran MNRU program, which was the starting point of the present implementation, and for the implementation of the psophometric filter.
 
-Since 2003, several companies have jointly worked on the Basic
-Operators revision and an alternative set addition: Texas Instruments,
-Conexant Systems, STMicroelectronics, Hughes Software Systems, France
-Telecom, and VoiceAge. Besides this work on Basic Operators, ITU-T
-Q7/12 and Q10/16 experts work on the addition of new tools. France
-Telecom and Polycom have provided essential contributions in these
-STL2005 works. Special thanks to ITU-T Q7/12 rapporteurs, Mr~Paolo
-Usai (ETSI) and Ms~Catherine Quinquis (France Telecom), ITU-T Q10/16
-STL work moderators (2004-2008), Mr~Karim Djafarian (Texas
-Instruments) and Mr~St\'{e}phane Ragot (France Telecom). France
-Telecom also provided great support for the management of Q10/16,
-responsible for the up-keeping of the STL since 2002.
+CNET (France) provided the G.722 tool, which was greatly appreciated.
 
-The following persons have contributed to the 2005 edition of this
-manual: Mr~Karim Djafarian (Texas Instruments) to the edition of the
-Basic Operators chapter, Mr~Claude Marro (France Telecom) to the
-chapter on the reverberation tool, Mr~Cyril Guillaum\'{e} (on behalf
-of France Telecom) to chapters on the frequency response measurement
-tool and the bitstream truncation tool, Mr~David Kapilow (AT\&T) to
-the chapter of G.711 PLC.
+UGST kindly thanks Mr~Jutta Deneger for allowing the incorporation of his implementation of the RPE-LTP algorithm in the STL.
 
-For the release of STL2009, EID-EV tool and new 20~Hz to 20~kHz
-bandpass filter were prepared by Mr~Jonas Svedberg (Ericsson). The
-revision of G.722 tool to introduce basic PLC options, G.192 bitstream
-and basic operators was performed by Mr~Jonas Svedberg (Ericsson) and
-Mr~Balazs Kovesi (France Telecom Orange). The stereo measured impulse
-responses for the reverberation tool were provided by Mr~David
-Virette and Mr~Claude Marro (France Telecom Orange) while the
-simulated fullband impulse response was provided by Mr~Minjie Xie
-(Polycom). Thanks goes to Mr~Balazs Kovesi (France Telecom Orange)
-for developing the program ROM evaluation counters and to Mr~Tommy
-Vaillancourt, Mr~Vaclav Eksler, and Mr~Vladimir Malenovsky
-(VoiceAge) for introducing floating-point complexity counters. For the
-new anchor 12~kHz low-pass filters, there was a contribution from
-Mr~Miao Lei (Huawei Technologies). Special thanks to Mr~Hans
-Gierlich, ITU-T Q6/12 Rapporteur, for providing the guidelines on
-test signals suitable for the frequency response measurement
-tool. Revision of frequency response measurement tool was performed by
-Mr~Pierre Berthet (on behalf of France Telecom Orange) and Mr~Deming
-Zhang (Huawei Technologies). The G.728 C-source code both in fixed-
-and floating-point arithmetics was kindly provided by Mr~David
-Kapilow (AT\&T). Some useful examples were added on usage of basic
-operators and Mr~Noboru Harada (NTT) and Mr~Karim Djafarian (Texas
-Instruments) should be thanked for this work. Mr~Adrien Cormier
-(France Telecom Orange) reviewed STL manual chapters and tools. Mr~Xu
-Jianfeng (Huawei) should also be thanked for his assistance in
-compilation of the new STL2009 tool packages. Last but not least, it
-should be mentioned that this release was only possible owing greatly
-to Ms~Claude Lamblin (France Telecom Orange), ex-Q10/16 Rapporteur
-and WP3/16 Chair. She has devoted a lot of time revising the manual
-text for STL2009 release, and above all, took all the responsibility
-in releasing STL2005.
+Also, Bellcore provided several programs in Fortran and C that, while not used directly in the present version of the STL, were important in various stages of the development of the Library, especially a version of the Red Book G.721.
 
-\textcolor{blue}{%
-  In the release of STL2014, the updates to dynamic RAM counting tool
-  and basic operator counters were made by kind devotion by Mr~Balazs
-  Kovesi (France Telecom Orange). He should also be acknowledged for
-  the creation of the new file comparison tool. Mr~Shigeaki Sasaki
-  (NTT) should be recognized for the MS-LR conversions in the stereo
-  file operations. Ms~Claude Lamblin should be thanked for once again
-  contributing to the cross-checks of the new STL2014 manual.
-%
-}
+PTT Ukraine graciously provided the G.727 implementation, which was warmly welcomed.
 
-Above all, special thank goes to ITU-T SG16 Counselor Mr~Sim\~ao
-Ferraz de Campos Neto, the ``father'' of the STL.
+COMSAT Labs (subsequently, part of Lockheed Martin Global Telecommunications, LMGT), in turn, provided essential help in funding the coordination work and the harmonization and documentation of the tools during an important consolidation period (1994-2001).
+
+Also important was the testing work done by the Research Institute of the Deutsche Telekom (now T-Nova/DT), as well as PKI, Telebr\'{a}s, AT\&T (USA), and CNET.
+
+Several parts of this manual were possible only by the contribution of several individuals: Mr~Pierre Combescure (CNET) for the description of the G.722 algorithm, Mr~Rudolf Hofmann (PKI), for description the Gilbert-Elliot channel implemented in the EID module, Mr~Peter Kroon (AT\&T) for the description of the RPE-LTP algorithm, and Mr~Vijay Varma (Bellcore) for the text describing the Bellcore Burst Error Model.
+
+Since 2003, several companies have jointly worked on the Basic Operators revision and an alternative set addition: Texas Instruments, Conexant Systems, STMicroelectronics, Hughes Software Systems, France Telecom, and VoiceAge.
+
+Besides this work on Basic Operators, ITU-T Q7/12 and Q10/16 experts work on the addition of new tools.
+France Telecom and Polycom have provided essential contributions in these STL2005 works.
+
+Special thanks to ITU-T Q7/12 rapporteurs, Mr~Paolo Usai (ETSI) and Ms~Catherine Quinquis (France Telecom), ITU-T Q10/16 STL work moderators (2004-2008), Mr~Karim Djafarian (Texas Instruments) and Mr~St\'{e}phane Ragot (France Telecom).
+France Telecom also provided great support for the management of Q10/16, responsible for the up-keeping of the STL since 2002.
+
+The following persons have contributed to the 2005 edition of this manual: Mr~Karim Djafarian (Texas Instruments) to the edition of the Basic Operators chapter, Mr~Claude Marro (France Telecom) to the chapter on the reverberation tool, Mr~Cyril Guillaum\'{e} (on behalf of France Telecom) to chapters on the frequency response measurement tool and the bitstream truncation tool, Mr~David Kapilow (AT\&T) to the chapter of G.711 PLC.
+
+For the release of STL2009, EID-EV tool and new 20~Hz to 20~kHz bandpass filter were prepared by Mr~Jonas Svedberg (Ericsson).
+The revision of G.722 tool to introduce basic PLC options, G.192 bitstream and basic operators was performed by Mr~Jonas Svedberg (Ericsson) and Mr~Balazs Kovesi (France Telecom Orange).
+The stereo measured impulse responses for the reverberation tool were provided by Mr~David Virette and Mr~Claude Marro (France Telecom Orange) while the simulated fullband impulse response was provided by Mr~Minjie Xie (Polycom).
+Thanks goes to Mr~Balazs Kovesi (France Telecom Orange) for developing the program ROM evaluation counters and to Mr~Tommy Vaillancourt, Mr~Vaclav Eksler, and Mr~Vladimir Malenovsky (VoiceAge) for introducing floating-point complexity counters.
+For the new anchor 12~kHz low-pass filters, there was a contribution from Mr~Miao Lei (Huawei Technologies).
+Special thanks to Mr~Hans Gierlich, ITU-T Q6/12 Rapporteur, for providing the guidelines on test signals suitable for the frequency response measurement tool.
+Revision of frequency response measurement tool was performed by Mr~Pierre Berthet (on behalf of France Telecom Orange) and Mr~Deming Zhang (Huawei Technologies).
+The G.728 C-source code both in fixed- and floating-point arithmetics was kindly provided by Mr~David Kapilow (AT\&T).
+Some useful examples were added on usage of basic operators and Mr~Noboru Harada (NTT) and Mr~Karim Djafarian (Texas Instruments) should be thanked for this work.
+Mr~Adrien Cormier (France Telecom Orange) reviewed STL manual chapters and tools.
+Mr~Xu Jianfeng (Huawei) should also be thanked for his assistance in compilation of the new STL2009 tool packages.
+Last but not least, it should be mentioned that this release was only possible owing greatly to Ms~Claude Lamblin (France Telecom Orange), ex-Q10/16 Rapporteur and WP3/16 Chair.
+She has devoted a lot of time revising the manual text for STL2009 release, and above all, took all the responsibility in releasing STL2005.
+
+The new basic operators in STL1019 were kindly contributed by 3GPP SA4.
+The work leading to the release of STL2019, including the migration of the STL to an open-source environment; the development of a new build toolchain; the integration of new base operators; and the update of this manual, was performed by Mr Dennis Guse and Mr Ludovic Malfait (Dolby Laboratories).
+Other GitHub contributors to STL2019 were Mr Thomas Schlien (RWTH Aachen University), Mr Sim\~ao Ferraz de Campos Neto (ITU), and Mr Martin Adolph (ITU).
+
+Above all, special thank goes to ITU-T SG16 Counselor Mr~Sim\~ao Ferraz de Campos Neto, the ``father'' of the STL.
 
 %=============================================================================
 \chapter{Tutorial}
@@ -356,7 +231,7 @@ Several acronyms are used in this text. The most relevant are:
 \item[STL2000] ITU-T Software Tools Library, release 2000.
 \item[STL2005] ITU-T Software Tools Library, release 2005.
 \item[STL2009] ITU-T Software Tools Library, release 2009.
-\item[STL2018] ITU-T Software Tools Library, release 2018.
+\item[STL2019] ITU-T Software Tools Library, release 2019.
 \item[UGST]  Users' Group on Software Tools, of ITU-T Study Group 16.
 \end{Descr}
 

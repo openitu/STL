@@ -17,9 +17,8 @@ operations tool was developed and introduced in STL2009. This stereo
 processing tool provides the basic functionalities of interleaving
 single channel files, splitting stereo files into single channel
 files, and creating specific single channel down-mix signals from a
-given stereo input. \textcolor{blue}{In STL2014 release, this tool was
-revised to incorporate mid-side (MS) stereo conversion from a
-standard left-right (LR) format.}
+given stereo input.
+%\textcolor{blue}{In STL2014 release, this tool was revised to incorporate mid-side (MS) stereo conversion from a standard left-right (LR) format.}
 
 \section{Description of the algorithm}
 
@@ -35,10 +34,8 @@ and provides the following functionalities:
   energy analysis file (a single channel analysis signal for stereo
   scene level evaluation purposes).
 \item Down-mixing a two-channel file into a single channel mono file
-\item \textcolor{blue}{Converting a two-channel stereo file into two
-    mid- and side-files, and reverse conversion from two MS files into
-    a two-channel stereo file. This operation also can change the power of
-    the files.}
+% $\item \textcolor{blue}{Converting a two-channel stereo file into two mid- and side-files, and reverse conversion from two MS files into a two-channel stereo file.
+% This operation also can change the power of the files.}
 \end{itemize}
 
 Figure~\ref{fig:stereoopFig1} illustrates the functionality that
@@ -50,9 +47,8 @@ illustrates the functionality that down-mixes a two-channel file into
 a maximum channel energy analysis file. Figure~\ref{fig:stereoopFig4}
 illustrates the functionality that down-mixes a two-channel file into
 a single channel mono
-file. \textcolor{blue}{Figures~\ref{fig:stereoopFig5} and \ref{fig:stereoopFig6}
-illustrate the conversions between one single two-channel stereo file
-and a mid- and a side-channle files.}
+file.
+% \textcolor{blue}{Figures~\ref{fig:stereoopFig5} and \ref{fig:stereoopFig6} illustrate the conversions between one single two-channel stereo file and a mid- and a side-channle files.}
 
 \begin{figure}[htp]
     \begin{center}
@@ -86,23 +82,23 @@ and a mid- and a side-channle files.}
            \label{fig:stereoopFig4} }
 \end{figure}
 
-\begin{figure}[htp]
-    \begin{center}
-        \includegraphics[scale=0.5]{stereoopFig5.pdf}
-  \end{center}
-  \caption{\textcolor{blue}{%
-      Converting a two-channel file into a mid- and a side-channel mono files.}
-           \label{fig:stereoopFig5} }
-\end{figure}
+%\begin{figure}[htp]
+%    \begin{center}
+%        \includegraphics[scale=0.5]{stereoopFig5.pdf}
+%  \end{center}
+%  \caption{\textcolor{blue}{%
+%      Converting a two-channel file into a mid- and a side-channel mono files.}
+%           \label{fig:stereoopFig5} }
+%\end{figure}
 
-\begin{figure}[htp]
-    \begin{center}
-        \includegraphics[scale=0.5]{stereoopFig6.pdf}
-  \end{center}
-  \caption{\textcolor{blue}{%
-      Converting a mid- and a side-channel files into a two-channel file.}
-           \label{fig:stereoopFig6} }
-\end{figure}
+%\begin{figure}[htp]
+%    \begin{center}
+%        \includegraphics[scale=0.5]{stereoopFig6.pdf}
+%  \end{center}
+%  \caption{\textcolor{blue}{%
+%      Converting a mid- and a side-channel files into a two-channel file.}
+%           \label{fig:stereoopFig6} }
+%\end{figure}
 
 This set of stereo operation functionalities, in combination with the
 existing STL tools which work on the single channel files, provides a
@@ -130,7 +126,8 @@ order.
 {\tt {\small
 \#include "ugstdemo.h"\\
 enum Mode{ NONE = -1,INTER, SPLIT, LEFT, RIGHT, MAXENVAL, MONO,
-\textcolor{blue}{MSCONV, IMSCONV,} N\_MODES };\\
+%\textcolor{blue}{MSCONV, IMSCONV,}
+N\_MODES };\\
 int main (int argc, char *argv[]);
 }}
 
@@ -171,17 +168,17 @@ stereoop & -mono     & infile.stereo.2ch & outfile.mono.1ch &  \\
 \end{tabular} 
 }}
 
-\textcolor{blue}{
-\subsubsection{Command line syntax for MS stereo operations}
-}
-\textcolor{blue}{
-{\tt {\small
-\begin{tabular}{llllll}
-stereoop & -msconv  & [-mult G] & infile.stereo.2ch & outfile.M.1ch & outfile.S.1ch \\ 
-stereoop & -imsconv & [-mult G] & infile.M.1ch & infile.S.1ch & outfile.stereo.2ch \\
-\end{tabular} 
-}}
-}
+%\textcolor{blue}{
+%\subsubsection{Command line syntax for MS stereo operations}
+%}
+%\textcolor{blue}{
+%{\tt {\small
+%\begin{tabular}{llllll}
+%stereoop & -msconv  & [-mult G] & infile.stereo.2ch & outfile.M.1ch & outfile.S.1ch \\
+%stereoop & -imsconv & [-mult G] & infile.M.1ch & infile.S.1ch & outfile.stereo.2ch \\
+%\end{tabular}
+%}}
+%}
 
 \subsubsection{``stereoop -maxenval'' detailed operation}
 
@@ -220,60 +217,60 @@ Pseudo code
   WriteSample(OutputSingleChannelFile, round(output));
 \end{verbatim}}
 
-\textcolor{blue}{
-\subsubsection{``stereoop -msconv'' detailed operation}
-The pseudo code below shows the tool operation when performing the LR-
-to MS-stereo conversion. The output mid- and side- sample mono value
-is (left + right) * Gain and (left - right) * Gain (both rounded to a
-short value), respectively. The default value of Gain is 0.5, unless
-specified with a {\tt -mult} option. It should be noted that due to
-the rounding, the LR-MS conversion may introduce some degradation.
-}
-
-\textcolor{blue}{
-Pseudo code
-}
-{\tt\small
-\begin{verbatim}
-  Gain = 0.5;
-
-  [left, right] = ReadSamples(InputStereoChannelFile);
-
-  m_output = ((double)left + (double)right) * Gain;
-  s_output = ((double)left - (double)right) * Gain;
-
-  WriteSample(OutputMChannelFile, round(m_output));
-  WriteSample(OutputSChannelFile, round(s_output));
-\end{verbatim}
-}
-
-\textcolor{blue}{
-\subsubsection{``stereoop -imsconv'' detailed operation}
-The pseudo code below shows the tool operation when performing the MS-
-to LR-stereo conversion. The output mid- and side- sample mono value
-is (left + right) * Gain and (left - right) * Gain (both rounded to a
-short value), respectively. The default value of Gain is 1.0, unless
-specified with a {\tt -mult} option. It should be noted that due to
-the rounding, the MS-LR conversion may introduce some degradation.
-}
-
-\textcolor{blue}{
-Pseudo code
-}
-{\tt\small
-\begin{verbatim}
-
-  Gain = 1.0;
-
-  mid_input  = ReadSamples(InputMChannelFile);
-  side_input = ReadSamples(InputSChannelFile);
-
-  left_output  = ((double)mid_input + (double)side_input) * Gain;
-  right_output = ((double)mid_input - (double)side_input) * Gain;
-
-  WriteSample(OutputStereoChannelFile, round([lef_output, right_output]);
-\end{verbatim}
-}
+%\textcolor{blue}{
+%\subsubsection{``stereoop -msconv'' detailed operation}
+%The pseudo code below shows the tool operation when performing the LR-
+%to MS-stereo conversion. The output mid- and side- sample mono value
+%is (left + right) * Gain and (left - right) * Gain (both rounded to a
+%short value), respectively. The default value of Gain is 0.5, unless
+%specified with a {\tt -mult} option. It should be noted that due to
+%the rounding, the LR-MS conversion may introduce some degradation.
+%}
+%
+%\textcolor{blue}{
+%Pseudo code
+%}
+%{\tt\small
+%\begin{verbatim}
+%  Gain = 0.5;
+%
+%  [left, right] = ReadSamples(InputStereoChannelFile);
+%
+%  m_output = ((double)left + (double)right) * Gain;
+%  s_output = ((double)left - (double)right) * Gain;
+%
+%  WriteSample(OutputMChannelFile, round(m_output));
+%  WriteSample(OutputSChannelFile, round(s_output));
+%\end{verbatim}
+%}
+%
+%\textcolor{blue}{
+%\subsubsection{``stereoop -imsconv'' detailed operation}
+%The pseudo code below shows the tool operation when performing the MS-
+%to LR-stereo conversion. The output mid- and side- sample mono value
+%is (left + right) * Gain and (left - right) * Gain (both rounded to a
+%short value), respectively. The default value of Gain is 1.0, unless
+%specified with a {\tt -mult} option. It should be noted that due to
+%the rounding, the MS-LR conversion may introduce some degradation.
+%}
+%
+%\textcolor{blue}{
+%Pseudo code
+%}
+%{\tt\small
+%\begin{verbatim}
+%
+%  Gain = 1.0;
+%
+%  mid_input  = ReadSamples(InputMChannelFile);
+%  side_input = ReadSamples(InputSChannelFile);
+%
+%  left_output  = ((double)mid_input + (double)side_input) * Gain;
+%  right_output = ((double)mid_input - (double)side_input) * Gain;
+%
+%  WriteSample(OutputStereoChannelFile, round([lef_output, right_output]);
+%\end{verbatim}
+%}
 
 \section{Tests and Portability}
 The stereoop tool example code has been evaluated under
