@@ -8,13 +8,8 @@
 
 \section{Description of the Algorithm}
 
-The specification for the measurement of the active level of speech
-signals is given in Recommendation ITU-T P.56
-\cite{P.56}\textcolor{blue}{\cite{P.56-rev}}, and is commonly referred as {\em speech
-  voltmeter}\footnote{\SF After the British Telecom and Malden Ltd.'s
-  SV6 Speech Voltmeter.}. Besides the description above, there is
-complementary information in the ITU-T {\em Handbook on Telephony}
-\cite{Hndbk-tel}, section on `Measurement of Speech'.
+The specification for the measurement of the active level of speech signals is given in Recommendation ITU-T P.56 \cite{P.56}\cite{P.56-rev}, and is commonly referred as {\em speech voltmeter}\footnote{\SF After the British Telecom and Malden Ltd.'s SV6 Speech Voltmeter.}.
+Besides the description above, there is complementary information in the ITU-T {\em Handbook on Telephony} \cite{Hndbk-tel}, section on `Measurement of Speech'.
 
 In summary, the P.56 algorithm takes samples of a signal in the speech
 bandwidth and calculates its active speech level. This means that
@@ -57,11 +52,8 @@ re-equalizations should be discarded.
 Another operating assumption for the P.56 Recommendation suggests that
 the input signal be band-limited (300--3400 Hz for telephony band
 signals and 100--7000 Hz for wideband signals, as given in Table 3 and
-Figure 2 of P.56. \textcolor{blue}{The revision of P.56 made in
-2011~\cite{P.56-rev} now states that the input signal should be
-bandlimited to 50 -- 14000~Hz for superwideband signals and 20 --
-20000~Hz for fullband signals, as given in Annexes B and C,
-respectively.}
+Figure 2 of P.56.
+The revision of P.56 made in 2011~\cite{P.56-rev} now states that the input signal should be bandlimited to 50 -- 14000~Hz for superwideband signals and 20 -- 20000~Hz for fullband signals, as given in Annexes B and C, respectively.
 
 The speech voltmeter algorithm is expressed in terms of discrete
 operations. Because of this, a minimum sampling frequency must be

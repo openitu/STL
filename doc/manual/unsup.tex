@@ -1,14 +1,10 @@
 
 \chapter{Unsupported tools}
 
-This Appendix to the ITU-T Software Tool Library (STL) Manual
-describes the unsupported tools provided in the ITU-T
-STL. \textcolor{blue}{The tools are named as ``unsupported'' because
-they do not follow the initial modularity concept of STL.} These
-tools are provided ``as is'' and without any warranties or implied
-suitability to use. However, any feedback on problems with these tools
-will be welcome and accomodated as possible, as will any improvements
-made which can be shared and incorporated in the STL.
+This Appendix to the ITU-T Software Tool Library (STL) Manual describes the unsupported tools provided in the ITU-T STL.
+The tools are named as ``unsupported'' because they do not follow the initial modularity concept of STL.
+These tools are provided ``as is'' and without any warranties or implied suitability to use.
+However, any feedback on problems with these tools will be welcome and accomodated as possible, as will any improvements made which can be shared and incorporated in the STL.
 
 
 \section{Source code}
@@ -50,16 +46,6 @@ made which can be shared and incorporated in the STL.
         can be specified in value and length, or can be taken
         from a user-specified file. For Unix/MSDOS.
 
-\textcolor{blue}{%
-\item[filcom\_w16.c:]
-  compares 16-bit integer files, giving on the following information:
-  file sizes, the location of the first difference, the largest
-  difference, histogram of the first N difference value, global and
-  segmental SNR, and block location of the lowest/highest SNR. For
-  Unix/MSDOS.
-%
-}
-
 \item[g728-vt:]
             a directory with software tools for use with the G.728
             floating-point verification package. Not all tools are
@@ -92,27 +78,15 @@ made which can be shared and incorporated in the STL.
            word of the input file. For Unix/MSDOS.
 
 \item[sine.c:]
-        generate a sinewave file for a given speco of
-        AC/DC/phase/ frequency/sampling frequency values. For
-        VMS/Unix/MSDOS.
+        generate a sinewave file for a given speco of AC / DC / phase / frequency / sampling frequency values.
+        For VMS/Unix/MSDOS.
 
 \item[signal-diff.c:]
-        subtract/add files (depending on the compilation, see
-        makefiles). For VMS/Unix/MSDOS.
+        subtract/add files (depending on the compilation, see makefiles). For VMS/Unix/MSDOS.
 
 %\item[\textcolor{blue}{stereoop.c}] \textcolor{blue}{Basic
 %        stereo operations on 16-bit audio files. The functionalities
 %        include: }
-
-\item[xencode.c:]
-        uuencode compatible with auto-break/sequencing for
-        long files and CRC calculation for error
-        detection. Not functional under MSDOS 6.22.
-
-\item[xdecode.c:]
-        uudecode compatible with auto-break/sequencing for
-        long files and CRC calculation for error
-        detection. Not functional under MSDOS 6.22.
 
 \item[g729e\_convert\_synch.c:]
         convert G.192 word oriented analysis 
@@ -122,42 +96,13 @@ made which can be shared and incorporated in the STL.
 \end{Descr}
 
 
-\section{Scripts}
-%~~~~~~~~~~~~~~~~
-
-\begin{Descr}{40mm}
-\item[rm.bat]
-                ``fake'' deletion utility that tries to emulate the
-        basic functionality of the Unix command {\tt rm}, that
-        deletes multiple files specified in the command
-        line. Should be put in the path, unless
-        a version of {\tt rm} is already available.
-\item[swapover.bat]
-                MSDOS batch script for byte-swapping multiple
-                files. Uses sb.c.
-\item[swapover.sh]
-                Unix script for byte-swapping multiple files. Uses sb.c.
-\end{Descr}
-
-\section{Makefiles}
-%~~~~~~~~~~~~~~~~~~
-
-\begin{Descr}{40mm}
-\item[makefile.tcc] for Borland [bt]cc C/C++ compiler
-\item[makefile.djc] for MSDOS djc port of gcc
-\item[makefile.unx] for Unix make
-\item[makefile.cl]      for MS Visual C command-line compiler
-\end{Descr}
-
-
 \section{Test files}
 %~~~~~~~~~~~~~~~~~~~
 
 \begin{Descr}{40mm}
-\item[tstunsup.zip]
-                zip archive with test files for testing some of the
-                unsupported tools: \\
-        {\tt\begin{verbatim}
+\item[unsup/test\_data]
+Test files for testing some of the unsupported tools: \\
+    {\tt\begin{verbatim}
    cf:
      3200    cftest1.dat
      3200    cftest2.dat
@@ -172,13 +117,5 @@ made which can be shared and incorporated in the STL.
       100    bigend.src
       100    litend.src
 
-   xencode and xdecode:
-     9182    voice.ori
-     8705    voice.uue
-     2093    printme.eps
-     3795    printme.uue
-     5368    voice01.uue
         \end{verbatim}}
-                It is necessary to have unzip/pkunzip/Winzip installed
-                for extraction.
 \end{Descr}
