@@ -303,7 +303,7 @@ int main (int argc, char *argv[]) {
 
   /* Allocate sample buffer */
   if ((buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error allocating memory for data buffer - aborting\n", 5);
+    error_terminate ("Error allocating memory for data buffer - aborting\n", 5);
 
   /* Define sample size */
   samplesize = sizeof (short);

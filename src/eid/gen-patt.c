@@ -568,7 +568,7 @@ int main (int argc, char *argv[]) {
     FIND_PAR_D (6, "_Burst erasure rate (0.005 .. 0.30) ..............: ", ber_rate, ber_rate);
     /* Check if a proper percentage was provided */
     if ((ber_rate < 0.005) || (ber_rate > 0.30))
-      HARAKIRI (" You need to specify a proper BFER. Aborted.\n", 5);
+      error_terminate (" You need to specify a proper BFER. Aborted.\n", 5);
 
     /* Get index for Bellcore model; verify */
     /* index 1..60 * corresponding to .5% to 30% */
@@ -578,7 +578,7 @@ int main (int argc, char *argv[]) {
       ber_rate = (((double) index) / 200.0);
     }
     if (check_bellcore (index) == 0)
-      HARAKIRI ("Invalid percentage for Bellcore model\n", 5);
+      error_terminate ("Invalid percentage for Bellcore model\n", 5);
     break;
   }
 
@@ -587,12 +587,12 @@ int main (int argc, char *argv[]) {
 
   /* Check consistency */
   if (start_frame > number_of_frames)
-    HARAKIRI ("*** Start frame is higher than number of frames. Aborted.\n", 1)
+    error_terminate ("*** Start frame is higher than number of frames. Aborted.\n", 1)
       else
   if (start_frame == 0)
-    HARAKIRI ("*** Start frame should be greater than zero (i.e. at least 1). Aborted.\n", 9);
+    error_terminate ("*** Start frame should be greater than zero (i.e. at least 1). Aborted.\n", 9);
   if (ber_rate < 0)
-    HARAKIRI ("*** You need to specify a BER/FER/BFER. Aborted.\n", 5);
+    error_terminate ("*** You need to specify a BER/FER/BFER. Aborted.\n", 5);
   if (tolerance >= 0) {
 
 
@@ -629,7 +629,7 @@ int main (int argc, char *argv[]) {
    **  Open output file
    */
   if ((out_file_ptr = fopen (data_file_name, WB)) == NULL)
-    HARAKIRI ("Could not create output file\n", 1);
+    error_terminate ("Could not create output file\n", 1);
   out = fileno (out_file_ptr);
 
   /*
@@ -645,7 +645,7 @@ int main (int argc, char *argv[]) {
 
       /* Setup new EID */
       if ((BEReid = open_eid (BER, BER_gamma)) == (SCD_EID *) 0) {
-        HARAKIRI ("Couldn't create EID for bit errors\n", 1);
+        error_terminate ("Couldn't create EID for bit errors\n", 1);
       }
     } else
       fprintf (stderr, "%s %s: BER=%.2f%% Gamma=%.2f%%\n", "Using BER/Gamma from EID-state file", state_file, BER * 100, BER_gamma * 100);
@@ -662,7 +662,7 @@ int main (int argc, char *argv[]) {
       /* Setup new EID */
       FER = ber_rate;
       if ((FEReid = open_eid (FER, FER_gamma)) == (SCD_EID *) 0) {
-        HARAKIRI ("Couldn't create EID for frame errors\n", 1);
+        error_terminate ("Couldn't create EID for frame errors\n", 1);
       }
     } else
       fprintf (stderr, "%s %s: FER=%.2f%% Gamma=%.2f%%\n", "Using FER/Gamma from EID-state file", state_file, FER * 100, FER_gamma * 100);
@@ -678,13 +678,13 @@ int main (int argc, char *argv[]) {
 
       /* Setup new EID */
       if ((burst_eid = open_burst_eid (index)) == (BURST_EID *) 0) {
-        HARAKIRI ("Couldn't create EID for burst frame errors\n", 1);
+        error_terminate ("Couldn't create EID for burst frame errors\n", 1);
       }
     }
 
     break;
   default:
-    HARAKIRI ("Wrong mode parameter. Allowed values are R,F,B\n", 1);
+    error_terminate ("Wrong mode parameter. Allowed values are R,F,B\n", 1);
     break;
   }
 
@@ -693,7 +693,7 @@ int main (int argc, char *argv[]) {
    */
   error_pat = (short *) calloc (EID_BUFFER_LENGTH, sizeof (short));
   if (error_pat == (short *) 0) {
-    HARAKIRI ("Could not allocate memory for error pattern buffer\n", 1);
+    error_terminate ("Could not allocate memory for error pattern buffer\n", 1);
   }
 
   /*
@@ -750,7 +750,7 @@ int main (int argc, char *argv[]) {
 
           items = save_data (error_pat, k, out_file_ptr);
           if (items < 0)
-            HARAKIRI ("Error saving data to file\n", 8);
+            error_terminate ("Error saving data to file\n", 8);
           generated += items;
         }
 
@@ -765,7 +765,7 @@ int main (int argc, char *argv[]) {
           /* Save data to file according to the defined format */
           items = save_data (error_pat, k, out_file_ptr);
           if (items < 0)
-            HARAKIRI ("Error saving data to file\n", 8);
+            error_terminate ("Error saving data to file\n", 8);
 
           /* Update counters */
           disturbed += ber1;
@@ -807,7 +807,7 @@ int main (int argc, char *argv[]) {
           /* Save intermediate data in buffer */
           items = save_data (error_pat, k, out_file_ptr);
           if (items < 0)
-            HARAKIRI ("Error saving data to file\n", 8);
+            error_terminate ("Error saving data to file\n", 8);
 
           /* Update counters */
           disturbed += ber1;

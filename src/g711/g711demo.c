@@ -301,23 +301,23 @@ int main (int argc, char *argv[]) {
   inp_type = toupper (lilo[1]) == 'O' ? IS_LOG : IS_LIN;
   out_type = toupper (lilo[3]) == 'O' ? IS_LOG : IS_LIN;
   if ((out_type == IS_LOG) && (inp_type == IS_LOG))
-    HARAKIRI ("log. to log. makes no sense! Aborted...\n", 8);
+    error_terminate ("log. to log. makes no sense! Aborted...\n", 8);
 
   /* Classification of law */
   law[0] = toupper (law[0]);
   if ((law[0] != (char) 'A') && (law[0] != (char) 'U'))
-    HARAKIRI (" Invalid law!\n", 7);
+    error_terminate (" Invalid law!\n", 7);
 
   /* .......... ALLOCATION OF BUFFERS .......... */
 
   if ((lin_buff = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for input buffer\n", 10);
+    error_terminate ("Can't allocate memory for input buffer\n", 10);
 
   if ((log_buff = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for output buffer\n", 10);
+    error_terminate ("Can't allocate memory for output buffer\n", 10);
 
   if ((lon_buff = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for temporary buffer\n", 10);
+    error_terminate ("Can't allocate memory for temporary buffer\n", 10);
 
 
   /* .......... FILE OPERATIONS .......... */

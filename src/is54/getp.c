@@ -71,19 +71,19 @@ void getParams (FILE * fpget) {
     fprintf (stderr, "\nEnter input speech file: ");
     fscanf (fpget, "%s", filename);
     if ((fpin = fopen (filename, RB)) == NULL)
-      HARAKIRI ("***ERROR Input File Specification\n", 2);
+      error_terminate ("***ERROR Input File Specification\n", 2);
   }
 
   fprintf (stderr, "\nEnter output speech file: ");
   fscanf (fpget, "%s", filename);
   if ((fpout = fopen (filename, WB)) == NULL)
-    HARAKIRI ("***ERROR Output File Specification\n", 1);
+    error_terminate ("***ERROR Output File Specification\n", 1);
 
   if (decode_only && fpcode == NULL) {
     fprintf (stderr, "\nEnter input bit-stream file: ");
     fscanf (fpget, "%s", filename);
     if ((fpcode = fopen (filename, "r")) == NULL)
-      HARAKIRI ("***ERROR Code File Specification\n", 1);
+      error_terminate ("***ERROR Code File Specification\n", 1);
   }
 
   if (makeLog || performMeas && fplog == NULL) {

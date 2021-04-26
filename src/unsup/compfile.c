@@ -558,7 +558,7 @@ int main (int argc, char *argv[]) {
     samplesize = sizeof (long);
     break;
   default:
-    HARAKIRI ("++==++==++ UNSUPPORTED DATA TYPE ++==++==++\007\n", 7);
+    error_terminate ("++==++==++ UNSUPPORTED DATA TYPE ++==++==++\007\n", 7);
   }
 
   /* Define 1st sample to compare */

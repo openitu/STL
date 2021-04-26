@@ -307,11 +307,11 @@ int main (argc, argv)
  */
 #ifndef STATIC_ALLOCATION
   if ((inp_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
   if ((out_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
   if ((tmp_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
 #endif
 
 
@@ -337,9 +337,9 @@ int main (argc, argv)
 
   /* ......... CREATE AND INIT GSM OBJECT (STATE VARIABLE) ......... */
   if (!(rpe_enc_state = rpeltp_init ()))
-    HARAKIRI ("Error creating state variable for encoder\n", 5);
+    error_terminate ("Error creating state variable for encoder\n", 5);
   if (!(rpe_dec_state = rpeltp_init ()))
-    HARAKIRI ("Error creating state variable for encoder\n", 5);
+    error_terminate ("Error creating state variable for encoder\n", 5);
 
 
   /* ......... PROCESSING ACCORDING TO GSM 06.10 RPE-LTP CODEC ......... */

@@ -204,7 +204,7 @@ long read_bit (short *patt, long n, FILE * F, char type) {
 
   /* Allocate memory */
   if ((bits = (char *) calloc (nbytes, sizeof (char))) == NULL)
-    HARAKIRI ("Cannot allocate memory to read compact binary bitstream\n", 6);
+    error_terminate ("Cannot allocate memory to read compact binary bitstream\n", 6);
 
   /* Reset memory to zero */
   memset (patt, 0, sizeof (short) * n);
@@ -298,7 +298,7 @@ long read_byte (short *patt, long n, FILE * F) {
 
   /* Allocate memory */
   if ((byte = (char *) calloc (n, sizeof (char))) == NULL)
-    HARAKIRI ("Cannot allocate memory to read data as byte bitstream\n", 6);
+    error_terminate ("Cannot allocate memory to read data as byte bitstream\n", 6);
 
   /* Read words from file */
   i = fread (byte, sizeof (char), n, F);
@@ -414,7 +414,7 @@ long save_bit (short *patt, long n, FILE * F) {
 
   /* Allocate memory */
   if ((bits = (char *) calloc (nbytes, sizeof (char))) == NULL)
-    HARAKIRI ("Cannot allocate memory to save compact binary bitstream\n", 6);
+    error_terminate ("Cannot allocate memory to save compact binary bitstream\n", 6);
 
   /* Reset memory to zero */
   memset (bits, 0, nbytes);
@@ -501,7 +501,7 @@ long save_byte (short *patt, long n, FILE * F) {
 
   /* Allocate memory */
   if ((byte = (char *) calloc (n, sizeof (char))) == NULL)
-    HARAKIRI ("Cannot allocate memory to save data as byte bitstream\n", 6);
+    error_terminate ("Cannot allocate memory to save data as byte bitstream\n", 6);
 
   /* Convert word16-oriented data to byte-oriented data */
   /* NO compliance verification is performed, for performance reasons */

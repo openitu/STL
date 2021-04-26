@@ -226,7 +226,7 @@ int main (int argc, char *argv[]) {
             break;
         }
         if (i == nil) {
-          HARAKIRI ("Invalid error pattern format type. Aborted\n", 5);
+          error_terminate ("Invalid error pattern format type. Aborted\n", 5);
         } else
           ep_format = i;
 
@@ -316,9 +316,9 @@ int main (int argc, char *argv[]) {
   /* Allocate memory for data buffers */
   /* ... master/interpolated error pattern */
   if ((ep = (short *) calloc (ep_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for master error pattern. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for master error pattern. Aborted.\n", 6);
   if ((epi = (short *) calloc (factor * ep_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for interpolated EP. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for interpolated EP. Aborted.\n", 6);
 
   /* Initiaize histogram state variable */
   init_ep_histogram (&master_eps, burst_len);

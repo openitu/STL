@@ -382,7 +382,7 @@ int main (int argc, char **argv) {
     law = '2';
     break;
   default:
-    HARAKIRI (" Invalid law (A, u, or L)! Aborted...\n", 7);
+    error_terminate (" Invalid law (A, u, or L)! Aborted...\n", 7);
   }
 
   /* Define correct data I/O types */
@@ -410,11 +410,11 @@ int main (int argc, char **argv) {
  */
 #ifndef STATIC_ALLOCATION
   if ((inp_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
   if ((out_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
   if ((tmp_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
 #endif
 
 /*

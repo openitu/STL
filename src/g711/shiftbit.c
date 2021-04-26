@@ -69,7 +69,7 @@ int main (int argc, char *argv[]) {
   GET_PAR_I (4, "Input file is Q.", qout);
 
   if (qout == qinp)
-    HARAKIRI ("Makes no sense a shift of 0 ... \n", 7)
+    error_terminate ("Makes no sense a shift of 0 ... \n", 7)
       else
   if (qout > qinp)
     dir = RIGHT;
@@ -92,7 +92,7 @@ int main (int argc, char *argv[]) {
 
   stat (inp, &info);
   if ((buf = (short *) malloc (info.st_size)) == NULL)
-    HARAKIRI ("Can't alloc inp\n", 4);
+    error_terminate ("Can't alloc inp\n", 4);
   l = info.st_size / 2;
 
   fprintf (stderr, "%s: Reading, ", inp);

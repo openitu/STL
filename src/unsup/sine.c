@@ -331,7 +331,7 @@ int main (int argc, char *argv[]) {
   /* Allocates memory */
 #ifndef STATIC_ALLOCATION
   if ((data = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 10);
+    error_terminate ("Error in memory allocation!\n", 10);
 #endif
 
   /* Creates output file */

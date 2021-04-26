@@ -36,7 +36,7 @@ int main (int argc, char *argv[]) {
 
   /* Check arguments */
   if (argc != 3)
-    HARAKIRI ("Usage is sh2chr shfile chrfile\n", 1);
+    error_terminate ("Usage is sh2chr shfile chrfile\n", 1);
 
   /* Open files */
   if (strcmp (argv[1], "-")) {

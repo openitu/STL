@@ -327,7 +327,7 @@ int main (int argc, char *argv[]) {
 
   /* Allocate memory */
   if ((smp_buf = (short *) calloc (N > delay ? N : delay, sizeof (short))) == NULL)
-    HARAKIRI ("Cannot allocate memory for buffer. Aborted.\n", 6);
+    error_terminate ("Cannot allocate memory for buffer. Aborted.\n", 6);
 
   /* Find starting byte in file */
   start_byte = sizeof (short) * (long) (--N1) * (long) N;
