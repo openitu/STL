@@ -1,0 +1,78 @@
+%%
+%%
+%% Revisions:
+%% Chapter: Date: Author: Description
+%% rate     JUN/92 Simao  Bug found (R.Hofman) on sample code at end of chapter
+%% g721     AUG/92 Simao  Suggested changes by M.Sheriff
+%% general  JAN/95 Simao
+%% rpeltp   FEB/95 Simao  Added
+%% g722     OCT/95 Simao  Added
+%% -        JAN/96 Simao  Created style file ugst.sty with common
+%%                        definitions; created environment Descr.
+%% -        APR/96 Simao  Eliminated ghostpage by changing the
+%%                        definition of the \maketitle command
+%%                        (see ugst.sty)
+%% -        Nov/00 Simao  STL2000 release - SG16
+%% -        Dec/00 Simao  Editorial review (my inputs)
+%% -        Mar/05 France Telecom STL2005 release
+%% -        Oct/25 Simao Campos review
+%% -	    Oct/08 France Telecom STL2009 release
+%% -	    Oct/09 Yusuke Hiwasaki STL2009 release
+%% -        Apr/18 Simao  Added path in preamble for including
+%%                        graphics (\includegraphics...}
+%% -
+%%
+%\documentstyle[12pt,a4,epsf]{book}
+\documentclass[12pt,a4paper]{book}
+
+\pagestyle{myheadings}
+
+% Special Parameters
+\evensidemargin           0mm
+\oddsidemargin            0mm
+\parindent                0mm
+\parskip                  2mm
+\textheight             250mm
+\textwidth              160mm
+%For postscript final deliverable
+\topmargin              -20mm
+% For PDF final deliverable via PS
+%\topmargin              0mm
+\topmargin              -10mm
+\addtolength{\itemsep}{-20pt}
+
+% Define headers
+\def\ugst_title{ ITU-T Software Tool Library, release 2019}
+\def\us{$\mu$s}
+\markboth{  \hspace{1cm} \hfill \ugst_title }%
+         { Version: \today \hfill \hspace{1cm} }
+
+\usepackage{txfonts} % for better Times fonts
+\usepackage{epsf}
+\usepackage[usenames]{color}
+\usepackage{array}
+%\usepackage[debugshow]{supertabular}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{cmap}
+\usepackage{ugst}
+\usepackage[bookmarks=true, bookmarksopen=true, bookmarksopenlevel=0, colorlinks=true, citecolor=red]{hyperref}
+%\usepackage[pdftex, linktocpage, bookmarks=true, bookmarksopen=true, bookmarksopenlevel=0, colorlinks=true, citecolor=MidnightBlue, linkcolor=MidnightBlue]{hyperref}
+\usepackage{epstopdf}
+\usepackage{ifpdf}
+\usepackage{framed}
+\graphicspath{{graphics/}}
+\usepackage{microtype}
+
+%==============================================================================
+\begin{document}
+%==============================================================================
+
+%=============================================================================
+% chapter bs1770demo:
+%=============================================================================
+\include{bs1770demo}
+
+\end{document}
