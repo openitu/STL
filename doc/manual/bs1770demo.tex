@@ -57,7 +57,7 @@ In both cases, the configuration is truncated to the number of channels. The con
 the function \texttt{parse\_conf} to form the vector of gain values \texttt{G[i]}.
 
 Since the step between each gating block is 100 ms, the energy is first computed for each 100 ms
-step and stored in the circular buffer \textbf{e\_tmp[4]} holding the last four values. For each
+step and stored in the circular buffer \texttt{e\_tmp[4]} holding the last four values. For each
 new gating block, the next 100 ms block is computed and then the energy of the gating block is found
 by summing the energy of the four sub-blocks. For the beginning of the file, the first gating block
 energy is computed only when the fourth sub-block is reached. This can be seen in the energy calculation

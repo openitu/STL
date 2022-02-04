@@ -61,12 +61,12 @@ void g_mod_nrg(
 \end{verbatim}
 }
 
-The \textbf{input} is the interleaved stereo signal read from file, \textbf{length} is the number
-of samples, \textbf{step} is the interval where new values of the modulation is considered and also
-the number of samples in the transition and \textbf{e\_step} is the allowed step size during high-energy
+The \texttt{input} is the interleaved stereo signal read from file, \texttt{length} is the number
+of samples, \texttt{step} is the interval where new values of the modulation is considered and also
+the number of samples in the transition and \texttt{e\_step} is the allowed step size during high-energy
 segments. High-energy segments of the input signal are defined as when the short-term energy estimate 
 $e_s(n)$ is above the long-term energy estimate $e_l(n)$. The energy of the input signal is first computed
-by the function \textbf{energy}.
+by the function \texttt{energy}.
 
 {\tt\small
 \begin{verbatim}
@@ -100,7 +100,7 @@ of the form:
 
 where $\beta$ is the low-pass filtering factor. The filtering is applied in forward and reversed time order
 on for both $e_s(n)$ and $e_l(n)$ to get a symmetric filtering of the energy values. This is implemented using
-the function \textbf{ar1}, where the last argument controls forward (1) or backward (-1) time order. Finally,
+the function \texttt{ar1}, where the last argument controls forward (1) or backward (-1) time order. Finally,
 a scaling of 0.77813 is applied to the long-term envelope $e_l(n)$ to lower it relative to short-term envelope 
 $e_s(n)$. 
 
@@ -135,9 +135,9 @@ The modulation may change at a step size of 1.5 ms. At each change point, a new 
 with a probility of 0.2. This is implemented by comparing a random number generator with 0.2. If the decision
 is taken to change level, the next level is generated as a random number in the range $[0,1.0]$. Next, if
 the current signal segment is considered to be a high-energy segment, the step towards the new random level is
-scaled with \textbf{e\_step}, effectively limiting the step-size during high-energy segments. By default, 
-\textbf{e\_step} is set to 0.5, which allows to go half-way to the new random level. If \textbf{e\_step} would
-be set to zero, the modulation function would not change at all during high energy segments. Finally, if \textbf{e\_step}
+scaled with \texttt{e\_step}, effectively limiting the step-size during high-energy segments. By default, 
+\texttt{e\_step} is set to 0.5, which allows to go half-way to the new random level. If \texttt{e\_step} would
+be set to zero, the modulation function would not change at all during high energy segments. Finally, if \texttt{e\_step}
 would be set to 1, the step size would not be limited at all during high energy segments.
 
 Once a new random value has been set, a cosine-shaped transition window is used to make a smooth transition to the
@@ -187,7 +187,7 @@ The modulation functions $g_4(n)$ and $g_5(n)$ may then be derived from $g\_mod\
   \]
   
 Once the modulation function has been generated, the spatial distortion is applied using the 
-function \textbf{apply\_spatial\_dist}.
+function \texttt{apply\_spatial\_dist}.
 
 
 \begin{figure}[htp]
