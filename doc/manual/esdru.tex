@@ -12,7 +12,7 @@
 
 Subjective listening tests benefit from having known quality references within
 the listening test material. For P.800 monaural listening tests, the MNRU has
-been widely adopted. Another example is BS.1536, where the anchor condition(s)
+been widely adopted. Another example is ITU-R Rec. BS.1534, where the anchor condition(s)
 are formed using a low pass filter. For testing stereo conditions, e.g. within
 P.811, it is beneficial to have the reference condition include the stereo or 
 spatial dimension. P.811 outlines two variants of a spatial distortion reference
@@ -21,6 +21,8 @@ unit (SDRU). Here, the ESDRU variant is described.
 
 
 \section{Description of the Algorithm}
+
+\todo{Add a valid reference for SDRU}
 
 An overview of the algorithm can be found in P.811 \cite{P.811}. The basis for
 the modulation is the same as for the SDRU \cite{SDRU}, and can be described by
@@ -63,7 +65,7 @@ void g_mod_nrg(
 
 The \texttt{input} is the interleaved stereo signal read from file, \texttt{length} is the number
 of samples, \texttt{step} is the interval where new values of the modulation is considered and also
-the number of samples in the transition and \texttt{e\_step} is the allowed step size during high-energy
+the number of samples in the transition, and \texttt{e\_step} is the allowed step size during high-energy
 segments. High-energy segments of the input signal are defined as when the short-term energy estimate 
 $e_s(n)$ is above the long-term energy estimate $e_l(n)$. The energy of the input signal is first computed
 by the function \texttt{energy}.
@@ -91,7 +93,7 @@ void energy(
 \end{verbatim}
 }
 
-The short-term and short-term energy envelopes are derived by applying a one-pole first order IIR-filter
+The short-term and long-term energy envelopes are derived by applying a one-pole first order IIR-filter
 of the form:
 
   \[
@@ -114,7 +116,7 @@ $e_s(n)$.
 \end{verbatim}
 }
 
-The same operation may also be written in MATLAB code as follows.
+The same operation may also be written in MATLAB code as follows:
 
 {\tt\small
 \begin{verbatim}
@@ -132,7 +134,7 @@ el = beta*filter(B,A,flipud(filter(B,A,flipud(es))));
 }
 
 The modulation may change at a step size of 1.5 ms. At each change point, a new value is chosen
-with a probility of 0.2. This is implemented by comparing a random number generator with 0.2. If the decision
+with a probability of 0.2. This is implemented by comparing a random number generator with 0.2. If the decision
 is taken to change level, the next level is generated as a random number in the range $[0,1.0]$. Next, if
 the current signal segment is considered to be a high-energy segment, the step towards the new random level is
 scaled with \texttt{e\_step}, effectively limiting the step-size during high-energy segments. By default, 
@@ -203,11 +205,11 @@ function \texttt{apply\_spatial\_dist}.
 
 
 
-\section{Usage of esdru.exe}
+\section{Usage of esdru}
 
 {\tt\small
 \begin{verbatim}
-esdru.exe [options] <alpha> <input file> <output file>
+esdru [options] <alpha> <input file> <output file>
 
 <alpha>           Alpha value [0.0 ... 1.0]
 <input file>      Input file, 16 bit Stereo PCM
