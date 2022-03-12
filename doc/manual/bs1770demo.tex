@@ -20,7 +20,7 @@ to obtain a desired dbLKFS level.
 \section{Description of the Algorithm}
 
 This example implementation follows the algorithm as described in \cite{BS1770}. The gating block
-energy is first computed, where each gating block is 400 ms and extracted with 75% overlap. This
+energy is first computed, where each gating block is 400 ms and extracted with 75\% overlap. This
 means the advancement step is 100 ms. According to \cite{BS1770}, incomplete gating blocks should
 be excluded from the computation. This means that the level measurement cannot be run for a signal
 that is shorter than one gating block, i.e. shorter than 400 ms.
@@ -50,7 +50,7 @@ channels and where each character corresponds to a position category according t
 \end{itemize}
 
 For example, a 5.1 configuration with [FL FR C LFE BL BR] may be configured with the string "000L11".
-Two default configuration strings are given, dependin on the number of channels. If the number of input
+Two default configuration strings are given, depending on the number of channels. If the number of input
 channels \texttt{nchan \textgreater 18}, the default configuration is "000L11000L11000000000000". If the 
 number of input channels \texttt{nchan \textless = 18}, the configuration is set to "000L1100011000000". 
 In both cases, the configuration is truncated to the number of channels. The configuration is parsed by
@@ -146,11 +146,11 @@ double find_scaling_factor(            /* o: scaling factor                 */
 
 
 
-\section{Usage of bs1770demo.exe}
+\section{Usage of bs1770demo}
 
 {\tt\small
 \begin{verbatim}
-bs1770demo.exe [options] <input file> [<output file>]
+bs1770demo [options] <input file> [<output file>]
 
 <input file>      Input file,  16 bit PCM, 48 kHz
 [<output file>]   Output file, 16 bit PCM, 48 kHz (Optional)
