@@ -54,7 +54,7 @@ for i=1:nchan
     tmp = tmp(:,1:M);
     z(i,:) = sum(tmp.^2);
 end
-l = sum(z .* (G * ones(1,M)))/BLOCK_SIZE;
+l = sum(z .* (G * ones(1,M)),1)/BLOCK_SIZE;
 
 [lev_in,lev_out,fac] = find_scaling_factor(l, lev_target);
 
