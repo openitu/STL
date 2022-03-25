@@ -285,7 +285,7 @@ int main(int argc, char **argv )
     {
         if( strcmp( argv[i], "-sf" ) == 0)
         {
-            if(sscanf( argv[i+1], "%d", &fs ) != 1)
+            if(sscanf( argv[i+1], "%ld", &fs ) != 1)
             {
                 fprintf(stderr, "Invalid sampling frequency %s, exiting..\n", argv[i + 1] );
                 usage();
@@ -365,7 +365,7 @@ int main(int argc, char **argv )
     fprintf( stdout, "alpha:            %f\n", alpha );
     fprintf( stdout, "e_step:           %f\n", e_step );
     fprintf( stdout, "seed:             %u\n", seed );
-    fprintf( stdout, "Sampling rate:    %d\n", fs );
+    fprintf( stdout, "Sampling rate:    %ld\n", fs );
 
     /* Set random seed */
     srand( seed );
@@ -389,10 +389,10 @@ int main(int argc, char **argv )
 
     fwrite( input_short, sizeof( short ), length * 2, f_output );
 
-    fprintf( stdout, "--> Done processing %d samples\n", length );
+    fprintf( stdout, "--> Done processing %ld samples\n", length );
     if (clip > 0)
     {
-        fprintf( stderr, "*** Warning: %d samples clipped\n", clip );
+        fprintf( stderr, "*** Warning: %ld samples clipped\n", clip );
     }
 
     fclose( f_input );
