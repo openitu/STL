@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/bash -x
 
-# 1) Download test files from http://www.itu.int/dms_pub/itu-r/oth/11/02/R11020000010030ZIPM.zip 
+# 1) Download test files from http://www.itu.int/dms_pub/itu-r/oth/11/02/R11020000010001ZIPM.zip 
 #    and put in the folder R11020000010001ZIPM
 # 2) Download test files from https://extranet.itu.int/rsg-meetings/sg6/wp6c/Share/Forms/Display%20View.aspx?RootFolder=%2Frsg%2Dmeetings%2Fsg6%2Fwp6c%2FShare%2F2016%2D2019%2F2016%2D10%20meeting%2FSWG%206C%2D3%20Audio%20Matters%20October%202016%2FDG3%2D1%20Loudness%2FAudio%20Files
 #    and put in the folder R11020000010001ZIPM 
 #
 # Requires - CopyAudio http://www-mmsp.ece.mcgill.ca/Documents/Downloads/AFsp/
-#          - bc
+#          - gawk
 
 INDIR=R11020000010001ZIPM
 
@@ -104,11 +104,11 @@ conf=(
 00
 000L110000
 000L11000000
-000L11000L11000000110000
+110L00000L11000000000000
 000L1100
 000L110000
 000L11000000
-000L11000L11000000110000
+110L00000L11000000000000
 000L1100
 )
 
@@ -121,12 +121,12 @@ target_level=(
 -23
 -23
 -23
+-Inf
 -23
 -23
 -23
 -23
 -23
--23
 -24
 -24
 -24
@@ -134,13 +134,13 @@ target_level=(
 -24
 -24
 -24
+-Inf
 -24
 -24
 -24
 -24
 -24
--24
--69
+-69.5
 -10
 -23
 -24
@@ -163,20 +163,30 @@ target_level=(
 )
 
 for i in {0..46};do
-    rm -f tmp.raw
+    rm -f tmp.raw result.txt
     copyaudio -F noheader $INDIR/${files[i]} tmp.raw > /dev/null 2>&1
-    lkfs=`bs1770demo.exe -conf ${conf[i]} tmp.raw | grep "Input level" | cut -f 2 -d':'`
-    diff=`echo ${target_level[i]} $lkfs | gawk '{print $1-$2}'`
-    neg=`echo "$diff<0" | bc -l`
-    if [ $neg -eq 1 ]; then
-        diff=`echo "0 - $diff" | bc -l`
-    fi
-    comparison_res=`echo "$diff > 0.1" | bc -l`
-    if [ $comparison_res -eq 1 ]; then
-        res=FAIL
-    else
-        res=PASS
-    fi
+	bs1770demo.exe -conf ${conf[i]} tmp.raw > result.txt
+    lkfs=`grep "Input level" result.txt | cut -f 2 -d':'`
+	
+	if [ "$(echo "$lkfs" | tr -d '[:space:]')" = "-Inf" ];then
+		if [ "$(echo "${target_level[i]}" | tr -d '[:space:]')" = "-Inf" ];then
+			res=PASS
+		else
+			res=FAIL
+		fi		
+	else
+		diff=`echo ${target_level[i]} $lkfs | gawk '{print $1 - $2}'`
+		pos=`echo ${target_level[i]} $lkfs | gawk '{print $1 > $2}'`
+		if [ -z "$pos" ]; then
+			diff=`echo $diff | gawk '{print -$1}'`
+		fi
+		pass=`echo $diff 0.1 | gawk '{print $1 < $2}'`
+		if [ -z "$pass" ]; then
+			res=FAIL
+		else
+			res=PASS
+		fi
+	fi
     echo $res: ${files[i]}
 done
 

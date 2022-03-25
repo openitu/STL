@@ -396,11 +396,13 @@ int main(int argc, char **argv )
     double lev_obtained;
     double fac;
     double G[MAX_CH_NUMBER];
+    short zero_input_flag;
 
     lev_target = -26;  /* Default target level       */
     i = 1;
     conf = NULL;
     nchan = -1;
+    zero_input_flag = 1;
 
     /* Command line parsing */
     if( argc == 1 )
@@ -568,49 +570,69 @@ int main(int argc, char **argv )
         if( j >= 0 )
         {
             gating_block_energy[j] = ( e_tmp[0] + e_tmp[1] + e_tmp[2] + e_tmp[3] ) / ((double)BLOCK_SIZE);
+            zero_input_flag &= (gating_block_energy[j] == 0.0); /* Keep track of all-zero input */
         }
     }
 
-    if( f_output != NULL )
+    if( !zero_input_flag )
     { 
-        /* Output file is specified -- find the scaling factor to reach the target level and apply scaling */
 
-        /* Find scaling factor */
-        /* Since a rescaling affects the relative gating threshold the factor is found through an iterative function */
-        fac = find_scaling_factor( gating_block_energy, n_gating_blocks, lev_target, &lev_input, &lev_obtained );
+        if( f_output != NULL )
+        { 
+            /* Output file is specified -- find the scaling factor to reach the target level and apply scaling */
 
-        /* Apply scaling */
-        rewind( f_input ); 
-        length_total = 0;
-        clip = 0;
-        while( (length = (long)fread( input_short, sizeof( short ), STEP_SIZE * nchan, f_input ) ) )
-        {
-            deinterleave_short2double( input_short, input, STEP_SIZE * nchan, nchan );
-            scale(input, fac, input, STEP_SIZE * nchan );
-            clip += interleave_double2short( input, input_short, STEP_SIZE * nchan, nchan );
-            length_total += length / nchan;
-            fwrite( input_short, sizeof( short ), length, f_output );
+            /* Find scaling factor */
+            /* Since a rescaling affects the relative gating threshold the factor is found through an iterative function */
+            fac = find_scaling_factor( gating_block_energy, n_gating_blocks, lev_target, &lev_input, &lev_obtained );
+
+            /* Apply scaling */
+            rewind( f_input ); 
+            length_total = 0;
+            clip = 0;
+            while( (length = (long)fread( input_short, sizeof( short ), STEP_SIZE * nchan, f_input ) ) )
+            {
+                deinterleave_short2double( input_short, input, STEP_SIZE * nchan, nchan );
+                scale(input, fac, input, STEP_SIZE * nchan );
+                clip += interleave_double2short( input, input_short, STEP_SIZE * nchan, nchan );
+                length_total += length / nchan;
+                fwrite( input_short, sizeof( short ), length, f_output );
+            }
+
+            fprintf( stdout, "Input level:      %.6f\n", lev_input );
+            fprintf( stdout, "Target level:     %.6f\n", lev_target );
+            fprintf( stdout, "Obtained level:   %.6f\n", lev_obtained );
+            fprintf( stdout, "Scaling factor:   %.6f\n", fac );
+            fprintf( stdout, "\n--> Done processing %ld samples\n", length_total );
+            if( clip > 0 )
+            {
+                fprintf( stderr, "*** Warning: %ld samples clipped\n", clip );
+            }
+
+            fclose( f_output );
         }
-
-        fprintf( stdout, "Input level:      %.6f\n", lev_input );
-        fprintf( stdout, "Target level:     %.6f\n", lev_target );
-        fprintf( stdout, "Obtained level:   %.6f\n", lev_obtained );
-        fprintf( stdout, "Scaling factor:   %.6f\n", fac );
-        fprintf( stdout, "\n--> Done processing %ld samples\n", length_total );
-        if( clip > 0 )
+        else
         {
-            fprintf( stderr, "*** Warning: %ld samples clipped\n", clip );
+            /* No output file is specified -- find the input level */
+            lev_input = gated_loudness_adaptive( gating_block_energy, 1.0, n_gating_blocks );
+            fprintf( stdout, "Input level:      %.6f\n", lev_input );
+            fprintf( stdout, "\n--> Done processing %ld samples\n", length_total );
         }
-
-        fclose( f_output );
     }
     else
     {
-        /* No output file is specified -- find the input level */
-        lev_input = gated_loudness_adaptive( gating_block_energy, 1.0, n_gating_blocks );
-        fprintf( stdout, "Input level:      %.6f\n", lev_input );
-        fprintf( stdout, "\n--> Done processing %ld samples\n", length_total );
+        fprintf( stderr, "*** Warning: All non-LFE channels are zero\n" );
+        if( f_output != NULL )
+        {
+            fprintf( stderr, "*** Scaling of zero input not possible, exiting ..\n" );
+            exit( -1 );
+        }
+        else
+        {
+            fprintf( stdout, "Input level:      -Inf\n" );
+            fprintf( stdout, "\n--> Done processing %ld samples\n", length_total );
+        }
     }
+
     /* Close files */
     fclose( f_input );
 
