@@ -1,4 +1,6 @@
-add_executable(esdru esdru.c)
+include_directories(../utl)
+
+add_executable(esdru esdru.c ../utl/ugst-utl.c)
 target_link_libraries(esdru ${M_LIBRARY})
 
 

@@ -1,11 +1,6 @@
 /*
     Implementation of ESDRU as defined in ITU-T Recommendation P.811
 
-    Matches output of MATLAB version esdru.m, if the random number generator and cos 
-    function is synchronized.
-
-    See LICENSE.md for terms.
-
     Author: erik.norvell@ericsson.com
 */
 
@@ -13,6 +8,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "ugst-utl.h"           /* for ran16_32c */
 
 #define LOCAL_PI       3.14159265358979323846
 
@@ -33,7 +29,7 @@ void usage()
 }
 
 
-void scale(
+void scale_double(
     const double *input,  /* i: Input signal       */
     const double fac,     /* i: Scaling factor     */
           double *output, /* i: Output signal      */
@@ -165,11 +161,12 @@ long convert_double2short( /* returns number of clipped samples */
 }
 
 void g_mod_nrg(
-    const double *input, /* i: Stereo input signal                 */
-    const long length,   /* i: Length of input signal in samples   */
-    const long step,     /* i: Length of transition in samples     */
-    const double e_step, /* i: Energy step in high energy segments */
-          double *m      /* o: Modulation curve                    */
+    const double *input, /*  i: Stereo input signal                 */
+    const long length,   /*  i: Length of input signal in samples   */
+    const long step,     /*  i: Length of transition in samples     */
+    const double e_step, /*  i: Energy step in high energy segments */
+          float *fseed,  /*i/o: Random number generator seed/state  */
+          double *m      /*  o: Modulation curve                    */
 )
 {
     long i, j, M;
@@ -189,13 +186,13 @@ void g_mod_nrg(
     ar1( 0.001, es, es, length, 1 );
     ar1( 0.0001, es, el, length, -1 );
     ar1( 0.0001, el, el, length, 1 );
-    scale( el, 0.77813, el, length );
+    scale_double( el, 0.77813, el, length );
 
     i = 0;
     m_prev = 1.0;
     while( i < length )    
     {
-        if( (rand() / ((double)RAND_MAX)) < 0.2 )
+        if( (ran16_32c( fseed ) / ((double)RAND_MAX)) < 0.2 )
         { 
             if( es[i] < el[i] )
             {
@@ -205,7 +202,7 @@ void g_mod_nrg(
             {
                 m_delta = e_step;
             }
-            m_new = rand() / ((double)RAND_MAX) * m_delta + m_prev * (1.0 - m_delta);
+            m_new = ran16_32c( fseed ) / ((double)RAND_MAX) * m_delta + m_prev * (1.0 - m_delta);
         }
         else
         {
@@ -259,7 +256,8 @@ int main(int argc, char **argv )
     char *output_filename;
     double *input;
     short *input_short;
-    unsigned int seed;
+    unsigned int intseed;
+    float fseed; /* float seed for ran16_32c */
     double *m;
     double alpha;
     double e_step;
@@ -271,7 +269,7 @@ int main(int argc, char **argv )
 
     fs = 48000;   /* Default sampling frequency */
     e_step = 0.5; /* Default allowed modulation step during high energy segments */
-    seed = 1;     /* Default seed for srand (same as implicitly run) */
+    intseed = 1;     /* Default seed for srand (same as implicitly run) */
     i = 1;
 
     /* Command line parsing */
@@ -311,7 +309,7 @@ int main(int argc, char **argv )
         }
         else if( strcmp( argv[i], "-seed" ) == 0 )
         {
-            if( sscanf( argv[i + 1], "%u", &seed ) != 1 )
+            if( sscanf( argv[i + 1], "%u", &intseed ) != 1 )
             {
                 fprintf( stderr, "Invalid seed %s, exiting..\n", argv[i + 1] );
                 usage();
@@ -364,11 +362,11 @@ int main(int argc, char **argv )
     fprintf( stdout, "Output file:      %s\n", output_filename );
     fprintf( stdout, "alpha:            %f\n", alpha );
     fprintf( stdout, "e_step:           %f\n", e_step );
-    fprintf( stdout, "seed:             %u\n", seed );
+    fprintf( stdout, "seed:             %u\n", intseed );
     fprintf( stdout, "Sampling rate:    %ld\n", fs );
 
     /* Set random seed */
-    srand( seed );
+    fseed = (float) intseed;
 
     /* Load input file */
     fseek( f_input, 0L, SEEK_END );
@@ -381,7 +379,7 @@ int main(int argc, char **argv )
     convert_short2double( input_short, input, length * 2);
 
     step = (long) (1.5 * fs / 50.0);
-    g_mod_nrg( input, length, step, e_step, m );
+    g_mod_nrg( input, length, step, e_step, &fseed, m);
 
     apply_spatial_dist( input, length, m, alpha );
 
