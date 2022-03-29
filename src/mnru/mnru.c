@@ -77,19 +77,19 @@ HISTORY:
 #include <math.h>
 #include <stdlib.h>             /* for calloc(), free() */
 #include <string.h>             /* for memset() */
+#include "ugst-utl.h"           /* for ran16_32c */
 
 #ifndef STL92_RNG               /* Uses the new Random Number Generator */
 #define random_MNRU new_random_MNRU
 
 /* Local function prototypes */
-float new_random_MNRU ARGS ((char *mode, new_RANDOM_state * r, long seed));
+float new_random_MNRU ARGS ((char *mode, new_RANDOM_state * r, long seed, float *fseed));
 float ran_vax ARGS ((void));
-unsigned long ran16_32c ARGS ((void));
 
 /*
   =============================================================================
 
-	new_random_MNRU (char *mode, RANDOM_state *r, long seed)
+	new_random_MNRU (char *mode, RANDOM_state *r, long seed, float *fseed)
         ~~~~~~~~~~~~~~~
 
         Description:
@@ -133,7 +133,7 @@ unsigned long ran16_32c ARGS ((void));
 #define TABLE_SIZE 8192         /* 2^13 */
 #define ITER_NO 8
 #define FACTOR 8                /* = 65536(max.no returned by ran16_32c) div.by TABLE_SIZE */
-float new_random_MNRU (char *mode, RANDOM_state * r, long seed) {
+float new_random_MNRU (char *mode, RANDOM_state * r, long seed, float *fseed) {
   long i;
   double z1;                    /* white random number -8...8 */
   /* weighted with a gaussian distribution */
@@ -141,7 +141,6 @@ float new_random_MNRU (char *mode, RANDOM_state * r, long seed) {
   double phi;                   /* gauss curve */
 
   extern float ran_vax ();
-  extern unsigned long ran16_32c ();
 
   long index;
 
@@ -169,7 +168,7 @@ float new_random_MNRU (char *mode, RANDOM_state * r, long seed) {
 
   /* *** REAL GENERATOR (after initialization) ** */
   for (z1 = 0, i = 0; i < ITER_NO; i++) {
-    index = ran16_32c () / FACTOR;
+    index = ran16_32c (fseed) / FACTOR;
     z1 += r->gauss[index];
   }
   z1 /= 2;                      /* provisional */
@@ -243,58 +242,6 @@ float ran_vax () {
 /*  ......................... End of ran_vax() ............................ */
 
 
-/*
-  ===========================================================================
-  unsigned long ran16_32c(void);
-  ~~~~~~~~~~~~~~~~~~~~~~~
-
-  Description:
-  ~~~~~~~~~~~~
-
-  Function that simulates the DSP32C function RAN24(), modified to return
-  a number between 0 and 2^16-1. This is based on Aachen University's
-  randm() of the narrow-band MNRU program mnrusim.c by PB (08.04.1991).
-
-  Parameters: none.
-  ~~~~~~~~~~~
-
-  Return value:
-  ~~~~~~~~~~~~~
-  An unsigned long number in the range 0 and 2^16-1.
-
-  Author:
-  ~~~~~~~
-  Simao Ferraz de Campos Neto
-  Comsat Laboratories                  Tel:    +1-301-428-4516
-  22300 Comsat Drive                   Fax:    +1-301-428-9287
-  Clarksburg MD 20871 - USA            E-mail: simao@ctd.comsat.com
-
-  History:
-  ~~~~~~~~
-  01.Jul.95  v1.00  Created, adapted from mnrusim.c
-
-  ===========================================================================
-*/
-#define BIT24	16777216.0
-#define BIT8    256.0
-unsigned long ran16_32c () {
-  static float seed = 12345.0;
-  double buffer1, buffer2;
-  long seedl;
-  unsigned long result;
-
-  buffer1 = ((253.0 * seed) + 1.0);
-  buffer2 = (buffer1 / BIT24);
-  seedl = ((long) buffer2) & 0x00FFFFFFL;
-  seed = buffer1 = buffer1 - (float) seedl *BIT24;
-  result = buffer1 / BIT8;
-
-  return result;
-}
-
-#undef BIT8
-#undef BIT24
-/*  .................... End of ran16_32c() ....................... */
 
 #else /* Use the original MNRU noise generator */
 
@@ -525,7 +472,7 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
 #define NOISE_GAIN 0.3793
 #endif
 
-double *MNRU_process (char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q) {
+double *MNRU_process (char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q, float *fseed) {
   long count, i;
   double noise, tmp;
   register double inp_smp, out_tmp, out_flt;
@@ -631,7 +578,7 @@ double *MNRU_process (char operation, MNRU_state * s, float *input, float *outpu
     if (mode == SIGNAL_ONLY)
       noise = 0;
     else {
-      noise = (double) random_MNRU (&s->rnd_mode, &s->rnd_state, s->seed);
+      noise = (double) random_MNRU (&s->rnd_mode, &s->rnd_state, s->seed, fseed);
       noise *= s->noise_gain * inp_smp; /* noise modulated by input sample */
       if (noise > 1.00 || noise < -1.00)
         s->clip++;              /* clip counter */

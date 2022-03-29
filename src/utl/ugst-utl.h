@@ -90,6 +90,7 @@ long serialize_right_justified ARGS ((short *par_buf, short *bit_stm, long n, lo
 long parallelize_right_justified ARGS ((short *bit_stm, short *par_buf, long bs_len, long resol, char sync));
 long serialize_left_justified ARGS ((short *par_buf, short *bit_stm, long n, long resol, char sync));
 long parallelize_left_justified ARGS ((short *bit_stm, short *par_buf, long bs_len, long resol, char sync));
+unsigned long ran16_32c ARGS( (float *seed) );
 
 #define IS_SERIAL -1
 #define IS_PARALLEL 1
