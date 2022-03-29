@@ -95,5 +95,7 @@ unsigned long ran16_32c ARGS( (float *seed) );
 #define IS_SERIAL -1
 #define IS_PARALLEL 1
 
+#define RAN16_32C_MAX 65535
+
 #endif
 /* ........................ End of UGST-UTL.H .......................... */

@@ -192,7 +192,7 @@ void g_mod_nrg(
     m_prev = 1.0;
     while( i < length )    
     {
-        if( (ran16_32c( fseed ) / ((double)RAND_MAX)) < 0.2 )
+        if( (ran16_32c( fseed ) / ((double)RAN16_32C_MAX)) < 0.2 )
         { 
             if( es[i] < el[i] )
             {
@@ -202,7 +202,7 @@ void g_mod_nrg(
             {
                 m_delta = e_step;
             }
-            m_new = ran16_32c( fseed ) / ((double)RAND_MAX) * m_delta + m_prev * (1.0 - m_delta);
+            m_new = ran16_32c( fseed ) / ((double)RAN16_32C_MAX) * m_delta + m_prev * (1.0 - m_delta);
         }
         else
         {
