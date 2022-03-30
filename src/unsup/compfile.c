@@ -103,7 +103,7 @@
 #define PRINT_RULE { int K; for (K=0;K<4;K++) printf("-------------------");}
 #define PRINT_RULE2 { int K; for (K=0;K<4;K++) printf("===================");}
 #define CR	   printf("\n");
-#define RELATIVE_DIFF(a,b)  ((a == 0 || b == 0) ? 0 : fabs(1.0-(double)a/(double)b))
+#define RELATIVE_DIFF(a,b)  ((a == 0 || b == 0) ? 1 : fabs(1.0-(double)a/(double)b))
 
 /* Function prototypes */
 void display_usage ARGS ((void));

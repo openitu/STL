@@ -161,12 +161,15 @@ long convert_double2short( /* returns number of clipped samples */
 }
 
 void g_mod_nrg(
-    const double *input, /*  i: Stereo input signal                 */
-    const long length,   /*  i: Length of input signal in samples   */
-    const long step,     /*  i: Length of transition in samples     */
-    const double e_step, /*  i: Energy step in high energy segments */
-          float *fseed,  /*i/o: Random number generator seed/state  */
-          double *m      /*  o: Modulation curve                    */
+    const double *input,       /*  i: Stereo input signal                 */
+    const long length,         /*  i: Length of input signal in samples   */
+    const long step,           /*  i: Length of transition in samples     */
+    const double e_step,       /*  i: Energy step in high energy segments */
+    const short energy_input,  /*  i: Flag for energy input               */
+    const short energy_output, /*  i: Flag for energy output              */
+    FILE* f_energy,            /*i/o: Energy file pointer                 */
+          float *fseed,        /*i/o: Random number generator seed/state  */
+          double *m            /*  o: Modulation curve                    */
 )
 {
     long i, j, M;
@@ -187,6 +190,17 @@ void g_mod_nrg(
     ar1( 0.0001, es, el, length, -1 );
     ar1( 0.0001, el, el, length, 1 );
     scale_double( el, 0.77813, el, length );
+
+    if( energy_input == 1 )
+    {
+        fread( es, sizeof( double ), length, f_energy );
+        fread( el, sizeof( double ), length, f_energy );
+    }
+    if( energy_output == 1 )
+    {
+        fwrite( es, sizeof( double ), length, f_energy );
+        fwrite( el, sizeof( double ), length, f_energy );
+    }
 
     i = 0;
     m_prev = 1.0;
@@ -215,6 +229,13 @@ void g_mod_nrg(
             m[i] = m_new * xf_win + m_prev * (1.0 - xf_win);
         }
         m_prev = m_new;
+    }
+
+    {
+    FILE *fp;
+    fp = fopen("mc.double","wb");
+    fwrite(m,sizeof(double),length,fp);
+    fclose(fp);
     }
 
     free( e );
@@ -252,6 +273,7 @@ int main(int argc, char **argv )
 {
     FILE* f_input;
     FILE* f_output;
+    FILE* f_energy;
     char *input_filename;
     char *output_filename;
     double *input;
@@ -266,11 +288,16 @@ int main(int argc, char **argv )
     long fs;
     long clip;
     long i;
+    short energy_input;
+    short energy_output;
 
     fs = 48000;   /* Default sampling frequency */
     e_step = 0.5; /* Default allowed modulation step during high energy segments */
-    intseed = 1;     /* Default seed for srand (same as implicitly run) */
+    intseed = 1;     /* Default seed */
     i = 1;
+    energy_input = 0;
+    energy_output = 0;
+    f_energy = NULL;
 
     /* Command line parsing */
     if (argc == 1)
@@ -316,11 +343,36 @@ int main(int argc, char **argv )
             }
             i += 2;
         }
+        else if( strcmp( argv[i], "-e_out" ) == 0 )
+        {
+            if( (f_energy = fopen( argv[i+1], "wb" )) == NULL )
+            {
+                fprintf( stderr, "Could not open energy output file %s, exiting..\n\n", argv[i + 1] );
+                usage();
+            }
+            energy_output = 1;
+            i += 2;
+        }
+        else if( strcmp( argv[i], "-e_in" ) == 0 )
+        {
+            if( (f_energy = fopen( argv[i + 1], "rb" )) == NULL )
+            {
+                fprintf( stderr, "Could not open energy input file %s, exiting..\n\n", argv[i + 1] );
+                usage();
+            }
+            energy_input = 1;
+            i += 2;
+        }
         else
         {
             fprintf( stderr, "Invalid option %s, exiting..\n", argv[i] );
             usage();
         }
+    }
+    if( (energy_input == 1) && (energy_output == 1) )
+    {
+        fprintf( stderr, "Energy input and energy output cannot both be set, exiting..\n" );
+        usage();
     }
 
     /* Process mandatory arguments */
@@ -379,7 +431,7 @@ int main(int argc, char **argv )
     convert_short2double( input_short, input, length * 2);
 
     step = (long) (1.5 * fs / 50.0);
-    g_mod_nrg( input, length, step, e_step, &fseed, m);
+    g_mod_nrg( input, length, step, e_step, energy_input, energy_output, f_energy, &fseed, m );
 
     apply_spatial_dist( input, length, m, alpha );
 
@@ -393,6 +445,10 @@ int main(int argc, char **argv )
         fprintf( stderr, "*** Warning: %ld samples clipped\n", clip );
     }
 
+    if ( f_energy != NULL )
+    {
+        fclose( f_energy );
+    }
     fclose( f_input );
     fclose( f_output );
     free( input );

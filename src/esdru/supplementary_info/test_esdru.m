@@ -1,4 +1,2 @@
-esdru('m1f1s01.48k','out_esdru_m.raw',48000,0.0,0.5,1);
-% esdru_new('m1f1s01.48k','out_esdru_m.raw',48000,0.0,0.5,1);
+esdru('../test_data/stereo_test.pcm','../test_data/stereo_test.0.2.matlab.pcm',48000,0.2);
 
-% esdru('m1f1s01.48k','ref_esdru_m.raw',48000,0.0,0.5,1);
