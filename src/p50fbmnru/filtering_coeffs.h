@@ -1,5 +1,7 @@
-const int		iFIRcoeffsLen = 257, iIIRorder = 2;
-const int		iIIRcoeffsLen = (iIIRorder+1) * 2;
+#define iFIRcoeffsLen 257
+#define iIIRorder 2
+#define iIIRcoeffsLen (iIIRorder+1) * 2
+
 
 const double	dIIRcoeffs[iIIRcoeffsLen] = {
 	0.9894120426128,	-1.978824085,		0.9894120426128,
