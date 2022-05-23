@@ -85,7 +85,7 @@ typedef struct
 {
   float *gauss;
 
-}               new_RANDOM_state;
+} new_RANDOM_state;
 
 /* Definitions for the MNRU state variable */
 #define MNRU_STAGE_OUT_FLT 2         /* number of 2nd-order stages in filter */
@@ -104,7 +104,7 @@ typedef struct
   double A[MNRU_STAGE_OUT_FLT][3];    /* numerator coefficients */
   double B[MNRU_STAGE_OUT_FLT][2];    /* denominator coefficients */
   double DLY[MNRU_STAGE_OUT_FLT][2];  /* delay storage elements (z-shifts) */
-}               MNRU_state;
+} MNRU_state;
 
 /* Prototype for MNRU and random function(s) */
 //#ifdef NO_PROMOTION
@@ -127,11 +127,11 @@ float random_MNRU(char *mode, RANDOM_state * r, long seed);
 
 void show_use(void)
 {   printf("\n");
-	 printf("\n      USE: BG_MNR07 <inputfile> <outputfile> <Q/dB> <Mode>\n\n");
+	 printf("\n      USE: p50mnru <inputfile> <outputfile> <Q/dB> <Mode>\n\n");
 	 printf("\n           The noise is P.50-filtered. Requires 48kHz sampling rate.\n");
 	 printf("\n           Mode M:   Modulated Noise");
 	 printf("\n                N:   Noise only");
-	 printf("\n                S:   Signal only");
+	 printf("\n                S:   Signal only\n");
 	 exit(1);
 }
 
@@ -170,12 +170,12 @@ int main(int argc, char *argv[])
 		  exit(1);
 	 }
 
-	 Q 		= 	(float)atof( argv[3]);
+	 Q 	= 	(float)atof( argv[3]);
 
-     unsigned char mrnumode = tolower((unsigned char) argv[4][0]);
-	 if( !strcmp( mrnumode, "M"))		MNRU_mode = MOD_NOISE;
-	 if( !strcmp( mrnumode, "N"))		MNRU_mode = NOISE_ONLY;
-	 if( !strcmp( mrnumode, "S"))		MNRU_mode = SIGNAL_ONLY;
+     char mrnumode = argv[4][0];
+	 if( mrnumode == 'M' || mrnumode == 'm' ) MNRU_mode = MOD_NOISE;
+	 if( mrnumode == 'N' || mrnumode == 'n' ) MNRU_mode = NOISE_ONLY;
+	 if( mrnumode == 'S' || mrnumode == 's' ) MNRU_mode = SIGNAL_ONLY;
 
 	 B_Len	=	512; BuffLen = B_Len / sizeof(short);
 	 //B_Max	=	(short)	(filelength( In) / B_Len);
