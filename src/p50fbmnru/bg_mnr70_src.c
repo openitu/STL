@@ -68,7 +68,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "your_filtering_routines.h"
+#include "filtering_routines.h"
 
 #include "filtering_coeffs.h"
 
@@ -865,10 +865,10 @@ double *MNRU_process_new(char operation, MNRU_state *s, double* input, double* o
 	  //An IIR highpass filter, followed by a FIR lowpass filter.
 
 	  //First, filter the data in s->vet using an IIR filter, and store the result in filteredNoiseTemp
-	  your_filterFunc_IIR(s->vet, filteredNoiseTemp, n, dIIRcoeffs, iIIRorder, delayLine_IIR);
+	  filterFunc_IIR(s->vet, filteredNoiseTemp, n, dIIRcoeffs, iIIRorder, delayLine_IIR);
 
 	  //Second, filter the data in filteredNoiseTemp using an FIR filter and store the result in s->vet
-	  your_filterFunc_FIR(filteredNoiseTemp, s->vet, n, dFIRcoeffs, iFIRcoeffsLen, delayLine_FIR);
+	  filterFunc_FIR(filteredNoiseTemp, s->vet, n, dFIRcoeffs, iFIRcoeffsLen, delayLine_FIR);
 
 
 #ifndef NO_DC_REMOVAL

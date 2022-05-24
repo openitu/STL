@@ -1,7 +1,7 @@
 #include <assert.h>
-#include "your_filtering_routines.h"
+#include "filtering_routines.h"
 
-void your_filterFunc_IIR(const double *input, double *output, int length, const double *coeffs, int order, double *delay)
+void filterFunc_IIR(const double *input, double *output, int length, const double *coeffs, int order, double *delay)
 {
     /* NOTE: Limitation of the implementation below */
     assert(order == 2);
@@ -19,7 +19,7 @@ void your_filterFunc_IIR(const double *input, double *output, int length, const 
     }
 }
 
-void your_filterFunc_FIR(const double *input, double *output, int length, const double *coeffs, int order, double *delay)
+void filterFunc_FIR(const double *input, double *output, int length, const double *coeffs, int order, double *delay)
 {
     while (length-- > 0) {
         double in, out;
