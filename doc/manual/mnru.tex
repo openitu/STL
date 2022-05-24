@@ -1,60 +1,35 @@
-
 %=============================================================================
-% ... THIS IS chapter{Duo-MNRU: The ITU-T Modulated Noise Reference Unit } ...
-% Revisions
-% Nov.1995 - Simao Campos
-% Jan.1996 - Peter Kroon, Simao Campos, Paul Voros, Rosario D. de Iacovo,
-% Apr.1996 - Mark Perkins
-% Feb.2000 - Convergence towards STL2000
-% Feb.2001 - Edits in example section
-% Apr.2005 - Updates for STL2005 (Cyril Guillaum� & St�phane Ragot)
-% Oct.2005 - Editorial changes for STL2005 (Simao Campos)
-% May.2013 - Mention about problems on applying to SWB signal
-%=============================================================================
-%=============================================================================
-\chapter{Duo-MNRU: The Dual-mode Modulated Noise Reference Unit}
+\chapter{MNRU: Modulated Noise Reference Unit}
 %=============================================================================
 
-For evaluation of the quality of a system or equipment, it is
-important to express the quality measure in a unit suitable for
-comparison with other reference (or well-known) equipments and
-systems. A common way of representing these figures is by means of
-relative units, where the quality is expressed by means of a unique
-figure, in a unidimensional scale.
+For evaluation of the quality of a system or equipment, it is important to express the quality measure in a unit
+suitable for comparison with other reference (or well-known) equipments and systems.
+A common way of representing these figures is by means of relative units, where the quality is expressed by means of a
+unique figure, in a unidimensional scale.
 
-But it is insuficient to be unidimensional; the scale must be
-inequivocal, with a universal meaning. As an example, the ACR scale ({\em
-Absolute Category Rating}, \cite[Annex B]{P.800}), which is a scale
-used for listening opinion tests and has five points termed {\em
-Excellent}, {\em Good}, {\em Fair}, {\em Poor}, and {\em Bad}, is
-inadequate: besides it shows a continuum of quality points, the meaning
-of the adjectives are far from universal, varying from language to
-language, and from person to person. Exchange of information on the
-performance of these systems and equipments is easier and more
-consistent with more objective measures. The issue of how the MNRU is
-to be used as a reference system in subjective tests has been studied
-in ITU-T Study Group 12, which is described in
-Recommendation ITU-T P.830 \cite{P.830} in its Sections 8.2.2 and 11.
+But it is insufficient to be unidimensional; the scale must be inequivocal, with a universal meaning.
+As an example, the ACR scale ({\em Absolute Category Rating}, \cite[Annex B]{P.800}), which is a scale used for
+listening opinion tests and has five points termed {\em Excellent}, {\em Good}, {\em Fair}, {\em Poor}, and {\em Bad},
+is inadequate: besides it shows a continuum of quality points, the meaning of the adjectives are far from universal,
+varying from language to language, and from person to person.
+Exchange of information on the performance of these systems and equipments is easier and more consistent with more
+objective measures.
+The issue of how the MNRU is to be used as a reference system in subjective tests has been studied in ITU-T Study Group
+12, which is described in Recommendation ITU-T P.830 \cite{P.830} in its Sections 8.2.2 and 11.
 
-The Modulated Noise Reference Unity (MNRU) was introduced as a means
-to controlled degradations that are representative of the non-linear
-distortion introduced by waveform coding techniques. Initially aiming
-at evaluating the quality of log-PCM waveform coding systems, it has
-been used in the process of generating several ITU-T standards, such
-as the ITU-T G.726 (32 kbit/s), G.722, G.728, and G.729.
+The Modulated Noise Reference Unity (MNRU) was introduced as a means to control degradations that are representative
+of the non-linear distortion introduced by waveform coding techniques.
+Initially aiming at evaluating the quality of log-PCM waveform coding systems, it has been used in the process of
+generating several ITU-T standards, such as the ITU-T G.726 (32 kbit/s), G.722, G.728, and G.729.
 
-The concept of such reference unit was published in
-\cite{Q001.02.04.02}.  The first system aimed at was the PCM coding
-with logarithmic compression (today world-wide available by means of
-the Recommendation ITU-T G.711), whose main characteristic is to have a
-considerably uniform signal-to-noise ratio (SNR) over a wide range of
-amplitudes.  Moreover, the quantizing noise is correlated to the
-signal: if no signal is present, no quantization noise is
-produced\footnote{\SF This is obviously academic, because always there
-will be idle noise, among others, in the absence of an input signal.},
-and large signals will produce more quantization noise than small
-ones. Therefore, the main characteristic of this reference unit should
-output speech corrupted by a speech-correlated noise.
+The concept of such reference unit was published in \cite{Q001.02.04.02}.
+The first system aimed at was the PCM coding with logarithmic compression (today world-wide available by means of the
+Recommendation ITU-T G.711), whose main characteristic is to have a considerably uniform signal-to-noise ratio (SNR)
+over a wide range of amplitudes.
+Moreover, the quantizing noise is correlated to the signal: if no signal is present, no quantization noise is
+produced\footnote{\SF This is obviously academic, because always there will be idle noise, among others, in the absence
+of an input signal.}, and large signals will produce more quantization noise than small ones.
+Therefore, the main characteristic of this reference unit should output speech corrupted by a speech-correlated noise.
 
 %------------------------------------------------------------------------
 % P.81 narrow-band MNRU
@@ -65,84 +40,66 @@ output speech corrupted by a speech-correlated noise.
   \begin{center}
     \includegraphics{p81-dig}
   \end{center}
-  \caption{Block diagram of the ``digital'' MNRU. The bandwidth of the
-           output filter $h(k)$ is 0--3400 Hz for the narrowband
-           case, and 0--7000 Hz for the wideband case.
-           \label{1/P.810}}
+  \caption{Block diagram of the ``digital'' MNRU. The bandwidth of the output filter $h(k)$ is 0--3400 Hz for the
+  narrowband case, and 0--7000 Hz for the wideband case. \label{1/P.810}}
  \end{figure}
 %------------------------------------------------------------------------
 
-In \cite{Q001.02.04.02}, the speech-correlated noise generation was
-based on a double-balanced ring modulator, controlled by the input
-speech signal, which modulates a noise carrier generated by a noise
-generator having a relatively uniform energy distribution, there in the range
-of 0--20kHz. This correlated noise is then added to the input signal, with
-gains applied such that a controlled signal-to-noise ratio is obtained
-in the output, after the 300--3400Hz band-limiting filter.
+In \cite{Q001.02.04.02}, the speech-correlated noise generation was based on a double-balanced ring modulator,
+controlled by the input speech signal, which modulates a noise carrier generated by a noise generator having a
+relatively uniform energy distribution, there in the range of 0--20kHz.
+This correlated noise is then added to the input signal, with gains applied such that a controlled signal-to-noise
+ratio is obtained in the output, after the 300--3400Hz band-limiting filter.
 
-With the 1996 revision of the MNRU description published in 
-Recommendation ITU-T P.810\footnote{\SF Formerly known as
-Recommendation ITU-T P.81.}, specific guidelines were given for ``digital
-implementations''\footnote{\SF The revised P.81 define a ``digital
-implementation'' either as a digital hardware implementation or as a
-software implementation of the MNRU.}, eliminating many of the
-ambiguities possible in earlier descriptions \cite{Old-P.81}, as
-explained in the STL92 manual \cite[Chapter 8]{STL92-Manual}. Figure
-\ref{1/P.810} shows a block diagram of the ``digital'' MNRU. Also,
-this implementation allows for transparent operation on narrowband
-or wideband speech, hence being known as Dual-mode MNRU, or
-``Duo-MNRU'', for short.
+With the 1996 revision of the MNRU description published in Recommendation ITU-T P.810\footnote{\SF Formerly known as
+Recommendation ITU-T P.81.}, specific guidelines were given for ``digital implementations''\footnote{\SF The revised
+P.81 define a ``digital implementation'' either as a digital hardware implementation or as a software implementation of
+the MNRU.}, eliminating many of the ambiguities possible in earlier descriptions \cite{Old-P.81}, as explained in the
+STL92 manual \cite[Chapter 8]{STL92-Manual}. Figure \ref{1/P.810} shows a block diagram of the ``digital'' MNRU.
+Also, this implementation allows for transparent operation on narrowband or wideband speech, hence being known as
+Dual-mode MNRU, or ``Duo-MNRU'', for short.
 
-\textcolor{blue}{%
-  Special caution must be made when selecting frequency bandwidth of the input signal. T
-  he current implementation of tool is only useful for narrowband (200 -- 3400 Hz) and wideband (100 -- 7000 Hz) signal only, and should not be applied to superwideband or fullband signal.
-%
-}
+In 2008, Swissqual introduced a full-band MNRU algorithm, known as P.50 MNRU, that shapes the noise according to an
+average speech power spectrum as in \cite{P.50} instead of white noise to reduce the impact of the noise in the
+high-frequencies and provide super-wideband and full-band MNRU distortion. This algorithm was used in several
+standardization efforts, notably for the standardization of ITU-T Rec. P.863 \cite{P.863} and EVS \cite{EVS}.
+ITU-T Rec. P.810 was updated in 2022 with an implementation of the full-band MNRU described in \ref{fullband}.
 
-\section{Description of the Algorithm}
+\section{Dual-mode Modulated Noise Reference Unit - Narrowband and wideband speech}
 
-The de-facto reference implementation of the MNRU\footnote{\SF
-Developed by the British Telecom and licenced to Malden
-Electronics.} is the same of the original description, whose
-specification can be found in Recommendation ITU-T P.810
+\subsection{Description of the Algorithm}
+
+The de-facto reference implementation of the MNRU\footnote{\SF Developed by the British Telecom and licenced to Malden
+Electronics.} is the same of the original description, whose specification can be found in Recommendation ITU-T P.810
 \cite{P.810} (formerly Recommendation ITU-T P.81 \cite{Old-P.81}).
-This Recommendation describes two MNRU schemes, one called {\em
-Narrow-band MNRU}, and another, {\em Wideband MNRU}. Wideband MNRU
-is applicable to systems where wideband speech (70--7000Hz) is
-expected, whereas Narrow-band MNRU is for telephone bandwidth
-(300--3400Hz). Both narrowband and wideband MNRUs are implemented in
-this version of the ITU-T Software Tools Library.
+This Recommendation describes two MNRU schemes, one called {\em Narrow-band MNRU}, and another, {\em Wideband MNRU}.
+Wideband MNRU is applicable to systems where wideband speech (70--7000Hz) is expected, whereas Narrow-band MNRU is for
+telephone bandwidth (300--3400Hz).
+Both narrowband and wideband MNRUs are implemented in this version of the ITU-T Software Tools Library.
 
-The basic block diagram of the P.810 MNRU is found in figure
-\ref{1/P.810}. In summary, there are two paths, one called {\em signal
-path}, another called {\em noise path}. In the noise path, gaussian
-noise (uniform in a range at least the cutoff frequency of the
-low-pass filter in the output of the MNRU) is modulated by the
-incoming signal. The result is then added with the output from the
-signal path. The gains are set such that the gain (in dB) applied in
-the output of the noise path is the signal-to-correlated-noise ratio
-$Q$, in the output of the band-pass filter, as calculated in the
-section to follow.
+The basic block diagram of the P.810 MNRU is found in figure\ref{1/P.810}.
+In summary, there are two paths, one called {\em signal path}, another called {\em noise path}.
+In the noise path, gaussian noise (uniform in a range at least the cutoff frequency of the low-pass filter in the
+output of the MNRU) is modulated by the incoming signal.
+The result is then added with the output from the signal path.
+The gains are set such that the gain (in dB) applied in the output of the noise path is the signal-to-correlated-noise
+ratio $Q$, in the output of the band-pass filter, as calculated in the section to follow.
 
 In analytical terms, the signal corrupted by the modulated noise $y(k)$ is
 \[
        y(k) = (G_s x(k) + G_n x(k) n(k)) \ast h(k)
 \]
-where $G_s$ is the gain of the signal path, $G_n$ is the gain of the
-noise path, $x(k)$ is the input signal, and $n(k)$ is the gaussian
-noise signal; the symbol $\ast$ means convolution, and $h(k)$ is the
-band-pass filter.
+where $G_s$ is the gain of the signal path, $G_n$ is the gain of the noise path, $x(k)$ is the input signal, and $n(k)$
+is the gaussian noise signal; the symbol $\ast$ means convolution, and $h(k)$ is the band-pass filter.
 
-If we suppose that the band-pass filter has $|H(f)|=1$ in its pass
-band, and calling $Q$ the signal-to-noise-ratio (SNR) at its output,
-we may write:
+If we suppose that the band-pass filter has $|H(f)|=1$ in its pass band, and calling $Q$ the signal-to-noise-ratio (SNR)
+at its output, we may write:
 \[
     10^{Q/10} = \frac{\sigma^2_\xi}{\sigma^2_\nu} =
                 \frac{E[\xi^2(k)]}{E[\nu^2(k)]}=
                 \frac{G^2_s E[x^2(k)]}{G^2_n E[x^2(k) n^2(k)]}
 \]
-But $x$ and $n$ are uncorrelated, and the noise is gaussian with mean 0
-and variance 1 (N(0,1)):
+But $x$ and $n$ are uncorrelated, and the noise is gaussian with mean 0 and variance 1 (N(0,1)):
 \[
     10^{Q/10} = \left( \frac{G_s}{G_n} \right)^2
                 \frac{\sigma^2_x}{\sigma^2_x \sigma^2_n} =
@@ -157,9 +114,8 @@ or
 \end{array}
 \]
 
-If we set $\Gamma_s=0$ ($G_s=1$), $Q$ is exactly $\Gamma_n$ (or,
-$G_n=10^{-Q/20}$), i.e., the SNR is the gain (in dB) of the noise path
-and the previous expression may be written as:
+If we set $\Gamma_s=0$ ($G_s=1$), $Q$ is exactly $\Gamma_n$ (or, $G_n=10^{-Q/20}$), i.e., the SNR is the gain (in dB) of the noise
+path and the previous expression may be written as:
 \[
 y(k)=[x(n)+10^{-Q/20} x(k) n(k)] \ast h(k)
 \]
@@ -181,8 +137,7 @@ If, on the other hand, $G_n=0$, the output of the algorithm is the
 input signal filtered by $h(k)$, with a gain $G_s$; this is the {\em
 Signal-only mode}.
 
-
-\section{Implementation}
+\subsection{Implementation}
 
 This implementation of the MNRU algorithm can be found in the module
 {\tt mnru.c}, with prototypes in {\tt mnru.h}. A thorough
@@ -280,7 +235,7 @@ The values of the fields shall not be altered by the user.
 
 
 %----------------------------------------------------------------------------
-{\Large\bf Filters in the MNRU module \ruley{2em} }\\*[0.5em]
+\subsubsection{Filters in the MNRU module}
 
 The composite frequency response of the narrowband and wideband MNRU
 filters is shown in figure \ref{MNRU:both-filters}. Figure
@@ -401,7 +356,7 @@ efficient MNRU implementation.
 
 
 %------------------------------------------------------------------------------
-{\Large\bf Random Number Generator for the MNRU module \ruley{2em} }\\*[0.5em]
+\subsubsection{Random Number Generator for the MNRU module}
 
 The random number generator (RNG) used in this implementation was
 chosen using the following criteria:
@@ -500,7 +455,7 @@ The operational modes are defined in {\tt mnru.h}:
 The noise modulation routine is {\tt MNRU\_process}, which is described
 next.
 
-\subsection{{\tt MNRU\_process}}
+\subsubsection{{\tt MNRU\_process}}
 
 {\bf Syntax: }
 
@@ -614,7 +569,7 @@ was successful or is in the {\tt MNRU\_CONTINUE} (``run'') operation
 state.
 
 
-\section{Portability and compliance} \label{MNRU-Tests}
+\subsection{Portability and compliance} \label{MNRU-Tests}
 
 In the development of this module, several steps were taken to assure
 its compliance to Recommendation ITU-T P.810, which included:
@@ -647,10 +602,10 @@ computers.
 
 
 %-----------------------------------------------------------------
-\section{Example code}
+\subsection{Example code}
 
 %.....................................................................
-\subsection {Description of the demonstration programs}
+\subsubsection {Description of the demonstration programs}
 
 One demonstration program is provided for the MNRU module, mnrudemo.c.
 Irrespective of whether the 16-bit, linear PCM input file is sampled
@@ -664,7 +619,7 @@ a noise-only file (the signal path is disconnected).
 %``classical'' hardware MNRU implementation.
 
 %..........................................................................
-\subsection {Simple example}
+\subsubsection {Simple example}
 
 The following C code gives an example of a possible use of the Duo-MNRU module.
 The input file speech is added to a multiplicative noise at a SNR defined by
@@ -753,5 +708,111 @@ main(argc, argv)
   fclose(Fo);
   return(0);
 }
+
 \end{verbatim}
 }
+
+\section{Shaped noise spectrum for fullband speech signals} \label{fullband}
+
+\subsection {Description}
+
+In the case of fullband speech signals, the signal energy at higher frequencies is typically much weaker than in the
+narrowband part of the spectrum.
+Consequently, a modulated white noise signal will result in an uneven SNR across the signal spectrum.
+In order to avoid higher amounts of perceived noise at high frequencies, the noise signal may be shaped in a
+pre-filtering step such as to match the average spectrum of speech signals.
+The filter frequency response can be derived from ITU-T Rec. P.50 \cite{P.50}, chapter 4 “Average voices – Long-term
+average spectrum”, as shown in Figure \ref{MNRUP50}.
+
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=\textwidth]{mnru-p50NoiseShape}
+    \end{center}
+    \caption{Frequency response of noise shaping filter.\label{MNRUP50}}
+\end{figure}
+
+Note that due to the noise shaping, an increase of the noise gain by +9dB is necessary in order to preserve the SNR as
+defined by the Q parameter.
+The noise shaping may be implemented using two cascaded IIR and FIR filters, where the IIR filter acts as a highpass
+filter with a cutoff frequency of 115Hz (Table \ref{p50IIR}), and the FIR is used as a lowpass and band-shaping filter
+(Table \ref{p50FIR}).
+
+\begin{table}
+    \centering
+    \begin{tabular}{lrrr}
+        a0..2 & 0.98941 & -1.97882 & 0.98941 \\
+        b0..2 & 1.0 & -1.97871 & 0.97894 \\
+
+    \end{tabular}
+    \caption{IIR filter coefficients for noise shaping}
+    \label{p50IIR}
+\end{table}
+
+
+\begin{table}
+    \centering
+    \resizebox{\textwidth}{!}{\begin{tabular}{lrlllllll}
+        b\textsubscript{0..7} & 5.6159e-6 & 4.6163e-6 & 3.6904e-6 & 2.8871e-6 & 2.2044e-6 & 1.6539e-6 & 1.2084e-6 & 8.3224e-7 \\
+        b\textsubscript{8..15} & 4.6748e-7 & 5.7472e-8 & -5.0130e-7 & -1.2669e-6 & -2.3140e-6 & -3.7063e-6 & -5.5290e-6 & -7.8631e-6 \\
+        b\textsubscript{16..23} & -1.0843e-5 & -1.4513e-5 & -1.8887e-5 & -2.3912e-5 & -2.9539e-5 & -3.5739e-5 & -4.2634e-5 & -5.0323e-5 \\
+        b\textsubscript{24..31} & -5.8925e-5 & -6.8454e-5 & -7.8831e-5 & -8.9844e-5 & -1.0135e-4 & -1.1310e-4 & -1.2493e-4 & -1.3673e-4 \\
+        b\textsubscript{32..39} & -1.4845e-4 & -1.6008e-4 & -1.7183e-4 & -1.8377e-4 & -1.9603e-4 & -2.0867e-4 & -2.2175e-4 & -2.3527e-4 \\
+        b\textsubscript{40..47} & -2.4940e-4 & -2.6406e-4 & -2.7915e-4 & -2.9440e-4 & -3.0961e-4 & -3.2452e-4 & -3.3921e-4 & -3.5341e-4 \\
+        b\textsubscript{48..55} & -3.6669e-4 & -3.7825e-4 & -3.8720e-4 & -3.9268e-4 & -3.9462e-4 & -3.9308e-4 & -3.8856e-4 & -3.8146e-4 \\
+        b\textsubscript{56..63} & -3.7217e-4 & -3.6064e-4 & -3.4739e-4 & -3.3241e-4 & -3.1609e-4 & -2.9860e-4 & -2.8033e-4 & -2.6118e-4 \\
+        b\textsubscript{64..71} & -2.4157e-4 & -2.2077e-4 & -1.9795e-4 & -1.7182e-4 & -1.4162e-4 & -1.0692e-4 & -6.9224e-5 & -2.9565e-5 \\
+        b\textsubscript{72..79} & 1.0779e-5 & 5.1586e-5 & 9.2954e-5 & 1.3597e-4 & 1.8033e-4 & 2.2716e-4 & 2.7767e-4 & 3.3456e-4 \\
+        b\textsubscript{80..87} & 4.0054e-4 & 4.7887e-4 & 5.6936e-4 & 6.7180e-4 & 7.8421e-4 & 9.0553e-4 & 1.0351e-3 & 1.1753e-3 \\
+        b\textsubscript{88..95} & 1.3266e-3 & 1.4923e-3 & 1.6746e-3 & 1.8757e-3 & 2.0950e-3 & 2.3324e-3 & 2.5833e-3 & 2.8472e-3 \\
+        b\textsubscript{96..103} & 3.1256e-3 & 3.4247e-3 & 3.7501e-3 & 4.1090e-3 & 4.4978e-3 & 4.9144e-3 & 5.3546e-3 & 5.8206e-3 \\
+        b\textsubscript{104..111} & 6.3167e-3 & 6.8548e-3 & 7.4344e-3 & 8.0591e-3 & 8.7259e-3 & 9.4382e-3 & 1.0199e-2 & 1.1025e-2 \\
+        b\textsubscript{112..119} & 1.1914e-2 & 1.2873e-2 & 1.3901e-2 & 1.5002e-2 & 1.6175e-2 & 1.7446e-2 & 1.8795e-2 & 2.0241e-2 \\
+        b\textsubscript{120..127} & 2.1785e-2 & 2.3466e-2 & 2.5289e-2 & 2.7347e-2 & 2.9502e-2 & 3.1675e-2 & 3.3583e-2 & 3.5567e-2 \\
+        b\textsubscript{128..135} & 6.1233e-2 & 3.5567e-2 & 3.3583e-2 & 3.1675e-2 & 2.9502e-2 & 2.7347e-2 & 2.5289e-2 & 2.3466e-2 \\
+        b\textsubscript{136..143} & 2.1785e-2 & 2.0241e-2 & 1.8795e-2 & 1.7446e-2 & 1.6175e-2 & 1.5002e-2 & 1.3901e-2 & 1.2873e-2 \\
+        b\textsubscript{144..151} & 1.1914e-2 & 1.1025e-2 & 1.0199e-2 & 9.4382e-3 & 8.7259e-3 & 8.0591e-3 & 7.4344e-3 & 6.8548e-3 \\
+        b\textsubscript{152..159} & 6.3167e-3 & 5.8206e-3 & 5.3546e-3 & 4.9144e-3 & 4.4978e-3 & 4.1090e-3 & 3.7501e-3 & 3.4247e-3 \\
+        b\textsubscript{160..167} & 3.1256e-3 & 2.8472e-3 & 2.5833e-3 & 2.3324e-3 & 2.0950e-3 & 1.8757e-3 & 1.6746e-3 & 1.4923e-3 \\
+        b\textsubscript{168..175} & 1.3266e-3 & 1.1753e-3 & 1.0351e-3 & 9.0553e-4 & 7.8421e-4 & 6.7180e-4 & 5.6936e-4 & 4.7887e-4 \\
+        b\textsubscript{176..183} & 4.0054e-4 & 3.3456e-4 & 2.7767e-4 & 2.2716e-4 & 1.8033e-4 & 1.3597e-4 & 9.2954e-5 & 5.1586e-5 \\
+        b\textsubscript{184..191} & 1.0779e-5 & -2.9565e-5 & -6.9224e-5 & -1.0692e-4 & -1.4162e-4 & -1.7182e-4 & -1.9795e-4 & -2.2077e-4 \\
+        b\textsubscript{192..199} & -2.4157e-4 & -2.6118e-4 & -2.8033e-4 & -2.9860e-4 & -3.1609e-4 & -3.3241e-4 & -3.4739e-4 & -3.6064e-4 \\
+        b\textsubscript{200..207} & -3.7217e-4 & -3.8146e-4 & -3.8856e-4 & -3.9308e-4 & -3.9462e-4 & -3.9268e-4 & -3.8720e-4 & -3.7825e-4 \\
+        b\textsubscript{208..215} & -3.6669e-4 & -3.5341e-4 & -3.3921e-4 & -3.2452e-4 & -3.0961e-4 & -2.9440e-4 & -2.7915e-4 & -2.6406e-4 \\
+        b\textsubscript{216..223} & -2.4940e-4 & -2.3527e-4 & -2.2175e-4 & -2.0867e-4 & -1.9603e-4 & -1.8377e-4 & -1.7183e-4 & -1.6008e-4 \\
+        b\textsubscript{224..231} & -1.4845e-4 & -1.3673e-4 & -1.2493e-4 & -1.1310e-4 & -1.0135e-4 & -8.9844e-5 & -7.8831e-5 & -6.8454e-5 \\
+        b\textsubscript{232..239} & -5.8925e-5 & -5.0323e-5 & -4.2634e-5 & -3.5739e-5 & -2.9539e-5 & -2.3912e-5 & -1.8887e-5 & -1.4513e-5 \\
+        b\textsubscript{240..247} & -1.0843e-5 & -7.8631e-6 & -5.5290e-6 & -3.7063e-6 & -2.3140e-6 & -1.2669e-6 & -5.0130e-7 & 5.7472e-8 \\
+        b\textsubscript{248..255} & 4.6748e-7 & 8.3224e-7 & 1.2084e-6 & 1.6539e-6 & 2.2044e-6 & 2.8871e-6 & 3.6904e-6 & 4.6163e-6 \\
+        b\textsubscript{256} & 5.6159e-6 &  &  &  &  &  &  &  \\
+    \end{tabular}}
+    \caption{FIR filter coefficients for noise shaping}
+    \label{p50FIR}
+\end{table}
+
+\subsection {Implementation}
+
+The implementation of fullband noise-shaped MNRU is provided in {\tt p50fbmnru} directory.
+{\tt bg\_mnr70\_src.c } provides the main algorithm and {\tt filter\_coeffs.h} the filter coefficients as described in
+Tables \ref{p50IIR} and \ref{p50FIR}.
+
+The usage for the command line tool is as follows:
+
+{\tt p50mnru <inputfile> <outputfile> <Q/dB> <Mode>}
+
+
+{\tt inputfile} is the path to the PCM 16-bit 48kHz input signal.
+
+{\tt outputfile} is the path to the PCM 16-bit 48kHz output signal.
+
+{\tt Q/dB} is the target SNR level {\tt Q}.
+
+
+{\tt Mode} defines the output signal:
+\begin{itemize}
+    \item {\tt M} outputs the input signal with added modulated noise.
+    \item {\tt N} outputs the modulated noise only.
+    \item {\tt S} outputs a copy of the input signal.
+\end{itemize}
+
+
