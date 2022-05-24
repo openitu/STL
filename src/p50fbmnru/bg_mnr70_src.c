@@ -127,7 +127,7 @@ float random_MNRU(char *mode, RANDOM_state * r, long seed);
 
 void show_use(void)
 {   printf("\n");
-	 printf("\n      USE: p50mnru <inputfile> <outputfile> <Q/dB> <Mode>\n\n");
+	 printf("\n      USE: p50fbmnru <inputfile> <outputfile> <Q/dB> <Mode>\n\n");
 	 printf("\n           The noise is P.50-filtered. Requires 48kHz sampling rate.\n");
 	 printf("\n           Mode M:   Modulated Noise");
 	 printf("\n                N:   Noise only");
