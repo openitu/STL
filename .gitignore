@@ -45,6 +45,7 @@ src/is54/test_data/voice-pf.rek
 src/is54/test_data/voice.bbs
 src/is54/test_data/voice.bec
 src/is54/test_data/voice.hbs
+!src/is54/test_data/voice.log
 src/is54/test_data/voice.rek
 src/sv56/test_data/voice.prc
 src/sv56/test_data/voice.rms
@@ -73,8 +74,8 @@ CTestTestfile.cmake
 *.blg
 *.fdb_latexmk
 *.fls
-*.out
-*.pdf
+manual/Latex/*.out
+manual/LaTeX/*.pdf
 *.synctex.gz
 *.toc
 

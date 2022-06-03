@@ -1,14 +1,34 @@
 os:
     - linux
     - osx
+    - windows
+
+dist: xenial
 
 language:
     - c
-    - cpp 
+    - cpp
 
 compiler:
     - clang
     - gcc
+
+addons:
+    apt:
+        packages:
+            - texlive-latex-extra
+            - texlive-fonts-recommended
+            - latexmk
+ 
+jobs:
+    include:
+    - stage:  manual
+      script: cd doc/manual && latexmk -pdf -halt-on-error STLmanual.tex < /dev/null
+      if: os = linux
+
+stages:
+    - manual
+    - test
 
 script:
     - cmake .

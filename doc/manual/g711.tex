@@ -1,0 +1,365 @@
+
+%=============================================================================
+% ...... THIS IS chapter{G.711: The ITU-T 64 kbit/s log-PCM algorithm } ......
+% Revisions: 
+% 04.Jan.1996 - Peter Kroon revision incorporated
+% 22.Feb.2001 - Edits in example section
+%
+%=============================================================================
+\chapter{G.711: The ITU-T 64 kbit/s log-PCM algorithm}
+%=============================================================================
+
+In the early 1960's an interest was expressed in encoding the analog signals
+in telephone networks, mainly to reduce costs in switching and
+multiplexing equipments and to allow the integration of communication
+and computing, increasing the efficiency in operation and maintenance
+\cite{Qual-meas-tel-sys}.
+
+In 1972, the then CCITT published the Recommendation ITU-T G.711 that
+constitutes the principal reference as far as transmission systems
+are concerned \cite{G.711}. The basic principle of the algorithm is
+to code speech using 8 bits per sample, the input voiceband signal
+being sampled at 8 kHz, keeping the telephony bandwidth of
+300--3400 Hz. With this combination, each voice channel requires
+64 kbit/s.
+
+\section{Description of the algorithm}
+
+The idea behind the digitalization of the network involved a
+compromise: use as far as possible the existing infrastructure; this imposes a
+bandwidth limitation for the bit-streams of coded signals. A rate of 64
+kbit/s was found to be reasonable.
+
+If one thinks of using the most natural quantization scheme, one will
+choose linear quantization. But one drawback of this approach is that
+the signal-to-noise ratio (SNR) varies with the amplitude of the input
+signals: the smaller the amplitude, the smaller the SNR. And, from the
+quality point of view, if a signal has a wide variance, or a variance
+that changes with time (as in the case of speech signals), the SNR
+will also change, resulting in a wide-varying quality of the
+system.
+
+To avoid this problem, one can use logarithmic quantization, which
+will result into a more uniform quantization noise. With this in
+mind, several studies were carried out in late 1960's to choose a
+good algorithm for this purpose. This led to the definition of two
+transmission schemes, one using the $\mu$ law compression
+characteristic: 
+\[ 
+   c(x) = x_{max} \frac{\ln(1 + \mu |x|/x_{max}) }{
+                        \ln(1+\mu) } sgn(x) 
+\] 
+and the other using the A law compression characteristic: 
+\[ 
+   c(x) = \left \{ \begin{array}{ll}
+          {\displaystyle A|x| \over \displaystyle 1 + \ln(A) } sgn(x), 
+                &\mbox{for } 0 \leq \Frac{|x|}{x_{max}} \leq \Frac{1}{A}\\
+          x_{max} {\displaystyle 1 + \ln(A|x|/x_{max}) \over 
+                   \displaystyle 1 + \ln(A) } sgn(x),
+                &\mbox{for \ruley{2em}} 
+                   \Frac{1}{A} \leq \Frac{|x|}{x_{max}} \leq 1
+          \end{array}
+       \right .
+\]
+
+Both characteristics behave as linear for small amplitude signals
+(being then equivalent to a linear quantization scheme), but are truly
+logarithmic for large signals. In fact, for large signals the SNR is:
+\[
+    \mbox{\em SNR}_\mu = 6.02 B + 4.77 - 20 \log_{10} (\ln(1+\mu))
+\]
+and
+\[
+    \mbox{\em SNR}_A = 6.02 B + 4.77 - 20 \log_{10} (1 + \ln A)
+\]
+where $B$ is the number of bits used for quantization.
+
+The ITU chose the values $A=87.56$ and $\mu=255$ for the G.711
+standard, together with 8 bits per sample, what leads the latter two
+equations to:
+\[
+    \mbox{\em SNR}_\mu = 6.02 B - 9.99 = 38.17 dB
+\]
+and
+\[
+    \mbox{\em SNR}_A = 6.02 B - 10.1 = 38.06 dB
+\]
+
+The G.711 standard does not specify the law as defined above, but
+rather uses a good linear-piecewise approximation for 8 bit samples,
+which has easier implementation (in hardware), as well as other
+properties (see \cite[p.229]{Jayant-Noll}).
+
+This approximation uses bit 1 for sign (1 for positive, 0 for
+negative), bits 2--4 to indicate a segment, and bits 5--8 for
+level\footnote{\SF Please note that the bit numbering in the G.711 is
+the reversal of the commonly used in computer languages, G.711's bit 1
+corresponding to common-sense's (most significant) bit 7, and G.711's
+bit 8 to the normal least significant bit 0, respectively.}. Within
+each segment, the quantization is linear (4 bits, or 16 levels), having
+15 segments of distinct slopes for $\mu$ law, and 13 for A law.
+
+The A law works with signals in the range from -4096 to 4096,
+implying in a range of 13 bits. As for the $\mu$ law, the linear
+signals are accepted in the range -8159 to 8159, which is represented
+by 14 bits. Besides this, in the dynamic range sense, A and $\mu$ law
+are equivalent to 12 and 13 bit linear quantization, respectively.
+
+One detail for the A law is that the even bits are inverted. The reason
+for this comes from problems observed (before the standardization of
+the line code HDB3) in transmission systems when long sequences of
+zeros happen, because small amplitudes, in A law, to be coded mostly
+using `0' bits. With this bit-inversion, long sequences of bits `0'
+becomes less probable, thus improving performance.
+
+The conversion rule for A/$\mu$ law from/to linear is described in
+terms of tables in G.711. A good reason for this is that there is no
+closed form for the compression of linear samples (although it is
+possible to find a closed formulae for the expansion algorithm). 
+Hence, two implementations are possible: table look-up, and algorithmic.
+For in-chip (LSI) implementations, the first one may be preferred,
+because it is simpler to implement, at the cost of a wider chip area.
+For other applications, such as using Digital Signal Processors (DSPs),
+or software implementations, table look-up would occupy too much
+memory, and the algorithmic solution would be preferred.
+
+\section{Implementation}
+
+This implementation of the G.711 can be found in the module {\tt
+g711.c}, with prototypes in {\tt g711.h}.
+
+For the reason explained before, an algorithmic approach to the G.711
+was followed. For the compression routines, first the samples are
+converted from two's complement to signed magnitude
+notation\footnote{\SF Using the samples as two's complement in the
+compression algorithm is a very common error whose effects are only
+noticeable for small amplitude signals. Our approach agrees to the one
+in G.726\cite{G.726}, block {\em compress}.}. So, a segment
+classification is done, and then the linear quantization of a certain
+number of bits of the input sample, that depends on the segment number
+(e.g., for A law, segment 1 uses a factor of 2:1, 2 a 4:1, etc.) is
+carried out. Finally, the sign of the sample is added. The expansion
+routines are even simpler: find the sign, get the mantissa and the
+exponent, and compute the linear sample.
+
+One important point here is that, following UGST Guidelines, linear
+input samples must be left-justified {\tt short}s. With this approach,
+the knowledge of the 0 dB reference for the file is simplified, and the
+need of having to apply different normalization factors to files if
+they are to be coded by A or $\mu$ law is eliminated\footnote{\SF In
+the case of stand-alone tools, this would mean that two copies of the
+same file should be available!}. As an example, suppose that we want to
+process a speech file $\cal X$ by the G.711 at an input level of -20
+dBov for both A and $\mu$ law. Then, if the sample representation is
+right-justified, and a factor $f$ brings a file's level to -20 dBov for
+$\mu$ law, then for A law the factor will be $2.f$, due to the
+difference in input signal's dynamic range of both laws (4096 and 8159,
+respectively). On the other hand, if the samples are left-justified,
+the factor is only one, and the routines will only look at the 13 or 14
+most significant bits of the 16-bit word, for A and $\mu$ law,
+respectively. In other words, the peak value for linear and A/$\mu$ law
+is the same, therefore one factor is sufficient.
+
+Compliance tests to this code have been done using a ramp file having
+the full excursion of the dynamic range for each of the laws, and
+examining the compressed and expanded samples against the values
+expected in tables 1a, 1b, 2a, and 2b of Recommendation ITU-T G.711 (see
+\cite{G.711}). Another test done exploits the synchronous property of
+the G.711 scheme. Only samples from column 7 of G.711 tables 1 and 2
+were used. These values are transparent to quantization. Hence, if
+the coding was done properly, output samples should match exactly the
+original ones.
+
+The compression functions are {\tt alaw\_compress} and {\tt
+ulaw\_compress}, and the expansion functions are {\tt alaw\_expand} and
+{\tt ulaw\_expand}. In the next part you find a summary of calls to
+these functions.
+
+\subsection{{\tt alaw\_compress} and {\tt ulaw\_compress}}
+
+{\bf Syntax: } 
+
+{\tt
+\#include "g711.h"\\
+void alaw\_compress
+         (\ttpbox{110mm}{
+            long {\em smpno}, short {\em *lin\_buf}, short {\em *log\_buf})
+         }\\
+void ulaw\_compress
+         (\ttpbox{110mm}{
+            long {\em smpno}, short {\em *lin\_buf}, short {\em *log\_buf})
+         }
+}
+
+{\bf Prototype: }       g711.h
+
+{\bf Description: }
+
+{\tt alaw\_compress} performs A law encoding rule according to
+Recommendation ITU-T G.711, and {\tt ulaw\_compress} does the same for $\mu$
+law. Note that input samples shall be left-justified, and that the
+output samples are right-justified with 8 bits.
+
+{\bf Variables: }
+\begin{Descr}{\DescrLen}
+\item[\pbox{20mm}{\em smpno}] %\rulex{1mm}\\
+               Is the number of samples in lin\_buf.
+
+\item[\pbox{20mm}{\em lin\_buf}] %\rulex{1mm}\\
+               Is the input samples' buffer; each {\tt short} sample 
+               shall contain linear PCM (2's complement, 16-bit wide) 
+               samples, left-justified.
+
+\item[\pbox{20mm}{\em log\_buf}] %\rulex{1mm}\\
+               Is the output samples' buffer; each {\tt short} sample 
+               will contain right-justified 8-bit wide valid A or $\mu$ 
+               law samples. 
+ 
+\end{Descr}
+        
+        {\bf Return value: }        None.
+
+
+\subsection{{\tt alaw\_expand} and {\tt ulaw\_expand}}
+
+{\bf Syntax: } 
+
+{\tt
+\#include "g711.h"\\
+void alaw\_expand 
+         (\ttpbox{110mm}{
+            long {\em smpno}, short {\em *log\_buf}, short {\em *lin\_buf})
+         }\\
+void alaw\_expand 
+         (\ttpbox{110mm}{
+            long {\em smpno}, short {\em *log\_buf}, short {\em *lin\_buf})
+         }
+}
+
+{\bf Prototype: }       g711.h
+
+{\bf Description: }
+
+{\tt alaw\_expand} performs A law decoding rule according to
+Recommendation ITU-T G.711, and {\tt ulaw\_expand} does the same for $\mu$
+law. Note that output samples will be left-justified, and that the
+input samples shall be right-justified with 8 bits.
+
+{\bf Variables: }
+\begin{Descr}{\DescrLen}
+\item[\pbox{20mm}{\em smpno}] %\rulex{1mm}\\
+               Is the number of samples in log\_buf.
+
+\item[\pbox{20mm}{\em log\_buf}] %\rulex{1mm}\\
+               Is the input samples' buffer; each {\tt short} sample 
+               shall contain right-justified 8-bit wide valid A or $\mu$ 
+               law samples.
+
+\item[\pbox{20mm}{\em lin\_buf}] %\rulex{1mm}\\
+               Is the output samples' buffer; each {\tt short} sample 
+               will contain linear PCM (2's complement, 16-bit wide) 
+               samples, left-justified.
+
+\end{Descr}
+        
+        
+        {\bf Return value: }        None.
+
+
+\section{Tests and portability}  
+
+Portability may be checked by running the same speech file in a
+proven platform and in a test platform. Files processed this way
+should match exactly. Source and processed reference files for
+portability tests are provided in the STL distribution.
+
+These routines had portability tested for VAX/VMS with VAX-C and gcc, 
+MS-DOS with Turbo C v2.0, HPUX with gcc, and Sun-OS with Sun-C.
+
+
+%-----------------------------------------------------------------
+\section{Example code}
+
+%.................................................................
+\subsection {Description of the demonstration program}
+
+One program is provided as demonstration program for the G.711 module,
+g711demo.c.
+
+Program {\tt g711demo.c} accepts input files in 16-bit linear PCM
+format for compression operation and produces files in the same format
+after the expansion operation. The compressed signal will be in
+16-bit, right adjusted format, according to the logarithmic law
+specified by the user. Three operations are possible: linear in,
+linear out ({\em lili}) linear in, logarithmic out ({\em lilo}), or
+logarithmic in, linear out ({\em loli}).
+
+%.................................................................
+\subsection {Simple example}
+
+The following C code gives an example of companding using either the
+A- or $\mu$-law functions available in the STL. 
+
+{\tt\small 
+\begin{verbatim}
+#include <stdio.h> 
+#include "ugstdemo.h" 
+#include "g711.h"
+
+#define BLK_LEN 256
+#define QUIT(m,code) {fprintf(stderr,m); exit((int)code);}
+
+main(argc, argv)
+  int             argc;
+  char           *argv[];
+{
+  char            law[4];
+
+  char            FileIn[180], FileOut[180];
+  short           tmp_buf[BLK_LEN], inp_buf[BLK_LEN], out_buf[BLK_LEN];
+  FILE           *Fi, *Fo;
+  void          (*compress)(), (*expand)(); /* pointer to a function */
+
+  /* Get parameters for processing */
+  GET_PAR_S(1, "_Law (A,u): ................... ", law);
+  GET_PAR_S(2, "_Input File: .................. ", FileIn);
+  GET_PAR_S(3, "_Output File: ................. ", FileOut);
+
+  /* Opening input and output LOG-PCM files */
+  Fi = fopen(FileIn, RB);
+  Fo = fopen(FileOut, WB);
+
+  /* Choose compression/expansion routinies according to the law */
+  if (toupper(law[0])=='A')
+  {
+     compress = alaw_compress;
+     expand = alaw_expand;
+  }
+  else if (tolower(law[0])=='u')
+  {
+     compress = ulaw_compress;
+     expand = ulaw_expand;
+  }
+  else 
+    QUIT("Bad law chosen!\n",1);
+
+ /* File processing */
+  while (fread(inp_buf, BLK_LEN, sizeof(short), Fi) == BLK_LEN)
+  {
+    /* Process input linear PCM samples in blocks of length BLK_LEN */
+    compress(BLK_LEN, inp_buf, tmp_buf);
+
+    /* Process log-PCM samples in blocks of length BLK_LEN */
+    expand(BLK_LEN, tmp_buf, out_buf);
+
+    /* Write PCM output word */
+    fwrite(out_buf, BLK_LEN, BLK_LEN, sizeof(short), Fo);
+  }
+
+  /* Close input and output files */
+  fclose(Fi);
+  fclose(Fo);
+  return 0;
+}
+\end{verbatim}
+}
