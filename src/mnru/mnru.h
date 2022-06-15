@@ -64,7 +64,7 @@ typedef struct {
 } MNRU_state;
 
 /* Prototype for MNRU and random function(s) */
-double *MNRU_process ARGS ((char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q));
+double *MNRU_process ARGS ((char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q, float *fseed));
 float random_MNRU ARGS ((char *mode, RANDOM_state * r, long seed));
 
 /* Definitions for the MNRU algorithm */

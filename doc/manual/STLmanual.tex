@@ -1,27 +1,3 @@
-%%
-%%
-%% Revisions:
-%% Chapter: Date: Author: Description
-%% rate     JUN/92 Simao  Bug found (R.Hofman) on sample code at end of chapter
-%% g721     AUG/92 Simao  Suggested changes by M.Sheriff
-%% general  JAN/95 Simao
-%% rpeltp   FEB/95 Simao  Added
-%% g722     OCT/95 Simao  Added
-%% -        JAN/96 Simao  Created style file ugst.sty with common
-%%                        definitions; created environment Descr.
-%% -        APR/96 Simao  Eliminated ghostpage by changing the
-%%                        definition of the \maketitle command
-%%                        (see ugst.sty)
-%% -        Nov/00 Simao  STL2000 release - SG16
-%% -        Dec/00 Simao  Editorial review (my inputs)
-%% -        Mar/05 France Telecom STL2005 release
-%% -        Oct/25 Simao Campos review
-%% -	    Oct/08 France Telecom STL2009 release
-%% -	    Oct/09 Yusuke Hiwasaki STL2009 release
-%% -        Apr/18 Simao  Added path in preamble for including
-%%                        graphics (\includegraphics...}
-%% -
-%%
 %\documentstyle[12pt,a4,epsf]{book}
 \documentclass[12pt,a4paper]{book}
 
@@ -42,7 +18,7 @@
 \addtolength{\itemsep}{-20pt}
 
 % Define headers
-\def\ugst_title{ ITU-T Software Tool Library, release 2019}
+\def\ugst_title{ ITU-T Software Tool Library, release 2022}
 \def\us{$\mu$s}
 \markboth{  \hspace{1cm} \hfill \ugst_title }%
          { Version: \today \hfill \hspace{1cm} }
@@ -83,7 +59,7 @@
 \pagenumbering{roman}
 
 %==============================================================================
-\title{ITU-T Software Tool Library 2019 User's Manual}
+\title{ITU-T Software Tool Library 2022 User's Manual}
 \author{ITU-T Users' Group on Software Tools}
 
 %------------------------------------------------------------------------------
@@ -93,7 +69,7 @@
 
 \ruley{100mm}
 
- Copyright \copyright~ 2005, 2006, 2009, and 2019 by the International
+ Copyright \copyright~ 2005, 2006, 2009, 2019 and 2022 by the International
  Telecommunication Union (ITU)
 
 \ruley{15mm}
@@ -208,6 +184,16 @@ Permission is granted to make and distribute verbatim copies of this manual prov
 % chapter stereoop: Stereo processing tool
 %=============================================================================
 \include{stereoop}
+
+%=============================================================================
+% chapter bs1770demo: ITU-R BS.1770-4 Level measurement tool
+%=============================================================================
+\include{bs1770demo}
+
+%=============================================================================
+% chapter esdru: P.811 E Spatial Distortion Reference Unit
+%=============================================================================
+\include{esdru}
 
 %=============================================================================
 % chapter BASOP: Basic operators
