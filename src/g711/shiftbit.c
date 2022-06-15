@@ -35,7 +35,7 @@
 
 #include "ugstdemo.h"
 #include <stdio.h>
-#include <unistd.h>
+#include <stdlib.h>
 
 /*
  * Includes dependent of the Operating System
@@ -97,7 +97,7 @@ int main (int argc, char *argv[]) {
 
   fprintf (stderr, "%s: Reading, ", inp);
   for (k = 0; k < l; k += 256)
-    if (read (fi, &buf[k], 512) < 0)
+    if (fread (&buf[k],1, 512, fi) < 0)
       KILL (inp, 5);
 
   fprintf (stderr, "shifting, ");
@@ -110,7 +110,7 @@ int main (int argc, char *argv[]) {
 
   fprintf (stderr, "and writing ... ");
   for (k = 0; k < l; k += 256)
-    if (write (fo, &buf[k], 512) <= 0)
+    if (fwrite (&buf[k], 1, 512, Fo) <= 0)
       KILL (inp, 6);
 
   fprintf (stderr, "Done!\n");

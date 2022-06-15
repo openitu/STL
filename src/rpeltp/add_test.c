@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #ifdef VMS
 #include <unixio.h>
@@ -202,7 +201,7 @@ int main (argc, argv)
     exit (1);
   }
 
-  interactive = isatty (fileno (datain));
+  interactive = 0; //isatty (fileno (datain));
 
   for (;;) {
     if (interactive)
