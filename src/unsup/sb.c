@@ -314,7 +314,7 @@ int main (int argc, char *argv[]) {
 
   /* Check consistency: conditional swap only if overwriting */
   if (conditional_swap && !overwrite)
-    HARAKIRI ("Conditional swapping only available when overwriting! Aborted.\n", 2);
+    error_terminate ("Conditional swapping only available when overwriting! Aborted.\n", 2);
 
   /* open input file */
   if ((i = fopen (argv[1], RB)) == NULL)

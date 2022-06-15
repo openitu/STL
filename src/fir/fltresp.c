@@ -295,7 +295,7 @@ int main (int argc, char *argv[]) {
     else if (fs == 48000)
       fir_state = mod_irs_48khz_init ();
     else
-      HARAKIRI ("Unimplemented: IRS at rate not 8, 16 or 48 kHz\n", 15);
+      error_terminate ("Unimplemented: IRS at rate not 8, 16 or 48 kHz\n", 15);
   }
 
 /*
@@ -305,7 +305,7 @@ int main (int argc, char *argv[]) {
     if (fs == 16000)
       fir_state = delta_sm_16khz_init ();
     else
-      HARAKIRI ("Unimplemented: Delta-SM at rate not 16 kHz\n", 15);
+      error_terminate ("Unimplemented: Delta-SM at rate not 16 kHz\n", 15);
   }
 
 /*
@@ -315,7 +315,7 @@ int main (int argc, char *argv[]) {
     if (fs == 8000)
       fir_state = psophometric_8khz_init ();
     else
-      HARAKIRI ("Unimplemented: Psophometric filter only at fs=8kHz\n", 15);
+      error_terminate ("Unimplemented: Psophometric filter only at fs=8kHz\n", 15);
   }
 
 
@@ -361,7 +361,7 @@ int main (int argc, char *argv[]) {
       if (fs == 16000)
         iir_state = stdpcm_16khz_init ();
       else
-        HARAKIRI ("Unimplemented: PCM with factor 1:1 for the given fs\n", 10);
+        error_terminate ("Unimplemented: PCM with factor 1:1 for the given fs\n", 10);
     } else
       iir_state = (fs == 8000)
         ? stdpcm_1_to_2_init () /* It is up-sampling! */
@@ -382,11 +382,11 @@ int main (int argc, char *argv[]) {
 
   /* Allocate memory for input buffer */
   if ((BufInp = (float *) calloc (inp_size, sizeof (float))) == NULL)
-    HARAKIRI ("Can't allocate memory for data buffer\n", 10);
+    error_terminate ("Can't allocate memory for data buffer\n", 10);
 
   /* Allocate memory for output buffer */
   if ((BufOut = (float *) calloc (out_size, sizeof (float))) == NULL)
-    HARAKIRI ("Can't allocate memory for data buffer\n", 10);
+    error_terminate ("Can't allocate memory for data buffer\n", 10);
 
 
   /* FILTERING OPERATION! */

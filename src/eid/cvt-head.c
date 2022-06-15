@@ -499,7 +499,7 @@ int main (int argc, char *argv[]) {
 
   /* If bitstream is not g192, abort */
   if (bs_format != g192)
-    HARAKIRI ("Bitstream needs to be in G.192 format. Aborted.\n", 7);
+    error_terminate ("Bitstream needs to be in G.192 format. Aborted.\n", 7);
 
   /* If sync info in file differs from the users' provided input, warns and changes to the value found in file */
   if (sync_inp != i) {
@@ -548,7 +548,7 @@ int main (int argc, char *argv[]) {
     sync_out = 1;
     break;
   default:
-    HARAKIRI ("Unrecognized bitstream type; check input file\n", 5);
+    error_terminate ("Unrecognized bitstream type; check input file\n", 5);
   }
 
   /* Print info */
@@ -580,9 +580,9 @@ int main (int argc, char *argv[]) {
 
   /* Allocate memory for input and output buffers */
   if ((bs_inp = (short *) calloc (Ninp, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for input buffer\n", 10);
+    error_terminate ("Can't allocate memory for input buffer\n", 10);
   if ((bs_out = (short *) calloc (Nout, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for output buffer\n", 10);
+    error_terminate ("Can't allocate memory for output buffer\n", 10);
 
 
   /* Check if is to process the whole file */

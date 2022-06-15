@@ -2538,7 +2538,7 @@ This tool works as follows:
     number of basic operators (first group) and all other functions
     (second group) are counted. This second group of other functions is
     divided into two sub-groups as it is possible to define a so called
-    "black list" that contains functions that should not be counted in
+    "block list" that contains functions that should not be counted in
     the program ROM. Typically these functions are memory allocation
     functions (malloc, free,\dots), file manipulation functions (fopen,
     fclose, fwrite, printf,\dots) or even functions related to complexity
@@ -2546,14 +2546,14 @@ This tool works as follows:
     already initialized and can be further edited and completed if
     needed. The other subgroup is called user defined functions as it
     consists of all functions which are neither basic operators nor
-    blacklist functions.
+    blocklist functions.
 \end{list}
 
 At the end of the execution, the results are printed out on the
 standard output indicating the names of the C file and of the
 pre-processed file, the number of calls to basic operators, the number
 of calls to user defined functions, and the number of calls to
-blacklist functions.
+blocklist functions.
 
 When a result file name is also given as second optional argument of
 the command line, a summary of the results is written in this result
@@ -2568,14 +2568,14 @@ The Excel file has as many rows as the number of C files. For each
 row, there are four columns: the first column contains the ANSI C
 input file name, the second the number of calls to basic operators,
 the third the number of calls to user defined functions and the fourth
-the number of calls to blacklist functions. In this way the program
+the number of calls to blocklist functions. In this way the program
 ROM of an application containing several C source files can be easily
 estimated as the sum of the numbers in the second and third columns.
 
 By defining the pre-pocessor directives {\tt VERBOSE\_BASOP}, {\tt
-VERBOSE\_FUNC} or\\ {\tt VERBOSE\_BLACKLIST\_FUNC} the detailed list
+VERBOSE\_FUNC} or\\ {\tt VERBOSE\_BLOCKLIST\_FUNC} the detailed list
 of called function for basic operator functions, user defined
-functions and blacklist functions respectively, is also printed
+functions and blocklist functions respectively, is also printed
 out. This allows an easy cross-check of the results.
 
 This tool is optimized for the basic operators of STL2005 or later. In
@@ -2598,8 +2598,8 @@ basop\_cnt input.c [result\_file\_name.txt]}
 where $input.c$ is an ANSI C file and $result\_file\_name.txt$ the
 ouput result file.
 
-If needed to further edit the black list of functions that should not
-be counted in the program ROM, modify {\tt const char blacklist[][20]
+If needed to further edit the block list of functions that should not
+be counted in the program ROM, modify {\tt const char blocklist[][20]
 = \{{\dots}\}} in basop\_cnt.c before compilation.
 
 
@@ -2617,22 +2617,22 @@ Input file:   \>g722.c\\
 Output pre-processed file:\>g722.c\_pre\\
 ~~87 ~calls to STL basicops\\
 ~~28 ~calls to user-defined functions\\
-~~~8 ~calls to blacklist tokens\\
+~~~8 ~calls to blocklist tokens\\
 \end{tabbing}
 }
-If the pre-processor directive {\tt VERBOSE\_BLACKLIST\_FUNC} is
-defined, the list of the 8 blacklist functions found is also given:
+If the pre-processor directive {\tt VERBOSE\_BLOCKLIST\_FUNC} is
+defined, the list of the 8 blocklist functions found is also given:
 \\ \texttt{
 \begin{tabbing}
-line..XXX:.\=blacklist X...\=x:\kill
-line  ~86:\>blacklist \#  \>1:                          \`          return \\
-line  160:\>blacklist \#  \>2:                          \`          calloc \\
-line  160:\>blacklist \#  \>3:                          \`          sizeof \\
-line  230:\>blacklist \#  \>4:                          \`            free \\
-line  271:\>blacklist \#  \>5:                          \`          return \\
-line  303:\>blacklist \#  \>6:                          \`          calloc \\
-line  303:\>blacklist \#  \>7:                          \`          sizeof \\
-line  318:\>blacklist \#  \>8:                          \`            free \\
+line..XXX:.\=blocklist X...\=x:\kill
+line  ~86:\>blocklist \#  \>1:                          \`          return \\
+line  160:\>blocklist \#  \>2:                          \`          calloc \\
+line  160:\>blocklist \#  \>3:                          \`          sizeof \\
+line  230:\>blocklist \#  \>4:                          \`            free \\
+line  271:\>blocklist \#  \>5:                          \`          return \\
+line  303:\>blocklist \#  \>6:                          \`          calloc \\
+line  303:\>blocklist \#  \>7:                          \`          sizeof \\
+line  318:\>blocklist \#  \>8:                          \`            free \\
 \end{tabbing}
 }
 Note that the line numbers correspond to the comment free pre-processed file.

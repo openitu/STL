@@ -256,11 +256,11 @@ int main (int argc, char *argv[]) {
 
   GET_PAR_S (1, "_BIN-File to be processed: ............... ", inpfil);
   if ((inpfilptr = fopen (inpfil, RB)) == NULL)
-    HARAKIRI ("\n   Error opening input file", 1);
+    error_terminate ("\n   Error opening input file", 1);
 
   GET_PAR_S (2, "_BIN-Output File: ........................ ", outfil);
   if ((outfilptr = fopen (outfil, WB)) == NULL)
-    HARAKIRI ("\n   Error opening output file", 1);
+    error_terminate ("\n   Error opening output file", 1);
 
   FIND_PAR_L (3, "_Segment Length for Filtering: ........... ", lseg, lseg);
   if (lseg > LSEGMAX) {
@@ -275,7 +275,7 @@ int main (int argc, char *argv[]) {
    */
 
   if ((typ1_ptr = iir_G712_8khz_init ()) == 0)
-    HARAKIRI ("Filter 1: initialization failure iir_G712_8khz()", 1);
+    error_terminate ("Filter 1: initialization failure iir_G712_8khz()", 1);
 
 
 /*

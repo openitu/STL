@@ -279,7 +279,7 @@ int main (int argc, char *argv[]) {
   inp_type = toupper ((int) lilo[1]) == 'O' ? IS_LOG : IS_ADPCM;
   out_type = toupper ((int) lilo[3]) == 'O' ? IS_LOG : IS_ADPCM;
   if ((out_type == IS_ADPCM) && (inp_type == IS_ADPCM))
-    HARAKIRI ("Bad conversion chosen (lolo,load,adlo)! Aborted...\n", 8);
+    error_terminate ("Bad conversion chosen (lolo,load,adlo)! Aborted...\n", 8);
 
   /* Classification of law */
   if (toupper ((int) law[0]) == (char) 'A')
@@ -287,7 +287,7 @@ int main (int argc, char *argv[]) {
   else if (toupper ((int) law[0]) == (char) 'U')
     law[0] = '0';
   else
-    HARAKIRI (" Invalid law (A or u)! Aborted...\n", 7);
+    error_terminate (" Invalid law (A or u)! Aborted...\n", 7);
 
   /* Classification of rate */
   if (rate == 40)
@@ -299,7 +299,7 @@ int main (int argc, char *argv[]) {
   else if (rate == 16)
     rate = 2;
   else if ((rate != 2) && (rate != 3) && (rate != 4) && (rate != 5)) {
-    HARAKIRI (" Invalid rate (5/4/3/2) or (40/32/24/16)! Aborted...\n", 9);
+    error_terminate (" Invalid rate (5/4/3/2) or (40/32/24/16)! Aborted...\n", 9);
   }
 
 /*
@@ -307,11 +307,11 @@ int main (int argc, char *argv[]) {
  */
 
   if ((inp_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
   if ((out_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
   if ((tmp_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
 
 /*
  * ......... FILE PREPARATION .........

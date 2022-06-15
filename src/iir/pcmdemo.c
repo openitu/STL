@@ -305,23 +305,23 @@ int main (int argc, char *argv[]) {
   /* ......... GETTING PARAMETERS ......... */
   GET_PAR_S (1, "_BIN-File to be processed: ............... ", inpfil);
   if ((inpfilptr = fopen (inpfil, RB)) == NULL)
-    HARAKIRI ("\n   Error opening input file", 1);
+    error_terminate ("\n   Error opening input file", 1);
 
   GET_PAR_S (2, "_BIN-Output File: ........................ ", outfil);
   if ((outfilptr = fopen (outfil, WB)) == NULL)
-    HARAKIRI ("\n   Error opening output file", 1);
+    error_terminate ("\n   Error opening output file", 1);
 
   GET_PAR_S (3, "_type of filter 1: ....................... ", typ1);
   if ((strcmp (typ1, "0") != 0) && (strcmp (typ1, "1_1") != 0) && (strcmp (typ1, "1_2") != 0) && (strcmp (typ1, "2_1") != 0))
-    HARAKIRI ("\n   undefined filter type (use 0, 1_1, 1_2 or 2_1)", 1);
+    error_terminate ("\n   undefined filter type (use 0, 1_1, 1_2 or 2_1)", 1);
 
   GET_PAR_S (4, "_type of filter 2: ....................... ", typ2);
   if ((strcmp (typ2, "0") != 0) && (strcmp (typ2, "1_1") != 0) && (strcmp (typ2, "1_2") != 0) && (strcmp (typ2, "2_1") != 0))
-    HARAKIRI ("\n   undefined filter type (use 0, 1_1, 1_2 or 2_1)", 1);
+    error_terminate ("\n   undefined filter type (use 0, 1_1, 1_2 or 2_1)", 1);
 
   GET_PAR_S (5, "_type of filter 3: ....................... ", typ3);
   if ((strcmp (typ3, "0") != 0) && (strcmp (typ3, "1_1") != 0) && (strcmp (typ3, "1_2") != 0) && (strcmp (typ3, "2_1") != 0))
-    HARAKIRI ("\n   undefined filter type (use 0, 1_1, 1_2 or 2_1)", 1);
+    error_terminate ("\n   undefined filter type (use 0, 1_1, 1_2 or 2_1)", 1);
 
   FIND_PAR_L (6, "_Segment Length for Filtering: ........... ", lseg, lseg);
   if (lseg > LSEGMAX) {
@@ -334,11 +334,11 @@ int main (int argc, char *argv[]) {
    * ... ALLOCATE MEMORY FOR INTERMEDIATE AND FINAL DATA ...
    */
   if ((buff1 = (float *) calloc ((long) (2 * lseg), sizeof (float))) == NULL)
-    HARAKIRI ("Error allocating memory for 1st filtering step\n", 3);
+    error_terminate ("Error allocating memory for 1st filtering step\n", 3);
   if ((buff2 = (float *) calloc ((long) (4 * lseg), sizeof (float))) == NULL)
-    HARAKIRI ("Error allocating memory for 2nd filtering step\n", 3);
+    error_terminate ("Error allocating memory for 2nd filtering step\n", 3);
   if ((buff3 = (float *) calloc ((long) (8 * lseg), sizeof (float))) == NULL)
-    HARAKIRI ("Error allocating memory for 3rd filtering step\n", 3);
+    error_terminate ("Error allocating memory for 3rd filtering step\n", 3);
 
 /*
    * ... INITIALIZE SELECTED IIR-STRUCTURES FOR UP-/DOWNSAMPLING ...
@@ -353,13 +353,13 @@ int main (int argc, char *argv[]) {
   /* ... for Filter #1 */
   if (strcmp (typ1, "1_1") == 0) {
     if ((typ1_ptr = stdpcm_16khz_init ()) == 0)
-      HARAKIRI ("Filter 1: initialization failure stdpcm_16khz_init()", 1);
+      error_terminate ("Filter 1: initialization failure stdpcm_16khz_init()", 1);
   } else if (strcmp (typ1, "1_2") == 0) {
     if ((typ1_ptr = stdpcm_1_to_2_init ()) == 0)
-      HARAKIRI ("Filter 1: initialization failure stdpcm_1_to_2_init()", 1);
+      error_terminate ("Filter 1: initialization failure stdpcm_1_to_2_init()", 1);
   } else if (strcmp (typ1, "2_1") == 0) {
     if ((typ1_ptr = stdpcm_2_to_1_init ()) == 0)
-      HARAKIRI ("Filter 1: initialization failure stdpcm_2_to_1_init()", 1);
+      error_terminate ("Filter 1: initialization failure stdpcm_2_to_1_init()", 1);
   } else
     typ1_ptr = (SCD_IIR *) NULL;        /* Init.the pointer to NULL */
 
@@ -367,13 +367,13 @@ int main (int argc, char *argv[]) {
   /* ... for Filter #2: */
   if (strcmp (typ2, "1_1") == 0) {
     if ((typ2_ptr = stdpcm_16khz_init ()) == 0)
-      HARAKIRI ("Filter 2: initialization failure stdpcm_16khz_init()", 1);
+      error_terminate ("Filter 2: initialization failure stdpcm_16khz_init()", 1);
   } else if (strcmp (typ2, "1_2") == 0) {
     if ((typ2_ptr = stdpcm_1_to_2_init ()) == 0)
-      HARAKIRI ("Filter 2: initialization failure stdpcm_1_to_2_init()", 1);
+      error_terminate ("Filter 2: initialization failure stdpcm_1_to_2_init()", 1);
   } else if (strcmp (typ2, "2_1") == 0) {
     if ((typ2_ptr = stdpcm_2_to_1_init ()) == 0)
-      HARAKIRI ("Filter 2: initialization failure stdpcm_2_to_1_init()", 1);
+      error_terminate ("Filter 2: initialization failure stdpcm_2_to_1_init()", 1);
   } else
     typ2_ptr = (SCD_IIR *) NULL;
 
@@ -381,13 +381,13 @@ int main (int argc, char *argv[]) {
   /* ... for Filter #3: */
   if (strcmp (typ3, "1_1") == 0) {
     if ((typ3_ptr = stdpcm_16khz_init ()) == 0)
-      HARAKIRI ("Filter 3: initialization failure stdpcm_16khz_init()", 1);
+      error_terminate ("Filter 3: initialization failure stdpcm_16khz_init()", 1);
   } else if (strcmp (typ3, "1_2") == 0) {
     if ((typ3_ptr = stdpcm_1_to_2_init ()) == 0)
-      HARAKIRI ("Filter 3: initialization failure stdpcm_1_to_2_init()", 1);
+      error_terminate ("Filter 3: initialization failure stdpcm_1_to_2_init()", 1);
   } else if (strcmp (typ3, "2_1") == 0) {
     if ((typ3_ptr = stdpcm_2_to_1_init ()) == 0)
-      HARAKIRI ("Filter 3: initialization failure stdpcm_2_to_1_init()", 1);
+      error_terminate ("Filter 3: initialization failure stdpcm_2_to_1_init()", 1);
   } else
     typ3_ptr = (SCD_IIR *) NULL;
 

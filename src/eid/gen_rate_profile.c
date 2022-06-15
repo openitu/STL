@@ -186,7 +186,7 @@ int main (int argc, char *argv[]) {
         n_layers = parse_layers (layer_str, &(layer_b[0]));
 
         if (n_layers <= 0) {
-          HARAKIRI ("Illegal layer string ", 5);
+          error_terminate ("Illegal layer string ", 5);
           exit (-1);
         }
         /* Move arg{c,v} over the option to the next argument */
@@ -198,7 +198,7 @@ int main (int argc, char *argv[]) {
         framerate = atoi (argv[2]);
 
         if (framerate <= 1) {
-          HARAKIRI ("Illegal framerate specified must be higher than 0\n", 5);
+          error_terminate ("Illegal framerate specified must be higher than 0\n", 5);
           exit (-1);
         }
         /* Move arg{c,v} over the option to the next argument */
@@ -212,7 +212,7 @@ int main (int argc, char *argv[]) {
   }
 
   if (n_layers <= 0) {
-    HARAKIRI ("No -layers A,B.C, ... option found on the command line. Exiting.\n", 6);
+    error_terminate ("No -layers A,B.C, ... option found on the command line. Exiting.\n", 6);
   } else {
     /* display starting layer setup */
     fprintf (stdout, "\n Starting layer_setup=[");
@@ -227,7 +227,7 @@ int main (int argc, char *argv[]) {
 
   GET_PAR_S (1, "_Output rate file ...............: ", o_file);
   if ((Forf = fopen (o_file, WB)) == NULL) {
-    HARAKIRI ("Could not create output rate file\n", 1);
+    error_terminate ("Could not create output rate file\n", 1);
   }
 
   FIND_PAR_L (2, "_Period .........................: ", period, DEF_PERIOD);
@@ -236,7 +236,7 @@ int main (int argc, char *argv[]) {
   FIND_PAR_L (5, "_Seed ...........................: ", seed, DEF_SEED);
 
   if (period > MAX_PERIOD) {
-    HARAKIRI ("Too long period !!\n", 1);
+    error_terminate ("Too long period !!\n", 1);
   }
 
   /* truncate minrate according to frame rate */

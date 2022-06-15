@@ -254,7 +254,7 @@ int main (int argc, char *argv[]) {
             break;
         }
         if (i == nil) {
-          HARAKIRI ("Invalid error pattern format type. Aborted\n", 5);
+          error_terminate ("Invalid error pattern format type. Aborted\n", 5);
         } else
           ep_format = i;
 
@@ -299,7 +299,7 @@ int main (int argc, char *argv[]) {
 
   /* Open files */
   if ((Fep = fopen (ep_file, RB)) == NULL)
-    HARAKIRI ("Could not open error pattern file\n", 1);
+    error_terminate ("Could not open error pattern file\n", 1);
 
 
   /* *** CHECK TYPE OF ERROR PATTERN *** */
@@ -340,7 +340,7 @@ int main (int argc, char *argv[]) {
   /* Allocate memory for data buffers */
   /* ... error pattern from file */
   if ((ep = (short *) calloc (ep_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for error pattern. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for error pattern. Aborted.\n", 6);
 
   /* Initiaize histogram state variable */
   init_ep_histogram (&eps, burst_len);

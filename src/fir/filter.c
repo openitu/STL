@@ -423,7 +423,7 @@ int main (int argc, char *argv[]) {
 
   /* The delay option is only available with asynchronous filtering */
   if (delay != 0 && !async)
-    HARAKIRI ("\nDelay option only available for ASYNC filtering! Aborted.\n", 5);
+    error_terminate ("\nDelay option only available for ASYNC filtering! Aborted.\n", 5);
 
 
   /* ......... STARTING ......... */
@@ -451,7 +451,7 @@ int main (int argc, char *argv[]) {
   /* Allocate memory for delay buffer & initialize it */
   if (delay > 0) {
     if ((zero = (short *) calloc (delay, sizeof (short))) == NULL) {
-      HARAKIRI ("Error allocating memory for delay buffer\n", 5);
+      error_terminate ("Error allocating memory for delay buffer\n", 5);
     } else
       memset (zero, 0, delay * sizeof (short));
   }
@@ -494,7 +494,7 @@ int main (int argc, char *argv[]) {
       fir_state = mod_irs_48khz_init ();
       break;
     default:
-      HARAKIRI ("Unimplemented: IRS rate not 8, 16 or 48 kHz\n", 15);
+      error_terminate ("Unimplemented: IRS rate not 8, 16 or 48 kHz\n", 15);
     }
   }
   if (strncmp (F_type, "rxirs", 5) == 0 || strncmp (F_type, "RXIRS", 5) == 0) {
@@ -509,7 +509,7 @@ int main (int argc, char *argv[]) {
       fir_state = rx_mod_irs_16khz_init ();
       break;
     default:
-      HARAKIRI ("Unimplemented: Receive Mod-IRS rate not 8 or 16 kHz\n", 15);
+      error_terminate ("Unimplemented: Receive Mod-IRS rate not 8 or 16 kHz\n", 15);
     }
   } else if (strncmp (F_type, "hirs16", 6) == 0 || strncmp (F_type, "HIRS16", 6) == 0) {
     fir_state = ht_irs_16khz_init ();
@@ -714,19 +714,19 @@ int main (int argc, char *argv[]) {
 
   /* Check consistency once more */
   if (async && factor == 1)
-    HARAKIRI ("INCONSISTENCY: async operation requires non-unity upsampling factor; aborting\n", 10);
+    error_terminate ("INCONSISTENCY: async operation requires non-unity upsampling factor; aborting\n", 10);
 
   /* Allocate memory for float input buffer */
   if ((InpBuff = (float *) calloc (inp_size, sizeof (float))) == NULL)
-    HARAKIRI ("Can't allocate memory for input data buffer\n", 10);
+    error_terminate ("Can't allocate memory for input data buffer\n", 10);
 
   /* Allocate memory for float output buffer */
   if ((OutBuff = (float *) calloc (out_size, sizeof (float))) == NULL)
-    HARAKIRI ("Can't allocate memory for output data buffer\n", 10);
+    error_terminate ("Can't allocate memory for output data buffer\n", 10);
 
   /* Allocate memory for short input/output buffer */
   if ((TmpBuff = (short *) calloc (max (inp_size, out_size), sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for short data buffer\n", 10);
+    error_terminate ("Can't allocate memory for short data buffer\n", 10);
 
 
 /*

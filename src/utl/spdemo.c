@@ -545,7 +545,7 @@ int main (int argc, char *argv[]) {
   /* If input is parallel, output must be serial */
   /* If input is serial, output must be parallel */
   if (inp_type == out_type)
-    HARAKIRI (" Invalid input/output combination of option [sp|ps]!\n", 7);
+    error_terminate (" Invalid input/output combination of option [sp|ps]!\n", 7);
 
   /* Verify if sync is valid; if not, change to 1 */
   if (sync != 1 && sync != 0)
@@ -594,7 +594,7 @@ int main (int argc, char *argv[]) {
 
     /* If bitstream is not g192, abort */
     if (bs_format != g192)
-      HARAKIRI ("Bitstream needs to be in G.192 format. Aborted.\n", 7);
+      error_terminate ("Bitstream needs to be in G.192 format. Aborted.\n", 7);
 
     /* If sync info in file differs from the users' provided input, warns and changes to the value found in file */
     if (sync != i) {
@@ -648,14 +648,14 @@ int main (int argc, char *argv[]) {
   /* Allocate memory for input and output buffers */
   if (inp_type == IS_SERIAL && out_type == IS_PARALLEL) {
     if ((bit_stm = (short *) calloc (Nin, size)) == NULL)
-      HARAKIRI ("Can't allocate memory for input buffer\n", 10);
+      error_terminate ("Can't allocate memory for input buffer\n", 10);
     if ((par_buf = (short *) calloc (Nout, sizeof (short))) == NULL)
-      HARAKIRI ("Can't allocate memory for output buffer\n", 11);
+      error_terminate ("Can't allocate memory for output buffer\n", 11);
   } else if (inp_type == IS_PARALLEL && out_type == IS_SERIAL) {
     if ((par_buf = (short *) calloc (Nin, sizeof (short))) == NULL)
-      HARAKIRI ("Can't allocate memory for input buffer\n", 10);
+      error_terminate ("Can't allocate memory for input buffer\n", 10);
     if ((bit_stm = (short *) calloc (Nout, size)) == NULL)
-      HARAKIRI ("Can't allocate memory for output buffer\n", 11);
+      error_terminate ("Can't allocate memory for output buffer\n", 11);
   }
 
 

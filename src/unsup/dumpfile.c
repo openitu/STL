@@ -268,7 +268,7 @@ int main (int argc, char *argv[]) {
     samplesize = sizeof (long);
     break;
   default:
-    HARAKIRI ("++==++==++ UNSUPPORTED DATA TYPE ++==++==++\007\n", 7);
+    error_terminate ("++==++==++ UNSUPPORTED DATA TYPE ++==++==++\007\n", 7);
   }
 
   /* Define 1st sample to compare */
@@ -331,7 +331,7 @@ int main (int argc, char *argv[]) {
 
   case 'R':
     fprintf (stderr, "This program doesn't handle REALs yet ...");
-    HARAKIRI (" sorry and aborting!\n\a", 4);
+    error_terminate (" sorry and aborting!\n\a", 4);
   }
   /* Finalizations */
   PRINT_RULE;

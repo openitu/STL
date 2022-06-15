@@ -403,7 +403,7 @@ int main (int argc, char *argv[]) {
             break;
         }
         if (i == nil) {
-          HARAKIRI ("Invalid BS format type. Aborted\n", 5);
+          error_terminate ("Invalid BS format type. Aborted\n", 5);
         } else {
           bs_format = i;
         }
@@ -418,7 +418,7 @@ int main (int argc, char *argv[]) {
             break;
         }
         if (i == nil) {
-          HARAKIRI ("Invalid error pattern format type. Aborted\n", 5);
+          error_terminate ("Invalid error pattern format type. Aborted\n", 5);
         } else {
           ep_format = i;
         }
@@ -440,7 +440,7 @@ int main (int argc, char *argv[]) {
         n_layers = parse_layers (layer_str, &(layer_b[0]));
 
         if (n_layers <= 0) {
-          HARAKIRI ("Illegal layer string ", 5);
+          error_terminate ("Illegal layer string ", 5);
           exit (-1);
         }
         /* Move arg{c,v} over the option to the next argument */
@@ -470,7 +470,7 @@ int main (int argc, char *argv[]) {
   local_argc--;
 
   if (((local_argc - 1) <= 0) || (local_argc - 1) > MAX_FILES) {
-    HARAKIRI ("Illegal number of EP files\n", 1);
+    error_terminate ("Illegal number of EP files\n", 1);
   }
 
   for (i = 0; i < (local_argc - 1); i++) {
@@ -478,7 +478,7 @@ int main (int argc, char *argv[]) {
   }
   /* check layering info vs number of EP-files */
   if (n_layers != (local_argc - 1)) {
-    HARAKIRI ("Missmatching number of layers  and EP-files\n\n", 5);
+    error_terminate ("Missmatching number of layers  and EP-files\n\n", 5);
   }
 
   GET_PAR_S (local_argc - 1 + 2, "_Output bit stream file .................: ", obs_file);
@@ -489,15 +489,15 @@ int main (int argc, char *argv[]) {
 
   /* Open files */
   if ((Fibs = fopen (ibs_file, RB)) == NULL) {
-    HARAKIRI ("Could not open input bitstream file\n", 1);
+    error_terminate ("Could not open input bitstream file\n", 1);
   }
   for (i = 0; i < n_layers; i++) {
     if ((Fep[i] = fopen (ep_file[i], RB)) == NULL) {
-      HARAKIRI ("Could not open error pattern file\n", 1);
+      error_terminate ("Could not open error pattern file\n", 1);
     }
   }
   if ((Fobs = fopen (obs_file, WB)) == NULL) {
-    HARAKIRI ("Could not create output file\n", 1);
+    error_terminate ("Could not create output file\n", 1);
   }
 #ifdef DEBUG
   F = fopen ("ep.g192", WB);    /* File to save the EP in G.192 format */
@@ -576,7 +576,7 @@ int main (int argc, char *argv[]) {
       }
       /* check maximum frame size for byte input vs current layering information */
       if (layer_b[n_layers - 1] > 255) {
-        HARAKIRI ("Error::Missmatching layer information, g192 byte input is used, layers can not be larger than 255 bits\n\n", 1);
+        error_terminate ("Error::Missmatching layer information, g192 byte input is used, layers can not be larger than 255 bits\n\n", 1);
       }
     } else {
       sync_header = 0;
@@ -586,7 +586,7 @@ int main (int argc, char *argv[]) {
   }
 
   if (fr_len == 0 || sync_header == 0) {
-    HARAKIRI ("Error::Input bitstream format MUST have sync_headers for layered error application\n\n", 1);
+    error_terminate ("Error::Input bitstream format MUST have sync_headers for layered error application\n\n", 1);
   }
 
 
@@ -594,7 +594,7 @@ int main (int argc, char *argv[]) {
   i = check_eid_format (Fep[0], ep_file[0], &tmp_type);
   /* Check whether the specified EP format matches with the one in the file */
   if (i == compact) {
-    HARAKIRI ("Error::EP format can not be binary compact format. g.192 format or g.192 byte format is required.\n\n", 1);
+    error_terminate ("Error::EP format can not be binary compact format. g.192 format or g.192 byte format is required.\n\n", 1);
   }
 
   if (i != ep_format) {
@@ -630,10 +630,10 @@ int main (int argc, char *argv[]) {
       }
     }
     if (ep_type != ep_type_2[k]) {
-      HARAKIRI ("EP types (BER/FER) must be the same for all patterns (all layers) !!\n\n", 1);
+      error_terminate ("EP types (BER/FER) must be the same for all patterns (all layers) !!\n\n", 1);
     }
     if (ep_format != ep_format_2[k]) {
-      HARAKIRI ("EP formats(g192,byte) must be the same for all patterns (and layers) !!\n\n", 1);
+      error_terminate ("EP formats(g192,byte) must be the same for all patterns (and layers) !!\n\n", 1);
     }
   }
 
@@ -682,7 +682,7 @@ int main (int argc, char *argv[]) {
 
 
     if (max_fr_len > layer_b[n_layers - 1]) {
-      HARAKIRI ("Error:: maximum frame size in input bitstream, larger than highest layer boundary !!\n\n", 1);
+      error_terminate ("Error:: maximum frame size in input bitstream, larger than highest layer boundary !!\n\n", 1);
     }
   }
 
@@ -695,11 +695,11 @@ int main (int argc, char *argv[]) {
 
   /* Allocate memory for data buffers */
   if ((bs = (short *) calloc (bs_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for bitstream. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for bitstream. Aborted.\n", 6);
   if ((layer_error = (short *) calloc (MAX_FILES, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for error pattern. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for error pattern. Aborted.\n", 6);
   if ((read_ok = (short *) calloc (MAX_FILES, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for ep_read_flags. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for ep_read_flags. Aborted.\n", 6);
 
   /* Initializes to the start of the payload in input bitstream */
   payload = sync_header ? bs + 2 : bs;
@@ -707,7 +707,7 @@ int main (int argc, char *argv[]) {
   /* Prepare a totally-erased frame */
   /* ... allocate memory */
   if ((outp_frame = (short *) calloc (bs_len, sizeof (short))) == NULL) {
-    HARAKIRI ("Can't allocate memory for erased frame. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for erased frame. Aborted.\n", 6);
   }
 
 
@@ -759,7 +759,7 @@ int main (int argc, char *argv[]) {
       }
       if (!k) {
         TRACE ("Bad input frame length, k=%ld, fr_len=%ld\n", k, fr_len);
-        HARAKIRI ("Illegal frame length in input bitstream\n", 1);
+        error_terminate ("Illegal frame length in input bitstream\n", 1);
       } else {
         TRACE ("Good inp length, k=%ld, fr_len=%ld\n", k, fr_len);
       }
@@ -957,7 +957,7 @@ int main (int argc, char *argv[]) {
     }
     break;
   default:
-    HARAKIRI ("BAD(unknown) error application type. Aborted.\n", 6);
+    error_terminate ("BAD(unknown) error application type. Aborted.\n", 6);
     break;
   }
 

@@ -617,7 +617,7 @@ int main (int argc, char *argv[]) {
     }
     break;
   default:
-    HARAKIRI ("++==++==++ UNSUPPORTED DATA TYPE ++==++==++\007\n", 7);
+    error_terminate ("++==++==++ UNSUPPORTED DATA TYPE ++==++==++\007\n", 7);
   }
 
   if ( result != 1 ){

@@ -25,7 +25,7 @@
   This file contains a program ROM estimation tool for softwares
   written using STL basic operators.
 
-  Usage : - Check blacklist array in this file and edit it if
+  Usage : - Check blocklist array in this file and edit it if
             adaptation is needed
           - Compile basop_cnt.c
           - Call basop_cnt for each C source file of the studied
@@ -36,12 +36,12 @@
             available in res.xls, it can be opened in Excel or in any
             text editor.  Res.xls contains 4 columns:
             C file name, # of basic operators,
-            # of user functions, and # of blacklist functions
+            # of user functions, and # of blocklist functions
 
   HISTORY :
   13.Oct.06	v1.0	First version used in G.722 PLC standardisation
 
-  14.Sep.09 v1.1  Cleaned blacklist, more comments, possibility to save
+  14.Sep.09 v1.1  Cleaned blocklist, more comments, possibility to save
                   results in a file (STL2009)
 
   AUTHORS :
@@ -55,7 +55,7 @@
 
 /** / #define VERBOSE_BASOP          /*print on stdout each basicOp found*/
 /** / #define VERBOSE_FUNC           /*print on stdout each user defined function call found*/
-/** / #define VERBOSE_BLACKLIST_FUNC /*print on stdout each blacklist function call found (not counted in complexity)*/
+/** / #define VERBOSE_BLOCKLIST_FUNC /*print on stdout each blocklist function call found (not counted in complexity)*/
 
 /* #define OLD_STL  */
 /* switch to old STL (before STL2005): "if", "do", are not counted directly as they should be
@@ -260,7 +260,7 @@ const char basops[][20] = {     /* all basicop commands */
   "W_extract_h",
   "W_round48_L",
   "W_round32_s",
-  "W_norm", 
+  "W_norm",
   "W_add",
   "W_sub",
   "W_neg",
@@ -313,7 +313,7 @@ const char basops[][20] = {     /* all basicop commands */
   "*"
 };
 
-const char blacklist[][20] = {  /* to recognize standard C functions (memory allocation, printings...) and other auxilary user defined functions that should not be counted in the program ROM */
+const char blocklist[][20] = {  /* to recognize standard C functions (memory allocation, printings...) and other auxilary user defined functions that should not be counted in the program ROM */
   /* this part can be edited to add new functions if needed */
   "malloc",
   "calloc",
@@ -388,7 +388,7 @@ int main (int argc, char *argv[]) {
   char last_word[200];          /* contains the last alphanumerical word */
   char prepoc_file[200];
   int ind, countops, i, ind_lastword;
-  int func_cnt, func_flag, blacklist_cnt;
+  int func_cnt, func_flag, blocklist_cnt;
   char twochar[3] = { "  \0" }; /* contains a string of two chars to search for comment separators */
   int incomment = 0;            /* flag to signal that the processing is in a commented part */
   int infunction = 0;           /* flag to signal that the processing is in a function, counts the opened {-s */
@@ -490,7 +490,7 @@ int main (int argc, char *argv[]) {
   ind = 0;
   countops = 0;
   func_cnt = 0;
-  blacklist_cnt = 0;
+  blocklist_cnt = 0;
   words[ind] = 0;
   ind_lastword = 0;
   last_word[ind_lastword] = 0;
@@ -580,11 +580,11 @@ int main (int argc, char *argv[]) {
           }
 
           /* check for standard C functions */
-          if (search_token (blacklist, last_word, ind_lastword) == 1) {
+          if (search_token (blocklist, last_word, ind_lastword) == 1) {
             func_flag = 0;      /* C function found --> not a user function */
-            blacklist_cnt++;
-#ifdef VERBOSE_BLACKLIST_FUNC
-            printf ("line %4d: blacklist #%4d:            %30s \n", line, blacklist_cnt, last_word);
+            blocklist_cnt++;
+#ifdef VERBOSE_BLOCKLIST_FUNC
+            printf ("line %4d: blocklist #%4d:            %30s \n", line, blocklist_cnt, last_word);
 #endif
           }
 
@@ -612,11 +612,11 @@ int main (int argc, char *argv[]) {
 
   printf ("%4d STL basicops\n", countops);
   printf ("%4d calls to user-defined functions\n", func_cnt);
-  printf ("%4d blacklist tokens\n\n", blacklist_cnt);
+  printf ("%4d blocklist tokens\n\n", blocklist_cnt);
 
   fclose (fp);
   if (argc == 3) {
-    fprintf (fpr, "%s\t%d\t%d\t%d\n", argv[1], countops, func_cnt, blacklist_cnt);
+    fprintf (fpr, "%s\t%d\t%d\t%d\n", argv[1], countops, func_cnt, blocklist_cnt);
     fclose (fpr);
   }
 

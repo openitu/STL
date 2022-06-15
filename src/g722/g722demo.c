@@ -195,7 +195,7 @@ int main (int argc, char *argv[]) {
 
         /* Protect mode, if misgiven */
         if (mode < 1 || mode > 3)
-          HARAKIRI ("Bad mode specified; aborting\n", 2);
+          error_terminate ("Bad mode specified; aborting\n", 2);
 
         /* Move argv over the option to the next argument */
         argv += 2;
@@ -261,7 +261,7 @@ int main (int argc, char *argv[]) {
 
   /* Protect mode, if misgiven */
   if (mode < 1 || mode > 3)
-    HARAKIRI ("Bad mode specified; aborting\n", 2);
+    error_terminate ("Bad mode specified; aborting\n", 2);
 
   /* Open input file */
   if ((inp = fopen (FileIn, RB)) == NULL)
@@ -278,27 +278,27 @@ int main (int argc, char *argv[]) {
     out_buf = outcode = (Word16 *) calloc (N, sizeof (Word16));
     cod_buf = code = (Word16 *) calloc (N / 2, sizeof (Word16));
     if (inp_buf == NULL)
-      HARAKIRI ("Error alocating input buffer\n", 3);
+      error_terminate ("Error alocating input buffer\n", 3);
     if (out_buf == NULL)
-      HARAKIRI ("Error alocating output buffer\n", 3);
+      error_terminate ("Error alocating output buffer\n", 3);
     if (cod_buf == NULL)
-      HARAKIRI ("Error alocating bitstream buffer\n", 3);
+      error_terminate ("Error alocating bitstream buffer\n", 3);
   } else if (encode) {
     /* It is a encode-only operation */
     inp_buf = incode = (Word16 *) calloc (N, sizeof (Word16));
     out_buf = cod_buf = code = (Word16 *) calloc (N / 2, sizeof (Word16));
     if (inp_buf == NULL)
-      HARAKIRI ("Error alocating input buffer\n", 3);
+      error_terminate ("Error alocating input buffer\n", 3);
     if (cod_buf == NULL)
-      HARAKIRI ("Error alocating bitstream buffer\n", 3);
+      error_terminate ("Error alocating bitstream buffer\n", 3);
   } else {
     /* It is a decode-only operation */
     inp_buf = cod_buf = incode = (Word16 *) calloc (N, sizeof (Word16));
     outcode = out_buf = (Word16 *) calloc (2l * N, sizeof (Word16));
     if (cod_buf == NULL)
-      HARAKIRI ("Error alocating bitstream buffer\n", 3);
+      error_terminate ("Error alocating bitstream buffer\n", 3);
     if (out_buf == NULL)
-      HARAKIRI ("Error alocating output buffer\n", 3);
+      error_terminate ("Error alocating output buffer\n", 3);
   }
 #endif
 
@@ -341,7 +341,7 @@ int main (int argc, char *argv[]) {
 
       /* Test for error */
       if (smpno != read1)
-        HARAKIRI ("Error encoding!\n", 10);
+        error_terminate ("Error encoding!\n", 10);
     }
 
     if (decode) {
@@ -353,7 +353,7 @@ int main (int argc, char *argv[]) {
 
       /* Test for error */
       if (smpno != read1)
-        HARAKIRI ("Error decoding!\n", 10);
+        error_terminate ("Error decoding!\n", 10);
     }
 
     /* Update sample counter */

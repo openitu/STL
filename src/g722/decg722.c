@@ -347,7 +347,7 @@ int main (int argc, char *argv[]) {
 
   /* check decompression mode_arg, */
   if (mode_arg < 1 || mode_arg > N_MODES) {
-    HARAKIRI ("Bad mode specified; aborting\n", 2);
+    error_terminate ("Bad mode specified; aborting\n", 2);
   }
   /* Open input file */
   if ((F_cod = fopen (FileIn, RB)) == NULL) {
@@ -396,7 +396,7 @@ int main (int argc, char *argv[]) {
     if (i != bs_format) {
       /* The input bitstream format is not g192 */
       fprintf (stderr, "*** Illegal input bitstream format: %s (should be %s) ***\n", format_str (i), format_str ((int) bs_format));
-      HARAKIRI ("\nExiting...\n\n", 1);
+      error_terminate ("\nExiting...\n\n", 1);
     }
     {                           /* check input file for valid initial G.192 synchronism headers */
       short sync_header = 0;
@@ -411,16 +411,16 @@ int main (int argc, char *argv[]) {
       }
       fseek (F_cod, 0l, SEEK_SET);      /* Rewind BP file */
       if (sync_header == 0) {
-        HARAKIRI ("Error::Input bitstream MUST have valid G192 sync_headers \n\n", 1);
+        error_terminate ("Error::Input bitstream MUST have valid G192 sync_headers \n\n", 1);
       }
     }
     /* start actual g.192 frame loop */
     while (fread (header, sizeof (short), 2, F_cod) == 2) {
       if (!((short) fread (inp_frame, sizeof (short), header[1], F_cod) == header[1])) {
-        HARAKIRI ("Error::Could not read complete frame of input bitstream  \n\n", 1);
+        error_terminate ("Error::Could not read complete frame of input bitstream  \n\n", 1);
         break;
       } else if (!((header[1] == 0) || (header[1] == fr_size[1]) || (header[1] == fr_size[2]) || (header[1] == fr_size[3]))) {
-        HARAKIRI ("Error::invalid input frame size in bitstream, only (0,48,56,64) kbps are allowed)\n\n", 1);
+        error_terminate ("Error::invalid input frame size in bitstream, only (0,48,56,64) kbps are allowed)\n\n", 1);
         break;
       } else {                  /* normal decoding */
         if (!quiet && !debug) { /* progress character */

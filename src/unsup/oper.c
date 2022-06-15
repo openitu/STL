@@ -334,7 +334,7 @@ int main (int argc, char *argv[]) {
         } else if (strcmp (argv[2], "linear") == 0)
           gain_in_dB = 0;
         else
-          HARAKIRI ("Invalid gain type (use dB or linear)\n", 5);
+          error_terminate ("Invalid gain type (use dB or linear)\n", 5);
 
         /* Move arg{c,v} over the option to the next argument */
         argc -= 2;
@@ -442,7 +442,7 @@ int main (int argc, char *argv[]) {
     oper_f = divide;
     break;
   default:
-    HARAKIRI ("Oper: Undefined operation - aborted\n", 5);
+    error_terminate ("Oper: Undefined operation - aborted\n", 5);
   }
 
   /* Convert gain if necessary */
@@ -466,7 +466,7 @@ int main (int argc, char *argv[]) {
     samplesize = sizeof (long);
     break;
   default:
-    HARAKIRI ("++==++==++ UNSUPPORTED DATA TYPE ++==++==++\007\n", 7);
+    error_terminate ("++==++==++ UNSUPPORTED DATA TYPE ++==++==++\007\n", 7);
   }
 
   /* Define 1st sample to compare */

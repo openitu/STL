@@ -355,9 +355,9 @@ int main (int argc, char *argv[]) {
 
   /* Open files */
   if ((Fi = fopen (master_ep, RB)) == NULL)
-    HARAKIRI ("Could not open input bitstream file\n", 1);
+    error_terminate ("Could not open input bitstream file\n", 1);
   if ((Fo = fopen (new_ep, WB)) == NULL)
-    HARAKIRI ("Could not create output file\n", 1);
+    error_terminate ("Could not create output file\n", 1);
 
   /* *** CHECK CONSISTENCY *** */
 
@@ -440,9 +440,9 @@ int main (int argc, char *argv[]) {
 
   /* Allocate memory for data buffers */
   if ((master = (short *) calloc (fr_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for master error pattern. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for master error pattern. Aborted.\n", 6);
   if ((new = (short *) calloc (fr_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for new error pattern. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for new error pattern. Aborted.\n", 6);
 
   /* Initializes to the start of the payload in input bitstream */
   payload = sync_header ? bs + 2 : bs;
@@ -468,7 +468,7 @@ int main (int argc, char *argv[]) {
       if (items < bs_len) {
         if (sync_header) {
           /* If the bitstream has sync header, this situation should not occur, since the length of the input bitstream file should be a multiple of the frame size! The file is either invalid otr corrupt. Execution is aborted at this point */
-          HARAKIRI ("File size not multiple of frame length. Aborted!\n", 9);
+          error_terminate ("File size not multiple of frame length. Aborted!\n", 9);
         } else if (feof (Fibs)) {
           /* EOF reached. Since the input bitstream is headerless, this maybe a corrupt file, or the user simply specified the wrong frame size. Warn the user and continue */
           fprintf (stderr, "*** File size not multiple of frame length ***\n");
@@ -529,7 +529,7 @@ int main (int argc, char *argv[]) {
       if (items < bs_len) {
         if (sync_header) {
           /* If the bitstream has sync header, this situation should not occur, since the length of the input bitstream file should be a multiple of the frame size! The file is either invalid otr corrupt. Execution is aborted at this point */
-          HARAKIRI ("File size not multiple of frame length in header. Aborted!\n", 9);
+          error_terminate ("File size not multiple of frame length in header. Aborted!\n", 9);
         } else if (feof (Fibs)) {
           /* EOF reached. Since the input bitstream is headerless, this maybe a corrupt file, or the user simply specified the wrong frame size. Warn the user and continue */
           fprintf (stderr, "*** File size not multiple of given frame length ***\n");

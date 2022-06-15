@@ -273,7 +273,7 @@ int main (int argc, char *argv[]) {
             break;
         }
         if (i == nil) {
-          HARAKIRI ("Invalid BS format type. Aborted\n", 5);
+          error_terminate ("Invalid BS format type. Aborted\n", 5);
         } else
           bs_format = i;
 
@@ -318,12 +318,12 @@ int main (int argc, char *argv[]) {
 
   /* Open files */
   if ((Fibs = fopen (ibs_file, RB)) == NULL)
-    HARAKIRI ("Could not open input bitstream file\n", 1);
+    error_terminate ("Could not open input bitstream file\n", 1);
   if (strcmp (out_file, "-") == 0)
     Fout = stdout;
   else if (log) {
     if ((Fout = fopen (out_file, WT)) == NULL)
-      HARAKIRI ("Could not open output ASCII file\n", 1);
+      error_terminate ("Could not open output ASCII file\n", 1);
   }
 #ifdef DEBUG
   F = fopen ("ep.g192", WB);    /* File to save the EP in G.192 format */
@@ -394,9 +394,9 @@ int main (int argc, char *argv[]) {
 
   /* Can't work with compact or headerless bitstreams: abort */
   if (bs_format == compact)
-    HARAKIRI ("Compact bitstreams are not supported by this program.\n", 6);
+    error_terminate ("Compact bitstreams are not supported by this program.\n", 6);
   if (!sync_header || fr_len == 0)
-    HARAKIRI ("Headerless bitstreams are not supported by this program.\n", 6);
+    error_terminate ("Headerless bitstreams are not supported by this program.\n", 6);
 
 
   /* *** FINAL INITIALIZATIONS *** */
@@ -432,7 +432,7 @@ int main (int argc, char *argv[]) {
     /* Write frame length to file, if enabled (default) */
     if (log) {
       if (fprintf (Fout, "%d\n", offset) <= 0)
-        HARAKIRI ("Error writing to output ASCII file\n", 5);
+        error_terminate ("Error writing to output ASCII file\n", 5);
     }
 
     /* Increment frame counter */
@@ -459,7 +459,7 @@ int main (int argc, char *argv[]) {
 
   /* Allocate memory for data buffers */
   if ((bs = (short *) calloc (bs_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for bitstream. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for bitstream. Aborted.\n", 6);
 
   /* Initializes to the start of the payload in input bitstream */
   payload = sync_header ? bs + 2 : bs;
