@@ -621,7 +621,7 @@ int main (int argc, char *argv[]) {
   }
 
   if ( result != 1 ){
-      HARAKIRI("++==++==++ COULD NOT READ ABSOLUTE TOLERANCE ++==++==++\007\n", 7 );
+      error_terminate("++==++==++ COULD NOT READ ABSOLUTE TOLERANCE ++==++==++\007\n", 7 );
   }
 
   /* Define 1st sample to compare */
@@ -669,7 +669,7 @@ int main (int argc, char *argv[]) {
   if (lseek (fh2, start_byte2, 0l) < 0l)
     KILL (File2, 4);
 
-  /* Some preliminaries */ 
+  /* Some preliminaries */
   N1++;
 
   /* Dumps the file to the screen */
