@@ -2538,7 +2538,7 @@ This tool works as follows:
     number of basic operators (first group) and all other functions
     (second group) are counted. This second group of other functions is
     divided into two sub-groups as it is possible to define a so called
-    "block list" that contains functions that should not be counted in
+    "blocklist" that contains functions that should not be counted in
     the program ROM. Typically these functions are memory allocation
     functions (malloc, free,\dots), file manipulation functions (fopen,
     fclose, fwrite, printf,\dots) or even functions related to complexity
@@ -2598,7 +2598,7 @@ basop\_cnt input.c [result\_file\_name.txt]}
 where $input.c$ is an ANSI C file and $result\_file\_name.txt$ the
 ouput result file.
 
-If needed to further edit the block list of functions that should not
+If needed to further edit the list of functions that should not
 be counted in the program ROM, modify {\tt const char blocklist[][20]
 = \{{\dots}\}} in basop\_cnt.c before compilation.
 
