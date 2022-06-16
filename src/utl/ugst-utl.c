@@ -1825,7 +1825,7 @@ long parallelize_left_justifiedstl96 (short *bit_stm, short *par_buf, long bs_le
 
 /*
   ===========================================================================
-  unsigned long ran16_32c(void);
+  unsigned long ran16_32c(float *seed);
   ~~~~~~~~~~~~~~~~~~~~~~~
 
   Description:
@@ -1835,7 +1835,7 @@ long parallelize_left_justifiedstl96 (short *bit_stm, short *par_buf, long bs_le
   a number between 0 and 2^16-1. This is based on Aachen University's
   randm() of the narrow-band MNRU program mnrusim.c by PB (08.04.1991).
 
-  Parameters: none.
+  Parameters: seed as float.
   ~~~~~~~~~~~
 
   Return value:
