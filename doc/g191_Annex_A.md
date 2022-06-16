@@ -2,7 +2,7 @@
 
 (This annex forms an integral part of this Recommendation)
 
-This annex contains a list with a short description of the software tools available in the ITU‑T Software Tool Library (STL). The 2019 release is referred to in the associated documentation as STL2019. All the routines in the modules are written in C.
+This annex contains a list with a short description of the software tools available in the ITU‑T Software Tool Library (STL). All the routines in the modules are written in C.
 
 ## a) Example programs available
 
@@ -24,18 +24,19 @@ The following programs are examples of the use of the modules:
 | `sv56demo.c` | on the use of the speech voltmeter module, and also the gain/loss routine. |
 | `eiddemo.c` | on the use of the error insertion device for bit error insertion and frame erasure. |
 | `eid-ev.c` | on the use of the error insertion device for bit error insertion for layered bitstreams, which can be used to apply errors to individual layers in layered bitstreams, such as [ITU‑T G.718] or [ITU‑T G.729.1]. |
-| `gen-patt.c` | on the use of generating bit error pattern files for error insertion in serial bitstreams encoded files that comply with [ITU‑T G.192]. |
-| `gen_rate_profile.c` | on the use of the fast switching rate profile generation tool. |
-| `firdemo.c` | on the use of the finite impulse response (FIR) high-quality low-pass and band-pass filters and of the FIR-IRS filters, associated with the rate change module. |
-| `pcmdemo.c` | on the use of the ITU‑T G.712 (standard PCM) IIR (infinite impulse response) filters, associated with the rate change module. |
-| `filter.c` | on the use of both the IIR and the FIR filters available in the rate change module. |
-| `mnrudemo.c` | on the use of the narrow-band and wideband modulated noise reference unity (ITU‑T P.810) module. |
-| `spdemo.c` | on the use of the serialization and parallelization routines of the utility module. |
-| `g711iplc.c` | on the use of the packet loss concealment module of Appendix I of [G.711]. |
-| `reverb.c` | on the use of the reverberation module. |
-| `truncate.c` | on the use of the bitstream truncation module. |
-| `freqresp.c` | on the use of the frequency response computation tool. |
-| `stereoop.c` | on the use of stereo file operations. |
+| `gen-patt.c` | on the use of generating bit error pattern files for error insertion in serial bitstreams encoded files that comply with [ITU‑T G.192].                                                                          |
+| `gen_rate_profile.c` | on the use of the fast switching rate profile generation tool.                                                                                                                                                   |
+| `firdemo.c` | on the use of the finite impulse response (FIR) high-quality low-pass and band-pass filters and of the FIR-IRS filters, associated with the rate change module.                                                  |
+| `pcmdemo.c` | on the use of the ITU‑T G.712 (standard PCM) IIR (infinite impulse response) filters, associated with the rate change module.                                                                                    |
+| `filter.c` | on the use of both the IIR and the FIR filters available in the rate change module.                                                                                                                              |
+| `mnrudemo.c` | on the use of the narrow-band and wideband modulated noise reference unity (ITU‑T P.810) module.                                                                                                                 |
+| `spdemo.c` | on the use of the serialization and parallelization routines of the utility module.                                                                                                                              |
+| `g711iplc.c` | on the use of the packet loss concealment module of Appendix I of [G.711].                                                                                                                                       |
+| `reverb.c` | on the use of the reverberation module.                                                                                                                                                                          |
+| `truncate.c` | on the use of the bitstream truncation module.                                                                                                                                                                   |
+| `freqresp.c` | on the use of the frequency response computation tool.                                                                                                                                                           |
+| `stereoop.c` | on the use of stereo file operations.                                                                                                                                                                            |
+| `esdru.c` | on the use of energy-based spatial distortion reference unit [ITU-T P.811].                                                                                                                                      |                                                                                                                                 || 
 
 NOTE - The module for the basic operators does not have a demo program but it is supplemented by two tools: one to evaluate program read only memory (ROM) complexity for fixed-point code (`basop_cnt.c`), and another to evaluate complexity (including program ROM) of floating-point implementations (`flc_example.c`). Both reside in the basic operators module.
 
@@ -664,3 +665,28 @@ The functions included are as follows.
 | `rdft` | Discrete Fourier transform for real signals. |
 | `genHanning` | Hanning window generation routine. |
 | `powSpect` | Power spectrum computation routine. |
+
+## r) Energy-based Spatial Distortion Reference Unit
+
+Name: `esdru.c`
+
+The functions included are as follows.
+
+--------------------  -------------------------------------
+`g_mod_nrg`           Generate the modulation coefficients.
+`apply_spatial_dist`  Apply spatial modulation routine.
+-----------------------------------------------------------
+
+## s) BS.1770-4 demo
+
+Name: `bs1770demo.c`
+
+The functions included are as follows.
+
+--------------------  --------------------------------------------------------------------
+`gated_loudness`      Calculate loudness according to gating threshold and scaling factor.
+`iir2`                Perform filtering for sub-block energy calculation.
+`find_scaling_factor` Iterative process to derive the most appropriate scaling factor.
+------------------------------------------------------------------------------------------
+
+-=Pagebreak=-
