@@ -191,20 +191,20 @@ main (int argc, char **argv) {
   ....Put your statements here ....GET_PAR_S (1, "_File with input bit stream: ............... ", ifile);
   ifilptr = fopen (ifile, RB);  /* open input file */
   if (ifilptr == NULL)
-    HARAKIRI ("    Could not open input file", 1);
+    error_terminate ("    Could not open input file", 1);
 
   /* ------------------------------------------------------------------ */
   /* Find SYNC-word and frame length on file */
   /* ------------------------------------------------------------------ */
   lread = fread (&SYNCword, 2, 1, ifilptr);
   if (SYNCword != (short) 0x6B21)
-    HARAKIRI ("    First word on input file not the SYNC-word (0x6B21)", 1);
+    error_terminate ("    First word on input file not the SYNC-word (0x6B21)", 1);
   lseg = 0;
   i = 0;
   while (lseg == 0) {
     lread = fread (&shvar, 2, 1, ifilptr);
     if (lread == 0)
-      HARAKIRI ("    No next SYNC-word found on input file", 1);
+      error_terminate ("    No next SYNC-word found on input file", 1);
     if (shvar == SYNCword)
       lseg = i;
     i++;
@@ -215,7 +215,7 @@ main (int argc, char **argv) {
   GET_PAR_S (2, "_File for disturbed bitstream: ............. ", ofile);
   ofilptr = fopen (ofile, WB);
   if (ofilptr == NULL)
-    HARAKIRI ("    Could not create output file", 1);
+    error_terminate ("    Could not create output file", 1);
 
 
 /* -------------------------------------------------------------------------- */
@@ -226,7 +226,7 @@ main (int argc, char **argv) {
 
   BEReid = open_eid (ber, gamma);       /* Open EID */
   if (BEReid == (SCD_EID *) 0)
-    HARAKIRI ("    Could not create EID for bit errors!?", 1);
+    error_terminate ("    Could not create EID for bit errors!?", 1);
 
 
 /* -------------------------------------------------------------------------- */
@@ -238,19 +238,19 @@ main (int argc, char **argv) {
 /* a) buffer for input bit stream: */
   xbuff = (short *) malloc ((1 + lseg) * sizeof (short));
   if (xbuff == (short *) 0)
-    HARAKIRI ("    Could not allocate memory for input bit stream buffer", 1);
+    error_terminate ("    Could not allocate memory for input bit stream buffer", 1);
 
 /* -------------------------------------------------------------------------- */
 /* b) buffer for output bit stream: */
   ybuff = (short *) malloc ((1 + lseg) * sizeof (short));
   if (ybuff == (short *) 0)
-    HARAKIRI ("    Could not allocate memory for output bit stream buffer", 1);
+    error_terminate ("    Could not allocate memory for output bit stream buffer", 1);
 
 /* -------------------------------------------------------------------------- */
 /* c) buffer for storing the error pattern: */
   EPbuff = (short *) malloc ((lseg) * sizeof (short));
   if (EPbuff == (short *) 0)
-    HARAKIRI ("    Could not allocate memory for error pattern buffer", 1);
+    error_terminate ("    Could not allocate memory for error pattern buffer", 1);
 
 /* -------------------------------------------------------------------------- */
 /*                           Now process input file */
@@ -348,19 +348,19 @@ main (int argc, char *argv[]) {
   ....Put your statements here ....GET_PAR_S (1, "_File with input bit stream: ............... ", ifile);
   ifilptr = fopen (ifile, RB);
   if (ifilptr == NULL)
-    HARAKIRI ("    Could not open input file", 1);
+    error_terminate ("    Could not open input file", 1);
   /* ------------------------------------------------------------------ */
   /* Find SYNC-word and frame length on file */
   /* ------------------------------------------------------------------ */
   lread = fread (&SYNCword, 2, 1, ifilptr);
   if (SYNCword != (short) 0x6B21)
-    HARAKIRI ("    First word on input file not the SYNC-word (0x6B21)", 1);
+    error_terminate ("    First word on input file not the SYNC-word (0x6B21)", 1);
   lseg = 0;
   i = 0;
   while (lseg == 0) {
     lread = fread (&shvar, 2, 1, ifilptr);
     if (lread == 0)
-      HARAKIRI ("    No next SYNC-word found on input file", 1);
+      error_terminate ("    No next SYNC-word found on input file", 1);
     if (shvar == SYNCword)
       lseg = i;
     i++;
@@ -371,7 +371,7 @@ main (int argc, char *argv[]) {
   GET_PAR_S (2, "_File for disturbed bitstream: ............. ", ofile);
   ofilptr = fopen (ofile, WB);
   if (ofilptr == NULL)
-    HARAKIRI ("    Could not create output file", 1);
+    error_terminate ("    Could not create output file", 1);
 
   GET_PAR_D (3, "_frame erasure rate (0.0 ... 0.50): ........ ", fer);
   GET_PAR_D (4, "_burst factor       (0.0 ... 0.99): ........ ", gamma);
@@ -381,7 +381,7 @@ main (int argc, char *argv[]) {
 /* -------------------------------------------------------------------------- */
   FEReid = open_eid (fer, gamma);       /* Open EID for frame erasure */
   if (FEReid == (SCD_EID *) 0)
-    HARAKIRI ("    Could not create EID for frame erasure module!?", 1);
+    error_terminate ("    Could not create EID for frame erasure module!?", 1);
 
 
 /* -------------------------------------------------------------------------- */
@@ -393,13 +393,13 @@ main (int argc, char *argv[]) {
 /* a) buffer for data from input file: */
   xbuff = (short *) malloc ((1 + lseg) * sizeof (short));
   if (xbuff == (short *) 0)
-    HARAKIRI ("    Could not allocate memory for input bit stream buffer", 1);
+    error_terminate ("    Could not allocate memory for input bit stream buffer", 1);
 
 /* -------------------------------------------------------------------------- */
 /* b) buffer for output bit stream: */
   ybuff = (short *) malloc ((1 + lseg) * sizeof (short));
   if (ybuff == (short *) 0)
-    HARAKIRI ("    Could not allocate memory for output bit stream buffer", 1);
+    error_terminate ("    Could not allocate memory for output bit stream buffer", 1);
 
 /* -------------------------------------------------------------------------- */
 /*                           Now process input file */

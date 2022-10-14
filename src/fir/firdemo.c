@@ -417,35 +417,35 @@ int main (int argc, char *argv[]) {
 
   GET_PAR_S (1, "_BIN-File to be filtered: ................ ", inpfil);
   if ((inpfilptr = fopen (inpfil, RB)) == NULL)
-    HARAKIRI ("Error opening input file\n", 1);
+    error_terminate ("Error opening input file\n", 1);
   inp = fileno (inpfilptr);
 
   GET_PAR_S (2, "_BIN-Output File: ........................ ", outfil);
   if ((outfilptr = fopen (outfil, WB)) == NULL)
-    HARAKIRI ("Error opening output file\n", 1);
+    error_terminate ("Error opening output file\n", 1);
   out = fileno (outfilptr);
 
   GET_PAR_L (3, "_IRS Filter       (0, 8, 16, 48): ........ ", irs);
   if ((irs != 0) && (irs != 8) && (irs != 16) && (irs != 48))
-    HARAKIRI ("wrong IRS filter\n", 1);
+    error_terminate ("wrong IRS filter\n", 1);
 
   GET_PAR_L (4, "_Delta-SM filtering (0:skip, 1:apply): ... ", delta_sm);
 
   GET_PAR_L (5, "_First  Up-Sampling   (0, 2, -2, 3): ..... ", up_1);
   if ((up_1 != 0) && (up_1 != 2) && (up_1 != -2) && (up_1 != 3))
-    HARAKIRI ("wrong upsampling factor\n", 1);
+    error_terminate ("wrong upsampling factor\n", 1);
 
   GET_PAR_L (6, "_Second Up-Sampling   (0, 2, -2,  3): .... ", up_2);
   if ((up_2 != 0) && (up_2 != 2) && (up_2 != -2) && (up_2 != 3))
-    HARAKIRI ("wrong upsampling factor\n", 1);
+    error_terminate ("wrong upsampling factor\n", 1);
 
   GET_PAR_L (7, "_First  Down-Sampling (0, 2, -2,  3): .... ", down_1);
   if ((down_1 != 0) && (down_1 != 2) && (down_1 != -2) && (down_1 != 3))
-    HARAKIRI ("wrong downsampling factor\n", 1);
+    error_terminate ("wrong downsampling factor\n", 1);
 
   GET_PAR_L (8, "_Second Down-Sampling (0, 2, -2,  3): .... ", down_2);
   if ((down_2 != 0) && (down_2 != 2) && (down_2 != -2) && (down_2 != 3))
-    HARAKIRI ("wrong downsampling factor\n", 1);
+    error_terminate ("wrong downsampling factor\n", 1);
 
   FIND_PAR_L (9, "_Segment Length for Filtering: ........... ", lseg, lseg);
   if (lseg > LSEGMAX) {
@@ -466,7 +466,7 @@ int main (int argc, char *argv[]) {
   down2_buff = (float *) calloc (9l * lseg, sizeof (float));
 
   if (!(sh_buff && fl_buff && irs_buff && up1_buff && up2_buff && down1_buff && down2_buff))
-    HARAKIRI ("Error allocating memory for sample buffers\n", 3);
+    error_terminate ("Error allocating memory for sample buffers\n", 3);
 
 /*
    * ... Initialize selected FIR-structures for up-/downsampling ...
@@ -492,7 +492,7 @@ int main (int argc, char *argv[]) {
   if (irs == 8) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a 8 kHz IRS */
     if ((irs_ptr = irs_8khz_init ()) == 0)
-      HARAKIRI ("irs_8khz initialization failure!\n", 1);
+      error_terminate ("irs_8khz initialization failure!\n", 1);
 
     /* Inhibit delta-sm: not available for 8kHz */
     delta_sm = 0;
@@ -505,11 +505,11 @@ int main (int argc, char *argv[]) {
     else
       irs_ptr = irs_16khz_init ();
     if (irs_ptr == 0)
-      HARAKIRI ("irs16_khz initialization failure!\n", 1);
+      error_terminate ("irs16_khz initialization failure!\n", 1);
   } else if (irs == 48) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a modified 16 kHz IRS */
     if ((irs_ptr = mod_irs_48khz_init ()) == 0)
-      HARAKIRI ("mod_irs48_khz initialization failure!\n", 1);
+      error_terminate ("mod_irs48_khz initialization failure!\n", 1);
 
     /* Inhibit delta-sm: not available for 48kHz */
     delta_sm = 0;
@@ -521,7 +521,7 @@ int main (int argc, char *argv[]) {
   /* Check whether to use the Delta-SM filtering */
   if (delta_sm) {
     if ((delta_sm_ptr = delta_sm_16khz_init ()) == 0)
-      HARAKIRI ("delta_sm initialization failure!\n", 1);
+      error_terminate ("delta_sm initialization failure!\n", 1);
   } else
     delta_sm_ptr = NULL;
 
@@ -529,15 +529,15 @@ int main (int argc, char *argv[]) {
   if (up_1 == 2) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a upsampling factor of 2 */
     if ((up1_ptr = hq_up_1_to_2_init ()) == 0)
-      HARAKIRI ("hq_up_1_to_2 initialization failure!\n", 1);
+      error_terminate ("hq_up_1_to_2 initialization failure!\n", 1);
   } else if (up_1 == -2) {
     /* get pointer to a struct which contains bpf coefficients and cleared state variables for a upsampling factor of 2 */
     if ((up1_ptr = linear_phase_pb_1_to_2_init ()) == 0)
-      HARAKIRI ("linear-phase band-pass 1:2 initialization failure!\n", 1);
+      error_terminate ("linear-phase band-pass 1:2 initialization failure!\n", 1);
   } else if (up_1 == 3) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a upsampling factor of 3 */
     if ((up1_ptr = hq_up_1_to_3_init ()) == 0)
-      HARAKIRI ("hq_up_1_to_3 initialization failure!\n", 1);
+      error_terminate ("hq_up_1_to_3 initialization failure!\n", 1);
   } else
     up1_ptr = NULL;
 
@@ -546,15 +546,15 @@ int main (int argc, char *argv[]) {
   if (up_2 == 2) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a upsampling factor of 2 */
     if ((up2_ptr = hq_up_1_to_2_init ()) == 0)
-      HARAKIRI ("hq_up_1_to_2 initialization failure!\n", 1);
+      error_terminate ("hq_up_1_to_2 initialization failure!\n", 1);
   } else if (up_2 == -2) {
     /* get pointer to a struct which contains bpf coefficients and cleared state variables for a upsampling factor of 2 */
     if ((up2_ptr = linear_phase_pb_1_to_2_init ()) == 0)
-      HARAKIRI ("linear-phase band-pass 1:2 initialization failure!\n", 1);
+      error_terminate ("linear-phase band-pass 1:2 initialization failure!\n", 1);
   } else if (up_2 == 3) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a upsampling factor of 3 */
     if ((up2_ptr = hq_up_1_to_3_init ()) == 0)
-      HARAKIRI ("hq_up_1_to_3 initialization failure!\n", 1);
+      error_terminate ("hq_up_1_to_3 initialization failure!\n", 1);
   } else
     up2_ptr = NULL;
 
@@ -563,15 +563,15 @@ int main (int argc, char *argv[]) {
   if (down_1 == 2) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a downsampling factor of 2 */
     if ((down1_ptr = hq_down_2_to_1_init ()) == 0)
-      HARAKIRI ("hq_down_2_to_1 initialization failure!\n", 1);
+      error_terminate ("hq_down_2_to_1 initialization failure!\n", 1);
   } else if (down_1 == -2) {
     /* get pointer to a struct which contains bpf coefficients and cleared state variables for a downsampling factor of 2 */
     if ((down1_ptr = linear_phase_pb_2_to_1_init ()) == 0)
-      HARAKIRI ("linear-phase band-pass 2:1 initialization failure!\n", 1);
+      error_terminate ("linear-phase band-pass 2:1 initialization failure!\n", 1);
   } else if (down_1 == 3) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a downsampling factor of 3 */
     if ((down1_ptr = hq_down_3_to_1_init ()) == 0)
-      HARAKIRI ("hq_down_3_to_1 initialization failure!\n", 1);
+      error_terminate ("hq_down_3_to_1 initialization failure!\n", 1);
   } else
     down1_ptr = NULL;
 
@@ -580,15 +580,15 @@ int main (int argc, char *argv[]) {
   if (down_2 == 2) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a downsampling factor of 2 */
     if ((down2_ptr = hq_down_2_to_1_init ()) == 0)
-      HARAKIRI ("hq_down_2_to_1 initialization failure!\n", 1);
+      error_terminate ("hq_down_2_to_1 initialization failure!\n", 1);
   } else if (down_2 == -2) {
     /* get pointer to a struct which contains bpf coefficients and cleared state variables for a downsampling factor of 2 */
     if ((down2_ptr = linear_phase_pb_2_to_1_init ()) == 0)
-      HARAKIRI ("linear-phase band-pass 2:1 initialization failure!\n", 1);
+      error_terminate ("linear-phase band-pass 2:1 initialization failure!\n", 1);
   } else if (down_2 == 3) {
     /* get pointer to a struct which contains filter coefficients and cleared state variables for a downsampling factor of 3 */
     if ((down2_ptr = hq_down_3_to_1_init ()) == 0)
-      HARAKIRI ("hq_down_3_to_1 initialization failure!\n", 1);
+      error_terminate ("hq_down_3_to_1 initialization failure!\n", 1);
   } else
     down2_ptr = NULL;
 

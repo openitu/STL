@@ -158,7 +158,7 @@ int main (int argc, char *argv[]) {
     display_usage (1);
   }
   if ((argc) != (n_infiles[mode] + n_outfiles[mode] + 1)) {
-    HARAKIRI ("Illegal number of files in command line \n", 1);
+    error_terminate ("Illegal number of files in command line \n", 1);
   }
   /* Get file parameters */
   for (i = 0; i < n_infiles[mode]; i++) {
@@ -182,13 +182,13 @@ int main (int argc, char *argv[]) {
   for (i = 0; i < n_infiles[mode]; i++) {
     if ((Fif[i] = fopen (ifname[i], RB)) == NULL) {
       sprintf (tmp_str, "Could not open input file %d,(%s)\n", i + 1, ifname[i]);
-      HARAKIRI (tmp_str, 1);
+      error_terminate (tmp_str, 1);
     }
   }
   for (i = 0; i < n_outfiles[mode]; i++) {
     if ((Fof[i] = fopen (ofname[i], WB)) == NULL) {
       sprintf (tmp_str, "Could not create output file %d,(%s)\n", i + 1, ofname[i]);
-      HARAKIRI (tmp_str, 1);
+      error_terminate (tmp_str, 1);
     }
   }
 
@@ -197,10 +197,10 @@ int main (int argc, char *argv[]) {
   if (mode == INTER) {          /* read two mono file samples */
     while ((n_in = fread (tmp_short, sizeof (short), 1, Fif[0])) == 1) {
       if ((n_in = fread (&tmp_short[1], sizeof (short), 1, Fif[1])) != 1) {
-        HARAKIRI ("Error, 1ch input file 2(right), shorter than 1ch input file 1(Left)\n", 1);
+        error_terminate ("Error, 1ch input file 2(right), shorter than 1ch input file 1(Left)\n", 1);
       }
       if ((n_out = fwrite (tmp_short, sizeof (short), 2, Fof[0])) != 2) {
-        HARAKIRI ("Error, could not write to 2ch output stereo file \n", 1);
+        error_terminate ("Error, could not write to 2ch output stereo file \n", 1);
       }
       cnt_samples++;
       memset (tmp_short, 0, sizeof (short) * 2);
@@ -208,7 +208,7 @@ int main (int argc, char *argv[]) {
 
     /* check if samples are still available in right channel */
     if ((n_in = fread (&tmp_short[1], sizeof (short), 1, Fif[1])) != 0) {
-      HARAKIRI ("Error, 1ch input file 1(Left), shorter than 1ch input file 2(right)!\n", 1);
+      error_terminate ("Error, 1ch input file 1(Left), shorter than 1ch input file 2(right)!\n", 1);
     }
   } else {
     /* reading of 2ch stereo file input samples */
@@ -216,10 +216,10 @@ int main (int argc, char *argv[]) {
 
       if (mode == SPLIT) {
         if ((n_out = fwrite (tmp_short, sizeof (short), 1, Fof[0])) != 1) {
-          HARAKIRI ("Error, could not write to 1ch output file 1 (Left)\n", 1);
+          error_terminate ("Error, could not write to 1ch output file 1 (Left)\n", 1);
         }
         if ((n_out = fwrite (&tmp_short[1], sizeof (short), 1, Fof[1])) != 1) {
-          HARAKIRI ("Error, could not write to 1ch output file 2 (Right)\n", 1);
+          error_terminate ("Error, could not write to 1ch output file 2 (Right)\n", 1);
         }
       } else {                  /* all 2ch to 1ch options */
         tmp_short_1ch[0] = 0;
@@ -250,11 +250,11 @@ int main (int argc, char *argv[]) {
           }
           break;
         default:
-          HARAKIRI ("Error, illegal mode option\n", 1);
+          error_terminate ("Error, illegal mode option\n", 1);
           break;
         }
         if ((n_out = fwrite (tmp_short_1ch, sizeof (short), 1, Fof[0])) != 1) {
-          HARAKIRI ("Error, could not write to 1ch output file 1\n", 1);
+          error_terminate ("Error, could not write to 1ch output file 1\n", 1);
         }
       }
       cnt_samples++;
@@ -263,7 +263,7 @@ int main (int argc, char *argv[]) {
 
     /* check consistecy of 2ch stereo file reading */
     if (n_in != 0) {
-      HARAKIRI ("Error, 2ch input file has odd number of samples !! \n", 1);
+      error_terminate ("Error, 2ch input file has odd number of samples !! \n", 1);
     }
   }                             /* mode=INTER */
 

@@ -294,7 +294,7 @@ int main (int argc, char *argv[]) {
 
   /* ......... SOME INITIALIZATIONS ......... */
   if (factor == ABSURD_VALUE)
-    HARAKIRI ("Gain not specified; aborting\n", 3);
+    error_terminate ("Gain not specified; aborting\n", 3);
 
   /* Convert dB to a linear factor, if it is the case */
   if (use_dB)
@@ -318,9 +318,9 @@ int main (int argc, char *argv[]) {
 
   /* Allocate memory for data buffers */
   if ((s_buf = (short *) calloc (sizeof (short), N)) == NULL)
-    HARAKIRI ("Unable to allocate short buffer\n", 5);
+    error_terminate ("Unable to allocate short buffer\n", 5);
   if ((f_buf = (float *) calloc (sizeof (float), N)) == NULL)
-    HARAKIRI ("Unable to allocate float buffer\n", 5);
+    error_terminate ("Unable to allocate float buffer\n", 5);
 
   /* Choose rounding number; it will be 0 when truncating */
   h = 0.5 * (round << (16 - bitno));

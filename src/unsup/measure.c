@@ -429,7 +429,7 @@ int main (int argc, char *argv[]) {
     /* Allocate memory */
     samples = (short *) calloc (blk, sizeof (short));
     if (!samples)
-      HARAKIRI ("Cannot allocate memory - aborted\n", 1);
+      error_terminate ("Cannot allocate memory - aborted\n", 1);
 
     /* Find statistics */
     while ((count = fread (samples, sizeof (short), blk, Fi)) != 0) {

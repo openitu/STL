@@ -69,7 +69,7 @@ filter.c:
 	      strlen(F_type)==4)               added by KAF 27Mar98
     {
       if (upsample) {
-           HARAKIRI("Error: cannot upsample using msin filter!\n",20);
+           error_terminate("Error: cannot upsample using msin filter!\n",20);
       }
       printf("MSIN: MSIN (mobile station input) Filter with SR=1:1\n");
       fir_state = msin_init();

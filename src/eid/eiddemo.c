@@ -247,17 +247,17 @@ int main (int argc, char *argv[]) {
 
   GET_PAR_S (1, "_File with input bitstream: ................ ", ifile);
   if ((ifilptr = fopen (ifile, RB)) == NULL)
-    HARAKIRI ("    Could not open input file", 1);
+    error_terminate ("    Could not open input file", 1);
 
   /* Check if first word in bit-stream file is a SYNC word */
   smpno = fread (&SYNCword, sizeof (SYNCword), 1, ifilptr);
   if (SYNCword != SYNC_WORD)
-    HARAKIRI ("    First word on input file not the SYNC-word (0x6B21)", 1);
+    error_terminate ("    First word on input file not the SYNC-word (0x6B21)", 1);
 
   /* Now find the number of bits per frame, lseg */
   for (lseg = -OVERHEAD, i = 0; i != SYNC_WORD; lseg++) {
     if ((smpno = fread (&i, sizeof (short), 1, ifilptr)) == 0)
-      HARAKIRI ("    No next SYNC-word found on input file", 1);
+      error_terminate ("    No next SYNC-word found on input file", 1);
   }
 
   /* move file pointer back to begin */
@@ -268,7 +268,7 @@ int main (int argc, char *argv[]) {
 
   GET_PAR_S (2, "_File for disturbed bitstream: ............. ", ofile);
   if ((ofilptr = fopen (ofile, WB)) == NULL)
-    HARAKIRI ("    Could not create output file", 1);
+    error_terminate ("    Could not create output file", 1);
 
   /* Ask for file with EID-States for INSERTING BIT ERRORS */
   GET_PAR_S (3, "_File with EID-states for bit errors: ...... ", BERfile);
@@ -285,7 +285,7 @@ int main (int argc, char *argv[]) {
 
     /* Setup a new EID */
     if ((BEReid = open_eid (BER, BER_gamma)) == (SCD_EID *) 0)
-      HARAKIRI ("    Could not create EID for bit errors!?", 1);
+      error_terminate ("    Could not create EID for bit errors!?", 1);
     i = 7;                      /* next parameter number */
   } else {
     i = 5;                      /* next parameter number */
@@ -306,7 +306,7 @@ int main (int argc, char *argv[]) {
       FEReid = open_eid (FER, FER_gamma);       /* Open EID for frame erasure */
       /* gamma=0 ==> random err.sequence */
       if (FEReid == (SCD_EID *) 0)
-        HARAKIRI ("    Could not create EID for frame erasure module!?", 1);
+        error_terminate ("    Could not create EID for frame erasure module!?", 1);
     } else
       printf ("   FRAME ERASURE MODULE switched off\n");
   } else {
@@ -324,16 +324,16 @@ int main (int argc, char *argv[]) {
   /* Buffer for data from input file: */
   xbuff = (short *) malloc ((OVERHEAD + lseg) * sizeof (short));
   if (xbuff == (short *) 0)
-    HARAKIRI ("    Could not allocate memory for input bitstream buffer", 1);
+    error_terminate ("    Could not allocate memory for input bitstream buffer", 1);
 
   /* Buffer for output bitstream: */
   ybuff = (short *) malloc ((OVERHEAD + lseg) * sizeof (short));
   if (ybuff == (short *) 0)
-    HARAKIRI ("    Could not allocate memory for output bitstream buffer", 1);
+    error_terminate ("    Could not allocate memory for output bitstream buffer", 1);
 
   /* Buffer for storing the error pattern: */
   if ((EPbuff = (short *) malloc ((lseg) * sizeof (short))) == (short *) 0)
-    HARAKIRI ("    Could not allocate memory for error pattern buffer", 1);
+    error_terminate ("    Could not allocate memory for error pattern buffer", 1);
 
 
 /*

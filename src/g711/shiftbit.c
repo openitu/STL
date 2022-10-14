@@ -35,7 +35,7 @@
 
 #include "ugstdemo.h"
 #include <stdio.h>
-#include <unistd.h>
+#include <stdlib.h>
 
 /*
  * Includes dependent of the Operating System
@@ -69,7 +69,7 @@ int main (int argc, char *argv[]) {
   GET_PAR_I (4, "Input file is Q.", qout);
 
   if (qout == qinp)
-    HARAKIRI ("Makes no sense a shift of 0 ... \n", 7)
+    error_terminate ("Makes no sense a shift of 0 ... \n", 7)
       else
   if (qout > qinp)
     dir = RIGHT;
@@ -92,12 +92,12 @@ int main (int argc, char *argv[]) {
 
   stat (inp, &info);
   if ((buf = (short *) malloc (info.st_size)) == NULL)
-    HARAKIRI ("Can't alloc inp\n", 4);
+    error_terminate ("Can't alloc inp\n", 4);
   l = info.st_size / 2;
 
   fprintf (stderr, "%s: Reading, ", inp);
   for (k = 0; k < l; k += 256)
-    if (read (fi, &buf[k], 512) < 0)
+    if (fread (&buf[k],1, 512, fi) < 0)
       KILL (inp, 5);
 
   fprintf (stderr, "shifting, ");
@@ -110,7 +110,7 @@ int main (int argc, char *argv[]) {
 
   fprintf (stderr, "and writing ... ");
   for (k = 0; k < l; k += 256)
-    if (write (fo, &buf[k], 512) <= 0)
+    if (fwrite (&buf[k], 1, 512, Fo) <= 0)
       KILL (inp, 6);
 
   fprintf (stderr, "Done!\n");

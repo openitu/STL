@@ -88,7 +88,7 @@ int main (int argc, char *argv[]) {
 
       /* Write 5 samples to file */
       if (fwrite (yi, sizeof (short), (size_t) 5, fo) != 5)
-        HARAKIRI ("Error saving decoded samples to file", 12);
+        error_terminate ("Error saving decoded samples to file", 12);
     }
     ++n;
   }

@@ -216,7 +216,7 @@ int main (int argc, char *argv[]) {
    **  Open output file
    */
   if ((out_file_ptr = fopen (data_file_name, WB)) == NULL)
-    HARAKIRI ("Could not create output file\n", 1);
+    error_terminate ("Could not create output file\n", 1);
 
   /*
    **  Select mode
@@ -238,7 +238,7 @@ int main (int argc, char *argv[]) {
        **  Setup new EID
        */
       if ((BEReid = open_eid (BER, BER_gamma)) == (SCD_EID *) 0) {
-        HARAKIRI ("Couldn't create EID for bit errors\n", 1);
+        error_terminate ("Couldn't create EID for bit errors\n", 1);
       }
     }
     ber_rate = BER;
@@ -261,7 +261,7 @@ int main (int argc, char *argv[]) {
        **  Setup new EID
        */
       if ((FEReid = open_eid (FER, FER_gamma)) == (SCD_EID *) 0) {
-        HARAKIRI ("Couldn't create EID for frame errors\n", 1);
+        error_terminate ("Couldn't create EID for frame errors\n", 1);
       }
     }
     ber_rate = FER;
@@ -285,7 +285,7 @@ int main (int argc, char *argv[]) {
        **  Setup new EID
        */
       if ((burst_eid = open_burst_eid (index)) == (BURST_EID *) 0) {
-        HARAKIRI ("Couldn't create EID for burst frame errors\n", 1);
+        error_terminate ("Couldn't create EID for burst frame errors\n", 1);
       }
     }
 #ifdef DEBUG
@@ -299,7 +299,7 @@ int main (int argc, char *argv[]) {
 #endif
     break;
   default:
-    HARAKIRI ("Wrong mode parameter. Allowed values are R,F,B,A\n", 1);
+    error_terminate ("Wrong mode parameter. Allowed values are R,F,B,A\n", 1);
     break;
   }
 
@@ -308,7 +308,7 @@ int main (int argc, char *argv[]) {
    */
   EPbuff = (short *) calloc (EID_BUFFER_LENGTH, sizeof (short));
   if (EPbuff == (short *) 0) {
-    HARAKIRI ("Could not allocate memory for error pattern buffer\n", 1);
+    error_terminate ("Could not allocate memory for error pattern buffer\n", 1);
   }
 
   /*

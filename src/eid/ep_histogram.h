@@ -193,7 +193,7 @@ long compute_ep_histogram (short *pattern, long items, int ep_type, ep_histogram
     /* Allocate memory for temporary buffer */
     if (s->ep == NULL && items != 0)
       if ((s->ep = (short *) calloc (items, sizeof (short))) == NULL)
-        HARAKIRI ("Can't allocate memory for counter. Aborted.\n", 6);
+        error_terminate ("Can't allocate memory for counter. Aborted.\n", 6);
 
     /* Flush possible error counts from last block, update counters */
     if (s->in_event) {

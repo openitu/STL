@@ -155,6 +155,7 @@ int main (int argc, char *argv[]) {
   long size, over = 0;
   char quiet = 0;
   long start_byte;
+  float fseed;
 
 
   /* PREAMBLE */
@@ -295,6 +296,7 @@ int main (int argc, char *argv[]) {
   /* INSERTION OF MODULATED NOISE ACCORDING TO P.810 */
 
   size = N;
+  fseed = 12345.0;
 
   if ((Buf = (short *) calloc (size, sizeof (short))) == NULL)
     KILL ("Can't allocate memory for intermediate data buffer\n", 10);
@@ -322,7 +324,7 @@ int main (int argc, char *argv[]) {
       operation = MNRU_CONTINUE;
 
     /* MNRU processing */
-    MNRU_process (operation, &state, inp, out, (long) l, (long) 314159265, MNRU_mode, QdB);
+    MNRU_process (operation, &state, inp, out, (long) l, (long) 314159265, MNRU_mode, QdB, &fseed);
 
     /* Convert from float to short with hard clip and truncation */
     over += fl2sh_16bit ((long) l, out, Buf, 1);

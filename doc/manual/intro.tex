@@ -38,8 +38,11 @@ Approved in January 2019 under the responsibility of ITU-T Study Group 12, STL20
 Thus the new operators provide support for 64-bit accumulator, complex numbers, as well as enhanced 32-bit operations and additional control code operators.
 The software package was reworked to make it available as a truly open-source project hosted on an open-source collaboration platform: \url{https://www.github.com/openitu/STL}.
 
-The STL2019 build toolchain is using CMake to generate platform-dependent and tool-dependent build scripts as well as to execute regression tests for each module in the STL.
-STL2019 modules have been tested on Windows, MacOS and several Linux flavors.
+In 2022, a new version of the STL was released which incoporates some bug fixes and minor edits, as well as two addition tools:
+The implementation of the implementation of ESDRU (energy-based spatial distortion reference unit) as described in ITU-T P.811, and the implementation of the loudness measurement algorithm as in ITU-R Rec. BS.1770-4.
+
+Since STL2019, the build toolchain uses CMake to generate platform-dependent and tool-dependent build scripts as well as to execute regression tests for each module in the STL.
+Modules have been tested on Windows, MacOS and several Linux flavors.
 
 Terms and conditions on the usage of the ITU-T STL are found in Recommendation ITU-T G.191 \cite{G.191}.
 
@@ -76,13 +79,13 @@ the present version, there are several of these modules:
 \item {\bf G.726}: 40, 32, 24, and 16 kbit/s ADPCM algorithm of ITU-T Rec. G.726.
 
 \item {\bf G.727}: 40, 32, 24, and 16 kbit/s embedded ADPCM algorithm of ITU-T Rec. G.727.
- 
+
 \item {\bf G.728}: Low-delay CELP algorithm at 16~kbit/s of ITU-T Rec. G.728.
 
 \item {\bf G.722}: 64, 56, and 48 kbit/s wideband speech ADPCM algorithm of ITU-T Rec. G.722.
 
 \item {\bf RPE-LTP}: The 13 kbit/s RPE-LTP algorithm of the full-rate GSM system (GSM Rec. 06.10).
-        
+
 \item {\bf RATE-CHANGE:} An up- and down-sampling algorithm with embedded filtering:
   \begin{itemize}
   \item ITU-T Rec. G.712 filter for factors of 1:2, 2:1 and 1:1
@@ -103,17 +106,19 @@ the present version, there are several of these modules:
 \item {\bf MNRU}: The modulated noise reference unit of ITU-T Rec. P.810 (formerly ITU-T Rec. P.81).
 
 \item {\bf SVP56}: The Speech Voltmeter for measuring the active speech level (which skips over silence in a utterance) of ITU-T Rec. P.56.
-        
+
 \item {\bf REVERB}: Tool to add reverberation to both mono and stereo speech and audio.
-        
+
 \item {\bf TRUNCATE}: Bitstream truncation tool.
-        
+
 \item {\bf FREQRESP}: Frequency response measurement tool.
-        
+
 \item {\bf STEREOOP}: Stereo processing tool.
-        
+
 \item {\bf BASOP}: The set of basic digital signal processing (DSP) operators that represent instructions typically available in digital signal processors \emph{(revised in STL2019)}.
-        
+
+\item {\bf BS1770DEMO}: Example implementation of the ITU-R BS.1770-4 level measurement algorithm.
+\item {\bf ESDRU}: The implementation of the Energy-based Spatial Distortion Reference Unit as described in ITU-T P.811.
 \item {\bf UTILITIES}: Tools that have been developed to assure proper interfacing between the various tools.
 These tools do not relate to any ITU-T Recommendation.
 Included are tools for conversion between float and short data representations, between parallel and serial (bit-stream) formats, and for scaling of data.
@@ -186,9 +191,11 @@ Mr~Xu Jianfeng (Huawei) should also be thanked for his assistance in compilation
 Last but not least, it should be mentioned that this release was only possible owing greatly to Ms~Claude Lamblin (France Telecom Orange), ex-Q10/16 Rapporteur and WP3/16 Chair.
 She has devoted a lot of time revising the manual text for STL2009 release, and above all, took all the responsibility in releasing STL2005.
 
-The new basic operators in STL1019 were kindly contributed by 3GPP SA4.
+The new basic operators in STL2019 were kindly contributed by 3GPP SA4.
 The work leading to the release of STL2019, including the migration of the STL to an open-source environment; the development of a new build toolchain; the integration of new base operators; and the update of this manual, was performed by Mr Dennis Guse and Mr Ludovic Malfait (Dolby Laboratories).
 Other GitHub contributors to STL2019 were Mr Thomas Schlien (RWTH Aachen University), Mr Sim\~ao Ferraz de Campos Neto (ITU), and Mr Martin Adolph (ITU).
+
+For the STL2022, the implementations of the ESDRU and ITU-R BS.1770 were kindly provided by Mr Erik Norvell from Ericsson.
 
 Above all, special thank goes to ITU-T SG16 Counselor Mr~Sim\~ao Ferraz de Campos Neto, the ``father'' of the STL.
 
@@ -200,7 +207,8 @@ Above all, special thank goes to ITU-T SG16 Counselor Mr~Sim\~ao Ferraz de Campo
 \section {Acronyms} \hskip 1em
 %------------------------------------------------------------------------------
 
-Several acronyms are used in this text. The most relevant are:
+Several acronyms are used in this text.
+The most relevant are:
 \begin{Descr}{20mm}
 \item[ANSI]  American National Standards Institute.
 \item[BBER]  Burst Bit Error Rate
@@ -210,15 +218,10 @@ Several acronyms are used in this text. The most relevant are:
 \item[EID]   Error insertion device.
 \item[ETSI]  European Telecommunications Standards Institute.
 \item[FER]   Frame Erasure Rate (refers to {\em random} frame erasures)
-\item[GSM]   Global System for Mobile Communications. Pan-European
-             digital-cellular system operating at a net rate of 13
-             kbit/s in its full-rate system.
-\item[IRS]   Intermediate Reference System, defined in ITU-T Rec. P.48
-             for the so-called ``full-IRS'' mask, or in Annex D of ITU-T
-             Rec. P.830 for the so-called ``modified'' IRS mask.
+\item[GSM]   Global System for Mobile Communications. Pan-European digital-cellular system operating at a net rate of 13 kbit/s in its full-rate system.
+\item[IRS]   Intermediate Reference System, defined in ITU-T Rec. P.48 for the so-called ``full-IRS'' mask, or in Annex D of ITU-T Rec. P.830 for the so-called ``modified'' IRS mask.
 \item[ITU]   International Telecommunication Union.
-\item[ITU-T] Standardisation Sector of the International
-             Telecommunication Union.
+\item[ITU-T] Standardisation Sector of the International Telecommunication Union.
 \item[LSB]   Least significant bit.
 \item[MIRS]  Modified-IRS telephony speech weighting (in ITU-T Rec. P.830 Annex D).
 \item[MSB]   Most significant bit.
@@ -232,6 +235,7 @@ Several acronyms are used in this text. The most relevant are:
 \item[STL2005] ITU-T Software Tools Library, release 2005.
 \item[STL2009] ITU-T Software Tools Library, release 2009.
 \item[STL2019] ITU-T Software Tools Library, release 2019.
+\item[STL2022] ITU-T Software Tools Library, release 2022.
 \item[UGST]  Users' Group on Software Tools, of ITU-T Study Group 16.
 \end{Descr}
 
@@ -561,7 +565,7 @@ HP 9000-700 & HPPA RISC
 \hline
 \multicolumn{1}{|l}{Legend:}
         &\multicolumn{3}{l|}{CISC: Complex Instruction Set Computer}\\
-\multicolumn{1}{|l}{ } 
+\multicolumn{1}{|l}{ }
         &\multicolumn{3}{l|}{RISC: Reduced Instruction Set Computer}\\
 \multicolumn{1}{|l}{Note: (a)} &
 \multicolumn{3}{l|}{Includes Windows 9x/NT/2000/XP/Vista/7, Linux and}\\

@@ -223,7 +223,7 @@
 /* -------------------------------------------- */
 /* ... Print error message and exit program ... */
 /* -------------------------------------------- */
-#define HARAKIRI(m,code) {fprintf (stderr,m); exit((int)code);}
+#define error_terminate(m,code) {fprintf (stderr,m); exit((int)code);}
 /* #define KILL(f,code) {perror(f); exit((int)code);} */
 #define KILL(f,code) perror(f), exit((int)code)
 

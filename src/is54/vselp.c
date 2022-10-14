@@ -272,7 +272,7 @@ int main (int argc, char *argv[]) {
         /* Scan log file name */
         strcpy (LogFile, argv[2]);
         if ((fplog = fopen (argv[2], "w")) == NULL)
-          HARAKIRI ("ERROR creating log file\n", 2);
+          error_terminate ("ERROR creating log file\n", 2);
 
         /* Move argv over the option to the next argument */
         argv += 2;
@@ -333,10 +333,10 @@ int main (int argc, char *argv[]) {
       i++;
       if (packedStream) {
         if ((fpstream = fopen (InpFile, "r")) == NULL)
-          HARAKIRI ("Error opening code file\n", 2);
+          error_terminate ("Error opening code file\n", 2);
       } else {
         if ((fpstream = fopen (InpFile, RB)) == NULL)
-          HARAKIRI ("Error opening code file\n", 2);
+          error_terminate ("Error opening code file\n", 2);
       }
     }
 
@@ -345,10 +345,10 @@ int main (int argc, char *argv[]) {
       i++;
       if (packedStream) {
         if ((fpstream = fopen (OutFile, "w")) == NULL)
-          HARAKIRI ("Error creating code file\n", 2);
+          error_terminate ("Error creating code file\n", 2);
       } else {
         if ((fpstream = fopen (OutFile, WB)) == NULL)
-          HARAKIRI ("Error creating code file\n", 2);
+          error_terminate ("Error creating code file\n", 2);
       }
     }
 
@@ -540,7 +540,7 @@ int main (int argc, char *argv[]) {
         if (feof (fpstream))
           break;
         else
-          HARAKIRI ("Error reading bitstream file\n", 3);
+          error_terminate ("Error reading bitstream file\n", 3);
       } else
         bs_read += i;
     }

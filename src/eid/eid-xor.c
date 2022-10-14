@@ -376,7 +376,7 @@ int main (int argc, char *argv[]) {
             break;
         }
         if (i == nil) {
-          HARAKIRI ("Invalid BS format type. Aborted\n", 5);
+          error_terminate ("Invalid BS format type. Aborted\n", 5);
         } else
           bs_format = i;
 
@@ -390,7 +390,7 @@ int main (int argc, char *argv[]) {
             break;
         }
         if (i == nil) {
-          HARAKIRI ("Invalid error pattern format type. Aborted\n", 5);
+          error_terminate ("Invalid error pattern format type. Aborted\n", 5);
         } else
           ep_format = i;
 
@@ -447,11 +447,11 @@ int main (int argc, char *argv[]) {
 
   /* Open files */
   if ((Fibs = fopen (ibs_file, RB)) == NULL)
-    HARAKIRI ("Could not open input bitstream file\n", 1);
+    error_terminate ("Could not open input bitstream file\n", 1);
   if ((Fep = fopen (ep_file, RB)) == NULL)
-    HARAKIRI ("Could not open error pattern file\n", 1);
+    error_terminate ("Could not open error pattern file\n", 1);
   if ((Fobs = fopen (obs_file, WB)) == NULL)
-    HARAKIRI ("Could not create output file\n", 1);
+    error_terminate ("Could not create output file\n", 1);
 #ifdef DEBUG
   F = fopen ("ep.g192", WB);    /* File to save the EP in G.192 format */
 #endif
@@ -618,9 +618,9 @@ int main (int argc, char *argv[]) {
 
   /* Allocate memory for data buffers */
   if ((bs = (short *) calloc (bs_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for bitstream. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for bitstream. Aborted.\n", 6);
   if ((ep = (short *) calloc (ep_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for error pattern. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for error pattern. Aborted.\n", 6);
 
   /* Initializes to the start of the payload in input bitstream */
   payload = sync_header ? bs + 2 : bs;
@@ -628,7 +628,7 @@ int main (int argc, char *argv[]) {
   /* Prepare a totally-erased frame */
   /* ... allocate memory */
   if ((erased_frame = (short *) calloc (bs_len, sizeof (short))) == NULL)
-    HARAKIRI ("Can't allocate memory for erased frame. Aborted.\n", 6);
+    error_terminate ("Can't allocate memory for erased frame. Aborted.\n", 6);
 
   /* ... set the frame samples to zero (total uncertainty) */
   memset (erased_frame, 0, bs_len * sizeof (short));

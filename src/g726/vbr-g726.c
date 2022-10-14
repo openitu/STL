@@ -355,7 +355,7 @@ int main (int argc, char *argv[]) {
           law[0] = '2';
           break;
         default:
-          HARAKIRI (" Invalid law (A or u)! Aborted...\n", 7);
+          error_terminate (" Invalid law (A or u)! Aborted...\n", 7);
         }
 
         /* Move argv over the option to the next argument */
@@ -440,11 +440,11 @@ int main (int argc, char *argv[]) {
  */
 
   if ((inp_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
   if ((out_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
   if ((tmp_buf = (short *) calloc (N, sizeof (short))) == NULL)
-    HARAKIRI ("Error in memory allocation!\n", 1);
+    error_terminate ("Error in memory allocation!\n", 1);
 
 /*
  * ......... FILE PREPARATION .........
