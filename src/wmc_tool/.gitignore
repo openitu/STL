@@ -1,0 +1,14 @@
+.idea/
+.vs/
+cmake-build-*/
+cmake_install*
+CMakeCache.txt
+CMakeFiles/
+Makefile
+wmc_tool.exe
+wmc_tool
+Testing/
+tmp/
+Workspace_msvc/
+DartConfiguration.tcl
+CTestTestfile.cmake
