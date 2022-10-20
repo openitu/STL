@@ -45,7 +45,7 @@
 
 #define FILE_MEM_INCREMENT 4 * 4096 /* in bytes */
 #define FILE_MEM_EXTRA     4 * 8    /* in bytes */
-#define MAX_RECORDS        20       /* maximum number of file specification on the command line */
+#define MAX_RECORDS        500      /* maximum number of file specification on the command line */
 
 /* Operating Modes */
 #define DESINSTRUMENT_ONLY   0x001
@@ -994,7 +994,7 @@ static TOOL_ERROR Process_File(
     if ( temp2[0] == NUL_CHAR )
     { /* No */
         /* Print two Spaces to Erase the last 2 Letters of "% Completed" */
-        fputs( "  \b\b", stderr );
+        fputs( "  \b\b", stdout );
     }
 
     fprintf(stdout, "\n" );
@@ -1084,7 +1084,7 @@ ret:
 
 int main( int argc, char *argv[] )
 {
-    int i, j, i_cmd_line, size, nRecords;
+    int i, j, i_cmd_line, size, nRecords = 0;
     int nBytesProcessed, FolderPROMSize, len, MaxFnLength;
     int Operation;
     unsigned int Tool_Warning_Mask;
@@ -1193,14 +1193,13 @@ int main( int argc, char *argv[] )
 
     /* Create file list from user-specified command-line arguments */
     i = 0;
-    nRecords = 0;
     MaxFnLength = STRING_LENGTH("Peak Memory Used");        /* Set Minimum Filename Length */
     for (; i_cmd_line < argc; i_cmd_line++)
     {
         /* If this is not a Command Line Option (it must be Filename or Directory) */
         if (*argv[i_cmd_line] != NUL_CHAR)
         {
-            if (nRecords == MAX_RECORDS)
+            if (i == MAX_RECORDS)
             {
                 ErrCode = ERR_NO_FILE_SPEC;
                 fprintf(stderr, "Maximum number of file specifications on the command line exceeded! The limit is %d entries!\n", MAX_RECORDS);
@@ -1252,7 +1251,7 @@ int main( int argc, char *argv[] )
                     /* it's an existing directory without file mask -> use *.c as default */
                     strcpy(file_book[i].pathname, file_book[i].cmd_line_spec);
                     /* remove the trailing '/', if any */
-                    size = strlen(file_book[i].pathname);
+                    size = (int)strlen(file_book[i].pathname);
                     while (file_book[i].pathname[size - 1] == '/')
                     {
                         file_book[i].pathname[size - 1] = '\0';

@@ -257,32 +257,20 @@ static const struct
     char kw_delim;       /* Keyword Name Delimiter          */
     Item_Type kw_type;   /* Keyword Type                    */
     Item_Type expr_type; /* Keyword Expression Type         */
-} keywords[] = {
+} keywords[] = {    /* capital keyword names added as they appear in the BASOP code */
     { "if", false, NUL_CHAR, ITEM_KEYWORD_IF, ITEM_IF },
-
     { "else", true, NUL_CHAR, ITEM_KEYWORD_ELSE | ITEM_SKIPPED, 0 },
-
     { "for", false, NUL_CHAR, ITEM_KEYWORD_FOR, ITEM_FOR },
-
     { "do", false, NUL_CHAR, ITEM_KEYWORD_DO | ITEM_SKIPPED, 0 },
-
     { "while", false, NUL_CHAR, ITEM_KEYWORD_WHILE, ITEM_WHILE },
-
     { "switch", false, NUL_CHAR, ITEM_KEYWORD_SWITCH, ITEM_SWITCH },
-
     { "case", true, NUL_CHAR, ITEM_KEYWORD_CASE | ITEM_SKIPPED, ITEM_CONSTANT | ITEM_SKIPPED },
-
     { "default", true, ':', ITEM_KEYWORD_DEFAULT | ITEM_SKIPPED, ITEM_DEFAULT },
-
     { "sizeof", true, NUL_CHAR, ITEM_KEYWORD_SIZEOF | /* sizeof 'expr' is not supported*/
                                     ITEM_CONSTANT | ITEM_SKIPPED, ITEM_CONSTANT | ITEM_SKIPPED },
-
     { "goto", false, NUL_CHAR, ITEM_KEYWORD_GOTO | ITEM_WARNING, ITEM_SKIPPED | ITEM_LABEL },
-
     { "break", false, NUL_CHAR, ITEM_KEYWORD_BREAK, 0 },
-
     { "continue", false, NUL_CHAR, ITEM_KEYWORD_CONTINUE | ITEM_WARNING, 0 },
-
     /* 'return' now Instrumented for enter/leave function Mechanism */
     { RETURN_KW_STRING, false, NUL_CHAR, ITEM_KEYWORD_RETURN | ITEM_RETURN }
 };
@@ -2525,7 +2513,7 @@ static TOOL_ERROR Find_Keywords(
     int ncomma, neos;
     char temp[MAX_CHARS_PER_LINE + 1 + 1]; /* +1+1 for '\n' and NUL*/
 
-    int i;
+    int i, run, finished;
 
     /* Get Parse Table Address (for clarity) */
     ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
@@ -2536,10 +2524,78 @@ static TOOL_ERROR Find_Keywords(
         /* Get UnInstrumented Keyword Name */
         strcpy( kw_name, keywords[i].kw_name );
 
-        for ( item_type = ITEM_NONE;
-              item_type <= ITEM_INSTRUMENTED + 1; /* +1 allow up to 1 extra pass for a Keyword*/
-              item_type += ITEM_INSTRUMENTED )
+        //for ( item_type = ITEM_NONE;
+        //      item_type <= ITEM_INSTRUMENTED + 1; /* +1 allow up to 1 extra pass for a Keyword*/
+        //      item_type += ITEM_INSTRUMENTED )
+        finished = 0;
+        run = 0;
+        while (!finished)
         {
+            item_type = ITEM_NONE;
+            if (run == 1)
+            { /* Yes */
+                /* Try Uppercase Version */
+                for (ns = kw_name; *ns != NUL_CHAR; *ns = toupper(*ns), ns++);
+            }
+            else if (run == 2)
+            {
+                /*  Skip Runs for Keywords that are Never Intrumented */
+                if (keywords[i].kw_ni)
+                {
+                    run = 4;
+                    break;
+                }
+                else
+                {
+                    /* Try Instrumented Lowercase Version */
+                    Instrument_Words(kw_name, keywords[i].kw_name);
+                    item_type = ITEM_INSTRUMENTED;
+                }
+            }
+            else if (run == 3)
+            {
+                /* Try Instrumented Uppercase Version */
+                for (ns = kw_name; *ns != NUL_CHAR; *ns = toupper(*ns), ns++);
+                item_type = ITEM_INSTRUMENTED;
+            }
+            else if (run == 4)
+            {
+                if (keywords[i].kw_type == ITEM_KEYWORD_WHILE)
+                { /* Yes */
+                    /* Try (Front) Instrumented Version */
+                    Instrument_Words_Front(kw_name, keywords[i].kw_name);
+                    item_type = ITEM_INSTRUMENTED;
+                }
+                else
+                {
+                    /* Skip this Run */
+                    run++;
+                    continue;
+                }
+            }
+            else if (run == 5)
+            {
+                if (keywords[i].kw_type == ITEM_KEYWORD_SWITCH)
+                { /* Yes */
+                    /* Try '__' Instrumented Version */
+                    Instrument_Words(kw_name, keywords[i].kw_name);
+                    Instrument_Words(kw_name, kw_name);
+                    item_type = ITEM_INSTRUMENTED;
+                }
+                else
+                {
+                    /* Skip this Run */
+                    run++;
+                    continue;
+                }
+            }
+            else if (run > 5)
+            {
+                finished = 1;
+                break;
+            }
+
+
             /* Set Name Length */
             kw_name_len = strlen( kw_name );
 
@@ -2708,9 +2764,9 @@ static TOOL_ERROR Find_Keywords(
 
                         /* Add Keyword Expression Region */
                         if ( ( ErrCode = Add_Region( ParseTbl_ptr,
-                    /* Keywords Expressions that Compute to Constants are stripped of KW_EXPR Attribute */
-                    /* Added because when 'sizeof' is marked as a KW Expresion, instrumentation of something */
-                    /* like 'sizeof(float) * 2' would be instrumented between the ')' and the '2'.*/
+                            /* Keywords Expressions that Compute to Constants are stripped of KW_EXPR Attribute */
+                            /* Added because when 'sizeof' is marked as a KW Expresion, instrumentation of something */
+                            /* like 'sizeof(float) * 2' would be instrumented between the ')' and the '2'.*/
                            ( ( keywords[i].kw_type & ITEM_CONSTANT ) ? 0 : ITEM_KW_EXPR ) | keywords[i].expr_type, ps, pe + 1 ) ) != NO_ERR )
                         {
                             goto ret;
@@ -2719,12 +2775,12 @@ static TOOL_ERROR Find_Keywords(
                     /* Continue after Arguments or Value End */
                     ne = pe + 1;
                 }
+
                 /* Keyword has a Delimiter? */
                 if ( dp != NULL )
                 { /* Yes */
                     /* Add Skipped Region (for the Delimiter) */
-                    if ( ( ErrCode = Add_Region( ParseTbl_ptr,
-                                                 ITEM_SKIPPED | ITEM_OPERATOR_DELIMITER, dp ) ) != NO_ERR )
+                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, ITEM_SKIPPED | ITEM_OPERATOR_DELIMITER, dp ) ) != NO_ERR )
                     {
                         goto ret;
                     }
@@ -2736,40 +2792,44 @@ static TOOL_ERROR Find_Keywords(
 
             /*  No Second Pass for Keywords that have Never been Intrumented*/
             /* is Keyword ever Instrumented? */
-            if ( keywords[i].kw_ni && isupper( kw_name[0] ) )
-            { /* No */
-                /* No 2nd Iteration */
-                break;
-            }
+            //if ( keywords[i].kw_ni && isupper( kw_name[0] ) )
+            //{ /* No */
+            //    /* No 2nd Iteration */
+            //    break;
+            //}
+
             /* 1st Pass? */
-            if ( item_type == ITEM_NONE )
-            { /* Yes */
-                /* Lowercase Keyword? */
-                if ( islower( kw_name[0] ) )
-                { /* Yes */
-                    /* Put in Uppercase */
-                    for ( ns = kw_name; *ns != NUL_CHAR; *ns = toupper( *ns ), ns++ )
-                        ;
-                    /* Repeat same Iteration */
-                    item_type -= ITEM_INSTRUMENTED;
-                }
-                else
-                {
-                    /* Instrument Name */
-                    Instrument_Words( kw_name, keywords[i].kw_name );
-                }
-            }
-            else
-            { /* No */
-                /* 'while' Keyword? */
-                if ( keywords[i].kw_type == ITEM_KEYWORD_WHILE )
-                { /* Yes */
-                    /* Instrument Name (in Front) */
-                    Instrument_Words_Front( kw_name, keywords[i].kw_name );
-                    /* There are two Versions (So one more Pass) */
-                    item_type -= ITEM_INSTRUMENTED - 1;
-                }
-            }
+            //if (item_type == ITEM_NONE)
+            //{ /* Yes */
+            //    /* Lowercase Keyword? */
+            //    if ( islower( kw_name[0] ) )
+            //    { /* Yes */
+            //        /* Put in Uppercase */
+            //        for ( ns = kw_name; *ns != NUL_CHAR; *ns = toupper( *ns ), ns++ )
+            //            ;
+            //        /* Repeat same Iteration */
+            //        item_type -= ITEM_INSTRUMENTED;
+            //    }
+            //    else
+            //    {
+            //        /* Instrument Name */
+            //        Instrument_Words( kw_name, keywords[i].kw_name );
+            //    }
+            //}
+            //else 
+            //{ /* No */
+            //    /* 'while' Keyword? */
+            //    if ( keywords[i].kw_type == ITEM_KEYWORD_WHILE )
+            //    { /* Yes */
+            //        /* Instrument Name (in Front) */
+            //        Instrument_Words_Front( kw_name, keywords[i].kw_name );
+            //        /* There are two Versions (So one more Pass) */
+            //        item_type -= ITEM_INSTRUMENTED - 1;
+            //    }
+            //}
+
+            /* Increase the Run Iterator */
+            run++;
         }
     }
 
