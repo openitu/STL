@@ -367,7 +367,7 @@ char **add_file_to_list(const char* filename, char** file_list, int* nfiles)
     else
     {
         /* increase the size of the file_list array by one */
-        ptr_temp = (char**)realloc((void*)file_list, (*nfiles + 1) * sizeof(char*));
+        ptr_temp = (char**)realloc((void*)file_list, (size_t)(*nfiles + 1) * sizeof(char*));
     }
 
     if (ptr_temp != NULL)
@@ -376,7 +376,7 @@ char **add_file_to_list(const char* filename, char** file_list, int* nfiles)
     }
     else
     {
-        printf("\nCritical Error : Unable to create/update file_list!\n\n");
+        fprintf( stderr, "Critical Error : Unable to create/update file_list!\n");
         exit(-1);
     }
 
@@ -1203,7 +1203,8 @@ int main( int argc, char *argv[] )
             if (nRecords == MAX_RECORDS)
             {
                 ErrCode = ERR_NO_FILE_SPEC;
-                Error("Maximum number of file specifications on the command line exceeded! The limit is %d entries.", ErrCode, MAX_RECORDS);
+                fprintf(stderr, "Maximum number of file specifications on the command line exceeded! The limit is %d entries!\n", MAX_RECORDS);
+                //Error("Maximum number of file specifications on the command line exceeded! The limit is %d entries.", ErrCode, MAX_RECORDS);
                 goto ret;
             }
 
@@ -1250,10 +1251,12 @@ int main( int argc, char *argv[] )
                 {
                     /* it's an existing directory without file mask -> use *.c as default */
                     strcpy(file_book[i].pathname, file_book[i].cmd_line_spec);
-                    /* remove trailing '/', if any */
-                    while ((ptr = strrchr(file_book[i].pathname, '/')) != NULL)
+                    /* remove the trailing '/', if any */
+                    size = strlen(file_book[i].pathname);
+                    while (file_book[i].pathname[size - 1] == '/')
                     {
-                        *ptr = '\0';
+                        file_book[i].pathname[size - 1] = '\0';
+                        size--;
                     }
                     strcpy(file_book[i].filename_or_mask, "*.c");
                     file_book[i].file_list = add_files_in_dir_to_list(file_book[i].pathname, file_book[i].filename_or_mask, file_book[i].file_list, &file_book[i].nFiles);
@@ -1261,7 +1264,8 @@ int main( int argc, char *argv[] )
                 else
                 {
                     ErrCode = ERR_FILE_FIND;
-                    Error("Cannot Open " DQUOTE("%s"), ErrCode, argv[i]);
+                    fprintf(stderr, "Unable to open %s!\n", argv[i]);
+                    //Error("Cannot Open " DQUOTE("%s"), ErrCode, argv[i]);
                     goto ret;
                 }
             }
@@ -1294,7 +1298,8 @@ int main( int argc, char *argv[] )
                 else
                 {
                     ErrCode = ERR_FILE_FIND;
-                    Error("Unable to open directory" DQUOTE("%s"), ErrCode, file_book[i].pathname);
+                    fprintf(stderr, "Unable to open directory %s!\n", file_book[i].pathname);
+                    //Error("Unable to open directory" DQUOTE("%s"), ErrCode, file_book[i].pathname);
                     goto ret;
                 }
             }
@@ -1303,7 +1308,8 @@ int main( int argc, char *argv[] )
             if (file_book[i].nFiles == 0)
             { /* No */
                 ErrCode = ERR_NO_FILE_SPEC;
-                Error("No existing File/Dir was specified", ErrCode);
+                fprintf(stderr, "No existing File/Dir was specified!\n");
+                //Error("No existing File/Dir was specified", ErrCode);
                 goto ret;
             }
 
@@ -1381,6 +1387,8 @@ int main( int argc, char *argv[] )
             /* Stop on Error */
             if (ErrCode != NO_ERR)
             {
+                /* The error message should be prepared in the string error_msg -> print it */
+                Print_Error();
                 goto ret;
             }
 

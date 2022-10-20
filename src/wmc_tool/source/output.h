@@ -33,7 +33,7 @@
 
 void Print( const char *format, ... );
 void Error( const char *format, ... );
-//void Print_Error( const char *msg = NULL );
+void Print_Error( const char *msg = NULL );
 void Print_Warning( const char *format, ... );
 //void Print_Info( const char *format, ... );
 

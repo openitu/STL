@@ -158,35 +158,35 @@ void Error( const char *format, ... )
 
     return;
 }
-//
-///*-------------------------------------------------------------------*
-// * Print_Error
-// *
-// * NOTE: Prints Error Message to the Console
-// *-------------------------------------------------------------------*/
-//void Print_Error( const char *msg )
-//{
-//    /*  Added to Prevent an Ordering Problem on Cygwin  */
-//    /* Flush 'stdout' Console */
-//    fflush( stdout );
-//
-//    /* Print to 'stderr' */
-//    if (msg == NULL)
-//    {
-//        fputs(error_msg, stderr);   /* Print Last Error if 'msg' is NULL */
-//    }
-//    else
-//    {
-//        fputs(msg, stderr);
-//    }
-//
-//    /*  Added to Correct Ordering Problem on Cygwin  */
-//    /* Flush 'stderr' Console */
-//    fflush( stderr );
-//
-//    return;
-//}
-//
+
+/*-------------------------------------------------------------------*
+ * Print_Error
+ *
+ * NOTE: Prints Error Message to the Console
+ *-------------------------------------------------------------------*/
+void Print_Error( const char *msg )
+{
+    /*  Added to Prevent an Ordering Problem on Cygwin  */
+    /* Flush 'stdout' Console */
+    fflush( stdout );
+
+    /* Print to 'stderr' */
+    if (msg == NULL)
+    {
+        fputs(error_msg, stderr);   /* Print Last Error if 'msg' is NULL */
+    }
+    else
+    {
+        fputs(msg, stderr);
+    }
+
+    /*  Added to Correct Ordering Problem on Cygwin  */
+    /* Flush 'stderr' Console */
+    fflush( stderr );
+
+    return;
+}
+
 /*-------------------------------------------------------------------*
  * Print_Warning
  * 

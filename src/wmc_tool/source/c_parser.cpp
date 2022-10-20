@@ -7811,7 +7811,8 @@ TOOL_ERROR Instrument_Const_Data_PROM_Table(
     Parse_Tbl_def* ParseTbl_ptr;
     Insert_Tbl_def* InsertTbl_ptr;
     int i, j, prom_size = 0, prom_size_dir = 0;
-    char cnst_data_size_func_name[MAX_PATH] = "", tmp_str[MAX_PATH], dir_name[MAX_PATH];
+    char tmp_str[MAX_PATH + 100];  /* 100 is added to account for the text preceding function name */
+    char cnst_data_size_func_name[MAX_PATH] = "", dir_name[MAX_PATH];
 
     if (nRecords == 0)
     {
