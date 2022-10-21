@@ -1256,6 +1256,7 @@ static int Find_Region(
 }
 
 
+
 /*-------------------------------------------------------------------*
  * Fix_Item_Type
  *-------------------------------------------------------------------*/
@@ -7016,6 +7017,12 @@ TOOL_ERROR DesInstrument(
         start = ParseRec_ptr->item_start;
         tmp = ParseRec_ptr->item_end;
 
+        /* check if we're in WMC_TOOL_SKIP region */
+        if (Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_INSTRUMENTATION_OFF) > 0)
+        {
+            continue;
+        }
+
         /* Instrumentation Definition? */
         if (ParseRec_ptr->item_type & ITEM_PREPROC_LINE)
         { /* Yes */
@@ -7046,7 +7053,7 @@ TOOL_ERROR DesInstrument(
 
         /* Instrumentation Code? */
         else if (ParseRec_ptr->item_type & item_type && ((ParseRec_ptr->item_type & ITEM_FUNC_COUNTERS_MAN) == 0 ||
-                Find_Region(start, ParseTbl_ptr, ITEM_INSTRUMENTATION_OFF) < 0))
+            Find_Region(start, ParseTbl_ptr, ITEM_INSTRUMENTATION_OFF) < 0))
         { /* Yes */
             /* Blank Instrumentation by Default */
             blank = true;
