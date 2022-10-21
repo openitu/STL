@@ -61,11 +61,11 @@ cmake -G "Visual Studio 16 2019" -A "x64" ..
 msbuild wmc_tool.sln
 ```
 
-The executable file `wmc_tool.exe` shall be created in the top-level directory.
+The executable file `wmc_tool.exe` shall be created in the top-level directory. Note, that it is recommended to run these commands from the `Developer Command Prompt for VS2019` opened in `Administrator` mode. This ensures that all paths to libraries including the SDK can be found by the `cmake` command. This can also be verified with the `vswhere` command.
 
 ## Testing
 
-To verify the conformance of the WMC tool it's possible to invoke the `ctest` command from the `build` directory. This runs a series of pre-defined tests using some exemplary `.c` files located in the `testv/src` folder. The instrumented files are compared with their respective references located in the `testv/ref` folder. In case of test failure it's possible to re-run the test with the `--verbose` command-line option to see the reason of failure. Note, that `ctest` uses the Python wrapper script `testv/test_wmc_tool.py` for copying the source files, running the WMC tool binary (executable) file, comparing the output to the reference and cleaning up the work.
+To verify the conformance of the WMC tool it's possible to invoke the `ctest` command from the `build` directory. On Windows platforms it may be necessary to append the config type with the `-C` command-line option. If no specific config type has been specified when running the `cmake` command, then `ctest -C Debug` shall be used for testing. This runs a series of pre-defined tests using some exemplary `.c` files located in the `testv/src` folder. The instrumented files are compared with their respective references located in the `testv/ref` folder. In case of test failure it's possible to re-run the test with the `--verbose` command-line option to see the reason of failure. Note, that `ctest` uses the Python wrapper script `testv/test_wmc_tool.py` for copying the source files, running the WMC tool binary (executable) file, comparing the output to the reference and cleaning up the work.
 
 ## Usage
 
