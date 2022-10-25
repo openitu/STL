@@ -6310,10 +6310,17 @@ void Free_Pointer_Table_Memory(
  * Setup_Regions
  *-------------------------------------------------------------------*/
 TOOL_ERROR Setup_Regions(
-    Parse_Context_def *ParseCtx_ptr )
+    Parse_Context_def *ParseCtx_ptr,
+    bool verbose
+)
 {
     TOOL_ERROR ErrCode = NO_ERR;
+    char* ptr, * end;
     char temp[MAX_CHARS_PER_LINE + 1 + 1]; /* +1+1 for '\n' and NUL*/
+    File_def* file_ptr;
+    Parse_Tbl_def* ParseTbl_ptr;
+    Parse_Rec_def* ParseRec_ptr;
+    int idx;
 
     /* Check Previous State */
     if ( ParseCtx_ptr->State != FILE_OK )
@@ -6321,15 +6328,9 @@ TOOL_ERROR Setup_Regions(
         ErrCode = Internal_Error( __FUNCTION__ );
         goto ret;
     }
+
     /* Set State Failure (by default) */
     ParseCtx_ptr->State = SETUP_FAILED;
-
-    char *ptr, *end;
-
-    File_def *file_ptr;
-    Parse_Tbl_def *ParseTbl_ptr;
-    Parse_Rec_def *ParseRec_ptr;
-    int idx;
 
     /* Get File Address (for clarity) */
     file_ptr = &ParseCtx_ptr->File;
@@ -6530,11 +6531,14 @@ TOOL_ERROR Setup_Regions(
     }
 
     /* Check, if Manual Instrumentation Macro is Found in a Non-Skipped Region */
-    if ( ( ptr = Find_String( ParseCtx_ptr->File.Data, "(", ParseTbl_ptr,
-                              ITEM_SKIPPED | ITEM_INSTRUMENTATION | ITEM_CALL_ARGS | ITEM_FUNC_COUNTERS_MAN,
-                              ITEM_INSTRUMENTATION_OFF ) ) != NULL )
+    if (verbose)
     {
-        Print_Warning("Manual Instrumentation Macro in Non-Skipped Region");
+        if ((ptr = Find_String(ParseCtx_ptr->File.Data, "(", ParseTbl_ptr,
+            ITEM_SKIPPED | ITEM_INSTRUMENTATION | ITEM_CALL_ARGS | ITEM_FUNC_COUNTERS_MAN,
+            ITEM_INSTRUMENTATION_OFF)) != NULL)
+        {
+            Print_Warning("\nManual Instrumentation Macro in a Non-Skipped Region", WARN_MANUAL_MACRO_IN_NONSKIPPED_REGION);
+        }
     }
 
     /* Find ROM Counting Instrumentation */

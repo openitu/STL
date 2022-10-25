@@ -28,7 +28,7 @@ void Free_Insert_Table_Memory( Insert_Tbl_def *InsertTable_ptr );
 void Free_FctCall_Table_Memory( FctCall_Tbl_def *FctCallTable_ptr );
 void Free_Pointer_Table_Memory( Pointer_Tbl_def *PointerTable_ptr );
 
-TOOL_ERROR Setup_Regions( Parse_Context_def *ParseContext_ptr );
+TOOL_ERROR Setup_Regions( Parse_Context_def *ParseContext_ptr, bool verbose );
 TOOL_ERROR DesInstrument( Parse_Context_def *ParseContext_ptr, bool keep_manual );
 TOOL_ERROR DesInstrument_ROM(Parse_Context_def* ParseCtx_ptr);
 TOOL_ERROR Instrument(Parse_Context_def* ParseContext_ptr, bool instr_const);

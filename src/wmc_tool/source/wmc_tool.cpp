@@ -957,7 +957,7 @@ static TOOL_ERROR Process_File(
     temp2[0] = NUL_CHAR;
 
     /* Setup */
-    if ( ( ErrCode = Setup_Regions( ParseCtx_ptr ) ) != NO_ERR )
+    if ( ( ErrCode = Setup_Regions( ParseCtx_ptr, (Operation & VERBOSE) != 0) ) != NO_ERR )
     {
         fprintf(stdout, "\n");
         return ErrCode;
@@ -1189,6 +1189,8 @@ int main( int argc, char *argv[] )
         {
             fprintf(stdout, "- adding statistics about ROM and RAM consumption in the print_mem() function in %s\n", Const_Data_PROM_File);
         }
+
+        fprintf(stdout, "\n");
     }
 
     /* Create file list from user-specified command-line arguments */
@@ -1450,7 +1452,7 @@ int main( int argc, char *argv[] )
         }
 
         /* Setup Regions*/
-        if ((ErrCode = Setup_Regions(&ParseContext)) != NO_ERR)
+        if ((ErrCode = Setup_Regions(&ParseContext, (Operation & VERBOSE) != 0)) != NO_ERR)
         {
             goto ret;
         }
