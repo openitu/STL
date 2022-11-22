@@ -6373,17 +6373,6 @@ TOOL_ERROR Setup_Regions(
         goto ret;
     }
 
-    ///* Skip File? */
-    //if ( Find_String( ParseCtx_ptr->File.Data, WMC_TOOL_SKIP_FILE_STRING, ParseTbl_ptr, ITEM_COMMENT ) != NULL )
-    //{ /* Yes */
-    //    /* Set Program Memory Size */
-    //    ParseCtx_ptr->PROMSize = 0;
-    //    /* Set State to Skipped */
-    //    ParseCtx_ptr->State = SKIPPED;
-    //    /* we're done */
-    //    goto ret;
-    //}
-
     /* Find Defines */
     if ( ( ErrCode = Find_Defines( ParseCtx_ptr ) ) != NO_ERR )
     {
@@ -7543,7 +7532,7 @@ TOOL_ERROR DesInstrument_ROM(
 
     /* Find the print_mem() function */
     start = ParseCtx_ptr->File.Data;
-    if ((start = Find_String(start, "print_mem", ParseTbl_ptr, ITEM_FUNC_BLOCK, ITEM_NONE)) != NULL)
+    if ((start = Find_String(start, "print_mem", ParseTbl_ptr, ITEM_ANY, ITEM_NONE)) != NULL)
     {
         /* Advance poiner */
         start += strlen("print_mem");
@@ -8076,7 +8065,7 @@ TOOL_ERROR Instrument_Const_Data_PROM_Table(
 
     /* Locate the print_mem() function and write 'Const_Data_PROM_Table' into it */
     start = ParseCtx_ptr->File.Data;
-    if ((start = Find_String(start, "print_mem", ParseTbl_ptr, ITEM_FUNC_BLOCK, ITEM_NONE)) != NULL)
+    if ((start = Find_String(start, "print_mem", ParseTbl_ptr, ITEM_ANY, ITEM_NONE)) != NULL)
     {
         /* Advance pointer */
         start += strlen("print_mem");
@@ -8175,14 +8164,11 @@ TOOL_ERROR Instrument(
         is_function_present = 1;
     }
 
-    /* If there is no function in the file, then check, if there is at least one const xx[] array */
+    /* Check, if there are const xx[] arrays */
     is_cnst_data_present = 0;
-    if (!is_function_present)
+    if ((Find_Identifier(ParseCtx_ptr->File.Data, CONST_STRING, ParseTbl_ptr, ITEM_ANY, ITEM_FUNC_DEF | ITEM_NOT_SEARCHED | ITEM_INSTRUMENTATION_OFF)) != NULL)
     {
-        if ((Find_Identifier(ParseCtx_ptr->File.Data, CONST_STRING, ParseTbl_ptr, ITEM_ANY, ITEM_FUNC_DEF | ITEM_NOT_SEARCHED | ITEM_INSTRUMENTATION_OFF)) != NULL)
-        {
-            is_cnst_data_present = 1;
-        }
+        is_cnst_data_present = 1;
     }
 
     /* Found something to instrument? */
