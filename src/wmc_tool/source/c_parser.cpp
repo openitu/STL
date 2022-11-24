@@ -8006,12 +8006,12 @@ TOOL_ERROR Instrument_Const_Data_PROM_Table(
                 }
 
                 /* generate entry string for the table */
-                sprintf(tmp_str, "/*AddedByWMC_Tool*/    { \"%s\", %d, Const_Data_Size_%s },", file_book[i].cmd_line_spec, prom_size, list_Const_Data_Files[0]);
+                sprintf(tmp_str, "/*AddedByWMC_Tool*/    { \"%s\", %d, Const_Data_Size_%s },", file_book[i].cmd_line_spec, prom_size_dir, list_Const_Data_Files[0]);
             }
             else
             {
                 /* generate entry string for the table */
-                sprintf(tmp_str, "/*AddedByWMC_Tool*/    { \"%s\", %d, NULL },", file_book[i].cmd_line_spec, prom_size);
+                sprintf(tmp_str, "/*AddedByWMC_Tool*/    { \"%s\", %d, NULL },", file_book[i].cmd_line_spec, prom_size_dir);
             }
 
             /* add new entry to the array of entries */
