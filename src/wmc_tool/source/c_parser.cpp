@@ -8101,7 +8101,7 @@ TOOL_ERROR Include_Header(
     char **ptr_end_preproc_block
 )
 {
-    char* ptr;
+    char* ptr, *ptr_end;
     int idx;
     TOOL_ERROR ErrCode = NO_ERR;
     Parse_Tbl_def* ParseTbl_ptr;
@@ -8109,23 +8109,23 @@ TOOL_ERROR Include_Header(
     /* Get Parse Table Address*/
     ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
 
+    /* Find the End of the Last Contiguous Preprocessor Directive Block (#include) */
+    ptr_end = Find_End_Preproc_Block(NULL, ParseTbl_ptr);
+
+    /* store the pointer for later use */
+    if (ptr_end_preproc_block != NULL)
+    {
+        *ptr_end_preproc_block = ptr_end;
+    }
+
     /* Check, if #include "wmc_auto.h" is present */
     if ((ptr = Find_String(ParseCtx_ptr->File.Data, WMOPS_LIB_INCLUDE_STRING, ParseTbl_ptr, ITEM_PREPROC_ARGS | ITEM_PREPROC_INC, ITEM_COMMENT, &idx)) == NULL)
     {
         /* Insert #include "wmc_auto.h" */
-
-        /* Find the End of the Last Contiguous Preprocessor Directive Block (#include) */
-        ptr = Find_End_Preproc_Block(NULL, ParseTbl_ptr);
-
-        if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr, ADDED_TOOL_INFO_STRING "#include " DQUOTE(WMC_TOOL_INCLUDE_STRING))) != NO_ERR)
+        if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr_end, ADDED_TOOL_INFO_STRING "#include " DQUOTE(WMC_TOOL_INCLUDE_STRING))) != NO_ERR)
         {
             return ErrCode;
         }
-    }
-
-    if (ptr_end_preproc_block != NULL)
-    {
-        *ptr_end_preproc_block = ptr;
     }
 
     return NO_ERR;
