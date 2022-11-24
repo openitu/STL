@@ -8158,7 +8158,7 @@ TOOL_ERROR Instrument(
     int nChars, is_function_present, is_cnst_data_present;
     int name_length, max_name_length;
     int name_occ, max_name_occ;
-    int align, wmops_lib_included;
+    int align;
 
     Parse_Rec_def *ParseRec_ptr;
     Parse_Tbl_def *ParseTbl_ptr;
