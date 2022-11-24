@@ -3555,6 +3555,7 @@ static char* Find_End_Preproc_Block(
     return ptr;
 }
 
+
 /*-------------------------------------------------------------------*
  * Find_Preproc_Instrumentation
  *-------------------------------------------------------------------*/
@@ -7997,7 +7998,7 @@ TOOL_ERROR Instrument_Const_Data_PROM_Table(
             if (nConst_Data_Files == 1)
             {
                 /* insert extern function declaration */
-                sprintf(tmp_str, "/*AddedByWMC_Tool*/extern int Const_Data_Size_%s(void);", cnst_data_size_func_name);
+                sprintf(tmp_str, "/*AddedByWMC_Tool*/extern int Const_Data_Size_%s(void);", list_Const_Data_Files[0]);
 
                 if ((ErrCode = Insert_Line(InsertTbl_ptr, ptr, tmp_str)) != NO_ERR)
                 {
@@ -8005,7 +8006,7 @@ TOOL_ERROR Instrument_Const_Data_PROM_Table(
                 }
 
                 /* generate entry string for the table */
-                sprintf(tmp_str, "/*AddedByWMC_Tool*/    { \"%s\", %d, Const_Data_Size_%s },", file_book[i].cmd_line_spec, prom_size, cnst_data_size_func_name);
+                sprintf(tmp_str, "/*AddedByWMC_Tool*/    { \"%s\", %d, Const_Data_Size_%s },", file_book[i].cmd_line_spec, prom_size, list_Const_Data_Files[0]);
             }
             else
             {
@@ -8091,6 +8092,44 @@ ret:
     return ErrCode;
 }
 
+/*-------------------------------------------------------------------*
+ * Include_Header
+ *-------------------------------------------------------------------*/
+
+TOOL_ERROR Include_Header(
+    Parse_Context_def* ParseCtx_ptr,
+    char **ptr_end_preproc_block
+)
+{
+    char* ptr;
+    int idx;
+    TOOL_ERROR ErrCode = NO_ERR;
+    Parse_Tbl_def* ParseTbl_ptr;
+
+    /* Get Parse Table Address*/
+    ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
+
+    /* Check, if #include "wmc_auto.h" is present */
+    if ((ptr = Find_String(ParseCtx_ptr->File.Data, WMOPS_LIB_INCLUDE_STRING, ParseTbl_ptr, ITEM_PREPROC_ARGS | ITEM_PREPROC_INC, ITEM_COMMENT, &idx)) == NULL)
+    {
+        /* Insert #include "wmc_auto.h" */
+
+        /* Find the End of the Last Contiguous Preprocessor Directive Block (#include) */
+        ptr = Find_End_Preproc_Block(NULL, ParseTbl_ptr);
+
+        if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr, ADDED_TOOL_INFO_STRING "#include " DQUOTE(WMC_TOOL_INCLUDE_STRING))) != NO_ERR)
+        {
+            return ErrCode;
+        }
+    }
+
+    if (ptr_end_preproc_block != NULL)
+    {
+        *ptr_end_preproc_block = ptr;
+    }
+
+    return NO_ERR;
+}
 
 /*-------------------------------------------------------------------*
  * Instrument
@@ -8113,7 +8152,7 @@ TOOL_ERROR Instrument(
 
     int idx;
 
-    char *ptr, *ptr2;
+    char *ptr, *ptr2, *ptr_end_preproc_block;
     char *ptr3;
     char temp[552];
     int nChars, is_function_present, is_cnst_data_present;
@@ -8175,25 +8214,30 @@ TOOL_ERROR Instrument(
     if (is_function_present || is_cnst_data_present)
     { /* Yes */
 
-        /* Check if "wmc_auto.h" is included */
-        wmops_lib_included = 0;
-        if ((ptr = Find_String(ParseCtx_ptr->File.Data, WMOPS_LIB_INCLUDE_STRING, ParseTbl_ptr,
-            ITEM_PREPROC_ARGS | ITEM_PREPROC_INC, ITEM_COMMENT, &idx)) != NULL)
-        { /* No */
-            wmops_lib_included = 1;
-        }
-
-        /* Find the End of the Last Contiguous Preprocessor Directive Block (#include) */
-        ptr = Find_End_Preproc_Block(NULL, ParseTbl_ptr);
-
-        /* Insert #include "wmc_auto.h" */
-        if (!wmops_lib_included)
+        /* Include "wmc_auto.h", if not present */
+        if ((ErrCode = Include_Header(ParseCtx_ptr, &ptr_end_preproc_block)) != NO_ERR)
         {
-            if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr, ADDED_TOOL_INFO_STRING "#include " DQUOTE(WMC_TOOL_INCLUDE_STRING))) != NO_ERR)
-            {
-                goto ret;
-            }
+            goto ret;
         }
+
+        //wmops_lib_included = 0;
+        //if ((ptr = Find_String(ParseCtx_ptr->File.Data, WMOPS_LIB_INCLUDE_STRING, ParseTbl_ptr,
+        //    ITEM_PREPROC_ARGS | ITEM_PREPROC_INC, ITEM_COMMENT, &idx)) != NULL)
+        //{ /* No */
+        //    wmops_lib_included = 1;
+        //}
+
+        ///* Find the End of the Last Contiguous Preprocessor Directive Block (#include) */
+        //ptr = Find_End_Preproc_Block(NULL, ParseTbl_ptr);
+
+        ///* Insert #include "wmc_auto.h" */
+        //if (!wmops_lib_included)
+        //{
+        //    if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr, ADDED_TOOL_INFO_STRING "#include " DQUOTE(WMC_TOOL_INCLUDE_STRING))) != NO_ERR)
+        //    {
+        //        goto ret;
+        //    }
+        //}
 
         /* Get Function Call Table Address (for clarity) */
         FctCallTbl_ptr = &ParseCtx_ptr->FctCallTbl;
@@ -8247,10 +8291,10 @@ TOOL_ERROR Instrument(
                     goto ret;
                 }
 
-                /* Insert Function Call Macro */
+                /* Insert Macro for Function Call */
                 //if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl,
                 //    ParseRec_ptr->item_end, temp)) != NO_ERR)
-                if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr, temp)) != NO_ERR)
+                if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr_end_preproc_block, temp)) != NO_ERR)
                 {
                     goto ret;
                 }

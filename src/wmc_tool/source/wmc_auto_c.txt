@@ -632,7 +632,6 @@
 "        /* Save Info about it */\r\n"
 "        ptr_max_stack = &something;\r\n"
 "\r\n"
-"        //wc_frame = frame;\r\n"
 "        wc_frame = update_cnt;          /* current frame number is stored in the variable update_cnt and updated in the function update_wmops() */\r\n"
 "        strncpy(location_max_stack, fctname, sizeof(location_max_stack) - 1);\r\n"
 "        location_max_stack[sizeof(location_max_stack) - 1] = '\\0';\r\n"

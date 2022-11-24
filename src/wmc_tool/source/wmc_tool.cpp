@@ -1463,6 +1463,12 @@ int main( int argc, char *argv[] )
             goto ret;
         }
 
+        /* Check, if "wmc_auto.h" is included */
+        if ((ErrCode = Include_Header(&ParseContext, NULL)) != NO_ERR)
+        {
+            goto ret;
+        }
+
         /* Instrument Const_Data_PROM_Table[] */
         if ((ErrCode = Instrument_Const_Data_PROM_Table(&ParseContext, file_book, nRecords)) != NO_ERR)
         {

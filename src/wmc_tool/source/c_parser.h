@@ -34,6 +34,7 @@ TOOL_ERROR DesInstrument_ROM(Parse_Context_def* ParseCtx_ptr);
 TOOL_ERROR Instrument(Parse_Context_def* ParseContext_ptr, bool instr_const);
 TOOL_ERROR Instrument_Const_Data_PROM_Table( Parse_Context_def *ParseContext_ptr, T_FILE_BOOK file_book[], int nRecords );
 TOOL_ERROR Finalize( Parse_Context_def *ParseContext_ptr );
+TOOL_ERROR Include_Header(Parse_Context_def* ParseContext_ptr, char** ptr_end_preproc_block );
 
 void Print_Information( void );
 
