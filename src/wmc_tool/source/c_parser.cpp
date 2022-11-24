@@ -8220,25 +8220,6 @@ TOOL_ERROR Instrument(
             goto ret;
         }
 
-        //wmops_lib_included = 0;
-        //if ((ptr = Find_String(ParseCtx_ptr->File.Data, WMOPS_LIB_INCLUDE_STRING, ParseTbl_ptr,
-        //    ITEM_PREPROC_ARGS | ITEM_PREPROC_INC, ITEM_COMMENT, &idx)) != NULL)
-        //{ /* No */
-        //    wmops_lib_included = 1;
-        //}
-
-        ///* Find the End of the Last Contiguous Preprocessor Directive Block (#include) */
-        //ptr = Find_End_Preproc_Block(NULL, ParseTbl_ptr);
-
-        ///* Insert #include "wmc_auto.h" */
-        //if (!wmops_lib_included)
-        //{
-        //    if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr, ADDED_TOOL_INFO_STRING "#include " DQUOTE(WMC_TOOL_INCLUDE_STRING))) != NO_ERR)
-        //    {
-        //        goto ret;
-        //    }
-        //}
-
         /* Get Function Call Table Address (for clarity) */
         FctCallTbl_ptr = &ParseCtx_ptr->FctCallTbl;
 
