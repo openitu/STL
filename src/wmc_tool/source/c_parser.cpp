@@ -7935,13 +7935,13 @@ TOOL_ERROR Instrument_Const_Data_PROM_Table(
             ptr_tmp = dir_name;
             for (j = 0; j < (int)strlen(dir_name); j++)
             {
-                if (dir_name[j] == '.' || dir_name[j] == '/')
-                {
-                    *ptr_tmp++ = '_';
-                }
-                else if (dir_name[j] == '*')
+                if (dir_name[j] == '*')
                 {
                     continue;
+                }
+                else if ( !IS_ALPHA_CHAR(dir_name[j]) && !IS_DIGIT_CHAR(dir_name[j]) )
+                {
+                    *ptr_tmp++ = '_';
                 }
                 else
                 {
