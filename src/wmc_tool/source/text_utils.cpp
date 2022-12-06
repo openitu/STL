@@ -595,14 +595,18 @@ char * Extract_String_From_File(
     {
         if ((ptr = strstr(line, line_keyword)) != NULL)
         {
+            /* extract the name */
             ptr += strlen(line_keyword);
-            while (!(IS_ALPHA_CHAR(*ptr) || *ptr == '_'))
+
+            /* skip leading spaces */
+            while (!(IS_ALPHA_CHAR(*ptr)) && !(IS_DIGIT_CHAR(*ptr)) && *ptr != '_')
             {
                 ptr++;
             }
 
+            /* proceed to the end of the name */
             ptr_end = ptr + 1;
-            while (IS_ALPHA_CHAR(*ptr_end) || *ptr_end == '_')
+            while (*ptr_end != SPACE_CHAR && *ptr_end != ')')
             {
                 ptr_end++;
             }

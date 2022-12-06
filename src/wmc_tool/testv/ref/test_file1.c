@@ -14,6 +14,7 @@
 
 
         const int16_t try_yt = 0.74834f;        /* try constant */
+/*AddedByWMC_Tool*/#define CONST_DATA_SIZE_TRY_YT +rsize(try_yt)
 
         #define WMC_TOOL_SKIP
                 const float fr_tr65[L_NON_BRT] =
@@ -27,10 +28,12 @@
 
         const float Ratios_WB_7[L_LEN_G] =
         {
+/*AddedByWMC_Tool*/#define CONST_DATA_SIZE_RATIOS_WB_7 +rsize(Ratios_WB_7)
             1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22.5f, 24, 25, 27, 28, 30, 35
         };
 
         const int16_t my_array_of_indices[SIZE_STATE][LEN_ELEM] = {
+/*AddedByWMC_Tool*/#define CONST_DATA_SIZE_MY_ARRAY_OF_INDICES +rsize(my_array_of_indices)
             5, 6, 8, 45, 9, 1, 7,
             5, 6, 8, 45, 9, 1, 7,
             5, 6, 8, 45, 9, 1, 7,
@@ -112,4 +115,15 @@ $("+=")     ff += date_from_struct_(fgtr, bgf, &ff);
 
             return_ hjk;
         }
+/*AddedByWMC_Tool*/int Const_Data_Size_Func(test_file1) { return
+/*AddedByWMC_Tool*/#ifdef CONST_DATA_SIZE_TRY_YT
+/*AddedByWMC_Tool*/       CONST_DATA_SIZE_TRY_YT
+/*AddedByWMC_Tool*/#endif
+/*AddedByWMC_Tool*/#ifdef CONST_DATA_SIZE_RATIOS_WB_7
+/*AddedByWMC_Tool*/       CONST_DATA_SIZE_RATIOS_WB_7
+/*AddedByWMC_Tool*/#endif
+/*AddedByWMC_Tool*/#ifdef CONST_DATA_SIZE_MY_ARRAY_OF_INDICES
+/*AddedByWMC_Tool*/       CONST_DATA_SIZE_MY_ARRAY_OF_INDICES
+/*AddedByWMC_Tool*/#endif
+/*AddedByWMC_Tool*/+0;}
 /*AddedByWMC_Tool*/ int PROM_Size_Func( test_file1 ) { return 27; }

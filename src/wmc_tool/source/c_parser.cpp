@@ -7930,20 +7930,26 @@ TOOL_ERROR Instrument_Const_Data_PROM_Table(
         /* insert auxiliary Get_Const_Data_Size_xxx() function in case we found more than one Const_Data_Size_Func() */
         if (nConst_Data_Files > 1)
         {
-            /* extract last folder name from the pathname */
-            if (strcmp(file_book[i].pathname, ".") == 0)
+            /* make string from the command-line spec -> replace '.' and '/' with '_' and discard '*' */
+            strcpy(dir_name, file_book[i].cmd_line_spec);
+            ptr_tmp = dir_name;
+            for (j = 0; j < (int)strlen(dir_name); j++)
             {
-                strcpy(dir_name, "current_dir");
+                if (dir_name[j] == '.' || dir_name[j] == '/')
+                {
+                    *ptr_tmp++ = '_';
+                }
+                else if (dir_name[j] == '*')
+                {
+                    continue;
+                }
+                else
+                {
+                    *ptr_tmp++ = dir_name[j];
+                }
             }
-            else if ((ptr_tmp = strrchr(file_book[i].pathname, '/')) != NULL)
-            {
-                strcpy(dir_name, ptr_tmp + 1);
-            }
-            else
-            {
-                strcpy(dir_name, file_book[i].pathname);
-            }
-
+            *ptr_tmp = NUL_CHAR;
+            
             /* insert function declaration */
             sprintf(tmp_str, "/*AddedByWMC_Tool*/static int Get_Const_Data_Size_%s(void)", dir_name);
 

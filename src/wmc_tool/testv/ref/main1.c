@@ -16,7 +16,7 @@
 /*AddedByWMC_Tool*/extern int Const_Data_Size_test_rom(void);
 /*AddedByWMC_Tool*/ROM_Size_Lookup_Table Const_Data_PROM_Table[] =
 /*AddedByWMC_Tool*/{
-/*AddedByWMC_Tool*/    { "out/test_rom.c", -1, Const_Data_Size_test_rom },
+/*AddedByWMC_Tool*/    { "out/test_rom.c", 0, Const_Data_Size_test_rom },
 /*AddedByWMC_Tool*/    { "", -1, NULL }
 /*AddedByWMC_Tool*/};
 /*AddedByWMC_Tool*/#endif

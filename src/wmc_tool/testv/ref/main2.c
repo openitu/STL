@@ -9,11 +9,18 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+/*AddedByWMC_Tool*/#include "wmc_auto.h"
 /*AddedByWMC_Tool*/#ifdef WMOPS
-/*AddedByWMC_Tool*/extern int Const_Data_Size_test_rom(void);
+/*AddedByWMC_Tool*/static int Get_Const_Data_Size_out_test_c(void)
+/*AddedByWMC_Tool*/{
+/*AddedByWMC_Tool*/    int total_size = 0, sz;
+/*AddedByWMC_Tool*/    Get_Const_Data_Size(test_file1, &sz); total_size += sz;
+/*AddedByWMC_Tool*/    Get_Const_Data_Size(test_rom, &sz); total_size += sz;
+/*AddedByWMC_Tool*/    return total_size;
+/*AddedByWMC_Tool*/}
 /*AddedByWMC_Tool*/ROM_Size_Lookup_Table Const_Data_PROM_Table[] =
 /*AddedByWMC_Tool*/{
-/*AddedByWMC_Tool*/    { "out/test*.c", -1, Const_Data_Size_test_rom },
+/*AddedByWMC_Tool*/    { "out/test*.c", 734, Get_Const_Data_Size_out_test_c },
 /*AddedByWMC_Tool*/    { "", -1, NULL }
 /*AddedByWMC_Tool*/};
 /*AddedByWMC_Tool*/#endif
