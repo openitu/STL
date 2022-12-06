@@ -4751,8 +4751,10 @@ static TOOL_ERROR Instrument_Keywords(
     {
         /* Get Record */
         ParseRec_ptr = &ParseTbl_ptr->Data[idx];
+
         /* Get Item Type */
         item_type = ParseRec_ptr->item_type;
+
         /* Skipped? */
         unless( item_type & ITEM_SKIPPED )
         { /* No */
@@ -4769,11 +4771,11 @@ static TOOL_ERROR Instrument_Keywords(
                 /* Is it a 'while' that is part of a 'do' Block? */
 
                 /* Insert Instrumentation Character */
-                if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr,
-                                                WORD_INSTRUMENT_STRING ) ) != NO_ERR )
+                if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr, WORD_INSTRUMENT_STRING ) ) != NO_ERR )
                 {
                     goto ret;
                 }
+
                 /* Is it a 'while'?
                    Auto Instrumentation Macro for 'while' in a 'do' Block
                    can handle multiple Condition. */
@@ -4816,6 +4818,7 @@ static TOOL_ERROR Instrument_Keywords(
                         goto ret;
                     }
                 }
+
                 /* Count Program Memory */
                 if ( item_type == ITEM_KEYWORD_FOR )
                     loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
@@ -5470,7 +5473,7 @@ static TOOL_ERROR Instrument_Operators(
         TERNARY_INSTRUMENT_STRING " ",
     };
     static const char * const operator_set2_strings[] = {
-        MACRO_END, MACRO_END ";"
+        MACRO_END, MACRO_END "{};"
     };
     char **instrumentation_string;
 
