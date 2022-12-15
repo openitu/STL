@@ -10,12 +10,7 @@ if(WIN32)
   )
 endif()  
 
-file(GLOB srcs
-    ${CMAKE_SOURCE_DIR}/*.cpp
-    ${CMAKE_SOURCE_DIR}/*.h
-)
-
-add_executable(wmc_tool ${srcs})
+add_executable(wmc_tool c_parser.cpp output.cpp text_utils.cpp wmc_tool.cpp)
 
 # Testing
 file(TO_CMAKE_PATH ${CMAKE_SOURCE_DIR}/test_data TEST_DIR)
