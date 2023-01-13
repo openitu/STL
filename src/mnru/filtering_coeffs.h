@@ -1,16 +1,16 @@
-#define iFIRcoeffsLen 257
-#define iIIRorder 2
-#define iIIRcoeffsLen (iIIRorder+1) * 2
+#define iP50FIRcoeffsLen 257
+#define iP50IIRorder 2
+#define iP50IIRcoeffsLen (iP50IIRorder+1) * 2
 
 
-const double	dIIRcoeffs[iIIRcoeffsLen] = {
+const double	dP50IIRcoeffs[iP50IIRcoeffsLen] = {
 	0.9894120426128,	-1.978824085,		0.9894120426128,
-	1.0,					-1.9787119772419,	0.9789361932093
+	1.0,    -1.9787119772419,	0.9789361932093
 };
 
 
 //FIR coeffs
-const double	dFIRcoeffs[iFIRcoeffsLen] = {
+const double	dP50FIRcoeffs[iP50FIRcoeffsLen] = {
    0.00000561594151,
    0.00000461631277,
    0.00000369040248,

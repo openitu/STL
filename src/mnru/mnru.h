@@ -1,19 +1,3 @@
-/*
-  ============================================================================
-   File: MNRU.H                                              V.2.0-31.JUL-1995
-  ============================================================================
-
-                            UGST/ITU-T MNRU MODULE
-
-                          GLOBAL FUNCTION PROTOTYPES
-
-   History:
-   27.Jan.92	v1.0	First version <simao@cpqd.br>
-   01.Feb.95    v1.1    Smart prototypes that work with many compilers
-                        <simao@ctd.comsat.com>
-   31.Jul.95    v2.0    MNRU conforming to new P.81. State variables changed.
-  ============================================================================
-*/
 #ifndef MNRU_DEFINED
 #define MNRU_DEFINED 200
 
@@ -65,6 +49,8 @@ typedef struct {
 
 /* Prototype for MNRU and random function(s) */
 double *MNRU_process ARGS ((char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q));
+double *P50_MNRU_process ARGS ((char operation, MNRU_state * s, double *input, double *output, long n, long seed, char mode, double Q, char dcRemoval));
+
 float random_MNRU ARGS ((char *mode, RANDOM_state * r, long seed));
 
 /* Definitions for the MNRU algorithm */
