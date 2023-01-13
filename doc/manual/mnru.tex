@@ -32,7 +32,7 @@ of an input signal.}, and large signals will produce more quantization noise tha
 Therefore, the main characteristic of this reference unit should output speech corrupted by a speech-correlated noise.
 
 %------------------------------------------------------------------------
-% P.81 narrow-band MNRU
+% P.810 narrow-band MNRU
 % The box y-length has been decreased by 1cm and the ps data
 %  shifted down by ~1cm (-18 points)
 %------------------------------------------------------------------------
@@ -52,26 +52,30 @@ This correlated noise is then added to the input signal, with gains applied such
 ratio is obtained in the output, after the 300--3400Hz band-limiting filter.
 
 With the 1996 revision of the MNRU description published in Recommendation ITU-T P.810\footnote{\SF Formerly known as
-Recommendation ITU-T P.81.}, specific guidelines were given for ``digital implementations''\footnote{\SF The revised
+Recommendation ITU-T P.81.}, specific
+guidelines were given for ``digital implementations''\footnote{\SF The revised
 P.81 define a ``digital implementation'' either as a digital hardware implementation or as a software implementation of
-the MNRU.}, eliminating many of the ambiguities possible in earlier descriptions \cite{Old-P.81}, as explained in the
-STL92 manual \cite[Chapter 8]{STL92-Manual}. Figure \ref{1/P.810} shows a block diagram of the ``digital'' MNRU.
+the MNRU.}, eliminating many of the ambiguities
+possible in earlier descriptions \cite{Old-P.81}, as explained in the STL92 manual
+\cite[Chapter 8]{STL92-Manual}. Figure \ref{1/P.810} shows a block diagram of the ``digital'' MNRU.
 Also, this implementation allows for transparent operation on narrowband or wideband speech, hence being known as
 Dual-mode MNRU, or ``Duo-MNRU'', for short.
 
-In 2008, Swissqual introduced a full-band MNRU algorithm, known as P.50 MNRU, that shapes the noise according to an
-average speech power spectrum as in \cite{P.50} instead of white noise to reduce the impact of the noise in the
-high-frequencies and provide super-wideband and full-band MNRU distortion. This algorithm was used in several
-standardization efforts, notably for the standardization of ITU-T Rec. P.863 \cite{P.863} and EVS \cite{EVS}.
-ITU-T Rec. P.810 was updated in 2022 with an implementation of the full-band MNRU described in \ref{fullband}.
+In 2008, Swissqual introduced a full-band MNRU algorithm, known as P.50 MNRU, to provide controlled super-wideband and
+full-band MNRU degradations.
+The algorithm adds a filtering stage that shapes the white noise according to an average speech power spectrum as
+in \cite{P.50} to reduce the impact of the noise in the high-frequencies.
+This algorithm was used in several standardization efforts, notably for the standardization of ITU-T Rec. P.863 \cite{P.863}
+and EVS \cite{EVS}.
+ITU-T Rec. P.810 was updated in 2022 with an implementation of the P.50 full-band MNRU described in \ref{fullband}.
 
 \section{Dual-mode Modulated Noise Reference Unit - Narrowband and wideband speech}
 
 \subsection{Description of the Algorithm}
 
 The de-facto reference implementation of the MNRU\footnote{\SF Developed by the British Telecom and licenced to Malden
-Electronics.} is the same of the original description, whose specification can be found in Recommendation ITU-T P.810
-\cite{P.810} (formerly Recommendation ITU-T P.81 \cite{Old-P.81}).
+Electronics.} is the same of the original description, whose
+specification can be found in Recommendation ITU-T P.810 \cite{P.810} (formerly Recommendation ITU-T P.81 \cite{Old-P.81}).
 This Recommendation describes two MNRU schemes, one called {\em Narrow-band MNRU}, and another, {\em Wideband MNRU}.
 Wideband MNRU is applicable to systems where wideband speech (70--7000Hz) is expected, whereas Narrow-band MNRU is for
 telephone bandwidth (300--3400Hz).
@@ -125,57 +129,19 @@ y(k)=x(k)+10^{-Q/20} x(k) n(k)
 \]
 in the passband region of $H(f)|$.
 
-When both $G_s$ and $G_n$ are non-zero, the MNRU is in an operational
-mode normally called {\em Modulated-noise mode}. This is the most
-common operation mode.
+When both $G_s$ and $G_n$ are non-zero, the MNRU is in an operational mode normally called {\em Modulated-noise mode}.
+This is the most common operation mode.
 
-Alternatively, if one consider $G_s=0$, the output of the algorithm is
-only the correlated noise, at a level $Q$ dB below the input signal.
+Alternatively, if one consider $G_s=0$, the output of the algorithm is only the correlated noise, at a level $Q$ dB below the input signal.
 This is {\em Noise-only mode}.
 
-If, on the other hand, $G_n=0$, the output of the algorithm is the
-input signal filtered by $h(k)$, with a gain $G_s$; this is the {\em
-Signal-only mode}.
+If, on the other hand, $G_n=0$, the output of the algorithm is the input signal filtered by $h(k)$, with a gain $G_s$;
+this is the {\emSignal-only mode}.
 
 \subsection{Implementation}
 
-This implementation of the MNRU algorithm can be found in the module
-{\tt mnru.c}, with prototypes in {\tt mnru.h}. A thorough
-characterization of this module is presented in \cite{Duo-MNRU}. The
-previous version of the ITU-T STL MNRU was applicable to narrowband
-signals and evolved from a Fortran implementation which had been used
-by several laboratories, especially by participants of ETSI's
-contest for the second generation of Digital Mobile Radio Systems,
-and was originally written by experts at CSELT/Italy (sometimes
-referred as {\em CSELT MNRU}), an implementation fully compliant with
-the narrowband MNRU specification available in the then-in-force P.81
-\cite{Old-P.81}.
-
-With the revision of MNRU specification, several changes had to be
-made to the STL92 MNRU:
-\begin{itemize}
-  \item The need for an upsampling by a factor of 5 before summation
-        of the modulated noise to the input speech was eliminated
-        because now for digital implementations, the bandwidth of the
-        multiplicative noise shall have the bandwidth of the input
-        signal. In the previous version, the noise bandwidth had to be
-        20 kHz.
-  \item The output filter for digital implementations shall be a
-        low-pass filter, instead of the bandpass filter of the
-        previous version of the MNRU
-  \item The need of an input speech DC-component removal filter
-        was added to the specification.
-\end{itemize}
-
-These changes, especially the elimination of the 5:1 speech data rate
-conversion, allowed for the implementation of both the narrowband and
-the wideband MNRU within the same C function, when the output filter is
-adequately designed \cite[pp.7--12]{Duo-MNRU}.
-
-The random number generator (RNG) algorithm was also modified to allow
-for real-time implementations, and the solution adopted was based on
-Aachen University's approach used by the Host Laboratory for the ITU-T
-G.729 Selection Tests.
+This implementation of the MNRU algorithm can be found in the module {\tt mnru.c}, with prototypes in {\tt mnru.h}.
+A thorough characterization of this module is presented in \cite{Duo-MNRU}.
 
 %------------------------------------------------------------------------
 % Rev.P.81 MNRU, as implemented in the STL96
@@ -191,16 +157,14 @@ G.729 Selection Tests.
 \end{figure}
 %------------------ End of test of figure ----------------------------------
 
-The block diagram of the MNRU implemented in the STL is in
-figure \ref{STL96-MNRU}.
+The block diagram of the MNRU implemented in the STL is in figure \ref{STL96-MNRU}.
 
-The MNRU works internally on a sample-by-sample basis but for ease of
-interface with other speech coding functions, access to it is made on
-a sample block basis. It should be noted however that the filters have
-memory, as well as do the random number generator, hence state
-variables are needed. These state variables have been arranged as
-fields of a structure whose {\tt type} name is {\tt MNRU\_state}. The
-fields of the structure are:
+The MNRU works internally on a sample-by-sample basis but for ease of interface with other speech coding functions,
+access to it is made on a sample block basis.
+It should be noted however that the filters have memory, as well as do the random number generator, hence state
+variables are needed.
+These state variables have been arranged as fields of a structure whose {\tt type} name is {\tt MNRU\_state}.
+The fields of the structure are:
 \begin{quote} \normalsize
  {\em seed}     \hfill \parbox{100mm}{\SF RNG's seed }\\
  {\em signal\_gain}     \hfill \parbox{100mm}{\SF Gain of the signal path }\\
@@ -237,16 +201,14 @@ The values of the fields shall not be altered by the user.
 %----------------------------------------------------------------------------
 \subsubsection{Filters in the MNRU module}
 
-The composite frequency response of the narrowband and wideband MNRU
-filters is shown in figure \ref{MNRU:both-filters}. Figure
-\ref{MNRU:lp-filter} shows the contribution of the output low-pass
-filter for (a) the narrowband, and (b) the wideband cases. Figure
-\ref{MNRU:hp-filter} shows the effect of the input DC-removal filter
-for (a) the narrowband and (b) the wideband operation modes of the
-MNRU. Details on the design of the output low-pass filters are given
-in \cite{Duo-MNRU}. The frequency responses have been obtained by
-exciting the MNRU module with digital sinewaves and computing the
-ratio of input and output signals, in dB.
+The composite frequency response of the narrowband and wideband MNRU filters is shown in figure \ref{MNRU:both-filters}.
+Figure \ref{MNRU:lp-filter} shows the contribution of the output low-pass filter for (a) the narrowband, and (b) the
+wideband cases.
+Figure \ref{MNRU:hp-filter} shows the effect of the input DC-removal filter for (a) the narrowband and (b) the wideband
+operation modes of the MNRU.
+Details on the design of the output low-pass filters are given in \cite{Duo-MNRU}.
+The frequency responses have been obtained by exciting the MNRU module with digital sinewaves and computing the ratio
+of input and output signals, in dB.
 
 
 %---------------------------------------------------------------------
@@ -332,17 +294,15 @@ ratio of input and output signals, in dB.
 %---------------------------------------------------------------------
 
 
-The input DC-removal filter was implemented using a first-order IIR
-pole-zero filter defined by
+The input DC-removal filter was implemented using a first-order IIR pole-zero filter defined by
 \[
     H_i(z) = { 1-z^{-1} \over \ 1 - \alpha z^{-1} \ }
 \]
-with $\alpha$=0.985. Its -3dB point is at 16 Hz for the narrowband
-case and at 38 Hz for the wideband case.
+with $\alpha$=0.985.
+Its -3dB point is at 16 Hz for the narrowband case and at 38 Hz for the wideband case.
 
-The output low-pass filter was implemented using a second-order
-cascade-form IIR filter with two-sections as illustrated in figure
-\ref{MNRU-IIR} and defined by the equation:
+The output low-pass filter was implemented using a second-order cascade-form IIR filter with two-sections as illustrated
+in figure \ref{MNRU-IIR} and defined by the equation:
 \[
     H_i(z) = A \prod_{k=1}^{2}
                     { a_{0k}+a_{1k}z^{-1}+a_{2k}z^{-2} \over
@@ -350,91 +310,72 @@ cascade-form IIR filter with two-sections as illustrated in figure
                                 }
 \]
 
-IIR filters were chosen because of their low computational
-complexity when compared to FIR implementations, allowing for a more
-efficient MNRU implementation.
+IIR filters were chosen because of their low computational complexity when compared to FIR implementations, allowing for
+a more efficient MNRU implementation.
 
 
 %------------------------------------------------------------------------------
 \subsubsection{Random Number Generator for the MNRU module}
 
-The random number generator (RNG) used in this implementation was
-chosen using the following criteria:
+The random number generator (RNG) used in this implementation was chosen using the following criteria:
 
 \rulex{5mm}
 \begin{minipage}{130mm}
  $\bullet$ \parbox[t]{120mm}{
-               the desired value for Q, $Q_d$, and the measured Q,
-               $Q_m$, should be very
-               close for a wide range of Q, e.g., Q from 0 to 50 dB.
+               the desired value for Q, $Q_d$, and the measured Q, $Q_m$, should be very close for a wide range of Q,
+                e.g., Q from 0 to 50 dB.
                \bigskip}
 
  $\bullet$ \parbox[t]{120mm}{
-               it should show a good approximation of a gaussian
-               distribution. This is needed because it is
-               specified in P.810 and more importantly because uniform
-               distributions do not allow good matching between the
-               desired and measured values of Q. \bigskip}
+               it should show a good approximation of a gaussian distribution.
+               This is needed because it is specified in P.810 and more importantly because uniform distributions do not
+               allow good matching between the desired and measured values of Q. \bigskip}
 
  $\bullet$ \parbox[t]{120mm}{
-               the algorithm needed to be portable (i.e., identical results
-               are got in different platforms if the same seed is given).}\\
+               the algorithm needed to be portable (i.e., identical results are got in different platforms if the same
+                seed is given).}\\
 \end{minipage}
 
-The RNG chosen to be used in the STL92 version of the MNRU was based
-on Knuth's Subtractive Method \cite{Recipes},\cite[Parts
-3.2--3.3]{Knuth}, which generates adequate random sequences but is
-computationally intensive and was too complex to be implemented in a
-real-time digital hardware MNRU.
+The RNG chosen to be used in in STL92 version of the MNRU was based on Knuth's Subtractive Method \cite{Recipes},
+\cite[Parts 3.2--3.3]{Knuth}, which generates adequate random sequences but is computationally intensive and was too
+complex to be implemented in a real-time digital hardware MNRU.
 
-The implementation used in the ITU-T G.729 8
-kbit/s speech codec selection tests was based on a gaussian-noise
-table lookup, in a manner similar to Malden Electronic's
-MNRU implementation.\footnote{\SF Malden's MNRU uses a ROM table
+The implementation used in the ITU-T G.729 8 kbit/s speech codec selection tests was based on a gaussian-noise table
+lookup, in a manner similar to Malden Electronic's MNRU implementation.\footnote{\SF Malden's MNRU uses a ROM table
 derived from  a Gaussian distribution with 4096 samples uniformly
 distributed throughout the table. An address in the table is
 uniformly sampled four times and accumulated to form a gaussian noise
-sample.} This approach is considerably less computationally intensive
-than the STL92 approach, and was used to further reduce the
+sample.}
+This approach is considerably less computationally intensive than the STL92 approach, and was used to further reduce the
 complexity of the MNRU implementation.
 
-After several experiments \cite{Duo-MNRU}, a table with 8192 gaussian
-samples was chosen to be used, which is randomly and uniformly
-accessed 8 times (i.e., an eight-time sample accumulation) to be used
-by the MNRU algorithm. The gaussian table itself is generated in
-run-time (rather than being stored in the data memory of the source
-or object code) using the Monte-Carlo substitution algorithm.
-The Monte-Carlo algorithm uses a linear congruential generation (LCG)
-algorithm defined by
+After several experiments \cite{Duo-MNRU}, a table with 8192 gaussian samples was chosen to be used, which is randomly
+and uniformly accessed 8 times (i.e., an eight-time sample accumulation) to be used by the MNRU algorithm.
+The gaussian table itself is generated in run-time (rather than being stored in the data memory of the source or object
+code) using the Monte-Carlo substitution algorithm.
+The Monte-Carlo algorithm uses a linear congruential generation (LCG) algorithm defined by
 \[
             I_{j} = 69069 I_{j-1} + 1 \pmod{2^{32}}
 \]
-which is converted to numbers in the range [0..1] using the upper 24
-bits of the 32-bit unsigned long $I_j$. $I_0$ is a fixed seed equal to
-314159265. This algorithm is used to generate the necessary initial random
-samples for the substitution algorithm.
+which is converted to numbers in the range [0..1] using the upper 24 bits of the 32-bit unsigned long $I_j$.
+$I_0$ is a fixed seed equal to 314159265.
+This algorithm is used to generate the necessary initial random samples for the substitution algorithm.
 
-Once the table has been filled, during the normal operation of the
-MNRU, eight successive samples are drawn (uniformily) from the table
-using a different LCG algorithm
+Once the table has been filled, during the normal operation of the MNRU, eight successive samples are drawn (uniformily)
+from the table using a different LCG algorithm
 \[
             L_{j} = 253 L_{j-1} + 1 \pmod{2^{24}}
 \]
-of which the upper 13 bits are used to generate random numbers
-uniformly distributed between 0 and 8191. $L_0$ is a fixed seed equal
-to 12345. Both LCGs were implemented as in Aachen University's MNRU
-implementation.
+of which the upper 13 bits are used to generate random numbers uniformly distributed between 0 and 8191. $L_0$ is a
+fixed seed equal to 12345.
+Both LCGs were implemented as in Aachen University's MNRU implementation.
 
-Since different ranges are necessary for table filling and for
-gaussian sample generation, two different LCG random number generators
-were used to avoid any additional calculations due to range convertion
-and to reduce the software load.
+Since different ranges are necessary for table filling and for gaussian sample generation, two different LCG random
+number generators were used to avoid any additional calculations due to range convertion and to reduce the software load.
 
-Since the Monte-Carlo RNG is used only at startup time, it is not
-necessary to keep any state variables for it. The sample-drawing RNG
-however needs to keep stored the previously generated index, which is
-stored in a structure of type {\tt RANDOM\_state}, whose only field
-is (as defined in {\tt mnru.h})\footnote{\SF The use of a structure
+Since the Monte-Carlo RNG is used only at startup time, it is not necessary to keep any state variables for it.
+The sample-drawing RNG however needs to keep stored the previously generated index, which is stored in a structure of
+type {\tt RANDOM\_state}, whose only field is (as defined in {\tt mnru.h})\footnote{\SF The use of a structure
 instead of a single variable in the parent structure ({\tt
 MNRU\_state}) allows for unimplemented features to be easily added in
 a later version of the algorithm.}:
@@ -442,8 +383,7 @@ a later version of the algorithm.}:
  {\em gauss}    \hfill \parbox{100mm}{\SF Index for next random number;}\\
 \end{quote}
 
-The field in {\tt RANDOM\_state} should not be altered by the user in
-any situation.
+The field in {\tt RANDOM\_state} should not be altered by the user in any situation.
 
 The operational modes are defined in {\tt mnru.h}:
 
@@ -452,8 +392,7 @@ The operational modes are defined in {\tt mnru.h}:
 \#define RANDOM\_RESET 1\\*[5mm]
 }
 
-The noise modulation routine is {\tt MNRU\_process}, which is described
-next.
+The noise modulation routine is {\tt MNRU\_process}, which is described next.
 
 \subsubsection{{\tt MNRU\_process}}
 
@@ -472,49 +411,39 @@ double *MNRU\_process (\ttpbox{110mm}{
 
 {\bf Description: }
 
-Module for addition of modulated noise to a vector of {\it n} samples,
-according to Recommendation ITU-T P.810, for either the narrowband or
-the wideband model. Depending on the {\it mode}, this function:
+Module for addition of modulated noise to a vector of {\it n} samples, according to Recommendation ITU-T P.810, for
+either the narrowband or the wideband model. Depending on the {\it mode}, this function:
 
 \rulex{5mm}
 \begin{minipage}{130mm}
  $\bullet$ \parbox[t]{120mm}{
-           adds modulated noise to the {\it input} buffer at a SNR level of
-          {\it Q} dB, saving to {\it output} buffer
+           adds modulated noise to the {\it input} buffer at a SNR level of {\it Q} dB, saving to {\it output} buffer
           ({\it mode}=={\tt MOD\_NOISE});\\}
 
  $\bullet$ \parbox[t]{120mm}{
-          puts into {\it output} only the noise, without addition of the
-          original signal ({\it mode}=={\tt NOISE\_ONLY});\\}
+          puts into {\it output} only the noise, without addition of the original signal ({\it mode}=={\tt NOISE\_ONLY});\\}
 
  $\bullet$ \parbox[t]{120mm}{
-          produces in the {\it output} a filtered-only (no noise added)
-          version of the `input' samples
-          ({\it mode}=={\tt SIGNAL\_ONLY});\\}
+          produces in the {\it output} a filtered-only (no noise added) version of the `input' samples ({\it mode}=={\tt SIGNAL\_ONLY});\\}
 
 \end{minipage}
 
-The symbols {\tt MOD\_NOISE}, {\tt NOISE\_ONLY}, and {\tt SIGNAL\_ONLY}
-are defined in {\tt mnru.h}.
+The symbols {\tt MOD\_NOISE}, {\tt NOISE\_ONLY}, and {\tt SIGNAL\_ONLY} are defined in {\tt mnru.h}.
 
-Although the MNRU algorithm operates on a sample-by-sample basis,
-{\tt MNRU\_process} handles the input data in blocks of {\it n}
-samples, for better computational efficiency.
+Although the MNRU algorithm operates on a sample-by-sample basis, {\tt MNRU\_process} handles the input data in blocks
+of {\it n} samples, for better computational efficiency.
 
-The implementation of the MNRU algorithm has three operational
-states, called {\tt MNRU\_START}, {\tt MNRU\_CONTINUE} and {\tt
-MNRU\_STOP}. With {\tt MNRU\_START}, the state variables are set, as
-well as memory is allocated for the intermediate  data, and this
-needs to be the first operation with the algorithm. Differently from
-the speech voltmeter module, after the initialization of the state
-variables, the normal calculations are carried out for the first
-block of data. Once reset, the algorithm changes the operation state
-to {\tt MNRU\_CONTINUE}, and the next calls to the MNRU algorithm
-will skip the reset operation. With the last block, it is adivisable to
-release the memory allocated to the intermediate data. This is
-accomplished by calling {\tt MNRU\_process} with the operational
-state set as {\tt MNRU\_STOP}. These three operational states are
-defined in {\tt mnru.h} as follows:
+The implementation of the MNRU algorithm has three operational states, called {\tt MNRU\_START}, {\tt MNRU\_CONTINUE} and
+{\tt MNRU\_STOP}.
+With {\tt MNRU\_START}, the state variables are set, as well as memory is allocated for the intermediate data, and this
+needs to be the first operation with the algorithm.
+Differently from the speech voltmeter module, after the initialization of the state variables, the normal calculations
+are carried out for the first block of data.
+Once reset, the algorithm changes the operation state to {\tt MNRU\_CONTINUE}, and the next calls to the MNRU algorithm
+will skip the reset operation.
+With the last block, it is adivisable to release the memory allocated to the intermediate data.
+This is accomplished by calling {\tt MNRU\_process} with the operational state set as {\tt MNRU\_STOP}.
+These three operational states are defined in {\tt mnru.h} as follows:
 
 \rulex{5mm} \parbox[t]{120mm}{\tt
 \#define MNRU\_START     1\\
@@ -547,58 +476,45 @@ defined in {\tt mnru.h} as follows:
         Initial value for random number generator.
 
 \item[\pbox{20mm}{\em mode}] %\rulex{1mm}\\
-        Operation mode: {\tt MOD\_NOISE}, {\tt SIGNAL\_ONLY},
-        {\tt NOISE\_ONLY} (description above).
+        Operation mode: {\tt MOD\_NOISE}, {\tt SIGNAL\_ONLY}, {\tt NOISE\_ONLY} (description above).
 
 \item[\pbox{20mm}{\em Q}] %\rulex{1mm}\\
-        Double defining the desired value for the
-        signal-to-modulated-noise $Q$ for the output data.
+        Double defining the desired value for the signal-to-modulated-noise $Q$ for the output data.
 \end{Descr}
 
-Please note that new values of {\em seed}, {\em mode}, and $Q$ are
-considered only when {\em operation} is {\tt MNRU\_START}, because they are
-considered as INITIAL state values. Therefore, when the operation is
-not {\tt MNRU\_START}, they are ignored.
+Please note that new values of {\em seed}, {\em mode}, and $Q$ are considered only when {\em operation} is {\tt MNRU\_START},
+because they are considered as INITIAL state values.
+Therefore, when the operation is not {\tt MNRU\_START}, they are ignored.
 
 
 {\bf Return value: }
 
-Returns a {\tt (double *)NULL} if not initialized or if initialization
-failed; returns a {\tt (double *)} to an intermediate data vector if reset
-was successful or is in the {\tt MNRU\_CONTINUE} (``run'') operation
-state.
+Returns a {\tt (double *)NULL} if not initialized or if initialization failed; returns a {\tt (double *)} to an
+intermediate data vector if reset was successful or is in the {\tt MNRU\_CONTINUE} (``run'') operation state.
 
 
 \subsection{Portability and compliance} \label{MNRU-Tests}
 
-In the development of this module, several steps were taken to assure
-its compliance to Recommendation ITU-T P.810, which included:
+In the development of this module, several steps were taken to assure its compliance to Recommendation ITU-T P.810, which included:
 
 \begin{itemize}
-  \item agreement of expected and measured Q values for tones and
-        speech,
+  \item agreement of expected and measured Q values for tones and speech,
   \item addition of partial files,
   \item level of output files,
   \item frequency response of built-in filters.
 \end{itemize}
 
-Additionally to these objective measurements, a subjective test was
-performed. The results of this test are found in \cite{Duo-MNRU},
-where it was concluded that the new MNRU implementation conforms to
-the P.810 and also behaves more closely to the hardware MNRU
-than the previous STL92 version.
+Additionally to these objective measurements, a subjective test was performed.
+The results of this test are found in \cite{Duo-MNRU}, where it was concluded that the new MNRU implementation conforms
+to the P.810 and also behaves more closely to the hardware MNRU than the previous STL92 version.
 
-Additionally to the conformance tests, the algorithm was tested for
-portability using a 1kHz tone file as input to the algorithm with Q
-values ranging from 0 to 50 dB in 5 dB steps, and also for the
-algorithm in the {\tt SIGNAL\_ONLY} mode. The processed test files were
-then compared the the reference processed files (generated on a HP
-workstation). Test and reference files should be identical.
-The algorithm was found to compile and execute correctly on MS-DOS
-under Borland Turbo-C++ 1.0 and under the MS-DOS port of the GNU-C
-compiler (gcc), on a HP UNIX workstation with cc (non-ANSI) and gcc,
-on a Sun workstation with cc (non-ANSI) and also on VAX VMS and APX
-computers.
+Additionally to the conformance tests, the algorithm was tested for portability using a 1kHz tone file as input to the
+algorithm with Q values ranging from 0 to 50 dB in 5 dB steps, and also for the algorithm in the {\tt SIGNAL\_ONLY} mode.
+The processed test files were then compared the the reference processed files (generated on a HP workstation). Test and
+reference files should be identical.
+The algorithm was found to compile and execute correctly on MS-DOS under Borland Turbo-C++ 1.0 and under the MS-DOS port
+of the GNU-C compiler (gcc), on a HP UNIX workstation with cc (non-ANSI) and gcc, on a Sun workstation with cc (non-ANSI)
+and also on VAX VMS and APX computers.
 
 
 %-----------------------------------------------------------------
@@ -608,12 +524,9 @@ computers.
 \subsubsection {Description of the demonstration programs}
 
 One demonstration program is provided for the MNRU module, mnrudemo.c.
-Irrespective of whether the 16-bit, linear PCM input file is sampled
-at 8 or 16 kHz, program {\tt mnrudemo.c} will add the multiplicative
-noise signal to the input signal at the user-defined $Q$ level and
-produce as output a 16-bit, linear PCM file. Optionally, the program
-can produce a signal-only file (equivalent to a very high Q value) or
-a noise-only file (the signal path is disconnected).
+Irrespective of whether the 16-bit, linear PCM input file is sampled at 8 or 16 kHz, program {\tt mnrudemo.c} will add
+the multiplicative noise signal to the input signal at the user-defined $Q$ level and produce as output a 16-bit, linear PCM file.
+Optionally, the program can produce a signal-only file (equivalent to a very high Q value) or a noise-only file (the signal path is disconnected).
 
 %These three modes of operation are provided for compatibility with the
 %``classical'' hardware MNRU implementation.
@@ -622,8 +535,8 @@ a noise-only file (the signal path is disconnected).
 \subsubsection {Simple example}
 
 The following C code gives an example of a possible use of the Duo-MNRU module.
-The input file speech is added to a multiplicative noise at a SNR defined by
-parameter Q. All samples in the file are processed.
+The input file speech is added to a multiplicative noise at a SNR defined by parameter Q.
+All samples in the file are processed.
 
 {\tt\small
 \begin{verbatim}
@@ -719,8 +632,8 @@ main(argc, argv)
 In the case of fullband speech signals, the signal energy at higher frequencies is typically much weaker than in the
 narrowband part of the spectrum.
 Consequently, a modulated white noise signal will result in an uneven SNR across the signal spectrum.
-In order to avoid higher amounts of perceived noise at high frequencies, the noise signal may be shaped in a
-pre-filtering step such as to match the average spectrum of speech signals.
+In order to avoid higher amounts of perceived noise at high frequencies, the noise signal may be shaped in a pre-filtering
+step such as to match the average spectrum of speech signals.
 The filter frequency response can be derived from ITU-T Rec. P.50 \cite{P.50}, chapter 4 “Average voices – Long-term
 average spectrum”, as shown in Figure \ref{MNRUP50}.
 
@@ -792,14 +705,16 @@ filter with a cutoff frequency of 115Hz (Table \ref{p50IIR}), and the FIR is use
 
 \subsection {Implementation}
 
-The implementation of fullband noise-shaped MNRU is provided in {\tt p50fbmnru} directory.
-{\tt bg\_mnr70\_src.c } provides the main algorithm and {\tt filter\_coeffs.h} the filter coefficients as described in
-Tables \ref{p50IIR} and \ref{p50FIR}.
+The implementation of fullband noise-shaped MNRU is provided in {\tt mnru} directory.
+{\tt P50\_MNRU\_process() } in {\tt mnru.c} provides the main algorithm,
+{\tt filter\_coeffs.c} provides the IIR and FIR filter routines,
+and {\tt filter\_coeffs.h} gives the filter coefficients as described in Tables \ref{p50IIR} and \ref{p50FIR}.
+
+{\tt p50fbmnru.c} provides code for the command line tool, similar to {\tt mnrudemo.c} for NB and WB MNRU.
 
 The usage for the command line tool is as follows:
 
-{\tt p50mnru <inputfile> <outputfile> <Q/dB> <Mode>}
-
+{\tt p50fbmnru <inputfile> <outputfile> <Q/dB> <Mode> [dcFilterOn]}
 
 {\tt inputfile} is the path to the PCM 16-bit 48kHz input signal.
 
@@ -807,12 +722,17 @@ The usage for the command line tool is as follows:
 
 {\tt Q/dB} is the target SNR level {\tt Q}.
 
-
 {\tt Mode} defines the output signal:
 \begin{itemize}
     \item {\tt M} outputs the input signal with added modulated noise.
     \item {\tt N} outputs the modulated noise only.
     \item {\tt S} outputs a copy of the input signal.
+\end{itemize}
+
+{\tt [dcFilterOn]} is an optional parameter
+\begin{itemize}
+    \item {\tt 0} disable DC Filter (default and recommended)
+    \item {\tt 1} enable DC Filter
 \end{itemize}
 
 
