@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
-project(ITU-T_STL2009)
+project(STL2023 VERSION 2023)
+add_definitions( -DVERSION_STL="${CMAKE_PROJECT_NAME}" )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

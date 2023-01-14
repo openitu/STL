@@ -12,9 +12,9 @@
  * Authors: Guy Richard, Vladimir Malenovsky (Vladimir.Malenovsky@USherbrooke.ca)
  */
 
-#include <stdio.h>  
-#include <string.h> 
-#include <stdlib.h> 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <limits.h>
 #include <sys/stat.h>
 
@@ -27,12 +27,12 @@
 #include <windows.h>
 #endif
 
-#include "wmc_tool.h"  
-#include "constants.h" 
-#include "parsing_defs.h" 
-#include "c_parser.h" 
-#include "output.h"   
-#include "text_utils.h" 
+#include "wmc_tool.h"
+#include "constants.h"
+#include "parsing_defs.h"
+#include "c_parser.h"
+#include "output.h"
+#include "text_utils.h"
 
 #ifndef MAX_PATH
 #define MAX_PATH 260
@@ -67,7 +67,7 @@
 static void usage()
 {
     Print("Usage: wmc_tool [options] filename1 filename2 ...\n\n"
-          "WMC tool v%s\n\n"
+          "WMC tool v%s - %s\n\n"
           "Mandatory arguments:\n"
           "     space-separated list of filenames or directories with file mask, e.g. ./lib_enc/array*.c\n"
           "     note: if file mask is not specified *.c is assumed by default\n\n"
@@ -80,7 +80,7 @@ static void usage()
           "        note: filename shall point to a .c file containing the print_mem() function\n"
           "     -b [--no-backup]: no backup of original files\n"
           "     -c dirname [--generate-wmc-files dirname]: copy wmc_auto.h and wmc_auto.c to a user-specified directory\n\n",
-          WMC_TOOL_VERSION_NO);
+          WMC_TOOL_VERSION_NO, VERSION_STL);
 
     return;
 }
@@ -233,7 +233,7 @@ static TOOL_ERROR Parse_Command_Line(
 /*-------------------------------------------------------------------*
  * strmatch()
  *
- * Function that matches input string to a given wildcard pattern 
+ * Function that matches input string to a given wildcard pattern
  *-------------------------------------------------------------------*/
 
 static int strmatch(const char str[], const char pattern[])
@@ -270,9 +270,9 @@ static int strmatch(const char str[], const char pattern[])
     }
 
     /* fill the table in bottom-up fashion */
-    for (i = 1; i <= n; i++) 
+    for (i = 1; i <= n; i++)
     {
-        for (j = 1; j <= m; j++) 
+        for (j = 1; j <= m; j++)
         {
             /* Two cases if we see a '*'
                a) We ignore '*' character and move
@@ -443,7 +443,7 @@ char **add_files_in_dir_to_list(const char* dir, const char* pattern, char** fil
         if ((strcmp(ent->d_name, ".") != 0) && (strcmp(ent->d_name, "..") != 0) && strmatch(ent->d_name, pattern))
         {
             /* combine directory name with filename */
-            strcpy(pathname, dir);  
+            strcpy(pathname, dir);
             if (pathname[strlen(pathname) - 1] != '/')
             {
                 strcat(pathname, "/");
@@ -1014,10 +1014,10 @@ static TOOL_ERROR Output_Wmops_File( char *PathName, bool Backup )
     char LongFileName[MAX_PATH + 1]; /* +1 for NUL Char*/
 
     static const char wmops_auto_file_h[] =
-#include "wmc_auto_h.txt" 
+#include "wmc_auto_h.txt"
         ;
     static const char wmops_auto_file_c[] =
-#include "wmc_auto_c.txt" 
+#include "wmc_auto_c.txt"
         ;
     for (i = 0; i < 2; i++)
     {
@@ -1134,7 +1134,7 @@ int main( int argc, char *argv[] )
     if (Operation & VERBOSE)
     {
         Print("\n"
-            "WMC Tool (WMOPS Automatic Instrumentation Tool) v%s\n"
+            "WMC Tool (WMOPS Automatic Instrumentation Tool) v%s - %s\n"
             "\n"
             "(C) 2022 copyright VoiceAge Corporation. All Rights Reserved.\n"
             "\n"
@@ -1147,7 +1147,7 @@ int main( int argc, char *argv[] )
             "for any purpose nor are held responsible for any defects of this software. THERE IS NO WARRANTY FOR THIS SOFTWARE.\n"
             "\n"
             "Authors: Guy Richard, Vladimir Malenovsky (Vladimir.Malenovsky@USherbrooke.ca)\n\n",
-            WMC_TOOL_VERSION_NO);
+            WMC_TOOL_VERSION_NO, VERSION_STL);
     }
 
     /* Print Information Only? */
