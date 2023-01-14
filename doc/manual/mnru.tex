@@ -136,7 +136,7 @@ Alternatively, if one consider $G_s=0$, the output of the algorithm is only the 
 This is {\em Noise-only mode}.
 
 If, on the other hand, $G_n=0$, the output of the algorithm is the input signal filtered by $h(k)$, with a gain $G_s$;
-this is the {\emSignal-only mode}.
+this is the {\em Signal-only mode}.
 
 \subsection{Implementation}
 
@@ -625,17 +625,35 @@ main(argc, argv)
 \end{verbatim}
 }
 
-\section{Shaped noise spectrum for fullband speech signals} \label{fullband}
+\section{P.50 Fullband MNRU - Shaped noise spectrum for fullband speech signals} \label{fullband}
 
 \subsection {Description}
 
 In the case of fullband speech signals, the signal energy at higher frequencies is typically much weaker than in the
 narrowband part of the spectrum.
 Consequently, a modulated white noise signal will result in an uneven SNR across the signal spectrum.
+
 In order to avoid higher amounts of perceived noise at high frequencies, the noise signal may be shaped in a pre-filtering
 step such as to match the average spectrum of speech signals.
 The filter frequency response can be derived from ITU-T Rec. P.50 \cite{P.50}, chapter 4 “Average voices – Long-term
 average spectrum”, as shown in Figure \ref{MNRUP50}.
+
+The overall structure of P.50 Fullband MNRU, shoing the additional filtering state of the noise source, is provided in
+Figure \ref{MNRUP50FB}.
+
+The diagram also shows that a control on the application of the DC removal filter.
+It was observed that the DC filter in this implementation may alter the perception of the voice timber at high Q which
+is undesirable.
+Therefore it is recommended to use an external DC removal filter rather than using the implemented DC removal filter.
+Since P.50 FB MNRU has been used with the DC removal filter enabled between 2008 and 2023, a switch is provided for
+backward compatibility.
+
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=\textwidth]{mnru-p50fb}
+    \end{center}
+    \caption{P.50 fullband MNRU implementation\label{MNRUP50FB}}
+\end{figure}
 
 \begin{figure}[ht]
     \begin{center}
