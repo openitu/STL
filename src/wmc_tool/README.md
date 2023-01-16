@@ -84,5 +84,5 @@ Note, that on Unix-based platforms it's necessary to use `""` quotes when enteri
 
 The program ROM and table (const data) ROM is instrumented automatically in all `.c` files. The WMC tool inserts specific instructions and macros for tracking the maximum stack size and the maximum heap size. To print out the statistics about the total ROM and RAM consumption within the codec the WMC tool shall be invoked with the `-m` command-line option. The statistics are then printed with the pre-defined `print_mem()` function.
 
-The WMC tool generates two files `wmc_auto.h` and `wmc_auto.c` with the `-c` command-line option. These files shall be included in the instrumented codec to successfully interpret the instrumentation macros. The best partice is to include the file `wmc_auto.h` in all `.c` files in the codec. 
+The WMC tool generates two files `wmc_auto.h` and `wmc_auto.c` with the `-c` command-line option. These files shall be included in the instrumented codec to successfully interpret the instrumentation macros. The best practice is to include the file `wmc_auto.h` in all `.c` files in the codec. 
 
