@@ -130,7 +130,7 @@ if __name__ == '__main__':
             file_list_cmp += [os.path.join(args.outdir, "wmc_auto.c")]
             
         # compare all output files against reference files
-        for item in (args.file_list):
+        for item in (file_list_cmp):
             item = os.path.abspath(item)
             for out_file in glob.glob(item):
                 ref_file = out_file.replace(args.outdir, args.refdir)

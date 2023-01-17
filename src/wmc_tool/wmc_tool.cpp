@@ -38,6 +38,9 @@
 #define MAX_PATH 260
 #endif
 
+#ifndef VERSION_STL
+#define VERSION_STL "STL2023"
+#endif
 
 /*-------------------------------------------------------------------*
  * Local Constants
@@ -1205,7 +1208,6 @@ int main( int argc, char *argv[] )
             {
                 ErrCode = ERR_NO_FILE_SPEC;
                 fprintf(stderr, "Maximum number of file specifications on the command line exceeded! The limit is %d entries!\n", MAX_RECORDS);
-                //Error("Maximum number of file specifications on the command line exceeded! The limit is %d entries.", ErrCode, MAX_RECORDS);
                 goto ret;
             }
 
@@ -1266,7 +1268,6 @@ int main( int argc, char *argv[] )
                 {
                     ErrCode = ERR_FILE_FIND;
                     fprintf(stderr, "Unable to open %s!\n", argv[i]);
-                    //Error("Cannot Open " DQUOTE("%s"), ErrCode, argv[i]);
                     goto ret;
                 }
             }
@@ -1300,7 +1301,6 @@ int main( int argc, char *argv[] )
                 {
                     ErrCode = ERR_FILE_FIND;
                     fprintf(stderr, "Unable to open directory %s!\n", file_book[i].pathname);
-                    //Error("Unable to open directory" DQUOTE("%s"), ErrCode, file_book[i].pathname);
                     goto ret;
                 }
             }
@@ -1310,15 +1310,12 @@ int main( int argc, char *argv[] )
             { /* No */
                 ErrCode = ERR_NO_FILE_SPEC;
                 fprintf(stderr, "No existing File/Dir was specified!\n");
-                //Error("No existing File/Dir was specified", ErrCode);
                 goto ret;
             }
 
             /* update the maximum filename length - to align all printout messages */
             for (j = 0; j < file_book[i].nFiles; j++)
             {
-                //printf("File %d: %s\n", j, file_list[j]);
-
                 len = (int)strlen(file_book[i].file_list[j]);
                 if (len > MaxFnLength)
                 {

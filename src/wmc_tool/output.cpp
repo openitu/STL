@@ -145,14 +145,12 @@ void Error( const char *format, ... )
     va_list args;
     char full_format[256] = "E%03x: ";
 
-
     /* Concatenate Error Code & Format String (also add '!') */
     strcat(full_format, format);
     strcat(full_format, "!");
 
     /* Process Message (LF added by Process_Message) */
     va_start(args, format);
-    //Process_Message(error_msg, STRING_LENGTH(error_msg), format, args);
     Process_Message( error_msg, STRING_LENGTH( error_msg ), full_format, args );
     va_end( args );
 
@@ -210,31 +208,4 @@ void Print_Warning( const char *format, ... )
     /* Print */
     fputs( warning_msg, stdout );
 }
-//
-///*-------------------------------------------------------------------*
-// * Print_Info
-// *-------------------------------------------------------------------*/
-//void Print_Info( const char *format, ... )
-//{
-//    char info_msg[256]; /* Includes all (NUL, LF, ...)*/
-//    va_list args;
-//
-//    /* Format to Buffer */
-//    va_start( args, format );
-//    vsprintf( info_msg, format, args );
-//    va_end( args );
-//
-//    /* Print to 'stdout' */
-//    if (info_msg == NULL)
-//    {
-//        return;
-//    }
-//    else
-//    {
-//        fprintf(stdout, info_msg);
-//    }
-//
-//    return;
-//}
-
 

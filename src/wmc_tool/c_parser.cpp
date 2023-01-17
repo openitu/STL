@@ -415,7 +415,6 @@ static inline void Delete( char *start, char *end )
  *-------------------------------------------------------------------*/
 static void Instrument_Words( char *dst, const char *src )
 {
-    //char *ptr = ""; /* Initially 'ptr' Points to a NUL Char*/
     char buf[2] = "", *ptr = buf;
     char* ptr_src = (char*)src;
     char chr;
@@ -436,7 +435,6 @@ static void Instrument_Words( char *dst, const char *src )
         else
         { /* No */
             /* Enable Add Instrumentation String on Next Separator */
-            //ptr = WORD_INSTRUMENT_STRING;
             strcpy(buf, WORD_INSTRUMENT_STRING);
             ptr = buf;
         }
@@ -464,7 +462,6 @@ static void DesInstrument_Word( char **start, char **end )
  *-------------------------------------------------------------------*/
 static void Instrument_Words_Front( char *dst, const char *src )
 {
-    //char* ptr = WORD_INSTRUMENT_STRING;
     char buf[2] = WORD_INSTRUMENT_STRING, *ptr = buf;
     char* ptr_src = (char*)src;
     char chr;
@@ -476,7 +473,6 @@ static void Instrument_Words_Front( char *dst, const char *src )
         if ( chr == SPACE_CHAR || chr == NUL_CHAR )
         { /* Yes */
             /* Enable Add Instrumentation String on Next Non-Separator */
-            //ptr = WORD_INSTRUMENT_STRING;
             strcpy(buf, WORD_INSTRUMENT_STRING);
             ptr = buf;
         }
@@ -543,12 +539,14 @@ static char *Make_Prj_Fct_Call_Instrumentation_String( int NameOcc )
 static void DesInstrument_Prj_Fct_Call( char **start, char **end )
 {
     char *ptr;
+
     /* Setup & Update Pointers */
     ptr = *end;
     while ( IS_INSTRUMENTATION_CHAR( PREV_CHAR( *end ) ) )
     {
         ( *end )--;
     }
+
     /* Delete Instrumentation String */
     Delete( *end, ptr );
 }
@@ -559,9 +557,6 @@ static void DesInstrument_Prj_Fct_Call( char **start, char **end )
  *-------------------------------------------------------------------*/
 static char *Make_Position_String( const char *ptr, char *dest )
 {
-    //static char temp[MAX_CHARS_PER_LINE + 1 + 1]; /* +1+1 for '\n' and NUL*/
-
-    //sprintf( temp, "Ln%5i, Col%3i -", strlno( ptr ), strcno( ptr ) );
     sprintf( dest, "Ln%5i, Col%3i -", strlno( ptr ), strcno( ptr ) );
 
     return dest;
@@ -1094,17 +1089,12 @@ static int FctCall_Table_Entries_Cmp( const void *elem1, const void *elem2 )
     FctCall_Rec_def *ptr1 = (FctCall_Rec_def *) elem1;
     FctCall_Rec_def *ptr2 = (FctCall_Rec_def *) elem2;
 
-    //mem2str a( ptr1->Ptr, ptr1->NameLength );
-    //mem2str b( ptr2->Ptr, ptr2->NameLength );
-
     len_cmp = ptr1->NameLength < ptr2->NameLength ? ptr1->NameLength : ptr2->NameLength;
 
     /* Case Insensitive Compare First )To Group Same Letters Together) */
-    //if ((cmp = _stricmp((char*)a, (char*)b)) == 0)
     if ((cmp = _strnicmp(ptr1->Ptr, ptr2->Ptr, len_cmp)) == 0)
     {
         /* Case Sensitive Compare Now (Lowercase Letters First) */
-        //if ( ( cmp = strcmp( (char *) b, (char *) a ) ) == 0 )
         if ((cmp = strncmp(ptr2->Ptr, ptr1->Ptr, len_cmp)) == 0)
         {
             if (ptr1->NameLength < ptr2->NameLength)
@@ -1478,7 +1468,6 @@ static char *Goto_Match(
 )
 {
     char chr, *ptr = (char *)ptr_data;
-    //char* chars = "";
     char chars[5] = "";
     MOVE_DIRECTION step;
     int level;
@@ -1491,18 +1480,15 @@ static char *Goto_Match(
     {
         case '{':
         case '}':
-            //chars = "{}";
             strcpy(chars, "{}");
             break;
         /* No Blocks Chars Allowed between Parentheses or Brackets */
         case '(':
         case ')':
-            //chars = "(){}";
             strcpy(chars, "(){}");
             break;
         case '[':
         case ']':
-            //chars = "[]{}";
             strcpy(chars, "[]{}");
             break;
         default:
@@ -2525,9 +2511,6 @@ static TOOL_ERROR Find_Keywords(
         /* Get UnInstrumented Keyword Name */
         strcpy( kw_name, keywords[i].kw_name );
 
-        //for ( item_type = ITEM_NONE;
-        //      item_type <= ITEM_INSTRUMENTED + 1; /* +1 allow up to 1 extra pass for a Keyword*/
-        //      item_type += ITEM_INSTRUMENTED )
         finished = 0;
         run = 0;
         while (!finished)
@@ -2790,44 +2773,6 @@ static TOOL_ERROR Find_Keywords(
                 }
                 /* Continue after Keyword Name End */
             }
-
-            /*  No Second Pass for Keywords that have Never been Intrumented*/
-            /* is Keyword ever Instrumented? */
-            //if ( keywords[i].kw_ni && isupper( kw_name[0] ) )
-            //{ /* No */
-            //    /* No 2nd Iteration */
-            //    break;
-            //}
-
-            /* 1st Pass? */
-            //if (item_type == ITEM_NONE)
-            //{ /* Yes */
-            //    /* Lowercase Keyword? */
-            //    if ( islower( kw_name[0] ) )
-            //    { /* Yes */
-            //        /* Put in Uppercase */
-            //        for ( ns = kw_name; *ns != NUL_CHAR; *ns = toupper( *ns ), ns++ )
-            //            ;
-            //        /* Repeat same Iteration */
-            //        item_type -= ITEM_INSTRUMENTED;
-            //    }
-            //    else
-            //    {
-            //        /* Instrument Name */
-            //        Instrument_Words( kw_name, keywords[i].kw_name );
-            //    }
-            //}
-            //else 
-            //{ /* No */
-            //    /* 'while' Keyword? */
-            //    if ( keywords[i].kw_type == ITEM_KEYWORD_WHILE )
-            //    { /* Yes */
-            //        /* Instrument Name (in Front) */
-            //        Instrument_Words_Front( kw_name, keywords[i].kw_name );
-            //        /* There are two Versions (So one more Pass) */
-            //        item_type -= ITEM_INSTRUMENTED - 1;
-            //    }
-            //}
 
             /* Increase the Run Iterator */
             run++;
@@ -5762,6 +5707,7 @@ static TOOL_ERROR Instrument_Operators(
             while ( OperInsRec_ptr->Ptr < ptr2 )
                 OperInsRec_ptr++;
         }
+
         /* Must Add Spaces? */
         if ( nChars == 0 )
         { /* No */
@@ -5777,13 +5723,11 @@ static TOOL_ERROR Instrument_Operators(
                 {
                     /* Set Start Point */
                     ptr3 = ptr4;
-                    /* Skip Counting Library Functions */
-                    //ptr4 = Skip_Chars( ptr4, SPACE_CHARS, ParseTbl_ptr,
-                    //                   ITEM_ANY, ITEM_CALL | ITEM_CALL_ARGS | ITEM_FUNC_COUNT_LIB );
                 }
                 /* Set Continuation Point */
                 ptr = ptr4;
             } while ( ptr4 > ptr3 );
+
             /* Something else than Spaces */
             if ( strpbrkn( memstr( ptr, ptr2 ), SPACE_CHARS ) != NULL )
             { /* Yes */
@@ -5795,6 +5739,7 @@ static TOOL_ERROR Instrument_Operators(
                 }
             }
         }
+
         /* Go to Start of Next Line */
         ptr = strlend( ptr2 ) + 1;
     }
@@ -5820,7 +5765,6 @@ static TOOL_ERROR Instrument_Calls(
     Parse_Rec_def *ParseRec_ptr;
     Parse_Tbl_def *ParseTbl_ptr;
     const PROM_Ops_Weights_defs *prom_ops_weights_ptr;
-//    FctCall_Tbl_def *FctCallTbl_ptr;
     int NameOcc;
     int nArgs;
 
@@ -5828,8 +5772,6 @@ static TOOL_ERROR Instrument_Calls(
     ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
     /* Get PROM Ops Weights (for clarity) */
     prom_ops_weights_ptr = &PROM_Ops_Weights[ParseCtx_ptr->PROMOpsWeightsSet];
-    /* Get Function Call Table Address (for clarity) */
-//    FctCallTbl_ptr = &ParseCtx_ptr->FctCallTbl;
 
     /* Search for Function Calls */
     for ( idx = 0; ( idx = Find_Region( NULL, ParseTbl_ptr, ITEM_CALL, idx ) ) >= 0; idx++ )
@@ -6119,10 +6061,6 @@ static TOOL_ERROR Remove_Superfluous_Spaces(
     char *last_ptr;
     bool flag;
     char chr;
-//    Parse_Tbl_def *ParseTbl_ptr;
-
-    /* Get Parse Table Address (for clarity) */
-//    ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
 
     /* Start at Beginning */
     ptr = ParseCtx_ptr->File.Data;
@@ -8191,9 +8129,6 @@ TOOL_ERROR Instrument(
     /* Get Parse Table Address (for clarity) */
     ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
 
-    /* Find the First Function in the File */
-    //idx = Find_Region( NULL, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_PROJECT );
-
     /* Find the first function in the file which is not in non-instrumented region */
     for (idx = 0; (idx = Find_Region(NULL, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_PROJECT, idx)) >= 0; idx++)
     {
@@ -8282,8 +8217,6 @@ TOOL_ERROR Instrument(
                 }
 
                 /* Insert Macro for Function Call */
-                //if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl,
-                //    ParseRec_ptr->item_end, temp)) != NO_ERR)
                 if ((ErrCode = Insert_Line(&ParseCtx_ptr->InsertTbl, ptr_end_preproc_block, temp)) != NO_ERR)
                 {
                     goto ret;

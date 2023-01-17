@@ -302,7 +302,6 @@ typedef enum
     INSTRUMENTED,
     FINAL_FAILED,
     FINALIZED,
-    //SKIPPED
 } PARSER_STATE;
 
 typedef struct
