@@ -1,7 +1,7 @@
 %=============================================================================
 % THIS IS chapter{WMC Tool: Automatic instrumentation of floating-point speech
 % and audio codecs for complexity and memory measurements
-% 
+%
 % Jan.2023 - created by Vladimir Malenovsky
 %=============================================================================
 \chapter{WMC Tool: Automatic instrumentation of floating-point speech
@@ -22,7 +22,7 @@ The WMC tool may optionally insert code to print summary information about both 
 %-----------------------------------------------------------------------------
 \section{Description of the WMC Tool}
 
-The WMC tool can be used only on \verb|.c| source files following the C89/C90 ISO standard \cite{C90}. The WMC tool will not work with other languages nor will it understand C++ source files. The WMC tool reads and parses all \verb|.c| files matching the file mask provided on the command line. If the files were previously instrumented, the inserted pseudo-isntructions are first all removed. Then, all source files are re-instrumented again. The source files are modified in place  after being backed up before processing. The instrumented source files may be compiled and linked with other source files and libraries of the project. 
+The WMC tool can be used only on \verb|.c| source files following the C89/C90 ISO standard \cite{C90}. The WMC tool will not work with other languages nor will it understand C++ source files. The WMC tool reads and parses all \verb|.c| files matching the file mask provided on the command line. If the files were previously instrumented, the inserted pseudo-isntructions are first all removed. Then, all source files are re-instrumented again. The source files are modified in place  after being backed up before processing. The instrumented source files may be compiled and linked with other source files and libraries of the project.
 
 \subsection{Usage}
 \label{ch:usage_wmc_tool}
@@ -70,7 +70,7 @@ To instrument \verb|.c| files in a directory named \verb|lib_code| the WMC tool 
 
 \verb|./wmc_tool "lib_code/*.c"|
 
-Note, that on Unix-based platforms it's necessary to use the \verb|""| quotes when specifying file masks on the command-line to avoid globing. 
+Note, that on Unix-based platforms it's necessary to use the \verb|""| quotes when specifying file masks on the command-line to avoid globing.
 
 The WMC tool uses the C header file named \verb|wmc_auto.h| and the C source file named \verb|wmc_auto.c| to interpret the instrumented code. Therefore, the files \verb|wmc_auto.h| and \verb|wmc_auto.c| \textbf{must} be included in the project and made visible to all instrumented source files. In fact, the C header file \verb|wmc_auto.h| is included by the WMC tool automatically, if not already included in the instrumented C source file. This is done with the following definition.
 
@@ -93,12 +93,12 @@ The WMC instrumentation process is illustrated on the schematic diagram in \ref{
 %-----------------------------------------------------------------------------
 \subsubsection{Errors}
 
-Since the WMC tool modifies source files it is necessary that they can still be compiled successfully after instrumentation. The WMC tool is strict and will not process a source file that cannot be compiled. Any error encountered during the un-parsing process, un-instrumentation process or re-instrumentation process will stop any further progres. The source file will be unchanged unless the error occurred during writing operation. In that case, the source file might be partially modified. When specifying more than one source file on the command line the source files processed prior to the one where error occured will be instrumented while the remaining files will not.
-	
+Since the WMC tool modifies source files it is necessary that they can still be compiled successfully after instrumentation. The WMC tool is strict and will not process a source file that cannot be compiled. Any error encountered during the un-parsing process, un-instrumentation process or re-instrumentation process will stop any further progress. The source file will be unchanged unless the error occurred during writing operation. In that case, the source file might be partially modified. When specifying more than one source file on the command line the source files processed prior to the one where error occured will be instrumented while the remaining files will not.
+
 %-----------------------------------------------------------------------------
 \subsubsection{Warnings}
 
-Warnings are issued when the WMC tool detects certain conditions in a source file. By default, no warnings are printed on the screen during the processing unless the WMC tool is invoked in the verbose mode by specifying the \verb|-v| option on the command line. Absent from any errors the processing will continue and the source file will be instrumented. The WMC tool is designed to give as much feedback as possible. All warnings can be safely ignored but correcting them in the source file usually helps the tool to instrument the statements better and more closely to their fixed-point counterpart. 
+Warnings are issued when the WMC tool detects certain conditions in a source file. By default, no warnings are printed on the screen during the processing unless the WMC tool is invoked in the verbose mode by specifying the \verb|-v| option on the command line. Absent from any errors the processing will continue and the source file will be instrumented. The WMC tool is designed to give as much feedback as possible. All warnings can be safely ignored but correcting them in the source file usually helps the tool to instrument the statements better and more closely to their fixed-point counterpart.
 
 Note, that the WMC tool is not a perfect C parser. It might issue an error even on certain valid instructions and statements. For example, the WMC tool has no knowledge of global constants and macros (\verb|#define|) declared in \verb|.h| include files because it does not open them. The WMC tool cannot detect all forms of complex function calls and pointer de-references and it does not recognize custom data types directly. A more detailed description of the limitations of the WMC tool can be found in Section \ref{ch:limitations}.
 
@@ -106,7 +106,7 @@ Note, that the WMC tool is not a perfect C parser. It might issue an error even 
 \section{Instrumentation of complexity}
 \label{ch:instrumentation_of_complexity}
 
-The WMC tool only instruments functions but not macros. System functions and functions with names that are considered as basic operations are skipped. The instrumentation mechanism has been designed to be as least intrusive as possible. The instrumentation code is inserted at the beginning of each instrumented line in the source code with a single macro that has the following form \verb|$("ops")| where \verb|ops| is a string of letters and symbols indicating individual operations. The WMC tool parses each source file and calculates the length of each instrumentation string. The maximum length is then used to indent the entire source file to make space for the instrumentation strings. This is shown in the example below. 
+The WMC tool only instruments functions but not macros. System functions and functions with names that are considered as basic operations are skipped. The instrumentation mechanism has been designed to be as least intrusive as possible. The instrumentation code is inserted at the beginning of each instrumented line in the source code with a single macro that has the following form \verb|$("ops")| where \verb|ops| is a string of letters and symbols indicating individual operations. The WMC tool parses each source file and calculates the length of each instrumentation string. The maximum length is then used to indent the entire source file to make space for the instrumentation strings. This is shown in the example below.
 
 \begin{Verbatim}[fontsize=\small]
     float calc_shift_value( const float totalStep )
@@ -114,7 +114,7 @@ The WMC tool only instruments functions but not macros. System functions and fun
         float sdf, reset_value;
 
 $("M")  reset_value = 0.23f;
-$("Gt") if_( totalStep > 23.3456f )  
+$("Gt") if_( totalStep > 23.3456f )
         {
 $("M**-")   reset_value = 56.345e-4f * (float)exp_( 34.456 * totalStep ) \\
                           - 2.65f;
@@ -127,7 +127,7 @@ $("M**-")   reset_value = 56.345e-4f * (float)exp_( 34.456 * totalStep ) \\
 It is always possible to remove the instrumentation from the source code with the \verb|-d| command line option. In many cases, the source file will then return to its original non-instrumented state except for whitespace characters and text alignment. The un-instrumentation process is also invoked automatically by the WMC tool as the first step in the instrumentation process. This ensures that the results are identical even when the process is repeated multiple times. This allows the users to make modifications to an already instrumented source code by simply re-instrumenting it again. Note, that the un-instrumentation process does not remove the functions \verb|push_wmops()| and \verb|pop_wmops()| and the system functions. Lines that are preceded by
 
 {
-{\em /*AddedByWMC\_Tool*/} 
+{\em /*AddedByWMC\_Tool*/}
 }
 
 are removed completely. At the end of the un-instrumentation process, the original indentation is restored.
@@ -143,7 +143,7 @@ If, for any reason, it is necessary to avoid the automatic instrumentation and u
 %-----------------------------------------------------------------------------
 \subsection{Keywords}
 
-Keywords in the source code are instrumented by appending the underscore '\verb|_|' symbol to the ir name. The following table demonstrates the instrumentation of the most common keywords.
+Keywords in the source code are instrumented by appending the underscore '\verb|_|' symbol to their name. The following table demonstrates the instrumentation of the most common keywords.
 
 \begin{table}
 \raggedleft\small
@@ -164,7 +164,7 @@ Keywords in the source code are instrumented by appending the underscore '\verb|
 \label{tab:instrumentation_of_keywords}
 \end{table}
 
-The following example demonstrates the instrumentation of the \verb|switch/case/default| keywords. 
+The following example demonstrates the instrumentation of the \verb|switch/case/default| keywords.
 
 \begin{Verbatim}[fontsize=\small]
     switch_( fruit_type )
@@ -187,7 +187,7 @@ $("M")          mood = 2;
             }
             break_;
         }
-        default:cost_(4) 
+        default:cost_(4)
         {
             switch_ (old_fruit_type)
             {
@@ -202,7 +202,7 @@ $("M")              mood = 2;
     }
 \end{Verbatim}
 
-For more information on keywords that are \textbf{NOT} instrumented invoke the WMC tool with the \verb|-i| command-line option.
+For more information on keywords that are \textbf{NOT} instrumented, invoke the WMC tool with the \verb|-i| command-line option.
 
 %-----------------------------------------------------------------------------
 \subsection{Mathematic functions}
@@ -212,7 +212,7 @@ The most common mathematic functions defined in \verb|math.h| are instrumented b
 \begin{table}[!hb]
 \centering\small
 \caption{Complexity cost of mathematic functions}
-\begin{tabular}{|l|l|} 
+\begin{tabular}{|l|l|}
 \hline
 \textbf{Name} & \textbf{Cost} \\
 \hline
@@ -252,7 +252,7 @@ $("+=")     ftrm += bgf * 5.48f;
 
             return_ result;
         }
-        
+
         float Get_Value_TBX( float tied_state )
         { func_start_
             float ff;
@@ -273,13 +273,13 @@ The WMC tool divides the operators in three categories as follows.
 \begin{table}[!hb]
 \centering\small
 \caption{Instrumentation of operators}
-\begin{tabular}{|c|c|c|} 
+\begin{tabular}{|c|c|c|}
 \hline
 \textbf{Category} & \textbf{Operator} & \textbf{Instrumented as} \\
 \hline
-Logical operators & '\verb|&&|' and '\verb$||$' & '\verb|__|' double uderscore appended \\
+Logical operators & '\verb|&&|' and '\verb$||$' & '\verb|__|' double underscore appended \\
 \hline
-Ternary operators & '\verb|?|' and '\verb|:|' & '\verb|_|' single uderscore appended \\
+Ternary operators & '\verb|?|' and '\verb|:|' & '\verb|_|' single underscore appended \\
 \hline
 Other operators & '\verb|*,%,<<,+=,...|' & '\verb|$("...")|' wherever appropriate \\
 \hline
@@ -300,7 +300,7 @@ $("+=Le") {
       }
 \end{Verbatim}
 
-The WMC tool always tries to insert the instrumentation macro at the least intrusive place in the code but. However, sometimes the WMC tool will be forced to insert the instrumentation macro between two keywords such as in the following example.
+The WMC tool always tries to insert the instrumentation macro at the least intrusive place in the code. However, sometimes the WMC tool will be forced to insert the instrumentation macro between two keywords such as in the following example.
 
 \begin{Verbatim}[fontsize=\small]
       void main(void)
@@ -321,7 +321,7 @@ The operators are instrumented by following the set of the following rules.
 \begin{table}[!hb]
 \centering\small
 \caption{Instrumentation rules for operators}
-\begin{tabular}{|p{0.15\textwidth}<{\raggedright}|p{0.4\textwidth}<{\raggedright}|p{0.3\textwidth}<{\raggedright}|} 
+\begin{tabular}{|p{0.15\textwidth}<{\raggedright}|p{0.4\textwidth}<{\raggedright}|p{0.3\textwidth}<{\raggedright}|}
 \hline
 \textbf{Operator(s)} & \textbf{Rules} & \textbf{Instrumented by} \verb|$("...")| \textbf{as} \\
 \hline
@@ -345,13 +345,13 @@ The operators are instrumented by following the set of the following rules.
 \hline
 \verb|[| and \verb|]| & indirection and subscript not instrumented & N/A \\
 \hline
-\verb|<|, \verb|<=|, \verb|==|, \verb|!=|, \verb|>=| and \verb|>| & not instreumented when comparison is made against zero; not instrumented if used as the first operator in the second expression of the \verb|for| loop control statement & \verb|"Lt"|, \verb|"Le"|, \verb|"Ee"|, \verb|"Ne"|, \verb|"Ge"| and \verb|"Gt"|, respectively \\
+\verb|<|, \verb|<=|, \verb|==|, \verb|!=|, \verb|>=| and \verb|>| & not instrumented when comparison is made against zero; not instrumented if used as the first operator in the second expression of the \verb|for| loop control statement & \verb|"Lt"|, \verb|"Le"|, \verb|"Ee"|, \verb|"Ne"|, \verb|"Ge"| and \verb|"Gt"|, respectively \\
 \hline
 \end{tabular}
 \label{tab:instrumentation_rules_operators}
 \end{table}
 
-Note, that the string that is passed as an argument to the instrumentation macro \verb|$("...")| should not be modified manually. If it's necessary to modify the instrumentation, then remove the automatically-inserted instrumentation macro \verb|$("...")| and use the instrumentation macro \verb|S("...")| encapsulated within the \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| pair instead. Operators and function calls that appear in a non-instrumented system function call will not be instrumented either. For example, the multiply operation in the following code will not be instrumented.	
+Note, that the string that is passed as an argument to the instrumentation macro \verb|$("...")| should not be modified manually. If it is necessary to modify the instrumentation, then remove the automatically-inserted instrumentation macro \verb|$("...")| and use the instrumentation macro \verb|S("...")| encapsulated within the \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| pair instead. Operators and function calls that appear in a non-instrumented system function call will not be instrumented either. For example, the multiply operation in the following code will not be instrumented.
 
 \begin{Verbatim}[fontsize=\small]
 buff_ptr = malloc(sizeof(short)*VEC_LEN);
@@ -370,26 +370,26 @@ It was already shown in the previous section in this document that it is possibl
 
 If \verb|#undef WMC_TOOL_SKIP| is missing the WMC tool will assume that the automatic instrumentation is skipped until the end of the source file. Note, that this also applies to the Program ROM and Data ROM information that is usually generated and inserted at the end of the source file. Nesting of \verb|#define WMC_TOOL_SKIP| is not supported by the WMC tool.
 
-The user has the possibility to insert complexity macros manually if they are encapsulated within \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| pairs. The manually-inserted macros must have the form defined in Table \ref{tbl:flp-counters}. In the following example, \verb|INDIRECT()| operation is added as it's unclear if the variable \verb|idx| can be replaced with a pointer which would avoid the extra penalty on complexity.
+The user has the possibility to insert complexity macros manually if they are encapsulated within \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| pairs. The manually-inserted macros must have the form defined in Table \ref{tbl:flp-counters}. In the following example, \verb|INDIRECT()| operation is added as it is unclear if the variable \verb|idx| can be replaced with a pointer which would avoid the extra penalty on complexity.
 
 \begin{Verbatim}[fontsize=\small]
-$("M>>")  idx = val>>8;	
-$("M")    result = tbl[idx];	
+$("M>>")  idx = val>>8;
+$("M")    result = tbl[idx];
 #define WMC_TOOL_SKIP
-INDIRECT(1); 
+INDIRECT(1);
 #undef WMC_TOOL_SKIP
 \end{Verbatim}
 
 Placing \verb|#define WMC_TOOL_SKIP| after the include section of the source effectively skips the automatic instrumentation of the whole source file. This can be useful e.g. in source files that are used only for debugging purposes or for source files containing only BASOP functions and routines written in the fixed-point format. In the next example, manual instrumentation is added to correct the over-estimation of computational complexity by automatic instrumentation.
 
 \begin{Verbatim}[fontsize=\small]
-int norm_l(int val)	
+int norm_l(int val)
 {
-#define WMC_TOOL_SKIP	
-FUNC(-1); 
-SHIFT(3); 
-  while (val > 0)	
-  {	
+#define WMC_TOOL_SKIP
+FUNC(-1);
+SHIFT(3);
+  while (val > 0)
+  {
       ...
   }
 #undef WMC_TOOL_SKIP
@@ -397,7 +397,7 @@ SHIFT(3);
 }
 \end{Verbatim}
 
-The reason for introducing \verb|FUNC(-1)| is the assumption that the function \verb|norm_l()| will be implemented in the BASOP code as a built-in function. Thus, calling it shouldn't be penalized with any extra complexity. The macro \verb|SHIFT(3)| reflects the estimated complexity of the \verb|while| loop control logic. More manually-inserted complexity macros are then expected to appear inside the \verb|while| loop body. Please, note that the manually-inserted complexity macros shall be be used carefully and only in special situations, where the automatic instrumentation over-estimates or under-estimates the computational complexity considerably. Note, that it is also possible to use the pre-defined macro \verb|S("...")| to override the automatic instrumentation if it's properly enclosed within the \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| macro pair.
+The reason for introducing \verb|FUNC(-1)| is the assumption that the function \verb|norm_l()| will be implemented in the BASOP code as a built-in function. Thus, calling it should not be penalized with any extra complexity. The macro \verb|SHIFT(3)| reflects the estimated complexity of the \verb|while| loop control logic. More manually-inserted complexity macros are then expected to appear inside the \verb|while| loop body. Please, note that the manually-inserted complexity macros shall be used carefully and only in special situations, where the automatic instrumentation over-estimates or under-estimates the computational complexity considerably. Note, that it is also possible to use the pre-defined macro \verb|S("...")| to override the automatic instrumentation if it is properly enclosed within the \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| macro pair.
 
 %-----------------------------------------------------------------------------
 \subsection{Complexity of functions and functional blocks}
@@ -416,38 +416,38 @@ To estimate the computational complexity of longer sections in the source code o
 float calculate_market_value()
 {
     float total_price;
-    
+
     push_wmops("function_calculate_market_value");
-    
+
     total_price = 0.0f;
     price += calc_apple_price();
-    
+
     if (flag_summer)
     {
         price += calc_banana_price();
         price += calc_orange_price();
     }
-    
+
     pop_wmops();
-    
+
     return total_price;
 }
 \end{Verbatim}
 
-The string inside each \verb|push_wmops()| macro shall be unique in the entire project and reflect what is being measured. It doesn't need to be the same as the name of the function in which it's used. The macro \verb|pop_wmops()| must \textbf{ALWAYS} be used to terminate the complexity counters associated with each \verb|push_wmops()| macro. The WMC tool supports nesting of these macro pairs. Note, that the \verb|push_wmops()| and the \verb|pop_wmops()| macros do not need to be encapsulated within the \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| macro pairs.
+The string inside each \verb|push_wmops()| macro shall be unique in the entire project and reflect what is being measured. It does not need to be the same as the name of the function in which it is used. The macro \verb|pop_wmops()| must \textbf{ALWAYS} be used to terminate the complexity counters associated with each \verb|push_wmops()| macro. The WMC tool supports nesting of these macro pairs. Note, that the \verb|push_wmops()| and the \verb|pop_wmops()| macros do not need to be encapsulated within the \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| macro pairs.
 
 %-----------------------------------------------------------------------------
 \subsection{Printing statistics about computational complexity}
 \label{ch:printing_statistics_about_computational_complexity}
 
-To print the statistics about computational complexity some extra instrumentation needs to be added be the user to the project. First, the complexity counting mechanism must be initialized with the system function \verb|reset_wmops()|. This function is usually called during the initialization phase of the codec, i.e. \textbf{before} the main loop in which individual frames of input data are processed. Furthermore, the function \verb|update_wmops()| shall be inserted \textbf{inside} the main loop processing the individual frames of input data. Ideally, \verb|update_wmops()| shall appear as the last statement in the body of the loop. Finally, to print the overall statistics about computational complexity the user shall insert the function \verb|print_wmops()| \textbf{after} the main loop in which individual frames of input data are processed. The usage of these three system functions is illustrated in the following example.
+To print the statistics about computational complexity some extra instrumentation needs to be added by the user to the project. First, the complexity counting mechanism must be initialized with the system function \verb|reset_wmops()|. This function is usually called during the initialization phase of the codec, i.e. \textbf{before} the main loop in which individual frames of input data are processed. Furthermore, the function \verb|update_wmops()| shall be inserted \textbf{inside} the main loop processing the individual frames of input data. Ideally, \verb|update_wmops()| shall appear as the last statement in the body of the loop. Finally, to print the overall statistics about computational complexity the user shall insert the function \verb|print_wmops()| \textbf{after} the main loop in which individual frames of input data are processed. The usage of these three system functions is illustrated in the following example.
 
 \begin{Verbatim}[fontsize=\small]
 int main(void)
 {
     FILE *fp;
     int frame = 0;
-    
+
     initilize_codec();
     reset_wmops();
 
@@ -456,13 +456,13 @@ int main(void)
         /* process the current frame */
         process_frame(data);
         ...
-        
+
         frame++;
         update_wmops();
     }
-    
+
     print_wmops();
-    
+
     return 0;
 }
 \end{Verbatim}
@@ -482,13 +482,13 @@ An exemplary printout of the complexity statistics may look like this.
           total  1907.00   22.605  59.003  46.679
 \end{Verbatim}
 
-The complexity printout is divided into two columns. The first column "\textbf{SELF}" shows the net complexity of functions or functional blocks, i.e. the complexity without the nested \verb|push_wmops()| \ldots \verb|pop_wmops()|  blocks. The second column  "\textbf{CUMULTIVE}" shows the gross complexity of functions or functional blocks, i.e. the complexity including the nested \verb|push_wmops()| \ldots \verb|pop_wmops()|  blocks. Each row contains the minimum, the maximum and the average complexity in WMOPS. The number of calls is calculated as the ratio between the number of times that a function or functional block has been hit and the total number frames. Thus, the number of calls can can be higher than \(1.00\) if \verb|push_wmops()| is called several times in each frame. The row "\textbf{total}" shows the total number of frames, the minimum, the maximum and the average complexity of all functions between two successive calls to \verb|update_wmops()|. The \textbf{total} maximum complexity per frame in WMOPS corresponds to the worst-case frame. 
+The complexity printout is divided into two columns. The first column "\textbf{SELF}" shows the net complexity of functions or functional blocks, i.e. the complexity without the nested \verb|push_wmops()| \ldots \verb|pop_wmops()|  blocks. The second column  "\textbf{CUMULTIVE}" shows the gross complexity of functions or functional blocks, i.e. the complexity including the nested \verb|push_wmops()| \ldots \verb|pop_wmops()|  blocks. Each row contains the minimum, the maximum and the average complexity in WMOPS. The number of calls is calculated as the ratio between the number of times that a function or functional block has been hit and the total number frames. Thus, the number of calls can be higher than \(1.00\) if \verb|push_wmops()| is called several times in each frame. The row "\textbf{total}" shows the total number of frames, the minimum, the maximum and the average complexity of all functions between two successive calls to \verb|update_wmops()|. The \textbf{total} maximum complexity per frame in WMOPS corresponds to the worst-case frame.
 
-With \verb|WMOPS| active it is possible to output per-frame complexity for the first record (usually the main encoding/decoding function) encompassed within the \verb|push_wmops()| \ldots \verb|pop_wmops()| macro pair. Per-frame complexity output is activated with the symbolic constant \verb|WMOPS_PER_FRAME| in the file \verb|wmc_auto.h|. The per-frame complexity is written as one \verb|float| number in each frame frame to the output binary file named \verb|wmops_analysis|. 
+With \verb|WMOPS| active it is possible to output per-frame complexity for the first record (usually the main encoding/decoding function) encompassed within the \verb|push_wmops()| \ldots \verb|pop_wmops()| macro pair. Per-frame complexity output is activated with the symbolic constant \verb|WMOPS_PER_FRAME| in the file \verb|wmc_auto.h|. The per-frame complexity is written as one \verb|float| number in each frame to the output binary file named \verb|wmops_analysis|.
 
-The user may also define the symbolic constant \verb|WMOPS_DETAIL| to instruct the WMC tool to calculate and print the complexity statistics for \textbf{EVERY} function in the project. This is the same as instrumenting each frunction with the \verb|push_wmops()| \ldots \verb|pop_wmops()| macro pair. Note, that it may increases the runtime overhead. 
+The user may also define the symbolic constant \verb|WMOPS_DETAIL| to instruct the WMC tool to calculate and print the complexity statistics for \textbf{EVERY} function in the project. This is the same as instrumenting each function with the \verb|push_wmops()| \ldots \verb|pop_wmops()| macro pair. Note, that it may increase the runtime overhead.
 
-Finally, the user may define the symbolic constant \verb|WMOPS_WC_FRAME_ANALYSIS| to print the detailed complexity analysis of the worst-case frame such as in the example below. 
+Finally, the user may define the symbolic constant \verb|WMOPS_WC_FRAME_ANALYSIS| to print the detailed complexity analysis of the worst-case frame such as in the example below.
 
 \begin{Verbatim}[fontsize=\small]
         routine    calls       SELF   CUMULATIVE
@@ -556,11 +556,11 @@ The macro \verb|PROM_Size_Func| uses as its argument the string corresponding to
 \begin{Verbatim}[fontsize=\small]
 int PROM_Size_pre_echo_mask()
 {
-   return 776; 
+   return 776;
 }
 \end{Verbatim}
 
-Note, that the declaration of the function \verb|PROM_Size_pre_echo_mask()| is visible in all project files that include \verb|wmc_auto.h|. During the instrumentation process the WMC tool will process all \verb|.c| files according to their command-line specification and will automatically sum up the program ROM size. Thus, if the user specifies e.g. \verb|lib_enc/*.c| on the command-line the WMC tool will calculate the total program ROM size of the \verb|lib_enc| library. This information may be inserted in a user-specified \verb|.c| file with the \verb|-m| command-line option anhd printed with the \verb|print_mem()| system function. Deatailed instruction on how to print memory consumption is explained in Section X.X of this document.
+Note, that the declaration of the function \verb|PROM_Size_pre_echo_mask()| is visible in all project files that include \verb|wmc_auto.h|. During the instrumentation process the WMC tool will process all \verb|.c| files according to their command-line specification and will automatically sum up the program ROM size. Thus, if the user specifies e.g. \verb|lib_enc/*.c| on the command-line the WMC tool will calculate the total program ROM size of the \verb|lib_enc| library. This information may be inserted in a user-specified \verb|.c| file with the \verb|-m| command-line option and printed with the \verb|print_mem()| system function. Detailed instructions on how to print memory consumption is explained in section \ref{ch:printing_statistics_about_memory_consumption} of this document.
 
 The Data (Table) ROM is estimated by counting the total size of all constant variables in each \verb|.c| source file. The WMC tool parses all global variables declared with the \verb|const| qualifier in each \verb|.c| source file and inserts the following instrumentation information in the declaration of each variable.
 
@@ -650,7 +650,7 @@ void apply_smoothing(
 
     ptr = alloc_filter(length);
     set_f(ptr, smooth_factor, length);
-    
+
     ...
 
     beta = 0;
@@ -658,10 +658,10 @@ void apply_smoothing(
     {
         beta += (i * length) / (N_TAPS) + beta * table_diff_vector[i];
     }
-    
+
     p_int_filt = alloc_filter(length);
     resp = calc_filter_resp(ptr);
-    
+
     ...
 
     return_;
@@ -673,10 +673,10 @@ float *alloc_filter(
 { func_start_
 
     ptr = (float *) malloc_(length * sizeof(float));
-}      
+}
 \end{Verbatim}
 
-The WMC tool distinguishes the allocated memory blocks by their hash value and by the order in which they have been allocated. Therefore, the WMC tool keeps a separate record for each memory block allocated with \verb|malloc()| or \verb|calloc()| regardless of its hash value. Note, that the information about a memory block is kept in the allocation records even when it's freed with \verb|free()|, if it contributes to the worst case (maximum). The hash value allows for fast searching of the records.
+The WMC tool distinguishes the allocated memory blocks by their hash value and by the order in which they have been allocated. Therefore, the WMC tool keeps a separate record for each memory block allocated with \verb|malloc()| or \verb|calloc()| regardless of its hash value. Note, that the information about a memory block is kept in the allocation records even when it is freed with \verb|free()|, if it contributes to the worst case (maximum). The hash value allows for fast searching of the records.
 
 The WMC tool distinguishes two types of heap memory.
 
@@ -685,7 +685,7 @@ The WMC tool distinguishes two types of heap memory.
   \item Intra-frame heap memory.
 \end{itemize}
 
-The intra-frame heap memory refers to the memory allocated and de-allocated within the \textbf{same} frame. The inter-frame heap memory then refers to the heap memory blocks that is allocated in a certain frame but not de-allocated in the same frame. Thus, the inter-frame memory is supposed to be preserved across frame boundaries. 
+The intra-frame heap memory refers to the memory allocated and de-allocated within the \textbf{same} frame. The inter-frame heap memory then refers to the heap memory blocks that is allocated in a certain frame but not de-allocated in the same frame. Thus, the inter-frame memory is supposed to be preserved across frame boundaries.
 
 The WMC tool monitors the intra-frame and the inter-frame heap memory blocks individually. The WMC tool calculates the maximum total intra-frame heap memory and the maximum total inter-frame heap memory. This is done by monitoring all concurrent allocations and de-allocations during the runtime process. For both the intra-frame heap memory and the inter-frame heap memory the WMC tool also stores the frame number in which each individual maximum is reached. Fig. \ref{fig:wmc_tool_ram_memory_types} shows an example of memory types that are monitored by the WMC tool during the runtime process.
 
@@ -697,7 +697,7 @@ The WMC tool monitors the intra-frame and the inter-frame heap memory blocks ind
 \label{fig:wmc_tool_ram_memory_types}
 \end{figure}
 
-Besides the maximum total intra-frame heap memory and the maximum total inter-frame heap memory the WMC tool also calculates the maximum total \textbf{RAM} memory. This is done under the assumption that both stack and heap are part of a single physical memory block. The WMC tool calculates the total RAM size by adding the current stack size to the heap size of all allocated memory blocks. The total RAM size is calculated during all stack and heap operations. After calculating the total RAM size the WMC tool potentially updates the maximum total RAM size if it has been exceeded and saves the index of the current frame. The process of calculating the total RAM size and the maximum total RAM size is illustrated in Fig:\ref{fig:wmc_tool_max_ram}. 
+Besides the maximum total intra-frame heap memory and the maximum total inter-frame heap memory the WMC tool also calculates the maximum total \textbf{RAM} memory. This is done under the assumption that both stack and heap are part of a single physical memory block. The WMC tool calculates the total RAM size by adding the current stack size to the heap size of all allocated memory blocks. The total RAM size is calculated during all stack and heap operations. After calculating the total RAM size the WMC tool potentially updates the maximum total RAM size if it has been exceeded and saves the index of the current frame. The process of calculating the total RAM size and the maximum total RAM size is illustrated in Fig. \ref{fig:wmc_tool_max_ram}.
 
 \begin{figure}[hbtp]
 \begin{center}
@@ -707,7 +707,7 @@ Besides the maximum total intra-frame heap memory and the maximum total inter-fr
 \label{fig:wmc_tool_max_ram}
 \end{figure}
 
-It can be seen from Fig:\ref{fig:wmc_tool_max_ram} that the WMC tool doesn't assume that a memory block is allocated or de-allocated at the beggining of the frame or at the end of the frame. The allocation or de-allocation of memory can be done at any time during the processing of the current frame. Note, that in the example of Fig:\ref{fig:wmc_tool_max_ram} the current frame is in fact the worst case where maximum total RAM is reached. This is only to illustrate the memory-tracking mechanism within the WMC tool.
+It can be seen from Fig. \ref{fig:wmc_tool_max_ram} that the WMC tool does not assume that a memory block is allocated or de-allocated at the beggining of the frame or at the end of the frame. The allocation or de-allocation of memory can be done at any time during the processing of the current frame. Note, that in the example of Fig. \ref{fig:wmc_tool_max_ram} the current frame is in fact the worst case where maximum total RAM is reached. This is only to illustrate the memory-tracking mechanism within the WMC tool.
 
 %-----------------------------------------------------------------------------
 \subsection{Printing statistics about memory consumption}
@@ -740,14 +740,14 @@ Thus, each element in the \verb|Const_Data_PROM_Table[]| array is essentially a 
   \item \verb|Get_Const_Data_Size_Func|: callback function returning the total Const Data (Table) ROM size measured for all source file matching \verb|file_spec|
 \end{itemize}
 
-The WMC tool may generate the \verb|Const_Data_PROM_Table[]| array and fill it with the appropriate contents automatically by specifying \verb|-m| o the command line. The user only needs to provide the \verb|.c| source filename in which he has inserted the \verb|print_mem()| function. Thus, the memory instrumentation process can be summarized as follows. The user first needs to insert the functions \verb|reset_mem()| and \verb|print_mem()| in the \verb|.c| source file containing the main loop processing input data frames. Let's assume, for example, that the main file is named as \verb|my_main_codec.c| and that the user has already inserted the appropriate system functions. 
+The WMC tool may generate the \verb|Const_Data_PROM_Table[]| array and fill it with the appropriate contents automatically by specifying \verb|-m| on the command line. The user only needs to provide the \verb|.c| source filename in which he has inserted the \verb|print_mem()| function. Thus, the memory instrumentation process can be summarized as follows. The user first needs to insert the functions \verb|reset_mem()| and \verb|print_mem()| in the \verb|.c| source file containing the main loop processing input data frames. Let's assume, for example, that the main file is named as \verb|my_main_codec.c| and that the user has already inserted the appropriate system functions.
 
 \begin{Verbatim}[fontsize=\small]
 int main(void)
 {
     FILE *fp;
     int frame = 0;
-    
+
     initilize_codec();
     reset_wmops();
     reset_mem(USE_32BITS);
@@ -757,14 +757,14 @@ int main(void)
         /* process the current frame */
         process_current_frame(data);
         ...
-        
+
         frame++;
         update_wmops();
     }
 
     print_wmops();
     print_mem();
-    
+
     return 0;
 }
 \end{Verbatim}
@@ -794,7 +794,7 @@ int main(void)
 {
     FILE *fp;
     int frame = 0;
-    
+
     initilize_codec();
     reset_wmops();
     reset_mem(USE_32BITS);
@@ -804,21 +804,21 @@ int main(void)
         /* process the current frame */
         process_current_frame(data);
         ...
-        
+
         frame++;
         update_wmops();
     }
 
     print_wmops();
     print_mem(Const_Data_PROM_Table);
-    
+
     return 0;
 }
 \end{Verbatim}
 
-Note, that the WMC tool recognized two file specifications on the command-line and generated an array with two entries. The first entry corresponds to \verb|./source/*.c| and the second entry corresponds to \verb|./lib_smoothing/*.c|. The program ROM is calculated for the source file matching the file specifications and written directly in the lookup table. For Const Data (Table) ROM, the memory size cannot be calculated at the instrumentation stage. Instead, the WMC tool inserts auxiliary functions calculating the memory size in the runtime. In the example above there is only one |.c| source file in the folder \verb|./lib_smoothing/*.c| containing some constant data, \verb|lp_filter.c|. As a result, the WMC tool inserts the callback function \verb|Const_Data_Size_lp_filter()| to retrieve its ROM size. In the folder \verb|./source/*.c| there are three \verb|.c| files containing some constant data, \verb|fft.c|, \verb|hysteresis_filter.c| and \verb|mod_spectrum.c|. The WMC tool creates a wrapper function named \verb|Get_Const_Data_Size_source_c()| in which callback functions are inserted retrieving ROM sizes of the individual source files. The total ROM size is then calculated by summing the individual ROM values and returned by the wrapper function. Finally, the reference to the generated array \verb|Const_Data_PROM_Table[]| is inserted as an argument to the \verb|print_mem()| function. 
+Note, that the WMC tool recognized two file specifications on the command-line and generated an array with two entries. The first entry corresponds to \verb|./source/*.c| and the second entry corresponds to \verb|./lib_smoothing/*.c|. The program ROM is calculated for the source file matching the file specifications and written directly in the lookup table. For Const Data (Table) ROM, the memory size cannot be calculated at the instrumentation stage. Instead, the WMC tool inserts auxiliary functions calculating the memory size in the runtime. In the example above there is only one \verb|.c| source file in the folder \verb|./lib_smoothing/*.c| containing some constant data, \verb|lp_filter.c|. As a result, the WMC tool inserts the callback function \verb|Const_Data_Size_lp_filter()| to retrieve its ROM size. In the folder \verb|./source/*.c| there are three \verb|.c| files containing some constant data, \verb|fft.c|, \verb|hysteresis_filter.c| and \verb|mod_spectrum.c|. The WMC tool creates a wrapper function named \verb|Get_Const_Data_Size_source_c()| in which callback functions are inserted retrieving ROM sizes of the individual source files. The total ROM size is then calculated by summing the individual ROM values and returned by the wrapper function. Finally, the reference to the generated array \verb|Const_Data_PROM_Table[]| is inserted as an argument to the \verb|print_mem()| function.
 
-It's recommended to use the system functions for resetting, updating and printing of statistics about computational complexity together with the system functions for resetting and printing of statistics about memory consumption. An exemplary printout of the memory consumption may look like this. 
+It is recommended to use the system functions for resetting, updating and printing of statistics about computational complexity together with the system functions for resetting and printing of statistics about memory consumption. An exemplary printout of the memory consumption may look like this.
 
 \begin{Verbatim}[fontsize=\small]
 Program ROM size (./source/*.c): 21856 instruction words
@@ -833,7 +833,7 @@ Maximum inter-frame heap size: 22258 words in frame 0
 
 The information about units in which memory consumption is reported is shown at the end of the printout which is not seen in the above example.
 
-With \verb|WMOPS| active it is possible to print detailed statistic about memory consumption in the codec by defining the symbolic constant \verb|MEM_COUNT_DETAILS| in the file \verb|wmc_auto.h|. As part of the detailed printout the user should see the list of functions that were triggered when the maximum stack size has been reached. Furthermore, the detailed memory analysis contains the list of all allocated inter-frame and intra-frame memory blocks when the maximum heap size has been reached. This is illustrated in the following exemplary printout.
+With \verb|WMOPS| active it is possible to print detailed statistics about memory consumption in the codec by defining the symbolic constant \verb|MEM_COUNT_DETAILS| in the file \verb|wmc_auto.h|. As part of the detailed printout the user should see the list of functions that were triggered when the maximum stack size has been reached. Furthermore, the detailed memory analysis contains the list of all allocated inter-frame and intra-frame memory blocks when the maximum heap size has been reached. This is illustrated in the following exemplary printout.
 
 \begin{Verbatim}[fontsize=\small]
 Function Name     Line   Type Function Parameters          Maximum Size  Usage
@@ -847,7 +847,7 @@ create_head()      749 malloc L_HEAD_N * sizeof(int16_t) )    840 words    90%
 
 The detailed printout contains the information about the function from which \verb|malloc()| or \verb|calloc()| has been called, the line number and the string describing the size that has been allocated. For each memory block the WMC tool prints the maximum heap size that has been reached and the average usage of the memory block. If the usage is lower than 100\% it means that the allocated memory block has not been fully used in the runtime. When the same memory block has been allocated multiple times in a frame it will be indicated in the printout with the \verb|Nx| prefix where \verb|N| indicates the number of occurences per frame.
 
-Activating \verb|MEM_COUNT_DETAILS| also allows for using the \verb|export_mem()| function in the source code. The function \verb|export_mem()| exports the memory size of all inter-frame and intra-frame memory blocks allocated on heap in the current frame. Therefore, the this function should ideally be inserted \textbf{inside} the main loop processing the input frames, for example as its last statement, similarly as the function \verb|update_wmops()|. The function \verb|export_mem()| takes one input argument which is the pathname to the \verb|.csv| file where the values are to be exported. 
+Activating \verb|MEM_COUNT_DETAILS| also allows for using the \verb|export_mem()| function in the source code. The function \verb|export_mem()| exports the memory size of all inter-frame and intra-frame memory blocks allocated on heap in the current frame. Therefore, this function should ideally be inserted \textbf{inside} the main loop processing the input frames, for example as its last statement, similarly as the function \verb|update_wmops()|. The function \verb|export_mem()| takes one input argument which is the pathname to the \verb|.csv| file where the values are to be exported.
 
 
 %-----------------------------------------------------------------------------
@@ -916,14 +916,14 @@ Fct_Call(arg1, arg2
 , arg3);
 #endif
 
-\end{BVerbatim} 
-& 
+\end{BVerbatim}
+&
 \begin{BVerbatim}[baseline=t,fontsize=\small]
 Fct_Call(arg1, arg2
 , arg3, arg4);
 , arg3);
 
-\end{BVerbatim} 
+\end{BVerbatim}
 & Not supported by the WMC tool because of parenthesis imbalance \\
 \hline
 \begin{BVerbatim}[baseline=t,fontsize=\small]
@@ -933,13 +933,13 @@ Fct_Call(arg1, arg2, arg3);
 Fct_Call(arg1, arg2);
 #endif
 
-\end{BVerbatim} 
-& 
+\end{BVerbatim}
+&
 \begin{BVerbatim}[baseline=t,fontsize=\small]
 Fct_Call(arg1, arg2, arg3);
 Fct_Call(arg1, arg2);
 
-\end{BVerbatim} 
+\end{BVerbatim}
 & Instrumented as two function calls with three and two arguments, respectively \\
 \hline
 \begin{BVerbatim}[baseline=t,fontsize=\small]
@@ -949,14 +949,14 @@ Fct_Call(arg1, arg2, arg3
 #endif
 );
 
-\end{BVerbatim} 
-& 
+\end{BVerbatim}
+&
 \begin{BVerbatim}[baseline=t,fontsize=\small]
 Fct_Call(arg1, arg2, arg3
 , arg4
 );
 
-\end{BVerbatim} 
+\end{BVerbatim}
 & Instrumented as one function call with four arguments regardless of \verb|EXTRA_ARG| \\
 \hline
 \begin{BVerbatim}[baseline=t,fontsize=\small]
@@ -968,19 +968,19 @@ Fct_Call(arg1, arg2,
 #endif
 );
 
-\end{BVerbatim} 
-& 
+\end{BVerbatim}
+&
 \begin{BVerbatim}[baseline=t,fontsize=\small]
 Fct_Call(arg1, arg2,
 , arg3, arg4
 , arg3
 );
 
-\end{BVerbatim} 
+\end{BVerbatim}
 & Instrumented as one function call with five arguments regardless of \verb|EXTRA_ARG| \\
 \hline
 \end{tabular}
 \label{tab:conditional_preprocessor_directives}
 \end{table}
 
-It is recommended to use the directives for conditional compilation by enclosing the complete function calls rather than their parts. The limitation is due to the fact that the WMC tool does not evaluate the macros used by the directives (e.g. \verb|EXTRA_ARG| in the examples above). However, during the runtime process the instrumentation of inactive parts in the source code should not have an impact on the estimated complexity. 
+It is recommended to use the directives for conditional compilation by enclosing the complete function calls rather than their parts. The limitation is due to the fact that the WMC tool does not evaluate the macros used by the directives (e.g. \verb|EXTRA_ARG| in the examples above). However, during the runtime process the instrumentation of inactive parts in the source code should not have an impact on the estimated complexity.
