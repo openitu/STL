@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     short           operation, MNRU_mode;
 	static short 	Buf[512];
 	static double	In_Buf[512], Out_Buf[512];
+	float fseed;
 
 	//Do inits to prevent crashing when option 'S' is selected
 	state.rnd_state.gauss = NULL;
@@ -87,6 +88,8 @@ int main(int argc, char *argv[])
     if( (lFileLen =  ftell( In)) == -1)  return( -1);
     if(  fseek( In, 0, SEEK_SET) == -1)  return( -1);
 
+    fseed = 12345.0;
+
 	 B_Max	=	lFileLen / B_Len;
 
     if (applyDcRemoval == 0) {
@@ -120,8 +123,7 @@ int main(int argc, char *argv[])
 			Out_Buf[i]	=	0;
 		}
 
-		P50_MNRU_process( operation, &state, In_Buf, Out_Buf, (long) BuffLen, (long) 314159265, (char) MNRU_mode, Q,
-		    applyDcRemoval);
+		P50_MNRU_process( operation, &state, In_Buf, Out_Buf, (long) BuffLen,  (char) MNRU_mode, Q, applyDcRemoval, &fseed);
 
 		for( i=0; i<BuffLen; i++)
 		{
@@ -139,7 +141,7 @@ int main(int argc, char *argv[])
 
 	operation	=	MNRU_STOP;
 
-	P50_MNRU_process( operation, &state, In_Buf, Out_Buf, (long) 0, (long) 0, (char)0, 0, 0);
+	P50_MNRU_process( operation, &state, In_Buf, Out_Buf, (float) 0, (char)0, 0, 0, NULL);
 
     printf("\n Done\n");
 	fclose(In); fclose(Out);

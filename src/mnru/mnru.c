@@ -89,7 +89,6 @@ HISTORY:
 /* Local function prototypes */
 float new_random_MNRU ARGS ((char *mode, new_RANDOM_state * r, long seed, float *fseed));
 float ran_vax ARGS ((void));
-unsigned long ran16_32c ARGS ((void));
 
 /*
   =============================================================================
@@ -246,60 +245,6 @@ float ran_vax () {
 
 /*  ......................... End of ran_vax() ............................ */
 
-
-/*
-  ===========================================================================
-  unsigned long ran16_32c(void);
-  ~~~~~~~~~~~~~~~~~~~~~~~
-
-  Description:
-  ~~~~~~~~~~~~
-
-  Function that simulates the DSP32C function RAN24(), modified to return
-  a number between 0 and 2^16-1. This is based on Aachen University's
-  randm() of the narrow-band MNRU program mnrusim.c by PB (08.04.1991).
-
-  Parameters: none.
-  ~~~~~~~~~~~
-
-  Return value:
-  ~~~~~~~~~~~~~
-  An unsigned long number in the range 0 and 2^16-1.
-
-  Author:
-  ~~~~~~~
-  Simao Ferraz de Campos Neto
-  Comsat Laboratories                  Tel:    +1-301-428-4516
-  22300 Comsat Drive                   Fax:    +1-301-428-9287
-  Clarksburg MD 20871 - USA            E-mail: simao@ctd.comsat.com
-
-  History:
-  ~~~~~~~~
-  01.Jul.95  v1.00  Created, adapted from mnrusim.c
-
-  ===========================================================================
-*/
-#define BIT24	16777216.0
-#define BIT8    256.0
-unsigned long ran16_32c () {
-  static float seed = 12345.0;
-  double buffer1, buffer2;
-  long seedl;
-  unsigned long result;
-
-  buffer1 = ((253.0 * seed) + 1.0);
-  buffer2 = (buffer1 / BIT24);
-  seedl = ((long) buffer2) & 0x00FFFFFFL;
-  seed = buffer1 = buffer1 - (float) seedl *BIT24;
-  result = buffer1 / BIT8;
-
-  return result;
-}
-
-#undef BIT8
-#undef BIT24
-/*  .................... End of ran16_32c() ....................... */
-
 #else /* Use the original MNRU noise generator */
 
 #define random_MNRU ori_random_MNRU
@@ -449,7 +394,7 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
 
         double *MNRU_process (char operation, MNRU_state *s,
         ~~~~~~~~~~~~~~~~~~~~  float *input, float *output,
-                              long n, long seed, char mode, double Q)
+                              long n, long seed, char mode, double Q, *fseed)
 
         Description:
         ~~~~~~~~~~~~
@@ -488,6 +433,7 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
         	      (see description above; defined in MNRU.H);
         Q:	      double defining the desired value for the signal-to-
                       modulated-noise for the output data.
+        fseed:        initial value for new random number generator
 
         ==================================================================
         NOTE! New values of `seed', `mode' and `Q' are considered only
@@ -538,6 +484,7 @@ double *MNRU_process (char operation, MNRU_state * s, float *input, float *outpu
   long count, i;
   double noise, tmp;
   register double inp_smp, out_tmp, out_flt;
+
 
 
   /*
@@ -681,7 +628,7 @@ double *MNRU_process (char operation, MNRU_state * s, float *input, float *outpu
 
 /**
 *   double *P50_MNRU_process (char operation, MNRU_state *s, double *input, double *output,
-*        long n, long seed, char mode, double Q)
+*        long n,char mode, double Q, float *fseed)
 *
 *   Module for addition of modulated P.50 shaped noise to a vector of `n' samples, according to Recommendation
 *   ITU-T P.810 (2023).
@@ -713,17 +660,17 @@ double *MNRU_process (char operation, MNRU_state * s, float *input, float *outpu
 *   @param  input       pointer to input double-data vector; must represent 48 kHz speech samples.
 *   @param  output	    pointer to output double-data vector; will represent 48 kHz speech samples.
 *   @param  n           long with the number of samples (double) in input
-*   @param  seed        initial value for random number generator
 *   @param  mode        operation mode: MOD_NOISE, SIGNAL_ONLY, NOISE_ONLY (see description above; defined in mnru.h)
 *   @param  Q           double defining the desired value for the signal-to-modulated-noise for the output data.
 *   @param  dcRemoval   0 for disabling DC Removal (recommended - see description of the algorithm),
 *                       1 for enabling the DC removal filter (for backward compatibility with P.50 MNNU prior 2023).
+*   @param  fseed       initial value for random number generator
 *
 *   @return (double *)  pointer to the noise vector if reset was OK and/or is in "run" (MNRU_CONTINUE) operation.
 *                       NULL if uninitialized or if initialization failed.
 **/
 double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* output,
-                         long n, long seed, char mode, double Q, char dcRemoval)
+                         long n, char mode, double Q, char dcRemoval, float *fseed)
 {
   long            count;
   double          tmp;
@@ -748,8 +695,8 @@ double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* o
     if ((filteredNoiseTemp = (double *) calloc(n, sizeof(double))) == NULL)
       return (NULL);
 
-    /* Seed for random number generation */
-    s->seed = seed;
+    /* Seed for random number generation (NO LONGER USED) */
+    s->seed = NULL;
 
     /* Gain for signal path */
     if (mode == MOD_NOISE)
@@ -808,7 +755,7 @@ double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* o
 			s->vet[count] = 0;
 		 else
 		 {
-			s->vet[count] = (double) random_MNRU(&s->rnd_mode, &s->rnd_state, s->seed);
+			s->vet[count] = (double) random_MNRU(&s->rnd_mode, &s->rnd_state, s->seed, fseed);
 		 }
 	  }
 

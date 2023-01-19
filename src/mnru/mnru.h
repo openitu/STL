@@ -49,7 +49,7 @@ typedef struct {
 
 /* Prototype for MNRU and random function(s) */
 double *MNRU_process ARGS ((char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q, float *fseed));
-double *P50_MNRU_process ARGS ((char operation, MNRU_state * s, double *input, double *output, long n, long seed, char mode, double Q, char dcRemoval));
+double *P50_MNRU_process ARGS ((char operation, MNRU_state * s, double *input, double *output, long n, char mode, double Q, char dcRemoval, float *fseed));
 
 float random_MNRU ARGS ((char *mode, RANDOM_state * r, long seed));
 
