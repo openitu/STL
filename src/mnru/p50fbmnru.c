@@ -38,6 +38,7 @@ void show_use(void)
      printf("\n ");
      printf("\n         --overflow  int16 overflow (legacy, same as P.50 MNNU prior 2023)");
      printf("\n                     if undefined, int16 are clamped (default)");
+     printf("\n\n");
 }
 
 int main(int argc, char *argv[])
