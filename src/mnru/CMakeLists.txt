@@ -48,33 +48,47 @@ add_test(mnrudemo12-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/sin
 
 
 #TEST: P50 FB MNRU
-add_test(p50fbmnru-0 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20_noDCFilter.pcm 20 M 0)
-add_test(p50fbmnru-0-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20_noDCFilter.ref test_data/P501_D_AM_fm_FB_48k_Q20_noDCFilter.pcm)
+add_test(p50fbmnru_Q20_legacyDC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20.pcm 20 M 1)
+add_test(p50fbmnru_Q20_legacyDC-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20.ref test_data/P501_D_AM_fm_FB_48k_Q20.pcm)
 
-add_test(p50fbmnru-1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20.pcm 20 M 1)
-add_test(p50fbmnru-1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20.ref test_data/P501_D_AM_fm_FB_48k_Q20.pcm)
+add_test(p50fbmnru-Q10_legacyDC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q10.pcm 10 M 1)
+add_test(p50fbmnru-Q10_legacyDC-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q10.ref test_data/P501_D_AM_fm_FB_48k_Q10.pcm)
 
-add_test(p50fbmnru-2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q10.pcm 10 M 1)
-add_test(p50fbmnru-2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q10.ref test_data/P501_D_AM_fm_FB_48k_Q10.pcm)
+add_test(p50fbmnru-Q20_legacyDC_noise ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20_noise.pcm 20 N 1)
+add_test(p50fbmnru-Q20_legacyDC_noise-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20_noise.ref test_data/P501_D_AM_fm_FB_48k_Q20_noise.pcm)
 
-add_test(p50fbmnru-3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20_noise.pcm 20 N 1)
-add_test(p50fbmnru-3-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20_noise.ref test_data/P501_D_AM_fm_FB_48k_Q20_noise.pcm)
+add_test(p50fbmnru-Q10_legacyDC_noise ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q10_noise.pcm 10 N 1)
+add_test(p50fbmnru-Q10_legacyDC_noise-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q10_noise.ref test_data/P501_D_AM_fm_FB_48k_Q10_noise.pcm)
 
-add_test(p50fbmnru-4 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q10_noise.pcm 10 N 1)
-add_test(p50fbmnru-4-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q10_noise.ref test_data/P501_D_AM_fm_FB_48k_Q10_noise.pcm)
+add_test(p50fbmnru-Q20_legacyDC_2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_EN_fm_SWB_48k.pcm test_data/P501_D_EN_fm_SWB_48k_Q20.pcm 20 M 1)
+add_test(p50fbmnru-Q20_legacyDC_2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_EN_fm_SWB_48k_Q20.ref test_data/P501_D_EN_fm_SWB_48k_Q20.pcm)
 
-add_test(p50fbmnru-5 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_EN_fm_SWB_48k.pcm test_data/P501_D_EN_fm_SWB_48k_Q20.pcm 20 M 1)
-add_test(p50fbmnru-5-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_EN_fm_SWB_48k_Q20.ref test_data/P501_D_EN_fm_SWB_48k_Q20.pcm)
+add_test(p50fbmnru-Q10_legacyDC_2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_EN_fm_SWB_48k.pcm test_data/P501_D_EN_fm_SWB_48k_Q10.pcm 10 M 1)
+add_test(p50fbmnru-Q10_legacyDC_2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_EN_fm_SWB_48k_Q10.ref test_data/P501_D_EN_fm_SWB_48k_Q10.pcm)
 
-add_test(p50fbmnru-6 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_EN_fm_SWB_48k.pcm test_data/P501_D_EN_fm_SWB_48k_Q10.pcm 10 M 1)
-add_test(p50fbmnru-6-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_EN_fm_SWB_48k_Q10.ref test_data/P501_D_EN_fm_SWB_48k_Q10.pcm)
+add_test(p50fbmnru-Q20_legacyDC_noise_2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_EN_fm_SWB_48k.pcm test_data/P501_D_EN_fm_SWB_48k_Q20_noise.pcm 20 N 1)
+add_test(p50fbmnru-Q20_legacyDC_noise_2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_EN_fm_SWB_48k_Q20_noise.ref test_data/P501_D_EN_fm_SWB_48k_Q20_noise.pcm)
 
-add_test(p50fbmnru-7 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_EN_fm_SWB_48k.pcm test_data/P501_D_EN_fm_SWB_48k_Q20_noise.pcm 20 N 1)
-add_test(p50fbmnru-7-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_EN_fm_SWB_48k_Q20_noise.ref test_data/P501_D_EN_fm_SWB_48k_Q20_noise.pcm)
+add_test(p50fbmnru-Q10_legacyDC_noise_2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_EN_fm_SWB_48k.pcm test_data/P501_D_EN_fm_SWB_48k_Q10_noise.pcm 10 N 1)
+add_test(p50fbmnru-Q10_legacyDC_noise_2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_EN_fm_SWB_48k_Q10_noise.ref test_data/P501_D_EN_fm_SWB_48k_Q10_noise.pcm)
 
-add_test(p50fbmnru-8 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_EN_fm_SWB_48k.pcm test_data/P501_D_EN_fm_SWB_48k_Q10_noise.pcm 10 N 1)
-add_test(p50fbmnru-8-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_EN_fm_SWB_48k_Q10_noise.ref test_data/P501_D_EN_fm_SWB_48k_Q10_noise.pcm)
+add_test(p50fbmnru_Q20_noDcFilter ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20_noDCFilter.pcm 20 M 0)
+add_test(p50fbmnru_Q20_noDcFilter-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20_noDCFilter.ref test_data/P501_D_AM_fm_FB_48k_Q20_noDCFilter.pcm)
 
+add_test(p50fbmnru_Q20_DC60Hz ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20_DC60Hz.pcm 20 M 2)
+add_test(p50fbmnru_Q20_DC60Hz-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20_DC60Hz.ref test_data/P501_D_AM_fm_FB_48k_Q20_DC60Hz.pcm)
+
+add_test(p50fbmnru_Q20_DC30Hz ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20_DC30Hz.pcm 20 M 3)
+add_test(p50fbmnru_Q20_DC30Hz-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20_DC30Hz.ref test_data/P501_D_AM_fm_FB_48k_Q20_DC30Hz.pcm)
+
+add_test(p50fbmnru_Q20_DC15Hz ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q20_DC15Hz.pcm 20 M 4)
+add_test(p50fbmnru_Q20_DC15Hz-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q20_DC15Hz.ref test_data/P501_D_AM_fm_FB_48k_Q20_DC15Hz.pcm)
+
+add_test(p50fbmnru_Q0_clipping_clamp ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q0_clamp.pcm 0 M 4)
+add_test(p50fbmnru_Q0_clipping_clamp-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q0_clamp.ref test_data/P501_D_AM_fm_FB_48k_Q0_clamp.pcm)
+
+add_test(p50fbmnru_Q0_clipping_overflow ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q0_overflow.pcm 0 M --overflow)
+add_test(p50fbmnru_Q0_clipping_overflow-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q0_overflow.ref test_data/P501_D_AM_fm_FB_48k_Q0_overflow.pcm)
 
 #TEST: Compute SNR for MNRU files
 #TODO: no automatic verification data available
