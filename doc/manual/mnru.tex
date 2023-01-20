@@ -61,13 +61,13 @@ possible in earlier descriptions \cite{Old-P.81}, as explained in the STL92 manu
 Also, this implementation allows for transparent operation on narrowband or wideband speech, hence being known as
 Dual-mode MNRU, or ``Duo-MNRU'', for short.
 
-In 2008, Swissqual introduced a full-band MNRU algorithm, known as P.50 MNRU, to provide controlled super-wideband and
-full-band MNRU degradations.
+In 2008, Swissqual introduced the P.50 fullband MNRU algorithm, known as P.50 MNRU, to provide controlled super-wideband and
+fullband MNRU degradations.
 The algorithm adds a filtering stage that shapes the white noise according to an average speech power spectrum as
 in \cite{P.50} to reduce the impact of the noise in the high-frequencies.
 This algorithm was used in several standardization efforts, notably for the standardization of ITU-T Rec. P.863 \cite{P.863}
 and EVS \cite{EVS}.
-ITU-T Rec. P.810 was updated in 2022 with an implementation of the P.50 full-band MNRU described in \ref{fullband}.
+ITU-T Rec. P.810 was updated in 2023 with an implementation of the P.50 full-band MNRU described in \ref{fullband}.
 
 \section{Dual-mode Modulated Noise Reference Unit - Narrowband and wideband speech}
 
@@ -638,7 +638,7 @@ step such as to match the average spectrum of speech signals.
 The filter frequency response can be derived from ITU-T Rec. P.50 \cite{P.50}, chapter 4 “Average voices – Long-term
 average spectrum”, as shown in Figure \ref{MNRUP50}.
 
-The overall structure of P.50 Fullband MNRU, shoing the additional filtering state of the noise source, is provided in
+The overall structure of P.50 Fullband MNRU, showing the additional filtering state of the noise source, is provided in
 Figure \ref{MNRUP50FB}.
 
 The diagram also shows that a control on the application of the DC removal filter.
@@ -723,7 +723,7 @@ filter with a cutoff frequency of 115Hz (Table \ref{p50IIR}), and the FIR is use
 
 \subsection {Implementation}
 
-The implementation of fullband noise-shaped MNRU is provided in {\tt mnru} directory.
+The implementation of P.50 fullband noise-shaped MNRU is provided in {\tt mnru} directory.
 {\tt P50\_MNRU\_process() } in {\tt mnru.c} provides the main algorithm,
 {\tt filter\_coeffs.c} provides the IIR and FIR filter routines,
 and {\tt filter\_coeffs.h} gives the filter coefficients as described in Tables \ref{p50IIR} and \ref{p50FIR}.

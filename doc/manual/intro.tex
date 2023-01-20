@@ -1,17 +1,3 @@
-%=============================================================================
-% ..... THIS HAS CHAPTERS 1 AND 2 for the STL95 (INTRO+GLOSSARY)  .....
-% Revisions
-% Nov.1995 - Simao Campos
-% Jan.1996 - Peter Kroon, Simao Campos, Paul Voros, Rosario D. de Iacovo,
-%            Rafi Rabipour
-% Apr.1996 - Mark Perkins
-% Feb.2000 - Convergence towards STL2000
-% Nov.2000 - SG16 Plenary
-% Mar.2005 - Convergence towards STL2005
-% Oct.2009 - Convergence towards STL2009, yusuke hiwasaki
-% May.2013 - Revision for STL2014
-%=============================================================================
-
 
 %==============================================================================
 \chapter{Introduction}
@@ -40,6 +26,8 @@ The software package was reworked to make it available as a truly open-source pr
 
 In 2022, a new version of the STL was released which incoporates some bug fixes and minor edits, as well as two addition tools:
 The implementation of the implementation of ESDRU (energy-based spatial distortion reference unit) as described in ITU-T P.811, and the implementation of the loudness measurement algorithm as in ITU-R Rec. BS.1770-4.
+
+In 2023, STL release incorporates an implementation of P.50 fullband MNRU as described in ITU-T Rec. P.810, as well as WMC tool, a tool for automatic instrumentation of speech and audio codecs to measure their computational complexity and memory.
 
 Since STL2019, the build toolchain uses CMake to generate platform-dependent and tool-dependent build scripts as well as to execute regression tests for each module in the STL.
 Modules have been tested on Windows, MacOS and several Linux flavors.
@@ -118,7 +106,11 @@ the present version, there are several of these modules:
 \item {\bf BASOP}: The set of basic digital signal processing (DSP) operators that represent instructions typically available in digital signal processors \emph{(revised in STL2019)}.
 
 \item {\bf BS1770DEMO}: Example implementation of the ITU-R BS.1770-4 level measurement algorithm.
+
 \item {\bf ESDRU}: The implementation of the Energy-based Spatial Distortion Reference Unit as described in ITU-T P.811.
+
+\item {\bf WMC Tool}: The implementation of WMC tool for measuring complexity and memory of speech and audio codecs.
+
 \item {\bf UTILITIES}: Tools that have been developed to assure proper interfacing between the various tools.
 These tools do not relate to any ITU-T Recommendation.
 Included are tools for conversion between float and short data representations, between parallel and serial (bit-stream) formats, and for scaling of data.
@@ -196,6 +188,9 @@ The work leading to the release of STL2019, including the migration of the STL t
 Other GitHub contributors to STL2019 were Mr Thomas Schlien (RWTH Aachen University), Mr Sim\~ao Ferraz de Campos Neto (ITU), and Mr Martin Adolph (ITU).
 
 For the STL2022, the implementations of the ESDRU and ITU-R BS.1770 were kindly provided by Mr Erik Norvell from Ericsson.
+
+For the STL2023, the implementation of the P.50 Fullband MNRU was kindly provided by Mrs Anna Llagostera and Mr Jens Berger from SwissQual AG/Rohde \& Schwarz, with a contribution from NTT on filter routines.
+The implementation of the WMC tool was kindly provided by Mr Guy Richard and Me Vladimir Malenovsky from VoiceAge Corporation.
 
 Above all, special thank goes to ITU-T SG16 Counselor Mr~Sim\~ao Ferraz de Campos Neto, the ``father'' of the STL.
 
