@@ -72,6 +72,7 @@ HISTORY:
 
 /* Definitions for the algorithm itself */
 #include "mnru.h"
+#include <stdio.h>
 
 /* Coefficients for P.50 IIR and FIR filters */
 #include "filtering_coeffs.h"
@@ -464,7 +465,15 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
   ==========================================================================
 */
 /* original RPELTP: #define ALPHA 0.999 */
-#define ALPHA 0.985
+
+// original P.50 MNRU - Cutoff frequency at 115 Hz (48 kHz)
+#define ALPHA 0.985                 // dcFilter = 1
+
+// Alternative DC removal filter coefficients for P.50 FB MNRU with a cutoff frequencies at 15, 30 and 60 Hz
+#define ALPHA_60Hz 0.9922           // dcFilter = 2
+#define ALPHA_30Hz 0.9961           // dcFilter = 3
+#define ALPHA_15Hz 0.998            // dcFilter = 4
+
 #define DNULL (double *)0
 
 // Noise gain definition for NB and WB MNRU
@@ -670,10 +679,11 @@ double *MNRU_process (char operation, MNRU_state * s, float *input, float *outpu
 *                       NULL if uninitialized or if initialization failed.
 **/
 double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* output,
-                         long n, char mode, double Q, char dcRemoval, float *fseed)
+                         long n, char mode, double Q, char dcFilter, float *fseed)
 {
   long            count;
   double          tmp;
+  double alpha;
 
   //Variables needed for filtering functions
   static double					*delayLine_FIR, *delayLine_IIR;
@@ -682,6 +692,24 @@ double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* o
   /*
   *    ..... RESET PORTION .....
   */
+
+  /* Set DC filter coefficient */
+  switch (dcFilter) {
+    case 1:
+        alpha = ALPHA;
+        break;
+    case 2:
+        alpha = ALPHA_60Hz;
+        break;
+    case 3:
+        alpha = ALPHA_30Hz;
+        break;
+    case 4:
+        alpha = ALPHA_15Hz;
+        break;
+    default:
+        alpha = 0;
+  }
 
   /* Check if is START of operation: reset state and allocate memory buffer */
   if (operation == MNRU_START)
@@ -770,12 +798,14 @@ double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* o
 	  //Second, filter the data in filteredNoiseTemp using an FIR filter and store the result in s->vet
 	  filterFunc_FIR(filteredNoiseTemp, s->vet, n, dP50FIRcoeffs, iP50FIRcoeffsLen, delayLine_FIR);
 
-    if (dcRemoval == 1) {
+
+    if ((dcFilter >= 1)  && (dcFilter < 5)) {
+printf("\nDC FILTER %d\n", dcFilter);
           for (count = 0; count < n; count++)
           {
              /* Remove DC from input sample: H(z)= (1-Z-1)/(1-a.Z-1) */
              tmp = input[count] - s->last_xk;
-             tmp += ALPHA * s->last_yk;
+             tmp += alpha * s->last_yk;
 
              /* Update for next time */
              s->last_xk = input[count];
