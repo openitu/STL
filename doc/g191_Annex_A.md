@@ -11,32 +11,37 @@ Associated header file: `ugstdemo.h`
 The following programs are examples of the use of the modules:
 
 |||
-|-------|-----------------------------------------------------------|
-| `g711demo.c` | on the use of the ITU‑T G.711 module. |
-| `g726demo.c` | on the use of the ITU‑T G.726 module. |
-| `g727demo.c` | on the use of the ITU‑T G.727 module |
-| `g722demo.c` | on the use of the ITU‑T G.722 module. |
-| `g728enc.c` | on the use of the ITU‑T G.728 floating-point encoder. |
-| `g728dec.c` | on the use of the ITU‑T G.728 floating-point decoder. |
-| `g728fpenc.c` | on the use of the ITU‑T G.728 fixed-point encoder. |
-| `g728fpdec.c` | on the use of the ITU‑T G.728 fixed-point decoder. |
-| `rpedemo.c` | on the use of the full-rate GSM 06.10 speech codec module. |
-| `sv56demo.c` | on the use of the speech voltmeter module, and also the gain/loss routine. |
-| `eiddemo.c` | on the use of the error insertion device for bit error insertion and frame erasure. |
-| `eid-ev.c` | on the use of the error insertion device for bit error insertion for layered bitstreams, which can be used to apply errors to individual layers in layered bitstreams, such as [ITU‑T G.718] or [ITU‑T G.729.1]. |
-| `gen-patt.c` | on the use of generating bit error pattern files for error insertion in serial bitstreams encoded files that comply with [ITU‑T G.192].                                                                          |
+|----------------------|-----------------------------------------------|
+| `g711demo.c`         | on the use of the ITU‑T G.711 module. |
+| `g726demo.c`         | on the use of the ITU‑T G.726 module. |
+| `g727demo.c`         | on the use of the ITU‑T G.727 module |
+| `g722demo.c`         | on the use of the ITU‑T G.722 module. |
+| `g728enc.c`          | on the use of the ITU‑T G.728 floating-point encoder. |
+| `g728dec.c`          | on the use of the ITU‑T G.728 floating-point decoder. |
+| `g728fpenc.c`        | on the use of the ITU‑T G.728 fixed-point encoder. |
+| `g728fpdec.c`        | on the use of the ITU‑T G.728 fixed-point decoder. |
+| `rpedemo.c`          | on the use of the full-rate GSM 06.10 speech codec module. |
+| `sv56demo.c`         | on the use of the speech voltmeter module, and also the gain/loss routine. |
+| `eiddemo.c`          | on the use of the error insertion device for bit error insertion and frame erasure. |
+| `eid-ev.c`           | on the use of the error insertion device for bit error insertion for layered bitstreams, which can be used to apply errors to individual layers in layered bitstreams, such as [ITU‑T G.718] or [ITU‑T G.729.1]. |
+| `gen-patt.c`         | on the use of generating bit error pattern files for error insertion in serial bitstreams encoded files that comply with [ITU‑T G.192].                                                                          |
 | `gen_rate_profile.c` | on the use of the fast switching rate profile generation tool.                                                                                                                                                   |
-| `firdemo.c` | on the use of the finite impulse response (FIR) high-quality low-pass and band-pass filters and of the FIR-IRS filters, associated with the rate change module.                                                  |
-| `pcmdemo.c` | on the use of the ITU‑T G.712 (standard PCM) IIR (infinite impulse response) filters, associated with the rate change module.                                                                                    |
-| `filter.c` | on the use of both the IIR and the FIR filters available in the rate change module.                                                                                                                              |
-| `mnrudemo.c` | on the use of the narrow-band and wideband modulated noise reference unity (ITU‑T P.810) module.                                                                                                                 |
-| `spdemo.c` | on the use of the serialization and parallelization routines of the utility module.                                                                                                                              |
-| `g711iplc.c` | on the use of the packet loss concealment module of Appendix I of [G.711].                                                                                                                                       |
-| `reverb.c` | on the use of the reverberation module.                                                                                                                                                                          |
-| `truncate.c` | on the use of the bitstream truncation module.                                                                                                                                                                   |
-| `freqresp.c` | on the use of the frequency response computation tool.                                                                                                                                                           |
-| `stereoop.c` | on the use of stereo file operations.                                                                                                                                                                            |
-| `esdru.c` | on the use of energy-based spatial distortion reference unit [ITU-T P.811].                                                                                                                                      |                                                                                                                                 || 
+| `firdemo.c`          | on the use of the finite impulse response (FIR) high-quality low-pass and band-pass filters and of the FIR-IRS filters, associated with the rate change module.                                                  |
+| `pcmdemo.c`          | on the use of the ITU‑T G.712 (standard PCM) IIR (infinite impulse response) filters, associated with the rate change module.                                                                                    |
+| `filter.c`           | on the use of both the IIR and the FIR filters available in the rate change module.                                                                                                                              |
+| `mnrudemo.c`         | on the use of the narrow-band and wideband modulated noise reference unity (ITU‑T P.810) module.                                                                                                                 |
+| `p50fbmnru.c`        | on the use of the P.50 fullband MNRU.
+                                                            |
+| `spdemo.c`           | on the use of the serialization and parallelization routines of the utility module.                                                                                                                              |
+| `g711iplc.c`         | on the use of the packet loss concealment module of Appendix I of [G.711].                                                                                                                                       |
+| `reverb.c`           | on the use of the reverberation module.                                                                                                                                                                          |
+| `truncate.c`         | on the use of the bitstream truncation module.                                                                                                                                                                   |
+| `freqresp.c`         | on the use of the frequency response computation tool.                                                                                                                                                           |
+| `stereoop.c`         | on the use of stereo file operations.                                                                                                                                                                            |
+| `esdru.c`            | on the use of energy-based spatial distortion reference unit [ITU-T P.811].                                                                                                                                                          |
+| `wmc_tool.cpp`            | on the use of WMC tool for speech and audio codecs complexity and memory measurement.                                                                                                                                                          |
+|| 
+
 
 NOTE - The module for the basic operators does not have a demo program but it is supplemented by two tools: one to evaluate program read only memory (ROM) complexity for fixed-point code (`basop_cnt.c`), and another to evaluate complexity (including program ROM) of floating-point implementations (`flc_example.c`). Both reside in the basic operators module.
 
@@ -185,6 +190,7 @@ The functions included are as follows.
 |||
 |---------------------|-----------------------------------------------------------|
 | `MNRU_process` | module for addition of modulated noise to a vector of samples, according to [ITU-T P.810], for both the narrow-band and the wideband models. |
+| `P50_MNRU_process` | module for addition of modulated noise to a vector of samples, according to [ITU-T P.810], for P.50 full band model. |
 
 ## i) Speech voltmeter module
 
@@ -687,6 +693,21 @@ The functions included are as follows.
 `gated_loudness`      Calculate loudness according to gating threshold and scaling factor.
 `iir2`                Perform filtering for sub-block energy calculation.
 `find_scaling_factor` Iterative process to derive the most appropriate scaling factor.
+------------------------------------------------------------------------------------------
+
+
+## t) WMC Tool
+
+Name: `wmc_tool.cpp`
+
+The main program for WMC Tool. Depends on:
+
+--------------------  --------------------------------------------------------------------
+`c_parser.cpp`        Routines for parsing C functions.
+`text_utils.cpp`      Text and string processing functions.
+`output.cpp`          Warning and error messages.
+`wmc_auto_h.txt`      Auto-generated header file for inclusion in projects.
+`wmc_auto_c.txt`      Auto-generated C source file for inclusion in projects.
 ------------------------------------------------------------------------------------------
 
 -=Pagebreak=-
