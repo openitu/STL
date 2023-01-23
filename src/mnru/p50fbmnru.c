@@ -30,13 +30,13 @@ void show_use(void)
 	 printf("\n           N:   Noise only");
 	 printf("\n           S:   Signal only\n");
 	 printf("\n      Options:");
-     printf("\n         dcFilter  0 to disable DC Filter (default)");
-     printf("\n                   1 for legacy DC removal filter (115 Hz -3 dB cutoff, same as P.50 MNNU prior 2023)");
-     printf("\n                   2 for legacy DC removal filter (60 Hz -3 dB cutoff)");
-     printf("\n                   3 for legacy DC removal filter (30 Hz -3 dB cutoff)");
-     printf("\n                   4 for legacy DC removal filter (15 Hz -3 dB cutoff)");
+     printf("\n         dcFilter  0 to disable DC removal Filter (default)");
+     printf("\n                   1 for 115 Hz -3 dB cutoff (legacy filter, same as P.50 FB MNNU prior 2023");
+     printf("\n                   2 for 60 Hz -3 dB cutoff");
+     printf("\n                   3 for 30 Hz -3 dB cutoff");
+     printf("\n                   4 for 15 Hz -3 dB cutoff");
      printf("\n ");
-     printf("\n         --overflow  int16 overflow (legacy, same as P.50 MNNU prior 2023)");
+     printf("\n         --overflow  int16 overflow (legacy, same as P.50 FB MNNU prior 2023)");
      printf("\n                     if undefined, int16 are clamped (default)");
      printf("\n\n");
 }
@@ -201,10 +201,10 @@ int main(int argc, char *argv[])
 
     if (lOverflowCnt > 0) {
         if (overflowEnabled == 0) {
-            printf("\n\n!!!! CLIPPING WARNING !!!! %d samples were CLAMPED\n", lOverflowCnt);
+            printf("\n\n!!!! CLIPPING WARNING !!!! %ld samples were CLAMPED\n", lOverflowCnt);
         }
         else {
-            printf("\n\n!!!! CLIPPING WARNING !!!! OVERFLOW for %d samples\n", lOverflowCnt);
+            printf("\n\n!!!! CLIPPING WARNING !!!! OVERFLOW for %ld samples\n", lOverflowCnt);
         }
     }
 

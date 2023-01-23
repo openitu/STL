@@ -72,7 +72,6 @@ HISTORY:
 
 /* Definitions for the algorithm itself */
 #include "mnru.h"
-#include <stdio.h>
 
 /* Coefficients for P.50 IIR and FIR filters */
 #include "filtering_coeffs.h"
@@ -800,7 +799,6 @@ double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* o
 
 
     if ((dcFilter >= 1)  && (dcFilter < 5)) {
-printf("\nDC FILTER %d\n", dcFilter);
           for (count = 0; count < n; count++)
           {
              /* Remove DC from input sample: H(z)= (1-Z-1)/(1-a.Z-1) */

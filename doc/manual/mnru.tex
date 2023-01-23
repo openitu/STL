@@ -640,13 +640,11 @@ average spectrum”, as shown in Figure \ref{MNRUP50}.
 
 The overall structure of P.50 Fullband MNRU, showing the additional filtering state of the noise source, is provided in
 Figure \ref{MNRUP50FB}.
-
-The diagram also shows that a control on the application of the DC removal filter.
-It was observed that the DC filter in this implementation may alter the perception of the voice timber at high Q which
-is undesirable.
-Therefore it is recommended to use an external DC removal filter rather than using the implemented DC removal filter.
-Since P.50 FB MNRU has been used with the DC removal filter enabled between 2008 and 2023, a switch is provided for
-backward compatibility.
+The circuit also shows a selector on the DC removal filter.
+It was observed that the DC filter originally used for narrowband and wideband MNRU results in a 115 Hz -3 dB cut-off frequency for 48 kHz samples.
+This filter may alter the perception of voice timbre at high Q which is undesirable.
+Since the P.50 fullband MNRU implementation used between 2008 and 2022 for ITU-T and 3GPP activities had the 115 Hz cut-off DC filter enabled, it is provided as legacy.
+This implementation also provides other options such as a DC filter bypass (default) as well as alternative filter coefficients for 15, 30 and 60 Hz cut-off.
 
 \begin{figure}[ht]
     \begin{center}
@@ -732,13 +730,14 @@ and {\tt filter\_coeffs.h} gives the filter coefficients as described in Tables 
 
 The usage for the command line tool is as follows:
 
-{\tt p50fbmnru <inputfile> <outputfile> <Q/dB> <Mode> [dcFilterOn]}
+{\tt p50fbmnru <inputfile> <outputfile> <Q/dB> <Mode> [dcFilter] [--overflow]}
 
 {\tt inputfile} is the path to the PCM 16-bit 48kHz input signal.
 
 {\tt outputfile} is the path to the PCM 16-bit 48kHz output signal.
 
 {\tt Q/dB} is the target SNR level {\tt Q}.
+
 
 {\tt Mode} defines the output signal:
 \begin{itemize}
@@ -747,10 +746,15 @@ The usage for the command line tool is as follows:
     \item {\tt S} outputs a copy of the input signal.
 \end{itemize}
 
-{\tt [dcFilterOn]} is an optional parameter
+{\tt [dcFilter]} is an optional parameter
 \begin{itemize}
-    \item {\tt 0} disable DC Filter (default and recommended)
-    \item {\tt 1} enable DC Filter
+    \item {\tt 0} to disable DC removal filter (default)
+    \item {\tt 1} for 115 Hz -3 dB cutoff (legacy filter, same as P.50 FB MNNU prior 2023
+    \item {\tt 2} for 60 Hz -3 dB cutoff
+    \item {\tt 3} for 30 Hz -3 dB cutoff
+    \item {\tt 4} for 15 Hz -3 dB cutoff
 \end{itemize}
 
+{\tt [--overflow]} int16 overflow (legacy, same as P.50 FB MNNU prior 2023)
 
+                if undefined, int16 are clamped (default)
