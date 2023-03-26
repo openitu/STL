@@ -238,25 +238,32 @@ static inline Word16 div_s(Word16 var1, Word16 var2) {
 Word16 var_out = 0, iteration;
 Word32 L_num, L_denom;
 
-   if ((var1 > var2) || (var1 < 0) || (var2 < 0)) {
-   /* printf ("Division Error var1=%d  var2=%d in ", var1, var2); printStack(); */
-      fprintf(stderr, "Division error var1 = %d  var2 = %d in basop32", var1, var2);
+   if (var2 == 0) {
+
+   /* printf ("Division by 0, Fatal error in "); printStack(); */
+      fprintf(stderr, "Division by 0 in divs_s in basop32");
       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
       exit(0);
+      #else
+      return MAX_16;  /* return max possible value, JHB Mar 2023 */
       #endif
    }
 
-   if (var2 == 0) {
-   /* printf ("Division by 0, Fatal error in "); printStack(); */
-      fprintf(stderr, "Division by 0 error in basop32");
+   if (var1 > var2 || var1 < 0 || var2 < 0) {
+
+   /* printf ("Division Error var1=%d  var2=%d in ", var1, var2); printStack(); */
+      fprintf(stderr, "Division error var1 = %d  var2 = %d in div_s in basop32", var1, var2);
       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
       exit(0);
+      #else
+      if (var1 < 0) var1 = -var1;  /* make positive values and proceed, JHB Mar 2023 */
+      if (var2 < 0) var2 = -var2;
       #endif
    }
 
    if (var1) {
 
-      if (var1 == var2) var_out = MAX_16;
+      if (var1 >= var2) var_out = MAX_16;  /* use >= check here, in case "make positive" above happened, JHB Mar 2023 */
       else {
 
          L_num = L_deposit_l(var1);

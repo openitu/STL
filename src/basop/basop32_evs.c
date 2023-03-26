@@ -2430,36 +2430,39 @@ Word16 var_out;
 
 #ifndef USE_BASOPS_INLINE
 
-Word16 div_s (Word16 var1, Word16 var2) {
+Word16 div_s(Word16 var1, Word16 var2) {
 
 Word16 var_out = 0;
 Word16 iteration;
 Word32 L_num;
 Word32 L_denom;
 
-   if ((var1 > var2) || (var1 < 0) || (var2 < 0))
-   {
-   /* printf ("Division Error var1=%d  var2=%d in ", var1, var2); printStack(); */
-      fprintf(stderr, "Division Error var1=%d  var2=%d in ", var1, var2);
-      #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
-      exit(0);
-      #endif
-   }
    if (var2 == 0)
    {
    /* printf ("Division by 0, Fatal error in "); printStack(); */
-      fprintf(stderr, "Division by 0, Fatal error in ");
+      fprintf(stderr, "Division by 0 in div_s in basop32");
       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
       exit(0);
+      #else
+      return MAX_16;  /* return max possible value, JHB Mar 2023 */
       #endif
    }
-   if (var1 == 0)
+
+   if (var1 > var2 || var1 < 0 || var2 < 0)
    {
-      var_out = 0;
+   /* printf ("Division Error var1=%d  var2=%d in ", var1, var2); printStack(); */
+      fprintf(stderr, "Division error var1 = %d  var2 = %d in div_s in basop32", var1, var2);
+      #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+      exit(0);
+      #else
+      if (var1 < 0) var1 = -var1;  /* make positive values and proceed, JHB Mar 2023 */
+      if (var2 < 0) var2 = -var2;
+      #endif
    }
-    else
-   {
-      if (var1 == var2)
+
+   if (var1) {
+
+      if (var1 >= var2)  /* use >= check here, in case "make positive" above happened, JHB Mar 2023 */
       {
          var_out = MAX_16;
       }
@@ -2657,45 +2660,51 @@ Word32 Temp;
 |             It's a Q15 value (point between b15 and b14).                 |
 |___________________________________________________________________________|
 */
-Word16 div_l (Word32  L_num, Word16 den) {
+Word16 div_l(Word32 L_num, Word16 den) {
 
-Word16   var_out = (Word16)0;
-Word32   L_den;
-Word16   iteration;
+Word16 var_out = (Word16)0;
+Word32 L_den;
+Word16 iteration;
 
-   if ( den == (Word16) 0 )
+   if (den == (Word16)0)
    {
    /* printf("Division by 0 in div_l, Fatal error in "); printStack(); */
-      fprintf(stderr, "Division by 0 in div_l, Fatal error in ");
+      fprintf(stderr, "Division by 0 in div_l in basop32");
       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
       exit(-1);
+      #else
+      return MAX_16;  /* return max possible value, JHB Mar 2023 */
       #endif
    }
 
-   if ( (L_num < (Word32) 0) || (den < (Word16) 0) )
+   if (L_num < (Word32)0 || den < (Word16)0)
    {
    /* printf("Division Error in div_l, Fatal error in "); printStack(); */
-      fprintf(stderr, "Division Error in div_l, Fatal error in ");
+      fprintf(stderr, "Division error L_num = %d  den = %d in div_l in basop32", L_num, den);
       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
       exit(-1);
+      #else
+      if (L_num < 0) L_num = -L_num;  /* make positive values and proceed, JHB Mar 2023 */
+      if (den < 0) den = -den;
       #endif
    }
 
-   L_den = L_deposit_h( den ) ;
+   L_den = L_deposit_h(den);
 
-   if ( L_num >= L_den )
+   if (L_num >= L_den)
    {
       BASOP_CHECK();
-      return MAX_16 ;
+      return MAX_16;
    }
    else
    {
-      L_num = L_shr(L_num, (Word16)1) ;
+      L_num = L_shr(L_num, (Word16)1);
       L_den = L_shr(L_den, (Word16)1);
-      for(iteration=(Word16)0; iteration< (Word16)15; iteration++)
+
+      for (iteration = (Word16)0; iteration < (Word16)15; iteration++)
       {
          var_out = shl( var_out, (Word16)1);
-         L_num   = L_shl( L_num, (Word16)1);
+         L_num = L_shl( L_num, (Word16)1);
          if (L_num >= L_den)
          {
             L_num = L_sub(L_num,L_den);
