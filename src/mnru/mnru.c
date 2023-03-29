@@ -73,6 +73,10 @@ HISTORY:
 /* Definitions for the algorithm itself */
 #include "mnru.h"
 
+/* Coefficients for P.50 IIR and FIR filters */
+#include "filtering_coeffs.h"
+#include "filtering_routines.h"
+
 /* General includes */
 #include <math.h>
 #include <stdlib.h>             /* for calloc(), free() */
@@ -241,8 +245,6 @@ float ran_vax () {
 
 /*  ......................... End of ran_vax() ............................ */
 
-
-
 #else /* Use the original MNRU noise generator */
 
 #define random_MNRU ori_random_MNRU
@@ -392,7 +394,7 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
 
         double *MNRU_process (char operation, MNRU_state *s,
         ~~~~~~~~~~~~~~~~~~~~  float *input, float *output,
-                              long n, long seed, char mode, double Q)
+                              long n, long seed, char mode, double Q, *fseed)
 
         Description:
         ~~~~~~~~~~~~
@@ -431,6 +433,7 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
         	      (see description above; defined in MNRU.H);
         Q:	      double defining the desired value for the signal-to-
                       modulated-noise for the output data.
+        fseed:        initial value for new random number generator
 
         ==================================================================
         NOTE! New values of `seed', `mode' and `Q' are considered only
@@ -461,8 +464,18 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
   ==========================================================================
 */
 /* original RPELTP: #define ALPHA 0.999 */
-#define ALPHA 0.985
+
+// original P.50 MNRU - Cutoff frequency at 115 Hz (48 kHz)
+#define ALPHA 0.985                 // dcFilter = 1
+
+// Alternative DC removal filter coefficients for P.50 FB MNRU with a cutoff frequencies at 15, 30 and 60 Hz
+#define ALPHA_60Hz 0.9922           // dcFilter = 2
+#define ALPHA_30Hz 0.9961           // dcFilter = 3
+#define ALPHA_15Hz 0.998            // dcFilter = 4
+
 #define DNULL (double *)0
+
+// Noise gain definition for NB and WB MNRU
 #ifdef STL92_RNG
 #define NOISE_GAIN 0.541
 #else
@@ -473,9 +486,13 @@ float ori_random_MNRU (char *mode, RANDOM_state r, long seed) {
 #endif
 
 double *MNRU_process (char operation, MNRU_state * s, float *input, float *output, long n, long seed, char mode, double Q, float *fseed) {
+// Noise gain definition for P.50 FB MNRU
+#define P50_NOISE_GAIN 3.0287
+
   long count, i;
   double noise, tmp;
   register double inp_smp, out_tmp, out_flt;
+
 
 
   /*
@@ -614,9 +631,216 @@ double *MNRU_process (char operation, MNRU_state * s, float *input, float *outpu
   /* Return address of vet: if NULL, nothing is allocated */
   return ((double *) s->vet);
 }
+/*  .................... End of MNRU_process() ....................... */
+
+
+/**
+*   double *P50_MNRU_process (char operation, MNRU_state *s, double *input, double *output,
+*        long n,char mode, double Q, float *fseed)
+*
+*   Module for addition of modulated P.50 shaped noise to a vector of `n' samples, according to Recommendation
+*   ITU-T P.810 (2023).
+*   Depending on the `mode', it:
+*
+*       - adds modulated noise to the `input' buffer at a SNR level of `Q' dB, saving to `output' buffer
+*         (mode==MOD_NOISE);
+*
+*       - puts into `output' the noise only, without adding to the original signal (mode==NOISE_ONLY);
+*
+*       - copies to `output' the `input' samples (mode==SIGNAL_ONLY);
+*
+*       There is the need of state variables, which are declared in mnru.h. These are reset calling the function
+*       with the argument `operation' set as MNRU_START. In the last call of the function, call it with
+*       operation=MNRU_STOP, to release the memory allocated for the processing. Normal operation is followed when
+*       operation is set as MNRU_CONTINUE.
+*
+*       IMPORTANT NOTES:
+*       - The DC Removal filter may alter the timber perception of the input signal. It is therefore recommended not
+*         to use the filter provided in this function.
+*       - New values of `seed', `mode' and `Q' are considered only when operation==MNRU_START, because they are
+*         considered as INITIAL state values.
+*
+*       For more details on the algorithm, see the related documentation.
+*
+*
+*   @param  operation   MNRU_START, MNRU_CONTINUE, MNRU_STOP (see description above; defined in mnru.h)
+*   @param  s           pointer to a structure defined as MNRU_state, as in mnru.h
+*   @param  input       pointer to input double-data vector; must represent 48 kHz speech samples.
+*   @param  output	    pointer to output double-data vector; will represent 48 kHz speech samples.
+*   @param  n           long with the number of samples (double) in input
+*   @param  mode        operation mode: MOD_NOISE, SIGNAL_ONLY, NOISE_ONLY (see description above; defined in mnru.h)
+*   @param  Q           double defining the desired value for the signal-to-modulated-noise for the output data.
+*   @param  dcRemoval   0 for disabling DC Removal (recommended - see description of the algorithm),
+*                       1 for enabling the DC removal filter (for backward compatibility with P.50 MNNU prior 2023).
+*   @param  fseed       initial value for random number generator
+*
+*   @return (double *)  pointer to the noise vector if reset was OK and/or is in "run" (MNRU_CONTINUE) operation.
+*                       NULL if uninitialized or if initialization failed.
+**/
+double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* output,
+                         long n, char mode, double Q, char dcFilter, float *fseed)
+{
+  long            count;
+  double          tmp;
+  double alpha;
+
+  //Variables needed for filtering functions
+  static double					*delayLine_FIR, *delayLine_IIR;
+  static double					*filteredNoiseTemp;
+
+  /*
+  *    ..... RESET PORTION .....
+  */
+
+  /* Set DC filter coefficient */
+  switch (dcFilter) {
+    case 1:
+        alpha = ALPHA;
+        break;
+    case 2:
+        alpha = ALPHA_60Hz;
+        break;
+    case 3:
+        alpha = ALPHA_30Hz;
+        break;
+    case 4:
+        alpha = ALPHA_15Hz;
+        break;
+    default:
+        alpha = 0;
+  }
+
+  /* Check if is START of operation: reset state and allocate memory buffer */
+  if (operation == MNRU_START)
+  {
+    /* Reset clip counter */
+    s->clip = 0;
+
+    /* Allocate memory for sample's buffer */
+    if ((s->vet = (double *) calloc(n, sizeof(double))) == NULL)
+      return (NULL);
+    if ((filteredNoiseTemp = (double *) calloc(n, sizeof(double))) == NULL)
+      return (NULL);
+
+    /* Seed for random number generation (NO LONGER USED) */
+    s->seed = NULL;
+
+    /* Gain for signal path */
+    if (mode == MOD_NOISE)
+      s->signal_gain = 1.000;
+    else if (mode == SIGNAL_ONLY)
+      s->signal_gain = 1.000;
+    else    /* (mode == NOISE_ONLY) */
+      s->signal_gain = 0.000;
+
+    /* Gain for noise path */
+    if (mode == MOD_NOISE || mode == NOISE_ONLY)
+      s->noise_gain = P50_NOISE_GAIN * pow(10.0, (-0.05 * Q));
+    else			/* (mode == SIGNAL_ONLY) */
+      s->noise_gain = 0;
+
+    /* Flag for random sequence initialization */
+    s->rnd_mode = RANDOM_RESET;
+
+    /* Initialization of the output low-pass filter */
+    /* Cleanup memory */
+    memset(s->DLY, '\0', sizeof(s->DLY));
+
+    //	 Init filter delay lines and state variables
+	 if ((delayLine_FIR = (double *)calloc(iP50FIRcoeffsLen, sizeof(double))) == NULL)
+		 return NULL;
+	 if ((delayLine_IIR = (double *)calloc(iP50IIRorder,     sizeof(double))) == NULL)
+		 return NULL;
+
+    /* Initialization of the input DC-removal filter */
+    s->last_xk = s->last_yk = 0;
+  }
+
+  /*
+   *    ..... REAL MNRU WORK .....
+   */
+
+  if (operation != MNRU_STOP)
+  {
+	  //skip everything if mode == SIGNAL_ONLY
+	  if (mode == SIGNAL_ONLY)
+	  {
+		  for (count = 0; count < n; count++)
+			  output[count] = input[count];
+		  return s->vet;
+	  }
+
+	  /* Initialize memory and upsample by a factor of 5 */
+	  memset(s->vet, '\0', n * sizeof(double));
+	  memset(filteredNoiseTemp, 0, n * sizeof(double));
+
+	  //Fill noise array
+	  for (count = 0; count < n; count++)
+	  {
+		 /* Random number generation */
+		 if (mode == SIGNAL_ONLY)
+			s->vet[count] = 0;
+		 else
+		 {
+			s->vet[count] = (double) random_MNRU(&s->rnd_mode, &s->rnd_state, s->seed, fseed);
+		 }
+	  }
+
+	  for (count = 0; count < n; count++)
+		  s->vet[count] *= s->noise_gain;
+
+	  /* Filter the noise according to P.50, two cascaded filters for P.50 filter:
+	  * An IIR highpass filter, followed by a FIR lowpass filter.
+      * First, filter the data in s->vet using an IIR filter, and store the result in filteredNoiseTemp */
+	  filterFunc_IIR(s->vet, filteredNoiseTemp, n, dP50IIRcoeffs, iP50IIRorder, delayLine_IIR);
+
+	  //Second, filter the data in filteredNoiseTemp using an FIR filter and store the result in s->vet
+	  filterFunc_FIR(filteredNoiseTemp, s->vet, n, dP50FIRcoeffs, iP50FIRcoeffsLen, delayLine_FIR);
+
+
+    if ((dcFilter >= 1)  && (dcFilter < 5)) {
+          for (count = 0; count < n; count++)
+          {
+             /* Remove DC from input sample: H(z)= (1-Z-1)/(1-a.Z-1) */
+             tmp = input[count] - s->last_xk;
+             tmp += alpha * s->last_yk;
+
+             /* Update for next time */
+             s->last_xk = input[count];
+             s->last_yk = tmp;
+
+             /* Overwrite DC-removed version of the input signal */
+             input[count] = tmp;
+          }
+     }
+
+	 //Add the modulated noise to the signal
+	 for (count = 0; count < n; count++)
+		 output[count] = input[count] * (s->signal_gain + s->vet[count]);
+
+  }
+  else //operation == MNRU_STOP
+  {
+	 if (s->rnd_state.gauss != NULL)	free(s->rnd_state.gauss);
+	 if (s->vet != NULL)				free(s->vet);
+	 s->rnd_state.gauss = NULL;
+	 s->vet = NULL;
+
+	 if (filteredNoiseTemp)	free(filteredNoiseTemp);
+	 filteredNoiseTemp = NULL;
+
+	 //Release filter delay lines and state variables
+	 if (delayLine_FIR)	free(delayLine_FIR);
+	 if (delayLine_IIR)	free(delayLine_IIR);
+	 delayLine_FIR = delayLine_IIR = NULL;
+  }
+
+  /* Return address of vet: if NULL, nothing is allocated */
+  return ((double *) s->vet);
+}
+
+/*  .................... End of P50_MNRU_process() ....................... */
 
 #undef NOISE_GAIN
 #undef DNULL
 #undef ALPHA
-
-/*  .................... End of MNRU_process() ....................... */
