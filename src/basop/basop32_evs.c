@@ -22,7 +22,7 @@
 MODULE:         BASOP32, BASIC OPERATORS
 
 ORIGINAL BY:
-                Incorporated from anonymous contributions for
+                Incorporated from anonymous contributions for 
                 ETSI Standards as well as G.723.1, G.729, and G.722.1
 
 DESCRIPTION:
@@ -42,16 +42,16 @@ FUNCTIONS:
   Defined in basop32.h. Self-documentation within each function.
 
 HISTORY:
-  26.Jan.00    v1.0     Incorporated to the STL from updated G.723.1/G.729
-                        basic operator library (based on basicop2.c) and
+  26.Jan.00    v1.0     Incorporated to the STL from updated G.723.1/G.729 
+                        basic operator library (based on basicop2.c) and 
                         G.723.1's basop.c [L_mls(), div_l(), i_mult()]
 
-  05.Jul.00    v1.1     Added 32-bit shiftless accumulation basic
+  05.Jul.00    v1.1     Added 32-bit shiftless accumulation basic 
                         operators (L_msu0, L_mac0, L_mult0). Improved
                         documentation for i_mult().
 
    03 Nov 04   v2.0     Incorporation of new 32-bit / 40-bit / control
-                        operators for the ITU-T Standard Tool Library as
+                        operators for the ITU-T Standard Tool Library as 
                         described in Geneva, 20-30 January 2004 WP 3/16 Q10/16
                         TD 11 document and subsequent discussions on the
                         wp3audio@yahoogroups.com email reflector.
@@ -73,7 +73,7 @@ HISTORY:
                         i_mult() weight of 3.
 
    30 Nov 09   v2.3     round() function is now round_fx().
-                        saturate() is not referenceable from outside application
+                        saturate() is not referencable from outside application
   =============================================================================
 */
 
@@ -86,8 +86,12 @@ Revision History
 
   Mar 2017 CKJ, thread-safe modifications:
                 -remove/disable usage of global flags
-                -add "xxx_ovf()" versions of some functions; e.g. sub_ovf()
-  Sep 2022 - Mar 2023 JHB, implement and enable static inline basops in basop32.h if USE_BASOPS_INLINE is defined. Implement control of Overflow and Carry global variables (instead of removing them) with enable/disable #defines USE_BASOPS_OVERFLOW_GLOBAL_VAR and USE_BASOPS_CARRY_GLOBAL_VAR. For EVS system level defines are in options.h
+                -add "xxx_ovf()" versions of some functions and pass Overflow as a stack param; e.g. sub_ovf()
+  Sep 2022 - Mar 2023 JHB, implement mods for 3GPP EVS build:
+                -if _EVS_ defined in Makefile, code looks for basop build control defines "USE_BASOPS_xxx" in options.h
+                -enable static inline basops in basop32.h if USE_BASOPS_INLINE is defined
+                -enable/disable Overflow and Carry global variables with USE_BASOPS_OVERFLOW_GLOBAL_VAR and USE_BASOPS_CARRY_GLOBAL_VAR
+                -no indentation/formatting mods to original STL file outside of EVS related changes 
   Mar 2023 JHB, improve comments
 
 EVS floating-point source files that reference basop32 fixed-point functions, Signalogic Mar 2023
@@ -138,7 +142,7 @@ common
  |                                                                           |
  | Basic arithmetic operators.                                               |
  |                                                                           |
- |                                                                           |
+ | $Id $                                                                     |
  |                                                                           |
  |       saturate()                                                          |
  |       add()                                                               |
@@ -177,31 +181,39 @@ common
  |   Include-Files                                                           |
  |___________________________________________________________________________|
 */
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
+#ifdef _EVS_  /* _EVS_ should be defined in Makefile when building 3GPP EVS codec */
+/*  added by 3GPP EVS authors, only applicable to reference code test program command-line operations; e.g. scanf()
+  #ifndef _CRT_SECURE_NO_WARNINGS
+  #define _CRT_SECURE_NO_WARNINGS
+  #endif
+*/
+  #include "options.h"  /* see options.h for descriptions of USE_BASOPS_INLINE, EXCLUDE_BASOPS_NOT_USED_EVS, USE_BASOPS_OVERFLOW_GLOBAL_VAR, USE_BASOPS_CARRY_GLOBAL_VAR, and USE_BASOPS_EXIT, JHB Mar 2023 */
 #endif
 
-#include <stdlib.h>
-
-#include "options.h"  /* see options.h for descriptions of USE_BASOPS_INLINE, EXCLUDE_BASOPS_NOT_USED_EVS, USE_BASOPS_OVERFLOW_GLOBAL_VAR, USE_BASOPS_CARRY_GLOBAL_VAR, and USE_BASOPS_EXIT, JHB Mar 2023 */
-
-#ifndef USE_BASOPS_EXIT
-  #include <stdio.h>  /* bring in exit() function */
+#include <stdio.h>  /* fprintf() */
+#ifdef USE_BASOPS_EXIT
+  #include <stdlib.h>  /* abort(), exit() */
 #endif
-
 #include "stl.h"
+
+
+#if (WMOPS)
+extern BASIC_OP multiCounter[MAXCOUNTERS];
+extern int currCounter;
+#endif
+
 
 /*___________________________________________________________________________
  |                                                                           |
  |   Local Functions                                                         |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE  /* defined in options.h, JHB Mar 2023 */
-static Word16 saturate(Word32 L_var1);
+static Word16 saturate (Word32 L_var1);
 #endif
-static Word16 saturate_ovf(Word32 L_var1, Flag *Overflow);  /* Identical to saturate() but doesn't use global Overflow flag to be thread-safe - CKJ Mar 2017 */
-
+#ifdef _EVS_
+static Word16 saturate_ovf(Word32 L_var1, Flag* Overflow);  /* Identical to saturate() but doesn't use global Overflow flag to be thread-safe - CKJ Mar 2017 */
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -212,7 +224,6 @@ static Word16 saturate_ovf(Word32 L_var1, Flag *Overflow);  /* Identical to satu
 /* Remove global flags, replaced with stack vars as needed - CJ Mar 2017 */
 Flag Overflow = 0;
 #endif
-
 #ifdef USE_BASOPS_CARRY_GLOBAL_VAR
 Flag Carry = 0;
 #endif
@@ -222,8 +233,6 @@ Flag Carry = 0;
  |   Functions                                                               |
  |___________________________________________________________________________|
 */
-
-#define PRINT_STACK_ID_ALL        "*"
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -251,39 +260,41 @@ Flag Carry = 0;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
-static Word16 saturate(Word32 L_var1)
+static Word16 saturate (Word32 L_var1)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   if (L_var1 > 0X00007fffL)
-   {
-      #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
-      Overflow = 1;
-      #endif
-      var_out = MAX_16;
-   }
-   else if (L_var1 < (Word32) 0xffff8000L)
-   {
-      #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
-      Overflow = 1;
-      #endif
-      var_out = MIN_16;
-   }
-   else
-   {
-      var_out = extract_l (L_var1);
-   }
+    if (L_var1 > 0X00007fffL)
+    {
+        #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+        Overflow = 1;
+        #endif
+        var_out = MAX_16;
+    }
+    else if (L_var1 < (Word32) 0xffff8000L)
+    {
+        #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+        Overflow = 1;
+        #endif
+        var_out = MIN_16;
+    }
+    else
+    {
+        var_out = extract_l (L_var1);
+#if (WMOPS)
+        multiCounter[currCounter].extract_l--;
+#endif
+    }
 
-   BASOP_CHECK();
-
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
-
 #endif
 
+#ifdef _EVS_
 /* Identical to saturate() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 static Word16 saturate_ovf(Word32 L_var1, Flag *Overflow)
 {
@@ -309,6 +320,7 @@ Word16 var_out;
 
    return (var_out);
 }
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -343,18 +355,23 @@ Word16 var_out;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word16 add (Word16 var1, Word16 var2)
 {
-Word16 var_out;
-Word32 L_sum;
+    Word16 var_out;
+    Word32 L_sum;
 
-   L_sum = (Word32) var1 + var2;
-   var_out = saturate (L_sum);
+    L_sum = (Word32) var1 + var2;
+    var_out = saturate (L_sum);
 
-   return (var_out);
+#if (WMOPS)
+    multiCounter[currCounter].add++;
+#endif
+
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 #endif
 
@@ -391,22 +408,27 @@ Word32 L_sum;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word16 sub (Word16 var1, Word16 var2)
 {
-Word16 var_out;
-Word32 L_diff;
+    Word16 var_out;
+    Word32 L_diff;
 
-   L_diff = (Word32) var1 - var2;
-   var_out = saturate (L_diff);
+    L_diff = (Word32) var1 - var2;
+    var_out = saturate (L_diff);
 
-   return (var_out);
-}
-
+#if (WMOPS)
+    multiCounter[currCounter].sub++;
 #endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
+}
+#endif
+
+#ifdef _EVS_
 /* Identical to sub() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 Word16 sub_ovf(Word16 var1, Word16 var2, Flag *Overflow) {
 
@@ -416,9 +438,11 @@ Word32 L_diff;
    L_diff = (Word32)var1 - var2;
    var_out = saturate_ovf(L_diff, Overflow);
 
+   BASOP_CHECK();
+
    return var_out;
 }
-
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -449,27 +473,32 @@ Word32 L_diff;
 */
 Word16 abs_s (Word16 var1)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   if (var1 == (Word16) MIN_16)
-   {
-      var_out = MAX_16;
-   }
-   else
-   {
-      if (var1 < 0)
-      {
-         var_out = -var1;
-      }
-      else
-      {
-         var_out = var1;
-      }
-   }
+    if (var1 == (Word16) MIN_16)	
+    {
+        var_out = MAX_16;
+    }
+    else
+    {
+        if (var1 < 0)
+        {
+            var_out = -var1;
+        }
+        else
+        {
+            var_out = var1;
+        }
+    }
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].abs_s++;
+#endif
 
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 
 
@@ -507,44 +536,56 @@ Word16 var_out;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
-Word16 shl(Word16 var1, Word16 var2)
+Word16 shl (Word16 var1, Word16 var2)
 {
-Word16 var_out;
-Word32 result;
+    Word16 var_out;
+    Word32 result;
 
-   if (var2 < 0)
-   {
-      if (var2 < -16) var2 = -16;
-      var2 = -var2;
-      var_out = shr (var1, var2);
-   }
-   else
-   {
-      result = (Word32) var1 *((Word32) 1 << var2);
+    if (var2 < 0)
+    {
+        if (var2 < -16)
+            var2 = -16;
+        var2 = -var2;
+        var_out = shr (var1, var2);
 
-      if ((var2 > 15 && var1 != 0) || (result != (Word32) ((Word16) result)))
-      {
-         #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
-         Overflow = 1;
-         #endif
-         var_out = (var1 > 0) ? MAX_16 : MIN_16;
-      }
-      else
-      {
-         var_out = extract_l (result);
-      }
-   }
+#if (WMOPS)
+        multiCounter[currCounter].shr--;
+#endif
+    }
+    else
+    {
+        result = (Word32) var1 *((Word32) 1 << var2);
 
-   BASOP_CHECK();
+        if ((var2 > 15 && var1 != 0) || (result != (Word32) ((Word16) result)))
+        {
+            #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+            Overflow = 1;
+            #endif
+            var_out = (var1 > 0) ? MAX_16 : MIN_16;
+        }
+        else
+        {
+            var_out = extract_l (result);
 
-   return (var_out);
-}
+#if (WMOPS)
+            multiCounter[currCounter].extract_l--;
+#endif
+        }
+    }
 
+#if (WMOPS)
+    multiCounter[currCounter].shl++;
 #endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
+}
+#endif
+
+#ifdef _EVS_
 /* Identical to shl() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 Word16 shl_ovf(Word16 var1, Word16 var2, Flag *Overflow)
 {
@@ -576,7 +617,7 @@ Word32 result;
 
    return (var_out);
 }
-
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -612,41 +653,49 @@ Word32 result;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word16 shr (Word16 var1, Word16 var2)
 {
-   Word16 var_out;
+    Word16 var_out;
 
-   if (var2 < 0)
-   {
-      if (var2 < -16) var2 = -16;
-      var2 = -var2;
-      var_out = shl (var1, var2);
-   }
-   else
-   {
-      if (var2 >= 15)
-      {
-         var_out = (var1 < 0) ? -1 : 0;
-      }
-      else
-      {
-         if (var1 < 0)
-         {
-            var_out = ~((~var1) >> var2);
-         }
-         else
-         {
-            var_out = var1 >> var2;
-         }
-      }
-   }
+    if (var2 < 0)
+    {
+        if (var2 < -16)
+            var2 = -16;
+        var2 = -var2;
+        var_out = shl (var1, var2);
 
-   BASOP_CHECK();
+#if (WMOPS)
+        multiCounter[currCounter].shl--;
+#endif
+    }
+    else
+    {
+        if (var2 >= 15)
+        {
+            var_out = (var1 < 0) ? -1 : 0;
+        }
+        else
+        {
+            if (var1 < 0)
+            {
+                var_out = ~((~var1) >> var2);
+            }
+            else
+            {
+                var_out = var1 >> var2;
+            }
+        }
+    }
 
-   return (var_out);
+#if (WMOPS)
+    multiCounter[currCounter].shr++;
+#endif
+
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 #endif
 
@@ -686,18 +735,26 @@ Word16 shr (Word16 var1, Word16 var2)
 */
 Word16 mult (Word16 var1, Word16 var2)
 {
-Word16 var_out;
-Word32 L_product;
+    Word16 var_out;
+    Word32 L_product;
 
-   L_product = (Word32) var1 *(Word32) var2;
+    L_product = (Word32) var1 *(Word32) var2;
 
-   L_product = (L_product & (Word32) 0xffff8000L) >> 15;
+    L_product = (L_product & (Word32) 0xffff8000L) >> 15;
 
-   if (L_product & (Word32) 0x00010000L) L_product = L_product | (Word32) 0xffff0000L;
+    if (L_product & (Word32) 0x00010000L)
+        L_product = L_product | (Word32) 0xffff0000L;
 
-   var_out = saturate (L_product);
+    var_out = saturate (L_product);
 
-   return (var_out);
+#if (WMOPS)
+    multiCounter[currCounter].mult++;
+#endif
+
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 
 
@@ -737,27 +794,33 @@ Word32 L_product;
 */
 Word32 L_mult (Word16 var1, Word16 var2)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = (Word32) var1 *(Word32) var2;
+    L_var_out = (Word32) var1 *(Word32) var2;
 
-   if (L_var_out != (Word32) 0x40000000L)
-   {
-      L_var_out *= 2;
-   }
-   else
-   {
-      #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
-      Overflow = 1;
-      #endif
-      L_var_out = MAX_32;
-   }
+    if (L_var_out != (Word32) 0x40000000L)
+    {
+        L_var_out *= 2;
+    }
+    else
+    {
+        #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+        Overflow = 1;
+        #endif
+        L_var_out = MAX_32;
+    }
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_mult++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 
+#ifdef _EVS_
 /* Identical to L_mult() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 Word32 L_mult_ovf (Word16 var1, Word16 var2, Flag *Overflow)
 {
@@ -779,7 +842,7 @@ Word32 L_var_out;
 
    return (L_var_out);
 }
-
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -809,20 +872,22 @@ Word32 L_var_out;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word16 negate (Word16 var1)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   var_out = (var1 == MIN_16) ? MAX_16 : -var1;
+    var_out = (var1 == MIN_16) ? MAX_16 : -var1;
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].negate++;
+#endif
 
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
-
 #endif
 
 /*___________________________________________________________________________
@@ -852,21 +917,23 @@ Word16 var_out;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
-#if 0  /* declared as static inline in basop32.h, JHB Mar 2023 */
-
+#ifndef _EVS_  /* for EVS build declared as static inline in basop32.h, JHB Mar 2023 */
 Word16 extract_h (Word32 L_var1)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   var_out = (Word16) (L_var1 >> 16);
+    var_out = (Word16) (L_var1 >> 16);
 
-   BASOP_CHECK();
-
-   return (var_out);
-}
+#if (WMOPS)
+    multiCounter[currCounter].extract_h++;
 #endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
+}
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -895,18 +962,21 @@ Word16 var_out;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
-#if 0  /* declared as static inline in basop32.h, JHB Mar 2023 */
-
+#ifndef _EVS_  /* for EVS build declared as static inline in basop32.h, JHB Mar 2023 */
 Word16 extract_l (Word32 L_var1)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   var_out = (Word16) L_var1;
+    var_out = (Word16) L_var1;
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].extract_l++;
+#endif
 
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 #endif
 
@@ -942,17 +1012,22 @@ Word16 var_out;
 */
 Word16 round_fx (Word32 L_var1)
 {
-Word16 var_out;
-Word32 L_rounded;
+    Word16 var_out;
+    Word32 L_rounded;
 
-   BASOP_SATURATE_WARNING_OFF
-   L_rounded = L_add (L_var1, (Word32) 0x00008000L);
-   BASOP_SATURATE_WARNING_ON
-   var_out = extract_h (L_rounded);
+    L_rounded = L_add (L_var1, (Word32) 0x00008000L);
+    var_out = extract_h (L_rounded);
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_add--;
+    multiCounter[currCounter].extract_h--;
+    multiCounter[currCounter].round++;
+#endif
 
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 
 
@@ -994,15 +1069,22 @@ Word32 L_rounded;
 */
 Word32 L_mac (Word32 L_var3, Word16 var1, Word16 var2)
 {
-Word32 L_var_out;
-Word32 L_product;
+    Word32 L_var_out;
+    Word32 L_product;
 
-   L_product = L_mult (var1, var2);
-   L_var_out = L_add (L_var3, L_product);
+    L_product = L_mult (var1, var2);
+    L_var_out = L_add (L_var3, L_product);
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_mult--;
+    multiCounter[currCounter].L_add--;
+    multiCounter[currCounter].L_mac++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 
 
@@ -1044,15 +1126,22 @@ Word32 L_product;
 */
 Word32 L_msu (Word32 L_var3, Word16 var1, Word16 var2)
 {
-Word32 L_var_out;
-Word32 L_product;
+    Word32 L_var_out;
+    Word32 L_product;
 
-   L_product = L_mult (var1, var2);
-   L_var_out = L_sub (L_var3, L_product);
+    L_product = L_mult (var1, var2);
+    L_var_out = L_sub (L_var3, L_product);
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_mult--;
+    multiCounter[currCounter].L_sub--;
+    multiCounter[currCounter].L_msu++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 
 
@@ -1098,21 +1187,25 @@ Word32 L_product;
  |    operators which take into account its value.                           |
  |___________________________________________________________________________|
 */
-
 #ifndef EXCLUDE_BASOPS_NOT_USED_EVS
-
 /* Exclude L_macNs() from build as it calls L_add_c() which reads/sets global Overflow/Carry flags. These functions aren't called anywhere in 3GPP EVS floating-point code - CJ March 2017 */
-
 Word32 L_macNs (Word32 L_var3, Word16 var1, Word16 var2)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = L_mult (var1, var2);
-   L_var_out = L_add_c (L_var3, L_var_out);
+    L_var_out = L_mult (var1, var2);
+    L_var_out = L_add_c (L_var3, L_var_out);
 
-/* BASOP_CHECK(); Do not check for overflow here, function produces the carry bit instead, JHB Sep 2016 */
+#if (WMOPS)
+    multiCounter[currCounter].L_mult--;
+    multiCounter[currCounter].L_add_c--;
+    multiCounter[currCounter].L_macNs++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 #endif
 
@@ -1158,22 +1251,26 @@ Word32 L_var_out;
  |    operators which take into account its value.                           |
  |___________________________________________________________________________|
 */
-
-
 #ifndef EXCLUDE_BASOPS_NOT_USED_EVS
-
 /* Exclude L_msuNs() from build as it calls L_sub_c() which reads/sets global Overflow/Carry flags. These functions aren't called anywhere in 3GPP EVS floating-point code - CJ March 2017 */
-
 Word32 L_msuNs (Word32 L_var3, Word16 var1, Word16 var2)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = L_mult (var1, var2);
-   L_var_out = L_sub_c (L_var3, L_var_out);
+    L_var_out = L_mult (var1, var2);
+    L_var_out = L_sub_c (L_var3, L_var_out);
 
-/* BASOP_CHECK(); Do not check for overflow here, function produces the carry bit instead */
+#if (WMOPS)
+    multiCounter[currCounter].L_mult--;
+    multiCounter[currCounter].L_sub_c--;
+    multiCounter[currCounter].L_msuNs++;
 
-   return (L_var_out);
+#endif
+
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 #endif
 
@@ -1208,33 +1305,36 @@ Word32 L_var_out;
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word32 L_add (Word32 L_var1, Word32 L_var2)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = L_var1 + L_var2;
+    L_var_out = L_var1 + L_var2;
 
-   if (((L_var1 ^ L_var2) & MIN_32) == 0)
-   {
-      if ((L_var_out ^ L_var1) & MIN_32)
-      {
-         L_var_out = (L_var1 < 0) ? MIN_32 : MAX_32;
-         #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
-         Overflow = 1;
-         #endif
-      }
-   }
+    if (((L_var1 ^ L_var2) & MIN_32) == 0)
+    {
+        if ((L_var_out ^ L_var1) & MIN_32)
+        {
+            L_var_out = (L_var1 < 0) ? MIN_32 : MAX_32;
+            #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+            Overflow = 1;
+            #endif
+        }
+    }
 
-   BASOP_CHECK();
-
-   return (L_var_out);
-}
-
+#if (WMOPS)
+    multiCounter[currCounter].L_add++;
 #endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
+}
+#endif
+
+#ifdef _EVS_
 /* Identical to L_add() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 Word32 L_add_ovf (Word32 L_var1, Word32 L_var2, Flag *Overflow)
 {
@@ -1255,7 +1355,7 @@ Word32 L_var_out;
 
    return (L_var_out);
 }
-
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -1288,33 +1388,36 @@ Word32 L_var_out;
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word32 L_sub (Word32 L_var1, Word32 L_var2)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = L_var1 - L_var2;
+    L_var_out = L_var1 - L_var2;
 
-   if (((L_var1 ^ L_var2) & MIN_32) != 0)
-   {
-      if ((L_var_out ^ L_var1) & MIN_32)
-      {
-         L_var_out = (L_var1 < 0L) ? MIN_32 : MAX_32;
-         #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
-         Overflow = 1;
-         #endif
-      }
-   }
+    if (((L_var1 ^ L_var2) & MIN_32) != 0)
+    {
+        if ((L_var_out ^ L_var1) & MIN_32)
+        {
+            L_var_out = (L_var1 < 0L) ? MIN_32 : MAX_32;
+            #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+            Overflow = 1;
+            #endif
+        }
+    }
 
-   BASOP_CHECK();
-
-   return (L_var_out);
-}
-
+#if (WMOPS)
+    multiCounter[currCounter].L_sub++;
 #endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
+}
+#endif
+
+#ifdef _EVS_
 /* Identical to L_sub() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 Word32 L_sub_ovf (Word32 L_var1, Word32 L_var2, Flag *Overflow)
 {
@@ -1335,6 +1438,7 @@ Word32 L_var_out;
 
    return (L_var_out);
 }
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -1373,20 +1477,18 @@ Word32 L_var_out;
  |    operators which take into account its value.                           |
  |___________________________________________________________________________|
 */
-
 #ifndef EXCLUDE_BASOPS_NOT_USED_EVS
-
 /* Exclude L_add_c() from build as it reads/sets global Overflow/Carry flags, L_add_c() isn't called anywhere in 3GPP EVS floating-point code - CJ March 2017 */
-
 Word32 L_add_c (Word32 L_var1, Word32 L_var2)
 {
     Word32 L_var_out;
     Word32 L_test;
     Flag carry_int = 0;
 
-    L_var_out = L_var1 + L_var2
     #ifdef USE_BASOPS_CARRY_GLOBAL_VAR
-    L_var_out += Carry;
+    L_var_out = L_var1 + L_var2 + Carry;
+    #else
+    L_var_out = L_var1 + L_var2;
     #endif
 
     L_test = L_var1 + L_var2;
@@ -1464,8 +1566,13 @@ Word32 L_add_c (Word32 L_var1, Word32 L_var2)
     }
     #endif
 
-    /* BASOP_CHECK(); Do not check for overflow here, function produces the carry bit instead */
+#if (WMOPS)
+    multiCounter[currCounter].L_add_c++;
+#endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
     return (L_var_out);
 }
 #endif
@@ -1507,11 +1614,8 @@ Word32 L_add_c (Word32 L_var1, Word32 L_var2)
  |    operators which take into account its value.                           |
  |___________________________________________________________________________|
 */
-
 #ifndef EXCLUDE_BASOPS_NOT_USED_EVS
-
 /* Exclude L_sub_c() from build as it reads/sets global Overflow/Carry flags, L_sub_c() isn't called anywhere in 3GPP EVS floating-point coded - CJ March 2017 */
-
 Word32 L_sub_c (Word32 L_var1, Word32 L_var2)
 {
     Word32 L_var_out;
@@ -1525,6 +1629,9 @@ Word32 L_sub_c (Word32 L_var1, Word32 L_var2)
         if (L_var2 != MIN_32)
         {
             L_var_out = L_add_c (L_var1, -L_var2);
+#if (WMOPS)
+            multiCounter[currCounter].L_add_c--;
+#endif
         }
         else
         {
@@ -1581,9 +1688,14 @@ Word32 L_sub_c (Word32 L_var1, Word32 L_var2)
         #endif
     }
 
-    /* BASOP_CHECK(); Do not check for overflow here, function produces the carry bit instead */
+#if (WMOPS)
+    multiCounter[currCounter].L_sub_c++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 #endif
 
@@ -1616,13 +1728,18 @@ Word32 L_sub_c (Word32 L_var1, Word32 L_var2)
 */
 Word32 L_negate (Word32 L_var1)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = (L_var1 == MIN_32) ? MAX_32 : -L_var1;
+    L_var_out = (L_var1 == MIN_32) ? MAX_32 : -L_var1;
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_negate++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 
 
@@ -1659,29 +1776,32 @@ Word32 L_var_out;
  |             range : 0x8000 <= var_out <= 0x7fff.                          |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word16 mult_r (Word16 var1, Word16 var2)
 {
-Word16 var_out;
-Word32 L_product_arr;
+    Word16 var_out;
+    Word32 L_product_arr;
 
-   L_product_arr = (Word32) var1 *(Word32) var2;       /* product */
-   L_product_arr += (Word32) 0x00004000L;      /* round */
-   L_product_arr &= (Word32) 0xffff8000L;
-   L_product_arr >>= 15;       /* shift */
+    L_product_arr = (Word32) var1 *(Word32) var2;       /* product */
+    L_product_arr += (Word32) 0x00004000L;      /* round */
+    L_product_arr &= (Word32) 0xffff8000L;
+    L_product_arr >>= 15;       /* shift */
 
-   if (L_product_arr & (Word32) 0x00010000L)   /* sign extend when necessary */
-   {
-      L_product_arr |= (Word32) 0xffff0000L;
-   }
+    if (L_product_arr & (Word32) 0x00010000L)   /* sign extend when necessary */
+    {
+        L_product_arr |= (Word32) 0xffff0000L;
+    }
+    var_out = saturate (L_product_arr);
 
-   var_out = saturate (L_product_arr);
+#if (WMOPS)
+    multiCounter[currCounter].mult_r++;
+#endif
 
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
-
 #endif
 
 /*___________________________________________________________________________
@@ -1728,6 +1848,9 @@ Word32 L_shl (Word32 L_var1, Word16 var2)
             var2 = -32;
         var2 = -var2;
         L_var_out = L_shr (L_var1, var2);
+#if (WMOPS)
+        multiCounter[currCounter].L_shr--;
+#endif
     }
     else
     {
@@ -1756,11 +1879,17 @@ Word32 L_shl (Word32 L_var1, Word16 var2)
             L_var_out = L_var1;
         }
     }
+    #if (WMOPS)
+    multiCounter[currCounter].L_shl++;
+	  #endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
     BASOP_CHECK();
-
+    #endif
     return (L_var_out);
 }
+
+#ifdef _EVS_
 /* Identical to L_shl() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 Word32 L_shl_ovf (Word32 L_var1, Word16 var2, Flag *Overflow)
 {
@@ -1802,7 +1931,7 @@ Word32 L_shl_ovf (Word32 L_var1, Word16 var2, Flag *Overflow)
 
     return (L_var_out);
 }
-
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -1847,6 +1976,9 @@ Word32 L_shr (Word32 L_var1, Word16 var2)
             var2 = -32;
         var2 = -var2;
         L_var_out = L_shl (L_var1, var2);
+#if (WMOPS)
+        multiCounter[currCounter].L_shl--;
+#endif
     }
     else
     {
@@ -1866,9 +1998,13 @@ Word32 L_shr (Word32 L_var1, Word16 var2)
             }
         }
     }
+    #if (WMOPS)
+    multiCounter[currCounter].L_shr++;
+	  #endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
     BASOP_CHECK();
-
+    #endif
     return (L_var_out);
 }
 
@@ -1916,28 +2052,37 @@ Word32 L_shr (Word32 L_var1, Word16 var2)
 */
 Word16 shr_r (Word16 var1, Word16 var2)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   if (var2 > 15)
-   {
-      var_out = 0;
-   }
-   else
-   {
-      var_out = shr (var1, var2);
+    if (var2 > 15)
+    {
+        var_out = 0;
+    }
+    else
+    {
+        var_out = shr (var1, var2);
 
-      if (var2 > 0)
-      {
-         if ((var1 & ((Word16) 1 << (var2 - 1))) != 0)
-         {
-            var_out++;
-         }
-      }
-   }
+#if (WMOPS)
+        multiCounter[currCounter].shr--;
+#endif
 
-   BASOP_CHECK();
+        if (var2 > 0)
+        {
+            if ((var1 & ((Word16) 1 << (var2 - 1))) != 0)
+            {
+                var_out++;
+            }
+        }
+    }
 
-   return (var_out);
+#if (WMOPS)
+    multiCounter[currCounter].shr_r++;
+#endif
+
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 
 
@@ -1981,15 +2126,23 @@ Word16 var_out;
 */
 Word16 mac_r (Word32 L_var3, Word16 var1, Word16 var2)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   L_var3 = L_mac (L_var3, var1, var2);
-   L_var3 = L_add (L_var3, (Word32) 0x00008000L);
-   var_out = extract_h (L_var3);
+    L_var3 = L_mac (L_var3, var1, var2);
+    L_var3 = L_add (L_var3, (Word32) 0x00008000L);
+    var_out = extract_h (L_var3);
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_mac--;
+    multiCounter[currCounter].L_add--;
+    multiCounter[currCounter].extract_h--;
+    multiCounter[currCounter].mac_r++;
+#endif
 
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 
 
@@ -2033,15 +2186,23 @@ Word16 var_out;
 */
 Word16 msu_r (Word32 L_var3, Word16 var1, Word16 var2)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   L_var3 = L_msu (L_var3, var1, var2);
-   L_var3 = L_add (L_var3, (Word32) 0x00008000L);
-   var_out = extract_h (L_var3);
+    L_var3 = L_msu (L_var3, var1, var2);
+    L_var3 = L_add (L_var3, (Word32) 0x00008000L);
+    var_out = extract_h (L_var3);
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_msu--;
+    multiCounter[currCounter].L_add--;
+    multiCounter[currCounter].extract_h--;
+    multiCounter[currCounter].msu_r++;
+#endif
 
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
 
 
@@ -2073,20 +2234,22 @@ Word16 var_out;
  |             range : 0x8000 0000 <= var_out <= 0x7fff 0000.                |
  |___________________________________________________________________________|
 */
-
-#if 0  /* declared as static inline in basop32.h, JHB Mar 2023 */
-
+#ifndef _EVS_  /* declared as static inline in basop32.h, JHB Mar 2023 */
 Word32 L_deposit_h (Word16 var1)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = (Word32) var1 << 16;
+    L_var_out = (Word32) var1 << 16;
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_deposit_h++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
-
 #endif
 
 /*___________________________________________________________________________
@@ -2117,20 +2280,22 @@ Word32 L_var_out;
  |             range : 0xFFFF 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
-
-#if 0  /* declared as static inline in basop32.h, JHB Mar 2023 */
-
+#ifndef _EVS_  /* declared as static inline in basop32.h, JHB Mar 2023 */
 Word32 L_deposit_l (Word16 var1)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = (Word32) var1;
+    L_var_out = (Word32) var1;
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_deposit_l++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
-
 #endif
 
 /*___________________________________________________________________________
@@ -2176,28 +2341,36 @@ Word32 L_var_out;
 */
 Word32 L_shr_r (Word32 L_var1, Word16 var2)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   if (var2 > 31)
-   {
-      L_var_out = 0;
-   }
-   else
-   {
-      L_var_out = L_shr (L_var1, var2);
+    if (var2 > 31)
+    {
+        L_var_out = 0;
+    }
+    else
+    {
+        L_var_out = L_shr (L_var1, var2);
 
-      if (var2 > 0)
-      {
-         if ((L_var1 & ((Word32) 1 << (var2 - 1))) != 0)
-         {
-            L_var_out++;
-         }
-      }
-   }
+#if (WMOPS)
+        multiCounter[currCounter].L_shr--;
+#endif
+        if (var2 > 0)
+        {
+            if ((L_var1 & ((Word32) 1 << (var2 - 1))) != 0)
+            {
+                L_var_out++;
+            }
+        }
+    }
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_shr_r++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 
 
@@ -2231,27 +2404,32 @@ Word32 L_var_out;
 */
 Word32 L_abs (Word32 L_var1)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   if (L_var1 == MIN_32)
-   {
-      L_var_out = MAX_32;
-   }
-   else
-   {
-      if (L_var1 < 0)
-      {
-         L_var_out = -L_var1;
-      }
-      else
-      {
-         L_var_out = L_var1;
-      }
-   }
+    if (L_var1 == MIN_32)
+    {
+        L_var_out = MAX_32;
+    }
+    else
+    {
+        if (L_var1 < 0)
+        {
+            L_var_out = -L_var1;
+        }
+        else
+        {
+            L_var_out = L_var1;
+        }
+    }
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_abs++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 
 
@@ -2285,40 +2463,42 @@ Word32 L_var_out;
  |             range : 0x8000 0000 <= var_out <= 0x7fff ffff.                |
  |___________________________________________________________________________|
 */
-
 #ifndef EXCLUDE_BASOPS_NOT_USED_EVS
-
 /* Exclude L_sat() from build as it reads/sets global Overflow/Carry flags, L_sat() isn't called anywhere in 3GPP EVS floating-point code - CJ March 2017 */
-
 Word32 L_sat (Word32 L_var1)
 {
-Word32 L_var_out;
+    Word32 L_var_out;
 
-   L_var_out = L_var1;
+    L_var_out = L_var1;
 
-   #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
-   if (Overflow)
-   {
+    #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+    if (Overflow)
+    {
 
-      #ifdef USE_BASOPS_CARRY_GLOBAL_VAR
-      if (Carry)
-      {
-         L_var_out = MIN_32;
-      }
-      else
-      {
-         L_var_out = MAX_32;
-      }
-      Carry = 0;
-      #endif
+        #ifdef USE_BASOPS_CARRY_GLOBAL_VAR
+        if (Carry)
+        {
+            L_var_out = MIN_32;
+        }
+        else
+        {
+            L_var_out = MAX_32;
+        }
+        #endif
 
-      Overflow = 0;
-   }
-   #endif
+        Carry = 0;
+        Overflow = 0;
+    }
+    #endif
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_sat++;
+#endif
 
-   return (L_var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (L_var_out);
 }
 #endif
 
@@ -2354,41 +2534,43 @@ Word32 L_var_out;
  |             range : 0x0000 0000 <= var_out <= 0x0000 000f.                |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word16 norm_s (Word16 var1)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   if (var1 == 0)
-   {
-      var_out = 0;
-   }
-   else
-   {
-      if (var1 == (Word16) 0xffff)
-      {
-         var_out = 15;
-      }
-      else
-      {
-         if (var1 < 0)
-         {
-            var1 = ~var1;
-         }
-         for (var_out = 0; var1 < 0x4000; var_out++)
-         {
-            var1 <<= 1;
-         }
-      }
-   }
+    if (var1 == 0)
+    {
+        var_out = 0;
+    }
+    else
+    {
+        if (var1 == (Word16) 0xffff)
+        {
+            var_out = 15;
+        }
+        else
+        {
+            if (var1 < 0)
+            {
+                var1 = ~var1;
+            }
+            for (var_out = 0; var1 < 0x4000; var_out++)
+            {
+                var1 <<= 1;
+            }
+        }
+    }
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].norm_s++;
+#endif
 
-   return (var_out);
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
-
 #endif
 
 /*___________________________________________________________________________
@@ -2427,69 +2609,83 @@ Word16 var_out;
  |             It's a Q15 value (point between b15 and b14).                 |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
+Word16 div_s (Word16 var1, Word16 var2) 
+{
+    Word16 var_out = 0;
+    Word16 iteration;
+    Word32 L_num;
+    Word32 L_denom;
 
-Word16 div_s(Word16 var1, Word16 var2) {
+    if (var2 == 0)
+    {
+    /* printf ("Division by 0, Fatal error \n"); */
+       fprintf(stderr, "Division by 0 in div_s in basop32");
+       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+       abort(); /* exit (0); */
+       #else
+       #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+       BASOP_CHECK();
+       #endif
+       return MAX_16;  /* return max possible value, JHB Mar 2023 */
+       #endif
+    }
 
-Word16 var_out = 0;
-Word16 iteration;
-Word32 L_num;
-Word32 L_denom;
+    if (var1 > var2 || var1 < 0 || var2 < 0)
+    {
+    /* printf ("Division Error var1=%d  var2=%d\n", var1, var2); */
+       fprintf(stderr, "Division error in div_s in basop32, var1 = %d var2 = %d", var1, var2);
+       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+       abort(); /* exit (0); */
+       #else
+       if (var1 < 0) var1 = -var1;  /* make positive values and proceed, JHB Mar 2023 */
+       if (var2 < 0) var2 = -var2;
+       #endif
+    }
 
-   if (var2 == 0)
-   {
-   /* printf ("Division by 0, Fatal error in "); printStack(); */
-      fprintf(stderr, "Division by 0 in div_s in basop32");
-      #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
-      exit(0);
-      #else
-      return MAX_16;  /* return max possible value, JHB Mar 2023 */
-      #endif
-   }
+    if (var1)
+    {
+        if (var1 >= var2)  /* use >= check here, in case "make positive" above happened, JHB Mar 2023 */
+        {
+            var_out = MAX_16;
+        }
+        else
+        {
+            L_num = L_deposit_l (var1);
+            L_denom = L_deposit_l (var2);
 
-   if (var1 > var2 || var1 < 0 || var2 < 0)
-   {
-   /* printf ("Division Error var1=%d  var2=%d in ", var1, var2); printStack(); */
-      fprintf(stderr, "Division error var1 = %d  var2 = %d in div_s in basop32", var1, var2);
-      #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
-      exit(0);
-      #else
-      if (var1 < 0) var1 = -var1;  /* make positive values and proceed, JHB Mar 2023 */
-      if (var2 < 0) var2 = -var2;
-      #endif
-   }
+#if (WMOPS)
+            multiCounter[currCounter].L_deposit_l--;
+            multiCounter[currCounter].L_deposit_l--;
+#endif
 
-   if (var1) {
-
-      if (var1 >= var2)  /* use >= check here, in case "make positive" above happened, JHB Mar 2023 */
-      {
-         var_out = MAX_16;
-      }
-      else
-      {
-         L_num = L_deposit_l (var1);
-         L_denom = L_deposit_l (var2);
-
-         for (iteration = 0; iteration < 15; iteration++)
-         {
-            var_out <<= 1;
-            L_num <<= 1;
-
-            if (L_num >= L_denom)
+            for (iteration = 0; iteration < 15; iteration++)
             {
-               L_num = L_sub (L_num, L_denom);
-               var_out = add (var_out, 1);
+                var_out <<= 1;
+                L_num <<= 1;
+
+                if (L_num >= L_denom)
+                {
+                    L_num = L_sub (L_num, L_denom);
+                    var_out = add (var_out, 1);
+#if (WMOPS)
+                    multiCounter[currCounter].L_sub--;
+                    multiCounter[currCounter].add--;
+#endif
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].div_s++;
+#endif
 
-   return var_out;
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
 }
-
 #endif
 
 /*___________________________________________________________________________
@@ -2524,43 +2720,44 @@ Word32 L_denom;
  |             range : 0x0000 0000 <= var_out <= 0x0000 001f.                |
  |___________________________________________________________________________|
 */
-
 #ifndef USE_BASOPS_INLINE
-
 Word16 norm_l (Word32 L_var1)
 {
-Word16 var_out;
+    Word16 var_out;
 
-   if (L_var1 == 0)
-   {
-      var_out = 0;
-   }
-   else
-   {
-      if (L_var1 == (Word32) 0xffffffffL)
-      {
-         var_out = 31;
-      }
-      else
-      {
-         if (L_var1 < 0)
-         {
-            L_var1 = ~L_var1;
-         }
-         for (var_out = 0; L_var1 < (Word32) 0x40000000L; var_out++)
-         {
-            L_var1 <<= 1;
-         }
-      }
-   }
+    if (L_var1 == 0)
+    {
+        var_out = 0;
+    }
+    else
+    {
+        if (L_var1 == (Word32) 0xffffffffL)
+        {
+            var_out = 31;
+        }
+        else
+        {
+            if (L_var1 < 0)
+            {
+                L_var1 = ~L_var1;
+            }
+            for (var_out = 0; L_var1 < (Word32) 0x40000000L; var_out++)
+            {
+                L_var1 <<= 1;
+            }
+        }
+    }
 
-   BASOP_CHECK();
-
-   return (var_out);
-}
-
+#if (WMOPS)
+    multiCounter[currCounter].norm_l++;
 #endif
 
+    #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+    BASOP_CHECK();
+    #endif
+    return (var_out);
+}
+#endif
 /*
  ******************************************************************************
  * Additional operators extracted from the G.723.1 Library
@@ -2609,15 +2806,23 @@ Word16 var_out;
 */
 Word32 L_mls (Word32 Lv, Word16 v)
 {
-Word32 Temp;
+   Word32   Temp  ;
 
    Temp = Lv & (Word32) 0x0000ffff ;
    Temp = Temp * (Word32) v ;
    Temp = L_shr( Temp, (Word16) 15 ) ;
    Temp = L_mac( Temp, v, extract_h(Lv) ) ;
 
-   BASOP_CHECK();
+#if (WMOPS)
+   multiCounter[currCounter].L_shr--;
+   multiCounter[currCounter].L_mac--;
+   multiCounter[currCounter].extract_h--;
+   multiCounter[currCounter].L_mls++;
+#endif
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return Temp ;
 }
 
@@ -2660,62 +2865,82 @@ Word32 Temp;
 |             It's a Q15 value (point between b15 and b14).                 |
 |___________________________________________________________________________|
 */
-Word16 div_l(Word32 L_num, Word16 den) {
+Word16 div_l (Word32  L_num, Word16 den)
+{
+    Word16   var_out = (Word16)0;
+    Word32   L_den;
+    Word16   iteration;
 
-Word16 var_out = (Word16)0;
-Word32 L_den;
-Word16 iteration;
+#if (WMOPS)
+    multiCounter[currCounter].div_l++;
+#endif
 
-   if (den == (Word16)0)
-   {
-   /* printf("Division by 0 in div_l, Fatal error in "); printStack(); */
-      fprintf(stderr, "Division by 0 in div_l in basop32");
-      #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
-      exit(-1);
-      #else
-      return MAX_16;  /* return max possible value, JHB Mar 2023 */
-      #endif
-   }
+    if ( den == (Word16) 0 ) {
+     /* printf("Division by 0 in div_l, Fatal error in "); printStack(); */
+        fprintf(stderr, "Division by 0 in div_l in basop32");
+        #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+        exit(0);
+        #else
+        #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+        BASOP_CHECK();
+        #endif
+        #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+        BASOP_CHECK();
+        #endif
+        return MAX_16;  /* return max possible value, JHB Mar 2023 */
+        #endif
+    }
 
-   if (L_num < (Word32)0 || den < (Word16)0)
-   {
-   /* printf("Division Error in div_l, Fatal error in "); printStack(); */
-      fprintf(stderr, "Division error L_num = %d  den = %d in div_l in basop32", L_num, den);
-      #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
-      exit(-1);
-      #else
-      if (L_num < 0) L_num = -L_num;  /* make positive values and proceed, JHB Mar 2023 */
-      if (den < 0) den = -den;
-      #endif
-   }
+    if ( (L_num < (Word32) 0) || (den < (Word16) 0) ) {
+     /* printf("Division Error in div_l, Fatal error in "); printStack(); */
+        fprintf(stderr, "Division error in div_l in basop32, L_num = %d den = %d", L_num, den);
+        #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+        exit(0);
+        #else
+        if (L_num < 0) L_num = -L_num;  /* make positive values and proceed, JHB Mar 2023 */
+        if (den < 0) den = -den;
+        #endif
+    }
 
-   L_den = L_deposit_h(den);
+    L_den = L_deposit_h( den ) ;
+#if (WMOPS)
+    multiCounter[currCounter].L_deposit_h--;
+#endif
 
-   if (L_num >= L_den)
-   {
-      BASOP_CHECK();
-      return MAX_16;
-   }
-   else
-   {
-      L_num = L_shr(L_num, (Word16)1);
-      L_den = L_shr(L_den, (Word16)1);
+    if ( L_num >= L_den ){
+        #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+        BASOP_CHECK();
+        #endif
+        return MAX_16 ;
+    }
+    else {
+        L_num = L_shr(L_num, (Word16)1) ;
+        L_den = L_shr(L_den, (Word16)1);
+#if (WMOPS)
+        multiCounter[currCounter].L_shr-=2;
+#endif
+        for(iteration=(Word16)0; iteration< (Word16)15;iteration++) {
+            var_out = shl( var_out, (Word16)1);
+            L_num   = L_shl( L_num, (Word16)1);
+#if (WMOPS)
+            multiCounter[currCounter].shl--;
+            multiCounter[currCounter].L_shl--;
+#endif
+            if (L_num >= L_den) {
+                L_num = L_sub(L_num,L_den);
+                var_out = add(var_out, (Word16)1);
+#if (WMOPS)
+            multiCounter[currCounter].L_sub--;
+            multiCounter[currCounter].add--;
+#endif
+            }
+        }
 
-      for (iteration = (Word16)0; iteration < (Word16)15; iteration++)
-      {
-         var_out = shl( var_out, (Word16)1);
-         L_num = L_shl( L_num, (Word16)1);
-         if (L_num >= L_den)
-         {
-            L_num = L_sub(L_num,L_den);
-            var_out = add(var_out, (Word16)1);
-         }
-      }
-
-      BASOP_CHECK();
-
-      return var_out;
-   }
+        #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+        BASOP_CHECK();
+        #endif
+        return var_out;
+    }
 }
 
 
@@ -2754,7 +2979,14 @@ Word16 i_mult (Word16 a, Word16 b)
 #ifdef ORIGINAL_G7231
    return a*b ;
 #else
-   Word32 /*register*/ c=a*b;
+   #ifndef _EVS_
+   Word32 register c=a*b;
+   #else
+   register Word32 c=a*b;  /* fix warning for 3GPP EVS build, CKJ Mar 2017 */
+   #endif
+#if (WMOPS)
+    multiCounter[currCounter].i_mult++;
+#endif
    return saturate(c) ;
 #endif
 }
@@ -2762,7 +2994,7 @@ Word16 i_mult (Word16 a, Word16 b)
 
 /*
  ******************************************************************************
- * The following three operators are not part of the original
+ * The following three operators are not part of the original 
  * G.729/G.723.1 set of basic operators and implement shiftless
  * accumulation operation.
  ******************************************************************************
@@ -2796,13 +3028,18 @@ Word16 i_mult (Word16 a, Word16 b)
 */
 Word32 L_mult0 (Word16 var1,Word16 var2)
 {
-   Word32 L_var_out;
+  Word32 L_var_out;
 
-   L_var_out = (Word32)var1 * (Word32)var2;
+  L_var_out = (Word32)var1 * (Word32)var2;
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_mult0++;
+#endif
 
-   return(L_var_out);
+  #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+  BASOP_CHECK();
+  #endif
+  return(L_var_out);
 }
 
 
@@ -2838,15 +3075,22 @@ Word32 L_mult0 (Word16 var1,Word16 var2)
 */
 Word32 L_mac0 (Word32 L_var3, Word16 var1, Word16 var2)
 {
-Word32 L_var_out;
-Word32 L_product;
+  Word32 L_var_out;
+  Word32 L_product;
 
-   L_product = L_mult0(var1,var2);
-   L_var_out = L_add(L_var3,L_product);
+  L_product = L_mult0(var1,var2);
+  L_var_out = L_add(L_var3,L_product);
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_mac0++;
+    multiCounter[currCounter].L_mult0--;
+    multiCounter[currCounter].L_add--;
+#endif
 
-   return(L_var_out);
+  #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+  BASOP_CHECK();
+  #endif
+  return(L_var_out);
 }
 
 
@@ -2882,15 +3126,24 @@ Word32 L_product;
 */
 Word32 L_msu0 (Word32 L_var3, Word16 var1, Word16 var2)
 {
-Word32 L_var_out;
-Word32 L_product;
+  Word32 L_var_out;
+  Word32 L_product;
 
-   L_product = L_mult0(var1,var2);
-   L_var_out = L_sub(L_var3,L_product);
+  L_product = L_mult0(var1,var2);
+  L_var_out = L_sub(L_var3,L_product);
 
-   BASOP_CHECK();
+#if (WMOPS)
+    multiCounter[currCounter].L_msu0++;
+    multiCounter[currCounter].L_mult0--;
+    multiCounter[currCounter].L_sub--;
+#endif
 
-   return(L_var_out);
+  #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+  BASOP_CHECK();
+  #endif
+  return(L_var_out);
 }
 
+
 /* end of file */
+

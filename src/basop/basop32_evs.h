@@ -8,13 +8,13 @@
             GLOBAL FUNCTION PROTOTYPES
 
    History:
-   26.Jan.00   v1.0     Incorporated to the STL from updated G.723.1/G.729
-                        basic operator library (based on basic_op.h) and
+   26.Jan.00   v1.0     Incorporated to the STL from updated G.723.1/G.729 
+                        basic operator library (based on basic_op.h) and 
                         G.723.1's basop.h.
    05.Jul.00   v1.1     Added 32-bit shiftless mult/mac/msub operators
 
    03 Nov 04   v2.0     Incorporation of new 32-bit / 40-bit / control
-                        operators for the ITU-T Standard Tool Library as
+                        operators for the ITU-T Standard Tool Library as 
                         described in Geneva, 20-30 January 2004 WP 3/16 Q10/16
                         TD 11 document and subsequent discussions on the
                         wp3audio@yahoogroups.com email reflector.
@@ -37,8 +37,6 @@
 
    30 Nov 09   v2.3     round() function is now round_fx().
                         saturate() is not referencable from outside application
-
-   13 Mar 12            Add Overflow2 flag for additional overflow checking.
   ============================================================================
 */
 
@@ -47,10 +45,14 @@ Made thread-safe and optimized for EVS codec floating-point use. Modifications c
 
 Copyright (C) Signalogic, 2017-2023
 
-Revision History
-
-  Mar 2017 CKJ, modified to remove usage of global flags so that the lib can be thread-safe
-  Sep 2022 - Mar 2023 JHB, implement and enable static inline basops in basop32.h if USE_BASOPS_INLINE is defined. Enable/disable Overflow and Carry global variables with USE_BASOPS_OVERFLOW_GLOBAL_VAR and USE_BASOPS_CARRY_GLOBAL_VAR. These can be defined in options.h or as needed
+  Mar 2017 CKJ, thread-safe modifications:
+                -remove/disable usage of global flags
+                -add "xxx_ovf()" versions of some functions and pass Overflow as a stack param; e.g. sub_ovf()
+  Sep 2022 - Mar 2023 JHB, implement mods for 3GPP EVS build:
+                -if _EVS_ defined in Makefile, code looks for basop build control defines "USE_BASOPS_xxx" in options.h
+                -enable static inline basops in basop32.h if USE_BASOPS_INLINE is defined
+                -enable/disable Overflow and Carry global variables with USE_BASOPS_OVERFLOW_GLOBAL_VAR and USE_BASOPS_CARRY_GLOBAL_VAR
+                -no indentation/formatting mods to original STL file outside of EVS related changes 
   Mar 2023 JHB, improve comments
   
 EVS floating-point source files that reference basop32 fixed-point functions, Signalogic Mar 2023
@@ -100,27 +102,33 @@ common
 #ifndef _BASIC_OP_H
 #define _BASIC_OP_H
 
-#define BASOP_OVERFLOW2
+#ifdef _EVS_ /* _EVS_ should be defined in Makefile when building 3GPP EVS codec */
+  #include "options.h"
+  #include "typedef.h"
 
-#define BASOP_SATURATE_WARNING_ON
-#define BASOP_SATURATE_WARNING_OFF
-#define BASOP_SATURATE_ERROR_ON
-#define BASOP_SATURATE_ERROR_OFF
-#define BASOP_CHECK()
+/* added by 3GPP EVS authors */
+  #define BASOP_SATURATE_WARNING_ON
+  #define BASOP_SATURATE_WARNING_OFF
+  #define BASOP_SATURATE_ERROR_ON
+  #define BASOP_SATURATE_ERROR_OFF
+  #define BASOP_CHECK()
+#endif
+
+#ifdef USE_BASOPS_EXIT
+  #include <stdlib.h>  /* exit(), abort() */
+#endif
 
 /*___________________________________________________________________________
  |                                                                           |
  |   Constants and Globals                                                   |
+ | $Id $
  |___________________________________________________________________________|
 */
-
 /* Remove global flags, replaced with stack vars as needed - CKJ Mar 2017 */
 /* Note - Chris demonstrates here that no EVS floating-point sources read Overflow, Overflow2, or Carry; i.e. these vars are "write-only" global flags written only by basop32.c, JHB Mar 2023 */
-
 #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
-extern Flag Overflow, Overflow2;  /* Overflow2 seems to be referenced only in EVS fixed-point source, JHB Mar 2023 */
+extern Flag Overflow;
 #endif
-
 #ifdef USE_BASOPS_CARRY_GLOBAL_VAR
 extern Flag Carry;
 #endif
@@ -131,22 +139,16 @@ extern Flag Carry;
 #define MAX_16 (Word16)0x7fff
 #define MIN_16 (Word16)0x8000
 
-#include <stdlib.h>
-
-#include "options.h"
-#include "typedef.h"
-
-/* functions inlined and no longer declared in basop32.c */
-
+#ifdef _EVS_  /* functions inlined here and not defined in basop32.c */
 static inline Word32 L_deposit_l(Word16 var1) { return (Word32)var1; }
 static inline Word32 L_deposit_h(Word16 var1) { return (Word32)var1 << 16; }
-
 static inline Word16 extract_l(Word32 L_var1) { return (Word16)L_var1; }
 static inline Word16 extract_h(Word32 L_var1) { return (Word16)(L_var1 >> 16); }
+#endif
 
 #ifdef USE_BASOPS_INLINE  /* defined in options.h, JHB Mar 2023 */
 
-#include <stdio.h>  /* needed for a few fprintf(stderr ...) calls. In extensive testing over 6 year period these have never fired, but we keep them in case some day it should happen and we need forensics, JHB Mar 2023 */
+#include <stdio.h>  /* bring in fprintf(stderr ...) */
 
 static inline Word16 saturate(Word32 L_var1) {
 
@@ -166,6 +168,9 @@ Word16 var_out;
    }
    else var_out = extract_l(L_var1);
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
 
@@ -179,6 +184,9 @@ Word32 L_diff;
    L_diff = (Word32)var1 - var2;
    var_out = saturate(L_diff);
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return (var_out);
 }
 
@@ -190,6 +198,9 @@ Word32 L_sum;
    L_sum = (Word32)var1 + var2;
    var_out = saturate(L_sum);
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
 
@@ -208,9 +219,12 @@ Word32 L_var_out;
          Overflow = 1;
          #endif
       }
-  }
+   }
 
-  return L_var_out;
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
+   return L_var_out;
 }
 
 static inline Word32 L_add(Word32 L_var1, Word32 L_var2) {
@@ -228,8 +242,11 @@ Word32 L_var_out;
          Overflow = 1;
          #endif
       }
-  }
+   }
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return L_var_out;
 }
 
@@ -243,8 +260,11 @@ Word32 L_num, L_denom;
    /* printf ("Division by 0, Fatal error in "); printStack(); */
       fprintf(stderr, "Division by 0 in divs_s in basop32");
       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
-      exit(0);
+      abort(); /* exit (0); */
       #else
+      #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+      BASOP_CHECK();
+      #endif
       return MAX_16;  /* return max possible value, JHB Mar 2023 */
       #endif
    }
@@ -252,9 +272,9 @@ Word32 L_num, L_denom;
    if (var1 > var2 || var1 < 0 || var2 < 0) {
 
    /* printf ("Division Error var1=%d  var2=%d in ", var1, var2); printStack(); */
-      fprintf(stderr, "Division error var1 = %d  var2 = %d in div_s in basop32", var1, var2);
+      fprintf(stderr, "Division error in div_s in basop32, var1 = %d var2 = %d", var1, var2);
       #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
-      exit(0);
+      abort(); /* exit (0); */
       #else
       if (var1 < 0) var1 = -var1;  /* make positive values and proceed, JHB Mar 2023 */
       if (var2 < 0) var2 = -var2;
@@ -282,6 +302,9 @@ Word32 L_num, L_denom;
       }
    }
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
 
@@ -299,6 +322,9 @@ Word32 L_product_arr;
 
    var_out = saturate(L_product_arr);
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
 
@@ -318,6 +344,9 @@ Word32 result;
    }
    else var_out = extract_l(result);
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
 
@@ -338,6 +367,9 @@ Word16 var_out;
       }
    }
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
 
@@ -352,6 +384,9 @@ Word16 var_out;
    }
    else var_out = shl_pos(var1, var2);
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
 
@@ -369,6 +404,9 @@ Word16 var_out;
       }
    }
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
 
@@ -385,9 +423,12 @@ Word16 var_out;
       }
    }
 
+   #ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+   BASOP_CHECK();
+   #endif
    return var_out;
 }
-#endif
+#endif  /* USE_BASOPS_INLINE */
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -396,7 +437,6 @@ Word16 var_out;
 */
 
 #ifndef USE_BASOPS_INLINE
-
 Word16 negate(Word16 var1);                /* Short negate,        1   */
 Word16 sub(Word16 var1, Word16 var2);      /* Short sub,           1   */
 Word16 add(Word16 var1, Word16 var2);      /* Short add,           1   */
@@ -405,63 +445,58 @@ Word16 mult_r(Word16 var1, Word16 var2);  /* Mult with round, 1 */
 Word16 norm_l(Word32 L_var1);             /* Long norm,             1  */
 Word16 div_s(Word16 var1, Word16 var2);   /* Short division,       18  */
 Word16 norm_s(Word16 var1);               /* Short norm,            1  */
-
 #endif
 
-Word16 sub_ovf (Word16 var1, Word16 var2, Flag *Overflow);  /* Identical to sub() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
+#ifdef _EVS_  /* Identical to functions without _ovf, but do not use global Overflow flag to be thread-safe - CJ MAR2017 */
+Word16 sub_ovf (Word16 var1, Word16 var2, Flag *Overflow);
+Word16 shl_ovf (Word16 var1, Word16 var2, Flag *Overflow);
+Word32 L_mult_ovf (Word16 var1, Word16 var2, Flag *Overflow);
+Word32 L_add_ovf (Word32 L_var1, Word32 L_var2, Flag *Overflow);
+Word32 L_sub_ovf (Word32 L_var1, Word32 L_var2, Flag *Overflow);
+Word32 L_shl_ovf (Word32 L_var1, Word16 var2, Flag *Overflow);
+#endif
+
 Word16 abs_s (Word16 var1);               /* Short abs,           1   */
 Word16 shl (Word16 var1, Word16 var2);    /* Short shift left,    1   */
-Word16 shl_ovf (Word16 var1, Word16 var2, Flag *Overflow);  /* Identical to shl() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 Word16 shr (Word16 var1, Word16 var2);    /* Short shift right,   1   */
 Word16 mult (Word16 var1, Word16 var2);   /* Short mult,          1   */
 Word32 L_mult (Word16 var1, Word16 var2); /* Long mult,           1   */
-Word32 L_mult_ovf (Word16 var1, Word16 var2, Flag *Overflow);  /* Identical to L_mult() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
-
-#if 0  /* declared above as static inline, JHB Mar 2023 */
-Word16 extract_h (Word32 L_var1);         /* Extract high,        1   */
-Word16 extract_l (Word32 L_var1);         /* Extract low,         1   */
-#endif
-
 Word16 round_fx (Word32 L_var1);          /* Round,               1   */
 Word32 L_mac (Word32 L_var3, Word16 var1, Word16 var2);   /* Mac,  1  */
 Word32 L_msu (Word32 L_var3, Word16 var1, Word16 var2);   /* Msu,  1  */
-
-#ifndef EXCLUDE_BASOPS_NOT_USED_EVS
-
-/* Exclude L_msuNs() and L_msuNS() from build as they call L_add_c() and L_sub_c() which read/set global Overflow/Carry vars. These functions aren't called anywhere in 3GPP EVS floating-point code - CJ March 2017 */
-
-Word32 L_macNs (Word32 L_var3, Word16 var1, Word16 var2); /* Mac without sat, 1   */
-Word32 L_msuNs (Word32 L_var3, Word16 var1, Word16 var2); /* Msu without sat, 1   */
-#endif
+Word32 L_macNs (Word32 L_var3, Word16 var1, Word16 var2); /* Mac without
+                                                             sat, 1   */
+Word32 L_msuNs (Word32 L_var3, Word16 var1, Word16 var2); /* Msu without
+                                                             sat, 1   */
 Word32 L_add (Word32 L_var1, Word32 L_var2);    /* Long add,        1 */
-Word32 L_add_ovf (Word32 L_var1, Word32 L_var2, Flag *Overflow);  /* Identical to L_add() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
-Word32 L_sub_ovf (Word32 L_var1, Word32 L_var2, Flag *Overflow);  /* Identical to L_sub() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 
 #ifndef EXCLUDE_BASOPS_NOT_USED_EVS
-/* Exclude L_add_c() and L_sub_c() from build as they read/set global Overflow/Carry vars, these functions aren't called anywhere in 3GPP EVS floating-point code - CJ March 2017 */
+/* Exclude from build as they read/set global Overflow/Carry vars, but are not called anywhere in 3GPP EVS floating-point code - CJ March 2017 */
 Word32 L_add_c (Word32 L_var1, Word32 L_var2);  /* Long add with c, 2 */
 Word32 L_sub_c (Word32 L_var1, Word32 L_var2);  /* Long sub with c, 2 */
+Word32 L_sat (Word32 L_var1);            /* Long saturation,       4  */
 #endif
 
 Word32 L_negate (Word32 L_var1);                /* Long negate,     1 */
 Word32 L_shl (Word32 L_var1, Word16 var2);      /* Long shift left, 1 */
-Word32 L_shl_ovf (Word32 L_var1, Word16 var2, Flag *Overflow); /* Identical to L_shl() but doesn't use global Overflow flag to be thread-safe - CJ MAR2017 */
 Word32 L_shr (Word32 L_var1, Word16 var2);      /* Long shift right, 1 */
-Word16 shr_r (Word16 var1, Word16 var2);        /* Shift right with round, 2 */
-Word16 mac_r (Word32 L_var3, Word16 var1, Word16 var2); /* Mac with rounding, 1 */
-Word16 msu_r (Word32 L_var3, Word16 var1, Word16 var2); /* Msu with rounding, 1 */
-#if 0  /* declared above as static inline, JHB Mar 2023 */
+Word16 shr_r (Word16 var1, Word16 var2);        /* Shift right with
+                                                   round, 2           */
+Word16 mac_r (Word32 L_var3, Word16 var1, Word16 var2); /* Mac with
+                                                           rounding, 1 */
+Word16 msu_r (Word32 L_var3, Word16 var1, Word16 var2); /* Msu with
+                                                           rounding, 1 */
+#ifndef _EVS_  /* declared above as static inline, JHB Mar 2023 */
+Word16 extract_h (Word32 L_var1);         /* Extract high,        1   */
+Word16 extract_l (Word32 L_var1);         /* Extract low,         1   */
 Word32 L_deposit_h (Word16 var1);        /* 16 bit var1 -> MSB,     1 */
 Word32 L_deposit_l (Word16 var1);        /* 16 bit var1 -> LSB,     1 */
 #endif
 
-Word32 L_shr_r (Word32 L_var1, Word16 var2); /* Long shift right with round, 3  */
-Word32 L_abs (Word32 L_var1);                /* Long abs,              1  */
+Word32 L_shr_r (Word32 L_var1, Word16 var2); /* Long shift right with
+                                                round,             3  */
+Word32 L_abs (Word32 L_var1);            /* Long abs,              1  */
 
-#ifndef EXCLUDE_BASOPS_NOT_USED_EVS
-/* Exclude L_sat() from build as it reads/sets global Overflow/Carry vars, isn't called anywhere in 3GPP EVS floating-point code - CJ March 2017 */
-Word32 L_sat (Word32 L_var1);            /* Long saturation,       4  */
-#endif
 
 /*
  * Additional G.723.1 operators
@@ -477,6 +512,8 @@ Word32 L_mult0(Word16 v1, Word16 v2); /* 32-bit Multiply w/o shift         1 */
 Word32 L_mac0(Word32 L_v3, Word16 v1, Word16 v2); /* 32-bit Mac w/o shift  1 */
 Word32 L_msu0(Word32 L_v3, Word16 v1, Word16 v2); /* 32-bit Msu w/o shift  1 */
 
+
 #endif /* ifndef _BASIC_OP_H */
+
 
 /* end of file */
