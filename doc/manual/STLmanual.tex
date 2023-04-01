@@ -18,7 +18,7 @@
 \addtolength{\itemsep}{-20pt}
 
 % Define headers
-\def\ugst_title{ ITU-T Software Tool Library, release 2022}
+\def\ugst_title{ ITU-T Software Tool Library, release 2023}
 \def\us{$\mu$s}
 \markboth{  \hspace{1cm} \hfill \ugst_title }%
          { Version: \today \hfill \hspace{1cm} }
@@ -41,6 +41,8 @@
 \usepackage{framed}
 \graphicspath{{graphics/}}
 \usepackage{microtype}
+\usepackage{fancyvrb}
+\usepackage{booktabs}
 
 %==============================================================================
 \begin{document}
@@ -59,7 +61,7 @@
 \pagenumbering{roman}
 
 %==============================================================================
-\title{ITU-T Software Tool Library 2022 User's Manual}
+\title{ITU-T Software Tool Library 2023 User's Manual}
 \author{ITU-T Users' Group on Software Tools}
 
 %------------------------------------------------------------------------------
@@ -69,7 +71,7 @@
 
 \ruley{100mm}
 
- Copyright \copyright~ 2005, 2006, 2009, 2019 and 2022 by the International
+ Copyright \copyright~ 2005, 2006, 2009, 2019, 2022 and 2023 by the International
  Telecommunication Union (ITU)
 
 \ruley{15mm}
@@ -199,6 +201,12 @@ Permission is granted to make and distribute verbatim copies of this manual prov
 % chapter esdru: P.811 E Spatial Distortion Reference Unit
 %=============================================================================
 \include{esdru}
+
+%=============================================================================
+% chapter WMC Tool: Automatic instrumentation of floating-point speech and
+% audio codecs for complexity and memory measurements
+%=============================================================================
+\include{wmc_tool}
 
 %=============================================================================
 % chapter UTILITIES: UGST utilities
