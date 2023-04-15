@@ -550,9 +550,6 @@ int main (int argc, char *argv[]) {
       }
   }
 
-  /* initialize state_file with 0, to make sure the string is terminated with \0, which FIND_PAR_S () doesn't add */
-  memset(state_file, 0, sizeof(state_file));
-
   /* Get command line parameters */
   GET_PAR_S (1, "_Output bit stream file ...........................: ", data_file_name);
   FIND_PAR_C (2, "_Processing mode (Random,Frame,Burst) [RFB] .......: ", mode, mode);
