@@ -653,6 +653,9 @@ int main(int argc, char **argv )
             fprintf( stdout, "Target level:     %.6f\n", lev_target );
             fprintf( stdout, "Obtained level:   %.6f\n", lev_obtained );
             fprintf( stdout, "Scaling factor:   %.6f\n", fac );
+#ifdef BS1770DEMO_UPDATE
+            fprintf( stdout, "Scaling [dB]:     %.6f\n", 20 * log10( fac ) );
+#endif
             fprintf( stdout, "\n--> Done processing %ld samples\n", length_total );
             if( clip > 0 )
             {
