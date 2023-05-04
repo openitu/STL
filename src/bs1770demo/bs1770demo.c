@@ -21,6 +21,10 @@
 #define MAX_ITERATIONS            10
 #define RELATIVE_DIFF             0.0001
 #define MAX_CH_NUMBER             24
+#ifdef BS1770DEMO_UPDATE
+#define ZERO_BLOCKS               (1000.0f) /* Constant to signal that zero blocks passed the gating threshold. 
+                                              (Only results within [-Inf,LKFS_OFFSET] are valid) */
+#endif
 
 /*
     Channel weights for default channel ordering. Assumes channels are ordered as in 22.2 WAVE files:
@@ -301,7 +305,18 @@ double gated_loudness(                  /* o: gated loudness                 */
         }
     }
 
+#ifdef BS1770DEMO_UPDATE
+    if ( count == 0 )
+    {
+        return ZERO_BLOCKS; /* Send invalid value to indicate that zero blocks were above threshold */
+    }
+    else 
+    {
+        return LKFS_OFFSET + 10 * log10(energy / count);
+    }
+#else
     return LKFS_OFFSET + 10 * log10( energy / count );
+#endif
 }
 
 double gated_loudness_adaptive(         /* o: gated loudness, using adaptive threshold  */
@@ -432,6 +447,7 @@ int main(int argc, char **argv )
     double G[MAX_CH_NUMBER];
     short zero_input_flag;
 #ifdef BS1770DEMO_UPDATE
+    short zero_blocks_flag;
     short rms_flag; 
 #endif    
 
@@ -621,7 +637,16 @@ int main(int argc, char **argv )
         }
     }
 
+#ifdef BS1770DEMO_UPDATE
+    /* Check if all blocks are below ABSOLUTE_THRESHOLD  */
+    zero_blocks_flag = (ZERO_BLOCKS == gated_loudness(gating_block_energy, 1.0, n_gating_blocks, ABSOLUTE_THRESHOLD, rms_flag) );
+#endif
+
+#ifdef BS1770DEMO_UPDATE
+    if ( !zero_input_flag && !zero_blocks_flag )
+#else
     if( !zero_input_flag )
+#endif
     { 
 
         if( f_output != NULL )
@@ -678,7 +703,18 @@ int main(int argc, char **argv )
     }
     else
     {
+#ifdef BS1770DEMO_UPDATE
+        if ( zero_input_flag )
+        {
+            fprintf(stderr, "*** Warning: All non-LFE channels are zero\n");
+        }
+        else 
+        {
+            fprintf(stderr, "*** Warning: All non-LFE channels are below absolute gating threshold %.2f\n", ABSOLUTE_THRESHOLD);
+        }
+#else
         fprintf( stderr, "*** Warning: All non-LFE channels are zero\n" );
+#endif
         if( f_output != NULL )
         {
             fprintf( stderr, "*** Scaling of zero input not possible, exiting ..\n" );
