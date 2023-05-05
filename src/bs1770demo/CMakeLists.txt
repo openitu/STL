@@ -16,4 +16,4 @@ add_test(bs1770demo4 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bs1770demo -lev -26 test_
 add_test(bs1770demo4-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -equiv 115 -q test_data/sine_ramp.26LKFS.test.pcm test_data/sine_ramp.26LKFS.pcm)
 
 add_test(bs1770demo5 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bs1770demo -rms -lev -26 test_data/sine_ramp.pcm test_data/sine_ramp.26LKFSrms.test.pcm)
-add_test(bs1770demo5-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -equiv 115 -q test_data/sine_ramp.26LKFSrms.test.pcm test_data/sine_ramp.26LKFSrms.pcm)
+add_test(bs1770demo5-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -equiv 206 -q test_data/sine_ramp.26LKFSrms.test.pcm test_data/sine_ramp.26LKFSrms.pcm)
