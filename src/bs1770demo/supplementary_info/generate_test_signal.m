@@ -16,10 +16,10 @@ fclose(fid);
 
 rng(1);
 
-A = dbov_fac(y,-26);
+A = 0.070880495302845;
 
 N = randn(size(y));
-AN = dbov_fac(N,-26);
+AN = 1.636408779315202e+03;
 
 Y(1,:) = A * 32767 * sin(2*pi*997*t);
 Y(2,:) = 0.58 * A * 32767 * sin(2*pi*1033*t);
@@ -30,4 +30,12 @@ Y(6,:) = 2.01*AN * randn(size(y));
 
 fid = fopen('sine_noise_test.pcm','w');
 fwrite(fid,Y,'short');
+fclose(fid);
+
+%%
+
+x = sin(2*pi*f*t) .* logspace(0,4,3*fs);
+
+fid = fopen('sine_ramp.pcm','w');
+fwrite(fid,x,'short');
 fclose(fid);
