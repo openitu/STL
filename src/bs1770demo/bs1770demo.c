@@ -11,8 +11,6 @@
 #include <math.h>
 #include <string.h>
 
-#define BS1770DEMO_UPDATE
-
 #define BLOCK_SIZE                19200      /* 400 ms in 48000 Hz sample rate */
 #define STEP_SIZE                 4800       /* 100 ms in 48000 Hz sample rate (75% overlap of 400 ms gating blocks) */   
 #define LKFS_OFFSET               (-0.691)
@@ -21,10 +19,8 @@
 #define MAX_ITERATIONS            10
 #define RELATIVE_DIFF             0.0001
 #define MAX_CH_NUMBER             24
-#ifdef BS1770DEMO_UPDATE
 #define ZERO_BLOCKS               (1000.0f) /* Constant to signal that zero blocks passed the gating threshold. 
                                               (Only results within [-Inf,LKFS_OFFSET] are valid) */
-#endif
 
 /*
     Channel weights for default channel ordering. Assumes channels are ordered as in 22.2 WAVE files:
@@ -106,9 +102,7 @@ void usage()
     fprintf( stdout, "Options:\n" );
     fprintf( stdout, "-nchan N          Number of channels [1..24] (Default: 1)\n" );
     fprintf( stdout, "-lev L            Target level LKFS (Default: -26)\n" );
-#ifdef BS1770DEMO_UPDATE    
     fprintf( stdout, "-rms              Disable gating (for background noise level measurement)\n" );
-#endif
     fprintf( stdout, "-conf xxxx        Configuration string:\n") ;
     fprintf( stdout, "                      '1' ldspk pos within |elev| < 30 deg, 60 deg <= |azim| <= 120 deg\n" );
     fprintf( stdout, "                      'L' LFE channel (weight zero)\n" );
@@ -280,12 +274,8 @@ double gated_loudness(                  /* o: gated loudness                 */
     const double *gating_block_energy,  /* i: gating_block_energy            */
     const double fac,                   /* i: Scaling factor                 */
     const long n_gating_blocks,         /* i: Number of gating blocks        */
-#ifdef BS1770DEMO_UPDATE
     const double threshold,             /* i: LKFS threshold                 */
     const short rms_flag                /* i: Flag for RMS (no gating)       */    
-#else    
-    const double threshold              /* i: LKFS threshold                 */
-#endif    
 )
 {
     long i;
@@ -294,18 +284,13 @@ double gated_loudness(                  /* o: gated loudness                 */
     count = 0;
     for( i = 0; i < n_gating_blocks; i++ )
     {
-#ifdef BS1770DEMO_UPDATE
         if( ( (LKFS_OFFSET + 10 * log10( gating_block_energy[i] * fac * fac )) > threshold ) || rms_flag )
-#else        
-        if( (LKFS_OFFSET + 10 * log10( gating_block_energy[i] * fac * fac )) > threshold )
-#endif        
         {
             energy += gating_block_energy[i] * fac * fac;
             count++;
         }
     }
 
-#ifdef BS1770DEMO_UPDATE
     if ( count == 0 )
     {
         return ZERO_BLOCKS; /* Send invalid value to indicate that zero blocks were above threshold */
@@ -314,40 +299,25 @@ double gated_loudness(                  /* o: gated loudness                 */
     {
         return LKFS_OFFSET + 10 * log10(energy / count);
     }
-#else
-    return LKFS_OFFSET + 10 * log10( energy / count );
-#endif
 }
 
 double gated_loudness_adaptive(         /* o: gated loudness, using adaptive threshold  */
     const double *gating_block_energy,  /* i: gating_block_energy                       */
     const double fac,                   /* i: Scaling factor                            */
-#ifdef BS1770DEMO_UPDATE
     const long n_gating_blocks,         /* i: Number of gating blocks                   */
     const short rms_flag                /* i: Flag for RMS (no gating)                  */
-#else    
-    const long n_gating_blocks          /* i: Number of gating blocks                   */
-#endif
 )
 {
     double relative_threshold;
     double gated_loudness_final;
 
     /* Find scaling factor */
-#ifdef BS1770DEMO_UPDATE
     relative_threshold = gated_loudness( gating_block_energy, fac, n_gating_blocks, ABSOLUTE_THRESHOLD, rms_flag ) + RELATIVE_THRESHOLD_OFFSET;
-#else    
-    relative_threshold = gated_loudness( gating_block_energy, fac, n_gating_blocks, ABSOLUTE_THRESHOLD ) + RELATIVE_THRESHOLD_OFFSET;
-#endif    
     if( ABSOLUTE_THRESHOLD > relative_threshold )
     {
         relative_threshold = ABSOLUTE_THRESHOLD;
     }
-#ifdef BS1770DEMO_UPDATE
     gated_loudness_final = gated_loudness( gating_block_energy, fac, n_gating_blocks, relative_threshold, rms_flag );
-#else    
-    gated_loudness_final = gated_loudness( gating_block_energy, fac, n_gating_blocks, relative_threshold );
-#endif    
     return gated_loudness_final;
 }
 
@@ -356,9 +326,7 @@ double find_scaling_factor(            /* o: scaling factor                 */
     const double *gating_block_energy, /* i: gating_block_energy            */
     const long n_gating_blocks,        /* i: Number of gating blocks        */
     const double lev,                  /* i: Target level                   */
-#ifdef BS1770DEMO_UPDATE
     const short rms_flag,              /* i: Flag for RMS (no gating)       */
-#endif    
           double *lev_input,           /* o: Input level                    */
           double *lev_obtained         /* o: Obtained level                 */
 )
@@ -374,11 +342,7 @@ double find_scaling_factor(            /* o: scaling factor                 */
     while( (fabs( 1.0 - fac / last_fac ) > RELATIVE_DIFF) && (itr < MAX_ITERATIONS) )
     {
         /* Find scaling factor */
-#ifdef BS1770DEMO_UPDATE
         gated_loudness_final = gated_loudness_adaptive( gating_block_energy, fac, n_gating_blocks, rms_flag );
-#else        
-        gated_loudness_final = gated_loudness_adaptive( gating_block_energy, fac, n_gating_blocks );
-#endif        
         last_fac = fac;
         fac *= pow( 10.0, (lev - gated_loudness_final) / 20.0 );
         if (itr == 0 )
@@ -446,19 +410,15 @@ int main(int argc, char **argv )
     double fac;
     double G[MAX_CH_NUMBER];
     short zero_input_flag;
-#ifdef BS1770DEMO_UPDATE
     short zero_blocks_flag;
     short rms_flag; 
-#endif    
 
     lev_target = -26;  /* Default target level       */
     i = 1;
     conf = NULL;
     nchan = -1;
     zero_input_flag = 1;
-#ifdef BS1770DEMO_UPDATE
     rms_flag = 0; 
-#endif    
 
     /* Command line parsing */
     if( argc == 1 )
@@ -492,13 +452,11 @@ int main(int argc, char **argv )
             }
             i += 2;
         }
-#ifdef BS1770DEMO_UPDATE
         else if( strcmp( argv[i], "-rms" ) == 0 )
         {
             rms_flag = 1;
             i += 1;
         }
-#endif        
         else if( strcmp( argv[i], "-conf" ) == 0 )
         {
             conf = argv[i + 1];
@@ -637,16 +595,10 @@ int main(int argc, char **argv )
         }
     }
 
-#ifdef BS1770DEMO_UPDATE
     /* Check if all blocks are below ABSOLUTE_THRESHOLD  */
     zero_blocks_flag = (ZERO_BLOCKS == gated_loudness(gating_block_energy, 1.0, n_gating_blocks, ABSOLUTE_THRESHOLD, rms_flag) );
-#endif
 
-#ifdef BS1770DEMO_UPDATE
     if ( !zero_input_flag && !zero_blocks_flag )
-#else
-    if( !zero_input_flag )
-#endif
     { 
 
         if( f_output != NULL )
@@ -655,11 +607,7 @@ int main(int argc, char **argv )
 
             /* Find scaling factor */
             /* Since a rescaling affects the relative gating threshold the factor is found through an iterative function */
-#ifdef BS1770DEMO_UPDATE
             fac = find_scaling_factor( gating_block_energy, n_gating_blocks, lev_target, rms_flag, &lev_input, &lev_obtained );
-#else            
-            fac = find_scaling_factor( gating_block_energy, n_gating_blocks, lev_target, &lev_input, &lev_obtained );
-#endif            
 
             /* Apply scaling */
             rewind( f_input ); 
@@ -678,9 +626,7 @@ int main(int argc, char **argv )
             fprintf( stdout, "Target level:     %.6f\n", lev_target );
             fprintf( stdout, "Obtained level:   %.6f\n", lev_obtained );
             fprintf( stdout, "Scaling factor:   %.6f\n", fac );
-#ifdef BS1770DEMO_UPDATE
             fprintf( stdout, "Scaling [dB]:     %.6f\n", 20 * log10( fac ) );
-#endif
             fprintf( stdout, "\n--> Done processing %ld samples\n", length_total );
             if( clip > 0 )
             {
@@ -692,18 +638,13 @@ int main(int argc, char **argv )
         else
         {
             /* No output file is specified -- find the input level */
-#ifdef BS1770DEMO_UPDATE
             lev_input = gated_loudness_adaptive( gating_block_energy, 1.0, n_gating_blocks, rms_flag );
-#else            
-            lev_input = gated_loudness_adaptive( gating_block_energy, 1.0, n_gating_blocks );
-#endif
             fprintf( stdout, "Input level:      %.6f\n", lev_input );
             fprintf( stdout, "\n--> Done processing %ld samples\n", length_total );
         }
     }
     else
     {
-#ifdef BS1770DEMO_UPDATE
         if ( zero_input_flag )
         {
             fprintf(stderr, "*** Warning: All non-LFE channels are zero\n");
@@ -712,9 +653,6 @@ int main(int argc, char **argv )
         {
             fprintf(stderr, "*** Warning: All non-LFE channels are below absolute gating threshold %.2f\n", ABSOLUTE_THRESHOLD);
         }
-#else
-        fprintf( stderr, "*** Warning: All non-LFE channels are zero\n" );
-#endif
         if( f_output != NULL )
         {
             fprintf( stderr, "*** Scaling of zero input not possible, exiting ..\n" );
