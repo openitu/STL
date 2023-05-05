@@ -103,12 +103,18 @@ included in the loudness calculation, the gain factor is found using an iterativ
 \texttt{fabs( 1.0 - fac / last\_fac ) \textless RELATIVE\_DIFF}, where \texttt{RELATIVE\_DIFF = 0.0001} or when the maximum number of iterations \texttt{MAX\_ITERATIONS = 10}
 has been reached.
 
+When measuring the loudness of signals with a large dynamic range, it may be desirable to disable the gating function
+to obtain the level considering the full signal. This is useful e.g. for noise level adjustment in listening tests
+including added background noise. For this reason, the gating function may be disabled using an RMS (Root-Mean-Square)
+energy measurement option \texttt{-rms}. Note that this feature is not part of \cite{BS1770}.
+
 {\tt\small
 \begin{verbatim}
 double find_scaling_factor(            /* o: scaling factor                 */
     const double *gating_block_energy, /* i: gating_block_energy            */
     const long n_gating_blocks,        /* i: Number of gating blocks        */
     const double lev,                  /* i: Target level                   */
+    const short rms_flag,              /* i: Flag for RMS (no gating)       */    
           double *lev_input,           /* o: Input level                    */
           double *lev_obtained         /* o: Obtained level                 */
 )
@@ -158,6 +164,7 @@ bs1770demo [options] <input file> [<output file>]
 Options:
 -nchan N          Number of channels [1..24] (Default: 1)
 -lev L            Target level LKFS (Default: -26)
+-rms              Disable gating (for background noise level measurement)
 -conf xxxx        Configuration string:
                       '1' ldspk pos within |elev| < 30 deg, 60 deg <= |azim| <= 120 deg
                       'L' LFE channel (weight zero)

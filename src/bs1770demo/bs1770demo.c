@@ -282,7 +282,7 @@ double gated_loudness(                  /* o: gated loudness                 */
     const long n_gating_blocks,         /* i: Number of gating blocks        */
 #ifdef BS1770DEMO_UPDATE
     const double threshold,             /* i: LKFS threshold                 */
-    const short rms_flag                /* i: Flag for RMS option (disabled gating) */    
+    const short rms_flag                /* i: Flag for RMS (no gating)       */    
 #else    
     const double threshold              /* i: LKFS threshold                 */
 #endif    
@@ -324,7 +324,7 @@ double gated_loudness_adaptive(         /* o: gated loudness, using adaptive thr
     const double fac,                   /* i: Scaling factor                            */
 #ifdef BS1770DEMO_UPDATE
     const long n_gating_blocks,         /* i: Number of gating blocks                   */
-    const short rms_flag                /* i: Flag for RMS option (disabled gating)     */
+    const short rms_flag                /* i: Flag for RMS (no gating)                  */
 #else    
     const long n_gating_blocks          /* i: Number of gating blocks                   */
 #endif
@@ -357,7 +357,7 @@ double find_scaling_factor(            /* o: scaling factor                 */
     const long n_gating_blocks,        /* i: Number of gating blocks        */
     const double lev,                  /* i: Target level                   */
 #ifdef BS1770DEMO_UPDATE
-    const short rms_flag,              /* i: Flag for RMS option (disabled gating) */
+    const short rms_flag,              /* i: Flag for RMS (no gating)       */
 #endif    
           double *lev_input,           /* o: Input level                    */
           double *lev_obtained         /* o: Obtained level                 */
