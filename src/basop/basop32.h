@@ -44,6 +44,10 @@
 #ifndef _BASIC_OP_H
 #define _BASIC_OP_H
 
+#ifdef BASOP_NOGLOB
+#include <assert.h>
+#endif /* BASOP_NOGLOB */
+
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -51,14 +55,28 @@
  | $Id $
  |___________________________________________________________________________|
 */
-extern Flag Overflow;
+#ifdef BASOP_NOGLOB
+/* DISABLED TO AVOID GLOBAL VARIABLES */
+/*
+extern Flag BASOP_Overflow, BASOP_Overflow2;
+extern Flag BASOP_Carry;
+*/
+#else /* BASOP_NOGLOB */
+extern Flag Overflow, Overflow2;
 extern Flag Carry;
+#endif /* BASOP_NOGLOB */
 
 #define MAX_32 (Word32)0x7fffffffL
 #define MIN_32 (Word32)0x80000000L
 
 #define MAX_16 (Word16)0x7fff
 #define MIN_16 (Word16)0x8000
+
+#ifdef BASOP_NOGLOB
+static inline void set_flag(Flag* flag) { if (flag) *flag = 1; else assert(0); }
+static inline void unset_flag(Flag* flag) { if (flag) *flag = 0; else assert(0); }
+static inline Flag get_flag(Flag* flag) { if (flag) return *flag; else assert(0); }
+#endif /* BASOP_NOGLOB */
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -117,6 +135,34 @@ Word32 L_mult0 (Word16 v1, Word16 v2);  /* 32-bit Multiply w/o shift 1 */
 Word32 L_mac0 (Word32 L_v3, Word16 v1, Word16 v2);      /* 32-bit Mac w/o shift 1 */
 Word32 L_msu0 (Word32 L_v3, Word16 v1, Word16 v2);      /* 32-bit Msu w/o shift 1 */
 
+#ifdef BASOP_NOGLOB
+/*
+ * Overflowing operators
+ */
+Word16 add_o (Word16 var1, Word16 var2, Flag * Overflow);
+Word16 sub_o (Word16 var1, Word16 var2, Flag * Overflow);
+Word16 shl_o (Word16 var1, Word16 var2, Flag * Overflow);
+Word16 mult_o (Word16 var1, Word16 var2, Flag * Overflow);
+Word32 L_mult_o (Word16 var1, Word16 var2, Flag * Overflow);
+Word16 round_fx_o (Word32 L_var1, Flag * Overflow);
+Word32 L_mac_o (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
+Word32 L_msu_o (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
+Word32 L_macNs_co (Word32 L_var3, Word16 var1, Word16 var2, Flag * Carry, Flag* Overflow);
+Word32 L_msuNs_co (Word32 L_var3, Word16 var1, Word16 var2, Flag * Carry, Flag* Overflow);
+Word32 L_add_o (Word32 L_var1, Word32 L_var2, Flag * Overflow);
+Word32 L_sub_o (Word32 L_var1, Word32 L_var2, Flag * Overflow);
+Word32 L_add_co (Word32 L_var1, Word32 L_var2, Flag * Carry, Flag *Overflow);
+Word32 L_sub_co (Word32 L_var1, Word32 L_var2, Flag * Carry, Flag *Overflow);
+Word32 L_shr_o (Word32 L_var1, Word16 var2, Flag * Overflow);
+Word32 L_shl_o (Word32 L_var1, Word16 var2, Flag * Overflow);
+Word32 L_mls_o (Word32 Lv, Word16 v, Flag * Overflow);
+Word32 L_mac0_o (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
+Word32 L_msu0_o (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
+Word16 mult_ro (Word16 var1, Word16 var2, Flag * Overflow);
+Word16 mac_ro (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
+Word16 msu_ro (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
+Word32 L_sat_co (Word32 L_var1, Flag Overflow, Flag Carry);
+#endif /* BASOP_NOGLOB */
 
 #endif /* ifndef _BASIC_OP_H */
 

@@ -25,6 +25,10 @@
 
 #include "stl.h"
 
+#ifdef BASOP_NOGLOB
+#define MAX_40 ( 0x0000007fffffffff )
+#define MIN_40 ( 0xffffff8000000000 )
+#endif /* BASOP_NOGLOB */
 
 #ifdef WMOPS
 extern BASIC_OP multiCounter[MAXCOUNTERS];
@@ -44,6 +48,7 @@ extern int currCounter;
 
 
 
+#ifndef BASOP_NOGLOB
 /*****************************************************************************
  *
  *  Macros for 40 bit arithmetic overflow management :
@@ -53,6 +58,7 @@ extern int currCounter;
  *****************************************************************************/
 #define L40_OVERFLOW_OCCURED(  L40_var1) (Overflow = 1, exit(1), L40_var1)
 #define L40_UNDERFLOW_OCCURED( L40_var1) (Overflow = 1, exit(2), L40_var1)
+#endif /* BASOP_NOGLOB */
 
 
 
@@ -104,6 +110,15 @@ Word40 L40_min (Word40 L40_var1, Word40 L40_var2);
 Word32 L_saturate40 (Word40 L40_var1);
 Word16 norm_L40 (Word40 L40_var1);
 
+#ifdef BASOP_NOGLOB
+/*
+ * Overflowing operators
+ */
+Word40 L40_shl_o( Word40 L40_var1, Word16 var2, Flag *Overflow );
+Word40 L40_add_o( Word40 L40_var1, Word40 L40_var2, Flag *Overflow );
+Word40 L40_sub_o( Word40 L40_var1, Word40 L40_var2, Flag *Overflow );
+Word32 L_saturate40_o( Word40 L40_var1, Flag *Overflow );
+#endif /* BASOP_NOGLOB */
 
 /*****************************************************************************
  *
