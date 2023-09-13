@@ -1,5 +1,5 @@
 /*
- * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -1139,7 +1139,7 @@ int main( int argc, char *argv[] )
         Print("\n"
             "WMC Tool (WMOPS Automatic Instrumentation Tool) v%s - %s\n"
             "\n"
-            "(C) 2022 copyright VoiceAge Corporation. All Rights Reserved.\n"
+            "(C) 2023 copyright VoiceAge Corporation. All Rights Reserved.\n"
             "\n"
             "This software is protected by copyright law and by international treaties. The source code, and all of its derivations,\n"
             "is provided by VoiceAge Corporation under the \"ITU-T Software Tools' General Public License\". Please, read the license file\n"
