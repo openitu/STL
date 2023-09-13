@@ -8056,6 +8056,12 @@ TOOL_ERROR Include_Header(
     /* Find the End of the Last Contiguous Preprocessor Directive Block (#include) */
     ptr_end = Find_End_Preproc_Block(NULL, ParseTbl_ptr);
 
+    /* if no #include is present in the file set the pointer to the beginning of the file */
+    if (ptr_end == NULL)
+    {
+        ptr_end = ParseCtx_ptr->File.Data;
+    }
+
     /* store the pointer for later use */
     if (ptr_end_preproc_block != NULL)
     {
