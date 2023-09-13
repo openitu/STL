@@ -454,10 +454,11 @@ char *mempwordicmp( const char *mem, const char *words )
 /*-------------------------------------------------------------------*
  * itos (Integer to String)
  *-------------------------------------------------------------------*/
-char *itos( char *str, int value, int digits )
+char *itos( char *str, int value )
 {
     size_t i, n;
     char *str2;
+    int digits = 3;
 
     /* Convert Value to String */
     sprintf(str, "%d", value);
