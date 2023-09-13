@@ -109,7 +109,7 @@ char *memwordicmp( const char *mem, const char *words );
 char *strwordistr( const char *mem, const char *words );
 char *mempwordicmp( const char *mem, const char *words );
 
-char *itos( char *str, int value, int digits = 3 );
+char *itos( char *str, int value );
 
 char *Fix_FileName( char *ptr );
 
