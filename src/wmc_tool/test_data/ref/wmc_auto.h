@@ -1007,9 +1007,6 @@ void mem_free( const char *func_name, int func_lineno, void *ptr );
 
 void reset_mem( Counting_Size cnt_size );
 void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] );
-#ifdef MEM_COUNT_DETAILS
-void export_mem( const char *csv_filename );
-#endif
 
 int push_stack( const char *filename, const char *fctname );
 int pop_stack( const char *filename, const char *fctname );
@@ -1031,7 +1028,6 @@ void reset_stack( void );
 #define free_( ptr )      free( ptr )
 #define reset_mem( cnt_size )
 #define print_mem( Const_Data_PROM_Table )
-#define export_mem( csv_filename )
 
 #define push_stack( file, fct )
 #define pop_stack( file, fct )

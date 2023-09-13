@@ -340,12 +340,6 @@ void update_wmops( void )
 
     start_cnt = ops_cnt;
 
-    if ( heap_allocation_call_tree_size > 0 )
-    {
-        /* update intra-frame heap memory and inter-frame heap memory*/
-        update_mem();
-    }
-
     /* increment frame counter */
     update_cnt++;
 
@@ -386,7 +380,7 @@ void print_wmops( void )
     }
 
     fprintf( stdout, sfmts, "---------------", "------", "------", "------", "------" );
-    fprintf( stdout, dfmts, "total", (float) update_cnt, FAC * min_cnt, FAC * max_cnt, update_cnt == 0 ? 0 : FAC * ops_cnt / update_cnt );
+    fprintf( stdout, dfmts, "total", (float) update_cnt, update_cnt == 0 ? 0 : FAC * min_cnt, FAC * max_cnt, update_cnt == 0 ? 0 : FAC * ops_cnt / update_cnt );
     fprintf( stdout, "\n" );
 
 #ifdef WMOPS_WC_FRAME_ANALYSIS
@@ -553,6 +547,11 @@ void print_wmops( void )
 #define ROUND_BLOCK_SIZE( n ) ( ( ( n ) + BLOCK_ROUNDING - 1 ) & ~( BLOCK_ROUNDING - 1 ) )
 #define IS_CALLOC( str )      ( str[0] == 'c' )
 
+#ifdef MEM_COUNT_DETAILS
+const char *csv_filename = "mem_analysis.csv";
+static FILE *fid_csv_filename = NULL;
+#endif
+
 typedef struct
 {
     char function_name[MAX_FUNCTION_NAME_LENGTH + 1];
@@ -686,6 +685,25 @@ void reset_mem( Counting_Size cnt_size )
     n_items_wc_inter_frame_heap = 0;
     size_wc_inter_frame_heap = 0;
     location_wc_inter_frame_heap = -1;
+
+#ifdef MEM_COUNT_DETAILS
+    /* Check, if the .csv file has already been opened */
+    if ( fid_csv_filename == NULL )
+    {
+        fid_csv_filename = fopen( csv_filename, "wb" );
+
+        if ( fid_csv_filename == NULL )
+        {
+            fprintf( stderr, "\nCannot open %s!\n\n", csv_filename );
+            exit( -1 );
+        }
+    }
+    else
+    {
+        /* reset file */
+        rewind( fid_csv_filename );
+    }
+#endif
 
     return;
 }
@@ -958,6 +976,11 @@ void *mem_alloc(
     ptr_record->lineno = func_lineno;
     ptr_record->block_size = size;
     ptr_record->total_block_size += size;
+
+#ifdef MEM_COUNT_DETAILS
+    /* Export heap memory allocation record to the .csv file */
+    fprintf( fid_csv_filename, "A,%d,%s,%d,%d\n", update_cnt, ptr_record->name, ptr_record->lineno, ptr_record->block_size );
+#endif
 
     if ( ptr_record->frame_allocated != -1 )
     {
@@ -1294,6 +1317,11 @@ void mem_free( const char *func_name, int func_lineno, void *ptr )
     /* Check, if Out-Of-Bounds Access has been Detected */
     ptr_record->OOB_Flag = mem_check_OOB( ptr_record );
 
+#ifdef MEM_COUNT_DETAILS
+    /* Export heap memory de-allocation record to the .csv file */
+    fprintf( fid_csv_filename, "D,%d,%s,%d,%d\n", update_cnt, ptr_record->name, ptr_record->lineno, ptr_record->block_size );
+#endif
+
     /* De-Allocate Memory Block */
     tmp_ptr = (char *) ptr;
     tmp_ptr -= BLOCK_ROUNDING;
@@ -1332,11 +1360,11 @@ void mem_free( const char *func_name, int func_lineno, void *ptr )
 void update_mem( void )
 {
     int i, j, flag_alloc = -1, i_record;
-    int32_t size_current_intra_frame_heap;
+    int size_current_intra_frame_heap;
     int *list_current_intra_frame_heap = NULL, n_items_current_intra_frame_heap;
     allocator_record *ptr_record;
 
-    /* process the heap allocation call tree */
+    /* process the heap allocation call tree and prepare lists of intra-frame and inter-frame heap memory blocks for this frame */
     n_items_current_intra_frame_heap = 0;
     size_current_intra_frame_heap = 0;
     for ( i = 0; i < heap_allocation_call_tree_size; i++ )
@@ -1364,7 +1392,7 @@ void update_mem( void )
                 memset( list_current_intra_frame_heap, -1, heap_allocation_call_tree_size * sizeof( int ) );
             }
 
-            /* zero index doesn't have sign to determine whether it's  allocated or de-allocated -> we need to search the list */
+            /* zero index doesn't have sign to determine whether it's allocated or de-allocated -> we need to search the list */
             if ( i_record == 0 )
             {
                 flag_alloc = 1;
@@ -1384,23 +1412,7 @@ void update_mem( void )
                 list_current_intra_frame_heap[n_items_current_intra_frame_heap++] = i_record;
                 size_current_intra_frame_heap += ptr_record->block_size;
 
-                /* check, if this is the new worst-case */
-                if ( size_current_intra_frame_heap > size_wc_intra_frame_heap )
-                {
-                    if ( n_items_current_intra_frame_heap >= max_items_wc_intra_frame_heap )
-                    {
-                        /* resize list, if needed */
-                        max_items_wc_intra_frame_heap = n_items_current_intra_frame_heap + MAX_NUM_RECORDS_REALLOC_STEP;
-                        list_wc_intra_frame_heap = realloc( list_wc_intra_frame_heap, max_items_wc_intra_frame_heap * sizeof( int ) );
-                    }
-
-                    /* save to wc list */
-                    memmove( list_wc_intra_frame_heap, list_current_intra_frame_heap, n_items_current_intra_frame_heap * sizeof( int ) );
-                    n_items_wc_intra_frame_heap = n_items_current_intra_frame_heap;
-                    size_wc_intra_frame_heap = size_current_intra_frame_heap;
-                    location_wc_intra_frame_heap = update_cnt;
-                    ptr_record->wc_heap_size_intra_frame = ptr_record->block_size;
-                }
+                /* no need to re-size the list -> the initially allocated size should be large enough */
             }
             else
             {
@@ -1451,23 +1463,6 @@ void update_mem( void )
 
                 list_current_inter_frame_heap[n_items_current_inter_frame_heap++] = i_record;
                 size_current_inter_frame_heap += ptr_record->block_size;
-
-                /* check, if this is the new worst-case */
-                if ( size_current_inter_frame_heap > size_wc_inter_frame_heap )
-                {
-                    if ( n_items_current_inter_frame_heap >= max_items_wc_inter_frame_heap )
-                    {
-                        /* resize list, if needed */
-                        max_items_wc_inter_frame_heap = n_items_current_inter_frame_heap + MAX_NUM_RECORDS_REALLOC_STEP;
-                        list_wc_inter_frame_heap = realloc( list_wc_inter_frame_heap, max_items_wc_inter_frame_heap * sizeof( int ) );
-                    }
-
-                    memmove( list_wc_inter_frame_heap, list_current_inter_frame_heap, n_items_current_inter_frame_heap * sizeof( int ) );
-                    n_items_wc_inter_frame_heap = n_items_current_inter_frame_heap;
-                    size_wc_inter_frame_heap = size_current_inter_frame_heap;
-                    location_wc_inter_frame_heap = update_cnt;
-                    ptr_record->wc_heap_size_inter_frame = ptr_record->block_size;
-                }
             }
             else
             {
@@ -1490,9 +1485,60 @@ void update_mem( void )
         }
     }
 
+    /* check, if this is the new worst-case for intra-frame heap memory */
+    if ( size_current_intra_frame_heap > size_wc_intra_frame_heap )
+    {
+        if ( n_items_current_intra_frame_heap >= max_items_wc_intra_frame_heap )
+        {
+            /* resize the list, if needed */
+            max_items_wc_intra_frame_heap = n_items_current_intra_frame_heap + MAX_NUM_RECORDS_REALLOC_STEP;
+            list_wc_intra_frame_heap = realloc( list_wc_intra_frame_heap, max_items_wc_intra_frame_heap * sizeof( int ) );
+        }
+
+        /* copy current-frame list to worst-case list */
+        memmove( list_wc_intra_frame_heap, list_current_intra_frame_heap, n_items_current_intra_frame_heap * sizeof( int ) );
+        n_items_wc_intra_frame_heap = n_items_current_intra_frame_heap;
+        size_wc_intra_frame_heap = size_current_intra_frame_heap;
+        location_wc_intra_frame_heap = update_cnt;
+
+        /* update the wc numbers in all individual records */
+        for ( i = 0; i < n_items_wc_intra_frame_heap; i++ )
+        {
+            i_record = list_wc_intra_frame_heap[i];
+            ptr_record = &( allocation_list[i_record] );
+            ptr_record->wc_heap_size_intra_frame = ptr_record->block_size;
+        }
+    }
+
+    /* check, if this is the new worst-case for inter-frame heap memory */
+    if ( size_current_inter_frame_heap > size_wc_inter_frame_heap )
+    {
+        if ( n_items_current_inter_frame_heap >= max_items_wc_inter_frame_heap )
+        {
+            /* resize list, if needed */
+            max_items_wc_inter_frame_heap = n_items_current_inter_frame_heap + MAX_NUM_RECORDS_REALLOC_STEP;
+            list_wc_inter_frame_heap = realloc( list_wc_inter_frame_heap, max_items_wc_inter_frame_heap * sizeof( int ) );
+        }
+
+        /* copy current-frame list to worst-case list */
+        memmove( list_wc_inter_frame_heap, list_current_inter_frame_heap, n_items_current_inter_frame_heap * sizeof( int ) );
+        n_items_wc_inter_frame_heap = n_items_current_inter_frame_heap;
+        size_wc_inter_frame_heap = size_current_inter_frame_heap;
+        location_wc_inter_frame_heap = update_cnt;
+
+        /* update the wc numbers in all individual records */
+        for ( i = 0; i < n_items_wc_inter_frame_heap; i++ )
+        {
+            i_record = list_wc_inter_frame_heap[i];
+            ptr_record = &( allocation_list[i_record] );
+            ptr_record->wc_heap_size_inter_frame = ptr_record->block_size;
+        }
+    }
+
     /* reset heap allocation call tree */
     heap_allocation_call_tree_size = 0;
 
+    /* de-allocate list of intra-frame heap memory blocks in the current fraeme - it's needed only inside this function */
     if ( list_current_intra_frame_heap )
     {
         free( list_current_intra_frame_heap );
@@ -1607,7 +1653,7 @@ static void mem_count_summary( void )
 
                 if ( ptr_record->noccurances > 1 )
                 {
-                    sprintf( size_str, "%dx%d %s", ptr_record->noccurances, (int) ( ( ptr_record->noccurances * ptr_record->wc_heap_size_intra_frame ) >> Stat_Cnt_Size ), Count_Unit[Stat_Cnt_Size] );
+                    sprintf( size_str, "%dx%d %s", ptr_record->noccurances, (int) ( ptr_record->wc_heap_size_intra_frame >> Stat_Cnt_Size ), Count_Unit[Stat_Cnt_Size] );
                 }
                 else
                 {
@@ -1636,7 +1682,7 @@ static void mem_count_summary( void )
                 continue;
             }
             ptr_record = &( allocation_list[index_record] );
-            ptr_record->noccurances = 1; /* reset the counter because som blocks may be both, intra-frame and inter-frame */
+            ptr_record->noccurances = 1; /* reset the counter as some blocks may have been both, intra-frame and inter-frame */
             for ( j = i + 1; j < n_items_wc_inter_frame_heap; j++ )
             {
                 index = list_wc_inter_frame_heap[j];
@@ -1655,7 +1701,7 @@ static void mem_count_summary( void )
         }
 
         /* Print Header */
-        sprintf( buf, format_str, "Function Name", "Line", "Type", "Function Parameters", "Maximum Size", "Usage" );
+        sprintf( buf, format_str, "Function Name", "Line", "Type", "Function Parameters", "Memory Size", "Usage" );
         puts( buf );
         length = strlen( buf );
         sprintf( buf, "%0*d\n", (int) length - 1, 0 );
@@ -1690,11 +1736,11 @@ static void mem_count_summary( void )
                 sprintf( line_str, "%d", ptr_record->lineno );
 
                 /* prepare average usage & memory size strings */
-                sprintf( usage_str, "%d%%", (int) ( ( (float) ptr_record->total_used_size / ( ptr_record->total_block_size + 1 ) ) * 100.0f ) );
+                sprintf( usage_str, "%d%%", (int) ( ( (float) ptr_record->total_used_size / ( ptr_record->total_block_size + 0.1f ) ) * 100.0f + 0.5f ) );
 
                 if ( ptr_record->noccurances > 1 )
                 {
-                    sprintf( size_str, "%dx%d %s", ptr_record->noccurances, (int) ( ( ptr_record->noccurances * ptr_record->wc_heap_size_inter_frame ) >> Stat_Cnt_Size ), Count_Unit[Stat_Cnt_Size] );
+                    sprintf( size_str, "%dx%d %s", ptr_record->noccurances, (int) ( ptr_record->wc_heap_size_inter_frame >> Stat_Cnt_Size ), Count_Unit[Stat_Cnt_Size] );
                 }
                 else
                 {
@@ -1712,45 +1758,6 @@ static void mem_count_summary( void )
     return;
 }
 
-/*-------------------------------------------------------------------*
- * export_mem()
- *
- * Export detailed (per-item) information about heap memory usage to a .csv file
- *--------------------------------------------------------------------*/
-
-void export_mem( const char *csv_filename )
-{
-    int i;
-    static FILE *fid = NULL;
-    allocator_record *record_ptr;
-
-    if ( csv_filename == NULL || strcmp( csv_filename, "" ) == 0 )
-    {
-        return;
-    }
-
-    /* Check, if the .csv file has already been opened */
-    if ( fid == NULL )
-    {
-        fid = fopen( csv_filename, "wb" );
-
-        if ( fid == NULL )
-        {
-            fprintf( stderr, "\nCannot open %s!\n\n", csv_filename );
-            exit( -1 );
-        }
-    }
-
-    /* Export individual heap memory records to a .csv file */
-    for ( i = 0; i < Num_Records; i++ )
-    {
-        record_ptr = &( allocation_list[i] );
-        fprintf( fid, "%s:%d,%d;", record_ptr->name, record_ptr->lineno, record_ptr->block_size );
-    }
-    fprintf( fid, "\n" );
-
-    return;
-}
 #endif
 
 /*-------------------------------------------------------------------*
@@ -1900,6 +1907,13 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
     {
         free( list_wc_inter_frame_heap );
     }
+
+#ifdef MEM_COUNT_DETAILS
+    if ( fid_csv_filename != NULL )
+    {
+        fclose( fid_csv_filename );
+    }
+#endif
 
     return;
 }
