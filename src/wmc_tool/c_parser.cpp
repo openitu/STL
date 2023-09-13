@@ -141,10 +141,7 @@
     "printf fprintf  "                                 \
     "fopen fclose fwrite fread  "                      \
     "exit  "                                           \
-    "assert  "                                         \
-    "push_indice set_indice get_indice exist_indice  " \
-    "reset_indices write_indices read_indices  "       \
-    "read_bitstream_info reset_stack push_stack "
+    "assert  "                                         
 
 #define MATH_FUNCTS_STRING      \
     "abs fabs labs  "           \
