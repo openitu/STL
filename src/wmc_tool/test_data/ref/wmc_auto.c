@@ -1,5 +1,5 @@
 /*
- * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -1924,3 +1924,4 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
 int cntr_push_pop = 0; /* global counter for checking balanced push_wmops()/pop_wmops() pairs when WMOPS is not activated */
 #endif
 
+ 

@@ -82,7 +82,8 @@ static void usage()
           "     -m filename [--rom filename]: add statistics about ROM and RAM consumption\n"
           "        note: filename shall point to a .c file containing the print_mem() function\n"
           "     -b [--no-backup]: no backup of original files\n"
-          "     -c dirname [--generate-wmc-files dirname]: copy wmc_auto.h and wmc_auto.c to a user-specified directory\n\n",
+          "     -c dirname [--generate-wmc-files dirname]: copy wmc_auto.h and wmc_auto.c to a user-specified directory\n",
+          "     -f value [--frames-per-second value]: set the number of frames per second (default 50.0)\n\n",
           WMC_TOOL_VERSION_NO, VERSION_STL);
 
     return;
@@ -95,7 +96,8 @@ static TOOL_ERROR Parse_Command_Line(
     int* Operation,
     unsigned int* Tool_Warning_Mask,
     char* Const_Data_PROM_File,
-    char* wmops_output_dir
+    char* wmops_output_dir,
+    float *frames_per_sec
 )
 {
     int i;
@@ -126,6 +128,8 @@ static TOOL_ERROR Parse_Command_Line(
 
     /* Parse all options */
     *i_last_cmd__line_option = 0;
+    *frames_per_sec = 50.0;
+
     i = 0;
     while (i < nargs && *args[i] == '-')
     {
@@ -221,12 +225,24 @@ static TOOL_ERROR Parse_Command_Line(
 
             *Operation |= OUTPUT_WMOPS_FILES;
         }
+        else if (_stricmp(arg_name, "f") == 0 || _stricmp(arg_name, "frames-per-second") == 0)
+        {
+            /* get the next argument - must be a positive float number */
+            i++;
+
+            /* get the value */
+            if ((*frames_per_sec = strtof(args[i], NULL)) <= 0.0 )
+            {
+                fprintf(stderr, "Incorrect number of frames per second specified: %s!\n\n", args[i]);
+                return ERR_CMD_LINE;
+            }
+        }
 
         /* Move to the next argument */
         i++;
     }
 
-    /* return the position of the first non-option argument */
+    /* return the position of the first non-optional argument */
     *i_last_cmd__line_option = i;
 
     return NO_ERR;
@@ -1008,75 +1024,90 @@ static TOOL_ERROR Process_File(
  * Output_Wmops_File
  *-------------------------------------------------------------------*/
 
-static TOOL_ERROR Output_Wmops_File( char *PathName, bool Backup )
+static TOOL_ERROR Output_Wmops_File( char *PathName, float frames_per_sec, bool Backup )
 {
     TOOL_ERROR ErrCode = NO_ERR;
-    FILE *file;
-    int i;
-    size_t file_size;
-    char LongFileName[MAX_PATH + 1]; /* +1 for NUL Char*/
+    FILE *TargetFile;
+    int i, len, size;
+    char SrcFileName[MAX_PATH + 1]; /* +1 for NUL Char*/
+    char TargetFileName[MAX_PATH + 1]; /* +1 for NUL Char*/
+    char *text = NULL, *p_str, temp_str[50];
 
+    const char* wmops_auto_files[] = { "wmc_auto.h", "wmc_auto.c" };
     static const char wmops_auto_file_h[] =
 #include "wmc_auto_h.txt"
         ;
     static const char wmops_auto_file_c[] =
 #include "wmc_auto_c.txt"
         ;
+
     for (i = 0; i < 2; i++)
     {
-        if (i == 0)
+        /* Copy the source file contents to a char * buffer for further manipulation */
+        size = i == 0 ? sizeof(wmops_auto_file_h) : sizeof(wmops_auto_file_c);
+
+        text = (char*)calloc(size, sizeof(char));
+        if (text == NULL)
         {
-            /* Create Output Filename */
-            strcpy(LongFileName, PathName);
-            strcat(LongFileName, "/wmc_auto.h");
+            ErrCode = ERR_FILE_READ;
+            Error("Error reading file " DQUOTE("%s"), ErrCode, SrcFileName);
+            goto ret;
+        }
 
-            /* Try opening the target file wmc_auto.h */
-            if ((file = fopen(LongFileName, "wb")) == NULL)
-            {
-                ErrCode = ERR_FILE_OPEN;
-                Error("Cannot Open " DQUOTE("%s"), ErrCode, "wmc_auto.h");
-                goto ret;
-            }
+        strncpy(text, i == 0 ? wmops_auto_file_h : wmops_auto_file_c, size);
 
-            /* Write it */
-            file_size = sizeof(wmops_auto_file_h) - 1;
-            if (fwrite(wmops_auto_file_h, 1, file_size, file) != file_size)
-            {
-                ErrCode = Write_Error(LongFileName);
-                goto ret;
-            }
+        /* Replace the constant FRAMES_PER_SECOND */
+        p_str = strstr(text, "#define FRAMES_PER_SECOND 50.0");
 
-            /* Close the File */
-            fclose(file);
+        if (p_str != NULL)
+        {
+            sprintf(temp_str, "#define FRAMES_PER_SECOND %.1f", frames_per_sec);
+            strncpy(p_str, temp_str, sizeof(temp_str));
+        }
+
+        /* Create Target Filename */
+        strcpy(TargetFileName, PathName);
+
+        /* strip off surrounding quotes "" */
+        strip(TargetFileName, '"');
+
+        /* Replace '\' Windows Directory Delimiter by UNIX '/' */
+        strcsub(TargetFileName, '\\', '/');
+
+        /* check that there is a proper trailing '/' */
+        len = (int)strlen(TargetFileName);
+        if (TargetFileName[len - 1] != '/')
+        {
+            /* add a trailing '/' */
+            strcat(TargetFileName, "/");
         }
         else
         {
-            /* Create Output Filename */
-            strcpy(LongFileName, PathName);
-            strcat(LongFileName, "/wmc_auto.c");
-
-            /* Try opening the target file wmc_auto.c */
-            if ((file = fopen(LongFileName, "wb")) == NULL)
+            /* remove all extra trailing '/' */
+            while (TargetFileName[len - 2] == '/')
             {
-                ErrCode = ERR_FILE_OPEN;
-                Error("Cannot Open " DQUOTE("%s"), ErrCode, "wmc_auto.c");
-                goto ret;
+                TargetFileName[len - 1] = '\0';
+                len--;
             }
-
-            /* Write it */
-            file_size = sizeof(wmops_auto_file_c) - 1;
-            if (fwrite(wmops_auto_file_c, 1, file_size, file) != file_size)
-            {
-                ErrCode = Write_Error(LongFileName);
-                goto ret;
-            }
-
-            /* Close the File */
-            fclose(file);
         }
+        strcat(TargetFileName, wmops_auto_files[i]);
+
+        /* Try opening the target file */
+        if ((TargetFile = fopen(TargetFileName, "wb")) == NULL)
+        {
+            ErrCode = ERR_FILE_OPEN;
+            Error("Cannot Open " DQUOTE("%s"), ErrCode, TargetFileName);
+            goto ret;
+        }
+
+        /* Write the whole content to the target file */
+        fwrite(text, size, 1, TargetFile);
+        fclose(TargetFile);
+        free(text);
     }
 
 ret:
+
     return ErrCode;
 }
 
@@ -1096,6 +1127,7 @@ int main( int argc, char *argv[] )
     char LongFileName[MAX_PATH];
     char Const_Data_PROM_File[MAX_PATH] = "";
     char wmops_output_dir[MAX_PATH];
+    float frames_per_sec;
     T_FILE_BOOK file_book[MAX_RECORDS];
     struct stat s;
     Parse_Context_def ParseContext;
@@ -1122,7 +1154,7 @@ int main( int argc, char *argv[] )
     if ( ( ErrCode = Parse_Command_Line( argc, argv, &i_cmd_line, &Operation,
                                          &Tool_Warning_Mask,
                                          Const_Data_PROM_File,
-                                         wmops_output_dir) ) != NO_ERR )
+                                         wmops_output_dir, &frames_per_sec) ) != NO_ERR )
     {
         if (ErrCode == ERR_HELP)
         {
@@ -1254,6 +1286,7 @@ int main( int argc, char *argv[] )
                 {
                     /* it's an existing directory without file mask -> use *.c as default */
                     strcpy(file_book[i].pathname, file_book[i].cmd_line_spec);
+
                     /* remove the trailing '/', if any */
                     size = (int)strlen(file_book[i].pathname);
                     while (file_book[i].pathname[size - 1] == '/')
@@ -1409,7 +1442,7 @@ int main( int argc, char *argv[] )
     if (Operation & OUTPUT_WMOPS_FILES)
     { /* Yes */
 
-        if ((ErrCode = Output_Wmops_File(wmops_output_dir, (Operation & NO_BACKUP) == 0)) != NO_ERR)
+        if ((ErrCode = Output_Wmops_File(wmops_output_dir, frames_per_sec, (Operation & NO_BACKUP) == 0)) != NO_ERR)
         {
             goto ret;
         }
