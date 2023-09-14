@@ -1012,7 +1012,7 @@
 "int pop_stack( const char *filename, const char *fctname );\r\n"
 "\r\n"
 "#ifdef WMOPS_DETAIL\r\n"
-"#define STACK_DEPTH_FCT_CALL   ( push_wmops( __FUNCTION__ ), push_stack( __FILE__, __FUNCTION__ ) ) /* add push_wmops() in all function calls */\r\n"
+"#define STACK_DEPTH_FCT_CALL   ( push_wmops( __FUNCTION__ \" [WMC_AUTO]\" ), push_stack( __FILE__, __FUNCTION__ ) ) /* add push_wmops() in all function calls */\r\n"
 "#define STACK_DEPTH_FCT_RETURN ( pop_wmops(), pop_stack( __FILE__, __FUNCTION__ ) )                 /* add pop_wmops() in all function returns */\r\n"
 "#else\r\n"
 "#define STACK_DEPTH_FCT_CALL   push_stack( __FILE__, __FUNCTION__ )\r\n"

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -349,41 +349,19 @@ void update_wmops( void )
 
 void print_wmops( void )
 {
-    int i;
+    int i, label_len, max_label_len;
 
-    char *sfmts = "%20s %8s %8s %7s %7s\n";
-    char *dfmts = "%20s %8.2f %8.3f %7.3f %7.3f\n";
-    char *sfmt = "%20s %8s %8s %7s %7s  %7s %7s %7s\n";
-    char *dfmt = "%20s %8.2f %8.3f %7.3f %7.3f  %7.3f %7.3f %7.3f\n";
+    char *sfmts = "%*s %8s %8s %7s %7s\n";
+    char *dfmts = "%*s %8.2f %8.3f %7.3f %7.3f\n";
+    char *sfmt  = "%*s %8s %8s %7s %7s  %7s %7s %7s\n";
+    char *dfmt  = "%*s %8.2f %8.3f %7.3f %7.3f  %7.3f %7.3f %7.3f\n";
 
 #ifdef WMOPS_WC_FRAME_ANALYSIS
-    int j, label_len, max_label_len;
+    int j;
     char *sfmtt = "%20s %4s %15s\n";
     char *dfmtt = "%20s %4d  ";
 #endif
 
-    fprintf( stdout, "\n\n --- Complexity analysis [WMOPS] ---  \n\n" );
-
-    fprintf( stdout, "%54s  %23s\n", "|------  SELF  ------|", "|---  CUMULATIVE  ---|" );
-    fprintf( stdout, sfmt, "        routine", " calls", "  min ", "  max ", "  avg ", "  min ", "  max ", "  avg " );
-    fprintf( stdout, sfmt, "---------------", "------", "------", "------", "------", "------", "------", "------" );
-
-    for ( i = 0; i < num_records; i++ )
-    {
-        fprintf( stdout, dfmt, wmops[i].label, update_cnt == 0 ? 0 : (float) wmops[i].call_number / update_cnt,
-                 wmops[i].min_selfcnt == DOUBLE_MAX ? 0 : FAC * wmops[i].min_selfcnt,
-                 FAC * wmops[i].max_selfcnt,
-                 wmops[i].update_cnt == 0 ? 0 : FAC * wmops[i].tot_selfcnt / wmops[i].update_cnt,
-                 wmops[i].min_cnt == DOUBLE_MAX ? 0 : FAC * wmops[i].min_cnt,
-                 FAC * wmops[i].max_cnt,
-                 wmops[i].update_cnt == 0 ? 0 : FAC * wmops[i].tot_cnt / wmops[i].update_cnt );
-    }
-
-    fprintf( stdout, sfmts, "---------------", "------", "------", "------", "------" );
-    fprintf( stdout, dfmts, "total", (float) update_cnt, update_cnt == 0 ? 0 : FAC * min_cnt, FAC * max_cnt, update_cnt == 0 ? 0 : FAC * ops_cnt / update_cnt );
-    fprintf( stdout, "\n" );
-
-#ifdef WMOPS_WC_FRAME_ANALYSIS
     /* calculate maximum label length for compact prinout */
     max_label_len = 0;
     for ( i = 0; i < num_records; i++ )
@@ -396,8 +374,30 @@ void print_wmops( void )
     }
     max_label_len += 4;
 
+    fprintf( stdout, "\n\n --- Complexity analysis [WMOPS] ---  \n\n" );
+    
+    fprintf( stdout, "%*s %33s  %23s\n", max_label_len, "", "|------  SELF  ------|", "|---  CUMULATIVE  ---|" );
+    fprintf( stdout, sfmt, max_label_len, "        routine", " calls", "  min ", "  max ", "  avg ", "  min ", "  max ", "  avg " );
+    fprintf( stdout, sfmt, max_label_len, "---------------", "------", "------", "------", "------", "------", "------", "------" );
+
+    for ( i = 0; i < num_records; i++ )
+    {
+        fprintf( stdout, dfmt, max_label_len, wmops[i].label, update_cnt == 0 ? 0 : (float) wmops[i].call_number / update_cnt,
+                 wmops[i].min_selfcnt == DOUBLE_MAX ? 0 : FAC * wmops[i].min_selfcnt,
+                 FAC * wmops[i].max_selfcnt,
+                 wmops[i].update_cnt == 0 ? 0 : FAC * wmops[i].tot_selfcnt / wmops[i].update_cnt,
+                 wmops[i].min_cnt == DOUBLE_MAX ? 0 : FAC * wmops[i].min_cnt,
+                 FAC * wmops[i].max_cnt,
+                 wmops[i].update_cnt == 0 ? 0 : FAC * wmops[i].tot_cnt / wmops[i].update_cnt );
+    }
+
+    fprintf( stdout, sfmts, max_label_len, "---------------", "------", "------", "------", "------" );
+    fprintf( stdout, dfmts, max_label_len, "total", (float) update_cnt, update_cnt == 0 ? 0 : FAC * min_cnt, FAC * max_cnt, update_cnt == 0 ? 0 : FAC * ops_cnt / update_cnt );
+    fprintf( stdout, "\n" );
+
+#ifdef WMOPS_WC_FRAME_ANALYSIS
     fprintf( stdout, "\nComplexity analysis for the worst-case frame %ld:\n", fnum_cnt_wc );
-    fprintf( stdout, "%*s %8s %10s %12s\n", max_label_len, "        routine", " calls", " SELF", "  CUMULATIVE" );
+    fprintf( stdout, "%*s %8s %10s %12s\n", max_label_len,   "        routine", " calls", " SELF", "  CUMULATIVE" );
     fprintf( stdout, "%*s %8s %10s   %10s\n", max_label_len, "---------------", "------", "------", "----------" );
 
     for ( i = 0; i < num_records; i++ )
