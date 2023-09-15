@@ -6438,8 +6438,14 @@ TOOL_ERROR Setup_Regions(
         if ( ( end = Find_Identifier( ptr, WMC_TOOL_SKIP_STRING, ParseTbl_ptr,
                                       ITEM_PREPROC_ARGS | ITEM_PREPROC_UNDEF, ITEM_ENCLOSED, &idx ) ) == NULL )
         { /* No */
+            
+            /* Error - #undef WMC_TOOL_SKIP missing ! */
+            ErrCode = ERR_EXPECTED_EOS;
+            Error("Unable to find matching #undef %s!", ErrCode, WMC_TOOL_SKIP_STRING);
+            goto ret;
+
             /* Skipped Regon will End at EOF */
-            end = file_ptr->Data + file_ptr->Size;
+            //end = file_ptr->Data + file_ptr->Size;
         }
         else
         { /* Yes */
