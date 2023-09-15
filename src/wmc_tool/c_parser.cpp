@@ -4105,6 +4105,7 @@ static TOOL_ERROR Find_Constants(
                     memset( str, 0, sizeof( str ) );
                     memmove( str, ptr2 - LEN, LEN );
                     memmove( str + LEN + 1, ptr, LEN );
+
                     for ( temp = 0; temp < sizeof( str ); temp++ )
                     {
                         if ( IS_EOL_CHAR( str[temp] ) || IS_RESERVED_CHAR( str[temp] ) )
@@ -4112,8 +4113,8 @@ static TOOL_ERROR Find_Constants(
                             str[temp] = ' ';
                         }
                     }
-                    printf( "%s: Number=%s#%s#\n", ptr2 == ptr4 ? "+/- is Oper" : "+/- is Cste",
-                            str, memstr( ptr2, ptr ) /*, str+LEN+1*/ );
+
+                    fprintf( stdout, "%s: Number=%s#%s#\n", ptr2 == ptr4 ? "+/- is Oper" : "+/- is Cste", str, memstr( ptr2, ptr ) /*, str+LEN+1*/ );
                 }
 #endif
             }
@@ -8692,14 +8693,14 @@ static void Print_Words( const char *words, bool ds = false, int margin = 4 )
             /* Terminate String */
             temp[margin + lin_length] = NUL_CHAR;
             /* Print */
-            printf("%s", temp);
+            fprintf(stdout, "%s", temp);
             /* Advance */
             ptr += lin_length;
             /* Update Remaining Length */
             str_length -= lin_length;
         } while ( str_length > 0 );
         /* Print newline */
-        printf( "\n" );
+        fprintf(stdout, "\n" );
     }
 }
 
@@ -8710,34 +8711,34 @@ void Print_Information( void )
 {
     int i;
 
-    printf( "\n  Manual Macros Removed during Desintrumentation:\n" );
+    fprintf(stdout, "\n  Manual Macros Removed during Desintrumentation:\n" );
     Print_Words( MANUAL_COUNTING_MACROS_STRING );
-    printf( "\n  WMOPS Library Functions that are not Instrumented:\n" );
+    fprintf(stdout, "\n  WMOPS Library Functions that are not Instrumented:\n" );
     Print_Words( WMOPS_COUNTLIB_FUNCTS_STRING, true );
-    printf( "\n  Other Counting Functions that are not Instrumented:\n" );
+    fprintf(stdout, "\n  Other Counting Functions that are not Instrumented:\n" );
     Print_Words( OTHER_COUNTLIB_FUNCTS_STRING );
-    printf( "\n  WMC_Tool Functions that are not Instrumented:\n" );
+    fprintf(stdout, "\n  WMC_Tool Functions that are not Instrumented:\n" );
     Print_Words( TOOL_FUNCTS_STRING, true );
-    printf( "\n  System Functions that are not Instrumented:\n" );
+    fprintf(stdout, "\n  System Functions that are not Instrumented:\n" );
     Print_Words( SYSTEM_FUNCTS_STRING );
-    printf( "\n  System Functions that are Instrumented:\n" );
+    fprintf(stdout, "\n  System Functions that are Instrumented:\n" );
     Print_Words( SYSTEM_ALLOC_FUNCTS_STRING );
 
-    printf( "\n  Preprocessor Directives that are Ignored:\n" );
+    fprintf(stdout, "\n  Preprocessor Directives that are Ignored:\n" );
     for (i = 0; Conditionnal_Directives[i] != NULL; i++)
     {
-        printf("    %c%s\n", PREPROC_CHAR, Conditionnal_Directives[i]);
+        fprintf(stdout, "    %c%s\n", PREPROC_CHAR, Conditionnal_Directives[i]);
     }
-    printf( "    %c%s\n", PREPROC_CHAR, Undefine_Directive );
+    fprintf(stdout, "    %c%s\n", PREPROC_CHAR, Undefine_Directive );
     for (i = 0; Other_Directives[i] != NULL; i++)
     {
-        printf("    %c%s\n", PREPROC_CHAR, Other_Directives[i]);
+        fprintf(stdout, "    %c%s\n", PREPROC_CHAR, Other_Directives[i]);
     }
 
-    printf( "\n  Math Functions that are Instrumented:\n" );
+    fprintf(stdout, "\n  Math Functions that are Instrumented:\n" );
     Print_Words( MATH_FUNCTS_STRING );
 
-    printf( "\n  Keywords that are Instrumented:\n" );
+    fprintf(stdout, "\n  Keywords that are Instrumented:\n" );
     for ( i = 0; i < (int)(nitems( keywords )); i++ )
     {
         if ( !( keywords[i].kw_type & ITEM_SKIPPED ) )
@@ -8746,7 +8747,7 @@ void Print_Information( void )
         }
     }
 
-    printf( "\n  Keywords that are not Instrumented:\n" );
+    fprintf(stdout, "\n  Keywords that are not Instrumented:\n" );
     for ( i = 0; i < (int)(nitems( keywords )); i++ )
     {
         if ( keywords[i].kw_type & ITEM_SKIPPED )
@@ -8755,22 +8756,22 @@ void Print_Information( void )
         }
     }
 
-    printf( "\n  Recognized Data Types:\n" );
+    fprintf(stdout, "\n  Recognized Data Types:\n" );
     Print_Words( TYPES_STRING );
 
-    printf( "\n  Macros used to Instrument: \n" );
-    printf( "    switch/case: %s(n)\n", AUTO_CASE_COUNTING_MACRO_STRING );
-    printf( "    logical operators: %s\n", LOGICAL_INSTRUMENT_STRING );
-    printf( "    ternary operators: %s\n", TERNARY_INSTRUMENT_STRING );
-    printf( "    all other operators: %s(\"ops_string\")\n", AUTO_DEFAULT_COUNTING_MACRO_STRING );
+    fprintf(stdout, "\n  Macros used to Instrument: \n" );
+    fprintf(stdout, "    switch/case: %s(n)\n", AUTO_CASE_COUNTING_MACRO_STRING );
+    fprintf(stdout, "    logical operators: %s\n", LOGICAL_INSTRUMENT_STRING );
+    fprintf(stdout, "    ternary operators: %s\n", TERNARY_INSTRUMENT_STRING );
+    fprintf(stdout, "    all other operators: %s(\"ops_string\")\n", AUTO_DEFAULT_COUNTING_MACRO_STRING );
 
-    printf( "\n  Include File Required in Instrumented Source Files:\n" );
-    printf( "    %s\n", WMOPS_LIB_INCLUDE_STRING );
+    fprintf(stdout, "\n  Include File Required in Instrumented Source Files:\n" );
+    fprintf(stdout, "    %s\n", WMOPS_LIB_INCLUDE_STRING );
 
-    printf( "\n  Skip Instrumentation:\n" );
-    printf( "    Begin Uninstrumented Segment: #define " WMC_TOOL_SKIP_STRING "\n" );
-    printf( "    End of Uninstrumented Segment: #undef  " WMC_TOOL_SKIP_STRING "\n" );
-    printf( "\n" );
+    fprintf(stdout, "\n  Skip Instrumentation:\n" );
+    fprintf(stdout, "    Begin Uninstrumented Segment: #define " WMC_TOOL_SKIP_STRING "\n" );
+    fprintf(stdout, "    End of Uninstrumented Segment: #undef  " WMC_TOOL_SKIP_STRING "\n" );
+    fprintf(stdout, "\n" );
 }
 
 /*-------------------------------------------------------------------*
