@@ -27,7 +27,6 @@
 
 #include "wmc_auto.h"
 
-
 #define WMC_TOOL_SKIP /* Skip the instrumentation of this file, if invoked by accident */
 
 #ifdef WMOPS
@@ -36,23 +35,26 @@
  * Complexity counting tool
  *--------------------------------------------------------------------*/
 
-#define MAX_RECORDS 1024
-#define MAX_CHAR    64
-#define MAX_STACK   64
-#define DOUBLE_MAX  0x80000000
+#define MAX_FUNCTION_NAME_LENGTH     50  /* Maximum length of the function name */
+#define MAX_PARAMS_LENGTH            50  /* Maximum length of the function parameter string */
+#define MAX_NUM_RECORDS              300 /* Initial maximum number of records -> mightb be increased during runtime, if needed */
+#define MAX_NUM_RECORDS_REALLOC_STEP 50  /* When re-allocating the list of records, increase the number of records by this number */
 
-struct wmops_record
+#define MAX_CALL_TREE_DEPTH          100 /* maximum depth of the function call tree */
+#define DOUBLE_MAX                   0x80000000
+
+typedef struct 
 {
-    char label[MAX_CHAR];
+    char label[MAX_FUNCTION_NAME_LENGTH];
     long call_number;
     long update_cnt;
-    int call_tree[MAX_RECORDS];
+    int call_tree[MAX_CALL_TREE_DEPTH];
     double start_selfcnt;
     double current_selfcnt;
     double max_selfcnt;
     double min_selfcnt;
     double tot_selfcnt;
-    double start_cnt; /* The following take into account the decendants */
+    double start_cnt; 
     double current_cnt;
     double max_cnt;
     double min_cnt;
@@ -63,16 +65,14 @@ struct wmops_record
     double wc_selfcnt;
     int32_t wc_call_number;
 #endif
-};
+} wmops_record;
 
 double ops_cnt;
 double prom_cnt;
 double inst_cnt[NUM_INST];
 
-static struct wmops_record wmops[MAX_RECORDS];
-static int stack[MAX_STACK];
-static int sptr;
-static int num_records;
+static wmops_record *wmops = NULL;
+static int num_wmops_records, max_num_wmops_records;
 static int current_record;
 static long update_cnt;
 static double start_cnt;
@@ -80,20 +80,41 @@ static double max_cnt;
 static double min_cnt;
 static double inst_cnt_wc[NUM_INST];
 static long fnum_cnt_wc;
-
+static int *wmops_caller_stack = NULL, wmops_caller_stack_index, max_wmops_caller_stack_index = 0;
 static int *heap_allocation_call_tree = NULL, heap_allocation_call_tree_size = 0, heap_allocation_call_tree_max_size = 0;
-
 
 void reset_wmops( void )
 {
     int i, j;
 
-    for ( i = 0; i < MAX_RECORDS; i++ )
+    num_wmops_records = 0;
+    max_num_wmops_records = MAX_NUM_RECORDS;
+    current_record = -1;
+    update_cnt = 0;
+
+    max_cnt = 0.0;
+    min_cnt = DOUBLE_MAX;
+    start_cnt = 0.0;
+    ops_cnt = 0.0;
+
+    /* allocate the list of wmops records */
+    if ( wmops == NULL )
+    {
+        wmops = (wmops_record *)malloc( max_num_wmops_records * sizeof( wmops_record ) );
+    }
+
+    if ( wmops == NULL )
+    {
+        fprintf( stderr, "Error: Unable to Allocate List of WMOPS Records!" );
+        exit( -1 );
+    }
+
+    for ( i = 0; i < max_num_wmops_records; i++ )
     {
         strcpy( &wmops[i].label[0], "\0" );
         wmops[i].call_number = 0;
         wmops[i].update_cnt = 0;
-        for ( j = 0; j < MAX_RECORDS; j++ )
+        for ( j = 0; j < MAX_CALL_TREE_DEPTH; j++ )
         {
             wmops[i].call_tree[j] = -1;
         }
@@ -111,22 +132,30 @@ void reset_wmops( void )
         wmops[i].wc_cnt = 0.0;
         wmops[i].wc_selfcnt = 0.0;
         wmops[i].current_call_number = 0;
+        wmops[i].wc_call_number = -1;
 #endif
     }
 
-    for ( i = 0; i < MAX_STACK; i++ )
+    /* allocate the list of wmops callers to track the sequence of function calls */
+    wmops_caller_stack_index = 0;
+    max_wmops_caller_stack_index = MAX_NUM_RECORDS;
+    if ( wmops_caller_stack == NULL )
     {
-        stack[i] = -1;
+        wmops_caller_stack = malloc( max_wmops_caller_stack_index * sizeof( int ) );
     }
-    sptr = 0;
-    num_records = 0;
-    current_record = -1;
-    update_cnt = 0;
 
-    max_cnt = 0.0;
-    min_cnt = DOUBLE_MAX;
-    start_cnt = 0.0;
-    ops_cnt = 0.0;
+    if ( wmops_caller_stack == NULL )
+    {
+        fprintf( stderr, "Error: Unable to Allocate List of WMOPS Callers!" );
+        exit( -1 );
+    }
+
+    for ( i = 0; i < max_wmops_caller_stack_index; i++ )
+    {
+        wmops_caller_stack[i] = -1;
+    }
+
+    return;
 }
 
 
@@ -135,9 +164,9 @@ void push_wmops( const char *label )
     int new_flag;
     int i, j;
 
-    /* Check if new function record label */
+    /* Check, if this is a new function label */
     new_flag = 1;
-    for ( i = 0; i < num_records; i++ )
+    for ( i = 0; i < num_wmops_records; i++ )
     {
         if ( strcmp( wmops[i].label, label ) == 0 )
         {
@@ -146,33 +175,36 @@ void push_wmops( const char *label )
         }
     }
 
-    /* Configure new record */
+    /* Create a new record in the list */
     if ( new_flag )
     {
-        if ( num_records >= MAX_RECORDS )
+        if ( num_wmops_records >= max_num_wmops_records )
         {
-            fprintf( stdout, "push_wmops(): exceeded MAX_RECORDS count.\n\n" );
-            exit( -1 );
+            /* There is no room for a new wmops record -> reallocate the list */
+            max_num_wmops_records += MAX_NUM_RECORDS_REALLOC_STEP;
+            wmops = realloc( wmops, max_num_wmops_records * sizeof( wmops_record ) );
         }
+
         strcpy( wmops[i].label, label );
-        num_records++;
+        num_wmops_records++;
     }
 
-    /* Push current context onto stack */
+    /* Push the current context info to the new record */
     if ( current_record >= 0 )
     {
-        if ( sptr >= MAX_STACK )
+        if ( wmops_caller_stack_index >= max_wmops_caller_stack_index )
         {
-            fprintf( stdout, "\r push_wmops(): stack exceeded, try inreasing MAX_STACK\n" );
-            exit( -1 );
+            /* There is no room for a new record -> reallocate the list */
+            max_wmops_caller_stack_index += MAX_NUM_RECORDS_REALLOC_STEP;
+            wmops_caller_stack = realloc( wmops_caller_stack, max_wmops_caller_stack_index * sizeof( int ) );
         }
-        stack[sptr++] = current_record;
+        wmops_caller_stack[wmops_caller_stack_index++] = current_record;
 
         /* accumulate op counts */
         wmops[current_record].current_selfcnt += ops_cnt - wmops[current_record].start_selfcnt;
 
         /* update call tree */
-        for ( j = 0; j < MAX_RECORDS; j++ )
+        for ( j = 0; j < MAX_CALL_TREE_DEPTH; j++ )
         {
             if ( wmops[i].call_tree[j] == current_record )
             {
@@ -186,7 +218,7 @@ void push_wmops( const char *label )
         }
     }
 
-    /* init current record */
+    /* update the current context info */
     current_record = i;
     wmops[current_record].start_selfcnt = ops_cnt;
     wmops[current_record].start_cnt = ops_cnt;
@@ -214,9 +246,9 @@ void pop_wmops( void )
     wmops[current_record].current_cnt += ops_cnt - wmops[current_record].start_cnt;
 
     /* Get back previous context from stack */
-    if ( sptr > 0 )
+    if ( wmops_caller_stack_index > 0 )
     {
-        current_record = stack[--sptr];
+        current_record = wmops_caller_stack[--wmops_caller_stack_index];
         wmops[current_record].start_selfcnt = ops_cnt;
     }
     else
@@ -238,9 +270,9 @@ void update_wmops( void )
     float tmpF;
 #endif
 
-    if ( sptr != 0 )
+    if ( wmops_caller_stack_index != 0 )
     {
-        fprintf( stdout, "update_wmops(): Stack must be empty!\n" );
+        fprintf( stdout, "update_wmops(): WMOPS caller stack corrupted - check that all push_wmops() are matched with pop_wmops()!\n" );
         exit( -1 );
     }
 
@@ -265,7 +297,7 @@ void update_wmops( void )
 #ifdef WMOPS_WC_FRAME_ANALYSIS
     if ( ops_cnt - start_cnt > max_cnt )
     {
-        for ( i = 0; i < num_records; i++ )
+        for ( i = 0; i < num_wmops_records; i++ )
         {
             wmops[i].wc_cnt = wmops[i].current_cnt;
             wmops[i].wc_selfcnt = wmops[i].current_selfcnt;
@@ -274,7 +306,7 @@ void update_wmops( void )
     }
 #endif
 
-    for ( i = 0; i < num_records; i++ )
+    for ( i = 0; i < num_wmops_records; i++ )
     {
         wmops[i].tot_selfcnt += wmops[i].current_selfcnt;
         wmops[i].tot_cnt += wmops[i].current_cnt;
@@ -364,7 +396,7 @@ void print_wmops( void )
 
     /* calculate maximum label length for compact prinout */
     max_label_len = 0;
-    for ( i = 0; i < num_records; i++ )
+    for ( i = 0; i < num_wmops_records; i++ )
     {
         label_len = strlen( wmops[i].label );
         if ( label_len > max_label_len )
@@ -380,7 +412,7 @@ void print_wmops( void )
     fprintf( stdout, sfmt, max_label_len, "        routine", " calls", "  min ", "  max ", "  avg ", "  min ", "  max ", "  avg " );
     fprintf( stdout, sfmt, max_label_len, "---------------", "------", "------", "------", "------", "------", "------", "------" );
 
-    for ( i = 0; i < num_records; i++ )
+    for ( i = 0; i < num_wmops_records; i++ )
     {
         fprintf( stdout, dfmt, max_label_len, wmops[i].label, update_cnt == 0 ? 0 : (float) wmops[i].call_number / update_cnt,
                  wmops[i].min_selfcnt == DOUBLE_MAX ? 0 : FAC * wmops[i].min_selfcnt,
@@ -396,37 +428,42 @@ void print_wmops( void )
     fprintf( stdout, "\n" );
 
 #ifdef WMOPS_WC_FRAME_ANALYSIS
-    fprintf( stdout, "\nComplexity analysis for the worst-case frame %ld:\n", fnum_cnt_wc );
+    fprintf( stdout, "\nComplexity analysis for the worst-case frame %ld:\n\n", fnum_cnt_wc );
     fprintf( stdout, "%*s %8s %10s %12s\n", max_label_len,   "        routine", " calls", " SELF", "  CUMULATIVE" );
     fprintf( stdout, "%*s %8s %10s   %10s\n", max_label_len, "---------------", "------", "------", "----------" );
 
-    for ( i = 0; i < num_records; i++ )
+    for ( i = 0; i < num_wmops_records; i++ )
     {
-        fprintf( stdout, "%*s %8d %10.3f %12.3f\n", max_label_len, wmops[i].label, wmops[i].wc_call_number, FAC * wmops[i].wc_selfcnt, FAC * wmops[i].wc_cnt );
-    }
-
-    fprintf( stdout, "\nCall Tree:\n\n" );
-    fprintf( stdout, sfmtt, "       function", "num", "called by:    " );
-    fprintf( stdout, sfmtt, "---------------", "---", "--------------" );
-
-    for ( i = 0; i < num_records; i++ )
-    {
-        fprintf( stdout, dfmtt, wmops[i].label, i );
-        for ( j = 0; wmops[i].call_tree[j] != -1; j++ )
+        if ( wmops[i].wc_call_number > 0 )
         {
-            if ( j != 0 )
-            {
-                fprintf( stdout, ", " );
-            }
-            fprintf( stdout, "%d", wmops[i].call_tree[j] );
+            fprintf( stdout, "%*s %8d %10.3f %12.3f\n", max_label_len, wmops[i].label, wmops[i].wc_call_number, FAC * wmops[i].wc_selfcnt, FAC * wmops[i].wc_cnt );
         }
-        fprintf( stdout, "\n" );
     }
 
+    fprintf( stdout, "\nCall tree for the worst-case frame %ld:\n\n", fnum_cnt_wc );
+    fprintf( stdout, sfmtt, "       function", "num", "called by     " );
     fprintf( stdout, sfmtt, "---------------", "---", "--------------" );
+
+    for ( i = 0; i < num_wmops_records; i++ )
+    {
+        if ( wmops[i].wc_call_number > 0 )
+        {
+            fprintf( stdout, dfmtt, wmops[i].label, i );
+            for ( j = 0; wmops[i].call_tree[j] != -1 && j < MAX_CALL_TREE_DEPTH; j++ )
+            {
+                if ( j != 0 )
+                {
+                    fprintf( stdout, ", " );
+                }
+                fprintf( stdout, "%d", wmops[i].call_tree[j] );
+            }
+            fprintf( stdout, "\n" );
+        }
+    }
+
     fprintf( stdout, "\n\n" );
 
-    fprintf( stdout, "\nInstruction type analysis for the worst-case frame %ld:\n\n", fnum_cnt_wc ); /* added -- JPA */
+    fprintf( stdout, "\nInstruction type analysis for the worst-case frame %ld:\n\n", fnum_cnt_wc ); 
     for ( i = 0; i < NUM_INST; i++ )
     {
         switch ( (enum instructions) i )
@@ -523,12 +560,6 @@ void print_wmops( void )
  * #define WMC_TOOL_SKIP ... #undef WMC_TOOL_SKIP macro pair around the malloc(), calloc() and free().
  *--------------------------------------------------------------------*/
 
-#define MAX_RECORDABLE_CALLS         100
-#define MAX_FUNCTION_NAME_LENGTH     35  /* Maximum length that the function string will be truncated to */
-#define MAX_PARAMS_LENGTH            50  /* Maximum length that the parameter string will be truncated to */
-#define MAX_NUM_RECORDS              300 /* Initial maximum number of memory records -> mightb be increased during runtime, if needed */
-#define MAX_NUM_RECORDS_REALLOC_STEP 50  /* When re-allocating the list of memory records, increase the number of records by this number */
-
 /* This is the value (in bytes) towards which the block size is rounded. For example, a block of 123 bytes, when using
    a 32 bits system, will end up taking 124 bytes since the last unused byte cannot be used for another block. */
 #ifdef MEM_ALIGN_64BITS
@@ -538,14 +569,12 @@ void print_wmops( void )
 #endif
 
 #define N_32BITS_BLOCKS ( BLOCK_ROUNDING / sizeof( int32_t ) )
+#define ROUND_BLOCK_SIZE( n ) ( ( ( n ) + BLOCK_ROUNDING - 1 ) & ~( BLOCK_ROUNDING - 1 ) )
 
 #define MAGIC_VALUE_OOB  0x12A534F0           /* Signature value which is inserted before and after each allocated memory block, used to detect out-of-bound access */
 #define MAGIC_VALUE_USED ( ~MAGIC_VALUE_OOB ) /* Value used to pre-fill allocated memory blocks, used to calculate actual memory usage */
 #define OOB_START        0x1                  /* Flag indicating out-of-bounds access before memory block */
 #define OOB_END          0x2                  /* Flag indicating out-of-bounds access after memory block */
-
-#define ROUND_BLOCK_SIZE( n ) ( ( ( n ) + BLOCK_ROUNDING - 1 ) & ~( BLOCK_ROUNDING - 1 ) )
-#define IS_CALLOC( str )      ( str[0] == 'c' )
 
 #ifdef MEM_COUNT_DETAILS
 const char *csv_filename = "mem_analysis.csv";
@@ -558,8 +587,16 @@ typedef struct
     int16_t *stack_ptr;
 } caller_info;
 
-caller_info stack_callers[2][MAX_RECORDABLE_CALLS];
+static caller_info *stack_callers[2] = {NULL, NULL};
 
+static int16_t *ptr_base_stack = 0;    /* Pointer to the bottom of stack (base pointer). Stack grows up. */
+static int16_t *ptr_current_stack = 0; /* Pointer to the current stack pointer */
+static int16_t *ptr_max_stack = 0;     /* Pointer to the maximum stack pointer (the farest point from the bottom of stack) */
+static int32_t wc_stack_frame = 0;     /* Frame corresponding to the worst-case stack usage */
+static int current_calls = 0, max_num_calls = MAX_NUM_RECORDS;
+static char location_max_stack[256] = "undefined";
+
+/* Heap-related variables */
 typedef struct
 {
     char name[MAX_FUNCTION_NAME_LENGTH + 1]; /* +1 for NUL */
@@ -579,18 +616,12 @@ typedef struct
 
 allocator_record *allocation_list = NULL;
 
-static int16_t *ptr_base_stack = 0;    /* Pointer to the bottom of stack (base pointer). Stack grows up. */
-static int16_t *ptr_current_stack = 0; /* Pointer to the current stack pointer */
-static int16_t *ptr_max_stack = 0;     /* Pointer to the maximum stack pointer (the farest point from the bottom of stack) */
-static int32_t wc_stack_frame = 0;     /* Frame corresponding to the worst-case stack usage */
-static int32_t wc_ram_size, wc_ram_frame;
-static int32_t current_heap_size;
-static int current_calls = 0;
-static char location_max_stack[256] = "undefined";
 static int Num_Records, Max_Num_Records;
 static size_t Stat_Cnt_Size = USE_BYTES;
 static const char *Count_Unit[] = { "bytes", "words", "words" };
 
+static int32_t wc_ram_size, wc_ram_frame;
+static int32_t current_heap_size;
 static int *list_wc_intra_frame_heap, n_items_wc_intra_frame_heap, max_items_wc_intra_frame_heap, size_wc_intra_frame_heap, location_wc_intra_frame_heap;
 static int *list_current_inter_frame_heap, n_items_current_inter_frame_heap, max_items_current_inter_frame_heap, size_current_inter_frame_heap;
 static int *list_wc_inter_frame_heap, n_items_wc_inter_frame_heap, max_items_wc_inter_frame_heap, size_wc_inter_frame_heap, location_wc_inter_frame_heap;
@@ -611,11 +642,28 @@ void reset_mem( Counting_Size cnt_size )
     int16_t something;
     size_t tmp_size;
 
+    /* initialize list of stack records */
+    if ( stack_callers[0] == NULL )
+    {
+        stack_callers[0] = malloc( MAX_NUM_RECORDS * sizeof( caller_info ) );
+        stack_callers[1] = malloc( MAX_NUM_RECORDS * sizeof( caller_info ) );
+    }
+
+    if ( stack_callers[0] == NULL || stack_callers[1] == NULL )
+    {
+        fprintf( stderr, "Error: Unable to Allocate List of Stack Records!" );
+        exit( -1 );
+    }
+
+    current_calls = 0;
+    max_num_calls = MAX_NUM_RECORDS;
+
     /* initialize stack pointers */
     ptr_base_stack = &something;
     ptr_max_stack = ptr_base_stack;
     ptr_current_stack = ptr_base_stack;
 
+    /* initialize the unit of memory block size */
     Stat_Cnt_Size = cnt_size;
 
     /* Check, if sizeof(int32_t) is 4 bytes */
@@ -741,11 +789,12 @@ int push_stack( const char *filename, const char *fctname )
 
     (void) *filename; /* to avoid compilation warning */
 
-    /* Is there room to save the caller's information? */
-    if ( current_calls >= MAX_RECORDABLE_CALLS )
-    { /* No */
-        fprintf( stderr, "No more room to store call stack info. Please increase MAX_RECORDABLE_CALLS" );
-        exit( -1 );
+    if ( current_calls >= max_num_calls )
+    {
+        /* There is no room for a new record -> reallocate the list */
+        max_num_calls += MAX_NUM_RECORDS_REALLOC_STEP;
+        stack_callers[0] = realloc( stack_callers[0], max_num_calls * sizeof( caller_info ) );
+        stack_callers[1] = realloc( stack_callers[1], max_num_calls * sizeof( caller_info ) );
     }
 
     /* Valid Function Name? */
@@ -762,7 +811,7 @@ int push_stack( const char *filename, const char *fctname )
     /* Save the Stack Pointer */
     stack_callers[0][current_calls].stack_ptr = ptr_current_stack;
 
-    /* Increase Stack Calling Tree Level */
+    /* Increase the Number of Calls in the List */
     current_calls++;
 
     /* Is this the First Time or the Worst Case? */
@@ -771,15 +820,17 @@ int push_stack( const char *filename, const char *fctname )
         /* Save Info about it */
         ptr_max_stack = ptr_current_stack;
 
-        wc_stack_frame = update_cnt; /* current frame number is stored in the variable update_cnt and updated in the function update_wmops() */
+        /* save the worst-case frame number */
+        /* current frame number is stored in the variable update_cnt and updated in the function update_wmops() */
+        wc_stack_frame = update_cnt; 
         strncpy( location_max_stack, fctname, sizeof( location_max_stack ) - 1 );
         location_max_stack[sizeof( location_max_stack ) - 1] = '\0';
 
         /* Save Call Tree */
         memmove( stack_callers[1], stack_callers[0], sizeof( caller_info ) * current_calls );
 
-        /* Terminate the List (Unless Full) */
-        if ( current_calls < MAX_RECORDABLE_CALLS )
+        /* Terminate the List with 0 (for printing purposes) */
+        if ( current_calls < max_num_calls )
         {
             stack_callers[1][current_calls].function_name[0] = 0;
         }
@@ -815,13 +866,13 @@ int pop_stack( const char *filename, const char *fctname )
 
     (void) *filename; /* to avoid compilation warning */
 
-    /* Decrease Stack Calling */
+    /* Decrease the Number of Records */
     current_calls--;
 
     /* Get Pointer to Caller Information */
     caller_info_ptr = &stack_callers[0][current_calls];
 
-    /* Check, if Names Match */
+    /* Check, if the Function Names Match */
     if ( strncmp( caller_info_ptr->function_name, fctname, MAX_FUNCTION_NAME_LENGTH ) != 0 )
     {
         fprintf( stderr, "Invalid usage of pop_stack()" );
@@ -860,7 +911,7 @@ static void print_stack_call_tree( void )
     fprintf( stdout, "\nList of functions when maximum stack size is reached:\n\n" );
 
     caller_info_ptr = &stack_callers[1][0];
-    for ( call_level = 0; call_level < MAX_RECORDABLE_CALLS; call_level++ )
+    for ( call_level = 0; call_level < max_num_calls; call_level++ )
     {
         /* Done? */
         if ( caller_info_ptr->function_name[0] == 0 )
@@ -1059,7 +1110,7 @@ static void *mem_alloc_block( size_t size, const char *size_str )
 
     /* Fill Memory Block with Magic Value or 0 */
     fill_value = MAGIC_VALUE_USED;
-    if ( IS_CALLOC( size_str ) )
+    if ( size_str[0] == 'c' )
     {
         fill_value = 0x00000000;
     }
@@ -1924,4 +1975,4 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
 int cntr_push_pop = 0; /* global counter for checking balanced push_wmops()/pop_wmops() pairs when WMOPS is not activated */
 #endif
 
- 
+
