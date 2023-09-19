@@ -1028,7 +1028,7 @@ static TOOL_ERROR Output_Wmops_File( char *PathName, float frames_per_sec, bool 
 {
     TOOL_ERROR ErrCode = NO_ERR;
     FILE *TargetFile;
-    int i, len, size;
+    int i, len;
     char SrcFileName[MAX_PATH + 1]; /* +1 for NUL Char*/
     char TargetFileName[MAX_PATH + 1]; /* +1 for NUL Char*/
     char *text = NULL, *p_str, temp_str[50];
@@ -1043,10 +1043,8 @@ static TOOL_ERROR Output_Wmops_File( char *PathName, float frames_per_sec, bool 
 
     for (i = 0; i < 2; i++)
     {
-        /* Copy the source file contents to a char * buffer for further manipulation */
-        size = i == 0 ? sizeof(wmops_auto_file_h) : sizeof(wmops_auto_file_c);
-
-        text = (char*)calloc(size, sizeof(char));
+        /* Allocate a char * buffer for further manipulation of the source file text */
+        text = (char*)calloc(i == 0 ? sizeof(wmops_auto_file_h) : sizeof(wmops_auto_file_c), sizeof(char));
         if (text == NULL)
         {
             ErrCode = ERR_FILE_READ;
@@ -1054,15 +1052,16 @@ static TOOL_ERROR Output_Wmops_File( char *PathName, float frames_per_sec, bool 
             goto ret;
         }
 
-        strncpy(text, i == 0 ? wmops_auto_file_h : wmops_auto_file_c, size);
+        /* copy the source file contents to a char * buffer for further manipulation */
+        strcpy(text, i == 0 ? wmops_auto_file_h : wmops_auto_file_c);
 
         /* Replace the constant FRAMES_PER_SECOND */
-        p_str = strstr(text, "#define FRAMES_PER_SECOND 50.0");
+        p_str = strstr(text, "#define FRAMES_PER_SECOND");
 
         if (p_str != NULL)
         {
-            sprintf(temp_str, "#define FRAMES_PER_SECOND %.1f", frames_per_sec);
-            strncpy(p_str, temp_str, sizeof(temp_str));
+            sprintf(temp_str, "#define FRAMES_PER_SECOND %-8.1f", frames_per_sec);
+            strncpy(p_str, temp_str, strlen(temp_str));
         }
 
         /* Create Target Filename */
@@ -1101,7 +1100,7 @@ static TOOL_ERROR Output_Wmops_File( char *PathName, float frames_per_sec, bool 
         }
 
         /* Write the whole content to the target file */
-        fwrite(text, size, 1, TargetFile);
+        fwrite(text, strlen(text), sizeof(char), TargetFile);
         fclose(TargetFile);
         free(text);
     }
