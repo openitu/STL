@@ -2621,12 +2621,20 @@ Word16 div_l (Word32 L_num, Word16 den) {
 
   if (den == (Word16) 0) {
     printf ("Division by 0 in div_l, Fatal error \n");
+#ifdef BASOP_NOGLOB
+    abort();
+#else /* BASOP_NOGLOB */
     exit (0);
+#endif /* BASOP_NOGLOB */
   }
 
   if ((L_num < (Word32) 0) || (den < (Word16) 0)) {
     printf ("Division Error in div_l, Fatal error \n");
+#ifdef BASOP_NOGLOB
+    abort();
+#else /* BASOP_NOGLOB */
     exit (0);
+#endif /* BASOP_NOGLOB */
   }
 
   L_den = L_deposit_h (den);
