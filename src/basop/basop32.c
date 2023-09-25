@@ -2273,7 +2273,7 @@ Word32 L_abs (Word32 L_var1) {
  |___________________________________________________________________________|
 */
 #ifdef BASOP_NOGLOB
-Word32 L_sat_co (Word32 L_var1, Flag Overflow, Flag Carry) {
+Word32 L_sat_co (Word32 L_var1, Flag Carry, Flag Overflow) {
 #else /* BASOP_NOGLOB */
 Word32 L_sat (Word32 L_var1) {
 #endif /* BASOP_NOGLOB */

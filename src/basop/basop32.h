@@ -162,7 +162,7 @@ Word32 L_msu0_o (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
 Word16 mult_ro (Word16 var1, Word16 var2, Flag * Overflow);
 Word16 mac_ro (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
 Word16 msu_ro (Word32 L_var3, Word16 var1, Word16 var2, Flag * Overflow);
-Word32 L_sat_co (Word32 L_var1, Flag Overflow, Flag Carry);
+Word32 L_sat_co (Word32 L_var1, Flag Carry, Flag Overflow);
 #endif /* BASOP_NOGLOB */
 
 #endif /* ifndef _BASIC_OP_H */
