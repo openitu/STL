@@ -519,14 +519,22 @@ Word16 shl (Word16 var1, Word16 var2) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 shr_o (Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 shr (Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
 
   if (var2 < 0) {
     if (var2 < -16)
       var2 = -16;
     var2 = -var2;
+#ifdef BASOP_NOGLOB
+    var_out = shl_o (var1, var2, Overflow);
+#else /* BASOP_NOGLOB */
     var_out = shl (var1, var2);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
     multiCounter[currCounter].shl--;
@@ -548,6 +556,12 @@ Word16 shr (Word16 var1, Word16 var2) {
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 shr (Word16 var1, Word16 var2) {
+  return shr_o (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -2622,7 +2636,7 @@ Word16 div_l (Word32 L_num, Word16 den) {
   if (den == (Word16) 0) {
     printf ("Division by 0 in div_l, Fatal error \n");
 #ifdef BASOP_NOGLOB
-    abort();
+    abort ();
 #else /* BASOP_NOGLOB */
     exit (0);
 #endif /* BASOP_NOGLOB */
@@ -2631,7 +2645,7 @@ Word16 div_l (Word32 L_num, Word16 den) {
   if ((L_num < (Word32) 0) || (den < (Word16) 0)) {
     printf ("Division Error in div_l, Fatal error \n");
 #ifdef BASOP_NOGLOB
-    abort();
+    abort ();
 #else /* BASOP_NOGLOB */
     exit (0);
 #endif /* BASOP_NOGLOB */
