@@ -110,29 +110,13 @@
     MANUAL_COUNTING_MACROS_STRING \
     AUTO_COUNTING_MACROS_STRING
 
-#define WMOPS_COUNTLIB_FUNCTS_STRING \
-    "reset_wmops push_wmops pop_wmops update_wmops print_wmops "
-#define OTHER_COUNTLIB_FUNCTS_STRING                                       \
-    "Dyn_Mem_Init Dyn_Mem_Exit Dyn_Mem_Exit_noprint  "                     \
-    "Dyn_Mem_In Dyn_Mem_Add Dyn_Mem_Out  "                                 \
-    "Sta_Mem_Init Sta_Mem_Exit Sta_Mem_Exit_noprint Sta_Mem_Add  "         \
-    "P_Dyn_Mem_Init P_Dyn_Mem_Exit P_Dyn_Mem_Exit_noprint  "               \
-    "P_Dyn_Mem_In P_Dyn_Mem_Add P_Dyn_Mem_Out  "                           \
-    "P_Sta_Mem_Init P_Sta_Mem_Exit P_Sta_Mem_Exit_noprint P_Sta_Mem_Add  " \
-    "DYN_MEM_IN DYN_MEM_ADD DYN_MEM_OUT  "
-#define COUNTLIB_FUNCTS_STRING   \
-    WMOPS_COUNTLIB_FUNCTS_STRING \
-    OTHER_COUNTLIB_FUNCTS_STRING
+#define WMOPS_FUNCTS_STRING \
+    "reset_wmops push_wmops pop_wmops update_wmops print_wmops print_mem " \
+    "rsize Get_Const_Data_Size Print_Const_Data_Size "
 
 #define COUNTING_CODE_STRING \
     COUNTING_MACROS_STRING   \
-    COUNTLIB_FUNCTS_STRING
-
-#define TOOL_FUNCTS_STRING \
-    "rsize "               \
-    "Get_Const_Data_Size " \
-    "Print_Const_Data_Size " \
-    "print_mem "
+    WMOPS_FUNCTS_STRING
 
 #define SYSTEM_ALLOC_FUNCTS_STRING \
     "malloc calloc free "
@@ -4204,12 +4188,12 @@ static Item_Type Get_Call_Type(
         return ITEM_FUNC_COUNTERS_AUTO_R | ITEM_INSTRUMENTATION | ITEM_SKIPPED;
     }
     /* Any of the Counting Library Functions? */
-    if ( memwordcmp( name_start, COUNTLIB_FUNCTS_STRING ) != NULL )
-    { /* Yes */
-        return ITEM_FUNC_COUNT_LIB | ITEM_SKIPPED;
-    }
-    /* Any of the ROM Counting Macros? */
-    if ( memwordcmp( name_start, TOOL_FUNCTS_STRING ) != NULL )
+    //if ( memwordcmp( name_start, COUNTLIB_FUNCTS_STRING ) != NULL )
+    //{ /* Yes */
+    //    return ITEM_FUNC_COUNT_LIB | ITEM_SKIPPED;
+    //}
+    /* Any of the WMOPS Library Functions or Macros? */
+    if ( memwordcmp( name_start, WMOPS_FUNCTS_STRING) != NULL )
     { /* Yes */
         return ITEM_FUNC_COUNT_LIB | ITEM_SKIPPED;
     }
@@ -8714,11 +8698,7 @@ void Print_Information( void )
     fprintf(stdout, "\n  Manual Macros Removed during Desintrumentation:\n" );
     Print_Words( MANUAL_COUNTING_MACROS_STRING );
     fprintf(stdout, "\n  WMOPS Library Functions that are not Instrumented:\n" );
-    Print_Words( WMOPS_COUNTLIB_FUNCTS_STRING, true );
-    fprintf(stdout, "\n  Other Counting Functions that are not Instrumented:\n" );
-    Print_Words( OTHER_COUNTLIB_FUNCTS_STRING );
-    fprintf(stdout, "\n  WMC_Tool Functions that are not Instrumented:\n" );
-    Print_Words( TOOL_FUNCTS_STRING, true );
+    Print_Words( WMOPS_FUNCTS_STRING, true );
     fprintf(stdout, "\n  System Functions that are not Instrumented:\n" );
     Print_Words( SYSTEM_FUNCTS_STRING );
     fprintf(stdout, "\n  System Functions that are Instrumented:\n" );
