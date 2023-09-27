@@ -29,11 +29,14 @@
 #pragma GCC system_header
 #endif
 
+#ifndef INT_MAX
+#define INT_MAX 32767
+#endif
+
 /* Real-time relationships */
 #define FRAMES_PER_SECOND 50.0    
 #define WMOPS_BOOST_FAC   ( 1.0f ) /* scaling factor for equalizing the difference between automatic and manual instrumentation */
 #define FAC               ( FRAMES_PER_SECOND / 1e6 * WMOPS_BOOST_FAC )
-
 
 #ifdef WMOPS
 enum instructions
@@ -560,7 +563,6 @@ enum instructions
 extern double ops_cnt;
 extern double prom_cnt;
 extern double inst_cnt[NUM_INST];
-extern int ops_cnt_activ;
 
 void reset_wmops( void );
 void push_wmops( const char *label );
@@ -1035,5 +1037,405 @@ void reset_stack( void );
 
 #endif
 
+
+/* Global counter variable for calculation of complexity weight */
+typedef struct
+{
+    unsigned int add;   /* Complexity Weight of 1 */
+    unsigned int sub;   /* Complexity Weight of 1 */
+    unsigned int abs_s; /* Complexity Weight of 1 */
+    unsigned int shl;   /* Complexity Weight of 1 */
+    unsigned int shr;   /* Complexity Weight of 1 */
+
+    unsigned int extract_h; /* Complexity Weight of 1 */
+    unsigned int extract_l; /* Complexity Weight of 1 */
+    unsigned int mult;      /* Complexity Weight of 1 */
+    unsigned int L_mult;    /* Complexity Weight of 1 */
+    unsigned int negate;    /* Complexity Weight of 1 */
+
+    unsigned int round;   /* Complexity Weight of 1 */
+    unsigned int L_mac;   /* Complexity Weight of 1 */
+    unsigned int L_msu;   /* Complexity Weight of 1 */
+    unsigned int L_macNs; /* Complexity Weight of 1 */
+    unsigned int L_msuNs; /* Complexity Weight of 1 */
+
+    unsigned int L_add;    /* Complexity Weight of 1 */
+    unsigned int L_sub;    /* Complexity Weight of 1 */
+    unsigned int L_add_c;  /* Complexity Weight of 2 */
+    unsigned int L_sub_c;  /* Complexity Weight of 2 */
+    unsigned int L_negate; /* Complexity Weight of 1 */
+
+    unsigned int L_shl;  /* Complexity Weight of 1 */
+    unsigned int L_shr;  /* Complexity Weight of 1 */
+    unsigned int mult_r; /* Complexity Weight of 1 */
+    unsigned int shr_r;  /* Complexity Weight of 3 */
+    unsigned int mac_r;  /* Complexity Weight of 1 */
+
+    unsigned int msu_r;       /* Complexity Weight of 1 */
+    unsigned int L_deposit_h; /* Complexity Weight of 1 */
+    unsigned int L_deposit_l; /* Complexity Weight of 1 */
+    unsigned int L_shr_r;     /* Complexity Weight of 3 */
+    unsigned int L_abs;       /* Complexity Weight of 1 */
+
+    unsigned int L_sat;  /* Complexity Weight of 4 */
+    unsigned int norm_s; /* Complexity Weight of 1 */
+    unsigned int div_s;  /* Complexity Weight of 18 */
+    unsigned int norm_l; /* Complexity Weight of 1 */
+    unsigned int move16; /* Complexity Weight of 1 */
+
+    unsigned int move32;  /* Complexity Weight of 2 */
+    unsigned int Logic16; /* Complexity Weight of 1 */
+    unsigned int Logic32; /* Complexity Weight of 2 */
+    unsigned int Test;    /* Complexity Weight of 2 */
+    unsigned int s_max;   /* Complexity Weight of 1 */
+
+    unsigned int s_min;   /* Complexity Weight of 1 */
+    unsigned int L_max;   /* Complexity Weight of 1 */
+    unsigned int L_min;   /* Complexity Weight of 1 */
+    unsigned int L40_max; /* Complexity Weight of 1 */
+    unsigned int L40_min; /* Complexity Weight of 1 */
+
+    unsigned int shl_r;     /* Complexity Weight of 3 */
+    unsigned int L_shl_r;   /* Complexity Weight of 3 */
+    unsigned int L40_shr_r; /* Complexity Weight of 3 */
+    unsigned int L40_shl_r; /* Complexity Weight of 3 */
+    unsigned int norm_L40;  /* Complexity Weight of 1 */
+
+    unsigned int L40_shl;    /* Complexity Weight of 1 */
+    unsigned int L40_shr;    /* Complexity Weight of 1 */
+    unsigned int L40_negate; /* Complexity Weight of 1 */
+    unsigned int L40_add;    /* Complexity Weight of 1 */
+    unsigned int L40_sub;    /* Complexity Weight of 1 */
+
+    unsigned int L40_abs;  /* Complexity Weight of 1 */
+    unsigned int L40_mult; /* Complexity Weight of 1 */
+    unsigned int L40_mac;  /* Complexity Weight of 1 */
+    unsigned int mac_r40;  /* Complexity Weight of 2 */
+
+    unsigned int L40_msu;      /* Complexity Weight of 1 */
+    unsigned int msu_r40;      /* Complexity Weight of 2 */
+    unsigned int Mpy_32_16_ss; /* Complexity Weight of 2 */
+    unsigned int Mpy_32_32_ss; /* Complexity Weight of 4 */
+    unsigned int L_mult0;      /* Complexity Weight of 1 */
+
+    unsigned int L_mac0; /* Complexity Weight of 1 */
+    unsigned int L_msu0; /* Complexity Weight of 1 */
+    unsigned int lshl;   /* Complexity Weight of 1 */
+    unsigned int lshr;   /* Complexity Weight of 1 */
+    unsigned int L_lshl; /* Complexity Weight of 1 */
+
+    unsigned int L_lshr;   /* Complexity Weight of 1 */
+    unsigned int L40_lshl; /* Complexity Weight of 1 */
+    unsigned int L40_lshr; /* Complexity Weight of 1 */
+    unsigned int s_and;    /* Complexity Weight of 1 */
+    unsigned int s_or;     /* Complexity Weight of 1 */
+
+    unsigned int s_xor; /* Complexity Weight of 1 */
+    unsigned int L_and; /* Complexity Weight of 1 */
+    unsigned int L_or;  /* Complexity Weight of 1 */
+    unsigned int L_xor; /* Complexity Weight of 1 */
+    unsigned int rotl;  /* Complexity Weight of 3 */
+
+    unsigned int rotr;          /* Complexity Weight of 3 */
+    unsigned int L_rotl;        /* Complexity Weight of 3 */
+    unsigned int L_rotr;        /* Complexity Weight of 3 */
+    unsigned int L40_set;       /* Complexity Weight of 3 */
+    unsigned int L40_deposit_h; /* Complexity Weight of 1 */
+
+    unsigned int L40_deposit_l; /* Complexity Weight of 1 */
+    unsigned int L40_deposit32; /* Complexity Weight of 1 */
+    unsigned int Extract40_H;   /* Complexity Weight of 1 */
+    unsigned int Extract40_L;   /* Complexity Weight of 1 */
+    unsigned int L_Extract40;   /* Complexity Weight of 1 */
+
+    unsigned int L40_round;    /* Complexity Weight of 1 */
+    unsigned int L_saturate40; /* Complexity Weight of 1 */
+    unsigned int round40;      /* Complexity Weight of 1 */
+    unsigned int If;           /* Complexity Weight of 4 */
+    unsigned int Goto;         /* Complexity Weight of 4 */
+
+    unsigned int Break;    /* Complexity Weight of 4 */
+    unsigned int Switch;   /* Complexity Weight of 8 */
+    unsigned int For;      /* Complexity Weight of 3 */
+    unsigned int While;    /* Complexity Weight of 4 */
+    unsigned int Continue; /* Complexity Weight of 4 */
+
+    unsigned int L_mls;  /* Complexity Weight of 6 */
+    unsigned int div_l;  /* Complexity Weight of 32 */
+    unsigned int i_mult; /* Complexity Weight of 3 */
+} BASIC_OP;
+
+#ifdef WMOPS
+extern BASIC_OP *multiCounter;
+extern int currCounter;
+
+/* Technical note :
+   * The following 3 variables are only used for correct complexity
+   * evaluation of the following structure :
+   *   IF{
+   *     ...
+   *   } ELSE IF {
+   *     ...
+   *   } ELSE IF {
+   *     ...
+   *   }
+   *   ...
+   *   } ELSE {
+   *     ...
+   *   }
+   */
+extern int funcId_where_last_call_to_else_occurred;
+extern long funcid_total_wmops_at_last_call_to_else;
+extern int call_occurred;
+
+extern long TotalWeightedOperation( void );
+long DeltaWeightedOperation();
+
+void Set_BASOP_WMOPS_counter( int counterId );
+void Reset_BASOP_WMOPS_counter( void );
+
+#endif
+
+/*****************************************************************************
+ *
+ *  Function Name : FOR
+ *
+ *  Purpose :
+ *
+ *    The macro FOR should be used instead of the 'for' C statement.
+ *    The complexity is independent of the number of loop iterations that are
+ *    performed.
+ *
+ *  Complexity weight : 3 (regardless of number of iterations).
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define FOR( a) for( a)
+
+#else 
+#define FOR( a) if( incrFor(), 0); else for( a)
+
+static __inline void incrFor( void) {
+   multiCounter[currCounter].For++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : WHILE
+ *
+ *  Purpose :
+ *
+ *    The macro WHILE should be used instead of the 'while' C statement.
+ *    The complexity is proportional to the number of loop iterations that
+ *    are performed.
+ *
+ *  Complexity weight : 4 x 'number of loop iterations'.
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define WHILE( a) while( a)
+
+#else 
+#define WHILE( a) while( incrWhile(), a)
+
+static __inline void incrWhile( void) {
+   multiCounter[currCounter].While++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : DO
+ *
+ *  Purpose :
+ *
+ *    The macro DO should be used instead of the 'do' C statement.
+ *
+ *  Complexity weight : 0 (complexity counted by WHILE macro).
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define DO do
+
+#else 
+#define DO do
+
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : IF
+ *
+ *  Purpose :
+ *
+ *    The macro IF should :
+ *
+ *    - not be used when :
+ *      - the 'if' structure does not have any 'else if' nor 'else' statement
+ *      - and it conditions only one DSP basic operations.
+ *
+ *    - be used instead of the 'if' C statement in every other case :
+ *      - when there is an 'else' or 'else if' statement,
+ *      - or when the 'if' conditions several DSP basic operations,
+ *      - or when the 'if' conditions a function call.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define IF( a) if( a)
+
+#else 
+#define IF( a) if( incrIf(), a)
+
+static __inline void incrIf( void) {
+   /* Technical note :
+    * If the "IF" operator comes just after an "ELSE", its counter
+    * must not be incremented.
+    */
+    if ( ( currCounter != funcId_where_last_call_to_else_occurred ) || ( TotalWeightedOperation() != funcid_total_wmops_at_last_call_to_else ) || ( call_occurred == 1 ) )
+    {
+        multiCounter[currCounter].If++;
+    }
+
+    call_occurred = 0;
+    funcId_where_last_call_to_else_occurred = INT_MAX;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : ELSE
+ *
+ *  Purpose :
+ *
+ *    The macro ELSE should be used instead of the 'else' C statement.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define ELSE else
+
+#else 
+#define ELSE else if( incrElse(), 0) ; else
+
+static __inline void incrElse( void) {
+   multiCounter[currCounter].If++;
+
+   /* We keep track of the funcId of the last function
+    * which used ELSE {...} structure.
+    */
+   funcId_where_last_call_to_else_occurred = currCounter;
+
+   /* We keep track of the number of WMOPS of this funcId
+    * when the ELSE macro was called.
+    */
+   funcid_total_wmops_at_last_call_to_else = TotalWeightedOperation();
+
+   /* call_occurred is set to 0, in order to count the next IF (if necessary)
+    */
+   call_occurred = 0;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : SWITCH
+ *
+ *  Purpose :
+ *
+ *    The macro SWITCH should be used instead of the 'switch' C statement.
+ *
+ *  Complexity weight : 8
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define SWITCH( a) switch( a)
+
+#else 
+#define SWITCH( a) switch( incrSwitch(), a)
+
+static __inline void incrSwitch( void) {
+   multiCounter[currCounter].Switch++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : CONTINUE
+ *
+ *  Purpose :
+ *
+ *    The macro CONTINUE should be used instead of the 'continue' C statement.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define CONTINUE continue
+
+#else 
+#define CONTINUE if( incrContinue(), 0); else continue
+
+static __inline void incrContinue( void) {
+   multiCounter[currCounter].Continue++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : BREAK
+ *
+ *  Purpose :
+ *
+ *    The macro BREAK should be used instead of the 'break' C statement.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define BREAK break
+
+#else 
+#define BREAK if( incrBreak(), 0) break; else break
+
+static __inline void incrBreak( void) {
+   multiCounter[currCounter].Break++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : GOTO
+ *
+ *  Purpose :
+ *
+ *    The macro GOTO should be used instead of the 'goto' C statement.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define GOTO goto
+
+#else 
+#define GOTO if( incrGoto(), 0); else goto
+
+static __inline void incrGoto( void) {
+   multiCounter[currCounter].Goto++;
+}
+#endif 
+
 #endif /* WMOPS_H */
+
 

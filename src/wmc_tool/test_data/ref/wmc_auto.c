@@ -39,7 +39,6 @@
 #define MAX_PARAMS_LENGTH            50  /* Maximum length of the function parameter string */
 #define MAX_NUM_RECORDS              300 /* Initial maximum number of records -> mightb be increased during runtime, if needed */
 #define MAX_NUM_RECORDS_REALLOC_STEP 50  /* When re-allocating the list of records, increase the number of records by this number */
-
 #define MAX_CALL_TREE_DEPTH          100 /* maximum depth of the function call tree */
 #define DOUBLE_MAX                   0x80000000
 
@@ -49,6 +48,7 @@ typedef struct
     long call_number;
     long update_cnt;
     int call_tree[MAX_CALL_TREE_DEPTH];
+    long LastWOper;
     double start_selfcnt;
     double current_selfcnt;
     double max_selfcnt;
@@ -86,6 +86,7 @@ static int *heap_allocation_call_tree = NULL, heap_allocation_call_tree_size = 0
 void reset_wmops( void )
 {
     int i, j;
+    unsigned int *ptr;
 
     num_wmops_records = 0;
     max_num_wmops_records = MAX_NUM_RECORDS;
@@ -109,6 +110,20 @@ void reset_wmops( void )
         exit( -1 );
     }
 
+    /* allocate the BASOP WMOPS counter */
+    if ( multiCounter == NULL )
+    {
+        multiCounter = (BASIC_OP *) malloc( max_num_wmops_records * sizeof( BASIC_OP ) );
+    }
+
+    if ( multiCounter == NULL )
+    {
+        fprintf( stderr, "Error: Unable to Allocate the BASOP WMOPS counter!" );
+        exit( -1 );
+    }
+
+    /* initilize the list of wmops records */
+    /* initilize the BASOP WMOPS counters */
     for ( i = 0; i < max_num_wmops_records; i++ )
     {
         strcpy( &wmops[i].label[0], "\0" );
@@ -134,6 +149,14 @@ void reset_wmops( void )
         wmops[i].current_call_number = 0;
         wmops[i].wc_call_number = -1;
 #endif
+
+        /* clear all BASOP operation counters */
+        ptr = (unsigned int*) &multiCounter[i];
+        for ( j = 0; j < (int) ( sizeof(BASIC_OP ) / sizeof( unsigned int ) ); j++ )
+        {
+            *ptr++ = 0;
+        }
+        wmops[i].LastWOper = 0;
     }
 
     /* allocate the list of wmops callers to track the sequence of function calls */
@@ -154,6 +177,10 @@ void reset_wmops( void )
     {
         wmops_caller_stack[i] = -1;
     }
+
+    /* initialize auxiliary BASOP WMOPS variables */
+    call_occurred = 1;
+    funcId_where_last_call_to_else_occurred = INT_MAX;
 
     return;
 }
@@ -183,9 +210,11 @@ void push_wmops( const char *label )
             /* There is no room for a new wmops record -> reallocate the list */
             max_num_wmops_records += MAX_NUM_RECORDS_REALLOC_STEP;
             wmops = realloc( wmops, max_num_wmops_records * sizeof( wmops_record ) );
+            multiCounter = realloc( multiCounter, max_num_wmops_records * sizeof( BASIC_OP ) );
         }
 
         strcpy( wmops[i].label, label );
+
         num_wmops_records++;
     }
 
@@ -227,12 +256,16 @@ void push_wmops( const char *label )
     wmops[current_record].current_call_number++;
 #endif
 
+    /* set the ID of BASOP functions counters */
+    Set_BASOP_WMOPS_counter( current_record );
+
     return;
 }
 
 
 void pop_wmops( void )
 {
+    long tot;
 
     /* Check for underflow */
     if ( current_record < 0 )
@@ -240,6 +273,10 @@ void pop_wmops( void )
         fprintf( stdout, "\r pop_wmops(): stack underflow, too many calls to pop_wmops()\n" );
         exit( -1 );
     }
+
+    /* add the BASOP complexity to the counter */
+    tot = DeltaWeightedOperation();
+    ops_cnt += tot;
 
     /* update count of current record */
     wmops[current_record].current_selfcnt += ops_cnt - wmops[current_record].start_selfcnt;
@@ -250,6 +287,9 @@ void pop_wmops( void )
     {
         current_record = wmops_caller_stack[--wmops_caller_stack_index];
         wmops[current_record].start_selfcnt = ops_cnt;
+
+        /* set the ID of the previous BASOP counter */
+        Set_BASOP_WMOPS_counter( current_record );
     }
     else
     {
@@ -345,6 +385,10 @@ void update_wmops( void )
 #ifdef WMOPS_WC_FRAME_ANALYSIS
         wmops[i].current_call_number = 0;
 #endif
+
+        /* update the WC of all BASOP counters */
+        Set_BASOP_WMOPS_counter( i );
+        Reset_BASOP_WMOPS_counter();
     }
 
     current_cnt = ops_cnt - start_cnt;
@@ -533,6 +577,24 @@ void print_wmops( void )
         }
     }
 #endif
+
+    /* De-allocate the list of wmops record */
+    if ( wmops != NULL )
+    {
+        free( wmops );
+    }
+
+    /* De-allocate the list of wmops caller functions */
+    if ( wmops_caller_stack != NULL )
+    {
+        free( wmops_caller_stack );
+    }
+
+    /* De-allocate the BASOP WMOPS counter */
+    if ( multiCounter != NULL )
+    {
+        free( multiCounter );
+    }
 
     return;
 }
@@ -1937,6 +1999,17 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
         free( allocation_list );
     }
 
+    /* De-allocate list of stack records */
+    if ( stack_callers[0] != NULL )
+    {
+        free( stack_callers[0] );
+    }
+
+    if ( stack_callers[1] != NULL )
+    {
+        free( stack_callers[1] );
+    }
+
     /* De-allocate heap allocation call tree */
     if ( heap_allocation_call_tree != NULL )
     {
@@ -1973,6 +2046,102 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
 
 #ifndef WMOPS
 int cntr_push_pop = 0; /* global counter for checking balanced push_wmops()/pop_wmops() pairs when WMOPS is not activated */
+#endif
+
+#ifdef WMOPS
+/* Global counter for the calculation of BASOP complexity */
+BASIC_OP *multiCounter = NULL;
+int currCounter = 0;
+int funcId_where_last_call_to_else_occurred;
+long funcid_total_wmops_at_last_call_to_else;
+int call_occurred = 1;
+
+const BASIC_OP op_weight = {
+    1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1,
+    1, 1, 2, 2, 1,
+    1, 1, 1, 3, 1,
+
+    1, 1, 1, 3, 1,
+    4, 1, 18, 1, 1,
+    2, 1, 2, 2, 1,
+    1, 1, 1, 1, 1,
+    3, 3, 3, 3, 1,
+
+    1, 1, 1, 1, 1,
+    1, 1, 1, 2,
+    1, 2, 2, 4, 1,
+    1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1,
+
+    1, 1, 1, 1, 3,
+    3, 3, 3, 3, 1,
+    1, 1, 1, 1, 1,
+    1, 1, 1, 4, 4,
+    4, 8, 3, 4, 4,
+
+    5, 32, 3
+};
+
+/* Set the counter group to use, default is zero */
+void Set_BASOP_WMOPS_counter( int counterId )
+{
+    if ( ( counterId > num_wmops_records ) || ( counterId < 0 ) )
+    {
+        currCounter = 0;
+        return;
+    }
+    currCounter = counterId;
+    call_occurred = 1;
+}
+
+long TotalWeightedOperation()
+{
+    int i;
+    const long *ptr, *ptr2;
+    long tot; 
+
+    tot = 0;
+    ptr = (const long *) &multiCounter[currCounter];
+    ptr2 = (const long *) &op_weight;
+    for ( i = 0; i < ( int )( sizeof( multiCounter[currCounter] ) / sizeof( long ) ); i++ )
+    {
+        tot += ( ( *ptr++ ) * ( *ptr2++ ) );
+    }
+
+    return ( (long) tot );
+}
+
+long DeltaWeightedOperation()
+{
+    long NewWOper, delta;
+
+    NewWOper = TotalWeightedOperation();
+    delta = NewWOper - wmops[currCounter].LastWOper;
+    wmops[currCounter].LastWOper = NewWOper;
+
+    return ( delta );
+}
+
+/* Resets the current BASOP WMOPS counter */
+void Reset_BASOP_WMOPS_counter( void )
+{
+    int i;
+    long *ptr;
+
+    /* clear the current BASOP operation counter before new frame begins */
+    ptr = (long *) &multiCounter[currCounter];
+    for ( i = 0; i < (int) ( sizeof( multiCounter[currCounter] ) / sizeof( long ) ); i++ )
+    {
+        *ptr++ = 0;
+    }
+
+    wmops[currCounter].LastWOper = 0;
+
+    return;
+}
+
 #endif
 
 
