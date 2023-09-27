@@ -1882,7 +1882,11 @@ Word32 L_shr (Word32 L_var1, Word16 var2) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 shr_ro (Word16 var1, Word16 var2, Flag *Overflow) {
+#else
 Word16 shr_r (Word16 var1, Word16 var2) {
+#endif
   Word16 var_out;
 
   if (var2 > 15) {
@@ -1907,6 +1911,11 @@ Word16 shr_r (Word16 var1, Word16 var2) {
   return (var_out);
 }
 
+#ifdef BASOP_NOGLOB
+Word16 shr_r (Word16 var1, Word16 var2) {
+  return shr_ro (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 /*___________________________________________________________________________
  |                                                                           |

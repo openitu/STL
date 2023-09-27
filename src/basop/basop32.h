@@ -143,6 +143,7 @@ Word16 add_o (Word16 var1, Word16 var2, Flag * Overflow);
 Word16 sub_o (Word16 var1, Word16 var2, Flag * Overflow);
 Word16 shl_o (Word16 var1, Word16 var2, Flag * Overflow);
 Word16 shr_o (Word16 var1, Word16 var2, Flag * Overflow);
+Word16 shr_ro(Word16 var1, Word16 var2, Flag* Overflow);
 Word16 mult_o (Word16 var1, Word16 var2, Flag * Overflow);
 Word32 L_mult_o (Word16 var1, Word16 var2, Flag * Overflow);
 Word16 round_fx_o (Word32 L_var1, Flag * Overflow);
