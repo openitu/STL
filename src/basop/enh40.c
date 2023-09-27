@@ -63,6 +63,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "stl.h"
+#ifdef BASOP_NOGLOB
+#include <assert.h>
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
 extern BASIC_OP multiCounter[MAXCOUNTERS];
@@ -124,7 +127,11 @@ extern int currCounter;
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
+#ifdef BASOP_NOGLOB
+Word40 L40_shl_o (Word40 L40_var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word40 L40_shl (Word40 L40_var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
 
   Word40 L40_var_out;
   Word40 L40_constant = L40_set (0xc000000000);
@@ -143,12 +150,22 @@ Word40 L40_shl (Word40 L40_var1, Word16 var2) {
 
     for (; var2 > 0; var2--) {
       if (L40_var_out > 0x003fffffffff) {
+#ifdef BASOP_NOGLOB
+        set_flag (Overflow);
+        L40_var_out = MAX_40;
+#else /* BASOP_NOGLOB */
         L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
+#endif /* BASOP_NOGLOB */
         break;
       }
 
       else if (L40_var_out < L40_constant) {
+#ifdef BASOP_NOGLOB
+        set_flag (Overflow);
+        L40_var_out = MIN_40;
+#else /* BASOP_NOGLOB */
         L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
+#endif /* BASOP_NOGLOB */
         break;
       }
 
@@ -165,6 +182,12 @@ Word40 L40_shl (Word40 L40_var1, Word16 var2) {
 
   return (L40_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word40 L40_shl (Word40 L40_var1, Word16 var2) {
+  return L40_shl_o (L40_var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*****************************************************************************
@@ -295,7 +318,11 @@ Word40 L40_negate (Word40 L40_var1) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
+#ifdef BASOP_NOGLOB
+Word40 L40_add_o (Word40 L40_var1, Word40 L40_var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
+#endif /* BASOP_NOGLOB */
   Word40 L40_var_out;
 
   L40_var_out = L40_var1 + L40_var2;
@@ -303,12 +330,22 @@ Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
   if ((((L40_var1 & 0x8000000000) >> 39) != 0)
       && (((L40_var2 & 0x8000000000) >> 39) != 0)
       && (((L40_var_out & 0x8000000000) >> 39) == 0)) {
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+    L40_var_out = MIN_40;
+#else /* BASOP_NOGLOB */
     L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
+#endif /* BASOP_NOGLOB */
 
   } else if ((((L40_var1 & 0x8000000000) >> 39) == 0)
              && (((L40_var2 & 0x8000000000) >> 39) == 0)
              && (((L40_var_out & 0x8000000000) >> 39) != 0)) {
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+    L40_var_out = MAX_40;
+#else /* BASOP_NOGLOB */
     L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
+#endif /* BASOP_NOGLOB */
   }
 #if (WMOPS)
   multiCounter[currCounter].L40_add++;
@@ -316,6 +353,12 @@ Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
 
   return (L40_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
+  return L40_add_o (L40_var1, L40_var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*****************************************************************************
@@ -348,7 +391,11 @@ Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
  *                the range : MIN_40 <= L40_var_out <= MAX_40.
  *
  *****************************************************************************/
+#ifdef BASOP_NOGLOB
+Word40 L40_sub_o (Word40 L40_var1, Word40 L40_var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word40 L40_sub (Word40 L40_var1, Word40 L40_var2) {
+#endif /* BASOP_NOGLOB */
   Word40 L40_var_out;
 
   L40_var_out = L40_var1 - L40_var2;
@@ -356,12 +403,22 @@ Word40 L40_sub (Word40 L40_var1, Word40 L40_var2) {
   if ((((L40_var1 & 0x8000000000) >> 39) != 0)
       && (((L40_var2 & 0x8000000000) >> 39) == 0)
       && (((L40_var_out & 0x8000000000) >> 39) == 0)) {
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+    L40_var_out = MIN_40;
+#else /* BASOP_NOGLOB */
     L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
+#endif /* BASOP_NOGLOB */
 
   } else if ((((L40_var1 & 0x8000000000) >> 39) == 0)
              && (((L40_var2 & 0x8000000000) >> 39) != 0)
              && (((L40_var_out & 0x8000000000) >> 39) != 0)) {
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+    L40_var_out = MAX_40;
+#else /* BASOP_NOGLOB */
     L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
+#endif /* BASOP_NOGLOB */
   }
 #if (WMOPS)
   multiCounter[currCounter].L40_sub++;
@@ -369,6 +426,12 @@ Word40 L40_sub (Word40 L40_var1, Word40 L40_var2) {
 
   return (L40_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word40 L40_sub (Word40 L40_var1, Word40 L40_var2) {
+  return L40_sub_o (L40_var1, L40_var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*****************************************************************************
@@ -537,7 +600,11 @@ Word40 L40_min (Word40 L40_var1, Word40 L40_var2) {
  *                the range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
+#ifdef BASOP_NOGLOB
+Word32 L_saturate40_o (Word40 L40_var1, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_saturate40 (Word40 L40_var1) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
 
   Word40 UNDER_L40_var2 = (Word40) ~ ((((Word40) 1) << 31) - (Word40) 1);
@@ -545,12 +612,20 @@ Word32 L_saturate40 (Word40 L40_var1) {
 
   if (L40_var1 < UNDER_L40_var2) {
     L40_var1 = UNDER_L40_var2;
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+#else /* BASOP_NOGLOB */
     Overflow = 1;
+#endif /* BASOP_NOGLOB */
   }
 
   if (L40_var1 > OVER_L40_var2) {
     L40_var1 = OVER_L40_var2;
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+#else /* BASOP_NOGLOB */
     Overflow = 1;
+#endif /* BASOP_NOGLOB */
   }
 
   L_var_out = L_Extract40 (L40_var1);
@@ -562,6 +637,12 @@ Word32 L_saturate40 (Word40 L40_var1) {
 
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_saturate40 (Word40 L40_var1) {
+  return L_saturate40_o (L40_var1, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*****************************************************************************

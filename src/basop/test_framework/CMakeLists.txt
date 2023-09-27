@@ -5,7 +5,7 @@ file(GLOB BASOP_TEST_SRC ./src/*.c ./test/*.c)
 include_directories( ./ ../ ./src )
 add_executable(basop_test ${BASOP_SRC} ${BASOP_TEST_SRC})
 
-target_compile_definitions(basop_test PUBLIC ENH_64_BIT_OPERATOR ENH_32_BIT_OPERATOR COMPLEX_OPERATOR ALLOW_ENH_UL32 IDENTICAL_FLOAT_INP)
+target_compile_definitions(basop_test PUBLIC ENH_64_BIT_OPERATOR ENH_32_BIT_OPERATOR COMPLEX_OPERATOR ALLOW_ENH_UL32 IDENTICAL_FLOAT_INP BASOP_NOGLOB)
 
 target_link_libraries(basop_test ${M_LIBRARY})
 
