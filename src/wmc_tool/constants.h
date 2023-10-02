@@ -98,7 +98,8 @@
                        "Encoder_State "
 #define CONST_STRING   "const"
 #define STORAGE_STRING "extern " \
-                       "static " CONST_STRING " "
+                       "static " \
+                       "const "
 
 #define DATA_DEF_STRING TYPES_STRING TYPE_MOD_STRING TYPEDEF_STRING STORAGE_STRING
 

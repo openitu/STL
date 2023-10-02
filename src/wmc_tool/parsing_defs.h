@@ -188,6 +188,7 @@
 #define ITEM_FUNC_COUNTERS_MAN    0x01
 #define ITEM_FUNC_COUNTERS        ( ITEM_FUNC_COUNTERS_MAN | ITEM_FUNC_COUNTERS_AUTO )
 #define ITEM_FUNC_COUNT_LIB       0x20
+#define ITEM_FUNC_BASOP           0x10
 #define ITEM_FUNC_SYSTEM          0x40
 
 /* Attributes for ITEM_SKIPPED */
