@@ -1539,6 +1539,10 @@ ret:
     {
         fprintf(stdout, "100%% Completed Successfully!\n" );
     }
+    else
+    {
+        Print_Error();
+    }
 
     return ErrCode;
 }
