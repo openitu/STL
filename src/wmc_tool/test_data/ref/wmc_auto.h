@@ -1189,7 +1189,7 @@ extern long funcid_total_wmops_at_last_call_to_else;
 extern int call_occurred;
 
 extern long TotalWeightedOperation( void );
-long DeltaWeightedOperation();
+long DeltaWeightedOperation( void );
 
 void Set_BASOP_WMOPS_counter( int counterId );
 void Reset_BASOP_WMOPS_counter( void );

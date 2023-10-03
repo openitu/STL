@@ -2113,7 +2113,7 @@ long TotalWeightedOperation()
     return ( (long) tot );
 }
 
-long DeltaWeightedOperation()
+long DeltaWeightedOperation( void )
 {
     long NewWOper, delta;
 
