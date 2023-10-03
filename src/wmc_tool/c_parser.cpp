@@ -4767,7 +4767,7 @@ static TOOL_ERROR Instrument_Keywords(
                     }
                 }
 
-                ///* Count Program Memory */
+                /* Count Program Memory */
                 //if ( item_type == ITEM_KEYWORD_FOR )
                 //    loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
                 //else if ( item_type == ITEM_KEYWORD_WHILE )
@@ -4777,12 +4777,15 @@ static TOOL_ERROR Instrument_Keywords(
             }
 
             /* Count Program Memory */   /* !!! VM: Moved to this place to count PROM size even for non-instrumented keywords */
-            if ( item_type == ITEM_KEYWORD_FOR )
-                loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
-            else if ( item_type == ITEM_KEYWORD_WHILE )
-                whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
-            else if ( item_type & ( ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP ) )
-                jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
+            if ( Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED) < 0 )
+            {
+                if (item_type == ITEM_KEYWORD_FOR)
+                    loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
+                else if (item_type == ITEM_KEYWORD_WHILE)
+                    whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
+                else if (item_type & (ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP))
+                    jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
+            }
         }
     }
 
