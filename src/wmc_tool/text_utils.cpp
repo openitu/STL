@@ -556,9 +556,18 @@ int Extract_Value_From_File(
     {
         if ((ptr = strstr(line, line_keyword)) != NULL)
         {
-            while (!isdigit(*ptr++));
+            /* skip the keyword */
+            ptr += strlen(line_keyword);
+
+            /* search for space followed by a number */
+            while (!(isspace(ptr[0]) && isdigit(ptr[1])))
+            {
+                ptr++;
+            }
+
             fclose(fp);
-            return strtol(--ptr, &ptr2, 10);
+
+            return strtol(ptr, &ptr2, 10);
         }
     }
 
