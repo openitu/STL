@@ -2113,7 +2113,7 @@
 "    return ( (long) tot );\r\n"
 "}\r\n"
 "\r\n"
-"long DeltaWeightedOperation()\r\n"
+"long DeltaWeightedOperation( void )\r\n"
 "{\r\n"
 "    long NewWOper, delta;\r\n"
 "\r\n"

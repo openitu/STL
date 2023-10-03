@@ -1189,7 +1189,7 @@
 "extern int call_occurred;\r\n"
 "\r\n"
 "extern long TotalWeightedOperation( void );\r\n"
-"long DeltaWeightedOperation();\r\n"
+"long DeltaWeightedOperation( void );\r\n"
 "\r\n"
 "void Set_BASOP_WMOPS_counter( int counterId );\r\n"
 "void Reset_BASOP_WMOPS_counter( void );\r\n"
