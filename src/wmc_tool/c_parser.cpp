@@ -8395,7 +8395,8 @@ TOOL_ERROR Instrument(
     }
 
     /* Insert PROM_Size_Func() function */
-    if (is_function_present)
+    //if (is_function_present)
+    if (ParseCtx_ptr->PROMSize > 0)
     {
         if ((ErrCode = Instrument_PROM(ParseCtx_ptr)) != NO_ERR)
         {
