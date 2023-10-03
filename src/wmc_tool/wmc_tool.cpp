@@ -69,10 +69,10 @@
 
 static void usage()
 {
-    Print("Usage: wmc_tool [options] filename1 filename2 ...\n\n"
-          "WMC tool v%s - %s\n\n"
+    Print("WMC tool v%s - %s\n\n"
+          "Usage: wmc_tool [options] filename1 filename2 ...\n\n"
           "Mandatory arguments:\n"
-          "     space-separated list of filenames or directories with file mask, e.g. ./lib_enc/array*.c\n"
+          "     space-separated list of filenames or directories with file mask, e.g. ./lib_enc/array*.c my_dir/sub_dir/*.c\n"
           "     note: if file mask is not specified *.c is assumed by default\n\n"
           "Options:\n"
           "     -h [--help]: print help\n"
@@ -82,7 +82,7 @@ static void usage()
           "     -m filename [--rom filename]: add statistics about ROM and RAM consumption\n"
           "        note: filename shall point to a .c file containing the print_mem() function\n"
           "     -b [--no-backup]: no backup of original files\n"
-          "     -c dirname [--generate-wmc-files dirname]: copy wmc_auto.h and wmc_auto.c to a user-specified directory\n",
+          "     -c dirname [--generate-wmc-files dirname]: copy wmc_auto.h and wmc_auto.c to a user-specified directory\n"
           "     -f value [--frames-per-second value]: set the number of frames per second (default 50.0)\n\n",
           WMC_TOOL_VERSION_NO, VERSION_STL);
 
