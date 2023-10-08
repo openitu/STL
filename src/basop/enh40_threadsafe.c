@@ -23,10 +23,11 @@ Revision History
   Mar 2017 CKJ, modified to remove usage of global flags so that the lib can be thread-safe
   Sep 2022 - Mar 2023 JHB, implement mods for codec builds:
                 -USE_BASOPS_xxx" should be defined in Makefile or an include file such as options.h or similar
-                -enable/disable Overflow and Carry global variables with USE_BASOPS_OVERFLOW_GLOBAL_VAR and USE_BASOPS_CARRY_GLOBAL_VAR
+                -enable/disable Overflow and Carry global variables with NO_BASOPS_OVERFLOW_GLOBAL_VAR and NO_BASOPS_CARRY_GLOBAL_VAR
                 -no indentation/formatting mods to STL 2017 file outside of mods described here
                 -note that MSC_VER sections were added by EVS authors, not in original STL file. These remain unmodified by Signalogic for EVS reference compatibility
   Mar 2023 JHB, improve comments
+  Sep 2023 JHB, change USE_BASOP_EXIT, USE_BASOPS_OVERFLOW_GLOBAL_VAR, USE_BASOPS_CARRY_GLOBAL_VAR to NO_BASOP_EXIT, NO_BASOPS_OVERFLOW_GLOBAL_VAR, and NO_BASOPS_CARRY_GLOBAL_VAR, and reverse polarity of #if usage
 */
 
 /*****************************************************************************
@@ -71,14 +72,17 @@ Revision History
  *  Include-Files
  *
  *****************************************************************************/
-#ifdef USE_BASOPS_THREADSAFE  /* USE_BASOPS_THREADSAFE should be defined in Makefile */
-  #include "options.h"  /* either the Makefile or an include file such as options.h or similar should contain definitions, as applicable, for USE_BASOPS_INLINE, EXCLUDE_BASOPS_NOT_USED, USE_BASOPS_OVERFLOW_GLOBAL_VAR, USE_BASOPS_CARRY_GLOBAL_VAR, and USE_BASOPS_EXIT, JHB Mar 2023 */
+
+#include "stl.h"
+
+#include "basop_platform.h"  /* include basop platform file, which will define _CODEC_TYPE_. Should always be after stl.h, although basop_platform.h will include stl.h if needed */
+
+#ifdef ENABLE_BASOPS_ERROR_DISPLAY
   #include <stdio.h>  /* fprintf() */
 #endif
-#ifdef USE_BASOPS_EXIT
+#ifndef NO_BASOPS_EXIT
   #include <stdlib.h>  /* abort(), exit() */
 #endif
-#include "stl.h"
 
 #if (WMOPS)
 extern BASIC_OP multiCounter[MAXCOUNTERS];
@@ -167,19 +171,19 @@ Word40 L40_shl (Word40 L40_var1, Word16 var2) {
 #else
       if (L40_var_out > 0x003fffffffffLL) {
 #endif
-        #ifdef USE_BASOPS_THREADSAFE
+        #ifdef ENABLE_BASOPS_ERROR_DISPLAY
         fprintf(stderr, "%s (@%d), L40_shl overflow, var1 = %lld, var2 = %d, var_out = %lld \n", __FILE__, __LINE__, L40_var1, var2, L40_var_out);
         #endif
 
-        #if defined(USE_BASOPS_OVERFLOW_GLOBAL_VAR) && defined(USE_BASOPS_EXIT) /* L40_OVERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(1) */
+        #if !defined(NO_BASOPS_OVERFLOW_GLOBAL_VAR) && !defined(NO_BASOPS_EXIT) /* L40_OVERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(1) */
         L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
         #endif
 
-        #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+        #ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR
         Overflow = 1;
         #endif
 
-        #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+        #ifndef NO_BASOPS_EXIT  /* allow exit() unless defined in options.h or Makefile, JHB Mar 2023 */
         exit(1);
         #endif
 
@@ -189,19 +193,19 @@ Word40 L40_shl (Word40 L40_var1, Word16 var2) {
 
       else if (L40_var_out < L40_constant) {
 
-        #ifdef USE_BASOPS_THREADSAFE
+        #ifdef ENABLE_BASOPS_ERROR_DISPLAY
         fprintf(stderr, "%s (@%d), L40_shl underflow, var1 = %lld, var2 = %d, var_out = %lld \n", __FILE__, __LINE__, L40_var1, var2, L40_var_out);
         #endif
 
-        #if defined(USE_BASOPS_OVERFLOW_GLOBAL_VAR) && defined(USE_BASOPS_EXIT)  /* L40_UNDERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(2) */
+        #if !defined(NO_BASOPS_OVERFLOW_GLOBAL_VAR) && !defined(NO_BASOPS_EXIT)  /* L40_UNDERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(2) */
         L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
         #endif
 
-        #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+        #ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR
         Overflow = 1;
         #endif
 
-        #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+        #ifndef NO_BASOPS_EXIT  /* allow exit() unless defined in options.h or Makefile, JHB Mar 2023 */
         exit(2);
         #endif
 
@@ -220,7 +224,7 @@ Word40 L40_shl (Word40 L40_var1, Word16 var2) {
   multiCounter[currCounter].L40_shl++;
 #endif /* ifdef WMOPS */
 
-#ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+#if _CODEC_TYPE == _EVS_CODEC_  /* EVS authors added BASOP_CHECK() */
   BASOP_CHECK();
 #endif
   return (L40_var_out);
@@ -370,19 +374,19 @@ Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
       && (((L40_var_out & 0x8000000000LL) >> 39) == 0)) {
 #endif
 
-    #ifdef USE_BASOPS_THREADSAFE
+    #ifdef ENABLE_BASOPS_ERROR_DISPLAY
     fprintf(stderr, "%s (@%d), L40_add underflow, var1 = %lld, var2 = %lld, var_out = %lld \n", __FILE__, __LINE__,  L40_var1, L40_var2, L40_var_out);
     #endif
 
-    #if defined(USE_BASOPS_OVERFLOW_GLOBAL_VAR) && defined(USE_BASOPS_EXIT)  /* L40_OVERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(1) */
+    #if !defined(NO_BASOPS_OVERFLOW_GLOBAL_VAR) && !defined(NO_BASOPS_EXIT)  /* L40_OVERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(1) */
     L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
     #endif
 
-    #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+    #ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR
     Overflow = 1;
     #endif
 
-    #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+    #ifndef NO_BASOPS_EXIT  /* disable exit() unless defined in options.h or Makefile, JHB Mar 2023 */
     exit(2);
     #endif
 
@@ -398,19 +402,19 @@ Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
              && (((L40_var_out & 0x8000000000LL) >> 39) != 0)) {
 #endif
 
-    #ifdef USE_BASOPS_THREADSAFE
+    #ifdef ENABLE_BASOPS_ERROR_DISPLAY
     fprintf(stderr, "%s (@%d), L40_add overflow, var1 = %lld, var2 = %lld, var_out = %lld \n", __FILE__, __LINE__,  L40_var1, L40_var2, L40_var_out);
     #endif
 
-    #if defined(USE_BASOPS_OVERFLOW_GLOBAL_VAR) && defined(USE_BASOPS_EXIT)  /* L40_UNDERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(2) */
+    #if !defined(NO_BASOPS_OVERFLOW_GLOBAL_VAR) && !defined(NO_BASOPS_EXIT)  /* L40_UNDERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(2) */
     L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
     #endif
 
-    #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+    #ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR
     Overflow = 1;
     #endif
 
-    #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+    #ifndef NO_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
     exit(1);
     #endif
 
@@ -421,7 +425,7 @@ Word40 L40_add (Word40 L40_var1, Word40 L40_var2) {
   multiCounter[currCounter].L40_add++;
 #endif /* ifdef WMOPS */
 
-#ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+#if _CODEC_TYPE == _EVS_CODEC_  /* EVS authors added BASOP_CHECK() */
   BASOP_CHECK();
 #endif
 
@@ -474,19 +478,19 @@ Word40 L40_sub (Word40 L40_var1, Word40 L40_var2) {
       && (((L40_var_out & 0x8000000000LL) >> 39) == 0)) {
 #endif
 
-    #ifdef USE_BASOPS_THREADSAFE
+    #ifdef ENABLE_BASOPS_ERROR_DISPLAY
     fprintf(stderr, "%s (@%d), L40_sub underflow, var1 = %lld, var2 = %lld, var_out = %lld \n", __FILE__, __LINE__,  L40_var1, L40_var2, L40_var_out);
     #endif
 
-    #if defined(USE_BASOPS_OVERFLOW_GLOBAL_VAR) && defined(USE_BASOPS_EXIT)  /* L40_UNDERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(2) */
+    #if !defined(NO_BASOPS_OVERFLOW_GLOBAL_VAR) && !defined(NO_BASOPS_EXIT)  /* L40_UNDERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(2) */
     L40_var_out = L40_UNDERFLOW_OCCURED (L40_var_out);
     #endif
 
-    #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+    #ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR
     Overflow = 1;
     #endif
 
-    #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+    #ifndef NO_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
     exit(2);
     #endif
 
@@ -502,19 +506,19 @@ Word40 L40_sub (Word40 L40_var1, Word40 L40_var2) {
              && (((L40_var_out & 0x8000000000LL) >> 39) != 0)) {
 #endif
 
-    #ifdef USE_BASOPS_THREADSAFE
+    #ifdef ENABLE_BASOPS_ERROR_DISPLAY
     fprintf(stderr, "%s (@%d), L40_sub overflow, var1 = %lld, var2 = %lld, var_out = %lld \n", __FILE__, __LINE__, L40_var1, L40_var2, L40_var_out);
     #endif
 
-    #if defined(USE_BASOPS_OVERFLOW_GLOBAL_VAR) && defined(USE_BASOPS_EXIT)  /* L40_OVERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(1) */
+    #if !defined(NO_BASOPS_OVERFLOW_GLOBAL_VAR) && !defined(NO_BASOPS_EXIT)  /* L40_OVERFLOW_OCCURED macro in enh40.h sets Overflow and then does exit(1) */
     L40_var_out = L40_OVERFLOW_OCCURED (L40_var_out);
     #endif
 
-    #ifdef USE_BASOPS_EXIT  /* disable exit() unless defined in options.h or otherwise, JHB Mar 2023 */
+    #ifndef NO_BASOPS_EXIT  /* disable exit() unless defined in options.h or Makefile, JHB Mar 2023 */
     exit(1);
     #endif
 
-    #ifdef USE_BASOPS_OVERFLOW_GLOBAL_VAR
+    #ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR
     Overflow = 1;
     #endif
 
@@ -525,7 +529,7 @@ Word40 L40_sub (Word40 L40_var1, Word40 L40_var2) {
   multiCounter[currCounter].L40_sub++;
 #endif /* ifdef WMOPS */
 
-#ifdef _EVS_  /* EVS authors added BASOP_CHECK() */
+#if _CODEC_TYPE == _EVS_CODEC_  /* EVS authors added BASOP_CHECK() */
   BASOP_CHECK();
 #endif
   return (L40_var_out);
@@ -698,7 +702,7 @@ Word40 L40_min (Word40 L40_var1, Word40 L40_var2) {
  *                the range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  *
  *****************************************************************************/
-#ifndef USE_BASOPS_THREADSAFE  /* Remove unused function that sets global Overflow flag - CJ MAR2017 */
+#ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR  /* Remove unused function that sets global Overflow flag - CJ MAR2017 */
 Word32 L_saturate40 (Word40 L40_var1) {
   Word32 L_var_out;
 

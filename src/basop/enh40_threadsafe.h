@@ -29,16 +29,18 @@ Revision History
                 -remove/disable usage of global flags
   Sep 2022 - Mar 2023 JHB, implement mods for codec builds:
                 -USE_BASOPS_xxx" should be defined in Makefile or an include file such as options.h or similar
-                -enable/disable Overflow and Carry global variables with USE_BASOPS_OVERFLOW_GLOBAL_VAR and USE_BASOPS_CARRY_GLOBAL_VAR
-                -disable abort() and enable error handling and descriptive error messages if USE_BASOPS_EXIT not defined
+                -enable/disable Overflow and Carry global variables with NO_BASOPS_OVERFLOW_GLOBAL_VAR and NO_BASOPS_CARRY_GLOBAL_VAR
+                -disable abort() and enable error handling and descriptive error messages if NO_BASOPS_EXIT defined
                 -no indentation/formatting mods to STL 2017 file outside of mods described here 
                 -note that MSC_VER section edits were by EVS authors, not in original STL file. These remain unmodified by Signalogic for EVS reference compatibility
   Mar 2023 JHB, improve comments
+  Sep 2023 JHB, change USE_BASOP_EXIT, USE_BASOPS_OVERFLOW_GLOBAL_VAR, USE_BASOPS_CARRY_GLOBAL_VAR to NO_BASOP_EXIT, NO_BASOPS_OVERFLOW_GLOBAL_VAR, and NO_BASOPS_CARRY_GLOBAL_VAR, and reverse polarity of #if usage
 */
 
 #ifndef _ENH40_H
 #define _ENH40_H
 
+#include "basop_platform.h"  /* include basop platform file, which will define _CODEC_TYPE_, Oct 2023 */
 
 #include "stl.h"
 
@@ -68,7 +70,7 @@ extern int currCounter;
  *
  *  Macros for 40 bit arithmetic overflow management :
  *  Upon 40-bit overflow beyond MAX_40 or underflow beyond MIN_40,
- *  the application will exit. (Note - with 2022-2023 mods in enh40_threadsafe.c these macros are not called unless both USE_BASOPS_OVERFLOW_GLOBAL_VAR and USE_BASOPS_EXIT are defined)
+ *  the application will exit. (Note - with 2022-2023 mods in enh40_threadsafe.c these macros are not called unless both NO_BASOPS_OVERFLOW_GLOBAL_VAR and NO_BASOPS_EXIT are undefined)
  *
  *****************************************************************************/
 #define L40_OVERFLOW_OCCURED(  L40_var1) (Overflow = 1, exit(1), L40_var1)
@@ -89,12 +91,12 @@ Word40 L40_shl_r (Word40 L40_var1, Word16 var2);
 static __inline Word40 L40_mult (Word16 var1, Word16 var2);
 
 static __inline Word40 L40_mac (Word40 L40_var1, Word16 var1, Word16 var2);
-#ifndef USE_BASOPS_THREADSAFE  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
+#ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
 static __inline Word16 mac_r40 (Word40 L40_var1, Word16 var1, Word16 var2);
 #endif
 
 static __inline Word40 L40_msu (Word40 L40_var1, Word16 var1, Word16 var2);
-#ifndef USE_BASOPS_THREADSAFE  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
+#ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
 static __inline Word16 msu_r40 (Word40 L40_var1, Word16 var1, Word16 var2);
 #endif
 
@@ -116,7 +118,7 @@ static __inline Word40 L40_deposit_l (Word16 var1);
 static __inline Word40 L40_deposit32 (Word32 L_var1);
 
 static __inline Word40 L40_round (Word40 L40_var1);
-#ifndef USE_BASOPS_THREADSAFE  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
+#ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
 static __inline Word16 round40 (Word40 L40_var1);
 #endif
 
@@ -127,7 +129,7 @@ Word40 L40_abs (Word40 L40_var1);
 Word40 L40_negate (Word40 L40_var1);
 Word40 L40_max (Word40 L40_var1, Word40 L40_var2);
 Word40 L40_min (Word40 L40_var1, Word40 L40_var2);
-#ifndef USE_BASOPS_THREADSAFE  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
+#ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
 Word32 L_saturate40 (Word40 L40_var1);
 #endif
 Word16 norm_L40 (Word40 L40_var1);
@@ -548,7 +550,7 @@ static __inline Word40 L40_round (Word40 L40_var1) {
  *                the range 0xffff 8000 <= var_out <= 0x0000 7fff.
  *
  *****************************************************************************/
-#ifndef USE_BASOPS_THREADSAFE  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
+#ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
 static __inline Word16 round40 (Word40 L40_var1) {
   Word16 var_out;
 
@@ -718,7 +720,7 @@ static __inline Word40 L40_mac (Word40 L40_var1, Word16 var2, Word16 var3) {
  *                the range : MIN_16 <= var_out <= MAX_16.
  *
  *****************************************************************************/
-#ifndef USE_BASOPS_THREADSAFE  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
+#ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
 static __inline Word16 mac_r40 (Word40 L40_var1, Word16 var2, Word16 var3) {
   Word40 L40_var_out;
   Word16 var_out;
@@ -836,7 +838,7 @@ static __inline Word40 L40_msu (Word40 L40_var1, Word16 var2, Word16 var3) {
  *                the range : MIN_16 <= var_out <= MAX_16.
  *
  *****************************************************************************/
-#ifndef USE_BASOPS_THREADSAFE  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
+#ifndef NO_BASOPS_OVERFLOW_GLOBAL_VAR  /* Remove unused function that used global Overflow flag - CJ MAR2017 */
 static __inline Word16 msu_r40 (Word40 L40_var1, Word16 var2, Word16 var3) {
   Word40 L40_var_out;
   Word16 var_out;
