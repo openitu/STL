@@ -278,7 +278,7 @@ void pop_wmops( void )
     tot = DeltaWeightedOperation();
     ops_cnt += tot;
 
-    /* update count of current record */
+     /* update count of current record */
     wmops[current_record].current_selfcnt += ops_cnt - wmops[current_record].start_selfcnt;
     wmops[current_record].current_cnt += ops_cnt - wmops[current_record].start_cnt;
 
@@ -295,6 +295,7 @@ void pop_wmops( void )
     {
         current_record = -1;
     }
+
 
     return;
 }
@@ -372,6 +373,7 @@ void update_wmops( void )
             {
                 wmops[i].max_cnt = wmops[i].current_cnt;
             }
+
 
             if ( wmops[i].current_cnt < wmops[i].min_cnt )
             {
@@ -2056,7 +2058,7 @@ int funcId_where_last_call_to_else_occurred;
 long funcid_total_wmops_at_last_call_to_else;
 int call_occurred = 1;
 
-const BASIC_OP op_weight = {
+BASIC_OP op_weight = {
     1, 1, 1, 1, 1,
     1, 1, 1, 1, 1,
     1, 1, 1, 1, 1,
@@ -2096,21 +2098,24 @@ void Set_BASOP_WMOPS_counter( int counterId )
     call_occurred = 1;
 }
 
+extern int32_t frame;
+
 long TotalWeightedOperation()
 {
     int i;
-    const long *ptr, *ptr2;
+    unsigned int *ptr, *ptr2;
     long tot; 
 
     tot = 0;
-    ptr = (const long *) &multiCounter[currCounter];
-    ptr2 = (const long *) &op_weight;
-    for ( i = 0; i < ( int )( sizeof( multiCounter[currCounter] ) / sizeof( long ) ); i++ )
+    ptr = (unsigned int *) &multiCounter[currCounter];
+    ptr2 = (unsigned int *) &op_weight;
+
+    for ( i = 0; i < ( int )( sizeof( multiCounter[currCounter] ) / sizeof( unsigned int ) ); i++ )
     {
         tot += ( ( *ptr++ ) * ( *ptr2++ ) );
     }
 
-    return ( (long) tot );
+    return ( tot );
 }
 
 long DeltaWeightedOperation( void )
@@ -2118,6 +2123,7 @@ long DeltaWeightedOperation( void )
     long NewWOper, delta;
 
     NewWOper = TotalWeightedOperation();
+
     delta = NewWOper - wmops[currCounter].LastWOper;
     wmops[currCounter].LastWOper = NewWOper;
 
