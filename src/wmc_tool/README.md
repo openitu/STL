@@ -21,6 +21,7 @@ This software is protected by copyright law and by international treaties. The s
 ## History
 
 2022-10-15 First release v1.4
+2023-10-24 Update to v1.5 (fixed small errors, compilation issues, added optimizations of the source code, added instrumentation of BASOP instructions and operators)
 
 ## Authors
 
@@ -42,6 +43,7 @@ The files `wmc_auto_h.txt` and `wmc_auto_c.txt` contain functions and definition
 ### Unix-based systems
 
 To build the project on Unix-based platforms invoke the following commands from the top-level directory containing the file `CMakeLists.txt`:
+
 ```
 mkdir build
 cd build
@@ -54,6 +56,7 @@ The binary file `wmc_tool` shall be created in the top-level directory.
 ### Windows system
 
 To build the project on MS Windows use the `cmake` command with `-G` option specifying the target platform. For example, to build project files for 64-bit MSVC 2019, invoke the following commands from the top-level directory containing the file `CMakeLists.txt`:
+
 ```
 md build
 cd build
@@ -62,6 +65,25 @@ msbuild wmc_tool.sln
 ```
 
 The executable file `wmc_tool.exe` shall be created in the top-level directory. Note, that it is recommended to run these commands from the `Developer Command Prompt for VS2019` opened in `Administrator` mode. This ensures that all paths to libraries including the SDK can be found by the `cmake` command. This can also be verified with the `vswhere` command.
+
+### Mac OS X system
+
+To build the project on OS X patforms for both, ARM and Intel architectures, invoke the following commands from the top-level directory containing the file `CMakeLists.txt`:
+
+```
+mkdir build
+cd build
+cmake -G "Xcode" "-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64" ..
+cmake --build . -j
+```
+
+At this point the binary is not signed yet and needs the following operations before it can be executed.
+- Open `wmc_tool` with Finder -> Open (an error prompt should pop-up)
+- Go to System Settings -> Privacy & Security and allow the `wmc_tool` to run
+- Add execution rights to `wmc_tool` with: `chmod +x wmc_tool`
+
+The `wmc_tool` should now be ready for execution.
+ 
 
 ## Testing
 
