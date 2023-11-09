@@ -981,7 +981,8 @@ typedef enum
 {
     USE_BYTES = 0,
     USE_16BITS = 1,
-    USE_32BITS = 2
+    USE_32BITS = 2,
+    USE_64BITS = 3
 } Counting_Size;
 
 #if ( defined( _WIN32 ) && ( _MSC_VER <= 1800 ) && ( _MSC_VER >= 1300 ) )

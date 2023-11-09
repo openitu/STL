@@ -25,6 +25,7 @@
 #include <windows.h>
 #endif
 
+#include "options.h"
 #include "wmc_auto.h"
 
 #define WMC_TOOL_SKIP /* Skip the instrumentation of this file, if invoked by accident */
@@ -682,7 +683,7 @@ allocator_record *allocation_list = NULL;
 
 static int Num_Records, Max_Num_Records;
 static size_t Stat_Cnt_Size = USE_BYTES;
-static const char *Count_Unit[] = { "bytes", "words", "words" };
+static const char *Count_Unit[] = { "bytes", "words", "words", "words" };
 
 static int32_t wc_ram_size, wc_ram_frame;
 static int32_t current_heap_size;
@@ -1895,7 +1896,16 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
 
         for ( i = 0; i < nElem; i++ )
         {
-            fprintf( stdout, "Program ROM size (%s): %d instruction words\n", Const_Data_PROM_Table[i].file_spec, Const_Data_PROM_Table[i].PROM_size );
+            if ( Stat_Cnt_Size > 0 )
+            {
+                /* words */
+                fprintf( stdout, "Program ROM size (%s): %d words\n", Const_Data_PROM_Table[i].file_spec, Const_Data_PROM_Table[i].PROM_size );
+            }
+            else
+            {
+                /* bytes */
+                fprintf( stdout, "Program ROM size (%s): %d bytes\n", Const_Data_PROM_Table[i].file_spec, Const_Data_PROM_Table[i].PROM_size << Stat_Cnt_Size );
+            }
         }
 
         for ( i = 0; i < nElem; i++ )
@@ -1984,11 +1994,12 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
     mem_count_summary();
 #endif
 
-    if ( Stat_Cnt_Size > 0 )
+    if ( Stat_Cnt_Size == 0 )
     {
-        fprintf( stdout, "\nNote: 1 word = %d bits\n", 8 << Stat_Cnt_Size );
-        fprintf( stdout, "This is an optimistic estimate of memory consumption assuming that each variable type is stored with sizeof(type) bits\n" );
+        /* bytes */
+        fprintf( stdout, "\nNote: The Program ROM size is calculated under the assumption that 1 instruction word is stored with %d bytes (%d bits)\n", 1 << Stat_Cnt_Size, 8 << Stat_Cnt_Size );
     }
+    fprintf( stdout, "Note: The Data ROM size is calculated using the sizeof(type) built-in function\n" );
 
     if ( n_items_wc_intra_frame_heap > 0 )
     {
