@@ -141,7 +141,7 @@
     "sqr Sqr SQR  "             \
     "square Square SQUARE  "    \
     "sign Sign SIGN  "          \
-    "inv_sqrt  "                \
+    "inv_sqrt inv_sqrtf "       \
     "log_base_2 log2_f  "       \
     "_round round_f  "          \
     "_squant  "                 \
