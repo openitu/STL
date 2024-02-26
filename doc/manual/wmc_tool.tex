@@ -56,7 +56,10 @@ Options:
         note: filename shall point to a .c file containing the print_mem() function
     -b [--no-backup]: no backup of original files
     -c dirname [--generate-wmc-files dirname]: copy wmc_auto.h and wmc_auto.c to a user-specified directory
+    -f value [--frames-per-second value]: set the number of frames per second (default 50.0)
 \end{Verbatim}
+
+The optional commend-line parameters may be used to control either the instrumentation or the couting process. With the \verb|-i| optional argument the WMC tool prints the list of  about functions that are instrumented. It doesn't run the WMC tool. The parametr \verb|-d| runs the des-instrumentation phase only. The des-instrumentation phase removes all meta-information that has been previously added to the source code with the WMC tool. When \verb|-m| argument is provided the WMC tool adds code calculating ROM and RAM memory consumption and fills the \verb|print_mem()| function to print the statistics about memopry usage. When \verb|-m| is provided the user needs to specify the used the name of the \verb|.c| file containing the \verb|print_mem()| function. The parameter \verb|-b| instructs the WMC tool not to create backup copies of the instrumented \verb|.c| files. The parameter \verb|-c| copies the control files \verb|wmc_auto.h| and \verb|wmc_auto.c| to a user-specified directory. The control files must be added to the project for calculating the complexity and memory consumption of all instrumented source files. The \verb|-f| parameter allows the users to override the default values for the number of frames per second. This value is important for the correct calculation of complexity in "WMOPS".
 
 \subsection{Instrumentation process}
 \label{ch:instrumentation_process}
