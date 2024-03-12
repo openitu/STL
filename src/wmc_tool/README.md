@@ -68,7 +68,7 @@ The executable file `wmc_tool.exe` shall be created in the top-level directory. 
 
 ### Mac OS X system
 
-To build the project on OS X patforms for both, ARM and Intel architectures, invoke the following commands from the top-level directory containing the file `CMakeLists.txt`:
+To build the project on OS X platforms for both, ARM and Intel architectures, invoke the following commands from the top-level directory containing the file `CMakeLists.txt`:
 
 ```
 mkdir build
