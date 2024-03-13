@@ -42,6 +42,8 @@
 #define MAX_NUM_RECORDS_REALLOC_STEP 50  /* When re-allocating the list of records, increase the number of records by this number */
 #define MAX_CALL_TREE_DEPTH          100 /* maximum depth of the function call tree */
 #define DOUBLE_MAX                   0x80000000
+#define FAC                          ( FRAMES_PER_SECOND / 1e6 )
+
 
 typedef struct 
 {
@@ -1903,8 +1905,8 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
             }
             else
             {
-                /* bytes */
-                fprintf( stdout, "Program ROM size (%s): %d bytes\n", Const_Data_PROM_Table[i].file_spec, Const_Data_PROM_Table[i].PROM_size << Stat_Cnt_Size );
+                /* bytes (here, we assume that each instruction takes PROM_INST_SIZE bits of the PROM memory) */
+                fprintf( stdout, "Program ROM size (%s): %d bytes\n", Const_Data_PROM_Table[i].file_spec, Const_Data_PROM_Table[i].PROM_size * ( PROM_INST_SIZE / 8 ) );
             }
         }
 
@@ -1994,10 +1996,15 @@ void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] )
     mem_count_summary();
 #endif
 
-    if ( Stat_Cnt_Size == 0 )
+    if ( Stat_Cnt_Size > 0 )
+    {
+        /* words */
+        fprintf( stdout, "\nNote: The Program ROM size is calculated under the assumption that 1 instruction word is stored with %d bits\n", 8 << Stat_Cnt_Size );
+    }
+    else
     {
         /* bytes */
-        fprintf( stdout, "\nNote: The Program ROM size is calculated under the assumption that 1 instruction word is stored with %d bytes (%d bits)\n", 1 << Stat_Cnt_Size, 8 << Stat_Cnt_Size );
+        fprintf( stdout, "\nNote: The Program ROM size is calculated under the assumption that 1 instruction word is stored with %d bits\n", PROM_INST_SIZE );
     }
     fprintf( stdout, "Note: The Data ROM size is calculated using the sizeof(type) built-in function\n" );
 

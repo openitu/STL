@@ -33,10 +33,8 @@
 #define INT_MAX 32767
 #endif
 
-/* Real-time relationships */
 #define FRAMES_PER_SECOND 50.0    
-#define WMOPS_BOOST_FAC   ( 1.0f ) /* scaling factor for equalizing the difference between automatic and manual instrumentation */
-#define FAC               ( FRAMES_PER_SECOND / 1e6 * WMOPS_BOOST_FAC )
+#define PROM_INST_SIZE    32     /* number of bits of each program instruction when stored in the PROM memory (applied only when the user selects reporting in bytes) */
 
 #ifdef WMOPS
 enum instructions
@@ -662,29 +660,30 @@ static int wmc_flag_ = 0;
 #endif
 
 /* Define all Macros without '{' & '}' (None of these should be called externally!) */
-#define ABS_( x )      OP_COUNT_( _ABS, ( x ) / WMOPS_BOOST_FAC )
-#define ADD_( x )      OP_COUNT_( _ADD, ( x ) / WMOPS_BOOST_FAC )
-#define MULT_( x )     OP_COUNT_( _MULT, ( x ) / WMOPS_BOOST_FAC )
-#define MAC_( x )      OP_COUNT_( _MAC, ( x ) / WMOPS_BOOST_FAC )
-#define MOVE_( x )     OP_COUNT_( _MOVE, ( x ) / WMOPS_BOOST_FAC )
-#define STORE_( x )    OP_COUNT_( _STORE, ( x ) / WMOPS_BOOST_FAC )
-#define LOGIC_( x )    OP_COUNT_( _LOGIC, ( x ) / WMOPS_BOOST_FAC )
-#define SHIFT_( x )    OP_COUNT_( _SHIFT, ( x ) / WMOPS_BOOST_FAC )
-#define BRANCH_( x )   OP_COUNT_( _BRANCH, ( x ) / WMOPS_BOOST_FAC )
-#define DIV_( x )      OP_COUNT_( _DIV, ( x ) / WMOPS_BOOST_FAC )
-#define SQRT_( x )     OP_COUNT_( _SQRT, ( x ) / WMOPS_BOOST_FAC )
-#define TRANS_( x )    OP_COUNT_( _TRANS, ( x ) / WMOPS_BOOST_FAC )
+#define ABS_( x )      OP_COUNT_( _ABS, ( x ) )
+#define ADD_( x )      OP_COUNT_( _ADD, ( x ) )
+#define MULT_( x )     OP_COUNT_( _MULT, ( x ) )
+#define MAC_( x )      OP_COUNT_( _MAC, ( x ) )
+#define MOVE_( x )     OP_COUNT_( _MOVE, ( x ) )
+#define STORE_( x )    OP_COUNT_( _STORE, ( x ) )
+#define LOGIC_( x )    OP_COUNT_( _LOGIC, ( x ) )
+#define SHIFT_( x )    OP_COUNT_( _SHIFT, ( x ) )
+#define BRANCH_( x )   OP_COUNT_( _BRANCH, ( x ) )
+#define DIV_( x )      OP_COUNT_( _DIV, ( x ) )
+#define SQRT_( x )     OP_COUNT_( _SQRT, ( x ) )
+#define TRANS_( x )    OP_COUNT_( _TRANS, ( x ) )
 #define POWER_( x )    TRANS_( x )
 #define LOG_( x )      TRANS_( x )
-#define LOOP_( x )     OP_COUNT_( _LOOP, ( x ) / WMOPS_BOOST_FAC )
-#define INDIRECT_( x ) OP_COUNT_( _INDIRECT, ( x ) / WMOPS_BOOST_FAC )
-#define PTR_INIT_( x ) OP_COUNT_( _PTR_INIT, ( x ) / WMOPS_BOOST_FAC )
-#define FUNC_( x )     ( OP_COUNT_( _MOVE, ( x ) / WMOPS_BOOST_FAC ), OP_COUNT_( _FUNC, 1 ) )
+#define LOOP_( x )     OP_COUNT_( _LOOP, ( x ) )
+#define INDIRECT_( x ) OP_COUNT_( _INDIRECT, ( x ) )
+#define PTR_INIT_( x ) OP_COUNT_( _PTR_INIT, ( x ) )
+#define FUNC_( x )     ( OP_COUNT_( _MOVE, ( x ) ), OP_COUNT_( _FUNC, 1 ) )
 #define MISC_( x )     ABS_( x )
 
 /* Math Operations */
 #define abs_    OP_COUNT_WRAPPER1_( ABS_( 1 ), abs )
 #define fabs_   OP_COUNT_WRAPPER1_( ABS_( 1 ), fabs )
+#define fabsf_  OP_COUNT_WRAPPER1_( ABS_( 1 ), fabsf )
 #define labs_   OP_COUNT_WRAPPER1_( ABS_( 1 ), labs )
 #define floor_  OP_COUNT_WRAPPER1_( MISC_( 1 ), floor )
 #define floorf_ OP_COUNT_WRAPPER1_( MISC_( 1 ), floorf )
