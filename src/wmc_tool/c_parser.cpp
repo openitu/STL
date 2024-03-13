@@ -124,29 +124,23 @@
 #define SYSTEM_FUNCTS_STRING                           \
     "printf fprintf  "                                 \
     "fopen fclose fwrite fread  "                      \
-    "exit  "                                           \
-    "assert  "                                         
+    "assert exit  "                                       
 
-#define MATH_FUNCTS_STRING      \
-    "abs fabs labs  "           \
-    "floor  "                   \
-    "sqrt sqrtf "               \
-    "pow exp  "                 \
-    "log log10  "               \
-    "cos sin tan  "             \
-    "acos asin atan atan2  "    \
-    "cosh sinh tanh  "          \
-    "fmod  "                    \
-    "min max Min Max MIN MAX  " \
-    "sqr Sqr SQR  "             \
-    "square Square SQUARE  "    \
-    "sign Sign SIGN  "          \
-    "inv_sqrt inv_sqrtf "       \
-    "log_base_2 log2_f  "       \
-    "_round round_f  "          \
-    "_squant  "                 \
-    "set_min set_max  "         \
-    "mac msu " 
+#define MATH_FUNCTS_STRING                             \
+    "abs fabs fabsf labs "                             \
+    "floor floorf "                                    \
+    "sqrt sqrtf inv_sqrt inv_sqrtf "                   \
+    "pow powf exp expf "                               \
+    "log logf log10 log10f log_base_2 log2 log2_f "    \
+    "cos cosf sin sinf tan tanf "                      \
+    "acos acosf asin asinf atan atanf atan2 atan2f "   \
+    "cosh coshf sinh sinhf tanh tanhf "                \
+    "fmod fmodf "                                      \
+    "min max Min Max MIN MAX "                         \
+    "sqr Sqr SQR square Square SQUARE "                \
+    "sign Sign SIGN "                                  \
+    "_round round_f "                                  \
+    "set_min set_max "        
 
 #define BASOP_FUNCTS_STRING      \
     "add sub abs_s shl shr extract_h extract_l mult L_mult negate round " \

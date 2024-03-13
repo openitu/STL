@@ -615,14 +615,6 @@ extern int cntr_push_pop;
 
 #endif
 
-/* mac & msu (Non Instrumented Versions) */
-#ifndef mac
-#define mac( a, b, c ) ( ( a ) + ( b ) * ( c ) )
-#endif
-#ifndef mac
-#define msu( a, b, c ) ( ( a ) - ( b ) * ( c ) )
-#endif
-
 #ifndef WMOPS
 /* DESACTIVATE the Counting Mechanism */
 #define OP_COUNT_( op, n )
@@ -691,63 +683,72 @@ static int wmc_flag_ = 0;
 #define MISC_( x )     ABS_( x )
 
 /* Math Operations */
-#define abs_   OP_COUNT_WRAPPER1_( ABS_( 1 ), abs )
-#define fabs_  OP_COUNT_WRAPPER1_( ABS_( 1 ), fabs )
-#define labs_  OP_COUNT_WRAPPER1_( ABS_( 1 ), labs )
-#define floor_ OP_COUNT_WRAPPER1_( MISC_( 1 ), floor )
-#define sqrt_  OP_COUNT_WRAPPER1_( SQRT_( 1 ), sqrt )
-#define pow_   OP_COUNT_WRAPPER1_( POWER_( 1 ), pow )
-#define exp_   OP_COUNT_WRAPPER1_( POWER_( 1 ), exp )
-#define log_   OP_COUNT_WRAPPER1_( LOG_( 1 ), log )
-#define log10_ OP_COUNT_WRAPPER1_( LOG_( 1 ), log10 )
-#define cos_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), cos )
-#define sin_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), sin )
-#define tan_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), tan )
-#define acos_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), acos )
-#define asin_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), asin )
-#define atan_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan )
-#define atan2_ OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan2 )
-#define cosh_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), cosh )
-#define sinh_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), sinh )
-#define tanh_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanh )
-#define fmod_  OP_COUNT_WRAPPER1_( DIV_( 1 ), fmod )
-/* these macros use any local macros already defined */
-/* min/max and their Variants */
-#define min_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), min( ( a ), ( b ) ) )
-#define max_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), max( ( a ), ( b ) ) )
-#define MIN_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), MIN( ( a ), ( b ) ) )
-#define MAX_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), MAX( ( a ), ( b ) ) )
-#define Min_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), Min( ( a ), ( b ) ) )
-#define Max_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), Max( ( a ), ( b ) ) )
-/* Square and its Variants */
-#define sqr_( x )    OP_COUNT_WRAPPER1_( MULT_( 1 ), sqr( ( x ) ) )
-#define Sqr_( x )    OP_COUNT_WRAPPER1_( MULT_( 1 ), Sqr( ( x ) ) )
-#define SQR_( x )    OP_COUNT_WRAPPER1_( MULT_( 1 ), SQR( ( x ) ) )
-#define square_( x ) OP_COUNT_WRAPPER1_( MULT_( 1 ), square( ( x ) ) )
-#define Square_( x ) OP_COUNT_WRAPPER1_( MULT_( 1 ), Square( ( x ) ) )
-#define SQUARE_( x ) OP_COUNT_WRAPPER1_( MULT_( 1 ), SQUARE( ( x ) ) )
-/* Sign and its Variants */
-#define sign_( x ) OP_COUNT_WRAPPER1_( MOVE_( 1 ), sign( ( x ) ) )
-#define Sign_( x ) OP_COUNT_WRAPPER1_( MOVE_( 1 ), Sign( ( x ) ) )
-#define SIGN_( x ) OP_COUNT_WRAPPER1_( MOVE_( 1 ), SIGN( ( x ) ) )
-/* Square Root and its Variants */
-#define sqrtf_( x ) OP_COUNT_WRAPPER1_( SQRT_( 1 ), sqrtf( ( x ) ) )
-/* Invert Square Root and its Variants */
-#define inv_sqrt_( x ) OP_COUNT_WRAPPER1_( SQRT_( 1 ), inv_sqrt( ( x ) ) )
-/* Others */
+#define abs_    OP_COUNT_WRAPPER1_( ABS_( 1 ), abs )
+#define fabs_   OP_COUNT_WRAPPER1_( ABS_( 1 ), fabs )
+#define labs_   OP_COUNT_WRAPPER1_( ABS_( 1 ), labs )
+#define floor_  OP_COUNT_WRAPPER1_( MISC_( 1 ), floor )
+#define floorf_ OP_COUNT_WRAPPER1_( MISC_( 1 ), floorf )
+#define sqrt_   OP_COUNT_WRAPPER1_( SQRT_( 1 ), sqrt )
+#define sqrtf_  OP_COUNT_WRAPPER1_( SQRT_( 1 ), sqrtf )
+#define pow_    OP_COUNT_WRAPPER1_( POWER_( 1 ), pow )
+#define powf_   OP_COUNT_WRAPPER1_( POWER_( 1 ), powf )
+#define exp_    OP_COUNT_WRAPPER1_( POWER_( 1 ), exp )
+#define expf_   OP_COUNT_WRAPPER1_( POWER_( 1 ), expf )
+#define log_    OP_COUNT_WRAPPER1_( LOG_( 1 ), log )
+#define logf_   OP_COUNT_WRAPPER1_( LOG_( 1 ), logf )
+#define log10_  OP_COUNT_WRAPPER1_( LOG_( 1 ), log10 )
+#define log10f_ OP_COUNT_WRAPPER1_( LOG_( 1 ), log10f )
+#define cos_    OP_COUNT_WRAPPER1_( TRANS_( 1 ), cos )
+#define cosf_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), cosf )
+#define sin_    OP_COUNT_WRAPPER1_( TRANS_( 1 ), sin )
+#define sinf_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), sinf )
+#define tan_    OP_COUNT_WRAPPER1_( TRANS_( 1 ), tan )
+#define tanf_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanf )
+#define acos_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), acos )
+#define acosf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), acosf )
+#define asin_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), asin )
+#define asinf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), asinf )
+#define atan_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan )
+#define atanf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), atanf )
+#define atan2_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan2 )
+#define atan2f_ OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan2f )
+#define cosh_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), cosh )
+#define coshf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), coshf )
+#define sinh_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), sinh )
+#define sinhf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), sinhf )
+#define tanh_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanh )
+#define tanhf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanhf )
+#define fmod_   OP_COUNT_WRAPPER1_( DIV_( 1 ), fmod )
+#define fmodf_  OP_COUNT_WRAPPER1_( DIV_( 1 ), fmodf )
+
+/* the macros below are instrumented versions of user-defined macros that might be used in the source code 
+/* representing some well-known and recognized mathematical operations (that are not defined in math.h) */
+/* Note: the 'wmc_flag_=wmc_flag_' is used to avoid warning: left-hand operand of comma expression has no effect with gcc */
+
+#define min_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), min( ( a ), ( b ) ) )
+#define max_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), max( ( a ), ( b ) ) )
+#define MIN_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), MIN( ( a ), ( b ) ) )
+#define MAX_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), MAX( ( a ), ( b ) ) )
+#define Min_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), Min( ( a ), ( b ) ) )
+#define Max_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), Max( ( a ), ( b ) ) )
+#define sqr_( x )        OP_COUNT_WRAPPER1_( MULT_( 1 ), sqr( ( x ) ) )
+#define Sqr_( x )        OP_COUNT_WRAPPER1_( MULT_( 1 ), Sqr( ( x ) ) )
+#define SQR_( x )        OP_COUNT_WRAPPER1_( MULT_( 1 ), SQR( ( x ) ) )
+#define square_( x )     OP_COUNT_WRAPPER1_( MULT_( 1 ), square( ( x ) ) )
+#define Square_( x )     OP_COUNT_WRAPPER1_( MULT_( 1 ), Square( ( x ) ) )
+#define SQUARE_( x )     OP_COUNT_WRAPPER1_( MULT_( 1 ), SQUARE( ( x ) ) )
+#define sign_( x )       OP_COUNT_WRAPPER1_( MOVE_( 1 ), sign( ( x ) ) )
+#define Sign_( x )       OP_COUNT_WRAPPER1_( MOVE_( 1 ), Sign( ( x ) ) )
+#define SIGN_( x )       OP_COUNT_WRAPPER1_( MOVE_( 1 ), SIGN( ( x ) ) )
+#define inv_sqrt_( x )   OP_COUNT_WRAPPER1_( SQRT_( 1 ), inv_sqrt( ( x ) ) )
+#define inv_sqrtf_( x )  OP_COUNT_WRAPPER1_( SQRT_( 1 ), inv_sqrtf( ( x ) ) )
 #define log_base_2_( x ) OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log_base_2( ( x ) ) )
+#define log2_( x   )     OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log2( ( x ) ) )
 #define log2_f_( x )     OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log2_f( ( x ) ) )
-/* The 'wmc_flag_=wmc_flag_' is Used to Avoid: "warning: left-hand operand of comma expression has no effect"
-   with Cygwin gcc Compiler */
-#define _round_( x )  OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, _round( ( x ) ) )
-#define round_f_( x ) OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, round_f( ( x ) ) )
-#define _squant_( x ) OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, _squant( ( x ) ) )
-/* Set Min/Max */
+#define _round_( x )     OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, _round( ( x ) ) )
+#define round_f_( x )    OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, round_f( ( x ) ) )
 #define set_min_( a, b ) OP_COUNT_WRAPPER3_( ( ADD_( 1 ), BRANCH_( 1 ), MOVE_( 1 ) ), set_min( ( a ), ( b ) ) )
 #define set_max_( a, b ) OP_COUNT_WRAPPER3_( ( ADD_( 1 ), BRANCH_( 1 ), MOVE_( 1 ) ), set_max( ( a ), ( b ) ) )
-/* mac & msu (Instrumented Versions) */
-#define mac_( a, b, c ) OP_COUNT_WRAPPER1_( MAC_( 1 ), mac( a, b, c ) )
-#define msu_( a, b, c ) OP_COUNT_WRAPPER1_( MAC_( 1 ), msu( a, b, c ) )
 
 /* Functions */
 #define func_( name, x ) OP_COUNT_WRAPPER1_( FUNC_( x ), name )
@@ -1438,5 +1439,6 @@ static __inline void incrGoto( void) {
 #endif 
 
 #endif /* WMOPS_H */
+
 
 
