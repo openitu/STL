@@ -135,7 +135,7 @@
     "cos cosf sin sinf tan tanf "                      \
     "acos acosf asin asinf atan atanf atan2 atan2f "   \
     "cosh coshf sinh sinhf tanh tanhf "                \
-    "fmod fmodf "                                      \
+    "fmod fmodf frexp frexpf "                         \
     "min max Min Max MIN MAX "                         \
     "sqr Sqr SQR square Square SQUARE "                \
     "sign Sign SIGN "                                  \

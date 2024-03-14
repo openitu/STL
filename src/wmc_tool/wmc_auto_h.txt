@@ -719,6 +719,8 @@
 "#define tanhf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanhf )\r\n"
 "#define fmod_   OP_COUNT_WRAPPER1_( DIV_( 1 ), fmod )\r\n"
 "#define fmodf_  OP_COUNT_WRAPPER1_( DIV_( 1 ), fmodf )\r\n"
+"#define frexp_  OP_COUNT_WRAPPER1_( MISC_( 2 ), frexp )\r\n"
+"#define frexpf_ OP_COUNT_WRAPPER1_( MISC_( 2 ), frexpf )\r\n"
 "\r\n"
 "/* the macros below are instrumented versions of user-defined macros that might be used in the source code \r\n"
 "/* representing some well-known and recognized mathematical operations (that are not defined in math.h) */\r\n"

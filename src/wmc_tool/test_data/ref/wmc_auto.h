@@ -719,6 +719,8 @@ static int wmc_flag_ = 0;
 #define tanhf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanhf )
 #define fmod_   OP_COUNT_WRAPPER1_( DIV_( 1 ), fmod )
 #define fmodf_  OP_COUNT_WRAPPER1_( DIV_( 1 ), fmodf )
+#define frexp_  OP_COUNT_WRAPPER1_( MISC_( 2 ), frexp )
+#define frexpf_ OP_COUNT_WRAPPER1_( MISC_( 2 ), frexpf )
 
 /* the macros below are instrumented versions of user-defined macros that might be used in the source code 
 /* representing some well-known and recognized mathematical operations (that are not defined in math.h) */
