@@ -121,25 +121,25 @@
 #define SYSTEM_ALLOC_FUNCTS_STRING \
     "malloc calloc free "
 
-#define SYSTEM_FUNCTS_STRING                           \
-    "printf fprintf  "                                 \
-    "fopen fclose fwrite fread  "                      \
-    "assert exit  "                                       
+#define SYSTEM_FUNCTS_STRING                                 \
+    "printf fprintf  "                                       \
+    "fopen fclose fwrite fread  "                            \
+    "assert exit  "                                             
 
-#define MATH_FUNCTS_STRING                             \
-    "abs fabs fabsf labs "                             \
-    "floor floorf "                                    \
-    "sqrt sqrtf inv_sqrt inv_sqrtf "                   \
-    "pow powf exp expf "                               \
-    "log logf log10 log10f log_base_2 log2 log2_f "    \
-    "cos cosf sin sinf tan tanf "                      \
-    "acos acosf asin asinf atan atanf atan2 atan2f "   \
-    "cosh coshf sinh sinhf tanh tanhf "                \
-    "fmod fmodf frexp frexpf "                         \
-    "min max Min Max MIN MAX "                         \
-    "sqr Sqr SQR square Square SQUARE "                \
-    "sign Sign SIGN "                                  \
-    "_round round_f "                                  \
+#define MATH_FUNCTS_STRING                                   \
+    "abs fabs fabsf labs "                                   \
+    "floor floorf "                                          \
+    "sqrt sqrtf inv_sqrt inv_sqrtf "                         \
+    "pow powf exp expf "                                     \
+    "log logf log10 log10f log_base_2 log2 log2f log2_f "    \
+    "cos cosf sin sinf tan tanf "                            \
+    "acos acosf asin asinf atan atanf atan2 atan2f "         \
+    "cosh coshf sinh sinhf tanh tanhf "                      \
+    "fmod fmodf frexp frexpf "                               \
+    "min max Min Max MIN MAX "                               \
+    "sqr Sqr SQR square Square SQUARE "                      \
+    "sign Sign SIGN "                                        \
+    "_round round round_f roundf "                           \
     "set_min set_max "        
 
 #define BASOP_FUNCTS_STRING      \

@@ -745,9 +745,12 @@ static int wmc_flag_ = 0;
 #define inv_sqrtf_( x )  OP_COUNT_WRAPPER1_( SQRT_( 1 ), inv_sqrtf( ( x ) ) )
 #define log_base_2_( x ) OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log_base_2( ( x ) ) )
 #define log2_( x   )     OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log2( ( x ) ) )
+#define log2f_( x   )    OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log2f( ( x ) ) )
 #define log2_f_( x )     OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log2_f( ( x ) ) )
 #define _round_( x )     OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, _round( ( x ) ) )
+#define round_( x )      OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, round( ( x ) ) )
 #define round_f_( x )    OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, round_f( ( x ) ) )
+#define roundf_( x )     OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, roundf( ( x ) ) )
 #define set_min_( a, b ) OP_COUNT_WRAPPER3_( ( ADD_( 1 ), BRANCH_( 1 ), MOVE_( 1 ) ), set_min( ( a ), ( b ) ) )
 #define set_max_( a, b ) OP_COUNT_WRAPPER3_( ( ADD_( 1 ), BRANCH_( 1 ), MOVE_( 1 ) ), set_max( ( a ), ( b ) ) )
 
