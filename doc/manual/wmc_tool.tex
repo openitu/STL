@@ -438,7 +438,7 @@ float calculate_market_value()
 }
 \end{Verbatim}
 
-The string inside each \verb|push_wmops()| macro shall be unique in the entire project and reflect what is being measured. It does not need to be the same as the name of the function in which it is used. The macro \verb|pop_wmops()| must \textbf{ALWAYS} be used to terminate the complexity counters associated with each \verb|push_wmops()| macro. The WMC tool supports nesting of these macro pairs. Note, that the \verb|push_wmops()| and the \verb|pop_wmops()| macros do not need to be encapsulated within the \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| macro pairs.
+The \verb|push_wmops()| macro must be placed after the declaration of local variables. The string inside each \verb|push_wmops()| macro shall be unique in the entire project and reflect what is being measured. It does not need to be the same as the name of the function in which it is used. The macro \verb|pop_wmops()| must \textbf{ALWAYS} be used to terminate the complexity counters associated with each \verb|push_wmops()| macro. The WMC tool supports nesting of these macro pairs. Note, that the \verb|push_wmops()| and the \verb|pop_wmops()| macros do not need to be encapsulated within the \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| macro pairs.
 
 %-----------------------------------------------------------------------------
 \subsection{Printing statistics about computational complexity}
