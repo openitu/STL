@@ -1,5 +1,5 @@
 /*
- * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -188,6 +188,7 @@
 #define ITEM_FUNC_COUNTERS_MAN    0x01
 #define ITEM_FUNC_COUNTERS        ( ITEM_FUNC_COUNTERS_MAN | ITEM_FUNC_COUNTERS_AUTO )
 #define ITEM_FUNC_COUNT_LIB       0x20
+#define ITEM_FUNC_BASOP           0x10
 #define ITEM_FUNC_SYSTEM          0x40
 
 /* Attributes for ITEM_SKIPPED */

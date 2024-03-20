@@ -2427,5 +2427,7 @@ Word32 L_msu0 (Word32 L_var3, Word16 var1, Word16 var2) {
   return (L_var_out);
 }
 
+#undef WMC_TOOL_SKIP
 
 /* end of file */
+/*AddedByWMC_Tool*/ int PROM_Size_Func( test_basop32 ) { return 157; }

@@ -1,5 +1,5 @@
 /*
- * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -19,7 +19,7 @@
  * Switches
  *-------------------------------------------------------------------*/
 
-#define WMC_TOOL_VERSION_NO  "1.4"          /* Current version */
+#define WMC_TOOL_VERSION_NO  "1.5"          /* Current version */
 /*#define DEBUG_PRINT*/                     /* For debugging purposes */
 
 /*-------------------------------------------------------------------*

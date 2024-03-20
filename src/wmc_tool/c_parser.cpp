@@ -1,5 +1,5 @@
 /*
- * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -110,62 +110,49 @@
     MANUAL_COUNTING_MACROS_STRING \
     AUTO_COUNTING_MACROS_STRING
 
-#define WMOPS_COUNTLIB_FUNCTS_STRING \
-    "reset_wmops push_wmops pop_wmops update_wmops print_wmops "
-#define OTHER_COUNTLIB_FUNCTS_STRING                                       \
-    "Dyn_Mem_Init Dyn_Mem_Exit Dyn_Mem_Exit_noprint  "                     \
-    "Dyn_Mem_In Dyn_Mem_Add Dyn_Mem_Out  "                                 \
-    "Sta_Mem_Init Sta_Mem_Exit Sta_Mem_Exit_noprint Sta_Mem_Add  "         \
-    "P_Dyn_Mem_Init P_Dyn_Mem_Exit P_Dyn_Mem_Exit_noprint  "               \
-    "P_Dyn_Mem_In P_Dyn_Mem_Add P_Dyn_Mem_Out  "                           \
-    "P_Sta_Mem_Init P_Sta_Mem_Exit P_Sta_Mem_Exit_noprint P_Sta_Mem_Add  " \
-    "DYN_MEM_IN DYN_MEM_ADD DYN_MEM_OUT  "
-#define COUNTLIB_FUNCTS_STRING   \
-    WMOPS_COUNTLIB_FUNCTS_STRING \
-    OTHER_COUNTLIB_FUNCTS_STRING
+#define WMOPS_FUNCTS_STRING \
+    "reset_wmops push_wmops pop_wmops update_wmops print_wmops print_mem " \
+    "rsize Get_Const_Data_Size Print_Const_Data_Size "
 
 #define COUNTING_CODE_STRING \
     COUNTING_MACROS_STRING   \
-    COUNTLIB_FUNCTS_STRING
-
-#define TOOL_FUNCTS_STRING \
-    "rsize "               \
-    "Get_Const_Data_Size " \
-    "Print_Const_Data_Size " \
-    "print_mem "
+    WMOPS_FUNCTS_STRING
 
 #define SYSTEM_ALLOC_FUNCTS_STRING \
     "malloc calloc free "
 
-#define SYSTEM_FUNCTS_STRING                           \
-    "printf fprintf  "                                 \
-    "fopen fclose fwrite fread  "                      \
-    "exit  "                                           \
-    "assert  "                                         \
-    "push_indice set_indice get_indice exist_indice  " \
-    "reset_indices write_indices read_indices  "       \
-    "read_bitstream_info reset_stack push_stack "
+#define SYSTEM_FUNCTS_STRING                                 \
+    "printf fprintf  "                                       \
+    "fopen fclose fwrite fread  "                            \
+    "assert exit  "                                             
 
-#define MATH_FUNCTS_STRING      \
-    "abs fabs labs  "           \
-    "floor  "                   \
-    "sqrt sqrtf "               \
-    "pow exp  "                 \
-    "log log10  "               \
-    "cos sin tan  "             \
-    "acos asin atan atan2  "    \
-    "cosh sinh tanh  "          \
-    "fmod  "                    \
-    "min max Min Max MIN MAX  " \
-    "sqr Sqr SQR  "             \
-    "square Square SQUARE  "    \
-    "sign Sign SIGN  "          \
-    "inv_sqrt  "                \
-    "log_base_2 log2_f  "       \
-    "_round round_f  "          \
-    "_squant  "                 \
-    "set_min set_max  "         \
-    "mac msu " 
+#define MATH_FUNCTS_STRING                                   \
+    "abs fabs fabsf labs "                                   \
+    "floor floorf "                                          \
+    "sqrt sqrtf inv_sqrt inv_sqrtf "                         \
+    "pow powf exp expf "                                     \
+    "log logf log10 log10f log_base_2 log2 log2f log2_f "    \
+    "cos cosf sin sinf tan tanf "                            \
+    "acos acosf asin asinf atan atanf atan2 atan2f "         \
+    "cosh coshf sinh sinhf tanh tanhf "                      \
+    "fmod fmodf frexp frexpf "                               \
+    "min max Min Max MIN MAX "                               \
+    "sqr Sqr SQR square Square SQUARE "                      \
+    "sign Sign SIGN "                                        \
+    "_round round round_f roundf "                           \
+    "set_min set_max "        
+
+#define BASOP_FUNCTS_STRING      \
+    "add sub abs_s shl shr extract_h extract_l mult L_mult negate round " \
+    "L_mac L_msu L_macNs L_msuNs L_add L_sub L_add_c L_sub_c L_negate L_shl L_shr " \
+    "mult_r shr_r mac_r msu_r L_deposit_h L_deposit_l L_shr_r L_abs L_sat norm_s div_s " \
+    "norm_l move16 move32 Logic16 Logic32 Test s_max s_min L_max L_min L40_max " \
+    "L40_min shl_r L_shl_r L40_shr_r L40_shl_r norm_L40 L40_shl L40_shr L40_negate " \
+    "L40_add L40_sub L40_abs L40_mult L40_mac mac_r40 L40_msu msu_r40 Mpy_32_16_ss " \
+    "Mpy_32_32_ss L_mult0 L_mac0 L_msu0 lshl lshr L_lshl L_lshr L40_lshl L40_lshr " \
+    "s_and s_or s_xor L_and L_or L_xor rotl rotr L_rotl L_rotr L40_set L40_deposit_h " \
+    "L40_deposit_l L40_deposit32 Extract40_H Extract40_L L_Extract40 L40_round " \
+    "L_saturate40 round40 If Goto Break Switch For While Continue L_mls div_l i_mult "
 
 #define WMOPS_LIB_INCLUDE_STRING \
     "wmc_auto.h"
@@ -199,15 +186,6 @@
 
 #define RETURN_KW_STRING "return"
 
-/*****************************************
- * Fixed Point Macros Lacking a ';'
- *****************************************/
-
-#define NON_STANDARD_FXP_MACROS_STRING \
-    "BASOP_SATURATE_WARNING_ON "       \
-    "BASOP_SATURATE_WARNING_OFF "      \
-    "BASOP_SATURATE_ERROR_ON "         \
-    "BASOP_SATURATE_ERROR_OFF "
 
 /*-------------------------------------------------------------------*
  * Local Typedefs
@@ -2520,6 +2498,9 @@ static TOOL_ERROR Find_Keywords(
             { /* Yes */
                 /* Try Uppercase Version */
                 for (ns = kw_name; *ns != NUL_CHAR; *ns = toupper(*ns), ns++);
+
+                /* Uppercase version is recognized as BASOP operation -> do not instrument */
+                item_type = ITEM_INSTRUMENTATION_OFF;
             }
             else if (run == 2)
             {
@@ -2591,6 +2572,7 @@ static TOOL_ERROR Find_Keywords(
             {
                 /* Set Name End */
                 ne = ns + kw_name_len;
+
                 /* Add Keyword Region */
                 if ( ( ErrCode = Add_Region( ParseTbl_ptr, item_type +
                     /*  Keywords that Compute to Constants are stripped of KW Attribute. */
@@ -2680,8 +2662,7 @@ static TOOL_ERROR Find_Keywords(
                         dp = pe;
                     }
                     /* Skip Blanks to the Left (this cannot fail) */
-                    pe = Skip_Chars( pe - 1, BLANK_CHARS, ParseTbl_ptr,
-                                     ITEM_ANY, ITEM_MOVED_OVER, BACKWARDS );
+                    pe = Skip_Chars( pe - 1, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_MOVED_OVER, BACKWARDS );
                 }
                 /* Keyword Name has a Delimiter? */
                 if ( keywords[i].kw_delim != NUL_CHAR )
@@ -2747,15 +2728,17 @@ static TOOL_ERROR Find_Keywords(
                         }
 
                         /* Add Keyword Expression Region */
-                        if ( ( ErrCode = Add_Region( ParseTbl_ptr,
+                        /* !!! VM: added ITEM_INSTRUMENTATION_OFF to mark a non-instrumented BASOP keyword expression region !!! */
+                        if ( ( ErrCode = Add_Region( ParseTbl_ptr, (item_type == ITEM_INSTRUMENTATION_OFF ? ITEM_INSTRUMENTATION_OFF : 0) +
                             /* Keywords Expressions that Compute to Constants are stripped of KW_EXPR Attribute */
                             /* Added because when 'sizeof' is marked as a KW Expresion, instrumentation of something */
                             /* like 'sizeof(float) * 2' would be instrumented between the ')' and the '2'.*/
-                           ( ( keywords[i].kw_type & ITEM_CONSTANT ) ? 0 : ITEM_KW_EXPR ) | keywords[i].expr_type, ps, pe + 1 ) ) != NO_ERR )
+                           (( ( keywords[i].kw_type & ITEM_CONSTANT ) ? 0 : ITEM_KW_EXPR ) | keywords[i].expr_type), ps, pe + 1 ) ) != NO_ERR )
                         {
                             goto ret;
                         }
                     }
+
                     /* Continue after Arguments or Value End */
                     ne = pe + 1;
                 }
@@ -3149,12 +3132,6 @@ static TOOL_ERROR Find_Data_Declarations(
                     /* Skip Blanks to the Right */
                     ptr = Skip_Chars( start, BLANK_CHARS, ParseTbl_ptr );
                 }
-                /* Fixed Point Macros Lacking ';'? */
-                if ( ( start = memwordcmp( ptr, NON_STANDARD_FXP_MACROS_STRING ) ) != NULL )
-                { /* Yes */
-                    /* Done */
-                    break;
-                }
                 /* Any of the Known Data Types, Type Definition
                    Type Modifier or Storage Class? */
                 if ( ( start = memwordcmp( ptr, DATA_DEF_STRING ) ) != NULL )
@@ -3361,6 +3338,7 @@ static TOOL_ERROR Find_Data_Declarations(
                     /* Done */
                     break;
                 }
+
                 /* Go to End of Statement */
                 /* !!!!! Incorrect when have 'int a' then 'BRANCH(1)', 'a += 2', ... on Next Line (Known Limitation)*/
                 if ( ( start = Goto_EOS( start, ParseTbl_ptr ) ) == NULL )
@@ -3370,11 +3348,14 @@ static TOOL_ERROR Find_Data_Declarations(
                     ErrCode = Expected_EOS( ptr );
                     goto ret;
                 }
+
                 /* Skip Blanks to the Right */
                 ptr = Skip_Chars( start + 1, BLANK_CHARS, ParseTbl_ptr );
             }
+
             /* Set Region End */
             ParseRecord.item_end = ptr;
+
             /* Is Region Empty? */
             if ( !Is_Empty_Region( ParseRecord.item_start, ptr, ParseTbl_ptr ) )
             {
@@ -3384,8 +3365,10 @@ static TOOL_ERROR Find_Data_Declarations(
                     goto ret;
                 }
             }
+
             /* Change Data Declaration Region Type */
             ParseRecord.item_type = ITEM_DATA_DECL_SUB | ITEM_WARNING;
+
             /* Go to Next Code Block */
             start = Find_String( ptr, "{", ParseTbl_ptr, ITEM_ANY );
         } while ( start != NULL && start < end );
@@ -4108,6 +4091,7 @@ static TOOL_ERROR Find_Constants(
                     memset( str, 0, sizeof( str ) );
                     memmove( str, ptr2 - LEN, LEN );
                     memmove( str + LEN + 1, ptr, LEN );
+
                     for ( temp = 0; temp < sizeof( str ); temp++ )
                     {
                         if ( IS_EOL_CHAR( str[temp] ) || IS_RESERVED_CHAR( str[temp] ) )
@@ -4115,8 +4099,8 @@ static TOOL_ERROR Find_Constants(
                             str[temp] = ' ';
                         }
                     }
-                    printf( "%s: Number=%s#%s#\n", ptr2 == ptr4 ? "+/- is Oper" : "+/- is Cste",
-                            str, memstr( ptr2, ptr ) /*, str+LEN+1*/ );
+
+                    fprintf( stdout, "%s: Number=%s#%s#\n", ptr2 == ptr4 ? "+/- is Oper" : "+/- is Cste", str, memstr( ptr2, ptr ) /*, str+LEN+1*/ );
                 }
 #endif
             }
@@ -4164,16 +4148,19 @@ static Item_Type Get_Call_Type(
         /* Not a Function Call */
         return ITEM_NONE;
     }
+
     /* Any of the System Functions? */
     if ( memwordcmp( name_start, SYSTEM_FUNCTS_STRING ) != NULL )
     { /* Yes */
         return ITEM_FUNC_SYSTEM | ITEM_SKIPPED;
     }
+
     /* Any of the System Allocation Functions? */
     if ( memwordcmp( name_start, SYSTEM_ALLOC_FUNCTS_STRING ) != NULL )
     { /* Yes */
         return ITEM_FUNC_SYSTEM;
     }
+
     /* Any of the Instrumented System Allocation Functions? */
     if ( memwordcmp( name_start, ins_sys_alloc_funcs_string ) != NULL )
     { /* Yes */
@@ -4185,36 +4172,43 @@ static Item_Type Get_Call_Type(
     { /* Yes */
         return ITEM_FUNC_MATH;
     }
+
     /* Any of the Instrumented Math Functions? */
     if ( memwordcmp( name_start, ins_math_funcs_string ) != NULL )
     { /* Yes */
         return ITEM_FUNC_MATH | ITEM_INSTRUMENTED;
     }
+
     /* Any of the Manual Counting Macros? */
     if ( memwordcmp( name_start, MANUAL_COUNTING_MACROS_STRING ) != NULL )
     { /* Yes */
         return ITEM_FUNC_COUNTERS_MAN | ITEM_INSTRUMENTATION | ITEM_SKIPPED;
     }
+
     /* Any of the Left Automatic Counting Macros? */
     if ( memwordcmp( name_start, AUTO_LEFT_COUNTING_MACRO_STRING ) != NULL )
     { /* Yes */
         return ITEM_FUNC_COUNTERS_AUTO_L | ITEM_INSTRUMENTATION | ITEM_SKIPPED;
     }
+
     /* Any of the Right Automatic Counting Macros? */
     if ( memwordcmp( name_start, AUTO_RIGHT_COUNTING_MACRO_STRING ) != NULL )
     { /* Yes */
         return ITEM_FUNC_COUNTERS_AUTO_R | ITEM_INSTRUMENTATION | ITEM_SKIPPED;
     }
-    /* Any of the Counting Library Functions? */
-    if ( memwordcmp( name_start, COUNTLIB_FUNCTS_STRING ) != NULL )
+
+    /* Any of the WMOPS Library Functions or Macros? */
+    if ( memwordcmp( name_start, WMOPS_FUNCTS_STRING) != NULL )
     { /* Yes */
         return ITEM_FUNC_COUNT_LIB | ITEM_SKIPPED;
     }
-    /* Any of the ROM Counting Macros? */
-    if ( memwordcmp( name_start, TOOL_FUNCTS_STRING ) != NULL )
+
+    /* Any of the BASOP Functions or Macros? */
+    if (memwordcmp(name_start, BASOP_FUNCTS_STRING) != NULL)
     { /* Yes */
-        return ITEM_FUNC_COUNT_LIB | ITEM_SKIPPED;
+        return ITEM_FUNC_BASOP | ITEM_INSTRUMENTATION_OFF;
     }
+
     return ITEM_FUNC_PROJECT;
 }
 
@@ -4346,8 +4340,8 @@ static TOOL_ERROR Find_Calls(
                     {
                         goto ret;
                     }
-                    /* Counting Macro or Function? */
-                    if ( item_type & ( ITEM_FUNC_COUNTERS | ITEM_FUNC_COUNT_LIB ) )
+                    /* Counting Macro, Couting Function or BASOP Function? */
+                    if ( item_type & ( ITEM_FUNC_COUNTERS | ITEM_FUNC_COUNT_LIB | ITEM_FUNC_BASOP ) )
                     { /* Yes */
                         /*
                            Get Optional End of Statement
@@ -4688,6 +4682,7 @@ static TOOL_ERROR Instrument_Keywords(
 
     /* Get Parse Table Address (for clarity) */
     ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
+
     /* Get PROM Ops Weights (for clarity) */
     prom_ops_weights_ptr = &PROM_Ops_Weights[ParseCtx_ptr->PROMOpsWeightsSet];
 
@@ -4713,8 +4708,8 @@ static TOOL_ERROR Instrument_Keywords(
             { /* No */
                 /* Instrument After (by default) */
                 ptr = ParseRec_ptr->item_end;
-                /* Is it a 'while' that is part of a 'do' Block? */
 
+                /* Is it a 'while' that is part of a 'do' Block? */
                 /* Insert Instrumentation Character */
                 if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr, WORD_INSTRUMENT_STRING ) ) != NO_ERR )
                 {
@@ -4743,12 +4738,14 @@ static TOOL_ERROR Instrument_Keywords(
                         {
                             goto ret;
                         }
+
                         if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl,
                                                         ParseRec_ptr->item_end,
                                                         ")" ) ) != NO_ERR )
                         {
                             goto ret;
                         }
+
                         /* Add Warning */
                         ParseRec_ptr->item_type |= ITEM_WARNING;
                     }
@@ -4765,11 +4762,22 @@ static TOOL_ERROR Instrument_Keywords(
                 }
 
                 /* Count Program Memory */
-                if ( item_type == ITEM_KEYWORD_FOR )
+                //if ( item_type == ITEM_KEYWORD_FOR )
+                //    loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
+                //else if ( item_type == ITEM_KEYWORD_WHILE )
+                //    whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
+                //else if ( item_type & ( ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP ) )
+                //    jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
+            }
+
+            /* Count Program Memory */   /* !!! VM: Moved to this place to count PROM size even for non-instrumented keywords */
+            if ( Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED) < 0 )
+            {
+                if (item_type == ITEM_KEYWORD_FOR)
                     loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
-                else if ( item_type == ITEM_KEYWORD_WHILE )
+                else if (item_type == ITEM_KEYWORD_WHILE)
                     whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
-                else if ( item_type & ( ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP ) )
+                else if (item_type & (ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP))
                     jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
             }
         }
@@ -5429,11 +5437,13 @@ static TOOL_ERROR Instrument_Operators(
 
     /* Erase Operator Insert Table */
     OperInsTbl.Size = 0;
+
     /* Initialize (No Memory Allocated by Default) */
     OperInsTbl.MaxSize = 0;
 
     /* Get Parse Table Address (for clarity) */
     ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
+
     /* Get PROM Ops Weights (for clarity) */
     prom_ops_weights_ptr = &PROM_Ops_Weights[ParseCtx_ptr->PROMOpsWeightsSet];
 
@@ -6426,31 +6436,41 @@ TOOL_ERROR Setup_Regions(
         goto ret;
     }
 
-    /* Find Skipped Regions */
+    /* Find Non-Instrumented Regions marked with #ifdef WMC_TOOL_SKIP ... #undef WMC_TOOL_SKIP */
     /* Start at Beginning */
     ptr = ParseCtx_ptr->File.Data;
-    /* Find the Beginning of Skipped Regions */
+    /* Find the Beginning of Non-Instrumented Regions */
     while ( ( ptr = Find_Identifier( ptr, WMC_TOOL_SKIP_STRING, ParseTbl_ptr, ITEM_CSTE_NAME, ITEM_ENCLOSED, &idx ) ) != NULL )
     {
         /* Get Record */
         ParseRec_ptr = &ParseTbl_ptr->Data[idx];
+
         /* Go to Start of Next Line */
         ptr = strlend( ParseRec_ptr->item_end ) + 1;
-        /* Find the End of Skipped Regions */
+
+        /* Find the End of Non-Instrumented Regions */
         /* Found it? */
         if ( ( end = Find_Identifier( ptr, WMC_TOOL_SKIP_STRING, ParseTbl_ptr,
                                       ITEM_PREPROC_ARGS | ITEM_PREPROC_UNDEF, ITEM_ENCLOSED, &idx ) ) == NULL )
         { /* No */
-            /* Skipped Regon will End at EOF */
-            end = file_ptr->Data + file_ptr->Size;
+            
+            /* Error - #undef WMC_TOOL_SKIP missing ! */
+            ErrCode = ERR_EXPECTED_EOS;
+            Error("Unable to find matching #undef %s!", ErrCode, WMC_TOOL_SKIP_STRING);
+            goto ret;
+
+            /* Skipped Region will End at EOF */
+            //end = file_ptr->Data + file_ptr->Size;
         }
         else
         { /* Yes */
             /* Go to Preprocessor Command */
             idx--;
+
             /* Get Record */
             ParseRec_ptr = &ParseTbl_ptr->Data[idx];
-            /* Skipped Region will End before #undef */
+
+            /* Non-Instrumented Region will End before #undef */
             end = ParseRec_ptr->item_start;
         }
 
@@ -6487,8 +6507,10 @@ TOOL_ERROR Setup_Regions(
     {
         /* Get Record */
         ParseRec_ptr = &ParseTbl_ptr->Data[idx];
+
         /* Mark Comment as Instrumentation */
         ParseRec_ptr->item_type |= ITEM_INSTRUMENTATION;
+
         /* continue After Comment */
         ptr = ParseRec_ptr->item_end;
     }
@@ -7223,7 +7245,7 @@ TOOL_ERROR DesInstrument(
                             { /* Yes */
                                 /* Go To Start of Line */
                                 tmp = ParseRec_ptr->item_start;
-                                while ( --tmp, !IS_EOL_CHAR( *tmp ) )
+                                while ( --tmp, (IS_SPACE_CHAR( *tmp ) && !IS_EOL_CHAR( *tmp )) )
                                     ;
                                 /* Advance (Past EOS) */
                                 ptr += 2;
@@ -8059,6 +8081,12 @@ TOOL_ERROR Include_Header(
     /* Find the End of the Last Contiguous Preprocessor Directive Block (#include) */
     ptr_end = Find_End_Preproc_Block(NULL, ParseTbl_ptr);
 
+    /* if no #include is present in the file set the pointer to the beginning of the file */
+    if (ptr_end == NULL)
+    {
+        ptr_end = ParseCtx_ptr->File.Data;
+    }
+
     /* store the pointer for later use */
     if (ptr_end_preproc_block != NULL)
     {
@@ -8147,7 +8175,7 @@ TOOL_ERROR Instrument(
         is_function_present = 1;
     }
 
-    /* Check, if there are const xx[] arrays */
+    /* Check, if there are any const xx[] arrays */
     is_cnst_data_present = 0;
     if ((Find_Identifier(ParseCtx_ptr->File.Data, CONST_STRING, ParseTbl_ptr, ITEM_ANY, ITEM_FUNC_DEF | ITEM_NOT_SEARCHED | ITEM_INSTRUMENTATION_OFF)) != NULL)
     {
@@ -8174,10 +8202,13 @@ TOOL_ERROR Instrument(
 
             /* Reset Max Function Name Length */
             max_name_length = 0;
+
             /* Reset # of Occurances */
             max_name_occ = 0;
+
             /* Start at Beginning */
             FctCallRec_ptr = FctCallTbl_ptr->Data;
+
             /* Process all Project Function Calls */
             for (idx = 0; idx < FctCallTbl_ptr->Size; idx++)
             {
@@ -8185,10 +8216,12 @@ TOOL_ERROR Instrument(
                 name_length = FctCallRec_ptr->NameLength;
                 if (max_name_length < name_length)
                     max_name_length = name_length;
+
                 /* Get Max Name Occurances */
                 name_occ = FctCallRec_ptr->NameOcc;
                 if (max_name_occ < name_occ)
                     max_name_occ = name_occ;
+
                 /* Advance */
                 FctCallRec_ptr++;
             }
@@ -8348,8 +8381,16 @@ TOOL_ERROR Instrument(
             miscs += name_occ, ParseCtx_ptr->PROMSize += name_occ * prom_ops_weights_ptr->misc;
     }
 
+    /* Find BASOP Functions and Count their PROM size */
+    for (idx = 0; (idx = Find_Region(NULL, ParseTbl_ptr, ITEM_CALL | ITEM_FUNC_BASOP, idx)) >= 0; idx++)
+    {
+        /* By default it is assumed that all BASOP functions take one PROM word */
+        ParseCtx_ptr->PROMSize++;
+    }
+
     /* Insert PROM_Size_Func() function */
-    if (is_function_present)
+    //if (is_function_present)
+    if (ParseCtx_ptr->PROMSize > 0)
     {
         if ((ErrCode = Instrument_PROM(ParseCtx_ptr)) != NO_ERR)
         {
@@ -8683,14 +8724,14 @@ static void Print_Words( const char *words, bool ds = false, int margin = 4 )
             /* Terminate String */
             temp[margin + lin_length] = NUL_CHAR;
             /* Print */
-            printf("%s", temp);
+            fprintf(stdout, "%s", temp);
             /* Advance */
             ptr += lin_length;
             /* Update Remaining Length */
             str_length -= lin_length;
         } while ( str_length > 0 );
         /* Print newline */
-        printf( "\n" );
+        fprintf(stdout, "\n" );
     }
 }
 
@@ -8701,34 +8742,32 @@ void Print_Information( void )
 {
     int i;
 
-    printf( "\n  Manual Macros Removed during Desintrumentation:\n" );
+    fprintf(stdout, "\n  Manual Macros Removed during Desintrumentation:\n" );
     Print_Words( MANUAL_COUNTING_MACROS_STRING );
-    printf( "\n  WMOPS Library Functions that are not Instrumented:\n" );
-    Print_Words( WMOPS_COUNTLIB_FUNCTS_STRING, true );
-    printf( "\n  Other Counting Functions that are not Instrumented:\n" );
-    Print_Words( OTHER_COUNTLIB_FUNCTS_STRING );
-    printf( "\n  WMC_Tool Functions that are not Instrumented:\n" );
-    Print_Words( TOOL_FUNCTS_STRING, true );
-    printf( "\n  System Functions that are not Instrumented:\n" );
+    fprintf(stdout, "\n  BASOP Functions that are not Instrumented:\n" );
+    Print_Words( BASOP_FUNCTS_STRING, true );
+    fprintf(stdout, "\n  WMOPS Library Functions that are not Instrumented:\n");
+    Print_Words(WMOPS_FUNCTS_STRING, true);
+    fprintf(stdout, "\n  System Functions that are not Instrumented:\n" );
     Print_Words( SYSTEM_FUNCTS_STRING );
-    printf( "\n  System Functions that are Instrumented:\n" );
+    fprintf(stdout, "\n  System Functions that are Instrumented:\n" );
     Print_Words( SYSTEM_ALLOC_FUNCTS_STRING );
 
-    printf( "\n  Preprocessor Directives that are Ignored:\n" );
+    fprintf(stdout, "\n  Preprocessor Directives that are Ignored:\n" );
     for (i = 0; Conditionnal_Directives[i] != NULL; i++)
     {
-        printf("    %c%s\n", PREPROC_CHAR, Conditionnal_Directives[i]);
+        fprintf(stdout, "    %c%s\n", PREPROC_CHAR, Conditionnal_Directives[i]);
     }
-    printf( "    %c%s\n", PREPROC_CHAR, Undefine_Directive );
+    fprintf(stdout, "    %c%s\n", PREPROC_CHAR, Undefine_Directive );
     for (i = 0; Other_Directives[i] != NULL; i++)
     {
-        printf("    %c%s\n", PREPROC_CHAR, Other_Directives[i]);
+        fprintf(stdout, "    %c%s\n", PREPROC_CHAR, Other_Directives[i]);
     }
 
-    printf( "\n  Math Functions that are Instrumented:\n" );
+    fprintf(stdout, "\n  Math Functions that are Instrumented:\n" );
     Print_Words( MATH_FUNCTS_STRING );
 
-    printf( "\n  Keywords that are Instrumented:\n" );
+    fprintf(stdout, "\n  Keywords that are Instrumented:\n" );
     for ( i = 0; i < (int)(nitems( keywords )); i++ )
     {
         if ( !( keywords[i].kw_type & ITEM_SKIPPED ) )
@@ -8737,7 +8776,7 @@ void Print_Information( void )
         }
     }
 
-    printf( "\n  Keywords that are not Instrumented:\n" );
+    fprintf(stdout, "\n  Keywords that are not Instrumented:\n" );
     for ( i = 0; i < (int)(nitems( keywords )); i++ )
     {
         if ( keywords[i].kw_type & ITEM_SKIPPED )
@@ -8746,22 +8785,22 @@ void Print_Information( void )
         }
     }
 
-    printf( "\n  Recognized Data Types:\n" );
+    fprintf(stdout, "\n  Recognized Data Types:\n" );
     Print_Words( TYPES_STRING );
 
-    printf( "\n  Macros used to Instrument: \n" );
-    printf( "    switch/case: %s(n)\n", AUTO_CASE_COUNTING_MACRO_STRING );
-    printf( "    logical operators: %s\n", LOGICAL_INSTRUMENT_STRING );
-    printf( "    ternary operators: %s\n", TERNARY_INSTRUMENT_STRING );
-    printf( "    all other operators: %s(\"ops_string\")\n", AUTO_DEFAULT_COUNTING_MACRO_STRING );
+    fprintf(stdout, "\n  Macros used to Instrument: \n" );
+    fprintf(stdout, "    switch/case: %s(n)\n", AUTO_CASE_COUNTING_MACRO_STRING );
+    fprintf(stdout, "    logical operators: %s\n", LOGICAL_INSTRUMENT_STRING );
+    fprintf(stdout, "    ternary operators: %s\n", TERNARY_INSTRUMENT_STRING );
+    fprintf(stdout, "    all other operators: %s(\"ops_string\")\n", AUTO_DEFAULT_COUNTING_MACRO_STRING );
 
-    printf( "\n  Include File Required in Instrumented Source Files:\n" );
-    printf( "    %s\n", WMOPS_LIB_INCLUDE_STRING );
+    fprintf(stdout, "\n  Include File Required in Instrumented Source Files:\n" );
+    fprintf(stdout, "    %s\n", WMOPS_LIB_INCLUDE_STRING );
 
-    printf( "\n  Skip Instrumentation:\n" );
-    printf( "    Begin Uninstrumented Segment: #define " WMC_TOOL_SKIP_STRING "\n" );
-    printf( "    End of Uninstrumented Segment: #undef  " WMC_TOOL_SKIP_STRING "\n" );
-    printf( "\n" );
+    fprintf(stdout, "\n  Skip Instrumentation:\n" );
+    fprintf(stdout, "    Begin Uninstrumented Segment: #define " WMC_TOOL_SKIP_STRING "\n" );
+    fprintf(stdout, "    End of Uninstrumented Segment: #undef  " WMC_TOOL_SKIP_STRING "\n" );
+    fprintf(stdout, "\n" );
 }
 
 /*-------------------------------------------------------------------*

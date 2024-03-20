@@ -20,7 +20,7 @@
 /*AddedByWMC_Tool*/}
 /*AddedByWMC_Tool*/ROM_Size_Lookup_Table Const_Data_PROM_Table[] =
 /*AddedByWMC_Tool*/{
-/*AddedByWMC_Tool*/    { "out/test*.c", 734, Get_Const_Data_Size_out_test_c },
+/*AddedByWMC_Tool*/    { "out/test*.c", 291, Get_Const_Data_Size_out_test_c },
 /*AddedByWMC_Tool*/    { "", -1, NULL }
 /*AddedByWMC_Tool*/};
 /*AddedByWMC_Tool*/#endif
