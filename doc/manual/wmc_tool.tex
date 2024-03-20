@@ -110,7 +110,9 @@ Note, that the WMC tool is not a perfect C parser. It might issue an error even 
 \section{Instrumentation of complexity}
 \label{ch:instrumentation_of_complexity}
 
-The WMC tool only instruments functions but not macros. System functions and functions with names that are considered as basic operations are skipped. The instrumentation mechanism has been designed to be as least intrusive as possible. The instrumentation code is inserted at the beginning of each instrumented line in the source code with a single macro that has the following form \verb|$("ops")| where \verb|ops| is a string of letters and symbols indicating individual operations. The WMC tool parses each source file and calculates the length of each instrumentation string. The maximum length is then used to indent the entire source file to make space for the instrumentation strings. This is shown in the example below.
+The instrumentation mechanism has been designed to minimize intrusiveness. It skips system functions and functions labeled as basic operations. When instrumenting \verb|.c| source files, the WMC tool omits macros by default. However, it detects macros defined within the same \verb|.c| source file using the \verb|#define| pragma. Macros defined in external header files and included using \verb|#include| pragma cannot be directly detected. To address this, the instrumentation mechanism employs a heuristic: if a string contains more than 70\% capital letters, it's treated as a macro and skipped during instrumentation.
+
+The instrumentation code is integrated at the start of every instrumented line in the source code using a singular macro format: \verb|$("ops")|, where \verb|ops| represents a string encompassing individual operations denoted by letters and symbols. Upon parsing each source file, the WMC tool computes the length of each instrumentation string. Subsequently, the maximum length determines the indentation of the entire source file to accommodate the instrumentation strings, as illustrated in the example below.
 
 \begin{Verbatim}[fontsize=\small]
     float calc_shift_value( const float totalStep )
@@ -128,13 +130,13 @@ $("M**-")   reset_value = 56.345e-4f * (float)exp_( 34.456 * totalStep ) \\
     }
 \end{Verbatim}
 
-It is always possible to remove the instrumentation from the source code with the \verb|-d| command line option. In many cases, the source file will then return to its original non-instrumented state except for whitespace characters and text alignment. The un-instrumentation process is also invoked automatically by the WMC tool as the first step in the instrumentation process. This ensures that the results are identical even when the process is repeated multiple times. This allows the users to make modifications to an already instrumented source code by simply re-instrumenting it again. Note, that the un-instrumentation process does not remove the functions \verb|push_wmops()| and \verb|pop_wmops()| and the system functions. Lines that are preceded by
+The removal of instrumentation from the source code can be achieved using the \verb|-d| command line option. In many instances, executing this option restores the source file to its original non-instrumented state, with the exception of whitespace characters and text alignment. The un-instrumentation process is automatically triggered by the WMC tool as the initial step in the instrumentation procedure. This ensures consistent results even with repeated executions. Consequently, users can modify previously instrumented source code by simply re-instrumenting it. It's important to note that the un-instrumentation process does not eliminate the \verb|push_wmops()| and \verb|pop_wmops()| functions, nor does it remove system functions. Lines preceded by
 
 {
 {\em /*AddedByWMC\_Tool*/}
 }
 
-are removed completely. At the end of the un-instrumentation process, the original indentation is restored.
+are removed completely. At the end of the un-instrumentation process the original indentation is restored.
 
 If, for any reason, it is necessary to avoid the automatic instrumentation and un-instrumentation of certain parts in the source code, the user may encapsulate such parts in \verb|#define WMC_TOOL_SKIP| \ldots \verb|#undef WMC_TOOL_SKIP| macro pairs. For example
 
@@ -227,18 +229,21 @@ The most common mathematic functions defined in \verb|math.h| are instrumented b
 \verb|sign()| & 1 \\
 \verb|round()| & 0 (not supported by the WMC tool) \\
 \verb|sqrt()| and \verb|inv_sqrt()| & 10 \\
-\verb|log()|, \verb|log2()| and thier derivatives & 25 \\
+\verb|log()|, \verb|log2()| and other logarithmic functions & 25 \\
 \verb|exp()| and \verb|pow()| & 25 \\
 \verb|sin()|, \verb|cos()| and all other trigonometric functions & 25 \\
+\verb|frexp()| & 2 \\
+\verb|fmod()| & 18 \\
 \hline
 \end{tabular}
 \label{tab:cost_of_math_functions}
 \end{table}
 
+
 %-----------------------------------------------------------------------------
 \subsection{User-defined functions}
 
-All user-defined functions in the source code are instrumented with one or more underscore '\verb|_|' symbols appended to their names. The WMC tool will count the number of arguments from the function call and insert a wrapper macro at the top of the source file, after the first \verb|#include| section. See the example below.
+All user-defined functions in the source code are instrumented with one or more underscore '\verb|_|' symbols appended to their names. The WMC tool counts the number of arguments in function calls and inserts a wrapper macro at the top of the source file, after the first \verb|#include| section. See the example below.
 
 \begin{Verbatim}[fontsize=\small]
 #include <stdlib.h>
@@ -268,6 +273,49 @@ $("M*")     ff = tied_state * 5.44f;
 \end{Verbatim}
 
 The WMC tool appends an additional underscore symbol '\verb|_|' in each variant of the user-defined function call. This means that if a function is defined to accept a variable number of arguments the first function call will have one underscore symbol '\verb|_|' appended to its name, the second function call will have two underscore symbols '\verb|__|' appended to its name and so on. The WMC tool supports up to 10 variants (different number of arguments) of the same function.
+
+The WMC tool may encounter difficulties in properly instrumenting one-line functions that are defined as follows
+
+\begin{Verbatim}[fontsize=\small]
+    float calculate_vector_norm( float vec[], int_16t size ) { return sum2_f(vec, size); }
+\end{Verbatim}
+
+It's advisable to define the function body on separate lines, like this
+
+\begin{Verbatim}[fontsize=\small]
+    float calculate_vector_norm( float vec[], int_16t size ) 
+    {
+        return sum2_f(vec, size); 
+    }
+\end{Verbatim}
+
+In a local function, all declared variables should be positioned at the start of the function body. Additionally, the initialization of local variables should be segregated from their declaration. For instance, consider the following code snippet, where the WMC tool inserts \verb|$("M")| before \verb|int ch = 0;|
+
+\begin{Verbatim}[fontsize=\small]
+    int free_structs(MY_STRUCT_INFO *ptr_dec)
+    {   
+        if (ptr_dec == NULL) return -1;
+    
+$("M")  int ch = 0;
+
+        for (ch = 0; ch < n_channels; ch++) 
+        {
+            struct_free(&decoder->cfg[ch]->fft_buf);
+            struct_free(&decoder->cfg[ch]->ifft_buf);
+        }
+
+        return 0;
+    }
+\end{Verbatim}
+
+Compiling the instrumented code provided above results in the following error (gcc):
+
+\begin{Verbatim}[fontsize=\small]
+lib_thj/struct_f.c:373:17: error: expected expression before ‘int’
+  125 | $("M")          int ch = 0;
+      |                 ^~~
+\end{Verbatim}
+
 
 %-----------------------------------------------------------------------------
 \subsection{Operators}
@@ -364,7 +412,7 @@ buff_ptr = malloc(sizeof(short)*VEC_LEN);
 %-----------------------------------------------------------------------------
 \subsection{Manual instrumentation}
 
-It was already shown in the previous section in this document that it is possible to avoid the automatic instrumentation by encapsulating parts of the source code with
+As demonstrated in the preceding section of this document, it's possible to bypass automatic instrumentation by encapsulating sections of the source code with
 
 \begin{Verbatim}[fontsize=\small]
 #define WMC_TOOL_SKIP
