@@ -1028,23 +1028,44 @@ static TOOL_ERROR Output_Wmops_File( char *PathName, float frames_per_sec, bool 
 {
     TOOL_ERROR ErrCode = NO_ERR;
     FILE *TargetFile;
-    int i, len;
+    int i, j, len, num_strings, offset;
     char SrcFileName[MAX_PATH + 1]; /* +1 for NUL Char*/
     char TargetFileName[MAX_PATH + 1]; /* +1 for NUL Char*/
-    char *text = NULL, *p_str, temp_str[50];
+    char *text = NULL, temp_str[50];
 
     const char* wmops_auto_files[] = { "wmc_auto.h", "wmc_auto.c" };
-    static const char wmops_auto_file_h[] =
-#include "wmc_auto_h.txt"
-        ;
-    static const char wmops_auto_file_c[] =
-#include "wmc_auto_c.txt"
-        ;
+    const char** wmops_auto_file;
+    const char* wmops_auto_file_h[] = {
+        #include "wmc_auto_h.txt" 
+    };
+    const char* wmops_auto_file_c[] = { 
+        #include "wmc_auto_c.txt" 
+    };
 
     for (i = 0; i < 2; i++)
     {
-        /* Allocate a char * buffer for further manipulation of the source file text */
-        text = (char*)calloc(i == 0 ? sizeof(wmops_auto_file_h) : sizeof(wmops_auto_file_c), sizeof(char));
+        /* get the pointer */
+        if (i == 0)
+        {
+            wmops_auto_file = wmops_auto_file_h;
+            num_strings = sizeof(wmops_auto_file_h) / sizeof(char*);
+        }
+        else
+        {
+            wmops_auto_file = wmops_auto_file_c;
+            num_strings = sizeof(wmops_auto_file_c) / sizeof(char*);
+        }
+
+        /* calculate the total length required */
+        len = 0;
+        for (j = 0; j < num_strings; j++) 
+        {
+            len += (int) strlen(wmops_auto_file[j]);
+        }
+        len++;
+
+        /* allocate a char * buffer for further manipulation of the source file text */
+        text = (char*) calloc(len, sizeof(char));
         if (text == NULL)
         {
             ErrCode = ERR_FILE_READ;
@@ -1052,16 +1073,22 @@ static TOOL_ERROR Output_Wmops_File( char *PathName, float frames_per_sec, bool 
             goto ret;
         }
 
-        /* copy the source file contents to a char * buffer for further manipulation */
-        strcpy(text, i == 0 ? wmops_auto_file_h : wmops_auto_file_c);
-
-        /* Replace the constant FRAMES_PER_SECOND */
-        p_str = strstr(text, "#define FRAMES_PER_SECOND");
-
-        if (p_str != NULL)
+        /* copy each string */
+        offset = 0;
+        for (j = 0; j < num_strings; j++) 
         {
-            sprintf(temp_str, "#define FRAMES_PER_SECOND %-8.1f", frames_per_sec);
-            strncpy(p_str, temp_str, strlen(temp_str));
+            if (strstr(wmops_auto_file[j], "#define FRAMES_PER_SECOND") != NULL)
+            {
+                /* replace the declaration of FRAMES_PER_SECOND with user-defined value */
+                sprintf(temp_str, "#define FRAMES_PER_SECOND %-8.1f", frames_per_sec);
+                strcpy(text + offset, temp_str);
+                offset += (int) strlen(temp_str);
+            }
+            else
+            {
+                strcpy(text + offset, wmops_auto_file[j]);
+                offset += (int) strlen(wmops_auto_file[j]);
+            }
         }
 
         /* Create Target Filename */
