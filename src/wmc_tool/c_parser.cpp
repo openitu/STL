@@ -7245,7 +7245,7 @@ TOOL_ERROR DesInstrument(
                             { /* Yes */
                                 /* Go To Start of Line */
                                 tmp = ParseRec_ptr->item_start;
-                                while ( --tmp, !IS_EOL_CHAR( *tmp ) )
+                                while ( --tmp, (IS_SPACE_CHAR( *tmp ) && !IS_EOL_CHAR( *tmp )) )
                                     ;
                                 /* Advance (Past EOS) */
                                 ptr += 2;
