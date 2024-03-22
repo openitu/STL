@@ -1,5 +1,5 @@
 /*
- * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -454,10 +454,11 @@ char *mempwordicmp( const char *mem, const char *words )
 /*-------------------------------------------------------------------*
  * itos (Integer to String)
  *-------------------------------------------------------------------*/
-char *itos( char *str, int value, int digits )
+char *itos( char *str, int value )
 {
     size_t i, n;
     char *str2;
+    int digits = 3;
 
     /* Convert Value to String */
     sprintf(str, "%d", value);
@@ -555,9 +556,18 @@ int Extract_Value_From_File(
     {
         if ((ptr = strstr(line, line_keyword)) != NULL)
         {
-            while (!isdigit(*ptr++));
+            /* skip the keyword */
+            ptr += strlen(line_keyword);
+
+            /* search for space followed by a number */
+            while (!(isspace(ptr[0]) && isdigit(ptr[1])))
+            {
+                ptr++;
+            }
+
             fclose(fp);
-            return strtol(--ptr, &ptr2, 10);
+
+            return strtol(ptr, &ptr2, 10);
         }
     }
 

@@ -53,3 +53,5 @@ void weight_coef_a( const Word16 *a, Word16 *b, const Word16 ght )
 
     return;
 }
+
+#undef WMC_TOOL_SKIP

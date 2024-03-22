@@ -65,3 +65,5 @@ int main(
 #endif
     return 0;
 }
+
+#undef WMC_TOOL_SKIP

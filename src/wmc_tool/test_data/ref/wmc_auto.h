@@ -1,5 +1,5 @@
 /*
- * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -29,13 +29,12 @@
 #pragma GCC system_header
 #endif
 
-/* Real-time relationships */
-#define FRAMES_PER_SECOND 50.0
-#define MILLION_CYCLES    1e6
-#define WMOPS_BOOST_FAC   ( 1.0f ) /* scaling factor for equalizing the difference between automatic and manual instrumentation */
-#define FAC               ( FRAMES_PER_SECOND / MILLION_CYCLES * WMOPS_BOOST_FAC )
-#define NUM_INST          20 /* Total number of instruction types (in enum below) */
+#ifndef INT_MAX
+#define INT_MAX 32767
+#endif
 
+#define FRAMES_PER_SECOND 50.0    
+#define PROM_INST_SIZE    32     /* number of bits of each program instruction when stored in the PROM memory (applied only when the user selects reporting in bytes) */
 
 #ifdef WMOPS
 enum instructions
@@ -59,7 +58,8 @@ enum instructions
     _TEST,
     _POWER,
     _LOG,
-    _MISC
+    _MISC,
+    NUM_INST
 };
 
 #define _ADD_C      1
@@ -561,7 +561,6 @@ enum instructions
 extern double ops_cnt;
 extern double prom_cnt;
 extern double inst_cnt[NUM_INST];
-extern int ops_cnt_activ;
 
 void reset_wmops( void );
 void push_wmops( const char *label );
@@ -614,14 +613,6 @@ extern int cntr_push_pop;
 
 #endif
 
-/* mac & msu (Non Instrumented Versions) */
-#ifndef mac
-#define mac( a, b, c ) ( ( a ) + ( b ) * ( c ) )
-#endif
-#ifndef mac
-#define msu( a, b, c ) ( ( a ) - ( b ) * ( c ) )
-#endif
-
 #ifndef WMOPS
 /* DESACTIVATE the Counting Mechanism */
 #define OP_COUNT_( op, n )
@@ -669,84 +660,99 @@ static int wmc_flag_ = 0;
 #endif
 
 /* Define all Macros without '{' & '}' (None of these should be called externally!) */
-#define ABS_( x )      OP_COUNT_( _ABS, ( x ) / WMOPS_BOOST_FAC )
-#define ADD_( x )      OP_COUNT_( _ADD, ( x ) / WMOPS_BOOST_FAC )
-#define MULT_( x )     OP_COUNT_( _MULT, ( x ) / WMOPS_BOOST_FAC )
-#define MAC_( x )      OP_COUNT_( _MAC, ( x ) / WMOPS_BOOST_FAC )
-#define MOVE_( x )     OP_COUNT_( _MOVE, ( x ) / WMOPS_BOOST_FAC )
-#define STORE_( x )    OP_COUNT_( _STORE, ( x ) / WMOPS_BOOST_FAC )
-#define LOGIC_( x )    OP_COUNT_( _LOGIC, ( x ) / WMOPS_BOOST_FAC )
-#define SHIFT_( x )    OP_COUNT_( _SHIFT, ( x ) / WMOPS_BOOST_FAC )
-#define BRANCH_( x )   OP_COUNT_( _BRANCH, ( x ) / WMOPS_BOOST_FAC )
-#define DIV_( x )      OP_COUNT_( _DIV, ( x ) / WMOPS_BOOST_FAC )
-#define SQRT_( x )     OP_COUNT_( _SQRT, ( x ) / WMOPS_BOOST_FAC )
-#define TRANS_( x )    OP_COUNT_( _TRANS, ( x ) / WMOPS_BOOST_FAC )
+#define ABS_( x )      OP_COUNT_( _ABS, ( x ) )
+#define ADD_( x )      OP_COUNT_( _ADD, ( x ) )
+#define MULT_( x )     OP_COUNT_( _MULT, ( x ) )
+#define MAC_( x )      OP_COUNT_( _MAC, ( x ) )
+#define MOVE_( x )     OP_COUNT_( _MOVE, ( x ) )
+#define STORE_( x )    OP_COUNT_( _STORE, ( x ) )
+#define LOGIC_( x )    OP_COUNT_( _LOGIC, ( x ) )
+#define SHIFT_( x )    OP_COUNT_( _SHIFT, ( x ) )
+#define BRANCH_( x )   OP_COUNT_( _BRANCH, ( x ) )
+#define DIV_( x )      OP_COUNT_( _DIV, ( x ) )
+#define SQRT_( x )     OP_COUNT_( _SQRT, ( x ) )
+#define TRANS_( x )    OP_COUNT_( _TRANS, ( x ) )
 #define POWER_( x )    TRANS_( x )
 #define LOG_( x )      TRANS_( x )
-#define LOOP_( x )     OP_COUNT_( _LOOP, ( x ) / WMOPS_BOOST_FAC )
-#define INDIRECT_( x ) OP_COUNT_( _INDIRECT, ( x ) / WMOPS_BOOST_FAC )
-#define PTR_INIT_( x ) OP_COUNT_( _PTR_INIT, ( x ) / WMOPS_BOOST_FAC )
-#define FUNC_( x )     ( OP_COUNT_( _MOVE, ( x ) / WMOPS_BOOST_FAC ), OP_COUNT_( _FUNC, 1 ) )
+#define LOOP_( x )     OP_COUNT_( _LOOP, ( x ) )
+#define INDIRECT_( x ) OP_COUNT_( _INDIRECT, ( x ) )
+#define PTR_INIT_( x ) OP_COUNT_( _PTR_INIT, ( x ) )
+#define FUNC_( x )     ( OP_COUNT_( _MOVE, ( x ) ), OP_COUNT_( _FUNC, 1 ) )
 #define MISC_( x )     ABS_( x )
 
 /* Math Operations */
-#define abs_   OP_COUNT_WRAPPER1_( ABS_( 1 ), abs )
-#define fabs_  OP_COUNT_WRAPPER1_( ABS_( 1 ), fabs )
-#define labs_  OP_COUNT_WRAPPER1_( ABS_( 1 ), labs )
-#define floor_ OP_COUNT_WRAPPER1_( MISC_( 1 ), floor )
-#define sqrt_  OP_COUNT_WRAPPER1_( SQRT_( 1 ), sqrt )
-#define pow_   OP_COUNT_WRAPPER1_( POWER_( 1 ), pow )
-#define exp_   OP_COUNT_WRAPPER1_( POWER_( 1 ), exp )
-#define log_   OP_COUNT_WRAPPER1_( LOG_( 1 ), log )
-#define log10_ OP_COUNT_WRAPPER1_( LOG_( 1 ), log10 )
-#define cos_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), cos )
-#define sin_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), sin )
-#define tan_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), tan )
-#define acos_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), acos )
-#define asin_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), asin )
-#define atan_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan )
-#define atan2_ OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan2 )
-#define cosh_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), cosh )
-#define sinh_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), sinh )
-#define tanh_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanh )
-#define fmod_  OP_COUNT_WRAPPER1_( DIV_( 1 ), fmod )
-/* these macros use any local macros already defined */
-/* min/max and their Variants */
-#define min_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), min( ( a ), ( b ) ) )
-#define max_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), max( ( a ), ( b ) ) )
-#define MIN_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), MIN( ( a ), ( b ) ) )
-#define MAX_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), MAX( ( a ), ( b ) ) )
-#define Min_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), Min( ( a ), ( b ) ) )
-#define Max_( a, b ) OP_COUNT_WRAPPER1_( MISC_( 1 ), Max( ( a ), ( b ) ) )
-/* Square and its Variants */
-#define sqr_( x )    OP_COUNT_WRAPPER1_( MULT_( 1 ), sqr( ( x ) ) )
-#define Sqr_( x )    OP_COUNT_WRAPPER1_( MULT_( 1 ), Sqr( ( x ) ) )
-#define SQR_( x )    OP_COUNT_WRAPPER1_( MULT_( 1 ), SQR( ( x ) ) )
-#define square_( x ) OP_COUNT_WRAPPER1_( MULT_( 1 ), square( ( x ) ) )
-#define Square_( x ) OP_COUNT_WRAPPER1_( MULT_( 1 ), Square( ( x ) ) )
-#define SQUARE_( x ) OP_COUNT_WRAPPER1_( MULT_( 1 ), SQUARE( ( x ) ) )
-/* Sign and its Variants */
-#define sign_( x ) OP_COUNT_WRAPPER1_( MOVE_( 1 ), sign( ( x ) ) )
-#define Sign_( x ) OP_COUNT_WRAPPER1_( MOVE_( 1 ), Sign( ( x ) ) )
-#define SIGN_( x ) OP_COUNT_WRAPPER1_( MOVE_( 1 ), SIGN( ( x ) ) )
-/* Square Root and its Variants */
-#define sqrtf_( x ) OP_COUNT_WRAPPER1_( SQRT_( 1 ), sqrtf( ( x ) ) )
-/* Invert Square Root and its Variants */
-#define inv_sqrt_( x ) OP_COUNT_WRAPPER1_( SQRT_( 1 ), inv_sqrt( ( x ) ) )
-/* Others */
+#define abs_    OP_COUNT_WRAPPER1_( ABS_( 1 ), abs )
+#define fabs_   OP_COUNT_WRAPPER1_( ABS_( 1 ), fabs )
+#define fabsf_  OP_COUNT_WRAPPER1_( ABS_( 1 ), fabsf )
+#define labs_   OP_COUNT_WRAPPER1_( ABS_( 1 ), labs )
+#define floor_  OP_COUNT_WRAPPER1_( MISC_( 1 ), floor )
+#define floorf_ OP_COUNT_WRAPPER1_( MISC_( 1 ), floorf )
+#define sqrt_   OP_COUNT_WRAPPER1_( SQRT_( 1 ), sqrt )
+#define sqrtf_  OP_COUNT_WRAPPER1_( SQRT_( 1 ), sqrtf )
+#define pow_    OP_COUNT_WRAPPER1_( POWER_( 1 ), pow )
+#define powf_   OP_COUNT_WRAPPER1_( POWER_( 1 ), powf )
+#define exp_    OP_COUNT_WRAPPER1_( POWER_( 1 ), exp )
+#define expf_   OP_COUNT_WRAPPER1_( POWER_( 1 ), expf )
+#define log_    OP_COUNT_WRAPPER1_( LOG_( 1 ), log )
+#define logf_   OP_COUNT_WRAPPER1_( LOG_( 1 ), logf )
+#define log10_  OP_COUNT_WRAPPER1_( LOG_( 1 ), log10 )
+#define log10f_ OP_COUNT_WRAPPER1_( LOG_( 1 ), log10f )
+#define cos_    OP_COUNT_WRAPPER1_( TRANS_( 1 ), cos )
+#define cosf_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), cosf )
+#define sin_    OP_COUNT_WRAPPER1_( TRANS_( 1 ), sin )
+#define sinf_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), sinf )
+#define tan_    OP_COUNT_WRAPPER1_( TRANS_( 1 ), tan )
+#define tanf_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanf )
+#define acos_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), acos )
+#define acosf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), acosf )
+#define asin_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), asin )
+#define asinf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), asinf )
+#define atan_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan )
+#define atanf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), atanf )
+#define atan2_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan2 )
+#define atan2f_ OP_COUNT_WRAPPER1_( TRANS_( 1 ), atan2f )
+#define cosh_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), cosh )
+#define coshf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), coshf )
+#define sinh_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), sinh )
+#define sinhf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), sinhf )
+#define tanh_   OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanh )
+#define tanhf_  OP_COUNT_WRAPPER1_( TRANS_( 1 ), tanhf )
+#define fmod_   OP_COUNT_WRAPPER1_( DIV_( 1 ), fmod )
+#define fmodf_  OP_COUNT_WRAPPER1_( DIV_( 1 ), fmodf )
+#define frexp_  OP_COUNT_WRAPPER1_( MISC_( 2 ), frexp )
+#define frexpf_ OP_COUNT_WRAPPER1_( MISC_( 2 ), frexpf )
+
+/* the macros below are instrumented versions of user-defined macros that might be used in the source code 
+/* representing some well-known and recognized mathematical operations (that are not defined in math.h) */
+/* Note: the 'wmc_flag_=wmc_flag_' is used to avoid warning: left-hand operand of comma expression has no effect with gcc */
+
+#define min_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), min( ( a ), ( b ) ) )
+#define max_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), max( ( a ), ( b ) ) )
+#define MIN_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), MIN( ( a ), ( b ) ) )
+#define MAX_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), MAX( ( a ), ( b ) ) )
+#define Min_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), Min( ( a ), ( b ) ) )
+#define Max_( a, b )     OP_COUNT_WRAPPER1_( MISC_( 1 ), Max( ( a ), ( b ) ) )
+#define sqr_( x )        OP_COUNT_WRAPPER1_( MULT_( 1 ), sqr( ( x ) ) )
+#define Sqr_( x )        OP_COUNT_WRAPPER1_( MULT_( 1 ), Sqr( ( x ) ) )
+#define SQR_( x )        OP_COUNT_WRAPPER1_( MULT_( 1 ), SQR( ( x ) ) )
+#define square_( x )     OP_COUNT_WRAPPER1_( MULT_( 1 ), square( ( x ) ) )
+#define Square_( x )     OP_COUNT_WRAPPER1_( MULT_( 1 ), Square( ( x ) ) )
+#define SQUARE_( x )     OP_COUNT_WRAPPER1_( MULT_( 1 ), SQUARE( ( x ) ) )
+#define sign_( x )       OP_COUNT_WRAPPER1_( MOVE_( 1 ), sign( ( x ) ) )
+#define Sign_( x )       OP_COUNT_WRAPPER1_( MOVE_( 1 ), Sign( ( x ) ) )
+#define SIGN_( x )       OP_COUNT_WRAPPER1_( MOVE_( 1 ), SIGN( ( x ) ) )
+#define inv_sqrt_( x )   OP_COUNT_WRAPPER1_( SQRT_( 1 ), inv_sqrt( ( x ) ) )
+#define inv_sqrtf_( x )  OP_COUNT_WRAPPER1_( SQRT_( 1 ), inv_sqrtf( ( x ) ) )
 #define log_base_2_( x ) OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log_base_2( ( x ) ) )
+#define log2_( x   )     OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log2( ( x ) ) )
+#define log2f_( x   )    OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log2f( ( x ) ) )
 #define log2_f_( x )     OP_COUNT_WRAPPER1_( ( LOG_( 1 ), MULT_( 1 ) ), log2_f( ( x ) ) )
-/* The 'wmc_flag_=wmc_flag_' is Used to Avoid: "warning: left-hand operand of comma expression has no effect"
-   with Cygwin gcc Compiler */
-#define _round_( x )  OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, _round( ( x ) ) )
-#define round_f_( x ) OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, round_f( ( x ) ) )
-#define _squant_( x ) OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, _squant( ( x ) ) )
-/* Set Min/Max */
+#define _round_( x )     OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, _round( ( x ) ) )
+#define round_( x )      OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, round( ( x ) ) )
+#define round_f_( x )    OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, round_f( ( x ) ) )
+#define roundf_( x )     OP_COUNT_WRAPPER1_( wmc_flag_ = wmc_flag_, roundf( ( x ) ) )
 #define set_min_( a, b ) OP_COUNT_WRAPPER3_( ( ADD_( 1 ), BRANCH_( 1 ), MOVE_( 1 ) ), set_min( ( a ), ( b ) ) )
 #define set_max_( a, b ) OP_COUNT_WRAPPER3_( ( ADD_( 1 ), BRANCH_( 1 ), MOVE_( 1 ) ), set_max( ( a ), ( b ) ) )
-/* mac & msu (Instrumented Versions) */
-#define mac_( a, b, c ) OP_COUNT_WRAPPER1_( MAC_( 1 ), mac( a, b, c ) )
-#define msu_( a, b, c ) OP_COUNT_WRAPPER1_( MAC_( 1 ), msu( a, b, c ) )
 
 /* Functions */
 #define func_( name, x ) OP_COUNT_WRAPPER1_( FUNC_( x ), name )
@@ -980,7 +986,8 @@ typedef enum
 {
     USE_BYTES = 0,
     USE_16BITS = 1,
-    USE_32BITS = 2
+    USE_32BITS = 2,
+    USE_64BITS = 3
 } Counting_Size;
 
 #if ( defined( _WIN32 ) && ( _MSC_VER <= 1800 ) && ( _MSC_VER >= 1300 ) )
@@ -1007,15 +1014,12 @@ void mem_free( const char *func_name, int func_lineno, void *ptr );
 
 void reset_mem( Counting_Size cnt_size );
 void print_mem( ROM_Size_Lookup_Table Const_Data_PROM_Table[] );
-#ifdef MEM_COUNT_DETAILS
-void export_mem( const char *csv_filename );
-#endif
 
 int push_stack( const char *filename, const char *fctname );
 int pop_stack( const char *filename, const char *fctname );
 
 #ifdef WMOPS_DETAIL
-#define STACK_DEPTH_FCT_CALL   ( push_wmops( __FUNCTION__ ), push_stack( __FILE__, __FUNCTION__ ) ) /* add push_wmops() in all function calls */
+#define STACK_DEPTH_FCT_CALL   ( push_wmops( __FUNCTION__ " [WMC_AUTO]" ), push_stack( __FILE__, __FUNCTION__ ) ) /* add push_wmops() in all function calls */
 #define STACK_DEPTH_FCT_RETURN ( pop_wmops(), pop_stack( __FILE__, __FUNCTION__ ) )                 /* add pop_wmops() in all function returns */
 #else
 #define STACK_DEPTH_FCT_CALL   push_stack( __FILE__, __FUNCTION__ )
@@ -1031,7 +1035,6 @@ void reset_stack( void );
 #define free_( ptr )      free( ptr )
 #define reset_mem( cnt_size )
 #define print_mem( Const_Data_PROM_Table )
-#define export_mem( csv_filename )
 
 #define push_stack( file, fct )
 #define pop_stack( file, fct )
@@ -1040,5 +1043,406 @@ void reset_stack( void );
 
 #endif
 
+
+/* Global counter variable for calculation of complexity weight */
+typedef struct
+{
+    unsigned int add;   /* Complexity Weight of 1 */
+    unsigned int sub;   /* Complexity Weight of 1 */
+    unsigned int abs_s; /* Complexity Weight of 1 */
+    unsigned int shl;   /* Complexity Weight of 1 */
+    unsigned int shr;   /* Complexity Weight of 1 */
+
+    unsigned int extract_h; /* Complexity Weight of 1 */
+    unsigned int extract_l; /* Complexity Weight of 1 */
+    unsigned int mult;      /* Complexity Weight of 1 */
+    unsigned int L_mult;    /* Complexity Weight of 1 */
+    unsigned int negate;    /* Complexity Weight of 1 */
+
+    unsigned int round;   /* Complexity Weight of 1 */
+    unsigned int L_mac;   /* Complexity Weight of 1 */
+    unsigned int L_msu;   /* Complexity Weight of 1 */
+    unsigned int L_macNs; /* Complexity Weight of 1 */
+    unsigned int L_msuNs; /* Complexity Weight of 1 */
+
+    unsigned int L_add;    /* Complexity Weight of 1 */
+    unsigned int L_sub;    /* Complexity Weight of 1 */
+    unsigned int L_add_c;  /* Complexity Weight of 2 */
+    unsigned int L_sub_c;  /* Complexity Weight of 2 */
+    unsigned int L_negate; /* Complexity Weight of 1 */
+
+    unsigned int L_shl;  /* Complexity Weight of 1 */
+    unsigned int L_shr;  /* Complexity Weight of 1 */
+    unsigned int mult_r; /* Complexity Weight of 1 */
+    unsigned int shr_r;  /* Complexity Weight of 3 */
+    unsigned int mac_r;  /* Complexity Weight of 1 */
+
+    unsigned int msu_r;       /* Complexity Weight of 1 */
+    unsigned int L_deposit_h; /* Complexity Weight of 1 */
+    unsigned int L_deposit_l; /* Complexity Weight of 1 */
+    unsigned int L_shr_r;     /* Complexity Weight of 3 */
+    unsigned int L_abs;       /* Complexity Weight of 1 */
+
+    unsigned int L_sat;  /* Complexity Weight of 4 */
+    unsigned int norm_s; /* Complexity Weight of 1 */
+    unsigned int div_s;  /* Complexity Weight of 18 */
+    unsigned int norm_l; /* Complexity Weight of 1 */
+    unsigned int move16; /* Complexity Weight of 1 */
+
+    unsigned int move32;  /* Complexity Weight of 2 */
+    unsigned int Logic16; /* Complexity Weight of 1 */
+    unsigned int Logic32; /* Complexity Weight of 2 */
+    unsigned int Test;    /* Complexity Weight of 2 */
+    unsigned int s_max;   /* Complexity Weight of 1 */
+
+    unsigned int s_min;   /* Complexity Weight of 1 */
+    unsigned int L_max;   /* Complexity Weight of 1 */
+    unsigned int L_min;   /* Complexity Weight of 1 */
+    unsigned int L40_max; /* Complexity Weight of 1 */
+    unsigned int L40_min; /* Complexity Weight of 1 */
+
+    unsigned int shl_r;     /* Complexity Weight of 3 */
+    unsigned int L_shl_r;   /* Complexity Weight of 3 */
+    unsigned int L40_shr_r; /* Complexity Weight of 3 */
+    unsigned int L40_shl_r; /* Complexity Weight of 3 */
+    unsigned int norm_L40;  /* Complexity Weight of 1 */
+
+    unsigned int L40_shl;    /* Complexity Weight of 1 */
+    unsigned int L40_shr;    /* Complexity Weight of 1 */
+    unsigned int L40_negate; /* Complexity Weight of 1 */
+    unsigned int L40_add;    /* Complexity Weight of 1 */
+    unsigned int L40_sub;    /* Complexity Weight of 1 */
+
+    unsigned int L40_abs;  /* Complexity Weight of 1 */
+    unsigned int L40_mult; /* Complexity Weight of 1 */
+    unsigned int L40_mac;  /* Complexity Weight of 1 */
+    unsigned int mac_r40;  /* Complexity Weight of 2 */
+
+    unsigned int L40_msu;      /* Complexity Weight of 1 */
+    unsigned int msu_r40;      /* Complexity Weight of 2 */
+    unsigned int Mpy_32_16_ss; /* Complexity Weight of 2 */
+    unsigned int Mpy_32_32_ss; /* Complexity Weight of 4 */
+    unsigned int L_mult0;      /* Complexity Weight of 1 */
+
+    unsigned int L_mac0; /* Complexity Weight of 1 */
+    unsigned int L_msu0; /* Complexity Weight of 1 */
+    unsigned int lshl;   /* Complexity Weight of 1 */
+    unsigned int lshr;   /* Complexity Weight of 1 */
+    unsigned int L_lshl; /* Complexity Weight of 1 */
+
+    unsigned int L_lshr;   /* Complexity Weight of 1 */
+    unsigned int L40_lshl; /* Complexity Weight of 1 */
+    unsigned int L40_lshr; /* Complexity Weight of 1 */
+    unsigned int s_and;    /* Complexity Weight of 1 */
+    unsigned int s_or;     /* Complexity Weight of 1 */
+
+    unsigned int s_xor; /* Complexity Weight of 1 */
+    unsigned int L_and; /* Complexity Weight of 1 */
+    unsigned int L_or;  /* Complexity Weight of 1 */
+    unsigned int L_xor; /* Complexity Weight of 1 */
+    unsigned int rotl;  /* Complexity Weight of 3 */
+
+    unsigned int rotr;          /* Complexity Weight of 3 */
+    unsigned int L_rotl;        /* Complexity Weight of 3 */
+    unsigned int L_rotr;        /* Complexity Weight of 3 */
+    unsigned int L40_set;       /* Complexity Weight of 3 */
+    unsigned int L40_deposit_h; /* Complexity Weight of 1 */
+
+    unsigned int L40_deposit_l; /* Complexity Weight of 1 */
+    unsigned int L40_deposit32; /* Complexity Weight of 1 */
+    unsigned int Extract40_H;   /* Complexity Weight of 1 */
+    unsigned int Extract40_L;   /* Complexity Weight of 1 */
+    unsigned int L_Extract40;   /* Complexity Weight of 1 */
+
+    unsigned int L40_round;    /* Complexity Weight of 1 */
+    unsigned int L_saturate40; /* Complexity Weight of 1 */
+    unsigned int round40;      /* Complexity Weight of 1 */
+    unsigned int If;           /* Complexity Weight of 4 */
+    unsigned int Goto;         /* Complexity Weight of 4 */
+
+    unsigned int Break;    /* Complexity Weight of 4 */
+    unsigned int Switch;   /* Complexity Weight of 8 */
+    unsigned int For;      /* Complexity Weight of 3 */
+    unsigned int While;    /* Complexity Weight of 4 */
+    unsigned int Continue; /* Complexity Weight of 4 */
+
+    unsigned int L_mls;  /* Complexity Weight of 6 */
+    unsigned int div_l;  /* Complexity Weight of 32 */
+    unsigned int i_mult; /* Complexity Weight of 3 */
+} BASIC_OP;
+
+#ifdef WMOPS
+extern BASIC_OP *multiCounter;
+extern int currCounter;
+
+/* Technical note :
+   * The following 3 variables are only used for correct complexity
+   * evaluation of the following structure :
+   *   IF{
+   *     ...
+   *   } ELSE IF {
+   *     ...
+   *   } ELSE IF {
+   *     ...
+   *   }
+   *   ...
+   *   } ELSE {
+   *     ...
+   *   }
+   */
+extern int funcId_where_last_call_to_else_occurred;
+extern long funcid_total_wmops_at_last_call_to_else;
+extern int call_occurred;
+
+extern long TotalWeightedOperation( void );
+long DeltaWeightedOperation( void );
+
+void Set_BASOP_WMOPS_counter( int counterId );
+void Reset_BASOP_WMOPS_counter( void );
+
+#endif
+
+/*****************************************************************************
+ *
+ *  Function Name : FOR
+ *
+ *  Purpose :
+ *
+ *    The macro FOR should be used instead of the 'for' C statement.
+ *    The complexity is independent of the number of loop iterations that are
+ *    performed.
+ *
+ *  Complexity weight : 3 (regardless of number of iterations).
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define FOR( a) for( a)
+
+#else 
+#define FOR( a) if( incrFor(), 0); else for( a)
+
+static __inline void incrFor( void) {
+   multiCounter[currCounter].For++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : WHILE
+ *
+ *  Purpose :
+ *
+ *    The macro WHILE should be used instead of the 'while' C statement.
+ *    The complexity is proportional to the number of loop iterations that
+ *    are performed.
+ *
+ *  Complexity weight : 4 x 'number of loop iterations'.
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define WHILE( a) while( a)
+
+#else 
+#define WHILE( a) while( incrWhile(), a)
+
+static __inline void incrWhile( void) {
+   multiCounter[currCounter].While++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : DO
+ *
+ *  Purpose :
+ *
+ *    The macro DO should be used instead of the 'do' C statement.
+ *
+ *  Complexity weight : 0 (complexity counted by WHILE macro).
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define DO do
+
+#else 
+#define DO do
+
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : IF
+ *
+ *  Purpose :
+ *
+ *    The macro IF should :
+ *
+ *    - not be used when :
+ *      - the 'if' structure does not have any 'else if' nor 'else' statement
+ *      - and it conditions only one DSP basic operations.
+ *
+ *    - be used instead of the 'if' C statement in every other case :
+ *      - when there is an 'else' or 'else if' statement,
+ *      - or when the 'if' conditions several DSP basic operations,
+ *      - or when the 'if' conditions a function call.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define IF( a) if( a)
+
+#else 
+#define IF( a) if( incrIf(), a)
+
+static __inline void incrIf( void) {
+   /* Technical note :
+    * If the "IF" operator comes just after an "ELSE", its counter
+    * must not be incremented.
+    */
+    if ( ( currCounter != funcId_where_last_call_to_else_occurred ) || ( TotalWeightedOperation() != funcid_total_wmops_at_last_call_to_else ) || ( call_occurred == 1 ) )
+    {
+        multiCounter[currCounter].If++;
+    }
+
+    call_occurred = 0;
+    funcId_where_last_call_to_else_occurred = INT_MAX;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : ELSE
+ *
+ *  Purpose :
+ *
+ *    The macro ELSE should be used instead of the 'else' C statement.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define ELSE else
+
+#else 
+#define ELSE else if( incrElse(), 0) ; else
+
+static __inline void incrElse( void) {
+   multiCounter[currCounter].If++;
+
+   /* We keep track of the funcId of the last function
+    * which used ELSE {...} structure.
+    */
+   funcId_where_last_call_to_else_occurred = currCounter;
+
+   /* We keep track of the number of WMOPS of this funcId
+    * when the ELSE macro was called.
+    */
+   funcid_total_wmops_at_last_call_to_else = TotalWeightedOperation();
+
+   /* call_occurred is set to 0, in order to count the next IF (if necessary)
+    */
+   call_occurred = 0;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : SWITCH
+ *
+ *  Purpose :
+ *
+ *    The macro SWITCH should be used instead of the 'switch' C statement.
+ *
+ *  Complexity weight : 8
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define SWITCH( a) switch( a)
+
+#else 
+#define SWITCH( a) switch( incrSwitch(), a)
+
+static __inline void incrSwitch( void) {
+   multiCounter[currCounter].Switch++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : CONTINUE
+ *
+ *  Purpose :
+ *
+ *    The macro CONTINUE should be used instead of the 'continue' C statement.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define CONTINUE continue
+
+#else 
+#define CONTINUE if( incrContinue(), 0); else continue
+
+static __inline void incrContinue( void) {
+   multiCounter[currCounter].Continue++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : BREAK
+ *
+ *  Purpose :
+ *
+ *    The macro BREAK should be used instead of the 'break' C statement.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define BREAK break
+
+#else 
+#define BREAK if( incrBreak(), 0) break; else break
+
+static __inline void incrBreak( void) {
+   multiCounter[currCounter].Break++;
+}
+#endif 
+
+
+/*****************************************************************************
+ *
+ *  Function Name : GOTO
+ *
+ *  Purpose :
+ *
+ *    The macro GOTO should be used instead of the 'goto' C statement.
+ *
+ *  Complexity weight : 4
+ *
+ *****************************************************************************/
+#ifndef WMOPS
+#define GOTO goto
+
+#else 
+#define GOTO if( incrGoto(), 0); else goto
+
+static __inline void incrGoto( void) {
+   multiCounter[currCounter].Goto++;
+}
+#endif 
+
 #endif /* WMOPS_H */
+
+
 

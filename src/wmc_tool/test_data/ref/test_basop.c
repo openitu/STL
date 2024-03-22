@@ -53,3 +53,6 @@ void weight_coef_a( const Word16 *a, Word16 *b, const Word16 ght )
 
     return;
 }
+
+#undef WMC_TOOL_SKIP
+/*AddedByWMC_Tool*/ int PROM_Size_Func( test_basop ) { return 15; }

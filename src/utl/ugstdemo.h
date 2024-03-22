@@ -183,7 +183,7 @@
      fprintf (stderr,"%s%c\n",msg,C);}
 
 #define FIND_PAR_S(p,msg,i,dft) \
-   { memmove(i,(argc>p)?argv[p]:dft, strlen((argc>p)?argv[p]:dft));\
+   { memmove(i,(argc>p)?argv[p]:dft, strlen((argc>p)?argv[p]:dft)+1);\
      fprintf (stderr,"%s%s\n",msg,i); }
 
 #define FIND_PAR_L(p,msg,i,j) \

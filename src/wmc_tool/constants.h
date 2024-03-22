@@ -1,5 +1,5 @@
 /*
- * (C) 2022 copyright VoiceAge Corporation. All Rights Reserved.
+ * (C) 2023 copyright VoiceAge Corporation. All Rights Reserved.
  *
  * This software is protected by copyright law and by international treaties. The source code, and all of its derivations,
  * is provided by VoiceAge Corporation under the "ITU-T Software Tools' General Public License". Please, read the license file
@@ -98,7 +98,8 @@
                        "Encoder_State "
 #define CONST_STRING   "const"
 #define STORAGE_STRING "extern " \
-                       "static " CONST_STRING " "
+                       "static " \
+                       "const "
 
 #define DATA_DEF_STRING TYPES_STRING TYPE_MOD_STRING TYPEDEF_STRING STORAGE_STRING
 
