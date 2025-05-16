@@ -28,7 +28,6 @@
 "#pragma GCC system_header\r\n",
 "#endif\r\n",
 "\r\n",
-"#define FRAMES_PER_SECOND            50.0\r\n",
 "#define ENH_32_BIT_OPERATOR\r\n",
 "#define ENH_64_BIT_OPERATOR\r\n",
 "#define ENH_U_32_BIT_OPERATOR\r\n",
