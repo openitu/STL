@@ -76,4 +76,17 @@
  * fixed instrumentation issues in encoder.c of the 3GPP EVS codec where malloc() is instrumented and print_mem() is present as well
  * when #undef WMC_TOOL_SKIP is missing, automatically assume end of file, but before the last automatically instrumented segment
  * the function DesInstrument_ROM() is called in all regular files as well as the file pointed to with the -m command-line argument
+ 
+## v1.7
+ * major udate of BASOP operators, corrections to the BASOP complexity counting mechanism
+ * update of recognized BASOP operators that should NOT be instrumented as regular functions
+  
+## v1.8
+ * introduction of the WMOPS_DISABLE_FCN_CALL_PENALIZATION macro allowing the user to skip the counting of complexity of function calls
+ * fix the defition of FRAMES_PER_SECOND
+
+## v1.9
+ * fix the counting of PROM of BASOP operators appearing inside function arguments
+
+  
   
