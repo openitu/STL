@@ -40,14 +40,14 @@ int cntr_push_pop = 0; /* global counter for checking balanced push_wmops()/pop_
  * Complexity counting tool
  *--------------------------------------------------------------------*/
 
-#define PROM_INST_SIZE               32  /* number of bits of each program instruction when stored in the PROM memory (applied only when the user selects reporting in bytes) */
 #define MAX_FUNCTION_NAME_LENGTH     200 /* Maximum length of the function name */
 #define MAX_PARAMS_LENGTH            200 /* Maximum length of the function parameter string */
 #define MAX_NUM_RECORDS              300 /* Initial maximum number of records -> might be increased during runtime, if needed */
 #define MAX_NUM_RECORDS_REALLOC_STEP 50  /* When re-allocating the list of records, increase the number of records by this number */
 #define MAX_CALL_TREE_DEPTH          100 /* maximum depth of the function call tree */
 #define DOUBLE_MAX                   0x80000000
-#define FAC                          ( FRAMES_PER_SECOND / 1e6 )
+#define FRAMES_PER_SECOND 50.0    #define FAC                          ( FRAMES_PER_SECOND / 1e6 )
+#define PROM_INST_SIZE               32 /* number of bits of each program instruction when stored in the PROM memory (applied only when the user selects reporting in bytes) */
 
 typedef struct
 {
@@ -150,9 +150,7 @@ static BASIC_OP op_weight = {
 
 BASIC_OP *multiCounter = NULL;
 unsigned int currCounter = 0;
-int funcId_where_last_call_to_else_occurred;
 long funcid_total_wmops_at_last_call_to_else;
-int call_occurred = 1;
 char func_name_where_last_call_to_else_occurred[MAX_FUNCTION_NAME_LENGTH + 1];
 
 void reset_wmops( void )
@@ -243,11 +241,6 @@ void reset_wmops( void )
     {
         wmops_caller_stack[i] = -1;
     }
-
-    /* initialize auxiliary BASOP counter variables */
-    currCounter = 0; /* Note: currCounter cannot be set to -1 because it's defined as unsigned int ! */
-    call_occurred = 1;
-    funcId_where_last_call_to_else_occurred = -100;
 
     return;
 }
@@ -374,7 +367,6 @@ void push_wmops_fct( const char *label, ... )
 
     /* set the ID of the current BASOP operations counter */
     currCounter = index_record;
-    call_occurred = 1;
 
     return;
 }
@@ -418,7 +410,6 @@ void pop_wmops( void )
     {
         currCounter = current_record;
     }
-    call_occurred = 1;
 
     return;
 }
@@ -512,7 +503,6 @@ void update_wmops( void )
 #endif
 
         /* reset the BASOP operations counter */
-        call_occurred = 1;
         Reset_BASOP_WMOPS_counter( i );
     }
 
@@ -2422,7 +2412,7 @@ int EQ_64( long long int L64_var1, long long int L64_var2 )
 #endif
     return F_ret;
 }
-int NE_64( long long int L64_var1, long long int L64_var2 ) 
+int NE_64( long long int L64_var1, long long int L64_var2 )
 {
     int F_ret = 0;
 
@@ -2444,29 +2434,25 @@ void incrIf( const char *func_name )
 {
     /* Technical note: If the "IF" operator comes just after an "ELSE", its counter must not be incremented */
     /* The following auxiliary variables are used to check if the "IF" operator doesn't immediately follow an "ELSE" operator */
-    if ( ( (int) currCounter != funcId_where_last_call_to_else_occurred ) || ( strncmp( func_name, func_name_where_last_call_to_else_occurred, MAX_FUNCTION_NAME_LENGTH ) != 0 ) || ( TotalWeightedOperation( currCounter) != funcid_total_wmops_at_last_call_to_else ) || ( call_occurred == 1 ) )
-        multiCounter[currCounter].If++;
+    if ( ( strncmp( func_name, func_name_where_last_call_to_else_occurred, MAX_FUNCTION_NAME_LENGTH ) != 0 ) || ( TotalWeightedOperation( currCounter ) != funcid_total_wmops_at_last_call_to_else ) )
+    {
 
-    call_occurred = 0;
-    funcId_where_last_call_to_else_occurred = -100;
+        multiCounter[currCounter].If++;
+    }
+
+    func_name_where_last_call_to_else_occurred[0] = '\0';
 }
 
 void incrElse( const char *func_name )
 {
     multiCounter[currCounter].If++;
 
-    /* Save the BASOP counter Id in the last function in which ELSE() has been called */
-    funcId_where_last_call_to_else_occurred = currCounter;
-
     /* Save the BASOP comeplxity in the last call of the ELSE() statement */
     funcid_total_wmops_at_last_call_to_else = TotalWeightedOperation( currCounter );
 
-    /* Save the function name in the last call of the ELSE() statement */
+    /* We keep track of the name of the last calling function when the ELSE macro was called */
     strncpy( func_name_where_last_call_to_else_occurred, func_name, MAX_FUNCTION_NAME_LENGTH );
     func_name_where_last_call_to_else_occurred[MAX_FUNCTION_NAME_LENGTH] = '\0';
-
-    /* Set call_occurred to 0 to prevent counting of complexity of the next "immediate" IF statement */
-    call_occurred = 0;
 }
 
 long TotalWeightedOperation( unsigned int CounterId )
@@ -2479,7 +2465,7 @@ long TotalWeightedOperation( unsigned int CounterId )
     ptr = (unsigned int *) &multiCounter[CounterId];
     ptr2 = (unsigned int *) &op_weight;
 
-    for ( i = 0; i < (int) ( sizeof( multiCounter[CounterId] ) / sizeof( unsigned int ) ); i++ )
+    for ( i = 0; i < (int) ( sizeof( BASIC_OP ) / sizeof( unsigned int ) ); i++ )
     {
         if ( *ptr == UINT_MAX )
         {
@@ -2509,11 +2495,11 @@ long DeltaWeightedOperation( unsigned int CounterId )
 void Reset_BASOP_WMOPS_counter( unsigned int counterId )
 {
     int i;
-    long *ptr;
+    unsigned int *ptr;
 
     /* reset the current BASOP operation counter */
-    ptr = (long *) &multiCounter[counterId];
-    for ( i = 0; i < (int) ( sizeof( multiCounter[counterId] ) / sizeof( long ) ); i++ )
+    ptr = (unsigned int *) &multiCounter[counterId];
+    for ( i = 0; i < (int) (sizeof(BASIC_OP) / sizeof(unsigned int)); i++ )
     {
         *ptr++ = 0;
     }

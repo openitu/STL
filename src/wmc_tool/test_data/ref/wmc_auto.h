@@ -28,12 +28,12 @@
 #pragma GCC system_header
 #endif
 
-#define FRAMES_PER_SECOND            50.0
 #define ENH_32_BIT_OPERATOR
 #define ENH_64_BIT_OPERATOR
 #define ENH_U_32_BIT_OPERATOR
 #define COMPLEX_OPERATOR
-#define CONTROL_CODE_OPS    /* enable control code operators such as LT_16, GT_16, ... */
+#define CONTROL_CODE_OPS                    /* enable control code operators such as LT_16, GT_16, ... */
+/* #define WMOPS_DISABLE_FCN_CALL_PENALIZATION*/ /* do not count the complexity of function calls */
 
 #ifdef WMOPS
 enum instructions
@@ -256,7 +256,7 @@ void update_mem( void );
     {                                        \
         ops_cnt += ( 2 * _TRANS_C * ( x ) ); \
         inst_cnt[_TRANS] += ( x );           \
-    }  
+    }
 
 #else
 
@@ -333,25 +333,29 @@ extern int cntr_push_pop;
 #endif
 
 /* Define all Macros without '{' & '}' (None of these should be called externally!) */
-#define ABS_( x )      OP_COUNT_( _ABS, ( x )  )
-#define ADD_( x )      OP_COUNT_( _ADD, ( x )  )
-#define MULT_( x )     OP_COUNT_( _MULT, ( x )  )
-#define MAC_( x )      OP_COUNT_( _MAC, ( x )  )
-#define MOVE_( x )     OP_COUNT_( _MOVE, ( x )  )
-#define STORE_( x )    OP_COUNT_( _STORE, ( x )  )
-#define LOGIC_( x )    OP_COUNT_( _LOGIC, ( x )  )
-#define SHIFT_( x )    OP_COUNT_( _SHIFT, ( x )  )
-#define BRANCH_( x )   OP_COUNT_( _BRANCH, ( x )  )
-#define DIV_( x )      OP_COUNT_( _DIV, ( x )  )
-#define SQRT_( x )     OP_COUNT_( _SQRT, ( x )  )
-#define TRANS_( x )    OP_COUNT_( _TRANS, ( x )  )
+#define ABS_( x )      OP_COUNT_( _ABS, ( x ) )
+#define ADD_( x )      OP_COUNT_( _ADD, ( x ) )
+#define MULT_( x )     OP_COUNT_( _MULT, ( x ) )
+#define MAC_( x )      OP_COUNT_( _MAC, ( x ) )
+#define MOVE_( x )     OP_COUNT_( _MOVE, ( x ) )
+#define STORE_( x )    OP_COUNT_( _STORE, ( x ) )
+#define LOGIC_( x )    OP_COUNT_( _LOGIC, ( x ) )
+#define SHIFT_( x )    OP_COUNT_( _SHIFT, ( x ) )
+#define BRANCH_( x )   OP_COUNT_( _BRANCH, ( x ) )
+#define DIV_( x )      OP_COUNT_( _DIV, ( x ) )
+#define SQRT_( x )     OP_COUNT_( _SQRT, ( x ) )
+#define TRANS_( x )    OP_COUNT_( _TRANS, ( x ) )
 #define POWER_( x )    TRANS_( x )
 #define LOG_( x )      TRANS_( x )
-#define LOOP_( x )     OP_COUNT_( _LOOP, ( x )  )
-#define INDIRECT_( x ) OP_COUNT_( _INDIRECT, ( x )  )
-#define PTR_INIT_( x ) OP_COUNT_( _PTR_INIT, ( x )  )
-#define FUNC_( x )     ( OP_COUNT_( _MOVE, ( x )  ), OP_COUNT_( _FUNC, 1 ) )
-#define MISC_( x )     ABS_( x )
+#define LOOP_( x )     OP_COUNT_( _LOOP, ( x ) )
+#define INDIRECT_( x ) OP_COUNT_( _INDIRECT, ( x ) )
+#define PTR_INIT_( x ) OP_COUNT_( _PTR_INIT, ( x ) )
+#ifdef WMOPS_DISABLE_FCN_CALL_PENALIZATION
+#define FUNC_( x ) ( x )
+#else
+#define FUNC_( x ) ( OP_COUNT_( _MOVE, ( x ) ), OP_COUNT_( _FUNC, 1 ) )
+#endif
+#define MISC_( x ) ABS_( x )
 
 /* Math Operations */
 #define abs_    OP_COUNT_WRAPPER1_( ABS_( 1 ), abs )
@@ -922,7 +926,7 @@ typedef struct
     unsigned int Madd_32_32_r; /* Complexity Weight of 1 */
     unsigned int Msub_32_32;   /* Complexity Weight of 1 */
     unsigned int Msub_32_32_r; /* Complexity Weight of 1 */
-#endif                    /* #ifdef ENH_32_BIT_OPERATOR */
+#endif                         /* #ifdef ENH_32_BIT_OPERATOR */
 
 #ifdef ENH_U_32_BIT_OPERATOR
     unsigned int UL_addNs;      /* Complexity Weight of 1 */
@@ -932,7 +936,7 @@ typedef struct
     unsigned int Mpy_32_16_uu;  /* Complexity Weight of 2 */
     unsigned int norm_ul_float; /* Complexity Weight of 1 */
     unsigned int UL_deposit_l;  /* Complexity Weight of 1 */
-#endif                     /* #ifdef ENH_U_32_BIT_OPERATOR */
+#endif                          /* #ifdef ENH_U_32_BIT_OPERATOR */
 
 #ifdef CONTROL_CODE_OPS
     unsigned int LT_16; /* Complexity Weight of 1 */
@@ -960,9 +964,8 @@ typedef struct
 #ifdef WMOPS
 extern BASIC_OP *multiCounter;
 extern unsigned int currCounter;
-extern int funcId_where_last_call_to_else_occurred;
 extern long funcid_total_wmops_at_last_call_to_else;
-extern int call_occurred;
+extern char func_name_where_last_call_to_else_occurred[];
 
 long TotalWeightedOperation( unsigned int counterId );
 long DeltaWeightedOperation( unsigned int counterId );
@@ -1090,7 +1093,9 @@ void incrIf( const char *func_name );
 #ifndef WMOPS
 #define ELSE else
 #else /* ifndef WMOPS */
-#define ELSE else if ( incrElse( __func__ ), 0 ); else
+#define ELSE                             \
+    else if ( incrElse( __func__ ), 0 ); \
+    else
 void incrElse( const char *func_name );
 #endif /* ifndef WMOPS */
 
@@ -1230,4 +1235,3 @@ extern int NE_64( long long int L64_var1, long long int L64_var2 );
 
 
 #endif /* WMOPS_H */
-
