@@ -80,13 +80,12 @@
 ## v1.7
  * major udate of BASOP operators, corrections to the BASOP complexity counting mechanism
  * update of recognized BASOP operators that should NOT be instrumented as regular functions
-  
-## v1.8
  * introduction of the WMOPS_DISABLE_FCN_CALL_PENALIZATION macro allowing the user to skip the counting of complexity of function calls
  * fix the defition of FRAMES_PER_SECOND
-
-## v1.9
+  
+## v1.8
  * fix the counting of PROM of BASOP operators appearing inside function arguments
+
 
   
   
