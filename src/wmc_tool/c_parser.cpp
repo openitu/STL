@@ -201,13 +201,6 @@
 
 #define FUNC_START_STRING FUNC_COUNTING_MACRO_STRING "start" WORD_INSTRUMENT_STRING
 
-/*****************************************
- * Function Exit
- *****************************************/
-
-#define RETURN_KW_STRING "return"
-
-
 /*-------------------------------------------------------------------*
  * Local Typedefs
  *-------------------------------------------------------------------*/
@@ -271,7 +264,7 @@ static const struct
     { "break", false, NUL_CHAR, ITEM_KEYWORD_BREAK, 0 },
     { "continue", false, NUL_CHAR, ITEM_KEYWORD_CONTINUE | ITEM_WARNING, 0 },
     /* 'return' now Instrumented for enter/leave function Mechanism */
-    { RETURN_KW_STRING, false, NUL_CHAR, ITEM_KEYWORD_RETURN | ITEM_RETURN }
+    { "return", false, NUL_CHAR, ITEM_KEYWORD_RETURN | ITEM_RETURN }
 };
 
 static const char * const Conditionnal_Directives[] = { "ifdef", "ifndef", "if", "else", "elif", "endif", NULL };
@@ -2605,6 +2598,7 @@ static TOOL_ERROR Find_Keywords(
                 }
                 /* Reset Parameter End */
                 pe = NULL;
+
                 /* Reset Delimiter Position */
                 dp = NULL;
                 /* Keyword has an Argument? */
@@ -4395,12 +4389,14 @@ static TOOL_ERROR Find_Calls(
                         ErrCode = Parentheses_Error( ps, ')' );
                         goto ret;
                     }
+
                     /* Add Function Arguments Region (Arguments are never Marked as Instrumented) */
                     if ( ( ErrCode = Add_Region( ParseTbl_ptr, ( item_type | ITEM_CALL_ARGS ) & ~ITEM_INSTRUMENTED,
                                                  ps, pe + 1 ) ) != NO_ERR )
                     {
                         goto ret;
                     }
+
                     /* Counting Macro, Couting Function or BASOP Function? */
                     if ( item_type & ( ITEM_FUNC_COUNTERS | ITEM_FUNC_COUNT_LIB | ITEM_FUNC_BASOP ) )
                     { /* Yes */
@@ -4410,7 +4406,8 @@ static TOOL_ERROR Find_Calls(
                            not Preprocessor Lines
                         */
                         /* Skip Blanks to the Right (this cannot fail) */
-                        ps = Skip_Chars( pe + 1, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_COMMENT );
+                        //ps = Skip_Chars( pe + 1, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_COMMENT );
+
                         /* It is the End of Statement? */
                         if ( *ps == ';' )
                         { /* Yes */
@@ -4760,94 +4757,102 @@ static TOOL_ERROR Instrument_Keywords(
         /* Skipped? */
         if( !(item_type & ITEM_SKIPPED) )
         { /* No */
-            /* In Skipped or Non-Instrumented Region? */
-            if ( Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED | ITEM_INSTRUMENTATION_OFF ) < 0
-                 /* 'return' always gets Instrumented (even in Manual Regions) */
-                 || ( item_type == ITEM_KEYWORD_RETURN
-                      /* 'return not' Instrumented in Skipped Regions */
-                      && Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED ) < 0
-                      && Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK ) < 0 
-                      && Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_MATH ) < 0
-                      && Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_SYSTEM ) < 0 ) )
-            { /* No */
-                /* Instrument After (by default) */
-                ptr = ParseRec_ptr->item_end;
 
-                if (skip_cmplx_instrum && item_type != ITEM_KEYWORD_RETURN)
-                {
-                    /* skip the instrumentation if the user specified so on the command-line */
-                    /* with the exception of the 'return' keywords */
-                    continue;
-                }
+            /* Skip the instrumentation if the user specified so on the command-line */
+            /* with the exception of the 'return' keywords */
+            if (!skip_cmplx_instrum || item_type == ITEM_KEYWORD_RETURN)
+            {
+                /* In Skipped or Non-Instrumented Region? */
+                if (Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED | ITEM_INSTRUMENTATION_OFF) < 0
+                    /* 'return' always gets Instrumented (even in Manual Regions) */
+                    || (item_type == ITEM_KEYWORD_RETURN
+                        /* 'return not' Instrumented in Skipped Regions */
+                        && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED) < 0
+                        && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK) < 0
+                        && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_MATH) < 0
+                        && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_SYSTEM) < 0))
+                { /* No */
 
-                /* Insert Instrumentation Character '_' */
-                if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr, WORD_INSTRUMENT_STRING ) ) != NO_ERR )
-                {
-                    goto ret;
-                }
+                    //if (skip_cmplx_instrum && item_type != ITEM_KEYWORD_RETURN)
+                    //{
+                    //    /* skip the instrumentation if the user specified so on the command-line */
+                    //    /* with the exception of the 'return' keywords */
+                    //    continue;
+                    //}
 
-                /* Is it a 'while'?
-                   Auto Instrumentation Macro for 'while' in a 'do' Block
-                   can handle multiple Condition. */
-                if (item_type == ITEM_KEYWORD_WHILE
-                    /* 'while' from 'do/while' now Needs Extra () for Multiple Condition*/
-                    || item_type == ITEM_KEYWORD_WHILE2 )
-                { /* Yes */
-                    /* Advance to Parameters Record */
-                    ParseRec_ptr++;
-                    /* More than one Condition? */
-                    if (Count_Args(ParseRec_ptr->item_start,
-                        ParseRec_ptr->item_end - 1,
-                        ParseTbl_ptr) > 1)
-                    { /* Yes */
-                        /* Must Add Extra () */
-                        if ((ErrCode = Add_Insertion(&ParseCtx_ptr->InsertTbl,
-                            ParseRec_ptr->item_start,
-                            "(")) != NO_ERR)
-                        {
-                            goto ret;
-                        }
+                    /* Instrument After (by default) */
+                    ptr = ParseRec_ptr->item_end;
 
-                        if ((ErrCode = Add_Insertion(&ParseCtx_ptr->InsertTbl,
-                            ParseRec_ptr->item_end,
-                            ")")) != NO_ERR)
-                        {
-                            goto ret;
-                        }
-
-                        /* Add Warning */
-                        ParseRec_ptr->item_type |= ITEM_WARNING;
-                    }
-                }
-                /* Is it a switch? */
-                else if ( item_type == ITEM_KEYWORD_SWITCH )
-                { /* Yes */
-                    if ( ( ErrCode = Instrument_Switch( ParseCtx_ptr, idx,
-                                                        &ParseCtx_ptr->PROMSize,
-                                                        prom_ops_weights_ptr ) ) != NO_ERR )
+                    /* Insert Instrumentation Character '_' */
+                    if ((ErrCode = Add_Insertion(&ParseCtx_ptr->InsertTbl, ptr, WORD_INSTRUMENT_STRING)) != NO_ERR)
                     {
                         goto ret;
                     }
-                }
 
-                ///* Count Program Memory */
-                //if ( item_type == ITEM_KEYWORD_FOR )
-                //    loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
-                //else if ( item_type == ITEM_KEYWORD_WHILE )
-                //    whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
-                //else if ( item_type & ( ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP ) )
-                //    jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
+                    /* Is it a 'while'?
+                       Auto Instrumentation Macro for 'while' in a 'do' Block
+                       can handle multiple Condition. */
+                    if (item_type == ITEM_KEYWORD_WHILE
+                        /* 'while' from 'do/while' now Needs Extra () for Multiple Condition*/
+                        || item_type == ITEM_KEYWORD_WHILE2)
+                    { /* Yes */
+                        /* Advance to Parameters Record */
+                        ParseRec_ptr++;
+                        /* More than one Condition? */
+                        if (Count_Args(ParseRec_ptr->item_start,
+                            ParseRec_ptr->item_end - 1,
+                            ParseTbl_ptr) > 1)
+                        { /* Yes */
+                            /* Must Add Extra () */
+                            if ((ErrCode = Add_Insertion(&ParseCtx_ptr->InsertTbl,
+                                ParseRec_ptr->item_start,
+                                "(")) != NO_ERR)
+                            {
+                                goto ret;
+                            }
+
+                            if ((ErrCode = Add_Insertion(&ParseCtx_ptr->InsertTbl,
+                                ParseRec_ptr->item_end,
+                                ")")) != NO_ERR)
+                            {
+                                goto ret;
+                            }
+
+                            /* Add Warning */
+                            ParseRec_ptr->item_type |= ITEM_WARNING;
+                        }
+                    }
+                    /* Is it a switch? */
+                    else if (item_type == ITEM_KEYWORD_SWITCH)
+                    { /* Yes */
+                        if ((ErrCode = Instrument_Switch(ParseCtx_ptr, idx,
+                            &ParseCtx_ptr->PROMSize,
+                            prom_ops_weights_ptr)) != NO_ERR)
+                        {
+                            goto ret;
+                        }
+                    }
+
+                    ///* Count Program Memory */
+                    //if ( item_type == ITEM_KEYWORD_FOR )
+                    //    loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
+                    //else if ( item_type == ITEM_KEYWORD_WHILE )
+                    //    whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
+                    //else if ( item_type & ( ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP ) )
+                    //    jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
+                }
             }
 
             /* Count Program Memory */   /* !!! VM: Moved to this place to count PROM size even for non-instrumented keywords */
             //if ( Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED) < 0 )
             if (!IS_RESERVED_CHAR(*(ParseRec_ptr->item_start)))
             {
-                if (item_type == ITEM_KEYWORD_FOR)
+                /* Note, that the construct (item_type & ~ITEM_INSTRUMENTATION_OFF) has been added to be able to use == instead of &*/
+                if ((item_type & ~ITEM_INSTRUMENTATION_OFF) == ITEM_KEYWORD_FOR)
                     loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
-                else if (item_type == ITEM_KEYWORD_WHILE)
+                else if ((item_type & ~ITEM_INSTRUMENTATION_OFF) == ITEM_KEYWORD_WHILE)
                     whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
-                else if (item_type & (ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP))
+                else if ((item_type & ~ITEM_INSTRUMENTATION_OFF) & (ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP))
                     jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
             }
         }
@@ -8512,7 +8517,6 @@ TOOL_ERROR Instrument(
     }
 
     /* Insert PROM_Size_Func() function */
-    //if (is_function_present)
     if (ParseCtx_ptr->PROMSize > 0)
     {
         if ((ErrCode = Instrument_PROM(ParseCtx_ptr)) != NO_ERR)
@@ -8555,7 +8559,7 @@ TOOL_ERROR Instrument(
         }
         ptr3 = NULL;
         /* Find Last 'return' keyword in this Function (this is used for the Function Leave Mechanism) */
-        while ( ( ptr = Find_String( memstr( ptr, ptr2 ), RETURN_KW_STRING, ParseTbl_ptr, ITEM_KEYWORD_RETURN ) ) != NULL )
+        while ( ( ptr = Find_String( memstr( ptr, ptr2 ), "return", ParseTbl_ptr, ITEM_KEYWORD_RETURN ) ) != NULL )
         {
             /* Copy and Advance */
             ptr3 = ptr++;
@@ -8671,7 +8675,7 @@ TOOL_ERROR Instrument(
             }
 
             /* Add 'return' keyword */
-            if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr, RETURN_KW_STRING WORD_INSTRUMENT_STRING ADDED_TOOL_INFO_STRING ";" ) ) != NO_ERR )
+            if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr, "return_" ADDED_TOOL_INFO_STRING ";" ) ) != NO_ERR )
             {
                 goto ret;
             }
