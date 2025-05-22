@@ -237,11 +237,18 @@ static TOOL_ERROR Parse_Command_Line(
             i++;
 
             /* get the value */
-            if ((*frames_per_sec = strtof(args[i], NULL)) <= 0.0 )
+            if ((*frames_per_sec = strtof(args[i], NULL)) <= 0.0)
             {
                 fprintf(stderr, "Incorrect number of frames per second specified: %s!\n\n", args[i]);
                 return ERR_CMD_LINE;
             }
+        }
+        else
+        {
+            /* unknown command-line option */
+            usage();
+            fprintf(stderr, "Unknown command-line option: %s!\n\n", args[i]);
+            return ERR_CMD_LINE;
         }
 
         /* Move to the next argument */
