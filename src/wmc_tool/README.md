@@ -51,9 +51,9 @@ cmake ..
 make
 ```
 
-The binary file `wmc_tool` shall be created in the top-level directory.
+The binary file `wmc_tool` shall be created in the top-level directory. 
 
-### Windows system
+### Windows system 
 
 To build the project on MS Windows use the `cmake` command with `-G` option specifying the target platform. For example, to build project files for 64-bit MSVC 2019, invoke the following commands from the top-level directory containing the file `CMakeLists.txt`:
 
@@ -61,10 +61,10 @@ To build the project on MS Windows use the `cmake` command with `-G` option spec
 md build
 cd build
 cmake -G "Visual Studio 16 2019" -A "x64" ..
-msbuild wmc_tool.sln
+cmake --build . --config Release
 ```
 
-The executable file `wmc_tool.exe` shall be created in the top-level directory. Note, that it is recommended to run these commands from the `Developer Command Prompt for VS2019` opened in `Administrator` mode. This ensures that all paths to libraries including the SDK can be found by the `cmake` command. This can also be verified with the `vswhere` command.
+In the script above `Visual Studio 16 2019` specifies the Visual Studio version, `x64` refers to the host architecture and `Release` specified the build type. The executable file `wmc_tool.exe` shall be created in the top-level directory. Note, that it is recommended to run these commands from the `Developer Command Prompt for VS2019` opened in `Administrator` mode. This ensures that all paths to libraries including the SDK can be found by the `cmake` command. This can also be verified with the `vswhere` command.
 
 ### Mac OS X system
 
