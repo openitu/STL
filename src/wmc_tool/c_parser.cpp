@@ -4378,8 +4378,7 @@ static TOOL_ERROR Find_Calls(
                 if ( item_type != ITEM_NONE )
                 {
                     /* Add Function Call Name Region */
-                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, item_type | ITEM_CALL,
-                                                 ns, ne + 1 ) ) != NO_ERR )
+                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, item_type | ITEM_CALL, ns, ne + 1 ) ) != NO_ERR )
                     {
                         goto ret;
                     }
@@ -4391,8 +4390,8 @@ static TOOL_ERROR Find_Calls(
                     }
 
                     /* Add Function Arguments Region (Arguments are never Marked as Instrumented) */
-                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, ( item_type | ITEM_CALL_ARGS ) & ~ITEM_INSTRUMENTED,
-                                                 ps, pe + 1 ) ) != NO_ERR )
+                    //if ((ErrCode = Add_Region(ParseTbl_ptr, (item_type | ITEM_CALL_ARGS) & ~ITEM_INSTRUMENTED, ps, pe + 1)) != NO_ERR)
+                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, ( item_type | ITEM_CALL_ARGS ) & ~ITEM_INSTRUMENTED & ~ITEM_INSTRUMENTATION_OFF, ps, pe + 1 ) ) != NO_ERR )
                     {
                         goto ret;
                     }
