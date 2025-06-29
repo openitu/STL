@@ -1560,11 +1560,11 @@ Now we should check for saturation and return the lower 32 bits.\\
 If W\_var is in 17Q47 format, then the result returned will be saturated to 1Q31 format.
 
 %........................................................
-\NewOperator{W\_shl\_sat\_l(W\_1, var1)}
+\NewOperator{W\_shl\_sat\_l(W\_var1, var2)}
 
-Arithmetically shifts left the 64-bit W\_v1 by v1 positions with lower 32-bit saturation and returns the 32 LSB of 64-bit result.\\
-If v1 is negative, the result is shifted to right by (-var1) positions and sign extended.
-After shift operation, returns the 32 MSB of 64-bit result.
+Arithmetically shifts left the 64-bit W\_var1 by var2 positions with lower 32-bit saturation and returns the 32 LSB of 64-bit result.\\
+If var2 is negative, the result is shifted to right by (-var2) positions and sign extended.
+After shift operation, returns the 32 LSB of 64-bit result.
 
 %........................................................
 \NewOperator{W\_extract\_l(W\_var1)}
