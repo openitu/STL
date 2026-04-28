@@ -37,6 +37,8 @@ sweep.[aru]*
 *.tst
 !*voic*.tst
 
+src/**/test_data/
+
 src/g722/test_data/inpsp.bs
 src/g722/test_data/outsp.e-d
 src/g727/test_data/rn54_a.out
@@ -97,3 +99,4 @@ bld/
 .vs/
 *vcxproj*
 *.sln*
+.vscode/
