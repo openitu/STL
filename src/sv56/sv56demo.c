@@ -575,7 +575,7 @@ int main (int argc, char *argv[]) {
   Overflow = pow ((double) 2.0, (double) (bitno - 1));
 
   /* reset variables for speech level measurements */
-  init_speech_voltmeter (&state, sf);
+  init_speech_voltmeter (&state, sf, (int)bitno);
 
 
 /*

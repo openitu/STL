@@ -555,7 +555,7 @@ int main (int argc, char *argv[]) {
     argc--;
 
     /* Reset variables for speech level measurements */
-    init_speech_voltmeter (&state, sf);
+    init_speech_voltmeter (&state, sf, (int)bitno);
 
     /* ......... FILE PREPARATION ......... */
 

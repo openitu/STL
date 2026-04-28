@@ -41,9 +41,11 @@
 /* State for speech voltmeter function */
 typedef struct {
   float f;                      /* sampling frequency, in Hz */
-  unsigned long a[15];          /* activity count */
-  double c[15];                 /* threshold level; 15 is the no.of thres. */
-  unsigned long hang[15];       /* hangover count */
+  unsigned long a[31];          /* activity count (max 31 for 32-bit) */
+  double c[31];                 /* threshold level; up to 31 for 32-bit */
+  unsigned long hang[31];       /* hangover count */
+  int thres_no;                 /* actual number of thresholds in use (bitno-1) */
+  int bitno;                    /* bit depth of input signal (default 16) */
   unsigned long n;              /* number of samples read since last reset */
   double s;                     /* sum of all samples since last reset */
   double sq;                    /* squared sum of samples since last reset */
@@ -59,7 +61,7 @@ typedef struct {
 
 /* Speech voltmeter prototypes */
 double bin_interp ARGS ((double upcount, double lwcount, double upthr, double lwthr, double Margin, double tol));
-void init_speech_voltmeter ARGS ((SVP56_state * state, double sampl_freq));
+void init_speech_voltmeter ARGS ((SVP56_state * state, double sampl_freq, int bitno));
 double speech_voltmeter ARGS ((float *buffer, long smpno, SVP56_state * state));
 
 
