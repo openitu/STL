@@ -11,7 +11,7 @@
        COPYRIGHT NOTE: This source code, and all of its derivations,
        is subject to the "ITU-T General Public License". Please have
        it  read  in    the  distribution  disk,   or  in  the  ITU-T
-       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO 
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
        CODING STANDARDS".
        =============================================================
 
@@ -19,15 +19,15 @@
    28.Feb.92	v1.0	First version <tdsimao@venus.cpqd.ansp.br>
    18.May.92	v1.1	Prototype of new init_speech_voltmeter;
                         removal of `init` parameter in speech_voltmeter;
-                        macros for accessing SVP56_state statistics. 
+                        macros for accessing SVP56_state statistics.
                         <tdsimao@venus.cpqd.ansp.br>
-   01.Sep.95    v2.2    Updated version number to match sv-p56.c and added 
+   01.Sep.95    v2.2    Updated version number to match sv-p56.c and added
                         smart prototypes <simao@ctd.comsat.com>
 
   ============================================================================
 */
 #ifndef SPEECH_VOLTMETER_defined
-#define SPEECH_VOLTMETER_defined 220
+#define SPEECH_VOLTMETER_defined 230
 
 /* DEFINITION FOR SMART PROTOTYPES */
 #ifndef ARGS
@@ -38,12 +38,24 @@
 #endif
 #endif
 
+/*
+ * Maximum bit depth supported by the speech voltmeter.
+ * Increase this constant if higher bit depths are needed.
+ */
+#define SVP56_MAX_NO_BITS 32
+
+/*
+ * Maximum number of thresholds supported by the speech voltmeter.
+ * Derived from SVP56_MAX_NO_BITS: thres_no = bitno - 1.
+ */
+#define SVP56_MAX_THRESHOLDS (SVP56_MAX_NO_BITS - 1)
+
 /* State for speech voltmeter function */
 typedef struct {
   float f;                      /* sampling frequency, in Hz */
-  unsigned long a[31];          /* activity count (max 31 for 32-bit) */
-  double c[31];                 /* threshold level; up to 31 for 32-bit */
-  unsigned long hang[31];       /* hangover count */
+  unsigned long a[SVP56_MAX_THRESHOLDS]; /* activity count per threshold */
+  double c[SVP56_MAX_THRESHOLDS];        /* threshold level */
+  unsigned long hang[SVP56_MAX_THRESHOLDS]; /* hangover count */
   int thres_no;                 /* actual number of thresholds in use (bitno-1) */
   int bitno;                    /* bit depth of input signal (default 16) */
   unsigned long n;              /* number of samples read since last reset */

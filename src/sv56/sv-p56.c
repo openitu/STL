@@ -352,7 +352,7 @@ double speech_voltmeter (float *buffer, long smpno, SVP56_state * state) {
   int I, j;
   long k;
   double g, x, AdB, CdB, AmdB, CmdB, ActiveSpeechLevel;
-  double LongTermLevel, Delta[31];
+  double LongTermLevel, Delta[SVP56_MAX_THRESHOLDS];
 
 
   /* Some initializations */
