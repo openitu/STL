@@ -120,6 +120,7 @@
 #include "private.h"
 #include "gsm.h"
 #include "rpeltp.h"
+#include "wav_io.h"
 
 /* ..... G.711 module definitions ..... */
 #include "g711.h"
@@ -205,7 +206,7 @@ int main (argc, argv)
 
   /* File variables */
   char FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
-  FILE *Fi, *Fo;
+  AUDIO_FILE *Fi, *Fo;
   long start_byte;
   char format, run_encoder, run_decoder;
 #ifdef VMS
@@ -325,14 +326,14 @@ int main (argc, argv)
 #endif
 
   /* Opening input/output files; abort if there's any problem */
-  if ((Fi = fopen (FileIn, RB)) == NULL)
+  if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
     KILL (FileIn, 2);
 
-  if ((Fo = fopen (FileOut, WB)) == NULL)
+  if ((Fo = audio_open_write (FileOut, 0, 1, 16)) == NULL)
     KILL (FileOut, 3);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Fi, start_byte, 0) < 0l)
+  if (fseek (Fi->fp, start_byte, 0) < 0l)
     KILL (FileIn, 4);
 
   /* ......... CREATE AND INIT GSM OBJECT (STATE VARIABLE) ......... */
@@ -354,14 +355,14 @@ int main (argc, argv)
       memset (inp_buf, (int) 0, N);
 
       /* Read a block of uncoded samples */
-      if ((smpno = fread (inp_buf, sizeof (short), (long) N, Fi)) <= 0)
+      if ((smpno = audio_read (Fi, inp_buf, (long) N)) <= 0)
         break;
     } else {
       /* Reset frame vector */
       memset (rpe_frame, (int) 0, (long) RPE_FRAME_SIZE);
 
       /* Read a unpacked frame */
-      if ((smpno = fread (rpe_frame, sizeof (short), (long) RPE_FRAME_SIZE, Fi)) <= 0)
+      if ((smpno = audio_read (Fi, rpe_frame, (long) RPE_FRAME_SIZE)) <= 0)
         break;
     }
 
@@ -388,7 +389,7 @@ int main (argc, argv)
       }
 
       /* Save samples to file */
-      if (!(smpno = fwrite (out_buf, sizeof (short), (long) smpno, Fo)))
+      if (!(smpno = audio_write (Fo, out_buf, (long) smpno)))
         break;
     }
     /* ENCODER-ONLY OPERATION */
@@ -401,7 +402,7 @@ int main (argc, argv)
 
       /* Run only the encoder, unpack frame and save rpe-ltp frame */
       rpeltp_encode (rpe_enc_state, inp_buf, rpe_frame);
-      if (!(smpno = fwrite (rpe_frame, sizeof (short), RPE_FRAME_SIZE, Fo)))
+      if (!(smpno = audio_write (Fo, rpe_frame, RPE_FRAME_SIZE)))
         break;
     }
     /* DECODER-ONLY OPERATION */
@@ -416,23 +417,23 @@ int main (argc, argv)
       }
 
       /* Save the decoded samples */
-      if (!(smpno = fwrite (out_buf, sizeof (short), (long) N, Fo)))
+      if (!(smpno = audio_write (Fo, out_buf, (long) N)))
         break;
     }
     count += smpno;
   }
 
   /* Check for errors */
-  if (ferror (Fi))
+  if (ferror (Fi->fp))
     KILL (FileIn, 6);
-  else if (ferror (Fo))
+  else if (ferror (Fo->fp))
     KILL (FileOut, 7);
 
   /* ......... FINALIZATIONS ......... */
 
   /* Close input and output files and state */
-  fclose (Fi);
-  fclose (Fo);
+  audio_close (Fi);
+  audio_close (Fo);
   rpeltp_delete (rpe_enc_state);
   rpeltp_delete (rpe_dec_state);
 

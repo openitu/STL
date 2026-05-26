@@ -155,6 +155,7 @@
 
 /* ... Include of utilities ... */
 #include "ugst-utl.h"
+#include "wav_io.h"
 
 /* ... Local definitions ... */
 #define DEF_BLK_LEN 256         /* samples per block */
@@ -423,7 +424,7 @@ int main (int argc, char *argv[]) {
 
   /* File-related variables */
   char FileIn[150];
-  FILE *Fi;                     /* input file pointer */
+  AUDIO_FILE *Fi;               /* input file pointer */
   FILE *out = stdout;           /* where to print the statistical results */
 #ifdef VMS
   char mrs[15];
@@ -563,7 +564,7 @@ int main (int argc, char *argv[]) {
 #ifdef VMS
     sprintf (mrs, "mrs=%d", 2 * N);
 #endif
-    if ((Fi = fopen (FileIn, RB)) == NULL)
+    if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
       KILL (FileIn, 2);
 
     /* Reinitialize number of blocks as specified initially */
@@ -577,7 +578,7 @@ int main (int argc, char *argv[]) {
     }
 
     /* Move pointer to 1st block of interest */
-    if (fseek (Fi, start_byte, 0) < 0l)
+    if (fseek (Fi->fp, start_byte, 0) < 0l)
       KILL (FileIn, 4);
 
 
@@ -587,7 +588,7 @@ int main (int argc, char *argv[]) {
     if (!quiet)
       fprintf (stderr, "  Processing \r");
     for (i = 0; i < N2; i++) {
-      if ((l = fread (buffer, sizeof (short), N, Fi)) > 0) {
+      if ((l = audio_read (Fi, buffer, N)) > 0) {
         /* ... Convert samples to float */
         sh2fl ((long) l, buffer, Buf, bitno, 1);
 
@@ -681,7 +682,7 @@ int main (int argc, char *argv[]) {
 #endif /* LOCAL_PRINT */
 
     /* Close current file */
-    fclose (Fi);
+    audio_close (Fi);
   }
 
   /* FINALIZATIONS */

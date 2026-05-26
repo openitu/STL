@@ -55,6 +55,7 @@
 #include <string.h>
 #include <math.h>
 #include "ugstdemo.h"
+#include "wav_io.h"
 
 /* includes for DOS specific directives */
 #if defined (MSDOS)
@@ -106,8 +107,9 @@ int main (int argc, char *argv[]) {
   int i, j, k, l, K;
 
   char File1[50], File2[50];
-  int fh1, fh2, fho;
-  FILE *F1, *F2, *Fo;
+  int fho;
+  AUDIO_FILE *F1, *F2;
+  FILE *Fo;
 
   long int N, N1, N2, NrDiffs = 0, NrEquivs = 0;
   long start_byte1, start_byte2, delay = 0;
@@ -193,18 +195,16 @@ int main (int argc, char *argv[]) {
   }
 
   /* Open input files */
-  if ((F1 = fopen (File1, RB)) == NULL)
+  if ((F1 = audio_open_read (File1, 0, 0, 16)) == NULL)
     KILL (File1, 2);
-  if ((F2 = fopen (File2, RB)) == NULL)
+  if ((F2 = audio_open_read (File2, 0, 0, 16)) == NULL)
     KILL (File2, 3);
-  fh1 = fileno (F1);
-  fh2 = fileno (F2);
 
   /* Positions file to the starting of block N1 */
   N1--;                         /* for the 1st block is not 1 but 0! */
-  if (lseek (fh1, start_byte1, 0) < 0l)
+  if (fseek (F1->fp, start_byte1, 0) < 0l)
     KILL (File1, 5);
-  if (lseek (fh2, start_byte2, 0) < 0l)
+  if (fseek (F2->fp, start_byte2, 0) < 0l)
     KILL (File2, 6);
 
   /* Print dump information */
@@ -217,7 +217,7 @@ int main (int argc, char *argv[]) {
 
   /* Dumps the file to the output (file or screen) */
   for (NrDiffs = i = j = 0; i < N2; i++, j = 0) {
-    if ((l = read (fh1, a, 2 * N) / 2) > 0 && (k = read (fh2, b, 2 * N) / 2) > 0) {
+    if ((l = audio_read (F1, a, N)) > 0 && (k = audio_read (F2, b, N)) > 0) {
       if (out_is_file) {
         if (isatty (fileno (stderr)) && !quiet)
           fprintf (stderr, "Now processing block %d\t\t\r", i + 1);
@@ -233,7 +233,7 @@ int main (int argc, char *argv[]) {
           if (ABS (b[j]) <= equiv && b[j] != 0)
             NrEquivs++;
         }
-        if ((K = write (fho, b, 2 * N)) != 2 * l)
+        if ((K = fwrite (b, sizeof (short), N, Fo)) != l)
           KILL (argv[6], 9);
       } else
         for (j = 0; j < l && j < k; j++) {
@@ -280,8 +280,8 @@ int main (int argc, char *argv[]) {
   }
 
   /* Finalizations */
-  fclose (F1);
-  fclose (F2);
+  audio_close (F1);
+  audio_close (F2);
   if (out_is_file)
     fclose (Fo);
 #ifndef VMS

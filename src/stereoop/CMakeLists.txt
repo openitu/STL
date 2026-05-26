@@ -1,6 +1,6 @@
 include_directories(../utl)
 
-add_executable(stereoop stereoop.c)
+add_executable(stereoop stereoop.c ../utl/wav_io.c)
 target_link_libraries(stereoop ${M_LIBRARY})
 
 add_test(stereoop1-interleave ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/stereoop -q -interleave test_data/sample.L.32k.1ch.smp test_data/sample.R.32k.1ch.smp test_data/sample.LR.32k.2ch.smp )

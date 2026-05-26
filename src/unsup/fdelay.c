@@ -65,6 +65,7 @@
 #include <string.h>             /* for memset() */
 #include <ctype.h>
 #include "ugstdemo.h"
+#include "wav_io.h"
 
 #if defined(VMS)
 #include <stat.h>
@@ -93,13 +94,13 @@
   -----------------------------------------------------------------------------
 */
 
-long add_delay (short *smp_buf, short sample, short delay, FILE * Fdel, FILE * Fout, FILE * OutFile) {
+long add_delay (short *smp_buf, short sample, short delay, AUDIO_FILE * Fdel, AUDIO_FILE * Fout, char * OutFile) {
   long saved = 0, smpno, i;
 
   if (Fdel) {
     /* Delay comes from a file */
-    while ((smpno = fread (smp_buf, sizeof (short), delay, Fdel)) > 0) {
-      if ((smpno = fwrite (smp_buf, sizeof (short), smpno, Fout)) < 0)
+    while ((smpno = audio_read (Fdel, smp_buf, delay)) > 0) {
+      if ((smpno = audio_write (Fout, smp_buf, smpno)) < 0)
         KILL (OutFile, 7);
       saved += smpno;
     }
@@ -107,7 +108,7 @@ long add_delay (short *smp_buf, short sample, short delay, FILE * Fdel, FILE * F
     /* Delay created here */
     for (i = 0; i < delay; i++)
       smp_buf[i] = sample;
-    if ((saved = fwrite (smp_buf, sizeof (short), delay, Fout)) < delay)
+    if ((saved = audio_write (Fout, smp_buf, delay)) < delay)
       KILL (OutFile, 7);
   }
 
@@ -180,7 +181,7 @@ int main (int argc, char *argv[]) {
   char InpFile[150], OutFile[150], *delay_file = 0;
   char quiet = 0, append = 0;
   short sample = 0;
-  FILE *Finp, *Fout, *Fdel = 0;
+  AUDIO_FILE *Finp, *Fout, *Fdel = 0;
 #ifdef VMS
   char mrs[15] = "mrs=";
 #endif
@@ -315,13 +316,13 @@ int main (int argc, char *argv[]) {
     fprintf (stderr, "# %s %ld samples of value %ld (0x%04X).\n", append ? "Appending" : "Delaying", delay, sample, sample);
 
   /* Open files; abort on error */
-  if ((Finp = fopen (InpFile, RB)) == NULL)
+  if ((Finp = audio_open_read (InpFile, 0, 0, 16)) == NULL)
     KILL (InpFile, 3);
-  if ((Fout = fopen (OutFile, WB)) == NULL)
+  if ((Fout = audio_open_write (OutFile, 0, 1, 16)) == NULL)
     KILL (OutFile, 4);
   if (delay_file) {
     /* Delay comes from a file - open delay file */
-    if ((Fdel = fopen (delay_file, RB)) == NULL)
+    if ((Fdel = audio_open_read (delay_file, 0, 0, 16)) == NULL)
       KILL (delay_file, 5);
   }
 
@@ -342,7 +343,7 @@ int main (int argc, char *argv[]) {
   }
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Finp, start_byte, 0) < 0l)
+  if (fseek (Finp->fp, start_byte, 0) < 0l)
     KILL (InpFile, 4);
 
   /* Put delay samples in begining of file, if *not* appending */
@@ -352,14 +353,14 @@ int main (int argc, char *argv[]) {
   /* Copy input file to output file */
   for (i = 0; i < N2; i++) {
     /* Read a block of samples */
-    if ((smpno = fread (smp_buf, sizeof (short), N, Finp)) < 0)
+    if ((smpno = audio_read (Finp, smp_buf, N)) < 0)
       KILL (InpFile, 6);
 
     /* Frame counter */
     frame++;
 
     /* Write output words */
-    if ((smpno = fwrite (smp_buf, sizeof (short), smpno, Fout)) < 0)
+    if ((smpno = audio_write (Fout, smp_buf, smpno)) < 0)
       KILL (OutFile, 7);
 
     /* Update sample counter */
@@ -375,10 +376,10 @@ int main (int argc, char *argv[]) {
 
   /* Free memory, close files */
   free (smp_buf);
-  fclose (Finp);
-  fclose (Fout);
+  audio_close (Finp);
+  audio_close (Fout);
   if (Fdel)
-    fclose (Fdel);
+    audio_close (Fdel);
   return (0);
 }
 

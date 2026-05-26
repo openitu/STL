@@ -61,6 +61,7 @@
 
   ======================================================================== */
 #include "ugstdemo.h"
+#include "wav_io.h"
 
 /* OS definition */
 #if defined(__MSDOS__) && !defined(MSDOS)
@@ -180,7 +181,7 @@ int main (int argc, char *argv[]) {
   short *buf;
   /* file-related variables */
   char File1[100], File2[100];
-  FILE *fi, *fo;
+  AUDIO_FILE *fi, *fo;
 #ifdef VMS
   char mrs[15] = "mrs=";
 #endif
@@ -329,13 +330,13 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Open input files */
-  if ((fi = fopen (File1, RB)) == NULL)
+  if ((fi = audio_open_read (File1, 0, 0, 16)) == NULL)
     KILL (File1, 3);
-  if ((fo = fopen (File2, WB)) == NULL)
+  if ((fo = audio_open_write (File2, 0, 1, 16)) == NULL)
     KILL (File2, 4);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (fi, start_byte, 0l) < 0l)
+  if (fseek (fi->fp, start_byte, 0l) < 0l)
     KILL (File1, 3);
 
   /* Some preliminaries */
@@ -364,7 +365,7 @@ int main (int argc, char *argv[]) {
       fprintf (stderr, "%c\r", funny[count % 8]);
 
     /* Read samples from input buffer */
-    if ((smpno = fread (buf, sizeof (short), N, fi)) == 0)
+    if ((smpno = audio_read (fi, buf, N)) == 0)
       break;
     else if (smpno < 0)
       KILL (File1, 2);
@@ -424,13 +425,13 @@ int main (int argc, char *argv[]) {
 #endif
       }
     }
-    tot_samples += fwrite (buf, sizeof (short), smpno, fo);
+    tot_samples += audio_write (fo, buf, smpno);
   }
 
   /* ..... FINALIZATIONS ..... */
   fprintf (stderr, "> Total %ld samples extracted\n", tot_samples);
-  fclose (fi);
-  fclose (fo);
+  audio_close (fi);
+  audio_close (fo);
   free (buf);
 #ifndef VMS
   return (0);

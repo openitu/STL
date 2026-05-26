@@ -534,6 +534,160 @@ On success, this function returns the number of samples of the output
 parallel sample buffer.
 
 
+%-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+\section{WAV file I/O} \label{Utl-wav-io}
+
+The {\tt wav\_io} module provides transparent reading and writing of WAV
+files alongside the traditional raw (headerless) PCM format used throughout
+the STL. All tools that process audio PCM signals use this module to
+auto-detect the input format and to select the output format based on the
+output filename extension.
+
+\subsection{Design}
+
+\begin{itemize}
+\item {\bf Input auto-detection:} When opening a file for reading, the first
+  four bytes are checked for the RIFF magic number ({\tt 0x52494646}). If
+  found, the file is parsed as a WAV file; otherwise it is treated as raw
+  PCM (legacy behavior).
+\item {\bf Output format:} Determined solely by the output filename extension.
+  If the filename ends in {\tt .wav} (case-insensitive), a WAV file with a
+  canonical 44-byte header is written. Any other extension produces raw PCM
+  output, preserving full backward compatibility.
+\item {\bf Supported formats:} 8-bit unsigned PCM, 16-bit signed PCM, 24-bit
+  signed PCM, 32-bit signed PCM, and 32-bit IEEE~754 float (format tags~1
+  and~3).
+\item {\bf Parameter validation:} The caller specifies expected sample rate,
+  channel count, and bit depth. If any expected value is non-zero and does not
+  match the WAV header, the file is rejected with an error.
+\item {\bf Multi-channel:} When a multi-channel WAV file is opened by a mono
+  tool, channel~1 is extracted and a warning is printed to {\tt stderr}.
+\end{itemize}
+
+\subsection{{\tt audio\_open\_read}}
+
+Opens a file for reading with automatic format detection.
+
+{\small
+\begin{verbatim}
+AUDIO_FILE *audio_open_read(
+  const char *filename,       /* File to open */
+  long expected_rate,         /* Expected sample rate (0 = don't check) */
+  int expected_channels,      /* Expected channels (0 = don't check) */
+  int expected_bits           /* Expected bits/sample (0 = don't check) */
+);
+\end{verbatim}
+}
+
+Returns a pointer to an {\tt AUDIO\_FILE} structure, or {\tt NULL} on error.
+For raw files, the file pointer is positioned at byte~0. For WAV files, it is
+positioned at the start of the PCM data chunk.
+
+\subsection{{\tt audio\_open\_write}}
+
+Opens a file for writing. The format is determined by the filename extension.
+
+{\small
+\begin{verbatim}
+AUDIO_FILE *audio_open_write(
+  const char *filename,       /* File to create */
+  long sample_rate,           /* Sample rate for WAV header */
+  int channels,               /* Channel count for WAV header */
+  int bits_per_sample         /* Bits per sample (8, 16, 24, or 32) */
+);
+\end{verbatim}
+}
+
+For WAV output, a 44-byte placeholder header is written on open and updated
+with the correct data size on close.
+
+\subsection{{\tt audio\_read} and {\tt audio\_write}}
+
+Read and write samples in the native bit depth of the file:
+
+{\small
+\begin{verbatim}
+long audio_read(AUDIO_FILE *af, void *buffer, long nsamples);
+long audio_write(AUDIO_FILE *af, void *buffer, long nsamples);
+\end{verbatim}
+}
+
+The buffer type must match the file's bit depth:
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+{\bf Bit depth} & {\bf Buffer type} & {\bf Bytes/sample} \\
+\hline
+8-bit PCM & {\tt unsigned char *} & 1 \\
+16-bit PCM & {\tt short *} & 2 \\
+24-bit PCM & {\tt long *} (sign-extended) & 3 on disk, 4 in memory \\
+32-bit PCM & {\tt long *} & 4 \\
+32-bit float & {\tt float *} & 4 \\
+\hline
+\end{tabular}
+\end{center}
+
+For multi-channel WAV input, {\tt audio\_read} de-interleaves and returns only
+channel~1. Both functions return the number of samples actually read or
+written.
+
+\subsection{{\tt audio\_close}}
+
+Closes the file. For WAV output, seeks back to the header and writes the
+final data size and file size fields.
+
+{\small
+\begin{verbatim}
+void audio_close(AUDIO_FILE *af);
+\end{verbatim}
+}
+
+\subsection{Accessor functions}
+
+{\small
+\begin{verbatim}
+int  audio_is_wav(AUDIO_FILE *af);         /* 1 if WAV, 0 if raw */
+long audio_get_sample_rate(AUDIO_FILE *af); /* From WAV header, 0 if raw */
+int  audio_get_channels(AUDIO_FILE *af);   /* From WAV header, 0 if raw */
+\end{verbatim}
+}
+
+\subsection{Usage example}
+
+The following fragment shows a 16-bit tool reading and writing WAV or raw:
+
+{\small
+\begin{verbatim}
+#include "wav_io.h"
+
+AUDIO_FILE *in, *out;
+short buf[256];
+long n;
+
+in = audio_open_read("input.wav", 8000, 1, 16);
+out = audio_open_write("output.wav", 8000, 1, 16);
+
+while ((n = audio_read(in, buf, 256)) > 0) {
+    /* process buf[] */
+    audio_write(out, buf, n);
+}
+
+audio_close(out);
+audio_close(in);
+\end{verbatim}
+}
+
+A 24-bit tool would use {\tt long} buffers and pass 24 for {\tt expected\_bits}:
+
+{\small
+\begin{verbatim}
+AUDIO_FILE *in = audio_open_read("hires.wav", 48000, 1, 24);
+long buf[256];
+audio_read(in, buf, 256);  /* 24-bit values sign-extended into long */
+\end{verbatim}
+}
+
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 \section{Portability and compliance} \label{Utl-port}
 
