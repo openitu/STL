@@ -39,6 +39,9 @@ add_executable(sh2chr sh2chr.c)
 
 add_executable(crc getcrc32.c)
 
+add_executable(random random.c)
+target_link_libraries(random ${M_LIBRARY})
+
 add_test(astrip1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/astrip -q -smooth -wlen 145 -sample test_data/cftest1.dat test_data/astrip.smp)
 add_test(astrip1-verify ${CMAKE_COMMAND} -E compare_files test_data/astrip.smp test_data/astrip.ref)
 
