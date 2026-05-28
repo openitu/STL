@@ -1,0 +1,265 @@
+/*---------------------------------------------------------------------------*
+ * Delay-and-error profile to FER pattern conversion tool, V1.1              *
+ * ------------------------------------------                                *
+ * (C) 2012 Fraunhofer IIS. All rights reserved.                             *
+ *                                                                           *
+ *      ===============================================================      *
+ *      COPYRIGHT NOTE: This source code, and all of its derivations,        *
+ *      is subject to the "ITU-T General Public License". Please have        *
+ *      it read in the distribution disk, or in the ITU-T Recommendation     *
+ *      G.191 on "SOFTWARE TOOLS FOR SPEECH AND AUDIO CODING STANDARDS".     *
+ *      See LICENSE.md in the top-level directory for terms.                 *
+ *      ===============================================================      *
+ *                                                                           *
+ * Fraunhofer IIS makes no representation nor warranty in regard to          *
+ * the accuracy, completeness or sufficiency of The Software, nor            *
+ * shall Fraunhofer IIS be held liable for any damages whatsoever            *
+ * relating to use of said Software.                                         *
+ *---------------------------------------------------------------------------*/
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#ifndef WIN32
+#include <unistd.h> /* commandline tool */
+#include "getopt.h"
+#else
+#include <getopt.h>
+#endif
+
+static void usage()
+{
+  fprintf( stdout,"\nConvert a delay and error profile to an error pattern\n" );
+  fprintf( stdout,"\nValid commandline switches:\n" );
+  fprintf( stdout,"-i <inputfile>\n" );
+  fprintf( stdout,"-o <outputfile>\n" );
+  fprintf( stdout,"-L <length in frames>\n" );
+  fprintf( stdout,"-s <shift/offset in frames>\n" );
+  fprintf( stdout,"-f <frames_per_packet> [1;2]\n" );
+  fprintf( stdout,"-l <late_loss_rate in percent>\n" );
+  fprintf( stdout,"-b use byte-oriented G.192 format (0x21 okay, 0x20 lost)\n" );
+  fprintf( stdout,"-w use word-oriented G.192 format (0x6b21 okay, 0x6b20 lost)\n" );
+  fprintf( stdout,"-c use LF for text format to have one entry per line - was default in V1.0\n" );
+  fprintf( stdout,"-d <constant JBM delay in milliseconds>\n" );
+  fprintf( stdout,"  either -l or -d parameter must be supplied (not both!) and a valid inputfile\n");
+}
+
+int main( int argc, char** argv )
+{
+  int c, i;
+  char *infilename  = NULL;
+  char *outfilename  = NULL;
+  float late_loss_rate = 0.0f;
+  unsigned int constant_delay_ms = 0;
+  int shift = 0;
+  int length = 7500;
+  unsigned int framesPerPacket = 1; /* no aggregation by default */
+  int useG192 = 0;
+  int useG192WordOriented = 0;
+  int useLF = 0;
+
+  char line [64] = {0};
+  unsigned int delayCount [2001] = {0};  /* [-1;1999] ms */
+  unsigned int line_cnt = 0;
+
+  FILE * infile = NULL;
+  FILE * outfile = NULL;
+
+  while ( (c = getopt (argc, argv, "i:o:l:d:L:s:f:bwc?")) != -1 ) {
+    switch ( c )
+    {
+    case 'i':
+      infilename = optarg;
+      break;
+    case 'o':
+      outfilename = optarg;
+      break;
+    case 'l':
+      late_loss_rate = atof(optarg);
+      break;
+    case 'd':
+      constant_delay_ms = atoi(optarg);
+      break;
+    case 's':
+      shift = atoi(optarg);
+      break;
+    case 'L':
+      length = atoi(optarg);
+      break;
+    case 'f':
+      framesPerPacket = atoi(optarg);
+      break;
+    case 'b':
+      useG192 = 1;
+      break;
+    case 'w':
+      useG192 = 1;
+      useG192WordOriented = 1;
+      break;
+    case 'c':
+      useLF = 1;
+      break;
+    case '?':
+      usage();
+      return 0;
+    default:
+      usage();
+      abort();
+    }
+  }
+
+  if((infilename == NULL) || ((late_loss_rate == 0) && (constant_delay_ms == 0)) ||
+      framesPerPacket == 0U || framesPerPacket > 2U)
+  {
+    usage();
+    return -1;
+  }
+
+  infile = fopen(infilename, "r");
+
+  if(!infile)
+  {
+    fprintf(stderr, "unable to open %s\n", infilename);
+    return -2;
+  }
+
+  if(outfilename)
+  {
+    outfile = fopen(outfilename, "w");
+
+    if(!outfile)
+    {
+      fprintf(stderr, "unable to open %s\n", outfilename);
+      goto cleanup;
+    }
+  }
+
+  /* read offset to Nirvana */
+  for(i=0; i<shift; i++)
+  {
+    if(!fgets(line, 63, infile))
+    {
+      fprintf(stderr, "shift out of range\n");
+      goto cleanup;
+    }
+  }
+
+  /* create delay histogram */
+  for(i=0; i<length; i++)
+  {
+    int delay_ms;
+    if(!fgets(line, 63, infile))
+    {
+      rewind(infile);
+      if(!fgets(line, 63, infile))
+      {
+        fprintf(stderr, "unable to rewind and read file\n");
+        goto cleanup;
+      }
+    }
+    line_cnt++;
+    delay_ms = atoi(line);
+    if((delay_ms <-1) || (delay_ms > 1999))
+    {
+      fprintf(stderr, "value in line %i out of range - aborting\n", line_cnt);
+      abort();
+    }
+    if(delay_ms == -1)
+      delayCount[2000]++;
+    else
+      delayCount[delay_ms]++;
+  }
+
+  if(late_loss_rate)
+  {
+    unsigned int late_loss_cnt = 0;
+    for(i=1999; i>=0; i--)
+    {
+      float current_late_loss_rate;
+      late_loss_cnt += delayCount[i];
+      current_late_loss_rate = ((float)late_loss_cnt * 100.0f) / (float)line_cnt;
+      if(current_late_loss_rate > late_loss_rate)
+      {
+        constant_delay_ms = i;
+        fprintf(stdout, "selected %ims to stay below %f late loss\n", i, late_loss_rate);
+        break;
+      }
+    }
+  }
+
+  /**** emulate constant delay JBM with given delay ****/
+  fseek(infile, 0, SEEK_SET);
+
+  /* read offset to nirvana, again */
+  for(i=0; i<shift; i++)
+  {
+    if(!fgets(line, 63, infile))
+    {
+      fprintf(stderr, "shift out of range\n");
+      goto cleanup;
+    }
+  }
+
+  if(constant_delay_ms)
+  {
+    unsigned int late_loss_cnt = 0;
+    unsigned int network_loss_cnt = 0;
+    unsigned int iFramePerPacket;
+    for(i=0; i<length; i++)
+    {
+      int delay_ms;
+      if(!fgets(line, 63, infile))
+      {
+        rewind(infile);
+        if(!fgets(line, 63, infile))
+        {
+          fprintf(stderr, "unable to rewind and read file\n");
+          goto cleanup;
+        }
+      }
+      delay_ms = atoi(line);
+
+      if(delay_ms == -1)
+      {
+        network_loss_cnt++;
+        if(outfile)
+        {
+          for( iFramePerPacket = 0; iFramePerPacket != framesPerPacket; ++iFramePerPacket )
+            fprintf(outfile, "%s", useG192 ? useG192WordOriented ? " k" : " " : useLF ? "1\n" : "1");
+        }
+      }
+      else if((unsigned int)delay_ms > constant_delay_ms)
+      {
+        late_loss_cnt++;
+        if(outfile)
+        {
+          for( iFramePerPacket = 0; iFramePerPacket != framesPerPacket; ++iFramePerPacket )
+            fprintf(outfile, "%s", useG192 ? useG192WordOriented ? " k" : " " : useLF ? "1\n" : "1");
+        }
+      }
+      else
+      {
+        if(outfile)
+        {
+          for( iFramePerPacket = 0; iFramePerPacket != framesPerPacket; ++iFramePerPacket )
+            fprintf(outfile, "%s", useG192 ? useG192WordOriented ? "!k" : "!" : useLF ? "0\n" : "0");
+        }
+      }
+    }
+
+    fprintf(stdout, "#processed delay and error values: %i\n", line_cnt);
+    fprintf(stdout, "network loss rate:   %.3f%%\n", ((float)network_loss_cnt * 100.0f) / (float)line_cnt);
+    fprintf(stdout, "late loss rate:      %.3f%%\n", ((float)late_loss_cnt * 100.0f) / (float)line_cnt);
+    fprintf(stdout, "distorted frames:    %d\n", framesPerPacket * (network_loss_cnt+late_loss_cnt) );
+  }
+
+cleanup:
+  fclose(infile);
+  if(outfile)
+    fclose(outfile);
+
+  return 0;
+}

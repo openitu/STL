@@ -1,0 +1,1 @@
+add_executable(dlyerr_2_errpat dlyerr_2_errpat.c)
