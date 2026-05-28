@@ -32,8 +32,7 @@ Motorola Inc.
 #include <math.h>
 #include "vparams.h"
 
-int ATORC ();                   /* from paramConv.c */
-                /* FTYPE *a, FTYPE *k */
+int ATORC (FTYPE *a, FTYPE *k);                   /* from paramConv.c */
 void I_MOV (struct coefSet defSet, int numSets, FTYPE rq0);
 
 FTYPE RES_ENG (FTYPE rq0, FTYPE * k);
@@ -120,9 +119,7 @@ void I_MOV (struct coefSet defSet, int numSets, FTYPE rq0) {
 
 
 /*	RES_ENG calculates a residual energy estimate*/
-FTYPE RES_ENG (rq0, k)
-     FTYPE rq0;
-     FTYPE *k;
+FTYPE RES_ENG (FTYPE rq0, FTYPE *k)
 {
   FTYPE *endPtr /* , tmp = 1.0 */ , ftmp;
   double tmp = 1.0;

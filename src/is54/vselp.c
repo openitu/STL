@@ -187,7 +187,7 @@ int main (int argc, char *argv[]) {
   FTYPE *tmpPtr, *tmpPtr2, *endPtr, f1;
   int i, numRead;
   short *shPtr;
-  long (*get_codes) (), (*put_codes) ();
+  long (*get_codes) (FILE *, int *), (*put_codes) (FILE *, int *);
   long bs_read = 0, bs_saved = 0;
   char use_user_resp_file = 0;  /* Don't use user's response file */
   char InpFile[MAX_STRLEN], OutFile[MAX_STRLEN], LogFile[MAX_STRLEN], PackedFile[MAX_STRLEN];

@@ -36,8 +36,7 @@ Motorola Inc.
 #include "vparams.h"
 /*#include "stdlib.h"*/
 /*	function declarations*/
-static void i_resp ();
-/*FTYPE *htPtr*/
+static void i_resp (FTYPE *htPtr);
 
 
 int LAG_SEARCH () {

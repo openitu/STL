@@ -37,8 +37,7 @@ Motorola Inc.
 #include "vparams.h"
 /*#include "stdlib.h"*/
 /*	from paramConv.c */
-int ATORC ();
-/*FTYPE *a, FTYPE *k*/
+int ATORC (FTYPE *a, FTYPE *k);
 
 void widen (FTYPE lambda, char side) {
   FTYPE term;                   /* holds lambda**i term (widening factor for Ai) */
@@ -66,15 +65,11 @@ void widen (FTYPE lambda, char side) {
 /*		 coefficients*/
 
 /*	function declarations */
-void ATOCOR ();
-/*FTYPE *k, FTYPE *ac*/
-void LEVINSON ();
-/*FTYPE *ac, FTYPE *a*/
+void ATOCOR (FTYPE *k, FTYPE *ac);
+void LEVINSON (FTYPE *ac, FTYPE *a);
 
 /*	function definition*/
-void A_SST (wCoefPtr, ssCoefPtr)
-     FTYPE *wCoefPtr;
-     FTYPE *ssCoefPtr;
+void A_SST (FTYPE *wCoefPtr, FTYPE *ssCoefPtr)
 {
   FTYPE *tmpKs;                 /* points to temporary reflection coef buffer */
   FTYPE *tmpAcs;                /* points to temp autocorrelation buffer */
