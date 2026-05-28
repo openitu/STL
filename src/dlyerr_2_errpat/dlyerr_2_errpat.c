@@ -23,13 +23,6 @@
 #include <string.h>
 #include <time.h>
 
-#ifndef WIN32
-#include <unistd.h> /* commandline tool */
-#include "getopt.h"
-#else
-#include <getopt.h>
-#endif
-
 static void usage()
 {
   fprintf( stdout,"\nConvert a delay and error profile to an error pattern\n" );
@@ -49,7 +42,7 @@ static void usage()
 
 int main( int argc, char** argv )
 {
-  int c, i;
+  int i;
   char *infilename  = NULL;
   char *outfilename  = NULL;
   float late_loss_rate = 0.0f;
@@ -68,48 +61,56 @@ int main( int argc, char** argv )
   FILE * infile = NULL;
   FILE * outfile = NULL;
 
-  while ( (c = getopt (argc, argv, "i:o:l:d:L:s:f:bwc?")) != -1 ) {
-    switch ( c )
-    {
-    case 'i':
-      infilename = optarg;
-      break;
-    case 'o':
-      outfilename = optarg;
-      break;
-    case 'l':
-      late_loss_rate = atof(optarg);
-      break;
-    case 'd':
-      constant_delay_ms = atoi(optarg);
-      break;
-    case 's':
-      shift = atoi(optarg);
-      break;
-    case 'L':
-      length = atoi(optarg);
-      break;
-    case 'f':
-      framesPerPacket = atoi(optarg);
-      break;
-    case 'b':
+  while (argc > 1 && argv[1][0] == '-')
+    if (strcmp (argv[1], "-i") == 0) {
+      infilename = argv[2];
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-o") == 0) {
+      outfilename = argv[2];
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-l") == 0) {
+      late_loss_rate = atof (argv[2]);
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-d") == 0) {
+      constant_delay_ms = atoi (argv[2]);
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-s") == 0) {
+      shift = atoi (argv[2]);
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-L") == 0) {
+      length = atoi (argv[2]);
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-f") == 0) {
+      framesPerPacket = atoi (argv[2]);
+      argc -= 2;
+      argv += 2;
+    } else if (strcmp (argv[1], "-b") == 0) {
       useG192 = 1;
-      break;
-    case 'w':
+      argc--;
+      argv++;
+    } else if (strcmp (argv[1], "-w") == 0) {
       useG192 = 1;
       useG192WordOriented = 1;
-      break;
-    case 'c':
+      argc--;
+      argv++;
+    } else if (strcmp (argv[1], "-c") == 0) {
       useLF = 1;
-      break;
-    case '?':
+      argc--;
+      argv++;
+    } else if (strcmp (argv[1], "-?") == 0 || strstr (argv[1], "-help")) {
       usage();
       return 0;
-    default:
+    } else {
+      fprintf (stderr, "ERROR! Invalid option \"%s\" in command line\n\n", argv[1]);
       usage();
-      abort();
+      return -1;
     }
-  }
 
   if((infilename == NULL) || ((late_loss_rate == 0) && (constant_delay_ms == 0)) ||
       framesPerPacket == 0U || framesPerPacket > 2U)
