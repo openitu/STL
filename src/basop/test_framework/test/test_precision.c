@@ -2394,7 +2394,7 @@ int test_precision(void)
        for (j = 0; j < (NUM_TEST_PATTERN_1 * 4); j++)
        {
 
-          fp_test_baseop[i][j] = fopen(test_files[i][j],"w");
+          fp_test_baseop[i][j] = fopen(test_files[i][j],"wb");
 
           if (fp_test_baseop[i][j] == NULL)
           {
@@ -2414,7 +2414,7 @@ int test_precision(void)
 
 
 
-    fp_test_baseop[i][j] = fopen(test_files[i][j],"w");
+    fp_test_baseop[i][j] = fopen(test_files[i][j],"wb");
 
     if (fp_test_baseop[i][j] == NULL) 
     {
