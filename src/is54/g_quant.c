@@ -36,8 +36,7 @@ Motorola Inc.
 #include "vparams.h"
 /*#include "stdlib.h"*/
 /*	function declarations*/
-static FTYPE corr ();
-/*FTYPE *vec1Ptr, FTYPE *vec2Ptr*/
+static FTYPE corr (FTYPE *vec1Ptr, FTYPE *vec2Ptr);
 
 int G_QUANT (int lag, FTYPE rs00, FTYPE rs11, FTYPE rs22) {
   FTYPE Rpc0;                   /* correlation between the weighted speech and the */
