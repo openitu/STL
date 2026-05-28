@@ -103,6 +103,7 @@
 /* ..... G.727 module as include functions ..... */
 #include "g727.h"
 #include "../g711/g711.h"
+#include "wav_io.h"
 
 
 /* Global variables */
@@ -200,8 +201,7 @@ int main (int argc, char **argv) {
 
   /* File variables */
   char FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
-  FILE *Fi, *Fo;
-  int inp, out;
+  AUDIO_FILE *Fi, *Fo;
   long start_byte;
 #ifdef VMS
   char mrs[15];
@@ -422,20 +422,18 @@ int main (int argc, char **argv) {
  */
 
   /* Opening input file; abort if there's any problem */
-  if ((Fi = fopen (FileIn, RB)) == NULL)
+  if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
     KILL (FileIn, 2);
-  inp = fileno (Fi);
 
   /* Creates output file */
 #ifdef VMS
   sprintf (mrs, "mrs=%d", 512);
 #endif
-  if ((Fo = fopen (FileOut, WB)) == NULL)
+  if ((Fo = audio_open_write (FileOut, 0, 1, 16)) == NULL)
     KILL (FileOut, 3);
-  out = fileno (Fo);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Fi, start_byte, 0) < 0l)
+  if (fseek (Fi->fp, start_byte, 0) < 0l)
     KILL (FileIn, 4);
 
 /*
@@ -457,7 +455,7 @@ int main (int argc, char **argv) {
 #endif
 
     /* Read a block of samples */
-    if ((smpno = fread (inp_buf, sizeof (short), N, Fi)) < 0)
+    if ((smpno = audio_read (Fi, inp_buf, N)) < 0)
       KILL (FileIn, 5);
 
     /* Compress linear input samples */
@@ -489,7 +487,7 @@ int main (int argc, char **argv) {
     }
 
     /* Write ADPCM output word */
-    if ((smpno = fwrite (out_buf, sizeof (short), smpno, Fo)) < 0)
+    if ((smpno = audio_write (Fo, out_buf, smpno)) < 0)
       KILL (FileOut, 6);
   }
 
@@ -499,8 +497,8 @@ int main (int argc, char **argv) {
  */
 
   /* Close input and output files */
-  fclose (Fi);
-  fclose (Fo);
+  audio_close (Fi);
+  audio_close (Fo);
 
   /* Exit with success for non-vms systems */
 #ifndef VMS

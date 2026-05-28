@@ -107,6 +107,7 @@
 #include "ugstdemo.h"           /* private defines for user interface */
 #include "ugst-utl.h"           /* conversion from float -> short */
 #include "iirflt.h"             /* IRS IIR filtering functions */
+#include "wav_io.h"
 
 /*
  * ......... Definitions for this test program .........
@@ -196,7 +197,7 @@ int main (int argc, char *argv[]) {
 
   /* ......... File related variables ......... */
   char inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
-  FILE *inpfilptr, *outfilptr;
+  AUDIO_FILE *inpfilptr, *outfilptr;
 #if defined(VMS)
   static char mrs[15] = "mrs=";
 #endif
@@ -256,11 +257,11 @@ int main (int argc, char *argv[]) {
 #endif
 
   GET_PAR_S (1, "_BIN-File to be processed: ............... ", inpfil);
-  if ((inpfilptr = fopen (inpfil, RB)) == NULL)
+  if ((inpfilptr = audio_open_read (inpfil, 0, 0, 16)) == NULL)
     error_terminate ("\n   Error opening input file", 1);
 
   GET_PAR_S (2, "_BIN-Output File: ........................ ", outfil);
-  if ((outfilptr = fopen (outfil, WB)) == NULL)
+  if ((outfilptr = audio_open_write (outfil, audio_get_sample_rate (inpfilptr), 1, 16)) == NULL)
     error_terminate ("\n   Error opening output file", 1);
 
   FIND_PAR_L (3, "_Segment Length for Filtering: ........... ", lseg, lseg);
@@ -289,7 +290,7 @@ int main (int argc, char *argv[]) {
   lsegx = lseg;
   while (lsegx == lseg) {
     /* Read input buffer */
-    lsegx = fread (sh_buff, sizeof (short), lseg, inpfilptr);
+    lsegx = audio_read (inpfilptr, sh_buff, lseg);
 
     /* convert short data to float in normalized range */
     sh2fl_16bit (lsegx, sh_buff, fl_buff, 1);
@@ -310,7 +311,7 @@ int main (int argc, char *argv[]) {
     /* Skip samples if requested */
     if (lseg1 > skip) {
       /* Write samples to output file */
-      nsam += fwrite (&sh_buff[skip], sizeof (short), (lseg1 - skip), outfilptr);
+      nsam += audio_write (outfilptr, &sh_buff[skip], (lseg1 - skip));
       skip = 0;
     } else
       skip -= lseg1;
@@ -337,8 +338,8 @@ int main (int argc, char *argv[]) {
     cascade_iir_free (typ1_ptr);
 
   /* Close files */
-  fclose (outfilptr);
-  fclose (inpfilptr);
+  audio_close (outfilptr);
+  audio_close (inpfilptr);
 
 #ifndef VMS
   return 0;

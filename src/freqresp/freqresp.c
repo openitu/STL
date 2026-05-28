@@ -49,6 +49,7 @@
 #include "fft.h"
 #include "export.h"
 #include "bmp_utils.h"
+#include "wav_io.h"
 
 /* UGST modules */
 #include "ugstdemo.h"
@@ -114,7 +115,7 @@ int main (int argc, char *argv[]) {
   float avg2PowSp[NFFT_MAX / 2];        /* Average Power spectrum vector for the second input file */
 
   /* file variables */
-  FILE *fp;                     /* file pointer */
+  AUDIO_FILE *fp;               /* file pointer */
   char in1FileName[MAX_STRLEN]; /* name of the first input file (input of the codec) */
   char in2FileName[MAX_STRLEN]; /* name of the second input file (output of the codec) */
   char asciiFileName[MAX_STRLEN];       /* name of the output ASCII file */
@@ -279,14 +280,14 @@ int main (int argc, char *argv[]) {
 
   /* ..... First File ..... */
   /* open first input file */
-  fp = fopen (in1FileName, "rb");
+  fp = audio_open_read (in1FileName, 0, 0, 16);
   if (fp == NULL) {
     fprintf (stderr, "Error: Can't open input file %s", in1FileName);
     exit (-1);
   }
 
   /* loop over first input file */
-  while ((nbread = fread (frame_sh, sizeof (short), nfft, fp)) == nfft) {
+  while ((nbread = audio_read (fp, frame_sh, nfft)) == nfft) {
     /* increment the number of processed frames */
     nbFrame++;
 
@@ -313,16 +314,16 @@ int main (int argc, char *argv[]) {
     }
 
     /* For overlapping, reposition the file pointer nb_samples_ov samples before its current position */
-    fseek (fp, -nb_samples_ov * 2, SEEK_CUR);
+    fseek (fp->fp, -nb_samples_ov * 2, SEEK_CUR);
   }
   /* close input file */
-  fclose (fp);
+  audio_close (fp);
 
 
   /* ..... Second File ..... */
 
   /* open second input file */
-  fp = fopen (in2FileName, "rb");
+  fp = audio_open_read (in2FileName, 0, 0, 16);
   if (fp == NULL) {
     fprintf (stderr, "Error: Can't open input file %s", in2FileName);
     exit (-1);
@@ -330,7 +331,7 @@ int main (int argc, char *argv[]) {
 
   nbFrame = 0;
   /* loop over first input file */
-  while ((nbread = fread (frame_sh, sizeof (short), nfft, fp)) == nfft) {
+  while ((nbread = audio_read (fp, frame_sh, nfft)) == nfft) {
     /* increment the number of processed frames */
     nbFrame++;
 
@@ -356,10 +357,10 @@ int main (int argc, char *argv[]) {
     }
 
     /* For overlapping, reposition the file pointer nb_samples_ov samples before its current position */
-    fseek (fp, -nb_samples_ov * 2, SEEK_CUR);
+    fseek (fp->fp, -nb_samples_ov * 2, SEEK_CUR);
   }
   /* close input file */
-  fclose (fp);
+  audio_close (fp);
 
 
   /* .... Save Average Power Spectrum .... */

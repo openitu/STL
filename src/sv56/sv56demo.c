@@ -185,6 +185,7 @@
 
 /* ... Include of utilities ... */
 #include "ugst-utl.h"
+#include "wav_io.h"
 
 /* Local definitions */
 #define MIN_LOG_OFFSET 1.0e-20  /* To avoid sigularity with log(0.0) */
@@ -432,7 +433,7 @@ int main (int argc, char *argv[]) {
 
   /* File-related variables */
   char FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
-  FILE *Fi, *Fo;                /* input/output file pointers */
+  AUDIO_FILE *Fi, *Fo;          /* input/output file pointers */
   FILE *out = stdout;           /* where to print the statistical results */
 #ifdef VMS
   char mrs[15];
@@ -586,15 +587,15 @@ int main (int argc, char *argv[]) {
 #ifdef VMS
   sprintf (mrs, "mrs=%d", 2 * N);
 #endif
-  if ((Fi = fopen (FileIn, RB)) == NULL)
+  if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
     KILL (FileIn, 2);
 
   /* Creates output file */
-  if ((Fo = fopen (FileOut, WB)) == NULL)
+  if ((Fo = audio_open_write (FileOut, 0, 1, 16)) == NULL)
     KILL (FileOut, 3);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Fi, start_byte, 0) < 0l)
+  if (fseek (Fi->fp, start_byte, 0) < 0l)
     KILL (FileIn, 4);
 
 
@@ -607,7 +608,7 @@ int main (int argc, char *argv[]) {
   /* Process selected blocks */
   for (i = 0; i < N2; i++) {
     /* Read samples ... */
-    if ((l = fread (buffer, sizeof (short), N, Fi)) > 0) {
+    if ((l = audio_read (Fi, buffer, N)) > 0) {
       /* ... Convert samples to float */
       sh2fl ((long) l, buffer, Buf, bitno, 1);
 
@@ -645,12 +646,12 @@ int main (int argc, char *argv[]) {
   /* EQUALIZATION: hard clipping (with truncation) */
 
   /* Move pointer to 1st desired block */
-  if (fseek (Fi, start_byte, 0) < 0l)
+  if (fseek (Fi->fp, start_byte, 0) < 0l)
     KILL (FileIn, 4);
 
   /* Get data of interest, equalize and de-normalize */
   for (i = 0; i < N2; i++) {
-    if ((l = fread (buffer, sizeof (short), N, Fi)) > 0) {
+    if ((l = audio_read (Fi, buffer, N)) > 0) {
       /* convert samples to float */
       sh2fl ((long) l, buffer, Buf, bitno, 1);
 
@@ -661,7 +662,7 @@ int main (int argc, char *argv[]) {
       NrSat += fl2sh ((long) l, Buf, buffer, (double) 0.0, mask[16 - bitno]);
 
       /* write equalized, de-normalized and hard-clipped samples to file */
-      if ((l = fwrite (buffer, sizeof (short), l, Fo)) < 0)
+      if ((l = audio_write (Fo, buffer, l)) < 0)
         KILL (FileOut, 6);
     } else {
       KILL (FileIn, 5);
@@ -680,8 +681,8 @@ int main (int argc, char *argv[]) {
     printf ("---> DONE    \n");
 
   /* Close files ... */
-  fclose (Fi);
-  fclose (Fo);
+  audio_close (Fi);
+  audio_close (Fo);
   if (out != stdout)
     fclose (out);
 #if !defined(VMS)

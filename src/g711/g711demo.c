@@ -166,6 +166,7 @@
 
 /* G711 module functions */
 #include "g711.h"
+#include "wav_io.h"
 
 
 /*
@@ -231,8 +232,7 @@ int main (int argc, char *argv[]) {
   short *log_buff;              /* compressed data */
   short *lon_buff;              /* quantized output samples */
   char inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
-  FILE *Fi, *Fo;
-  int inp, out;
+  AUDIO_FILE *Fi, *Fo;
   char law[MAX_STRLEN], lilo[MAX_STRLEN];
   short inp_type, out_type;
   char revert_even_bits = 1;
@@ -327,20 +327,18 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Open input file */
-  if ((Fi = fopen (inpfil, RB)) == NULL)
+  if ((Fi = audio_open_read (inpfil, 0, 0, 16)) == NULL)
     KILL (inpfil, 2);
-  inp = fileno (Fi);
 
   /* Open (create) output file */
-  if ((Fo = fopen (outfil, WB)) == NULL)
+  if ((Fo = audio_open_write (outfil, 0, 1, 16)) == NULL)
     KILL (outfil, 3);
-  out = fileno (Fo);
 
   /* Define starting byte in file */
   start_byte = (N1 * N + skip) * sizeof (short);
 
   /* ... and move file's pointer to 1st desired block */
-  if (fseek (Fi, (N1 * N + skip) * sizeof (short), 0) < 0l)
+  if (fseek (Fi->fp, (N1 * N + skip) * sizeof (short), 0) < 0l)
     KILL (inpfil, 4);
 
   /* Check whether is to process til end-of-file */
@@ -365,38 +363,38 @@ int main (int argc, char *argv[]) {
     /* Input: LINEAR | Output: LOG */
     if (inp_type == IS_LIN && out_type == IS_LOG)
       for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
-        if ((smpno = fread (lin_buff, sizeof (short), N, Fi)) < 0)
+        if ((smpno = audio_read (Fi, lin_buff, N)) < 0)
           KILL (inpfil, 5);
         alaw_compress (smpno, lin_buff, log_buff);
         if (!revert_even_bits)
           for (i = 0; i < smpno; i++)
             log_buff[i] ^= 0x0055;
 
-        if ((smpno = fwrite (log_buff, sizeof (short), smpno, Fo)) < 0)
+        if ((smpno = audio_write (Fo, log_buff, smpno)) < 0)
           KILL (outfil, 6);
       }
 
     /* Input: LINEAR | Output: LINEAR */
     else if (inp_type == IS_LIN && out_type == IS_LIN)
       for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
-        if ((smpno = fread (lin_buff, sizeof (short), N, Fi)) < 0)
+        if ((smpno = audio_read (Fi, lin_buff, N)) < 0)
           KILL (inpfil, 5);
         alaw_compress (smpno, lin_buff, log_buff);
         alaw_expand (smpno, log_buff, lon_buff);
-        if ((smpno = fwrite (lon_buff, sizeof (short), smpno, Fo)) < 0)
+        if ((smpno = audio_write (Fo, lon_buff, smpno)) < 0)
           KILL (outfil, 6);
       }
 
     /* Input: LOG | Output: LINEAR */
     else if (inp_type == IS_LOG)
       for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
-        if ((smpno = fread (log_buff, sizeof (short), N, Fi)) < 0)
+        if ((smpno = audio_read (Fi, log_buff, N)) < 0)
           KILL (inpfil, 5);
         if (!revert_even_bits)
           for (i = 0; i < smpno; i++)
             log_buff[i] ^= 0x0055;
         alaw_expand (smpno, log_buff, lon_buff);
-        if ((smpno = fwrite (lon_buff, sizeof (short), smpno, Fo)) < 0)
+        if ((smpno = audio_write (Fo, lon_buff, smpno)) < 0)
           KILL (outfil, 6);
       }
     break;
@@ -407,26 +405,26 @@ int main (int argc, char *argv[]) {
     /* Input: LINEAR | Output: LOG */
     if (inp_type == IS_LIN && out_type == IS_LOG)
       for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
-        smpno = fread (lin_buff, sizeof (short), N, Fi);
+        smpno = audio_read (Fi, lin_buff, N);
         ulaw_compress (smpno, lin_buff, log_buff);
-        smpno = fwrite (log_buff, sizeof (short), smpno, Fo);
+        smpno = audio_write (Fo, log_buff, smpno);
       }
 
     /* Input: LINEAR | Output: LINEAR */
     else if (inp_type == IS_LIN && out_type == IS_LIN)
       for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
-        smpno = fread (lin_buff, sizeof (short), N, Fi);
+        smpno = audio_read (Fi, lin_buff, N);
         ulaw_compress (smpno, lin_buff, log_buff);
         ulaw_expand (smpno, log_buff, lon_buff);
-        smpno = fwrite (lon_buff, sizeof (short), smpno, Fo);
+        smpno = audio_write (Fo, lon_buff, smpno);
       }
 
     /* Input: LOG | Output: LINEAR */
     else if (inp_type == IS_LOG)
       for (tot_smpno = cur_blk = 0; cur_blk < N2; cur_blk++, tot_smpno += smpno) {
-        smpno = fread (log_buff, sizeof (short), N, Fi);
+        smpno = audio_read (Fi, log_buff, N);
         ulaw_expand (smpno, log_buff, lon_buff);
-        smpno = fwrite (lon_buff, sizeof (short), smpno, Fo);
+        smpno = audio_write (Fo, lon_buff, smpno);
       }
     break;
   }
@@ -437,8 +435,8 @@ int main (int argc, char *argv[]) {
   t2 = clock ();
   printf ("Speed: %f sec CPU-time for %ld processed samples\n", (t2 - t1) / (double) CLOCKS_PER_SEC, tot_smpno);
 
-  fclose (Fi);
-  fclose (Fo);
+  audio_close (Fi);
+  audio_close (Fo);
 #ifndef VMS
   return (0);
 #endif

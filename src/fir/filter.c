@@ -171,6 +171,7 @@
 #include "iirflt.h"
 #include "firflt.h"
 #include "ugst-utl.h"
+#include "wav_io.h"
 
 /* LOCAL DEFINITIONS */
 #ifndef max
@@ -327,7 +328,7 @@ int main (int argc, char *argv[]) {
 
   /* File variables */
   char FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
-  FILE *Fi, *Fo;
+  AUDIO_FILE *Fi, *Fo;
   long start_byte;
 #ifdef VMS
   char mrs[15];
@@ -759,15 +760,15 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Opening input file; abort if there's any problem */
-  if ((Fi = fopen (FileIn, RB)) == NULL)
+  if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
     KILL (FileIn, 2);
 
   /* Creates output file */
-  if ((Fo = fopen (FileOut, WB)) == NULL)
+  if ((Fo = audio_open_write (FileOut, audio_get_sample_rate (Fi), 1, 16)) == NULL)
     KILL (FileOut, 3);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Fi, start_byte, 0))
+  if (fseek (Fi->fp, start_byte, 0))
     KILL (FileIn, 4);
 
 
@@ -775,7 +776,7 @@ int main (int argc, char *argv[]) {
 
   /* One-time delay of output signal, if appropriate */
   if (async && delay > 0)
-    if ((smpno = fwrite (zero, sizeof (short), delay, Fo)) == 0 && ferror (Fo))
+    if ((smpno = audio_write (Fo, zero, delay)) == 0)
       KILL (FileOut, 6);
 
   /* Process regular frames */
@@ -788,7 +789,7 @@ int main (int argc, char *argv[]) {
     memset (OutBuff, '\0', out_size * sizeof (float));
 
     /* Read a block of samples */
-    if ((smpno = fread (TmpBuff, sizeof (short), N, Fi)) == 0)
+    if ((smpno = audio_read (Fi, TmpBuff, N)) == 0)
       KILL (FileIn, 5);
 
     /* ... and convert short to float, normalizing */
@@ -830,12 +831,12 @@ int main (int argc, char *argv[]) {
       skip -= smpno;
       continue;
     } else if (skip > 0) {
-      if ((smpno = fwrite (&TmpBuff[skip], sizeof (short), (smpno - skip), Fo)) == 0 && ferror (Fo))
+      if ((smpno = audio_write (Fo, &TmpBuff[skip], (smpno - skip))) == 0)
         KILL (FileOut, 6);
       total += smpno;
       skip = 0;
     } else {
-      if ((smpno = fwrite (TmpBuff, sizeof (short), smpno, Fo)) == 0 && ferror (Fo))
+      if ((smpno = audio_write (Fo, TmpBuff, smpno)) == 0)
         KILL (FileOut, 6);
       total += smpno;
     }
@@ -846,8 +847,8 @@ int main (int argc, char *argv[]) {
   fprintf (stderr, "\n");
 
   /* Close open files */
-  fclose (Fi);
-  fclose (Fo);
+  audio_close (Fi);
+  audio_close (Fo);
 
   /* Release some memory */
   free (TmpBuff);
