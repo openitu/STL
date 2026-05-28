@@ -1,0 +1,6 @@
+# Binary test data files - prevent CRLF corruption
+src/unsup/test_data/cftest1.dat binary
+
+# Reference files compared byte-for-byte in tests - force LF
+src/basop/test_framework/test/test_ref/*.csv text eol=lf
+src/freqresp/test_data/asciiOut.ref text eol=lf
