@@ -1,17 +1,8 @@
-cmake_minimum_required(VERSION 3.1...3.25)
+cmake_minimum_required(VERSION 3.10)
+
 project(STL2023 VERSION 2023)
 
-# Enforce 32-bit build
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  if(MSVC)
-    message(FATAL_ERROR "This project only supports 32-bit builds. Please re-configure using: cmake -A Win32 .")
-  else()
-    add_compile_options(-m32)
-    add_link_options(-m32)
-  endif()
-endif()
-
-add_definitions( -DVERSION_STL="${CMAKE_PROJECT_NAME}" )
+add_definitions( -DVERSION_STL="${CMAKE_PROJECT_NAME}" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
