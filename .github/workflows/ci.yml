@@ -80,3 +80,9 @@ jobs:
 
       - name: Build manual
         run: cd doc/manual && latexmk -pdf -halt-on-error STLmanual.tex < /dev/null
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: STL-manual
+          path: doc/manual/STLmanual.pdf
