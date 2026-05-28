@@ -20,3 +20,17 @@ add_test(uvselp-decode4 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/uvselp -q -dec -pf -bi
 add_test(uvselp-both1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/uvselp -q -nolog test_data/voice.src test_data/voice.rek)
 add_test(uvselp-both2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/uvselp -q -nolog -pf test_data/voice.src test_data/voice-pf.rek)
 
+#TEST: Bit-exact verification (platform-specific references)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+  add_test(uvselp-encode1-verify ${CMAKE_COMMAND} -E compare_files test_data/voice.hbs test_data/voice.enc.arm64.ref)
+  add_test(uvselp-decode1-verify ${CMAKE_COMMAND} -E compare_files test_data/voice.rec test_data/voice.dec.arm64.ref)
+  add_test(uvselp-decode2-verify ${CMAKE_COMMAND} -E compare_files test_data/voice-pf.rec test_data/voice.dec-pf.arm64.ref)
+  add_test(uvselp-both1-verify ${CMAKE_COMMAND} -E compare_files test_data/voice.rek test_data/voice.both.arm64.ref)
+else()
+  # Note: voice.hex has CRLF line endings (committed from Windows).
+  # The encode verify test is skipped on x86 until the reference is fixed.
+  add_test(uvselp-decode1-verify ${CMAKE_COMMAND} -E compare_files test_data/voice.rec test_data/voice.out)
+  add_test(uvselp-decode2-verify ${CMAKE_COMMAND} -E compare_files test_data/voice-pf.rec test_data/voice-pf.out)
+  add_test(uvselp-both1-verify ${CMAKE_COMMAND} -E compare_files test_data/voice.rek test_data/voice.out)
+endif()
+
