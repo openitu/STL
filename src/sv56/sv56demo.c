@@ -185,6 +185,7 @@
 
 /* ... Include of utilities ... */
 #include "ugst-utl.h"
+#include "sv56-util.h"
 
 /* Local definitions */
 #define MIN_LOG_OFFSET 1.0e-20  /* To avoid sigularity with log(0.0) */
@@ -440,13 +441,13 @@ int main (int argc, char *argv[]) {
 
   /* Other variables */
   char quiet = 0, use_active_level = 1, long_summary = 1;
-  short buffer[4096];
+  unsigned char raw_buf[4096 * 4];
   float Buf[4096];
   long NrSat = 0, start_byte, bitno = 16;
+  int bps;
   double sf = 16000, factor;
   double ActiveLeveldB, DesiredSpeechLeveldB;
   static char funny[5] = { '/', '-', '\\', '|', '-' };
-  static unsigned mask[5] = { 0xFFFF, 0xFFFE, 0xFFFB, 0xFFF8, 0xFFF0 };
 
 
   /* ......... GET PARAMETERS ......... */
@@ -557,10 +558,16 @@ int main (int argc, char *argv[]) {
   FIND_PAR_D (7, "_Sampling Frequency: ................... ", sf, sf);
   FIND_PAR_L (8, "_A/D resolution: ....................... ", bitno, bitno);
 
+  /* Validate bitno */
+  if (bitno < 8 || bitno > SVP56_MAX_NO_BITS) {
+    fprintf (stderr, "Error: bitno must be between 8 and %d\n", SVP56_MAX_NO_BITS);
+    exit (1);
+  }
+  bps = sv56_bytes_per_sample ((int) bitno);
 
   /* ......... SOME INITIALIZATIONS ......... */
   start_byte = --N1;
-  start_byte *= N * sizeof (short);
+  start_byte *= N * bps;
 
   /* Check if is to process the whole file */
   if (N2 == 0) {
@@ -568,7 +575,7 @@ int main (int argc, char *argv[]) {
 
     /* ... find the input file size ... */
     stat (FileIn, &st);
-    N2 = ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
+    N2 = ceil ((st.st_size - start_byte) / (double) (N * bps));
   }
 
   /* Overflow (saturation) point */
@@ -584,7 +591,7 @@ int main (int argc, char *argv[]) {
 
   /* Opening input file; abort if there's any problem */
 #ifdef VMS
-  sprintf (mrs, "mrs=%d", 2 * N);
+  sprintf (mrs, "mrs=%d", bps * N);
 #endif
   if ((Fi = fopen (FileIn, RB)) == NULL)
     KILL (FileIn, 2);
@@ -607,9 +614,9 @@ int main (int argc, char *argv[]) {
   /* Process selected blocks */
   for (i = 0; i < N2; i++) {
     /* Read samples ... */
-    if ((l = fread (buffer, sizeof (short), N, Fi)) > 0) {
+    if ((l = fread (raw_buf, bps, N, Fi)) > 0) {
       /* ... Convert samples to float */
-      sh2fl ((long) l, buffer, Buf, bitno, 1);
+      sv56_raw2fl ((long) l, raw_buf, Buf, (int) bitno);
 
       /* ... Get the active level */
       ActiveLeveldB = speech_voltmeter (Buf, (long) l, &state);
@@ -650,18 +657,18 @@ int main (int argc, char *argv[]) {
 
   /* Get data of interest, equalize and de-normalize */
   for (i = 0; i < N2; i++) {
-    if ((l = fread (buffer, sizeof (short), N, Fi)) > 0) {
+    if ((l = fread (raw_buf, bps, N, Fi)) > 0) {
       /* convert samples to float */
-      sh2fl ((long) l, buffer, Buf, bitno, 1);
+      sv56_raw2fl ((long) l, raw_buf, Buf, (int) bitno);
 
       /* equalizes vector */
       scale (Buf, (long) l, (double) factor);
 
-      /* Convert from float to short with hard clip and truncation */
-      NrSat += fl2sh ((long) l, Buf, buffer, (double) 0.0, mask[16 - bitno]);
+      /* Convert from float to raw with hard clip and truncation */
+      NrSat += sv56_fl2raw ((long) l, Buf, raw_buf, (int) bitno);
 
       /* write equalized, de-normalized and hard-clipped samples to file */
-      if ((l = fwrite (buffer, sizeof (short), l, Fo)) < 0)
+      if ((l = fwrite (raw_buf, bps, l, Fo)) < 0)
         KILL (FileOut, 6);
     } else {
       KILL (FileIn, 5);

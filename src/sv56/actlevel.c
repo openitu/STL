@@ -155,6 +155,7 @@
 
 /* ... Include of utilities ... */
 #include "ugst-utl.h"
+#include "sv56-util.h"
 
 /* ... Local definitions ... */
 #define DEF_BLK_LEN 256         /* samples per block */
@@ -430,8 +431,9 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Other variables */
-  short buffer[4096];
+  unsigned char raw_buf[4096 * 4];
   float Buf[4096];
+  int bps;
   long start_byte, bitno = 16;
   double sf = 16000;            /* Hz */
   double ActiveLeveldB, level = 0, gain = 0;
@@ -538,9 +540,16 @@ int main (int argc, char *argv[]) {
 
 
   /* ......... SOME INITIALIZATIONS ......... */
+  /* Validate bitno */
+  if (bitno < 8 || bitno > SVP56_MAX_NO_BITS) {
+    fprintf (stderr, "Error: bitno must be between 8 and %d\n", SVP56_MAX_NO_BITS);
+    exit (1);
+  }
+  bps = sv56_bytes_per_sample ((int) bitno);
+
   /* funny_size = strlen(funny); */
   start_byte = --N1;
-  start_byte *= N * sizeof (short);
+  start_byte *= N * bps;
   N2_ori = N2;
 
   /* Overflow (saturation) point */
@@ -561,7 +570,7 @@ int main (int argc, char *argv[]) {
 
     /* Opening input file; abort if there's any problem */
 #ifdef VMS
-    sprintf (mrs, "mrs=%d", 2 * N);
+    sprintf (mrs, "mrs=%d", bps * N);
 #endif
     if ((Fi = fopen (FileIn, RB)) == NULL)
       KILL (FileIn, 2);
@@ -573,7 +582,7 @@ int main (int argc, char *argv[]) {
     if (N2 == 0) {
       struct stat st;
       stat (FileIn, &st);
-      N2 = ceil (st.st_size / (double) (N * sizeof (short)));
+      N2 = ceil (st.st_size / (double) (N * bps));
     }
 
     /* Move pointer to 1st block of interest */
@@ -587,9 +596,9 @@ int main (int argc, char *argv[]) {
     if (!quiet)
       fprintf (stderr, "  Processing \r");
     for (i = 0; i < N2; i++) {
-      if ((l = fread (buffer, sizeof (short), N, Fi)) > 0) {
+      if ((l = fread (raw_buf, bps, N, Fi)) > 0) {
         /* ... Convert samples to float */
-        sh2fl ((long) l, buffer, Buf, bitno, 1);
+        sv56_raw2fl ((long) l, raw_buf, Buf, (int) bitno);
 
         /* ... Get the active level */
         ActiveLeveldB = speech_voltmeter (Buf, (long) l, &state);

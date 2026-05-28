@@ -21,3 +21,27 @@ set_tests_properties(sv56demo2-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRE
 
 add_test(sv56demo3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/actlev -q test_data/voice.src test_data/voice.nrm test_data/voice.prc test_data/voice.ltl test_data/voice.rms)
 set_tests_properties(sv56demo3 PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_executable(sv56test sv56test.c sv-p56.c)
+target_link_libraries(sv56test ${M_LIBRARY})
+
+add_executable(sv56-convert sv56-convert.c)
+target_link_libraries(sv56-convert ${M_LIBRARY})
+
+add_test(sv56test-16bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56test 16 test_data/voice.src test_data/voice_16bit.out)
+set_tests_properties(sv56test-16bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56test-16bit-verify ${CMAKE_COMMAND} -E compare_files test_data/voice_16bit.ref test_data/voice_16bit.out)
+set_tests_properties(sv56test-16bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56test-24bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56test 24 test_data/voice_24.src test_data/voice_24bit.out)
+set_tests_properties(sv56test-24bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56test-24bit-verify ${CMAKE_COMMAND} -E compare_files test_data/voice_24bit.ref test_data/voice_24bit.out)
+set_tests_properties(sv56test-24bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56test-32bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56test 32 test_data/voice_32.src test_data/voice_32bit.out)
+set_tests_properties(sv56test-32bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56test-32bit-verify ${CMAKE_COMMAND} -E compare_files test_data/voice_32bit.ref test_data/voice_32bit.out)
+set_tests_properties(sv56test-32bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
