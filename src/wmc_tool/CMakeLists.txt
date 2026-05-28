@@ -11,7 +11,8 @@ if(WIN32)
 endif()  
 
 add_executable(wmc_tool c_parser.cpp output.cpp text_utils.cpp wmc_tool.cpp)
-find_package(PythonInterp)
+find_package(Python3 COMPONENTS Interpreter)
+set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
 
 # Testing
 file(TO_CMAKE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/test_data TEST_DIR)
