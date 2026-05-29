@@ -1,0 +1,3 @@
+**/*.out
+test_data/voice.prc
+test_data/voice.rms
