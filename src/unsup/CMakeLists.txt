@@ -74,3 +74,12 @@ add_test(fdelay5-verify ${CMAKE_COMMAND} -E compare_files test_data/delay-15.tst
 
 add_test(fdelay6 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/fdelay -hex 0xF test_data/litend.src test_data/delay-0f.tst)
 add_test(fdelay6-verify ${CMAKE_COMMAND} -E compare_files test_data/delay-0f.tst test_data/delay-15.ref)
+
+add_test(random1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/random -s 12345 -r 10 20 -n 5)
+set_tests_properties(random1 PROPERTIES PASS_REGULAR_EXPRESSION "12 19 12 14 14")
+
+add_test(random2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/random -s 42 alpha bravo charlie delta echo)
+set_tests_properties(random2 PROPERTIES PASS_REGULAR_EXPRESSION "^alpha ")
+
+add_test(random3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/random -s 42 -d 3 -n 3 alpha bravo charlie delta echo)
+set_tests_properties(random3 PROPERTIES PASS_REGULAR_EXPRESSION "bravo delta charlie")
