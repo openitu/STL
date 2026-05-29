@@ -4,9 +4,11 @@
 % May 2026 - created for STL integration
 %=============================================================================
 \chapter{Gain amplification verification tool}
+\label{ch:gain_chk}
 %=============================================================================
 
 \section{Introduction}
+\label{sec:gain_chk-intro}
 
 The \texttt{gain\_chk} tool compares a reference signal and a processed
 signal and reports short-time gain differences per frequency band. The
@@ -19,6 +21,7 @@ Optionally, a VAD file can be provided to separate statistics for active
 and inactive frames.
 
 \section{Description of the algorithm}
+\label{sec:gain_chk-algorithm}
 
 \subsection{Frame and spectrum analysis}
 
@@ -100,11 +103,12 @@ The tool returns a numeric code intended for automation scripts:
 \end{itemize}
 
 \section{Implementation}
+\label{sec:gain_chk-impl}
 
 \subsection{Data and file format}
 
-The tool expects raw header-less little or big endian 16-bit PCM files in
-native host byte order, consistent with other STL command-line tools.
+The tool expects 16-bit PCM input files in native host byte order,
+consistent with other STL command-line tools.
 
 Mandatory input/output arguments:
 \begin{itemize}
@@ -120,6 +124,26 @@ Optional arguments:
 \item \texttt{-a} active-frame amplification threshold (dB);
 \item \texttt{-s} inactive-frame attenuation threshold (dB).
 \end{itemize}
+
+\subsection{Output file format}
+
+The results text file (\texttt{-t}) is opened in append mode. For each
+invocation, the tool writes:
+
+\begin{enumerate}
+\item The command line used.
+\item A header line indicating the frame class (\texttt{For all Frames},
+      \texttt{For Active Frames}, or \texttt{For Inactive Frames}).
+\item One line per frequency band:
+\begin{verbatim}
+Ener Ratio (Out/In) for critical band <b> (<f_lo> Hz - <f_hi> Hz) = <G_dB> dB  ( <G_%>%)
+\end{verbatim}
+\item A full-spectrum summary line covering band $0$--$F_s/2$.
+\item A separator line of dashes.
+\end{enumerate}
+
+\noindent When a VAD file is provided, the above block is repeated
+separately for active and inactive frame classes.
 
 \subsection{Command line syntax}
 
@@ -152,6 +176,7 @@ After loop:
 }
 
 \section{Tests and portability}
+\label{sec:gain_chk-tests}
 
 The STL CMake integration defines regression tests for \texttt{gain\_chk}
 using bundled PCM material. Tests run at 48 kHz and compare expected tool
@@ -162,7 +187,42 @@ math functions (\texttt{log}, \texttt{log10}, \texttt{cos}). It is portable
 across common Unix-like and Windows toolchains supported by STL.
 
 \section{Example code}
+\label{sec:gain_chk-example}
 
 The demonstration program is \texttt{gain\_chk.c}. It implements command
 line parsing, frame-based spectral analysis, optional VAD-conditioned
 statistics, report generation, and threshold-based return codes.
+
+A typical invocation comparing a reference and processed file at 48~kHz:
+
+{\tt {\small
+\begin{verbatim}
+$ gain_chk -i ref.pcm -o processed.pcm -t results.txt -r 48000
+\end{verbatim}
+}}
+
+\noindent Sample output written to \texttt{results.txt}:
+
+{\tt {\small
+\begin{verbatim}
+For all Frames
+Ener Ratio (Out/In) for critical band  0 (    0 Hz -  4000 Hz) =  -1.49 dB  ( -29.02%)
+Ener Ratio (Out/In) for critical band  1 ( 4000 Hz -  8000 Hz) =  -6.58 dB  ( -78.00%)
+Ener Ratio (Out/In) for critical band  2 ( 8000 Hz - 16000 Hz) = -35.58 dB  ( -99.97%)
+Ener Ratio (Out/In) for critical band  3 (16000 Hz - 20000 Hz) = -16.10 dB  ( -97.55%)
+Ener Ratio (Out/In) for the Full Spectrum(    0 Hz - 20000 Hz) =  -1.55 dB  ( -30.02%)
+\end{verbatim}
+}}
+
+\noindent With threshold checking enabled for scripted pass/fail:
+
+{\tt {\small
+\begin{verbatim}
+$ gain_chk -i ref.pcm -o processed.pcm -t results.txt -r 48000 \
+           -v vad.bin -a 3.0 -s 6.0
+$ echo $?
+4
+\end{verbatim}
+}}
+
+\noindent Exit code~4 indicates both active and inactive thresholds passed.
