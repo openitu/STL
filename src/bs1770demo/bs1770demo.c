@@ -542,9 +542,8 @@ int main(int argc, char **argv )
     fprintf( stdout, "nchan:            %ld\n", nchan );
 
     /* Find length of input file */
-    fseek( f_input->fp, 0L, SEEK_END );
-    length_total = ftell( f_input->fp ) / (2*nchan); /* 2 bytes per sample (16 bits), nchan channels */
-    if( (ftell( f_input->fp ) % (2 * nchan)) != 0 )
+    length_total = audio_get_data_size( f_input ) / (2*nchan); /* 2 bytes per sample (16 bits), nchan channels */
+    if( (audio_get_data_size( f_input ) % (2 * nchan)) != 0 )
     {
         fprintf( stderr, "*** Number of samples not divisible into number of channels, exiting..\n" );
         exit( -1 );
@@ -554,7 +553,7 @@ int main(int argc, char **argv )
         fprintf( stderr, "*** Input file must be longer than 400 ms to use bs1770demo, exiting..\n" );
         exit( -1 );
     }
-    rewind( f_input->fp );
+    audio_seek( f_input, 0L );
     n_gating_blocks = 4 * (length_total - BLOCK_SIZE) / (BLOCK_SIZE);
 
     /* Allocate input buffers */
@@ -611,7 +610,7 @@ int main(int argc, char **argv )
             fac = find_scaling_factor( gating_block_energy, n_gating_blocks, lev_target, rms_flag, &lev_input, &lev_obtained );
 
             /* Apply scaling */
-            rewind( f_input->fp ); 
+            audio_seek( f_input, 0L ); 
             length_total = 0;
             clip = 0;
             while( (length = (long)fread( input_short, sizeof( short ), STEP_SIZE * nchan, f_input->fp ) ) )

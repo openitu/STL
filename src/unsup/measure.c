@@ -430,7 +430,7 @@ int main (int argc, char *argv[]) {
       KILL (inpfil, 2);
 
     /* Move onto start */
-    fseek (Fi->fp, skip * blk * sizeof (short), 0);
+    audio_seek (Fi, skip * blk * sizeof (short));
 
     /* Allocate memory */
     samples = (short *) calloc (blk, sizeof (short));

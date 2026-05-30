@@ -226,12 +226,7 @@ int main (int argc, char *argv[]) {
     out_is_file = YES;
   }
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-    stat (File1, &st);
-    N2 = st.st_size / (N * sizeof (short));
-  }
+  /* N2 will be computed after opening files */
 
   /* Open input files */
   if ((F1 = audio_open_read (File1, 0, 0, 16)) == NULL)
@@ -239,11 +234,15 @@ int main (int argc, char *argv[]) {
   if ((F2 = audio_open_read (File2, 0, 0, 16)) == NULL)
     KILL (File2, 3);
 
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0)
+    N2 = audio_get_data_size (F1) / (N * sizeof (short));
+
   /* Positions file to the starting of block N1 */
   N1--;                         /* for the 1st block is not 1 but 0! */
-  if (fseek (F1->fp, N1 * N * sizeof (short), 0) != 0l)
+  if (audio_seek (F1, N1 * N * sizeof (short)) != 0l)
     KILL (File1, 5);
-  if (fseek (F2->fp, N1 * N * sizeof (short), 0) != 0l)
+  if (audio_seek (F2, N1 * N * sizeof (short)) != 0l)
     KILL (File2, 6);
 
   /* Allocate memory for SNR vector */

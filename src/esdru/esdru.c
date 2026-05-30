@@ -426,9 +426,8 @@ int main(int argc, char **argv )
     fseed = (float) intseed;
 
     /* Load input file */
-    fseek( f_input->fp, 0L, SEEK_END );
-    length = ftell( f_input->fp ) / 4; /* 2 bytes per sample, 2 channels */
-    rewind( f_input->fp );
+    length = audio_get_data_size( f_input ) / 4; /* 2 bytes per sample, 2 channels */
+    audio_seek( f_input, 0L );
     input = malloc(sizeof(double) * length * 2);
     input_short = malloc( sizeof( short ) * length * 2 );
     m = malloc( sizeof( double ) * length );

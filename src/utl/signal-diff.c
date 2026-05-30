@@ -181,17 +181,8 @@ int main (int argc, char *argv[]) {
   /* Find number of blocks */
   if (N2 == 0) {
     struct stat st;
-    long k, l;
-
-    /* ... find the shortest of the 2 files and the number of blks from it */
-    /* ... hey, need to skip the delayed samples! ... */
-    stat (File1, &st);
-    k = (st.st_size - start_byte1) / (N * sizeof (short));
-    stat (File2, &st);
-    l = (st.st_size - start_byte2) / (N * sizeof (short));
-    N2 = k < l ? k : l;
-    if (k != l)
-      fprintf (stderr, "%%SUB-W-DIFSIZ: Files have different sizes!\n");
+    /* N2 will be computed after opening files */
+    N2 = 0;
   }
 
   /* Open input files */
@@ -200,11 +191,21 @@ int main (int argc, char *argv[]) {
   if ((F2 = audio_open_read (File2, 0, 0, 16)) == NULL)
     KILL (File2, 3);
 
+  /* Compute number of blocks if processing the whole files */
+  if (N2 == 0) {
+    long k, l;
+    k = (audio_get_data_size (F1) - start_byte1) / (N * sizeof (short));
+    l = (audio_get_data_size (F2) - start_byte2) / (N * sizeof (short));
+    N2 = k < l ? k : l;
+    if (k != l)
+      fprintf (stderr, "%%SUB-W-DIFSIZ: Files have different sizes!\n");
+  }
+
   /* Positions file to the starting of block N1 */
   N1--;                         /* for the 1st block is not 1 but 0! */
-  if (fseek (F1->fp, start_byte1, 0) < 0l)
+  if (audio_seek (F1, start_byte1) < 0l)
     KILL (File1, 5);
-  if (fseek (F2->fp, start_byte2, 0) < 0l)
+  if (audio_seek (F2, start_byte2) < 0l)
     KILL (File2, 6);
 
   /* Print dump information */
