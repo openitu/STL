@@ -44,41 +44,43 @@
 
   Valid filter specifications:
   Flt_type Description
-   IRS8     (regular) IRS weighting with factor 1:1 at 8kHz
-   IRS16    (regular or modified) IRS weighting with factor 1:1 at 16kHz
-   IRS48    (modified) IRS weighting with factor 1:1 at 48kHz
-   HIRS16   Half-tilt IRS weighting for data sampled at 16kHz, factor 1:1
-   TIRS     IRS weighting with TIA coefficients, sf=8kHz, factor 1:1
-   DSM      Delta-SM filtering characteristic, 1:1
-   PSO      Psophometric wheighting filter, 1:1
-   HQ2      FIR (High quality) low-pass with factor 1:2 (up) or 2:1 (down)
-   HQ3      FIR (High quality) low-pass with factor 1:3 (up) or 3:1 (down)
-   SHQ2     FIR (Super High quality) low-pass with factor 1:2 (up) or 2:1 (down) (729 coefs)
-   SHQ3     FIR (Super High quality) low-pass with factor 1:3 (up) or 3:1 (down) (729 coefs)
-   FLAT     Linear-phase pass-band with factor 1:2 (up) or 2:1 (down)
-   FLAT1    Linear-phase pass-band with factor 1:1 (no rate change)
-   PCM      Standard IIR PCM quality factor 1:2 (up) or 2:1 (down)
-   PCM1     Standard PCM quality with factor 1:1 at 16 kHz
-   GSM1     GSM Mobile station input response w/ factor 1:1 at 16 kHz
-   P341     Send-part weighting of ITU-T Rec.P.341 (Wideband telephones)
-   DC       Direct-form DC-removal IIR filter (factor 1:1)
-   IFLAT    Flat IIR low-pass with factor 1:3 (up) or 3:1 (down) using a
-            cascade structure
-   5KBP     50-5000 Hz Flat bandpass FIR filter for fs=16kHz, 1:1
-   100_5KBP	100-5000 Hz Flat bandpass FIR filter for fs=16kHz, 1:1
-   14KBP	50-14000 Hz Flat bandpass FIR filter for fs=32kHz, 1:1
-   20KBP	20-20000 Hz Flat bandpass FIR filter for fs=48kHz, 1:1 (non-linear phase in HP-design)
-   LP1p5	low-pass filter with cut-off frequency 1.5kHz for fs=48kHz, 1:1
-   LP35		low-pass filter with cut-off frequency 3.5kHz for fs=48kHz, 1:1
-   LP7		low-pass filter with cut-off frequency 7kHz for fs=48kHz, 1:1
-   LP10		low-pass filter with cut-off frequency 10kHz for fs=48kHz, 1:1
- // FILTER_12k48k_HW
-   LP12		low-pass filter with cut-off frequency 12kHz for fs=48kHz, 1:1
- //  FILTER_12k48k_HW
-   LP14		low-pass filter with cut-off frequency 14kHz for fs=48kHz, 1:1
-   LP20		low-pass filter with cut-off frequency 20kHz for fs=48kHz, 1:1
-   RXIRS8   Receive-side Modified IRS weighting with factor 1:1 at 8kHz
-   RXIRS16  Receive-side Modified IRS weighting with factor 1:1 at 16kHz
+   IRS8       (regular) IRS weighting with factor 1:1 at 8kHz
+   IRS16      (regular or modified) IRS weighting with factor 1:1 at 16kHz
+   IRS48      (modified) IRS weighting with factor 1:1 at 48kHz
+   HIRS16     Half-tilt IRS weighting for data sampled at 16kHz, factor 1:1
+   TIRS       IRS weighting with TIA coefficients, sf=8kHz, factor 1:1
+   DSM        Delta-SM filtering characteristic, 1:1
+   PSO        Psophometric wheighting filter, 1:1
+   HQ2        FIR (High quality) low-pass with factor 1:2 (up) or 2:1 (down)
+   HQ3        FIR (High quality) low-pass with factor 1:3 (up) or 3:1 (down)
+   SHQ2       FIR (Super High quality) low-pass with factor 1:2 (up) or 2:1 (down) (729 coefs)
+   SHQ3       FIR (Super High quality) low-pass with factor 1:3 (up) or 3:1 (down) (729 coefs)
+   FLAT       Linear-phase pass-band with factor 1:2 (up) or 2:1 (down)
+   FLAT1      Linear-phase pass-band with factor 1:1 (no rate change)
+   PCM        Standard IIR PCM quality factor 1:2 (up) or 2:1 (down)
+   PCM1       Standard PCM quality with factor 1:1 at 16 kHz
+   GSM1       GSM Mobile station input response w/ factor 1:1 at 16 kHz
+   P341       Send-part weighting of ITU-T Rec.P.341 (Wideband telephones)
+   DC         Direct-form DC-removal IIR filter (factor 1:1)
+   IFLAT      Flat IIR low-pass with factor 1:3 (up) or 3:1 (down) using a
+              cascade structure
+   5KBP       50-5000 Hz Flat bandpass FIR filter for fs=16kHz, 1:1
+   100_5KBP	  100-5000 Hz Flat bandpass FIR filter for fs=16kHz, 1:1
+   14KBP	  50-14000 Hz Flat bandpass FIR filter for fs=32kHz, 1:1
+   20KBP	  20-20000 Hz Flat bandpass FIR filter for fs=48kHz, 1:1 (non-linear phase in HP-design)
+   LP1p5	  low-pass filter with cut-off frequency 1.5kHz for fs=48kHz, 1:1
+   LP35		  low-pass filter with cut-off frequency 3.5kHz for fs=48kHz, 1:1
+   LP7		  low-pass filter with cut-off frequency 7kHz for fs=48kHz, 1:1
+   LP10		  low-pass filter with cut-off frequency 10kHz for fs=48kHz, 1:1
+   LP12		  low-pass filter with cut-off frequency 12kHz for fs=48kHz, 1:1
+   LP14		  low-pass filter with cut-off frequency 14kHz for fs=48kHz, 1:1
+   LP20		  low-pass filter with cut-off frequency 20kHz for fs=48kHz, 1:1
+   RXIRS8     Receive-side Modified IRS weighting with factor 1:1 at 8kHz
+   RXIRS16    Receive-side Modified IRS weighting with factor 1:1 at 16kHz
+   HP50_32KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=32kHz, 1119 coefs\n");
+   HP50_48KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=48kHz, 1679 coefs\n");
+   SHQ2       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:2 (up) or 2:1(down)\n");
+   SHQ3       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:3 (up) or 3:1(down)\n");
 
 
   Testing:
@@ -262,41 +264,41 @@ void display_usage () {
   printf ("\n");
   printf (" Valid filter specifications:\n");
   printf ("  Flt_type Description\n");
-  printf ("   IRS8    (regular) IRS weighting with factor 1:1 at 8kHz\n");
-  printf ("   IRS16   (regular or modified) IRS weighting with factor 1:1 at 16kHz\n");
-  printf ("   IRS48   (modified) IRS weighting with factor 1:1 at 48kHz\n");
-  printf ("   RXIRS8  Receive-side Modified IRS weighting with factor 1:1 at 8kHz\n");
-  printf ("   RXIRS16 Receive-side Modified IRS weighting with factor 1:1 at 16kHz\n");
-  printf ("   HIRS16  Half-tilt IRS weighting, sf=16kHz, factor 1:1.\n");
-  printf ("   TIRS    IRS weighting w/ TIA coefficients, sf=8kHz, factor 1:1.\n");
-  printf ("   DSM     Delta-SM filtering characteristic, 1:1\n");
-  printf ("   PSO     Psophometric wheighting filter, 1:1\n");
-  printf ("   HQ2     FIR (High quality) low-pass for factor 1:2 (up) or 2:1(down)\n");
-  printf ("   HQ3     FIR (High quality) low-pass for factor 1:3 (up) or 3:1(down)\n");
-  printf ("   FLAT    Linear-phase passband w/ factor 1:2 (up) or 2:1 (down)\n");
-  printf ("   FLAT1   Linear-phase pass-band FIR w/ factor 1:1 (no rate change)\n");
-  printf ("   PCM     Standard IIR PCM quality factor 1:2 (up) or 2:1 (down)\n");
-  printf ("   PCM1    Standard PCM quality with factor 1:1 at 16 kHz\n");
-  printf ("   GSM1    GSM Mobile station input FIR w/ factor 1:1 at 16 kHz\n");
-  printf ("   MSIN    Same as GSM1\n");
-  printf ("   P341    P.341 send-mask FIR with factor 1:1 at 16 kHz\n");
-  printf ("   DC      Direct-form DC-removal IIR filter (factor 1:1)\n");
-  printf ("   IFLAT   Cascade-form IIR flat low-pass with factor 1:3 (up) or 3:1 (down)\n");
-  printf ("   5KBP    50-5k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=16kHz\n");
-  printf ("   100_5KBP 100-5k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=16kHz\n");
-  printf ("   14KBP   50-14k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=32kHz\n");
-  printf ("   20KBP   20-20k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=48kHz\n");
-  printf ("   LP1p5   1.5kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
-  printf ("   LP35    3.5kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
-  printf ("   LP7     7kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
-  printf ("   LP10    10kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
-  printf ("   LP12    12kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
-  printf ("   LP14    14kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
-  printf ("   LP20    20kHz low-pass filter for fs=48kHz, w/ factor 1:1\n\n");
-  printf (("   HP50_32KHZ   50 Hz highpass FIR filter w/ factor 1:1 at sf=32kHz, 1119 coefs\n"));
-  printf (("   HP50_48KHZ   50 Hz highpass FIR filter w/ factor 1:1 at sf=48kHz, 1679 coefs\n"));
-  printf (("   SHQ2     FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:2 (up) or 2:1(down)\n"));
-  printf (("   SHQ3     FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:3 (up) or 3:1(down)\n"));
+  printf ("   IRS8       (regular) IRS weighting with factor 1:1 at 8kHz\n");
+  printf ("   IRS16      (regular or modified) IRS weighting with factor 1:1 at 16kHz\n");
+  printf ("   IRS48      (modified) IRS weighting with factor 1:1 at 48kHz\n");
+  printf ("   RXIRS8     Receive-side Modified IRS weighting with factor 1:1 at 8kHz\n");
+  printf ("   RXIRS16    Receive-side Modified IRS weighting with factor 1:1 at 16kHz\n");
+  printf ("   HIRS16     Half-tilt IRS weighting, sf=16kHz, factor 1:1.\n");
+  printf ("   TIRS       IRS weighting w/ TIA coefficients, sf=8kHz, factor 1:1.\n");
+  printf ("   DSM        Delta-SM filtering characteristic, 1:1\n");
+  printf ("   PSO        Psophometric wheighting filter, 1:1\n");
+  printf ("   HQ2        FIR (High quality) low-pass for factor 1:2 (up) or 2:1(down)\n");
+  printf ("   HQ3        FIR (High quality) low-pass for factor 1:3 (up) or 3:1(down)\n");
+  printf ("   FLAT       Linear-phase passband w/ factor 1:2 (up) or 2:1 (down)\n");
+  printf ("   FLAT1      Linear-phase pass-band FIR w/ factor 1:1 (no rate change)\n");
+  printf ("   PCM        Standard IIR PCM quality factor 1:2 (up) or 2:1 (down)\n");
+  printf ("   PCM1       Standard PCM quality with factor 1:1 at 16 kHz\n");
+  printf ("   GSM1       GSM Mobile station input FIR w/ factor 1:1 at 16 kHz\n");
+  printf ("   MSIN       Same as GSM1\n");
+  printf ("   P341       P.341 send-mask FIR with factor 1:1 at 16 kHz\n");
+  printf ("   DC         Direct-form DC-removal IIR filter (factor 1:1)\n");
+  printf ("   IFLAT      Cascade-form IIR flat low-pass with factor 1:3 (up) or 3:1 (down)\n");
+  printf ("   5KBP       50-5k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=16kHz\n");
+  printf ("   100_5KBP   100-5k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=16kHz\n");
+  printf ("   14KBP      50-14k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=32kHz\n");
+  printf ("   20KBP      20-20k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=48kHz\n");
+  printf ("   LP1p5      1.5kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP35       3.5kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP7        7kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP10       10kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP12       12kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP14       14kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   LP20       20kHz low-pass filter for fs=48kHz, w/ factor 1:1\n");
+  printf ("   HP50_32KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=32kHz, 1119 coefs\n");
+  printf ("   HP50_48KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=48kHz, 1679 coefs\n");
+  printf ("   SHQ2       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:2 (up) or 2:1(down)\n");
+  printf ("   SHQ3       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:3 (up) or 3:1(down)\n\n");
 
   /* Quit program */
   exit (-128);
