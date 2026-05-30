@@ -18,6 +18,8 @@
 #include <math.h>
 #include <stddef.h>
 
+#include "wav_io.h"
+
 #define PI2             6.2831853f
 #define NB_BANDS        25
 #define L_MAX           1024
@@ -41,11 +43,12 @@ static float bands[NB_BANDS] = {
 
 static void usage( void )
 {
-    printf( " Usage: gain_chk  -i original_f  -o processed_f  -t results_f  -r Fs  [-v VAD_f]\n\n" );
-    printf( "    -i original_f  - reference binary file\n" );
-    printf( "    -o processed_f - evaluated binary file\n" );
+    printf( " Usage: gain_chk  -i original_f  -o processed_f  -t results_f  [-r Fs]  [-v VAD_f]\n\n" );
+    printf( "    -i original_f  - reference audio file (raw PCM or WAV)\n" );
+    printf( "    -o processed_f - evaluated audio file (raw PCM or WAV)\n" );
     printf( "    -t results_f   - results text file\n" );
     printf( "    -r Fs          - sampling frequency [8000, 16000, 32000, 48000] in Hz\n" );
+    printf( "                     (optional for WAV input; read from header)\n" );
     printf( "    -v VAD_f       - VAD Flag binary file (One 16 Bits Flag per Frame), optional\n" );
 #ifdef THRESHOLD_CHECK                        
     printf( "    -a val         - Active Signal Amplification Threshold (in dB)\n" );
@@ -290,7 +293,9 @@ int main( int argc, char *argv[] )
     float band_ener_tot1[N_FRM_TYPE][NB_BANDS+2], band_ener_tot2[N_FRM_TYPE][NB_BANDS+2];
     float *ptR1, *ptI1, *ptR2, *ptI2;
 
-    FILE *file1, *file2, *file3, *file4;
+    AUDIO_FILE *file1, *file2;
+    FILE *file3, *file4;
+    char *fname1 = NULL, *fname2 = NULL;
 
     printf("===================================================================\n");
     printf("Gain Amplification Verification tool, V3.0\n");
@@ -328,11 +333,7 @@ int main( int argc, char *argv[] )
                             usage();
                         }
 
-                        if ( (file1 = fopen( argv[i], "rb" )) == NULL)
-                        {
-                            fprintf( stderr, "Error: cannot open reference input file (-i): %s\n", argv[i] );
-                            exit( 1 );
-                        }
+                        fname1 = argv[i];
                         printf( "\nReference file:  %s\n", argv[i] );
 
                         i++;
@@ -345,11 +346,7 @@ int main( int argc, char *argv[] )
                             usage();
                         }
 
-                        if ( (file2 = fopen( argv[i], "rb" )) == NULL)
-                        {
-                            fprintf( stderr, "Error: cannot open evaluated input file (-o): %s\n", argv[i] );
-                            exit( 1 );
-                        }
+                        fname2 = argv[i];
                         printf("Evaluated file:  %s\n", argv[i]);
 
                         i++;
@@ -465,13 +462,13 @@ int main( int argc, char *argv[] )
         }
     }
 
-    if ( file1 == NULL || file2 == NULL || file4 == NULL )
+    if ( fname1 == NULL || fname2 == NULL || file4 == NULL )
     {
-        if ( file1 == NULL )
+        if ( fname1 == NULL )
         {
             fputs( "Error: missing required option -i <reference_PCM_file>.\n", stderr );
         }
-        if ( file2 == NULL )
+        if ( fname2 == NULL )
         {
             fputs( "Error: missing required option -o <evaluated_PCM_file>.\n", stderr );
         }
@@ -489,6 +486,24 @@ int main( int argc, char *argv[] )
     }
 
 #endif
+    /* Open audio files */
+    if ( (file1 = audio_open_read( fname1, 0, 0, 16 )) == NULL)
+    {
+        fprintf( stderr, "Error: cannot open reference input file (-i): %s\n", fname1 );
+        exit( 1 );
+    }
+    if ( (file2 = audio_open_read( fname2, 0, 0, 16 )) == NULL)
+    {
+        fprintf( stderr, "Error: cannot open evaluated input file (-o): %s\n", fname2 );
+        exit( 1 );
+    }
+
+    /* Resolve sampling frequency: use WAV header if -r not provided */
+    if ( Fs < 0.0f && audio_is_wav( file1 ) )
+    {
+        Fs = (float)audio_get_sample_rate( file1 );
+        printf( "Sampling frequency = %5.0f Hz (from WAV header)\n\n", Fs );
+    }
     if ( Fs!=8000 && Fs!=16000 && Fs!=32000 && Fs!=48000 )
     {
         if ( Fs < 0.0f )
@@ -501,6 +516,19 @@ int main( int argc, char *argv[] )
                      (double)Fs );
         }
         usage();
+    }
+    /* Validate WAV sample rates against resolved Fs */
+    if ( audio_is_wav( file1 ) && audio_get_sample_rate( file1 ) != (long)Fs )
+    {
+        fprintf( stderr, "Error: WAV sample rate (%ld Hz) in reference file does not match -r %.0f Hz.\n",
+                 audio_get_sample_rate( file1 ), (double)Fs );
+        exit( 1 );
+    }
+    if ( audio_is_wav( file2 ) && audio_get_sample_rate( file2 ) != (long)Fs )
+    {
+        fprintf( stderr, "Error: WAV sample rate (%ld Hz) in evaluated file does not match -r %.0f Hz.\n",
+                 audio_get_sample_rate( file2 ), (double)Fs );
+        exit( 1 );
     }
 
     L_FRAME = (short)(Fs / 50 + 0.5f);  /* number of samples in frame of 20 ms */
@@ -597,14 +625,14 @@ int main( int argc, char *argv[] )
     frames_analysed = 0;
 
     {
-        size_t nread1 = 0, nread2 = 0;
+        long nread1 = 0, nread2 = 0;
 
         for ( ;; )
         {
-            nread1 = fread( data1, sizeof(short), (size_t)L_FRAME, file1 );
-            nread2 = fread( data2, sizeof(short), (size_t)L_FRAME, file2 );
+            nread1 = audio_read( file1, data1, (long)L_FRAME );
+            nread2 = audio_read( file2, data2, (long)L_FRAME );
 
-            if ( nread1 != (size_t)L_FRAME || nread2 != (size_t)L_FRAME )
+            if ( nread1 != (long)L_FRAME || nread2 != (long)L_FRAME )
             {
                 break;
             }
@@ -732,33 +760,33 @@ int main( int argc, char *argv[] )
         {
             fprintf( stderr, "Error: could not read one full %d-sample frame (20 ms) from both inputs at Fs = %.0f Hz.\n",
                      (int)L_FRAME, (double)Fs );
-            if ( ferror( file1 ) )
+            if ( ferror( file1->fp ) )
             {
                 fputs( "Error: read error on reference file (-i).\n", stderr );
             }
-            if ( ferror( file2 ) )
+            if ( ferror( file2->fp ) )
             {
                 fputs( "Error: read error on evaluated file (-o).\n", stderr );
             }
-            if ( !ferror( file1 ) && !ferror( file2 ) )
+            if ( !ferror( file1->fp ) && !ferror( file2->fp ) )
             {
                 if ( nread1 == 0 && nread2 == 0 )
                 {
                     fputs( "Error: both input files are empty or shorter than one frame.\n", stderr );
                 }
-                else if ( nread1 < (size_t)L_FRAME && nread2 < (size_t)L_FRAME )
+                else if ( nread1 < (long)L_FRAME && nread2 < (long)L_FRAME )
                 {
-                    fprintf( stderr, "Error: both files are shorter than one frame (read %zu and %zu samples, need %d).\n",
+                    fprintf( stderr, "Error: both files are shorter than one frame (read %ld and %ld samples, need %d).\n",
                              nread1, nread2, (int)L_FRAME );
                 }
-                else if ( nread1 < (size_t)L_FRAME )
+                else if ( nread1 < (long)L_FRAME )
                 {
-                    fprintf( stderr, "Error: reference file (-i) is shorter than one frame or ended first (read %zu samples, need %d).\n",
+                    fprintf( stderr, "Error: reference file (-i) is shorter than one frame or ended first (read %ld samples, need %d).\n",
                              nread1, (int)L_FRAME );
                 }
                 else
                 {
-                    fprintf( stderr, "Error: evaluated file (-o) is shorter than one frame or ended first (read %zu samples, need %d).\n",
+                    fprintf( stderr, "Error: evaluated file (-o) is shorter than one frame or ended first (read %ld samples, need %d).\n",
                              nread2, (int)L_FRAME );
                 }
             }
@@ -774,10 +802,10 @@ int main( int argc, char *argv[] )
             exit( 1 );
         }
 
-        if ( nread1 != (size_t)L_FRAME || nread2 != (size_t)L_FRAME )
+        if ( nread1 != (long)L_FRAME || nread2 != (long)L_FRAME )
         {
             fprintf( stderr, "Warning: stopped after %ld complete frame(s): inputs do not both extend by another full frame\n"
-                     "         (last fread: %zu samples from -i, %zu from -o; need %d per frame).\n",
+                     "         (last fread: %ld samples from -i, %ld from -o; need %d per frame).\n",
                      frame, nread1, nread2, (int)L_FRAME );
         }
     }

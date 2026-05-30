@@ -1,4 +1,6 @@
-add_executable(gain_chk gain_chk.c)
+include_directories(../utl)
+
+add_executable(gain_chk gain_chk.c ../utl/wav_io.c)
 target_link_libraries(gain_chk ${M_LIBRARY})
 
 set(_gain_chk_testdir "${CMAKE_CURRENT_BINARY_DIR}/gain_chk_ctest_scratch")

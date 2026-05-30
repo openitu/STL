@@ -63,13 +63,6 @@ if(NOT _rv EQUAL 4)
     message(FATAL_ERROR "gain_chk exit code ${_rv}, expected 4 (threshold pass).\nSTDERR:\n${_ert}\nSTDOUT:\n${_sot}")
 endif()
 
-execute_process(
-    COMMAND "${CMAKE_COMMAND}" -E compare_files "${_ref_err}" "${_err}"
-    RESULT_VARIABLE _cmp
-)
+include(${CMAKE_CURRENT_LIST_DIR}/../../../cmake/CompareTextFiles.cmake)
 
-if(NOT _cmp EQUAL 0)
-    file(READ "${_err}" _got)
-    file(READ "${_ref_err}" _want)
-    message(FATAL_ERROR "stderr mismatch for CASE=${CASE} (floating-point summary).\n--- got ---\n${_got}\n--- expected ---\n${_want}")
-endif()
+compare_text_files(GOT "${_err}" EXPECTED "${_ref_err}" LABEL "CASE=${CASE}")
