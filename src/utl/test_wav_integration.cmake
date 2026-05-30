@@ -434,6 +434,14 @@ add_test(NAME wav-decg722-wav-output-verify
 set_tests_properties(wav-decg722-wav-output-verify PROPERTIES
   DEPENDS wav-decg722-wav-output)
 
+# --- sine WAV output ---
+add_test(NAME wav-sine-wav-output
+  COMMAND ${BIN}/sine -q ${WAV_TEST_DIR}/sine_out.wav 20000 1000 4 16000)
+set_tests_properties(wav-sine-wav-output PROPERTIES FIXTURES_REQUIRED WAV_FILES)
+add_test(NAME wav-sine-wav-output-verify
+  COMMAND ${BIN}/test_wav_io_validate ${WAV_TEST_DIR}/sine_out.wav 16000 1 16)
+set_tests_properties(wav-sine-wav-output-verify PROPERTIES DEPENDS wav-sine-wav-output)
+
 # ==========================================================================
 # WAV output verification for all remaining tools
 # ==========================================================================
