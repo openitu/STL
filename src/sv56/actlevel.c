@@ -435,6 +435,7 @@ int main (int argc, char *argv[]) {
   float Buf[4096];
   long start_byte, bitno = 16;
   double sf = 16000;            /* Hz */
+  int sf_given = 0;
   double ActiveLeveldB, level = 0, gain = 0;
   static char funny[] = "|/-\\|/-\\", funny_size = sizeof (funny), quiet = 0;
 #ifdef LOCAL_PRINT
@@ -452,6 +453,7 @@ int main (int argc, char *argv[]) {
       if (strcmp (argv[1], "-sf") == 0) {
         /* Change default sampling frequency */
         sf = atof (argv[2]);
+        sf_given = 1;
 
         /* Update argc/argv to next valid option/argument */
         argv += 2;
@@ -564,21 +566,21 @@ int main (int argc, char *argv[]) {
 #ifdef VMS
     sprintf (mrs, "mrs=%d", 2 * N);
 #endif
-    if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
+    if ((Fi = audio_open_read (FileIn, sf_given ? (long) sf : 0, 0, 16)) == NULL)
       KILL (FileIn, 2);
+    if (audio_get_sample_rate (Fi) > 0)
+      sf = (double) audio_get_sample_rate (Fi);
 
     /* Reinitialize number of blocks as specified initially */
     N2 = N2_ori;
 
     /* Check if is to process the whole file */
     if (N2 == 0) {
-      struct stat st;
-      stat (FileIn, &st);
-      N2 = ceil (st.st_size / (double) (N * sizeof (short)));
+      N2 = ceil (audio_get_data_size (Fi) / (double) (N * sizeof (short)));
     }
 
     /* Move pointer to 1st block of interest */
-    if (fseek (Fi->fp, start_byte, 0) < 0l)
+    if (audio_seek (Fi, start_byte) < 0l)
       KILL (FileIn, 4);
 
 

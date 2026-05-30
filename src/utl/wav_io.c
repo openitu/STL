@@ -394,3 +394,25 @@ long audio_get_sample_rate (AUDIO_FILE * af) {
 int audio_get_channels (AUDIO_FILE * af) {
   return af ? af->channels : 0;
 }
+
+
+int audio_seek (AUDIO_FILE * af, long offset) {
+  if (!af || !af->fp)
+    return -1;
+  return fseek (af->fp, af->data_offset + offset, SEEK_SET) < 0 ? -1 : 0;
+}
+
+
+long audio_get_data_size (AUDIO_FILE * af) {
+  if (!af || !af->fp)
+    return 0;
+  if (af->is_wav)
+    return af->data_size;
+  else {
+    long cur = ftell (af->fp);
+    fseek (af->fp, 0, SEEK_END);
+    long size = ftell (af->fp);
+    fseek (af->fp, cur, SEEK_SET);
+    return size;
+  }
+}

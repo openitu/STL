@@ -312,16 +312,8 @@ int main (int argc, char *argv[]) {
   /* Define 1st sample to compare */
   start_byte = samplesize * N1 * N;
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-
-    /* ... find the size of the full file and discount the number */
-    /* ... of samples to skip in the beginning of the file ... */
-    stat (File1, &st);
-    to_process = (st.st_size - start_byte) / samplesize;
-    N2 = ceil ((st.st_size - start_byte) / (double) (N * samplesize));
-  } else
+  /* N2 will be computed after opening file if processing the whole file */
+  if (N2 != 0)
     to_process = N * N2;
 
   /* Opening test file; abort if there's any problem */
@@ -332,11 +324,18 @@ int main (int argc, char *argv[]) {
   /* Open input files */
   if ((fi = audio_open_read (File1, 0, 0, 16)) == NULL)
     KILL (File1, 3);
-  if ((fo = audio_open_write (File2, 0, 1, 16)) == NULL)
+
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0) {
+    to_process = (audio_get_data_size (fi) - start_byte) / samplesize;
+    N2 = ceil ((audio_get_data_size (fi) - start_byte) / (double) (N * samplesize));
+  }
+
+  if ((fo = audio_open_write (File2, audio_get_sample_rate (fi), 1, 16)) == NULL)
     KILL (File2, 4);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (fi->fp, start_byte, 0l) < 0l)
+  if (audio_seek (fi, start_byte) < 0l)
     KILL (File1, 3);
 
   /* Some preliminaries */

@@ -287,6 +287,7 @@ int main(int argc, char **argv )
     long step;
     long length;
     long fs;
+    int fs_given = 0;
     long clip;
     long i;
     short energy_input;
@@ -316,6 +317,7 @@ int main(int argc, char **argv )
                 fprintf(stderr, "Invalid sampling frequency %s, exiting..\n", argv[i + 1] );
                 usage();
             }
+            fs_given = 1;
             i += 2;
         }
         else if( strcmp( argv[i], "-e_step" ) == 0 )
@@ -399,12 +401,14 @@ int main(int argc, char **argv )
     }
     input_filename = argv[i++];
     output_filename = argv[i];
-    if( (f_input = audio_open_read (input_filename, 0, 0, 16)) == NULL )
+    if( (f_input = audio_open_read (input_filename, fs_given ? fs : 0, 0, 16)) == NULL )
     {
         fprintf( stderr, "Could not open input file %s, exiting..\n\n", input_filename );
         usage();
     }
-    if( (f_output = audio_open_write( output_filename, 0, 1, 16 )) == NULL )
+    if (audio_get_sample_rate (f_input) > 0)
+        fs = audio_get_sample_rate (f_input);
+    if( (f_output = audio_open_write( output_filename, fs, 1, 16 )) == NULL )
     {
         fprintf( stderr, "Could not open output file %s, exiting..\n\n", output_filename );
         usage();

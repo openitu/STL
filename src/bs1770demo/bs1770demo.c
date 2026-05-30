@@ -478,7 +478,7 @@ int main(int argc, char **argv )
     }
 
     input_filename = argv[i++];
-    if( (f_input = audio_open_read (input_filename, 0, 0, 16)) == NULL )
+    if( (f_input = audio_open_read (input_filename, 48000, 0, 16)) == NULL )
     {
         fprintf( stderr, "*** Could not open input file %s, exiting..\n\n", input_filename );
         usage();
@@ -490,7 +490,7 @@ int main(int argc, char **argv )
     else
     {
         output_filename = argv[i];
-        if( (f_output = audio_open_write( output_filename, 0, 1, 16 )) == NULL )
+        if( (f_output = audio_open_write( output_filename, audio_get_sample_rate (f_input), 1, 16 )) == NULL )
         {
             fprintf( stderr, "*** Could not open output file %s, exiting..\n\n", output_filename );
             usage();

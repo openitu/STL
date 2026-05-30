@@ -125,6 +125,7 @@ int main (int argc, char *argv[]) {
   /* algorithm variables */
   int nfft = 2048;
   long fs = 16000;              /* sampling frequency */
+  int fs_given = 0;
   int little_endian;            /* flag =1 if little-endian, else =0 */
   int i, j;
   int nbread;
@@ -154,6 +155,7 @@ int main (int argc, char *argv[]) {
       if (strcmp (argv[1], "-fs") == 0) {
         /* Set the sampling frequency parameter */
         fs = atol (argv[2]);
+        fs_given = 1;
 
         /* Move arg{c,v} over the option to the next argument */
         argc -= 2;
@@ -280,11 +282,13 @@ int main (int argc, char *argv[]) {
 
   /* ..... First File ..... */
   /* open first input file */
-  fp = audio_open_read (in1FileName, 0, 0, 16);
+  fp = audio_open_read (in1FileName, fs_given ? fs : 0, 0, 16);
   if (fp == NULL) {
     fprintf (stderr, "Error: Can't open input file %s", in1FileName);
     exit (-1);
   }
+  if (audio_get_sample_rate (fp) > 0)
+    fs = audio_get_sample_rate (fp);
 
   /* loop over first input file */
   while ((nbread = audio_read (fp, frame_sh, nfft)) == nfft) {
@@ -323,7 +327,7 @@ int main (int argc, char *argv[]) {
   /* ..... Second File ..... */
 
   /* open second input file */
-  fp = audio_open_read (in2FileName, 0, 0, 16);
+  fp = audio_open_read (in2FileName, fs_given ? fs : 0, 0, 16);
   if (fp == NULL) {
     fprintf (stderr, "Error: Can't open input file %s", in2FileName);
     exit (-1);

@@ -479,36 +479,7 @@ int main (int argc, char *argv[]) {
     start_byte2 *= (N1 * N - delay);
   }
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-    long k, l;
-
-    /* ... find the size of the 2 files and the number of blks from it */
-    /* ... hey, need to skip the delayed samples! ... */
-    stat (File1, &st);
-    k = (st.st_size - start_byte1) / (N * samplesize);
-    stat (File2, &st);
-    l = (st.st_size - start_byte2) / (N * samplesize);
-
-    if (trim_by == 1)
-      N2 = k;
-    else if (trim_by == 2)
-      N2 = l;
-    else if (trim_by == 3) {
-      /* Trim by the size of the longest file */
-      N2 = k > l ? k : l;
-
-      /* Convert the trim flag to the equivalent of trimming by the size of file 1 or file 2, the longest of them; this eases implementation */
-      trim_by = (k > l) ? 1 : 2;
-    } else {
-      /* Trim by the size of the shortest file */
-      N2 = k < l ? k : l;
-    }
-
-    if (k != l)
-      fprintf (stderr, "WARNING: Files have different sizes!\n");
-  }
+  /* N2 will be computed after opening files if processing the whole file */
 
   /* Opening test file; abort if there's any problem */
 #ifdef VMS
@@ -520,7 +491,27 @@ int main (int argc, char *argv[]) {
     KILL (File1, 3);
   if ((f2 = audio_open_read (File2, 0, 0, 16)) == NULL)
     KILL (File2, 4);
-  if ((fr = audio_open_write (RFile, 0, 1, 16)) == NULL)
+
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0) {
+    long k, l;
+    k = (audio_get_data_size (f1) - start_byte1) / (N * samplesize);
+    l = (audio_get_data_size (f2) - start_byte2) / (N * samplesize);
+    if (trim_by == 1)
+      N2 = k;
+    else if (trim_by == 2)
+      N2 = l;
+    else if (trim_by == 3) {
+      N2 = k > l ? k : l;
+      trim_by = (k > l) ? 1 : 2;
+    } else {
+      N2 = k < l ? k : l;
+    }
+    if (k != l)
+      fprintf (stderr, "WARNING: Files have different sizes!\n");
+  }
+
+  if ((fr = audio_open_write (RFile, audio_get_sample_rate (f1), 1, 16)) == NULL)
     KILL (RFile, 5);
 
   /* If samples of the primary files are to be skipped, dump them into the output file */
@@ -529,7 +520,7 @@ int main (int argc, char *argv[]) {
     short *a = (short *) calloc (sizeof (short), delay);
     double register tmp;
 
-    if (fseek (f1->fp, dump * samplesize, 0l) < 0l)
+    if (audio_seek (f1, dump * samplesize) < 0l)
       KILL (File1, 3);
 
     if (audio_read (f1, a, delay) != delay)
@@ -543,9 +534,9 @@ int main (int argc, char *argv[]) {
   }
 
   /* Move pointer to 1st block of interest */
-  if (fseek (f1->fp, start_byte1, 0l) < 0l)
+  if (audio_seek (f1, start_byte1) < 0l)
     KILL (File1, 3);
-  if (fseek (f2->fp, start_byte2, 0l) < 0l)
+  if (audio_seek (f2, start_byte2) < 0l)
     KILL (File2, 4);
 
   /* Some preliminaries */

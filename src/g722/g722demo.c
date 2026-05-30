@@ -265,11 +265,11 @@ int main (int argc, char *argv[]) {
     error_terminate ("Bad mode specified; aborting\n", 2);
 
   /* Open input file */
-  if ((inp = audio_open_read (FileIn, 0, 0, 16)) == NULL)
+  if ((inp = audio_open_read (FileIn, 16000, 0, 16)) == NULL)
     KILL (FileIn, -2);
 
   /* Open output file */
-  if ((out = audio_open_write (FileOut, 0, 1, 16)) == NULL)
+  if ((out = audio_open_write (FileOut, audio_get_sample_rate (inp), 1, 16)) == NULL)
     KILL (FileOut, -2);
 
 #ifndef STATIC_ALLOCATION

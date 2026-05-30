@@ -157,7 +157,7 @@ int main (int argc, char *argv[]) {
   }
 
   /* open the output file */
-  ptr_fileOut = audio_open_write (FileOut, 0, 1, 16);
+  ptr_fileOut = audio_open_write (FileOut, audio_get_sample_rate (ptr_fileIn), 1, 16);
   if (ptr_fileOut == NULL) {
     fprintf (stderr, "\nUnable to open Output file\n");
     exit (-1);
