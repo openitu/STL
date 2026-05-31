@@ -48,7 +48,7 @@ jobs:
 
       - name: Configure (Unix)
         if: runner.os != 'Windows'
-        run: cmake . ${{ matrix.cflags && '-DCMAKE_C_FLAGS=-m32 -msse2 -mfpmath=sse -DCMAKE_CXX_FLAGS=-m32 -msse2 -mfpmath=sse' || '' }}
+        run: cmake . ${{ matrix.cflags && '-DCMAKE_C_FLAGS="-m32 -msse2 -mfpmath=sse" -DCMAKE_CXX_FLAGS="-m32 -msse2 -mfpmath=sse"' || '' }}
         env:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
