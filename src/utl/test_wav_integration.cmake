@@ -81,12 +81,6 @@ add_test(NAME wav-g726-match
 set_tests_properties(wav-g726-match PROPERTIES
   FIXTURES_REQUIRED WAV_FILES)
 
-# SV56: WAV 16000 Hz input (matching default -sf 16000)
-add_test(NAME wav-sv56-match
-  COMMAND ${BIN}/sv56demo -q ${WAV_TEST_DIR}/voice_16k.wav ${WAV_TEST_DIR}/sv56_out.raw 256 1 0 -30)
-set_tests_properties(wav-sv56-match PROPERTIES
-  FIXTURES_REQUIRED WAV_FILES)
-
 # MNRU: WAV 8000 Hz input (pass-through, any rate accepted)
 add_test(NAME wav-mnru-match
   COMMAND ${BIN}/mnrudemo -q ${WAV_TEST_DIR}/sine_8k.wav ${WAV_TEST_DIR}/mnru_out.raw 256 1 20 00)
@@ -124,31 +118,9 @@ set_tests_properties(wav-g726-mismatch PROPERTIES
   FIXTURES_REQUIRED WAV_FILES
   WILL_FAIL TRUE)
 
-# SV56: WAV 44100 Hz input with -sf 16000 (explicit mismatch)
-add_test(NAME wav-sv56-mismatch
-  COMMAND ${BIN}/sv56demo -q -sf 16000 ${WAV_TEST_DIR}/voice_44k.wav ${WAV_TEST_DIR}/sv56_bad.raw 256 1 0 -30)
-set_tests_properties(wav-sv56-mismatch PROPERTIES
-  FIXTURES_REQUIRED WAV_FILES
-  WILL_FAIL TRUE)
+# SV56: wav_io integration tests disabled (sv56 uses p56-bitdepth raw I/O)
 
-# SV56: WAV 16000 Hz input with -sf 8000 (explicit mismatch)
-add_test(NAME wav-sv56-explicit-mismatch
-  COMMAND ${BIN}/sv56demo -q -sf 8000 ${WAV_TEST_DIR}/voice_16k.wav ${WAV_TEST_DIR}/sv56_bad2.raw 256 1 0 -30)
-set_tests_properties(wav-sv56-explicit-mismatch PROPERTIES
-  FIXTURES_REQUIRED WAV_FILES
-  WILL_FAIL TRUE)
-
-# ==========================================================================
-# Case 2b: WAV input WITHOUT -sf parameter → should succeed (uses WAV rate)
-# ==========================================================================
-
-# SV56: WAV 16000 Hz input, no -sf given (should use WAV's rate, not reject)
-add_test(NAME wav-sv56-no-sf
-  COMMAND ${BIN}/sv56demo -q ${WAV_TEST_DIR}/voice_16k.wav ${WAV_TEST_DIR}/sv56_nosf.raw 256 1 0 -30)
-set_tests_properties(wav-sv56-no-sf PROPERTIES
-  FIXTURES_REQUIRED WAV_FILES)
-
-# filter: WAV 16000 Hz input, no -fs given (default is 8000, should accept WAV rate)
+# MNRU: WAV 8000 Hz input with -sf 16000 (explicit mismatch)
 add_test(NAME wav-gen-filter-16k
   COMMAND ${BIN}/mkwav ${WAV_TEST_DIR}/filter_test_16k.wav 16000 1 16 test_data/test.src
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/fir)
@@ -199,16 +171,6 @@ add_test(NAME wav-g711-wav-output-verify
   COMMAND ${BIN}/test_wav_io_validate ${WAV_TEST_DIR}/g711_out.wav 8000 1 16)
 set_tests_properties(wav-g711-wav-output-verify PROPERTIES
   DEPENDS wav-g711-wav-output)
-
-# SV56: WAV output
-add_test(NAME wav-sv56-wav-output
-  COMMAND ${BIN}/sv56demo -q ${WAV_TEST_DIR}/voice_16k.wav ${WAV_TEST_DIR}/sv56_out.wav 256 1 0 -30)
-set_tests_properties(wav-sv56-wav-output PROPERTIES
-  FIXTURES_REQUIRED WAV_FILES)
-add_test(NAME wav-sv56-wav-output-verify
-  COMMAND ${BIN}/test_wav_io_validate ${WAV_TEST_DIR}/sv56_out.wav 16000 1 16)
-set_tests_properties(wav-sv56-wav-output-verify PROPERTIES
-  DEPENDS wav-sv56-wav-output)
 
 # MNRU: WAV output preserves input rate
 add_test(NAME wav-mnru-wav-output
