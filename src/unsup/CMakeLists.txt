@@ -53,14 +53,14 @@ set(UNSUP_TEST_OUT ${CMAKE_CURRENT_BINARY_DIR}/test_out)
 file(MAKE_DIRECTORY ${UNSUP_TEST_OUT})
 
 add_test(sb1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sb ${UNSUP_TEST_DATA}/bigend.src ${UNSUP_TEST_OUT}/bytswpd.tst)
-set_tests_properties(sb1 PROPERTIES FIXTURES_SETUP SB1_DONE)
+set_tests_properties(sb1 PROPERTIES FIXTURES_SETUP SB1_DONE RESOURCE_LOCK SB_FILE)
 add_test(sb1-verify ${CMAKE_COMMAND} -E compare_files ${UNSUP_TEST_OUT}/bytswpd.tst ${UNSUP_TEST_DATA}/litend.src)
-set_tests_properties(sb1-verify PROPERTIES FIXTURES_REQUIRED SB1_DONE FIXTURES_SETUP SB1_VERIFIED)
+set_tests_properties(sb1-verify PROPERTIES FIXTURES_REQUIRED SB1_DONE FIXTURES_SETUP SB1_VERIFIED RESOURCE_LOCK SB_FILE)
 
 add_test(sb2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sb -over ${UNSUP_TEST_OUT}/bytswpd.tst)
-set_tests_properties(sb2 PROPERTIES FIXTURES_REQUIRED SB1_VERIFIED FIXTURES_SETUP SB2_DONE)
+set_tests_properties(sb2 PROPERTIES FIXTURES_REQUIRED SB1_VERIFIED FIXTURES_SETUP SB2_DONE RESOURCE_LOCK SB_FILE)
 add_test(sb2-verify ${CMAKE_COMMAND} -E compare_files ${UNSUP_TEST_OUT}/bytswpd.tst ${UNSUP_TEST_DATA}/bigend.src)
-set_tests_properties(sb2-verify PROPERTIES FIXTURES_REQUIRED SB2_DONE)
+set_tests_properties(sb2-verify PROPERTIES FIXTURES_REQUIRED SB2_DONE RESOURCE_LOCK SB_FILE)
 
 add_test(fdelay1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/fdelay test_data/bigend.src test_data/delaydft.tst)
 add_test(fdelay1-verify ${CMAKE_COMMAND} -E compare_files test_data/delaydft.tst test_data/delaydft.ref)
