@@ -87,15 +87,12 @@
 /* ... Includes for O.S. specific headers ... */
 #if defined(MSDOS)
 #include <fcntl.h>
-#include <io.h>                 /* For read(), write(), lseek() */
 #include <sys\stat.h>
 #elif defined(VMS)
 #include <perror.h>
 #include <file.h>
 #include <stat.h>
-#include <unixio.h>             /* For read(), write(), lseek() */
 #else /* Unix */
-#include <unistd.h>             /* For read(), write(), lseek() */
 #include <sys/stat.h>
 #endif
 
@@ -107,10 +104,10 @@
 
 /* Function prototypes */
 void display_usage ARGS ((void));
-long compare_doubles ARGS ((char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char quiet, double reltol, double abstol));
-long compare_floats ARGS ((char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char quiet, double reltol, float abstol));
-long compare_longs ARGS ((char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char KindOfDump, char quiet, double reltol, long abstol));
-long compare_shorts ARGS( (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char KindOfDump, char quiet, double reltol, short abstol) );
+long compare_doubles ARGS ((char *File1, char *File2, FILE *f1, FILE *f2, long N, long N1, long N2, char quiet, double reltol, double abstol));
+long compare_floats ARGS ((char *File1, char *File2, FILE *f1, FILE *f2, long N, long N1, long N2, char quiet, double reltol, float abstol));
+long compare_longs ARGS ((char *File1, char *File2, FILE *f1, FILE *f2, long N, long N1, long N2, char KindOfDump, char quiet, double reltol, long abstol));
+long compare_shorts ARGS( (char *File1, char *File2, FILE *f1, FILE *f2, long N, long N1, long N2, char KindOfDump, char quiet, double reltol, short abstol) );
 
 
 /*
@@ -160,7 +157,7 @@ void display_usage () {
 
 /*
   -------------------------------------------------------------------------
-  long compare_floats(char *File1, char *File2, int fh1, int fh2,
+  long compare_floats(char *File1, char *File2, FILE *f1, FILE *f2,
 		      long N, long N1, long N2, char quiet);
 
   Compare float data from 2 files and print different samples indicating
@@ -171,7 +168,7 @@ void display_usage () {
   30.Dec.93  v1.0  Simao
   --------------------------------------------------------------------------
 */
-long compare_floats (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char quiet, double reltol, float abstol) {
+long compare_floats (char *File1, char *File2, FILE *f1, FILE *f2, long N, long N1, long N2, char quiet, double reltol, float abstol) {
   long i, j, l, k, NrDiffs;
   char c;
   float *a, *b;
@@ -187,7 +184,7 @@ long compare_floats (char *File1, char *File2, int fh1, int fh2, long N, long N1
   /* Start loop */
   for (c = 0, NrDiffs = i = j = 0; i < N2; i++, j = 0) {
     if (!(c == 'Q' || c == 'X' || c == 27 || c == 'S')) {
-      if ((l = read (fh1, a, sizeof (float) * N) / sizeof (float)) > 0 && (k = read (fh2, b, sizeof (float) * N) / sizeof (float)) > 0)
+      if ((l = fread (a, sizeof (float), N, f1)) > 0 && (k = fread (b, sizeof (float), N, f2)) > 0)
         while (j < l && j < k) {
           if( fabs( a[j] - b[j] ) > abstol && RELATIVE_DIFF(a[j],b[j]) > reltol ) {
             if (!quiet) {
@@ -232,7 +229,7 @@ long compare_floats (char *File1, char *File2, int fh1, int fh2, long N, long N1
 
 /*
   -------------------------------------------------------------------------
-  long compare_doubles(char *File1, char *File2, int fh1, int fh2,
+  long compare_doubles(char *File1, char *File2, FILE *f1, FILE *f2,
 		      long N, long N1, long N2, char quiet);
 
   Compare double data from 2 files and print different samples indicating
@@ -243,7 +240,7 @@ long compare_floats (char *File1, char *File2, int fh1, int fh2, long N, long N1
   30.Dec.93  v1.0  Simao
   --------------------------------------------------------------------------
 */
-long compare_doubles (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char quiet, double reltol, double abstol ) {
+long compare_doubles (char *File1, char *File2, FILE *f1, FILE *f2, long N, long N1, long N2, char quiet, double reltol, double abstol ) {
   long i, j, l, k, NrDiffs;
   char c;
   double *a, *b;
@@ -259,7 +256,7 @@ long compare_doubles (char *File1, char *File2, int fh1, int fh2, long N, long N
   /* Start loop */
   for (c = 0, NrDiffs = i = j = 0; i < N2; i++, j = 0) {
     if (!(c == 'Q' || c == 'X' || c == 27 || c == 'S')) {
-      if ((l = read (fh1, a, sizeof (double) * N) / sizeof (double)) > 0 && (k = read (fh2, b, sizeof (double) * N) / sizeof (double)) > 0)
+      if ((l = fread (a, sizeof (double), N, f1)) > 0 && (k = fread (b, sizeof (double), N, f2)) > 0)
         while (j < l && j < k) {
           if ( a[j] != 0 && b[j] != 0 )
           if( fabs( a[j] - b[j] ) > abstol && RELATIVE_DIFF( a[j], b[j] ) > reltol ) {
@@ -305,7 +302,7 @@ long compare_doubles (char *File1, char *File2, int fh1, int fh2, long N, long N
 
 /*
   -------------------------------------------------------------------------
-  long compare_shorts(char *File1, char *File2, int fh1, int fh2,
+  long compare_shorts(char *File1, char *File2, FILE *f1, FILE *f2,
 		      long N, long N1, long N2, char KindOfDump, char quiet);
 
   Compare short data from 2 files and print in decimal or hex format the
@@ -316,7 +313,7 @@ long compare_doubles (char *File1, char *File2, int fh1, int fh2, long N, long N
   30.Dec.93  v1.0  Simao
   --------------------------------------------------------------------------
 */
-long compare_shorts (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char KindOfDump, char quiet, double reltol, short abstol ) {
+long compare_shorts (char *File1, char *File2, FILE *f1, FILE *f2, long N, long N1, long N2, char KindOfDump, char quiet, double reltol, short abstol ) {
   long i, j, l, k, NrDiffs;
   char c;
   short *a, *b;
@@ -332,7 +329,7 @@ long compare_shorts (char *File1, char *File2, int fh1, int fh2, long N, long N1
   /* Start loop */
   for (c = 0, NrDiffs = i = j = 0; i < N2; i++, j = 0) {
     if (!(c == 'Q' || c == 'X' || c == 27 || c == 'S')) {
-      if ((l = read (fh1, a, sizeof (short) * N) / sizeof (short)) > 0 && (k = read (fh2, b, sizeof (short) * N) / sizeof (short)) > 0)
+      if ((l = fread (a, sizeof (short), N, f1)) > 0 && (k = fread (b, sizeof (short), N, f2)) > 0)
         while (j < l && j < k) {
           if( abs( a[j] - b[j] ) > abstol && RELATIVE_DIFF( a[j], b[j] ) > reltol ) {
             if (!quiet) {
@@ -380,7 +377,7 @@ long compare_shorts (char *File1, char *File2, int fh1, int fh2, long N, long N1
 
 /*
   -------------------------------------------------------------------------
-  long compare_longs(char *File1, char *File2, int fh1, int fh2,
+  long compare_longs(char *File1, char *File2, FILE *f1, FILE *f2,
 		      long N, long N1, long N2, char KindOfDump, char quiet);
 
   Compare long data from 2 files and print in decimal or hex format the
@@ -391,7 +388,7 @@ long compare_shorts (char *File1, char *File2, int fh1, int fh2, long N, long N1
   30.Dec.93  v1.0  Simao
   --------------------------------------------------------------------------
 */
-long compare_longs (char *File1, char *File2, int fh1, int fh2, long N, long N1, long N2, char KindOfDump, char quiet, double reltol, long abstol ) {
+long compare_longs (char *File1, char *File2, FILE *f1, FILE *f2, long N, long N1, long N2, char KindOfDump, char quiet, double reltol, long abstol ) {
   long i, j, l, k, NrDiffs;
   char c;
   long *a, *b;
@@ -407,7 +404,7 @@ long compare_longs (char *File1, char *File2, int fh1, int fh2, long N, long N1,
   /* Start loop */
   for (c = 0, NrDiffs = i = j = 0; i < N2; i++, j = 0) {
     if (!(c == 'Q' || c == 'X' || c == 27 || c == 'S')) {
-      if ((l = read (fh1, a, sizeof (long) * N) / sizeof (long)) > 0 && (k = read (fh2, b, sizeof (long) * N) / sizeof (long)) > 0)
+      if ((l = fread (a, sizeof (long), N, f1)) > 0 && (k = fread (b, sizeof (long), N, f2)) > 0)
         while (j < l && j < k) {
           if( labs( a[j] - b[j] ) > abstol && RELATIVE_DIFF( a[j], b[j] ) > reltol ) {
             if (!quiet) {
@@ -454,13 +451,12 @@ long compare_longs (char *File1, char *File2, int fh1, int fh2, long N, long N1,
 
 int main (int argc, char *argv[]) {
   char C[1];
-  int fh1, fh2;
+  FILE *f1, *f2;
 
   long N, N1, N2, NrDiffs = 0, tot_smp;
   long delay = 0, start_byte1, start_byte2, samplesize;
   char File1[50], File2[50];
   char KindOfDump = 'D', TypeOfData = 'I', quiet = 0;
-  FILE *f1, *f2;
   struct stat st;
   long k, l, s1, s2;
 
@@ -659,14 +655,11 @@ int main (int argc, char *argv[]) {
     KILL (File1, 3);
   if ((f2 = fopen (File2, RB)) == NULL)
     KILL (File2, 4);
-  fh1 = fileno (f1);
-  fh2 = fileno (f2);
-
 
   /* Move pointer to 1st block of interest */
-  if (lseek (fh1, start_byte1, 0l) < 0l)
+  if (fseek (f1, start_byte1, SEEK_SET) != 0)
     KILL (File1, 3);
-  if (lseek (fh2, start_byte2, 0l) < 0l)
+  if (fseek (f2, start_byte2, SEEK_SET) != 0)
     KILL (File2, 4);
 
   /* Some preliminaries */
@@ -675,19 +668,19 @@ int main (int argc, char *argv[]) {
   /* Dumps the file to the screen */
   switch (TypeOfData) {
   case 'I':                    /* short data */
-    NrDiffs = compare_shorts (File1, File2, fh1, fh2, N, N1, N2, KindOfDump, quiet, reltol, abstol_short);
+    NrDiffs = compare_shorts (File1, File2, f1, f2, N, N1, N2, KindOfDump, quiet, reltol, abstol_short);
     break;
 
   case 'L':                    /* long data */
-    NrDiffs = compare_longs (File1, File2, fh1, fh2, N, N1, N2, KindOfDump, quiet, reltol, abstol_long );
+    NrDiffs = compare_longs (File1, File2, f1, f2, N, N1, N2, KindOfDump, quiet, reltol, abstol_long );
     break;
 
   case 'R':                    /* float data */
-    NrDiffs = compare_floats (File1, File2, fh1, fh2, N, N1, N2, quiet, reltol, abstol_float );
+    NrDiffs = compare_floats (File1, File2, f1, f2, N, N1, N2, quiet, reltol, abstol_float );
     break;
 
   case 'D':                    /* double data */
-    NrDiffs = compare_doubles (File1, File2, fh1, fh2, N, N1, N2, quiet, reltol, abstol_double );
+    NrDiffs = compare_doubles (File1, File2, f1, f2, N, N1, N2, quiet, reltol, abstol_double );
     break;
   }
 
