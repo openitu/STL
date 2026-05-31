@@ -327,26 +327,24 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Open input file */
-  if ((Fi = audio_open_read (inpfil, 0, 0, 16)) == NULL)
+  if ((Fi = audio_open_read (inpfil, 8000, 0, 16)) == NULL)
     KILL (inpfil, 2);
 
   /* Open (create) output file */
-  if ((Fo = audio_open_write (outfil, 0, 1, 16)) == NULL)
+  if ((Fo = audio_open_write (outfil, audio_get_sample_rate (Fi), 1, 16)) == NULL)
     KILL (outfil, 3);
 
   /* Define starting byte in file */
   start_byte = (N1 * N + skip) * sizeof (short);
 
   /* ... and move file's pointer to 1st desired block */
-  if (fseek (Fi->fp, (N1 * N + skip) * sizeof (short), 0) < 0l)
+  if (audio_seek (Fi, (N1 * N + skip) * sizeof (short)) < 0)
     KILL (inpfil, 4);
 
   /* Check whether is to process til end-of-file */
   if (N2 == 0) {
-    struct stat st;
     /* ... hey, need to skip the delayed samples! ... */
-    stat (inpfil, &st);
-    N2 = ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
+    N2 = ceil ((audio_get_data_size (Fi) - start_byte) / (double) (N * sizeof (short)));
   }
 
 

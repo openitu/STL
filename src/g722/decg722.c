@@ -356,7 +356,7 @@ int main (int argc, char *argv[]) {
     KILL (FileIn, -2);
   }
   /* Open output file */
-  if ((F_out = audio_open_write (FileOut, 0, 1, 16)) == NULL) {
+  if ((F_out = audio_open_write (FileOut, 16000, 1, 16)) == NULL) {
     KILL (FileOut, -2);
   }
 

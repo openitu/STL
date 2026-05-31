@@ -30,7 +30,7 @@ target_link_libraries(oper ${M_LIBRARY})
 
 add_executable(sb sb.c)
 
-add_executable(sine sine.c)
+add_executable(sine sine.c ../utl/wav_io.c)
 target_link_libraries(sine ${M_LIBRARY})
 
 add_executable(chr2sh chr2sh.c)

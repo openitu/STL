@@ -187,7 +187,7 @@ int main (int argc, char *argv[]) {
     }
   }
   for (i = 0; i < n_outfiles[mode]; i++) {
-    if ((Fof[i] = audio_open_write (ofname[i], 0, 1, 16)) == NULL) {
+    if ((Fof[i] = audio_open_write (ofname[i], audio_get_sample_rate (Fif[0]), 1, 16)) == NULL) {
       sprintf (tmp_str, "Could not create output file %d,(%s)\n", i + 1, ofname[i]);
       error_terminate (tmp_str, 1);
     }

@@ -242,7 +242,7 @@ int main (int argc, char *argv[]) {
   }
 
   /* Open input file */
-  if ((F_inp = audio_open_read (FileIn, 0, 0, 16)) == NULL) {
+  if ((F_inp = audio_open_read (FileIn, 16000, 0, 16)) == NULL) {
     fprintf (stderr, "Could not open %s\n", FileIn);
     KILL (FileIn, -2);
   }

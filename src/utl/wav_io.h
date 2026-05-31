@@ -60,4 +60,15 @@ long audio_get_sample_rate (AUDIO_FILE * af);
 /* Returns channel count from WAV header (0 if raw) */
 int audio_get_channels (AUDIO_FILE * af);
 
+/* Seek to a byte offset relative to the start of PCM data.
+ * For WAV files, accounts for the header (data_offset).
+ * For raw files, seeks from byte 0.
+ * Returns 0 on success, -1 on failure. */
+int audio_seek (AUDIO_FILE * af, long offset);
+
+/* Returns total size of PCM data in bytes.
+ * For WAV, returns the data chunk size from the header.
+ * For raw, returns the file size. */
+long audio_get_data_size (AUDIO_FILE * af);
+
 #endif /* WAV_IO_H */

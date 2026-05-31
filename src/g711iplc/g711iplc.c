@@ -99,11 +99,11 @@ int main (int argc, char *argv[]) {
     exit (EXIT_FAILURE);
   }
   readplcmask_open (&mask, argv[0]);    /* PLC pattern file */
-  if ((fi = audio_open_read (argv[1], 0, 0, 16)) == NULL) {   /* input file */
+  if ((fi = audio_open_read (argv[1], 8000, 0, 16)) == NULL) {   /* input file */
     fprintf (stderr, "Can't open input file: %s", argv[1]);
     exit (EXIT_FAILURE);
   }
-  if ((fo = audio_open_write (argv[2], 0, 1, 16)) == NULL) {   /* output file */
+  if ((fo = audio_open_write (argv[2], audio_get_sample_rate (fi), 1, 16)) == NULL) {   /* output file */
     fprintf (stderr, "Can't open output file: %s", argv[2]);
     exit (EXIT_FAILURE);
   }

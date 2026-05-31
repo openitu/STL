@@ -318,7 +318,7 @@ int main (int argc, char *argv[]) {
   /* Open files; abort on error */
   if ((Finp = audio_open_read (InpFile, 0, 0, 16)) == NULL)
     KILL (InpFile, 3);
-  if ((Fout = audio_open_write (OutFile, 0, 1, 16)) == NULL)
+  if ((Fout = audio_open_write (OutFile, audio_get_sample_rate (Finp), 1, 16)) == NULL)
     KILL (OutFile, 4);
   if (delay_file) {
     /* Delay comes from a file - open delay file */
@@ -335,15 +335,11 @@ int main (int argc, char *argv[]) {
 
   /* Check if is to process the whole file */
   if (N2 == 0) {
-    struct stat st;
-
-    /* ... find the input file size ... */
-    stat (InpFile, &st);
-    N2 = ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
+    N2 = ceil ((audio_get_data_size (Finp) - start_byte) / (double) (N * sizeof (short)));
   }
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Finp->fp, start_byte, 0) < 0l)
+  if (audio_seek (Finp, start_byte) < 0l)
     KILL (InpFile, 4);
 
   /* Put delay samples in begining of file, if *not* appending */

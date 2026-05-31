@@ -411,14 +411,7 @@ int main (int argc, char *argv[]) {
   /* Find starting byte in file */
   start_byte = sizeof (short) * (long) (--N1) * (long) N;
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-
-    /* ... find the input file size ... */
-    stat (FileIn, &st);
-    N2 = ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
-  }
+  /* N2 will be computed after opening file if processing the whole file */
 
   /* Define correct data I/O types */
   if (encode && decode) {
@@ -451,18 +444,22 @@ int main (int argc, char *argv[]) {
  */
 
   /* Opening input file; abort if there's any problem */
-  if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
+  if ((Fi = audio_open_read (FileIn, 8000, 0, 16)) == NULL)
     KILL (FileIn, 2);
+
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0)
+    N2 = ceil ((audio_get_data_size (Fi) - start_byte) / (double) (N * sizeof (short)));
 
   /* Creates output file */
 #ifdef VMS
   sprintf (mrs, "mrs=%d", 512);
 #endif
-  if ((Fo = audio_open_write (FileOut, 0, 1, 16)) == NULL)
+  if ((Fo = audio_open_write (FileOut, audio_get_sample_rate (Fi), 1, 16)) == NULL)
     KILL (FileOut, 3);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Fi->fp, start_byte, 0) < 0l)
+  if (audio_seek (Fi, start_byte) < 0l)
     KILL (FileIn, 4);
 
 /*

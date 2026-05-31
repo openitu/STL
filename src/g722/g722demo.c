@@ -253,11 +253,8 @@ int main (int argc, char *argv[]) {
 
   /* Check if is to process the whole file */
   if (N2 == 0) {
-    struct stat st;
-
-    /* ... find the input file size ... */
-    stat (FileIn, &st);
-    N2 = (long) ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
+    /* N2 will be computed after opening file */
+    N2 = 0;
   }
 
   /* Protect mode, if misgiven */
@@ -265,11 +262,15 @@ int main (int argc, char *argv[]) {
     error_terminate ("Bad mode specified; aborting\n", 2);
 
   /* Open input file */
-  if ((inp = audio_open_read (FileIn, 0, 0, 16)) == NULL)
+  if ((inp = audio_open_read (FileIn, 16000, 0, 16)) == NULL)
     KILL (FileIn, -2);
 
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0)
+    N2 = (long) ceil ((audio_get_data_size (inp) - start_byte) / (double) (N * sizeof (short)));
+
   /* Open output file */
-  if ((out = audio_open_write (FileOut, 0, 1, 16)) == NULL)
+  if ((out = audio_open_write (FileOut, audio_get_sample_rate (inp), 1, 16)) == NULL)
     KILL (FileOut, -2);
 
 #ifndef STATIC_ALLOCATION
