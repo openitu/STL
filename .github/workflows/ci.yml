@@ -111,7 +111,7 @@ jobs:
         run: |
           docker run --rm --platform linux/386 \
             -v ${{ github.workspace }}:/src -w /src \
-            ubuntu:22.04 bash -c "
+            debian:bullseye bash -c "
               apt-get update && apt-get install -y gcc g++ cmake make &&
               cmake . &&
               cmake --build . &&
