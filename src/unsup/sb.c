@@ -54,6 +54,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ugstdemo.h"
+#ifdef _WIN32
+#include <process.h>
+#endif
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 #ifdef VMS
 #include <stat.h>
@@ -236,24 +242,23 @@ long decent_approach (FILE * i, FILE * o) {
   Get a temporary file name, handling ideosynchrasies from different compilers
   -----------------------------------------------------------------------------
 */
-void get_tmp_name (char *fileout) {
-#if defined (unix) || defined (__GNUC__) || defined(_MSC_VER)
-  char *ch;
+void get_tmp_name (char *fileout, const char *input_file) {
+  /* Create temp file in same directory as input (rename requires same directory on some platforms) */
+  const char *sep;
+  size_t dirlen;
+#ifdef _WIN32
+  sep = strrchr(input_file, '\\');
+  if (!sep) sep = strrchr(input_file, '/');
+#else
+  sep = strrchr(input_file, '/');
 #endif
-
-  tmpnam (fileout);
-
-#if defined (unix) || defined (__GNUC__)
-  ch = strrchr (fileout, '/');
-  ch++;
-  memmove(fileout, ch, strlen(ch));
-
-#endif
-#ifdef _MSC_VER
-  ch = strrchr (fileout, '\\');
-  ch++;
-  memmove(fileout, ch, strlen(ch));
-#endif
+  if (sep) {
+    dirlen = (size_t)(sep - input_file + 1);
+    memcpy(fileout, input_file, dirlen);
+    sprintf(fileout + dirlen, "sb_tmp_%d.tmp", (int)getpid());
+  } else {
+    sprintf(fileout, "sb_tmp_%d.tmp", (int)getpid());
+  }
 
 #ifdef DEBUG
   printf ("Temporary file name: %s\n", fileout);
@@ -284,7 +289,7 @@ int main (int argc, char *argv[]) {
       argc--;
       fprintf (stderr, "Aya, sir; it's and ILS file!\n");
     } else if (!strcmp (argv[1], "-over")) {
-      get_tmp_name (fileout);
+      get_tmp_name (fileout, argv[2]);
       argv++;
       argc--;
       overwrite = 1;
