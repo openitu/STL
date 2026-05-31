@@ -31,17 +31,26 @@ target_link_libraries(sv56-convert ${M_LIBRARY})
 add_test(sv56test-16bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56test 16 test_data/voice.src test_data/voice_16bit.out)
 set_tests_properties(sv56test-16bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_test(sv56test-16bit-verify ${CMAKE_COMMAND} -E compare_files test_data/voice_16bit.ref test_data/voice_16bit.out)
-set_tests_properties(sv56test-16bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_test(sv56test-16bit-verify ${CMAKE_COMMAND}
+  -DGOT=${CMAKE_CURRENT_SOURCE_DIR}/test_data/voice_16bit.out
+  -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/voice_16bit.ref
+  -DLABEL=sv56test-16bit
+  -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)
 
 add_test(sv56test-24bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56test 24 test_data/voice_24.src test_data/voice_24bit.out)
 set_tests_properties(sv56test-24bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_test(sv56test-24bit-verify ${CMAKE_COMMAND} -E compare_files test_data/voice_24bit.ref test_data/voice_24bit.out)
-set_tests_properties(sv56test-24bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_test(sv56test-24bit-verify ${CMAKE_COMMAND}
+  -DGOT=${CMAKE_CURRENT_SOURCE_DIR}/test_data/voice_24bit.out
+  -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/voice_24bit.ref
+  -DLABEL=sv56test-24bit
+  -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)
 
 add_test(sv56test-32bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56test 32 test_data/voice_32.src test_data/voice_32bit.out)
 set_tests_properties(sv56test-32bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_test(sv56test-32bit-verify ${CMAKE_COMMAND} -E compare_files test_data/voice_32bit.ref test_data/voice_32bit.out)
-set_tests_properties(sv56test-32bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_test(sv56test-32bit-verify ${CMAKE_COMMAND}
+  -DGOT=${CMAKE_CURRENT_SOURCE_DIR}/test_data/voice_32bit.out
+  -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/voice_32bit.ref
+  -DLABEL=sv56test-32bit
+  -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)
