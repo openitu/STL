@@ -79,4 +79,10 @@ jobs:
           sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended latexmk
 
       - name: Build manual
-        run: cd doc/manual && latexmk -pdf -halt-on-error STLmanual.tex < /dev/null
+        run: cd doc/manual && latexmk -pdf -halt-on-error STLmanual.tex
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: STL-manual
+          path: doc/manual/STLmanual.pdf
