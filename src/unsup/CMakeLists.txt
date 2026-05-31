@@ -49,12 +49,14 @@ add_test(concat1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/concat -f -undo test_data/und
 add_test(concat1-verify ${CMAKE_COMMAND} -E compare_files test_data/concat3.tst test_data/concat3.txt)
 
 add_test(sb1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sb test_data/bigend.src test_data/bytswpd.tst)
+set_tests_properties(sb1 PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 add_test(sb1-verify ${CMAKE_COMMAND} -E compare_files test_data/bytswpd.tst test_data/litend.src)
+set_tests_properties(sb1-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DEPENDS sb1)
 
 add_test(sb2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sb -over test_data/bytswpd.tst)
-set_tests_properties(sb2 PROPERTIES DEPENDS sb1)
+set_tests_properties(sb2 PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DEPENDS sb1-verify)
 add_test(sb2-verify ${CMAKE_COMMAND} -E compare_files test_data/bytswpd.tst test_data/bigend.src)
-set_tests_properties(sb2-verify PROPERTIES DEPENDS sb2)
+set_tests_properties(sb2-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DEPENDS sb2)
 
 add_test(fdelay1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/fdelay test_data/bigend.src test_data/delaydft.tst)
 add_test(fdelay1-verify ${CMAKE_COMMAND} -E compare_files test_data/delaydft.tst test_data/delaydft.ref)
