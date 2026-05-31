@@ -48,11 +48,23 @@ add_test(astrip2-verify ${CMAKE_COMMAND} -E compare_files test_data/astrip.blk t
 add_test(concat1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/concat -f -undo test_data/undo.txt test_data/concat1.txt test_data/concat2.txt test_data/concat3.tst)
 add_test(concat1-verify ${CMAKE_COMMAND} -E compare_files test_data/concat3.tst test_data/concat3.txt)
 
-add_test(sb1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sb test_data/bigend.src test_data/bytswpd.tst)
-add_test(sb1-verify ${CMAKE_COMMAND} -E compare_files test_data/bytswpd.tst test_data/litend.src)
+set(UNSUP_TEST_DATA ${CMAKE_CURRENT_SOURCE_DIR}/test_data)
+set(UNSUP_TEST_OUT ${CMAKE_CURRENT_BINARY_DIR}/test_out)
+file(MAKE_DIRECTORY ${UNSUP_TEST_OUT})
 
-add_test(sb2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sb -over test_data/bytswpd.tst)
-add_test(sb2-verify ${CMAKE_COMMAND} -E compare_files test_data/bytswpd.tst test_data/bigend.src)
+add_test(sb1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sb ${UNSUP_TEST_DATA}/bigend.src ${UNSUP_TEST_OUT}/bytswpd.tst)
+set_tests_properties(sb1 PROPERTIES FIXTURES_SETUP SB1_DONE RESOURCE_LOCK SB_FILE)
+add_test(sb1-verify ${CMAKE_COMMAND} -E compare_files ${UNSUP_TEST_OUT}/bytswpd.tst ${UNSUP_TEST_DATA}/litend.src)
+set_tests_properties(sb1-verify PROPERTIES FIXTURES_REQUIRED SB1_DONE FIXTURES_SETUP SB1_VERIFIED RESOURCE_LOCK SB_FILE)
+
+# Debug: check file exists before sb2
+add_test(NAME sb2-debug COMMAND ${CMAKE_COMMAND} -E sha256sum ${UNSUP_TEST_OUT}/bytswpd.tst)
+set_tests_properties(sb2-debug PROPERTIES FIXTURES_REQUIRED SB1_VERIFIED FIXTURES_SETUP SB2_DEBUG_DONE RESOURCE_LOCK SB_FILE)
+
+add_test(sb2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sb -over ${UNSUP_TEST_OUT}/bytswpd.tst)
+set_tests_properties(sb2 PROPERTIES FIXTURES_REQUIRED SB2_DEBUG_DONE FIXTURES_SETUP SB2_DONE RESOURCE_LOCK SB_FILE)
+add_test(sb2-verify ${CMAKE_COMMAND} -E compare_files ${UNSUP_TEST_OUT}/bytswpd.tst ${UNSUP_TEST_DATA}/bigend.src)
+set_tests_properties(sb2-verify PROPERTIES FIXTURES_REQUIRED SB2_DONE RESOURCE_LOCK SB_FILE)
 
 add_test(fdelay1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/fdelay test_data/bigend.src test_data/delaydft.tst)
 add_test(fdelay1-verify ${CMAKE_COMMAND} -E compare_files test_data/delaydft.tst test_data/delaydft.ref)
