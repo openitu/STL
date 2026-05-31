@@ -48,7 +48,7 @@ jobs:
 
       - name: Configure (Unix)
         if: runner.os != 'Windows'
-        run: cmake . ${{ matrix.cflags && '-DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32' || '' }}
+        run: cmake . ${{ matrix.cflags && '-DCMAKE_C_FLAGS=-m32 -msse2 -mfpmath=sse -DCMAKE_CXX_FLAGS=-m32 -msse2 -mfpmath=sse' || '' }}
         env:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
@@ -114,7 +114,7 @@ jobs:
             -v ${{ github.workspace }}:/src -w /src \
             debian:bullseye bash -c "
               apt-get update && apt-get install -y --no-install-recommends gcc g++ cmake make &&
-              cmake . &&
+              cmake . -DCMAKE_C_FLAGS='-msse2 -mfpmath=sse' -DCMAKE_CXX_FLAGS='-msse2 -mfpmath=sse' &&
               cmake --build . &&
               ctest --output-on-failure
             "
