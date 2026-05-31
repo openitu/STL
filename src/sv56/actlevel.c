@@ -155,7 +155,7 @@
 
 /* ... Include of utilities ... */
 #include "ugst-utl.h"
-#include "wav_io.h"
+#include "sv56-util.h"
 
 /* ... Local definitions ... */
 #define DEF_BLK_LEN 256         /* samples per block */
@@ -424,18 +424,18 @@ int main (int argc, char *argv[]) {
 
   /* File-related variables */
   char FileIn[150];
-  AUDIO_FILE *Fi;               /* input file pointer */
+  FILE *Fi;                     /* input file pointer */
   FILE *out = stdout;           /* where to print the statistical results */
 #ifdef VMS
   char mrs[15];
 #endif
 
   /* Other variables */
-  short buffer[4096];
+  unsigned char raw_buf[4096 * 4];
   float Buf[4096];
+  int bps;
   long start_byte, bitno = 16;
   double sf = 16000;            /* Hz */
-  int sf_given = 0;
   double ActiveLeveldB, level = 0, gain = 0;
   static char funny[] = "|/-\\|/-\\", funny_size = sizeof (funny), quiet = 0;
 #ifdef LOCAL_PRINT
@@ -453,7 +453,6 @@ int main (int argc, char *argv[]) {
       if (strcmp (argv[1], "-sf") == 0) {
         /* Change default sampling frequency */
         sf = atof (argv[2]);
-        sf_given = 1;
 
         /* Update argc/argv to next valid option/argument */
         argv += 2;
@@ -541,9 +540,16 @@ int main (int argc, char *argv[]) {
 
 
   /* ......... SOME INITIALIZATIONS ......... */
+  /* Validate bitno */
+  if (bitno < 8 || bitno > SVP56_MAX_NO_BITS) {
+    fprintf (stderr, "Error: bitno must be between 8 and %d\n", SVP56_MAX_NO_BITS);
+    exit (1);
+  }
+  bps = sv56_bytes_per_sample ((int) bitno);
+
   /* funny_size = strlen(funny); */
   start_byte = --N1;
-  start_byte *= N * sizeof (short);
+  start_byte *= N * bps;
   N2_ori = N2;
 
   /* Overflow (saturation) point */
@@ -558,29 +564,29 @@ int main (int argc, char *argv[]) {
     argc--;
 
     /* Reset variables for speech level measurements */
-    init_speech_voltmeter (&state, sf);
+    init_speech_voltmeter (&state, sf, (int)bitno);
 
     /* ......... FILE PREPARATION ......... */
 
     /* Opening input file; abort if there's any problem */
 #ifdef VMS
-    sprintf (mrs, "mrs=%d", 2 * N);
+    sprintf (mrs, "mrs=%d", bps * N);
 #endif
-    if ((Fi = audio_open_read (FileIn, sf_given ? (long) sf : 0, 0, 16)) == NULL)
+    if ((Fi = fopen (FileIn, RB)) == NULL)
       KILL (FileIn, 2);
-    if (audio_get_sample_rate (Fi) > 0)
-      sf = (double) audio_get_sample_rate (Fi);
 
     /* Reinitialize number of blocks as specified initially */
     N2 = N2_ori;
 
     /* Check if is to process the whole file */
     if (N2 == 0) {
-      N2 = ceil (audio_get_data_size (Fi) / (double) (N * sizeof (short)));
+      struct stat st;
+      stat (FileIn, &st);
+      N2 = ceil (st.st_size / (double) (N * bps));
     }
 
     /* Move pointer to 1st block of interest */
-    if (audio_seek (Fi, start_byte) < 0l)
+    if (fseek (Fi, start_byte, 0) < 0l)
       KILL (FileIn, 4);
 
 
@@ -590,9 +596,9 @@ int main (int argc, char *argv[]) {
     if (!quiet)
       fprintf (stderr, "  Processing \r");
     for (i = 0; i < N2; i++) {
-      if ((l = audio_read (Fi, buffer, N)) > 0) {
+      if ((l = fread (raw_buf, bps, N, Fi)) > 0) {
         /* ... Convert samples to float */
-        sh2fl ((long) l, buffer, Buf, bitno, 1);
+        sv56_raw2fl ((long) l, raw_buf, Buf, (int) bitno);
 
         /* ... Get the active level */
         ActiveLeveldB = speech_voltmeter (Buf, (long) l, &state);
@@ -684,7 +690,7 @@ int main (int argc, char *argv[]) {
 #endif /* LOCAL_PRINT */
 
     /* Close current file */
-    audio_close (Fi);
+    fclose (Fi);
   }
 
   /* FINALIZATIONS */

@@ -47,8 +47,6 @@ src/is54/test_data/voice.bec
 src/is54/test_data/voice.hbs
 !src/is54/test_data/voice.log
 src/is54/test_data/voice.rek
-src/sv56/test_data/voice.prc
-src/sv56/test_data/voice.rms
 src/unsup/test_data/astrip.blk
 src/unsup/test_data/undo.txt
 src/utl/test_data/voice.rnp
@@ -97,3 +95,8 @@ bld/
 .vs/
 *vcxproj*
 *.sln*
+.vscode/
+/build
+*.double
+stderr.txt
+stdout.txt
