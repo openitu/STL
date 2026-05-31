@@ -48,7 +48,7 @@ jobs:
 
       - name: Configure (Unix)
         if: runner.os != 'Windows'
-        run: cmake . ${{ matrix.cflags && format('-DCMAKE_C_FLAGS={0} -DCMAKE_CXX_FLAGS={0}', matrix.cflags) }}
+        run: cmake . ${{ matrix.cflags && '-DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32' || '' }}
         env:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
@@ -98,23 +98,25 @@ jobs:
 
   build-i386-container:
     runs-on: ubuntu-latest
-    container: i386/ubuntu:22.04
     name: i386 container
     timeout-minutes: 15
     steps:
-      - name: Install dependencies
-        run: apt-get update && apt-get install -y gcc g++ cmake make git
-
       - uses: actions/checkout@v4
 
-      - name: Configure
-        run: cmake .
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/386
 
-      - name: Build
-        run: cmake --build .
-
-      - name: Test
-        run: ctest --output-on-failure
+      - name: Build and test in i386 container
+        run: |
+          docker run --rm --platform linux/386 \
+            -v ${{ github.workspace }}:/src -w /src \
+            i386/ubuntu:22.04 bash -c "
+              apt-get update && apt-get install -y gcc g++ cmake make &&
+              cmake . &&
+              cmake --build . &&
+              ctest --output-on-failure
+            "
 
   build-arm32-qemu:
     runs-on: ubuntu-latest
