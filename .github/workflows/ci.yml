@@ -66,7 +66,7 @@ jobs:
 
       - name: Build (Windows)
         if: runner.os == 'Windows'
-        run: cmake --build . --config Release
+        run: cmake --build .
 
       - name: Test (Unix)
         if: runner.os != 'Windows'
@@ -74,7 +74,7 @@ jobs:
 
       - name: Test (Windows)
         if: runner.os == 'Windows'
-        run: ctest --output-on-failure --build-config Release
+        run: ctest --output-on-failure
 
   manual:
     runs-on: ubuntu-latest
