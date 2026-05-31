@@ -451,14 +451,14 @@ void print_test_out(int test_index, FILE * fp, int index, int f_type1, char *fnm
     {
         float * outf_d = (float *)((char *)out_dut + (sizeof(float)*index));
 	unsigned long * res = (unsigned long *)outf_d;
-	fprintf(fp, "%X,\n", *res);
+	fprintf(fp, "%lX,\n", *res);
     }
     break;
     case DATA_TYPE_LONG:
     {
         int * outf_d = (int *)((char *)out_dut + (sizeof(int)*index));
 	unsigned long * res = (unsigned long *)outf_d;
-	fprintf(fp, "%X,\n", *res);
+	fprintf(fp, "%lX,\n", *res);
     }
     break;
     case DATA_TYPE_SHORT:
@@ -472,7 +472,7 @@ void print_test_out(int test_index, FILE * fp, int index, int f_type1, char *fnm
         f_cmplx * outf_d = (f_cmplx *)((char *)out_dut + (sizeof(f_cmplx)*index));
 	float res = (sqrt(outf_d->re*outf_d->re + outf_d->im*outf_d->im));
 	unsigned long *res1 = (unsigned long *)&res;
-	fprintf(fp, "%X,\n", *res1);
+	fprintf(fp, "%lX,\n", *res1);
     }
     break;
     case DATA_TYPE_CMPLX_L:
@@ -480,7 +480,7 @@ void print_test_out(int test_index, FILE * fp, int index, int f_type1, char *fnm
         f_cmplx * outf_d = (f_cmplx *)((char *)out_dut + (sizeof(f_cmplx)*index));
 	float res = sqrt((outf_d->re*outf_d->re + outf_d->im*outf_d->im));
 	unsigned long *res1 = (unsigned long *)&res;
-	fprintf(fp, "%X,\n", *res1);
+	fprintf(fp, "%lX,\n", *res1);
     }
     break;
     case DATA_TYPE_WORD64:
