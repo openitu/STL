@@ -113,7 +113,7 @@ jobs:
             -e DEBIAN_FRONTEND=noninteractive \
             -v ${{ github.workspace }}:/src -w /src \
             debian:bullseye bash -c "
-              apt-get update && apt-get install -y --no-install-recommends gcc g++ cmake make &&
+              apt-get update && apt-get install -y --no-install-recommends gcc g++ cmake make python3 &&
               cmake . -DCMAKE_C_FLAGS='-msse2 -mfpmath=sse' -DCMAKE_CXX_FLAGS='-msse2 -mfpmath=sse' &&
               cmake --build . &&
               ctest --output-on-failure
@@ -136,7 +136,7 @@ jobs:
             -e DEBIAN_FRONTEND=noninteractive \
             -v ${{ github.workspace }}:/src -w /src \
             arm32v7/ubuntu:22.04 bash -c "
-              apt-get update && apt-get install -y --no-install-recommends gcc g++ cmake make &&
+              apt-get update && apt-get install -y --no-install-recommends gcc g++ cmake make python3 &&
               cmake . &&
               cmake --build . &&
               ctest --output-on-failure
