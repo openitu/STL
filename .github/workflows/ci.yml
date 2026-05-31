@@ -99,7 +99,7 @@ jobs:
   build-i386-container:
     runs-on: ubuntu-latest
     name: i386 container
-    timeout-minutes: 15
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
