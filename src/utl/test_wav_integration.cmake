@@ -76,10 +76,7 @@ set_tests_properties(wav-g711-match-verify PROPERTIES
   DEPENDS "wav-g711-match;wav-g711-match-raw")
 
 # G.726: WAV 8000 Hz input
-add_test(NAME wav-g726-match
-  COMMAND ${BIN}/g726demo -q a lilo 16 ${WAV_TEST_DIR}/g726_voice_8k.wav ${WAV_TEST_DIR}/g726_out.raw 256 1 64)
-set_tests_properties(wav-g726-match PROPERTIES
-  FIXTURES_REQUIRED WAV_FILES)
+# g726demo: removed (g726demo expects A-law/mu-law input, not linear PCM; vbr-g726 WAV tests cover G.726)
 
 # MNRU: WAV 8000 Hz input (pass-through, any rate accepted)
 add_test(NAME wav-mnru-match
@@ -108,13 +105,6 @@ set_tests_properties(wav-reverb-match PROPERTIES
 add_test(NAME wav-g711-mismatch
   COMMAND ${BIN}/g711demo A lilo ${WAV_TEST_DIR}/sweep_48k.wav ${WAV_TEST_DIR}/g711_bad.raw 256 1 256)
 set_tests_properties(wav-g711-mismatch PROPERTIES
-  FIXTURES_REQUIRED WAV_FILES
-  WILL_FAIL TRUE)
-
-# G.726: WAV 16000 Hz input (expects 8000 Hz)
-add_test(NAME wav-g726-mismatch
-  COMMAND ${BIN}/g726demo -q a lilo 16 ${WAV_TEST_DIR}/g726_voice_16k.wav ${WAV_TEST_DIR}/g726_bad.raw 256 1 64)
-set_tests_properties(wav-g726-mismatch PROPERTIES
   FIXTURES_REQUIRED WAV_FILES
   WILL_FAIL TRUE)
 
@@ -407,14 +397,6 @@ set_tests_properties(wav-sine-wav-output-verify PROPERTIES DEPENDS wav-sine-wav-
 # ==========================================================================
 # WAV output verification for all remaining tools
 # ==========================================================================
-
-# g726demo: WAV output at 8000 Hz
-add_test(NAME wav-g726-wav-output
-  COMMAND ${BIN}/g726demo -q a lilo 16 ${WAV_TEST_DIR}/g726_voice_8k.wav ${WAV_TEST_DIR}/g726_out.wav 256 1 64)
-set_tests_properties(wav-g726-wav-output PROPERTIES FIXTURES_REQUIRED WAV_FILES)
-add_test(NAME wav-g726-wav-output-verify
-  COMMAND ${BIN}/test_wav_io_validate ${WAV_TEST_DIR}/g726_out.wav 8000 1 16)
-set_tests_properties(wav-g726-wav-output-verify PROPERTIES DEPENDS wav-g726-wav-output)
 
 # vbr-g726: WAV output at 8000 Hz
 add_test(NAME wav-vbr-g726-wav-output
