@@ -111,6 +111,12 @@ if __name__ == '__main__':
     for file in args.file_list:
         cmdline.append(file)
     
+    # Debug: print command and working directory
+    print("DEBUG test_wmc_tool.py: cwd =", os.getcwd(), file=sys.stderr)
+    print("DEBUG test_wmc_tool.py: cmdline =", cmdline, file=sys.stderr)
+    print("DEBUG test_wmc_tool.py: out dir exists =", os.path.isdir(args.outdir), file=sys.stderr)
+    print("DEBUG test_wmc_tool.py: out contents =", os.listdir(args.outdir) if os.path.isdir(args.outdir) else "N/A", file=sys.stderr)
+    
     # print(' '.join(cmdline))
     # sys.exit(0)
     

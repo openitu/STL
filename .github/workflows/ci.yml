@@ -116,7 +116,7 @@ jobs:
               apt-get update && apt-get install -y --no-install-recommends gcc g++ cmake make python3 &&
               cmake . -DCMAKE_C_FLAGS='-msse2 -mfpmath=sse' -DCMAKE_CXX_FLAGS='-msse2 -mfpmath=sse' &&
               cmake --build . &&
-              ctest --output-on-failure -E 'wmc_tool_test_multiple_files|wmc_tool_test_rom_file2'
+              ctest --output-on-failure
             "
 
   build-arm32-qemu:
@@ -139,5 +139,5 @@ jobs:
               apt-get update && apt-get install -y --no-install-recommends gcc g++ cmake make python3 &&
               cmake . &&
               cmake --build . &&
-              ctest --output-on-failure -E 'wmc_tool_test_multiple_files|wmc_tool_test_rom_file2'
+              ctest --output-on-failure
             "
