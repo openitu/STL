@@ -25,15 +25,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v3
-      - uses: uraimo/run-on-arch-action@v2
-        with:
-          arch: s390x
-          distro: ubuntu22.04
-          install: |
-            apt-get update -q -y
-            apt-get install -y cmake gcc g++
-          run: |
-            cmake .
-            cmake --build .
-            ctest --output-on-failure
+      - name: Install cross-compiler and QEMU
+        run: |
+          sudo apt-get update -q -y
+          sudo apt-get install -y gcc-s390x-linux-gnu g++-s390x-linux-gnu qemu-user-static
+      - name: Configure (cross-compile for s390x)
+        run: |
+          cmake -DCMAKE_C_COMPILER=s390x-linux-gnu-gcc \
+                -DCMAKE_CXX_COMPILER=s390x-linux-gnu-g++ \
+                -DCMAKE_SYSTEM_NAME=Linux \
+                -DCMAKE_SYSTEM_PROCESSOR=s390x \
+                -DCMAKE_CROSSCOMPILING_EMULATOR=/usr/bin/qemu-s390x-static \
+                .
+      - name: Build
+        run: cmake --build .
+      - name: Test
+        run: ctest --output-on-failure
