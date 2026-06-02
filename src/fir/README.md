@@ -28,6 +28,9 @@ The ITU-T/UGST FIR Standard HQ and IRS Up/Downsampling and Filtering Module
     fir-pso.c: ..... sub-unit of the FIR module with the psophometric weighting
                      init.functions
     fir-LP.c: ...... sub-unit of the FIR module with lowpass filters (anchors)
+    fir-wb.c: ...... sub-unit with wideband filters: SHQ2/SHQ3 (super-high-quality
+                     low-pass, 729 coefs, -80dB) and HP50_32KHZ/HP50_48KHZ
+                     (50 Hz high-pass for 32/48 kHz sampling rates)
     firflt.c: ...... dummy program that calls all the sub-units. Equivalent to
                      the old HQFLT.C file.
 
