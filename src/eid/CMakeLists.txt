@@ -131,3 +131,17 @@ add_test(dlyerr_2_errpat4 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat
     -i test_data/profile.dat -o test_data/t4_lateloss.proc -L 30 -l 5.0)
 add_test(dlyerr_2_errpat4-verify ${CMAKE_COMMAND} -E compare_files
     test_data/t4_lateloss.ref test_data/t4_lateloss.proc)
+
+#--- eid-amr: EID for 3GPP AMR codec (from 3GPP S4-120998)
+add_executable(eid-amr eid-amr.c softbit.c)
+target_link_libraries(eid-amr ${M_LIBRARY})
+
+add_test(eid-amr1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/eid-amr
+    test_data/bst475.amr test_data/bf03.g192 test_data/bst475_bf03.tst)
+add_test(eid-amr1-verify ${CMAKE_COMMAND} -E compare_files
+    test_data/bst475_bf03.amr test_data/bst475_bf03.tst)
+
+add_test(eid-amr2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/eid-amr
+    test_data/bst122.amr test_data/bf06.g192 test_data/bst122_bf06.tst)
+add_test(eid-amr2-verify ${CMAKE_COMMAND} -E compare_files
+    test_data/bst122_bf06.amr test_data/bst122_bf06.tst)

@@ -20,6 +20,7 @@ The "Error Insertion Device" (EID) module is built of the following files:
     
     eid-int.c: .... Interpolates error patterns from a master EP
     eid-xor.c: .... Disturbs bits or erases frames based on error patterns
+    eid-amr.c: .... EID for 3GPP AMR codec (frame erasures via G.192 patterns)
     dlyerr_2_errpat.c: Delay/error profile to frame-erasure pattern converter
     ep-stats.c: ... Assesses and prints statistics about an error pattern file
     gen-patt.c: ... Generates error pattern files
@@ -264,6 +265,7 @@ little-endian computers (PC/VAX/Alpha) are:
 Has not been implemented yet.
 
 
+<<<<<<< HEAD
 
 ## dlyerr_2_errpat: Delay/error profile to frame-erasure pattern
 
@@ -303,6 +305,27 @@ Example (fixed JBM delay of 200ms, word G.192 output):
 Originally provided by Fraunhofer IIS via 3GPP Tdoc S4-121077
 (TSGS4#70, Chicago, 13--17 Aug 2012), in support of the EVS codec
 processing plan.
+
+## EID-AMR: Error Insertion Device for 3GPP AMR codec
+
+The `eid-amr` tool provides frame erasure simulation for 3GPP AMR bitstreams
+using G.192 error patterns. The `eid-xor` tool is not directly applicable to
+AMR because the AMR bitstream follows the ETSI/3GPP format (TS 26.073 §6.3),
+which is not compliant with ITU-T G.192.
+
+Derived from the EID-3G tool (Nobuhiko Naka, NTT DOCOMO). Differences:
+- No position parameter (consistent with `eid-xor` usage).
+- Only frame erasures (no bit errors).
+- All data bits in an erased frame are forced to zero.
+- Lost frames signalled with frame type NO\_DATA (0x03).
+- Statistics reported to stderr.
+
+Usage:
+
+    eid-amr <AMR_bitstream_in> <G.192_FER_pattern> <AMR_bitstream_out>
+
+Originally submitted to 3GPP in Tdoc S4-120998 (Aug. 2012).
+Authors: Balazs Kovesi, Stephane Ragot (Orange SA).
 
 
 Good luck!
