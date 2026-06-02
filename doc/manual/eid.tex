@@ -1341,3 +1341,110 @@ are hit by layer errors in the individual error application mode.}
 	\label{fig:G192outputFrameLayer034ErrorIndividual}
   \end{center}
 \end{figure}
+
+%--------------------------------------
+\section {Delay/error profile to erasure pattern (dlyerr\_2\_errpat)} \label{DLYERR}
+%--------------------------------------
+
+\subsection{Description}
+
+The {\tt dlyerr\_2\_errpat} tool converts a delay-and-error profile into a
+frame-erasure error pattern suitable for use with {\tt eid-xor}. This enables
+simulation of jitter buffer management (JBM) behavior: packets that arrive
+too late for playout are treated as lost, in addition to packets lost in
+the network.
+
+The input profile contains one integer per line representing either:
+\begin{itemize}
+\item A network delay in milliseconds (0--1999), or
+\item The value $-1$, indicating the packet was lost in the network.
+\end{itemize}
+
+Two JBM emulation modes are supported:
+\begin{itemize}
+\item {\bf Constant-delay mode} ({\tt -d}): a fixed JBM delay in milliseconds.
+      Any packet with delay exceeding this threshold is marked as lost.
+\item {\bf Bounded-loss-rate mode} ({\tt -l}): the tool automatically selects
+      the minimum JBM delay such that the combined late-loss rate stays
+      below the specified percentage.
+\end{itemize}
+
+\subsection{Algorithm}
+
+Processing is performed in two passes over the input profile:
+
+\begin{enumerate}
+\item {\bf Histogram pass}: reads the profile and builds a delay histogram
+      (counts per millisecond bin). In bounded-loss-rate mode, this histogram
+      is used to determine the JBM delay threshold by accumulating from the
+      highest delay downward until the target late-loss rate is exceeded.
+
+\item {\bf Output pass}: re-reads the profile and classifies each packet:
+      \begin{itemize}
+      \item delay $= -1$ (network loss) $\rightarrow$ frame erased
+      \item delay $>$ JBM threshold $\rightarrow$ frame erased (late loss)
+      \item otherwise $\rightarrow$ frame received (good)
+      \end{itemize}
+\end{enumerate}
+
+If the profile is shorter than the requested output length ({\tt -L}), the
+file is rewound and reused from the beginning.
+
+When {\tt -f~2} is specified, each packet decision produces two consecutive
+frame-erasure flags in the output (for codecs sending two frames per packet).
+
+\subsection{Usage}
+
+{\tt\small
+\begin{verbatim}
+dlyerr_2_errpat [options]
+
+  -i <inputfile>       delay/error profile (required)
+  -o <outputfile>      error pattern output (required)
+  -d <delay_ms>        constant-JBM-delay mode
+  -l <rate_percent>    bounded-loss-rate mode
+  -L <frames>          output length (default: 7500)
+  -s <offset>          skip initial frames in profile
+  -f <1|2>             frames per packet (default: 1)
+  -w                   word-oriented G.192 output
+  -b                   byte-oriented G.192 output
+  -c                   text with LF (one entry per line)
+\end{verbatim}
+}
+
+Exactly one of {\tt -d} or {\tt -l} must be supplied.
+
+\subsection{Output formats}
+
+\begin{itemize}
+\item {\bf Default text}: concatenated ASCII {\tt 0} (good) / {\tt 1} (erased)
+\item {\bf Text with LF} ({\tt -c}): one digit per line
+\item {\bf Byte G.192} ({\tt -b}): binary bytes 0x21 (good) / 0x20 (erased)
+\item {\bf Word G.192} ({\tt -w}): binary 16-bit words 0x6B21 / 0x6B20
+\end{itemize}
+
+\subsection{Example}
+
+Apply MTSI delay/error profile with a fixed 200\,ms JBM delay, word-oriented
+G.192 output, random offset into the profile:
+
+{\tt\small
+\begin{verbatim}
+dlyerr_2_errpat -d 200 -f 1 -w -s 1234 \
+    -i dly_err_profile_1.dat -o ep1.g192
+eid-xor -fer -ep g192 bitstream.g192 ep1.g192 output.g192
+\end{verbatim}
+}
+
+Bounded loss rate of 1\%, two frames per packet:
+
+{\tt\small
+\begin{verbatim}
+dlyerr_2_errpat -l 1 -f 2 -w -i dly_err_profile_5.dat -o ep5.g192
+\end{verbatim}
+}
+
+\subsection{Origin}
+
+Provided by Fraunhofer IIS via 3GPP Tdoc S4-121077 (TSGS4\#70, Chicago,
+13--17 Aug 2012), in support of the EVS reference codec processing plan.
