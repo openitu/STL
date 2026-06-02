@@ -105,7 +105,8 @@ add_test(eid-xor ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/eid-xor -fer -bs bit -ep bit 
 
 
 #--- dlyerr_2_errpat: delay/error profile to frame-erasure pattern (from 3GPP S4-121077)
-add_executable(dlyerr_2_errpat dlyerr_2_errpat.c)
+add_executable(dlyerr_2_errpat dlyerr_2_errpat.c softbit.c)
+target_link_libraries(dlyerr_2_errpat ${M_LIBRARY})
 
 # default text format, constant delay
 add_test(dlyerr_2_errpat1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat

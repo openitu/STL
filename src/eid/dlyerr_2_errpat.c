@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------*
- * Delay-and-error profile to FER pattern conversion tool, V1.1             *
+ * Delay-and-error profile to FER pattern conversion tool, V1.2             *
  * ------------------------------------------                               *
  * (C) 2012 Fraunhofer IIS.                                                 *
  *                                                                          *
@@ -20,7 +20,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
+#include "ugstdemo.h"
+#include "softbit.h"
 
 static void usage() {
   fprintf(stdout, "\nConvert a delay and error profile to an error pattern\n");
@@ -36,6 +37,22 @@ static void usage() {
   fprintf(stdout, "-c use LF for text format to have one entry per line - was default in V1.0\n");
   fprintf(stdout, "-d <constant JBM delay in milliseconds>\n");
   fprintf(stdout, " either -l or -d parameter must be supplied (not both!) and a valid inputfile\n");
+}
+
+/* Write one frame erasure flag to output */
+static void write_flag(short flag, int useG192, int useG192WordOriented, int useLF, FILE *outfile) {
+  if (useG192) {
+    if (useG192WordOriented)
+      save_g192(&flag, 1, outfile);
+    else
+      save_byte(&flag, 1, outfile);
+  } else {
+    /* Text mode: 0 = good, 1 = erased */
+    if (useLF)
+      fprintf(outfile, "%c\n", flag == G192_FER ? '1' : '0');
+    else
+      fprintf(outfile, "%c", flag == G192_FER ? '1' : '0');
+  }
 }
 
 int main(int argc, char **argv) {
@@ -121,7 +138,7 @@ int main(int argc, char **argv) {
   }
 
   if (outfilename) {
-    outfile = fopen(outfilename, "w");
+    outfile = fopen(outfilename, useG192 ? WB : "w");
     if (!outfile) {
       fprintf(stderr, "unable to open %s\n", outfilename);
       retval = -2;
@@ -194,6 +211,7 @@ int main(int argc, char **argv) {
     unsigned int iFramePerPacket;
     for (i = 0; i < length; i++) {
       int delay_ms;
+      short flag;
       if (!fgets(line, 63, infile)) {
         rewind(infile);
         if (!fgets(line, 63, infile)) {
@@ -206,21 +224,17 @@ int main(int argc, char **argv) {
 
       if (delay_ms == -1) {
         network_loss_cnt++;
-        if (outfile) {
-          for (iFramePerPacket = 0; iFramePerPacket != framesPerPacket; ++iFramePerPacket)
-            fprintf(outfile, "%s", useG192 ? useG192WordOriented ? " k" : " " : useLF ? "1\n" : "1");
-        }
+        flag = G192_FER;
       } else if ((unsigned int)delay_ms > constant_delay_ms) {
         late_loss_cnt++;
-        if (outfile) {
-          for (iFramePerPacket = 0; iFramePerPacket != framesPerPacket; ++iFramePerPacket)
-            fprintf(outfile, "%s", useG192 ? useG192WordOriented ? " k" : " " : useLF ? "1\n" : "1");
-        }
+        flag = G192_FER;
       } else {
-        if (outfile) {
-          for (iFramePerPacket = 0; iFramePerPacket != framesPerPacket; ++iFramePerPacket)
-            fprintf(outfile, "%s", useG192 ? useG192WordOriented ? "!k" : "!" : useLF ? "0\n" : "0");
-        }
+        flag = G192_SYNC;
+      }
+
+      if (outfile) {
+        for (iFramePerPacket = 0; iFramePerPacket != framesPerPacket; ++iFramePerPacket)
+          write_flag(flag, useG192, useG192WordOriented, useLF, outfile);
       }
     }
 
