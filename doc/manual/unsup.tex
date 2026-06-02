@@ -161,13 +161,13 @@ The pseudo-random number generator is inherited from the EID tool
 generator as described by Knuth~\cite{Knuth}:
 
 \[
-  \text{seed}_{n+1} = (69069 \times \text{seed}_n + 1) \mod 2^{32}
+  \mathrm{seed}_{n+1} = (69069 \times \mathrm{seed}_n + 1) \mod 2^{32}
 \]
 
 The generator returns a uniformly distributed value in $[0, 1)$ by
 scaling:
 \[
-  r = 2^{-32} \times \text{seed}
+  r = 2^{-32} \times \mathrm{seed}
 \]
 
 The {\tt unsigned int} type (32 bits on all modern platforms) is used
@@ -187,10 +187,10 @@ items without replacement. For each selection:
 \subsubsection{Range mode}
 
 In range mode, the tool draws {\em n} random integers from the
-inclusive range $[\text{start}, \text{stop}]$. Each value is computed
+inclusive range $[\mathrm{start}, \mathrm{stop}]$. Each value is computed
 as:
 \[
-  v = \text{start} + \lfloor (\text{stop} - \text{start} + 1) \cdot r \rfloor
+  v = \mathrm{start} + \lfloor (\mathrm{stop} - \mathrm{start} + 1) \cdot r \rfloor
 \]
 
 Note that in range mode, values are drawn independently (with
@@ -230,7 +230,7 @@ random [OPTIONS] [ITEM_LIST]
 
 \item[\tt -r START STOP]
         Range mode: draw random integers from the inclusive range
-        $[\text{START}, \text{STOP}]$. When this option is specified,
+        $[\mathrm{START}, \mathrm{STOP}]$. When this option is specified,
         no item list is expected.
 
 \item[\tt -n NUM\_ITEMS]
