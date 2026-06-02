@@ -111,13 +111,13 @@ target_link_libraries(dlyerr_2_errpat ${M_LIBRARY})
 # default text format, constant delay
 add_test(dlyerr_2_errpat1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat
     -i test_data/profile.dat -o test_data/t1_text.proc -L 30 -d 40)
-add_test(dlyerr_2_errpat1-verify ${CMAKE_COMMAND} -E compare_files
+add_test(dlyerr_2_errpat1-verify ${CMAKE_COMMAND} -E compare_files --ignore-eol
     test_data/t1_text.ref test_data/t1_text.proc)
 
 # LF text format
 add_test(dlyerr_2_errpat2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat
     -i test_data/profile.dat -o test_data/t2_lf.proc -L 30 -d 40 -c)
-add_test(dlyerr_2_errpat2-verify ${CMAKE_COMMAND} -E compare_files
+add_test(dlyerr_2_errpat2-verify ${CMAKE_COMMAND} -E compare_files --ignore-eol
     test_data/t2_lf.ref test_data/t2_lf.proc)
 
 # word G.192 format with frame aggregation
@@ -129,7 +129,7 @@ add_test(dlyerr_2_errpat3-verify ${CMAKE_COMMAND} -E compare_files
 # late-loss-rate driven threshold
 add_test(dlyerr_2_errpat4 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat
     -i test_data/profile.dat -o test_data/t4_lateloss.proc -L 30 -l 5.0)
-add_test(dlyerr_2_errpat4-verify ${CMAKE_COMMAND} -E compare_files
+add_test(dlyerr_2_errpat4-verify ${CMAKE_COMMAND} -E compare_files --ignore-eol
     test_data/t4_lateloss.ref test_data/t4_lateloss.proc)
 
 #--- eid-amr: EID for 3GPP AMR codec (from 3GPP S4-120998)
