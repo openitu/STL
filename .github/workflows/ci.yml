@@ -2,43 +2,87 @@ name: CI
 
 on:
   push:
-    branches: [dev, master, STL_2026_itu_submission]
+    branches: [dev, main]
   pull_request:
-    branches: [dev, master]
+    branches: [dev, main]
 
 jobs:
-  build-native:
+  build-and-test:
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+          - os: ubuntu-latest
+            compiler: clang
+            cc: clang
+            cxx: clang++
+          - os: macos-latest
+            compiler: clang
+            cc: clang
+            cxx: clang++
+          - os: windows-latest
+            compiler: msvc
+            cc: cl
+            cxx: cl
+
     runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} / ${{ matrix.compiler }}
+    timeout-minutes: 15
+
     steps:
+      - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
-      - name: Configure
+
+      - name: Configure (Unix)
+        if: runner.os != 'Windows'
         run: cmake .
-      - name: Build
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          # Exclude build directory from Windows Defender to avoid scan delays
+          powershell -Command "Add-MpPreference -ExclusionPath '${{ github.workspace }}'"
+          cmake .
+
+      - name: Build (Unix)
+        if: runner.os != 'Windows'
         run: cmake --build .
-      - name: Test
+
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        run: cmake --build . --config Release
+
+      - name: Test (Unix)
+        if: runner.os != 'Windows'
         run: ctest --output-on-failure
 
-  build-s390x:
+      - name: Test (Windows)
+        if: runner.os == 'Windows'
+        run: ctest --output-on-failure --build-config Release
+
+  manual:
     runs-on: ubuntu-latest
+    name: LaTeX manual
     steps:
       - uses: actions/checkout@v4
-      - name: Install cross-compiler and QEMU
+
+      - name: Install TeX Live
         run: |
-          sudo apt-get update -q -y
-          sudo apt-get install -y gcc-s390x-linux-gnu g++-s390x-linux-gnu qemu-user-static
-      - name: Configure (cross-compile for s390x)
-        run: |
-          cmake -DCMAKE_C_COMPILER=s390x-linux-gnu-gcc \
-                -DCMAKE_CXX_COMPILER=s390x-linux-gnu-g++ \
-                -DCMAKE_SYSTEM_NAME=Linux \
-                -DCMAKE_SYSTEM_PROCESSOR=s390x \
-                -DCMAKE_CROSSCOMPILING_EMULATOR=/usr/bin/qemu-s390x-static \
-                -DCMAKE_EXE_LINKER_FLAGS="-static" \
-                .
-      - name: Build
-        run: cmake --build .
-      - name: Test
-        run: ctest --output-on-failure
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended latexmk
+
+      - name: Build manual
+        run: cd doc/manual && latexmk -pdf -halt-on-error STLmanual.tex
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: STL-manual
+          path: doc/manual/STLmanual.pdf
