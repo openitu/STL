@@ -161,7 +161,7 @@ The pseudo-random number generator is inherited from the EID tool
 generator as described by Knuth~\cite{Knuth}:
 
 \[
-  \mathrm{seed}_{n+1} = (69069 \times \mathrm{seed}_n + 1) \mod 2^{32}
+  \mathrm{seed}_{n+1} = (69069 \times \mathrm{seed}_n + 1) \bmod 2^{32}
 \]
 
 The generator returns a uniformly distributed value in $[0, 1)$ by
