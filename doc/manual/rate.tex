@@ -488,15 +488,17 @@ be symmetric.
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
 \subsection{FIR module}
 
-The frequency responses of the implemented high-quality low-pass
+The frequency responses of the implemented high-quality (HQ) low-pass
 filters are shown in figures \ref{hq-frq-1-2} and \ref{hq-frq-1-3}
-(for rate-change factors 2 and 3, respectively), while the telephone
+(denoted HQ2 and HQ3 in the command line, for rate-change factors 2 and 3, respectively), while the telephone
 bandwidth bandpass filter is given in figure \ref{hq-bandpass} (only
 a rate-change factor of 2 is available). The impulse responses of
 these filters are given in figures \ref{ir-hq-up}, \ref{ir-hq-down},
 and \ref{ir-bandpass}, respectively for the up-sampling filters
 (factors 2 and 3), for the down-sampling filters (factors 2 and 3),
-and for the bandpass filter.
+and for the bandpass filter. 
+
+Additional filters (SHQ2 and SHQ3 for super-high-quality for rate-change factors 2 and 3, respectively) with more taps (729 coefficients) and smaller transition band (stopband attenuation $-80$\,dB) are also provided; their frequency responses are given in figures \ref{shq2} and \ref{shq3}. These filters are intended for applications requiring higher spectral selectivity than the standard HQ filters, such as wideband and super-wideband codec characterization in 3GPP.
 
 The transmit-side IRS filter has been implemented for the ``regular''
 and modified flavors. The regular transmit-side P.48 IRS filter
@@ -546,6 +548,8 @@ high-quality up-sampling from 8 to 16 kHz, and from 16 to 32 kHz,
 the same routines are called, while for IRS, band-limiting or
 MUSHRA anchors, there is no rate-change routine from 16 to 32 kHz.
 
+High-pass filters with 50 Hz cutoff frequency (3\,dB point) for the 32 and 48 kHz sampling rates (HP50\_32K with 1119 coefficients and HP50\_48K with 1679 coefficients) are also provided. Their frequency response is given in figure \ref{hp50}.
+
 Since the digital filters have memory, state variables are needed. In
 this version of the STL, a type {\tt SCD\_FIR} is defined, containing the past
 sample memory, as well as filter coefficients and other control
@@ -583,7 +587,7 @@ described here.}
    (b) High-quality filter for down-sampling.
 
   \end{center}
-  \caption{\SF High-quality filter responses for a
+  \caption{\SF Super-high-quality filter responses for a
                factor of 2 and sampling rates of 8000 and
                16000 Hz.\label{hq-frq-1-2}}
 
@@ -603,12 +607,53 @@ described here.}
    (b) High-quality filter for down-sampling.
 
   \end{center}
-  \caption{\SF High-quality filter responses for a
+  \caption{\SF Super-high-quality filter responses for a
                factor of 3 and sampling rates of 8000 and
                24000 Hz.\label{hq-frq-1-3}}
 
 \end{figure}
 %------------- End of FIR filters response: frq for factor 3 ----------------
+
+%----------- Begin of FIR filters response : frq for factor 2 ---------------
+\begin{figure}[hbtp]
+  \begin{center}
+    %Both boxes' dimension: 15.24cm x  8.89cm
+        \includegraphics[scale=0.8]{shq2_up.pdf}
+    \\
+   (a) Super-high-quality filter for up-sampling.
+
+        \includegraphics[scale=0.8]{shq2_down.pdf}
+    \\
+   (b) Super-high-quality filter for down-sampling.
+
+  \end{center}
+  \caption{\SF Super-high-quality filter responses for a
+               factor of 2 and sampling rates of 8000 and
+               16000 Hz.\label{shq2}}
+
+\end{figure}
+%------------- End of FIR filters response: frq for factor 2 ----------------
+
+%----------- Begin of FIR filters response: frq for factor 3 ---------------
+\begin{figure}[hbtp]
+  \begin{center}
+    %Both boxes' dimension: 15.24cm x  8.89cm
+        \includegraphics[scale=0.8]{shq3_up.pdf}
+    \\
+   (a) High-quality filter for up-sampling.
+
+        \includegraphics[scale=0.8]{shq3_down.pdf}
+   \\
+   (b) High-quality filter for down-sampling.
+
+  \end{center}
+  \caption{\SF Super-high-quality filter responses for a
+               factor of 3 and sampling rates of 8000 and
+               24000 Hz.\label{shq3}}
+
+\end{figure}
+%------------- End of FIR filters response: frq for factor 3 ----------------
+
 
 
 %----------- Begin of FIR filters response: frq for bandpass filter  --------
@@ -1142,6 +1187,26 @@ described here.}
           }
 \end{figure}
 %----- End of FIR filters response: impulse response for LP20 -----
+
+
+%----------- Begin of FIR filters response : frq for factor 2 ---------------
+\begin{figure}[hbtp]
+  \begin{center}
+    %Both boxes' dimension: 15.24cm x  8.89cm
+        \includegraphics{hp50_32khz}
+    \\
+   (a) 50Hz high-pass filter operating at 32 kHz.
+
+        \includegraphics{hp50_48khz}
+    \\
+   (b) 50Hz high-pass filter operating at 48 kHz.
+
+  \end{center}
+  \caption{\SF 50Hz high-pass filter responses (32000 and 48000 Hz).\label{hp50}}
+
+\end{figure}
+%------------- End of FIR filters response: frq for factor 2 ----------------
+
 \flushfloats
 
 
