@@ -77,10 +77,8 @@
    LP20		  low-pass filter with cut-off frequency 20kHz for fs=48kHz, 1:1
    RXIRS8     Receive-side Modified IRS weighting with factor 1:1 at 8kHz
    RXIRS16    Receive-side Modified IRS weighting with factor 1:1 at 16kHz
-   HP50_32KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=32kHz, 1119 coefs\n");
-   HP50_48KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=48kHz, 1679 coefs\n");
-   SHQ2       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:2 (up) or 2:1(down)\n");
-   SHQ3       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:3 (up) or 3:1(down)\n");
+   HP50_32KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=32kHz, 1119 coefs
+   HP50_48KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=48kHz, 1679 coefs
 
 
   Testing:
