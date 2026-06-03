@@ -7,6 +7,7 @@
 % Apr.96 - Peter Kroon
 % Feb.2000 - Convergence towards STL2000
 % Oct.2009 - EID-EV Jonas Svedberg, Yusuke Hiwasaki
+% May.2026 - EID-AMR Balazs Kövesi, Stéphane Ragot
 %=============================================================================
 
 %=============================================================================
@@ -1341,3 +1342,14 @@ are hit by layer errors in the individual error application mode.}
 	\label{fig:G192outputFrameLayer034ErrorIndividual}
   \end{center}
 \end{figure}
+
+%--------------------------------------
+\section {Adaptation for 3GPP AMR codec (EID-AMR)} \label{EID-AMR}
+%--------------------------------------
+
+An extra tool called EID-AMR provides an Error Insertion Device (EID) capability for the 3GPP AMR codec operating with G.192 error patterns to simulate packet erasures.
+The eid-xor tool from ITU-T STL is not directly applicable to AMR bitstreams, because
+the bitstream of the 3GPP AMR codec follows a specific ETSI/3GPP format detailed in Clause 6.3 of 3GPP TS 26.073, which is not compliant with ITU-T G.192.
+The EID-AMR tool loops over the input error pattern, and replaces bad (lost) frames with a frame type indicating NO\_DATA (of value 0x03) and all data bits forced to zero.
+Note that this tool does not handle bit errors.
+Statistics are reported as in the eid-xor tool.
