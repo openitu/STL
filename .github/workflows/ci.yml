@@ -17,6 +17,11 @@ jobs:
             cc: gcc
             cxx: g++
           - os: ubuntu-latest
+            compiler: gcc-32bit
+            cc: gcc
+            cxx: g++
+            cflags: "-m32"
+          - os: ubuntu-latest
             compiler: clang
             cc: clang
             cxx: clang++
@@ -37,9 +42,13 @@ jobs:
       - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
 
+      - name: Install 32-bit libraries
+        if: matrix.cflags == '-m32'
+        run: sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib
+
       - name: Configure (Unix)
         if: runner.os != 'Windows'
-        run: cmake .
+        run: cmake . ${{ matrix.cflags && format('-DCMAKE_C_FLAGS="-m32 -msse2 -mfpmath=sse" -DCMAKE_CXX_FLAGS="-m32 -msse2 -mfpmath=sse"') || '' }}
         env:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
