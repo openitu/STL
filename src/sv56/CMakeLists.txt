@@ -54,3 +54,65 @@ add_test(sv56test-32bit-verify ${CMAKE_COMMAND}
   -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/voice_32bit.ref
   -DLABEL=sv56test-32bit
   -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)
+
+# WAV integration tests
+add_test(sv56demo-wav-24bit-normal ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q test_data/speech_normal_24bit.wav test_data/speech_normal_24bit.out)
+set_tests_properties(sv56demo-wav-24bit-normal PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-24bit-normal-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_normal_24bit.ref test_data/speech_normal_24bit.out)
+set_tests_properties(sv56demo-wav-24bit-normal-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-32bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q test_data/speech_normal_32bit.wav test_data/speech_normal_32bit.out)
+set_tests_properties(sv56demo-wav-32bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-32bit-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_normal_32bit.ref test_data/speech_normal_32bit.out)
+set_tests_properties(sv56demo-wav-32bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-24bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q test_data/speech_quiet_24bit.wav test_data/speech_quiet_24bit.out)
+set_tests_properties(sv56demo-wav-24bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-24bit-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_quiet_24bit.ref test_data/speech_quiet_24bit.out)
+set_tests_properties(sv56demo-wav-24bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-float ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q test_data/speech_quiet_32bit_float.wav test_data/speech_quiet_32bit_float.out)
+set_tests_properties(sv56demo-wav-float PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-float-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_quiet_32bit_float.ref test_data/speech_quiet_32bit_float.out)
+set_tests_properties(sv56demo-wav-float-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-vquiet-32bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q test_data/speech_vquiet_32bit.wav test_data/speech_vquiet_32bit.out)
+set_tests_properties(sv56demo-wav-vquiet-32bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-vquiet-32bit-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_vquiet_32bit.ref test_data/speech_vquiet_32bit.out)
+set_tests_properties(sv56demo-wav-vquiet-32bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-vquiet-16bit-adc ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q -bits 16 test_data/speech_vquiet_32bit.wav test_data/speech_vquiet_32bit_16bit.out)
+set_tests_properties(sv56demo-wav-vquiet-16bit-adc PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-vquiet-16bit-adc-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_vquiet_32bit_16bit.ref test_data/speech_vquiet_32bit_16bit.out)
+set_tests_properties(sv56demo-wav-vquiet-16bit-adc-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+# WAV text output (statistics) verification tests
+add_test(sv56demo-wav-24bit-normal-log ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q -log test_data/speech_normal_24bit.log test_data/speech_normal_24bit.wav test_data/speech_normal_24bit.out)
+set_tests_properties(sv56demo-wav-24bit-normal-log PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-24bit-normal-log-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_normal_24bit.log.ref test_data/speech_normal_24bit.log)
+set_tests_properties(sv56demo-wav-24bit-normal-log-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-32bit-log ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q -log test_data/speech_normal_32bit.log test_data/speech_normal_32bit.wav test_data/speech_normal_32bit.out)
+set_tests_properties(sv56demo-wav-32bit-log PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-32bit-log-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_normal_32bit.log.ref test_data/speech_normal_32bit.log)
+set_tests_properties(sv56demo-wav-32bit-log-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-vquiet-32bit-log ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q -log test_data/speech_vquiet_32bit.log test_data/speech_vquiet_32bit.wav test_data/speech_vquiet_32bit.out)
+set_tests_properties(sv56demo-wav-vquiet-32bit-log PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-vquiet-32bit-log-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_vquiet_32bit.log.ref test_data/speech_vquiet_32bit.log)
+set_tests_properties(sv56demo-wav-vquiet-32bit-log-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-vquiet-16bit-adc-log ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q -log test_data/speech_vquiet_32bit_16bit.log -bits 16 test_data/speech_vquiet_32bit.wav test_data/speech_vquiet_32bit_16bit.out)
+set_tests_properties(sv56demo-wav-vquiet-16bit-adc-log PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(sv56demo-wav-vquiet-16bit-adc-log-verify ${CMAKE_COMMAND} -E compare_files test_data/speech_vquiet_32bit_16bit.log.ref test_data/speech_vquiet_32bit_16bit.log)
+set_tests_properties(sv56demo-wav-vquiet-16bit-adc-log-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
