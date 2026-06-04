@@ -4,7 +4,7 @@ on:
   push:
     branches: [dev, main, STL_2026_itu_submission]
   pull_request:
-    branches: [dev, main]
+    branches: [dev, main, STL_2026_itu_submission]
 
 jobs:
   build-and-test:
