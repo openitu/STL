@@ -18,3 +18,8 @@ function(compare_text_files)
         message(FATAL_ERROR "Text file mismatch: ${_CTF_LABEL}\n--- got ---\n${_got}\n--- expected ---\n${_want}")
     endif()
 endfunction()
+
+# Auto-invoke when called via cmake -P with -D variables
+if(DEFINED GOT AND DEFINED EXPECTED)
+    compare_text_files(GOT "${GOT}" EXPECTED "${EXPECTED}" LABEL "${LABEL}")
+endif()
