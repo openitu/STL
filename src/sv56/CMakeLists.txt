@@ -46,6 +46,14 @@ set_tests_properties(sv56test-32bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT
 add_test(sv56test-32bit-verify ${CMAKE_COMMAND} -E compare_files test_data/voice_32bit.ref test_data/voice_32bit.out)
 set_tests_properties(sv56test-32bit-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
+# 12-bit backward compatibility test
+add_test(sv56demo4 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q -log test_data/voice_12bit.log test_data/voice.src test_data/voice_12bit.prc 256 1 0 -30 16000 12)
+set_tests_properties(sv56demo4 PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_test(sv56demo4-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/voice_12bit.nrm test_data/voice_12bit.prc)
+set_tests_properties(sv56demo4-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DEPENDS sv56demo4)
+add_test(sv56demo4-log-verify ${CMAKE_COMMAND} -E compare_files test_data/voice_12bit.log.ref test_data/voice_12bit.log)
+set_tests_properties(sv56demo4-log-verify PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DEPENDS sv56demo4)
+
 # WAV integration tests
 add_test(sv56demo-wav-24bit-normal ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/sv56demo -q test_data/speech_normal_24bit.wav test_data/speech_normal_24bit.out)
 set_tests_properties(sv56demo-wav-24bit-normal PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
