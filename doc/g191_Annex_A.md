@@ -40,6 +40,9 @@ The following programs are examples of the use of the modules:
 | `stereoop.c`         | on the use of stereo file operations.                                                                                                                                                                            |
 | `esdru.c`            | on the use of energy-based spatial distortion reference unit [ITU-T P.811].                                                                                                                                                          |
 | `wmc_tool.cpp`            | on the use of WMC tool for speech and audio codecs complexity and memory measurement.                                                                                                                                                          |
+| `dlyerr_2_errpat.c`  | on the use of the delay/error profile to frame-erasure pattern conversion tool for jitter buffer emulation. |
+| `eid-amr.c`          | on the use of the EID for 3GPP AMR codec frame erasure simulation using G.192 error patterns. |
+| `random.c`           | on the use of the pseudo-random selection tool for deterministic item selection or range drawing. |
 || 
 
 
@@ -85,6 +88,12 @@ The functions included are as follows:
 | `LP12_48kHz_init` | initialize a low-pass filter with a cut-off frequency of 12 kHz at (48-kHz sampling). |
 | `LP14_48kHz_init` | initialize a low-pass filter with a cut-off frequency of 14 kHz at 48-kHz sampling). |
 | `LP20_48kHz_init` | initialize a low-pass filter with a cut-off frequency of 20 kHz (48-kHz sampling). |
+| `shq_up_1_to_2_init` | initialize 1:2 SHQ half-band up-sampling filter. |
+| `shq_up_1_to_3_init` | initialize 1:3 SHQ up-sampling filter. |
+| `shq_down_2_to_1_init` | initialize 2:1 SHQ half-band down-sampling filter. |
+| `shq_down_3_to_1_init` | initialize 3:1 SHQ down-sampling filter. |
+| `hp50_32khz_init` | initialize 50-Hz high-pass filter (32-kHz sampling). |
+| `hp50_48khz_init` | initialize 50-Hz high-pass filter (48-kHz sampling). |
 | `hq_kernel` | FIR filtering function. |
 | `hq_reset` | clear state variables. |
 | `hq_free` | deallocate FIR-filter memory. |
@@ -709,5 +718,23 @@ The main program for WMC Tool. Depends on:
 `wmc_auto_h.txt`      Auto-generated header file for inclusion in projects.
 `wmc_auto_c.txt`      Auto-generated C source file for inclusion in projects.
 ------------------------------------------------------------------------------------------
+
+## u) Delay/error profile to frame-erasure pattern conversion
+
+Name: `dlyerr_2_errpat.c`
+
+Converts a delay-and-error profile (one entry per packet with network delay in ms and a loss flag) into a frame-erasure error pattern suitable for use with the `eid-xor` tool. Supports fixed-delay and bounded-loss-rate jitter buffer emulation modes. Output formats include G.192 word, G.192 byte, and text.
+
+## v) EID for 3GPP AMR codec
+
+Name: `eid-amr.c`
+
+Applies G.192 frame erasure patterns to 3GPP AMR bitstreams. The standard `eid-xor` tool cannot be used directly with AMR because the AMR bitstream follows the ETSI/3GPP format rather than ITU-T G.192. Lost frames are signalled with frame type NO\_DATA and all data bits are forced to zero.
+
+## w) Pseudo-random selection tool
+
+Name: `random.c`
+
+Provides deterministic pseudo-random selection of items from a list or drawing of integers from a numeric range. Uses the EID linear congruential generator for cross-platform reproducibility. Supports configurable seed, dummy pre-runs, and multi-item selection.
 
 -=Pagebreak=-

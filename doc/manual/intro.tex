@@ -31,6 +31,8 @@ In 2023, STL release incorporates an implementation of P.50 fullband MNRU as des
 
 In 2024, the revision of the STL offers additional features and bug fixes to the BS.1770 demo and WMC tool.
 
+In 2026, the proposed revision of the STL adds: WAV file I/O support with multi-bit-depth (16/24/32-bit) processing for all tools; extensions to the speech voltmeter (sv56) for arbitrary bit-depth processing; a delay-and-error profile to frame-erasure pattern conversion tool (dlyerr\_2\_errpat) for jitter buffer emulation (3GPP S4-121077); an EID for 3GPP AMR bitstreams (eid-amr); a pseudo-random selection tool (random) for EVS processing scripts (3GPP S4-121078); SHQ2/SHQ3 half-band and HP50 high-pass FIR filters; and cross-platform portability fixes with expanded CTest regression coverage.
+
 Since STL2019, the build toolchain uses CMake to generate platform-dependent and tool-dependent build scripts as well as to execute regression tests for each module in the STL.
 Modules have been tested on Windows, MacOS and several Linux flavors.
 
@@ -195,6 +197,8 @@ For the STL2023, the implementation of the P.50 Fullband MNRU was kindly provide
 
 For the STL2024, the improvements to BS.1770 demo and WMC Tool were kindly provided by Mr Erik Norvell from Ericsson and Mr Vladimir Malenovsky from VoiceAge Corporation respectively.
 
+For the STL2026, the dlyerr\_2\_errpat tool (delay/error profile to frame-erasure pattern converter) and the random tool were kindly contributed by Mr Stefan Doehla from Fraunhofer IIS via 3GPP SA4. The SHQ2/SHQ3 and HP50 FIR filters and the eid-amr tool (EID for 3GPP AMR bitstreams) were contributed by Mr St\'{e}phane Ragot. Mr Markus Multrus from Fraunhofer IIS contributed bug fixes to the basic operators documentation. The sv56 updates were provided by Mr Jan Reimes from HEAD acoustics. The WAV I/O support, integration of contributions, and maintenance of the GitHub repository were performed by Mr Ludovic Malfait (BT Group).
+
 Above all, special thank goes to ITU-T SG16 Counselor Mr~Sim\~ao Ferraz de Campos Neto, the ``father'' of the STL.
 
 %=============================================================================
@@ -236,6 +240,7 @@ The most relevant are:
 \item[STL2022] ITU-T Software Tools Library, release 2022.
 \item[STL2023] ITU-T Software Tools Library, release 2023.
 \item[STL2024] ITU-T Software Tools Library, release 2024.
+\item[STL2026] ITU-T Software Tools Library, release 2026.
 \item[UGST]  Users' Group on Software Tools, of ITU-T Study Group 16.
 \end{Descr}
 
