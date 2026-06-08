@@ -1,0 +1,144 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main, STL_2026_itu_submission]
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  build-and-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+          - os: ubuntu-latest
+            compiler: gcc-32bit
+            cc: gcc
+            cxx: g++
+            cflags: "-m32"
+          - os: ubuntu-latest
+            compiler: clang
+            cc: clang
+            cxx: clang++
+          - os: macos-latest
+            compiler: clang
+            cc: clang
+            cxx: clang++
+          - os: windows-latest
+            compiler: msvc
+            cc: cl
+            cxx: cl
+
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} / ${{ matrix.compiler }}
+    timeout-minutes: 15
+
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+
+      - name: Install 32-bit libraries
+        if: matrix.cflags == '-m32'
+        run: sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib
+
+      - name: Configure (Unix)
+        if: runner.os != 'Windows'
+        run: cmake . ${{ matrix.cflags && format('-DCMAKE_C_FLAGS="-m32 -msse2 -mfpmath=sse" -DCMAKE_CXX_FLAGS="-m32 -msse2 -mfpmath=sse"') || '' }}
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          # Exclude build directory from Windows Defender to avoid scan delays
+          powershell -Command "Add-MpPreference -ExclusionPath '${{ github.workspace }}'"
+          cmake .
+
+      - name: Build (Unix)
+        if: runner.os != 'Windows'
+        run: cmake --build .
+
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        run: cmake --build . --config Release
+
+      - name: Test (Unix)
+        if: runner.os != 'Windows'
+        run: ctest --output-on-failure
+
+      - name: Test (Windows)
+        if: runner.os == 'Windows'
+        run: ctest --output-on-failure --build-config Release
+
+  manual:
+    runs-on: ubuntu-latest
+    name: LaTeX manual
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended latexmk
+
+      - name: Build manual
+        run: cd doc/manual && latexmk -pdf -halt-on-error STLmanual.tex < /dev/null
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: STL-manual
+          path: doc/manual/STLmanual.pdf
+
+  build-s390x:
+    runs-on: ubuntu-latest
+    name: s390x (big-endian)
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cross-compiler and QEMU
+        run: |
+          sudo apt-get update -q -y
+          sudo apt-get install -y gcc-s390x-linux-gnu g++-s390x-linux-gnu qemu-user-static
+      - name: Configure (cross-compile for s390x)
+        run: |
+          cmake -DCMAKE_C_COMPILER=s390x-linux-gnu-gcc \
+                -DCMAKE_CXX_COMPILER=s390x-linux-gnu-g++ \
+                -DCMAKE_SYSTEM_NAME=Linux \
+                -DCMAKE_SYSTEM_PROCESSOR=s390x \
+                -DCMAKE_CROSSCOMPILING_EMULATOR=/usr/bin/qemu-s390x-static \
+                -DCMAKE_EXE_LINKER_FLAGS="-static" \
+                .
+      - name: Build
+        run: cmake --build .
+      - name: Test
+        run: ctest --output-on-failure
+
+  build-i386-container:
+    runs-on: ubuntu-latest
+    name: i386 container
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/386
+
+      - name: Build and test in i386 container
+        run: |
+          docker run --rm --platform linux/386 \
+            -e DEBIAN_FRONTEND=noninteractive \
+            -v ${{ github.workspace }}:/src -w /src \
+            debian:bullseye bash -c "
+              apt-get update && apt-get install -y --no-install-recommends gcc g++ cmake make python3 &&
+              cmake . -DCMAKE_C_FLAGS='-msse2 -mfpmath=sse' -DCMAKE_CXX_FLAGS='-msse2 -mfpmath=sse' &&
+              cmake --build . &&
+              ctest --output-on-failure
+            "
