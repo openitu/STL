@@ -20,6 +20,8 @@ file(TO_CMAKE_PATH ${TEST_DIR}/test_wmc_tool.py TEST_WMC_TOOL_SCRIPT)
 
 add_test(NAME wmc_tool_dry_run COMMAND wmc_tool -h)
 add_test(NAME wmc_tool_dry_run2 COMMAND wmc_tool -i)
+
+if(Python3_FOUND)
 add_test(NAME wmc_tool_test_single_file COMMAND ${PYTHON_EXECUTABLE} ${TEST_WMC_TOOL_SCRIPT} -e $<TARGET_FILE:wmc_tool> -s src -r ref -o out -v test_file1.c WORKING_DIRECTORY ${TEST_DIR})
 add_test(NAME wmc_tool_test_single_file2 COMMAND ${PYTHON_EXECUTABLE} ${TEST_WMC_TOOL_SCRIPT} -e $<TARGET_FILE:wmc_tool> test_file2.c WORKING_DIRECTORY ${TEST_DIR})
 add_test(NAME wmc_tool_test_multiple_files COMMAND ${PYTHON_EXECUTABLE} ${TEST_WMC_TOOL_SCRIPT} -e $<TARGET_FILE:wmc_tool> -v "test_file*.c" test_g728durb.c WORKING_DIRECTORY ${TEST_DIR})
@@ -30,3 +32,6 @@ add_test(NAME wmc_tool_test_rom_file2 COMMAND ${PYTHON_EXECUTABLE} ${TEST_WMC_TO
 add_test(NAME wmc_tool_test_desinstrument_file COMMAND ${PYTHON_EXECUTABLE} ${TEST_WMC_TOOL_SCRIPT} -e $<TARGET_FILE:wmc_tool> -v -d di_test_file1.c WORKING_DIRECTORY ${TEST_DIR})
 add_test(NAME wmc_tool_test_desinstrument_rom_file COMMAND ${PYTHON_EXECUTABLE} ${TEST_WMC_TOOL_SCRIPT} -e $<TARGET_FILE:wmc_tool> -v -d di_test_rom.c WORKING_DIRECTORY ${TEST_DIR})
 add_test(NAME wmc_tool_test_wmc_auto_files COMMAND ${PYTHON_EXECUTABLE} ${TEST_WMC_TOOL_SCRIPT} -e $<TARGET_FILE:wmc_tool> -c ${TEST_DIR} test_file3.c WORKING_DIRECTORY ${TEST_DIR})
+else()
+  message(STATUS "Python3 not found -- skipping wmc_tool Python tests")
+endif()
