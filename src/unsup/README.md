@@ -56,6 +56,10 @@ oper.c:     implement arithmetic operation on two files: add, subtract,
             multiply or divide two files applying scaling factors (linear
             or dB), and adding a DC level.
 
+random.c:   randomization tool for selecting items from a list or drawing
+            numbers from a range. Reuses the EID linear congruential
+            generator from eid.c.
+
 sb.c        swap bytes for word-oriented files. For VMS/Unix/MSDOS.
 
 sh2chr.c:   convert short-oriented (16-bit words) files to char-oriented

@@ -22,7 +22,10 @@ add_subdirectory(src/basop/test_framework)
 add_subdirectory(src/basop/flc)
 add_subdirectory(src/bs1770demo)
 add_subdirectory(src/eid)
+<<<<<<< HEAD
 
+=======
+>>>>>>> STL_2026_itu_submission
 add_subdirectory(src/esdru)
 add_subdirectory(src/fir)
 add_subdirectory(src/freqresp)
