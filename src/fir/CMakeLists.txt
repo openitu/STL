@@ -173,7 +173,7 @@ add_test(filter29 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q SHQ3 test_data/tes
 add_test(filter29-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-shq3.flt test_data/tst-shq3.ref)
 
 add_test(filter30 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q HP50_32KHZ test_data/test.src test_data/test-hp50-32khz.flt)
-add_test(filter30-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test-hp50-32khz.flt test_data/test-hp50-32khz.ref)
+add_test(filter30-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-hp50-32khz.flt test_data/test-hp50-32khz.ref)
 
 add_test(filter31 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q HP50_48KHZ test_data/test.src test_data/test-hp50-48khz.flt)
-add_test(filter31-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test-hp50-48khz.flt test_data/test-hp50-48khz.ref)
+add_test(filter31-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-hp50-48khz.flt test_data/test-hp50-48khz.ref)
