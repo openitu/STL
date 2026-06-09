@@ -1679,7 +1679,7 @@ static TOOL_ERROR Find_Enclosed_Text(
 
     char *ptr;
     char *last_ptr;
-    Item_Type item_type;
+    Item_Type item_type = ITEM_UNKNOWN;
     char chr;
 
     /* Start at Beginning */
@@ -2471,7 +2471,7 @@ static TOOL_ERROR Find_Keywords(
     char kw_name[16];
     size_t kw_name_len;
     char *ns, *ne; /* Name Start/End */
-    char *ps, *pe; /* Params Start/End */
+    char *ps = NULL, *pe; /* Params Start/End */
     char *dp;
     Item_Type item_type;
     Parse_Tbl_def *ParseTbl_ptr;
