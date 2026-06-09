@@ -58,7 +58,7 @@ jobs:
         run: |
           # Exclude build directory from Windows Defender to avoid scan delays
           powershell -Command "Add-MpPreference -ExclusionPath '${{ github.workspace }}'"
-          cmake . -DCMAKE_C_FLAGS="/we4700" -DCMAKE_CXX_FLAGS="/we4700"
+          cmake . -DCMAKE_C_FLAGS="/we4700"
 
       - name: Build (Unix)
         if: runner.os != 'Windows'
