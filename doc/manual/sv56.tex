@@ -220,15 +220,15 @@ samples. Measurements are cummulative, therefore state variables are
 needed in this approach.  These state variables have been arranged as
 fields of a structure whose name is {\tt SVP56\_state}. The fields of
 the structure are\footnote{\SF All the fields are \double, except the
-\float\ $f$ and the {\tt unsigned long} {\em a[]}, {\em hang[]}, and
-{\em n}.}:
+\float\ $f$, the {\tt int} {\em thres\_no} and {\em bitno}, and the
+{\tt unsigned long} {\em a[]}, {\em hang[]}, and {\em n}.}:
 \begin{quote} \normalsize
  {\em f}        \hfill \parbox{100mm}{\SF Sampling frequency, in Hz }\\
- {\em a[SVP56\_MAX\_THRESHOLDS]}    \hfill \parbox{100mm}{\SF Activity count }\\
- {\em c[SVP56\_MAX\_THRESHOLDS]}    \hfill \parbox{100mm}{\SF Threshold level }\\
- {\em hang[SVP56\_MAX\_THRESHOLDS]} \hfill \parbox{100mm}{\SF Hangover count }\\
- {\em thres\_no} \hfill \parbox{100mm}{\SF Actual number of thresholds in use (bitno$-$1) }\\
- {\em bitno}     \hfill \parbox{100mm}{\SF Bit depth of input signal (default 16) }\\
+ {\em a[]}      \hfill \parbox{100mm}{\SF Activity count (size: {\em thres\_no}) }\\
+ {\em c[]}      \hfill \parbox{100mm}{\SF Threshold level (size: {\em thres\_no}) }\\
+ {\em hang[]}   \hfill \parbox{100mm}{\SF Hangover count (size: {\em thres\_no}) }\\
+ {\em thres\_no} \hfill \parbox{100mm}{\SF Number of thresholds in use ($= bitno - 1$) }\\
+ {\em bitno}    \hfill \parbox{100mm}{\SF Bit depth of input signal (1--32, default 16) }\\
  {\em n}        \hfill \parbox{100mm}{\SF Number of samples read since last  
                                           reset }\\
  {\em s}        \hfill \parbox{100mm}{\SF Sum of all samples since last   
@@ -282,10 +282,11 @@ void init\_speech\_voltmeter
 
 {\tt init\_speech\_voltmeter} performs the initialization of the
 speech voltmeter state variables in the structure pointed by {\em
-state} to the appropriate initial values. The values required from
-the user are the sampling rate $f$ (in Hz) of the signal that the speech
-voltmeter is supposed to measure, and the bit depth {\em bitno} of the
-input signal. Note that when measuring new
+state} to the appropriate initial values. The user must specify the
+sampling rate $f$ (in Hz) and the bit depth {\em bitno} of the signal
+that the speech voltmeter is supposed to measure. The bit depth
+determines the number of thresholds used ($B-1$) and must be in the
+range 1 to 32. Note that when measuring new
 speech material, the state variable shall be re-initialized, otherwise
 accumulation of previous measurements will happen and wrong measurements 
 will be reported.
@@ -309,12 +310,10 @@ maximum bit depth supported:
                negative, the sampling rate is initialized to 16000 Hz.
 
 \item[\pbox{20mm}{\em bitno}] %\rulex{1mm}\\
-               Is the bit depth (resolution) of the input signal. Typical
-               values are 16 (default for narrowband speech) and 24 or 32
-               for higher-resolution signals. This parameter sets the number
-               of thresholds used by the algorithm to {\em bitno $-$ 1}, and
-               initializes the peak detectors {\em maxP} and {\em maxN} to
-               $\pm 2^{bitno-1}$. Must not exceed {\tt SVP56\_MAX\_NO\_BITS}.
+               Is the bit depth (resolution) of the input signal, in the
+               range 1 to 32. This determines the number of threshold levels
+               used by the algorithm ($B-1$ thresholds). For standard
+               telephony, use 16.
 \end{Descr}
         
 {\bf Return value: }      
@@ -465,7 +464,6 @@ the conversion between raw integer samples and normalized floats:
 {\tt sv56\_raw2fl()} reads raw bytes and normalizes by dividing by
 $2^{bitno-1}$, and {\tt sv56\_fl2raw()} performs the inverse operation
 with truncation and hard-clipping.
-
 After the equalization factor is found, results are reported on the
 screen, which varies according to the program used and some of the
 command-line options.

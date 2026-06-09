@@ -185,7 +185,7 @@
 
 /* ... Include of utilities ... */
 #include "ugst-utl.h"
-#include "sv56-util.h"
+#include "wav_io.h"
 
 /* Local definitions */
 #define MIN_LOG_OFFSET 1.0e-20  /* To avoid sigularity with log(0.0) */
@@ -425,7 +425,7 @@ int main (int argc, char *argv[]) {
 
   /* Parameters for operation */
   double Overflow;              /* Max.positive value for AD_resolution bits */
-  long N = 256, N1 = 1, N2 = 0, i, l;
+  long N = 256, N1 = 1, N2 = 0, i, l, k;
   double NdB = -26;             /* dBov */
 
   /* Intermediate storage variables for speech voltmeter */
@@ -433,7 +433,7 @@ int main (int argc, char *argv[]) {
 
   /* File-related variables */
   char FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
-  FILE *Fi, *Fo;                /* input/output file pointers */
+  AUDIO_FILE *Fi, *Fo;          /* input/output file pointers */
   FILE *out = stdout;           /* where to print the statistical results */
 #ifdef VMS
   char mrs[15];
@@ -441,10 +441,13 @@ int main (int argc, char *argv[]) {
 
   /* Other variables */
   char quiet = 0, use_active_level = 1, long_summary = 1;
-  unsigned char raw_buf[4096 * 4];
+  short short_buf[4096];        /* for 8/16-bit reads */
+  long long_buf[4096];          /* for 24/32-bit reads */
+  int write_buf32[4096];        /* for 32-bit writes (4 bytes each) */
   float Buf[4096];
   long NrSat = 0, start_byte, bitno = 16;
-  int bps;
+  char user_set_bitno = 0, is_float = 0;
+  int bps, file_bitno;
   double sf = 16000, factor;
   double ActiveLeveldB, DesiredSpeechLeveldB;
   static char funny[5] = { '/', '-', '\\', '|', '-' };
@@ -472,8 +475,9 @@ int main (int argc, char *argv[]) {
         argv += 2;
         argc -= 2;
       } else if (strcmp (argv[1], "-bits") == 0) {
-        /* Change default sampling frequency */
+        /* Change default A/D resolution */
         bitno = atol (argv[2]);
+        user_set_bitno = 1;
 
         /* Update argc/argv to next valid option/argument */
         argv += 2;
@@ -559,11 +563,41 @@ int main (int argc, char *argv[]) {
   FIND_PAR_L (8, "_A/D resolution: ....................... ", bitno, bitno);
 
   /* Validate bitno */
-  if (bitno < 8 || bitno > SVP56_MAX_NO_BITS) {
-    fprintf (stderr, "Error: bitno must be between 8 and %d\n", SVP56_MAX_NO_BITS);
+  if (bitno < 1 || bitno > 32) {
+    fprintf (stderr, "Error: bitno must be between 1 and 32\n");
     exit (1);
   }
-  bps = sv56_bytes_per_sample ((int) bitno);
+
+/*
+ * ......... FILE PREPARATION .........
+ */
+
+  /* Opening input file; auto-detects WAV vs raw */
+  if ((Fi = audio_open_read (FileIn, 0, 0, 0)) == NULL)
+    KILL (FileIn, 2);
+
+  /* If WAV, derive file bit depth and sample rate from header */
+  if (audio_is_wav (Fi)) {
+    file_bitno = Fi->bits_per_sample;
+    if (audio_get_sample_rate (Fi) > 0)
+      sf = (double) audio_get_sample_rate (Fi);
+    if (!user_set_bitno)
+      bitno = file_bitno;
+    else if (bitno > file_bitno) {
+      fprintf (stderr, "Error: requested resolution (%ld bits) exceeds file bit depth (%d)\n", bitno, file_bitno);
+      exit (1);
+    }
+  } else {
+    file_bitno = 16;            /* raw PCM is always 16-bit */
+  }
+
+  /* Check if input is IEEE float format */
+  is_float = (audio_is_wav (Fi) && Fi->audio_format == 3);
+  if (is_float && !user_set_bitno)
+    bitno = 32;
+
+  /* Bytes per sample for the file format */
+  bps = file_bitno / 8;
 
   /* ......... SOME INITIALIZATIONS ......... */
   start_byte = --N1;
@@ -571,37 +605,22 @@ int main (int argc, char *argv[]) {
 
   /* Check if is to process the whole file */
   if (N2 == 0) {
-    struct stat st;
-
-    /* ... find the input file size ... */
-    stat (FileIn, &st);
-    N2 = ceil ((st.st_size - start_byte) / (double) (N * bps));
+    long data_size = audio_get_data_size (Fi);
+    N2 = ceil ((data_size - start_byte) / (double) (N * bps));
   }
 
-  /* Overflow (saturation) point */
-  Overflow = pow ((double) 2.0, (double) (bitno - 1));
+  /* Overflow (saturation) point: file_overflow for normalization, Overflow for algorithm */
+  Overflow = is_float ? 1.0 : pow ((double) 2.0, (double) (file_bitno - 1));
 
   /* reset variables for speech level measurements */
   init_speech_voltmeter (&state, sf, (int)bitno);
 
-
-/*
- * ......... FILE PREPARATION .........
- */
-
-  /* Opening input file; abort if there's any problem */
-#ifdef VMS
-  sprintf (mrs, "mrs=%d", bps * N);
-#endif
-  if ((Fi = fopen (FileIn, RB)) == NULL)
-    KILL (FileIn, 2);
-
   /* Creates output file */
-  if ((Fo = fopen (FileOut, WB)) == NULL)
+  if ((Fo = audio_open_write (FileOut, (long) sf, 1, file_bitno)) == NULL)
     KILL (FileOut, 3);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Fi, start_byte, 0) < 0l)
+  if (audio_seek (Fi, start_byte) < 0)
     KILL (FileIn, 4);
 
 
@@ -614,19 +633,27 @@ int main (int argc, char *argv[]) {
   /* Process selected blocks */
   for (i = 0; i < N2; i++) {
     /* Read samples ... */
-    if ((l = fread (raw_buf, bps, N, Fi)) > 0) {
-      /* ... Convert samples to float */
-      sv56_raw2fl ((long) l, raw_buf, Buf, (int) bitno);
-
-      /* ... Get the active level */
-      ActiveLeveldB = speech_voltmeter (Buf, (long) l, &state);
-
-      /* Print some preliminary information */
-      if (!quiet)
-        printf ("%c\r", funny[i % 5]);
+    if (is_float) {
+      if ((l = audio_read (Fi, Buf, N)) <= 0)
+        KILL (FileIn, 5);
+    } else if (file_bitno <= 16) {
+      if ((l = audio_read (Fi, short_buf, N)) <= 0)
+        KILL (FileIn, 5);
+      for (k = 0; k < l; k++)
+        Buf[k] = (float) ((double) short_buf[k] / Overflow);
     } else {
-      KILL (FileIn, 5);
+      if ((l = audio_read (Fi, long_buf, N)) <= 0)
+        KILL (FileIn, 5);
+      for (k = 0; k < l; k++)
+        Buf[k] = (float) ((double) long_buf[k] / Overflow);
     }
+
+    /* ... Get the active level */
+    ActiveLeveldB = speech_voltmeter (Buf, (long) l, &state);
+
+    /* Print some preliminary information */
+    if (!quiet)
+      printf ("%c\r", funny[i % 5]);
   }
 
   /* Beautify screen ... */
@@ -652,26 +679,60 @@ int main (int argc, char *argv[]) {
   /* EQUALIZATION: hard clipping (with truncation) */
 
   /* Move pointer to 1st desired block */
-  if (fseek (Fi, start_byte, 0) < 0l)
+  if (audio_seek (Fi, start_byte) < 0)
     KILL (FileIn, 4);
 
   /* Get data of interest, equalize and de-normalize */
   for (i = 0; i < N2; i++) {
-    if ((l = fread (raw_buf, bps, N, Fi)) > 0) {
-      /* convert samples to float */
-      sv56_raw2fl ((long) l, raw_buf, Buf, (int) bitno);
-
-      /* equalizes vector */
+    if (is_float) {
+      if ((l = audio_read (Fi, Buf, N)) <= 0)
+        KILL (FileIn, 5);
+      /* equalizes vector and convert to 32-bit PCM */
+      for (k = 0; k < l; k++) {
+        double val = (double) Buf[k] * factor;
+        if (val > 1.0 - (1.0 / 2147483648.0)) { val = 1.0 - (1.0 / 2147483648.0); NrSat++; }
+        else if (val < -1.0) { val = -1.0; NrSat++; }
+        write_buf32[k] = (int) (val * 2147483648.0);
+      }
+      if ((l = audio_write (Fo, write_buf32, l)) < 0)
+        KILL (FileOut, 6);
+    } else if (file_bitno <= 16) {
+      if ((l = audio_read (Fi, short_buf, N)) <= 0)
+        KILL (FileIn, 5);
+      /* Use float path for backward-compatible rounding */
+      for (k = 0; k < l; k++)
+        Buf[k] = (float) ((double) short_buf[k] / Overflow);
       scale (Buf, (long) l, (double) factor);
-
-      /* Convert from float to raw with hard clip and truncation */
-      NrSat += sv56_fl2raw ((long) l, Buf, raw_buf, (int) bitno);
-
-      /* write equalized, de-normalized and hard-clipped samples to file */
-      if ((l = fwrite (raw_buf, bps, l, Fo)) < 0)
+      for (k = 0; k < l; k++) {
+        double val = (double) Buf[k] * Overflow;
+        if (val > Overflow - 1.0) { val = Overflow - 1.0; NrSat++; }
+        else if (val < -Overflow) { val = -Overflow; NrSat++; }
+        short_buf[k] = (short) val;
+      }
+      if ((l = audio_write (Fo, short_buf, l)) < 0)
+        KILL (FileOut, 6);
+    } else if (file_bitno == 24) {
+      if ((l = audio_read (Fi, long_buf, N)) <= 0)
+        KILL (FileIn, 5);
+      for (k = 0; k < l; k++) {
+        double val = (double) long_buf[k] * factor;
+        if (val > Overflow - 1.0) { val = Overflow - 1.0; NrSat++; }
+        else if (val < -Overflow) { val = -Overflow; NrSat++; }
+        long_buf[k] = (long) val;
+      }
+      if ((l = audio_write (Fo, long_buf, l)) < 0)
         KILL (FileOut, 6);
     } else {
-      KILL (FileIn, 5);
+      if ((l = audio_read (Fi, long_buf, N)) <= 0)
+        KILL (FileIn, 5);
+      for (k = 0; k < l; k++) {
+        double val = (double) long_buf[k] * factor;
+        if (val > Overflow - 1.0) { val = Overflow - 1.0; NrSat++; }
+        else if (val < -Overflow) { val = -Overflow; NrSat++; }
+        write_buf32[k] = (int) val;
+      }
+      if ((l = audio_write (Fo, write_buf32, l)) < 0)
+        KILL (FileOut, 6);
     }
   }
 
@@ -687,8 +748,8 @@ int main (int argc, char *argv[]) {
     printf ("---> DONE    \n");
 
   /* Close files ... */
-  fclose (Fi);
-  fclose (Fo);
+  audio_close (Fi);
+  audio_close (Fo);
   if (out != stdout)
     fclose (out);
 #if !defined(VMS)

@@ -1,0 +1,19 @@
+ -------------------------------------------------------
+  Input file: ................... test_data/speech_normal_24bit.wav, 24 bits, fs=16000 Hz
+  Block Length: .................     256 [samples]
+  Starting Block: ...............       1 []
+  Number of Blocks: .............     412 []
+  dBov desired for output: ...... -26.000 [dBov]
+  Norm factor desired is: .......   0.894 [times]
+  Max norm WITHOUT saturation: .. -24.854 [dBov]
+ -------------------------------------------------------
+  DC level: .....................    2327 [PCM]
+  Maximum positive value: ....... 8227312 [PCM]
+  Maximum negative value: ....... -5141930 [PCM]
+ -------------------------------------------------------
+  Long term energy (rms): ....... -25.478 [dBov]
+  Active speech level: .......... -25.023 [dBov]
+  RMS peak-factor found: ........  25.310 [dB]
+  Active peak factor found: .....  24.854 [dB]
+  Activity factor: ..............  90.044 [%]
+ -------------------------------------------------------
