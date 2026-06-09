@@ -266,12 +266,12 @@ long audio_read (AUDIO_FILE * af, void *buffer, long nsamples) {
   sample_bytes = (bps == 24) ? 3 : (bps / 8);
   frame_bytes = sample_bytes * ch;
 
-  /* Simple case: mono or raw, and not 24-bit (can fread directly) */
-  if (ch <= 1 && bps != 24) {
+  /* Raw files are native-endian; direct fread is safe for 8/16-bit mono */
+  if (!af->is_wav && ch <= 1 && bps <= 2) {
     return (long) fread (buffer, (size_t) sample_bytes, (size_t) nsamples, af->fp);
   }
 
-  /* Multi-channel extraction or 24-bit unpacking */
+  /* WAV (little-endian) and multi-channel: extract with byte-order handling */
   {
     unsigned char *raw_buf;
 
@@ -337,10 +337,39 @@ long audio_write (AUDIO_FILE * af, void *buffer, long nsamples) {
   sample_bytes = (bps == 24) ? 3 : (bps / 8);
 
   if (bps != 24) {
-    /* 8, 16, 32-bit or float: direct fwrite */
-    n = (long) fwrite (buffer, (size_t) sample_bytes, (size_t) nsamples, af->fp);
-    af->data_size += n * sample_bytes;
-    return n;
+    /* For raw or 8-bit: direct fwrite (native endian or single byte) */
+    if (!af->is_wav || bps == 8) {
+      n = (long) fwrite (buffer, (size_t) sample_bytes, (size_t) nsamples, af->fp);
+      af->data_size += n * sample_bytes;
+      return n;
+    }
+    /* WAV 16-bit: write little-endian */
+    if (bps == 16) {
+      short *in = (short *) buffer;
+      for (i = 0; i < nsamples; i++) {
+        unsigned char b[2];
+        b[0] = (unsigned char) (in[i] & 0xFF);
+        b[1] = (unsigned char) ((in[i] >> 8) & 0xFF);
+        if (fwrite (b, 1, 2, af->fp) != 2) break;
+      }
+      af->data_size += i * 2;
+      return i;
+    }
+    /* WAV 32-bit: write little-endian */
+    {
+      int *in = (int *) buffer;
+      for (i = 0; i < nsamples; i++) {
+        unsigned char b[4];
+        unsigned int val = (unsigned int) in[i];
+        b[0] = (unsigned char) (val & 0xFF);
+        b[1] = (unsigned char) ((val >> 8) & 0xFF);
+        b[2] = (unsigned char) ((val >> 16) & 0xFF);
+        b[3] = (unsigned char) ((val >> 24) & 0xFF);
+        if (fwrite (b, 1, 4, af->fp) != 4) break;
+      }
+      af->data_size += i * 4;
+      return i;
+    }
   }
 
   /* 24-bit: pack from long */
