@@ -338,7 +338,7 @@ long audio_write (AUDIO_FILE * af, void *buffer, long nsamples) {
 
   if (bps != 24) {
     /* For raw or 8-bit: direct fwrite (native endian or single byte) */
-    if (!af->is_wav || bps == 1) {
+    if (!af->is_wav || bps == 8) {
       n = (long) fwrite (buffer, (size_t) sample_bytes, (size_t) nsamples, af->fp);
       af->data_size += n * sample_bytes;
       return n;
