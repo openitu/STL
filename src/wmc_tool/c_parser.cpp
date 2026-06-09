@@ -1679,7 +1679,7 @@ static TOOL_ERROR Find_Enclosed_Text(
 
     char *ptr;
     char *last_ptr;
-    Item_Type item_type = ITEM_UNKNOWN;
+    Item_Type item_type = ITEM_NONE;
     char chr;
 
     /* Start at Beginning */
