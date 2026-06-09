@@ -88,7 +88,7 @@ add_test(p50fbmnru_Q0_clipping_clamp ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru
 add_test(p50fbmnru_Q0_clipping_clamp-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/P501_D_AM_fm_FB_48k_Q0_clamp.ref test_data/P501_D_AM_fm_FB_48k_Q0_clamp.pcm)
 
 add_test(p50fbmnru_Q0_clipping_overflow ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/p50fbmnru test_data/P501_D_AM_fm_FB_48k.pcm test_data/P501_D_AM_fm_FB_48k_Q0_overflow.pcm 0 M --overflow)
-add_test(p50fbmnru_Q0_clipping_overflow-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q -equiv 1 test_data/P501_D_AM_fm_FB_48k_Q0_overflow.ref test_data/P501_D_AM_fm_FB_48k_Q0_overflow.pcm)
+add_test(p50fbmnru_Q0_clipping_overflow-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/P501_D_AM_fm_FB_48k_Q0_overflow.ref test_data/P501_D_AM_fm_FB_48k_Q0_overflow.pcm)
 
 #TEST: Compute SNR for MNRU files
 #TODO: no automatic verification data available
