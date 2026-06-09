@@ -1,6 +1,6 @@
 /* wav_io.c - WAV file I/O support for STL tools
  *
- * Minimal canonical WAV (RIFF) reader/writer for 16-bit PCM.
+ * Canonical WAV (RIFF) reader/writer for 8/16/24/32-bit PCM and 32-bit IEEE float.
  * See wav_io.h for API documentation.
  */
 #include "wav_io.h"
