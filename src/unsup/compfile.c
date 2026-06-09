@@ -461,7 +461,7 @@ int main (int argc, char *argv[]) {
   long k, l, s1, s2;
 
   char *abstol;
-  double reltol;
+  double reltol = 0.0;
   double abstol_double;
   float abstol_float;
   long abstol_long;
