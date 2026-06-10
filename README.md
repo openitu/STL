@@ -57,13 +57,12 @@ The primary audience using, maintaining and extending the STL is primarily const
 We distinguish between (1) the STL code development in the open source environment, and (2) the maintenance and update of Recommendation ITU-T G.191 in the standardization environment.
 
 ## Open source environment (GitHub):
-*   It follows the best practices for open source code development
+*   It follows the best practices for open source code development.
 *   Participation is open and encouraged to anyone interested in the development of the STL, independent of ITU membership.
-*   The open source environment will have three branches of the STL:
-    1.   Master branch — the latest ITU-T approved version of the STL (starting with STL2009);
-    2.   Development branch — to advance the STL code and add new features; and
-    3.   Submission branch — to submit new stable code to SG12.
-*   Proposals submitted to the development branch document motivation and intended merits.
+*   The repository uses a single long-lived branch:
+    *   **`main`** — the latest version of the STL, updated upon ITU-T approval.
+    *   **Feature/fix branches** — short-lived branches for new tools or changes, merged via pull requests.
+*   Approved versions are marked with git tags (e.g., `STL2024`, `STL2026`).
 *   Any tools in the library should satisfy the principles outlined in clauses 2.3 and 2.4 of the G.191: ITU-T Software Tool Library 2009 User's manual, in particular with respect to testing of portability and compliance.
 *   New tools: 
     *   should not overlap in functionality provided by other tools already in the library, unless there is community consensus on the benefits of such approach;
@@ -73,11 +72,10 @@ We distinguish between (1) the STL code development in the open source environme
 *   Changes to existing tools: 
     *   should provide sufficient evidence that the changes do not break existing code (in particular, backward compatibility), unless there is community consensus that this is the best approach;
     *   should respect the license of the tool.
-    *   The development branch is used for discussion and consensus building on a stable version, for inclusion in the submission branch.
     
 ## Standardization environment ([ITU-T Study Group 12](https://itu.int/go/tsg12)):
 *   Participation is limited to those who can participate in the standardization work in ITU-T SG12.
 *   The Editor of ITU-T G.191 monitors the change process in the open source environment. 
-*   Upon availability of sufficient stable material in the submission branch, the Editor of ITU-T G.191 submits a TD to Q2/12 summarizing the proposed changes and related discussion, and provides a snapshot of the submission branch as basis for a revised version of ITU-T G.191.
+*   Upon availability of sufficient stable material, the Editor of ITU-T G.191 opens a pull request against `main`, submits a TD to Q2/12 summarizing the proposed changes, and provides the PR as basis for a revised version of ITU-T G.191.
 *   The TD is considered by Q2/12, and action is taken following the alternative approval procedure (AAP) for ITU-T Recommendations.
-*   The Editor of ITU-T G.191 provides feedback on the actions taken to the developers in the open source environment, and, upon approval of a revised version of G.191, updates the master branch of the open source environment.
+*   The Editor of ITU-T G.191 provides feedback on the actions taken to the developers in the open source environment, and, upon approval of a revised version of G.191, merges the PR into `main` and tags the release.
