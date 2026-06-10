@@ -883,6 +883,7 @@ static TOOL_ERROR Add_Insertion(
                 }
                 InsertRec_ptr = InsertTbl_ptr->Data + InsertTbl_ptr->Size;
                 /* Fill Record */
+                memset(InsertRec_ptr, 0, sizeof(*InsertRec_ptr));
                 InsertRec_ptr->Ptr = (char *)ptr;
                 /* Reset # of Chars Stored */
                 nChars = 0;
@@ -5441,6 +5442,7 @@ static TOOL_ERROR Instrument_Operators(
 
     /* Initialize (No Memory Allocated by Default) */
     OperInsTbl.MaxSize = 0;
+    OperInsTbl.Data = NULL;
 
     /* Get Parse Table Address (for clarity) */
     ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;
