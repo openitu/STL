@@ -107,3 +107,40 @@ add_test(sv56demo-wav-vquiet-16bit-adc-log-verify ${CMAKE_COMMAND}
   -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/speech_vquiet_32bit_16bit.log.ref
   -DLABEL=sv56demo-wav-vquiet-16bit-adc-log
   -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)
+
+# actlev WAV integration tests
+add_test(actlev-wav-24bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/actlev -q -log test_data/actlev_normal_24bit.log test_data/speech_normal_24bit.wav)
+set_tests_properties(actlev-wav-24bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(actlev-wav-24bit-verify ${CMAKE_COMMAND}
+  -DGOT=${CMAKE_CURRENT_SOURCE_DIR}/test_data/actlev_normal_24bit.log
+  -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/actlev_normal_24bit.log.ref
+  -DLABEL=actlev-wav-24bit
+  -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)
+
+add_test(actlev-wav-vquiet-32bit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/actlev -q -log test_data/actlev_vquiet_32bit.log test_data/speech_vquiet_32bit.wav)
+set_tests_properties(actlev-wav-vquiet-32bit PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(actlev-wav-vquiet-32bit-verify ${CMAKE_COMMAND}
+  -DGOT=${CMAKE_CURRENT_SOURCE_DIR}/test_data/actlev_vquiet_32bit.log
+  -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/actlev_vquiet_32bit.log.ref
+  -DLABEL=actlev-wav-vquiet-32bit
+  -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)
+
+add_test(actlev-wav-vquiet-16bit-adc ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/actlev -q -bits 16 -log test_data/actlev_vquiet_32bit_16bit.log test_data/speech_vquiet_32bit.wav)
+set_tests_properties(actlev-wav-vquiet-16bit-adc PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(actlev-wav-vquiet-16bit-adc-verify ${CMAKE_COMMAND}
+  -DGOT=${CMAKE_CURRENT_SOURCE_DIR}/test_data/actlev_vquiet_32bit_16bit.log
+  -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/actlev_vquiet_32bit_16bit.log.ref
+  -DLABEL=actlev-wav-vquiet-16bit-adc
+  -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)
+
+add_test(actlev-wav-multi ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/actlev -q -log test_data/actlev_multi.log test_data/speech_normal_24bit.wav test_data/speech_vquiet_32bit.wav)
+set_tests_properties(actlev-wav-multi PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(actlev-wav-multi-verify ${CMAKE_COMMAND}
+  -DGOT=${CMAKE_CURRENT_SOURCE_DIR}/test_data/actlev_multi.log
+  -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test_data/actlev_multi.log.ref
+  -DLABEL=actlev-wav-multi
+  -P ${CMAKE_SOURCE_DIR}/cmake/CompareTextFiles.cmake)

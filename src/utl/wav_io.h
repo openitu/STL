@@ -3,7 +3,7 @@
  * Provides transparent reading/writing of WAV and raw PCM files.
  * Input format is auto-detected (RIFF header check).
  * Output format is determined by filename extension (.wav = WAV, else raw).
- * Only 16-bit PCM WAV is supported.
+ * Supports 8/16/24/32-bit PCM and 32-bit IEEE float WAV.
  */
 #ifndef WAV_IO_H
 #define WAV_IO_H

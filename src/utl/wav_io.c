@@ -1,6 +1,6 @@
 /* wav_io.c - WAV file I/O support for STL tools
  *
- * Minimal canonical WAV (RIFF) reader/writer for 16-bit PCM.
+ * Canonical WAV (RIFF) reader/writer for 8/16/24/32-bit PCM and 32-bit IEEE float.
  * See wav_io.h for API documentation.
  */
 #include "wav_io.h"
@@ -338,7 +338,7 @@ long audio_write (AUDIO_FILE * af, void *buffer, long nsamples) {
 
   if (bps != 24) {
     /* For raw or 8-bit: direct fwrite (native endian or single byte) */
-    if (!af->is_wav || bps == 1) {
+    if (!af->is_wav || bps == 8) {
       n = (long) fwrite (buffer, (size_t) sample_bytes, (size_t) nsamples, af->fp);
       af->data_size += n * sample_bytes;
       return n;
