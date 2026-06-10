@@ -14,18 +14,20 @@ file(MAKE_DIRECTORY ./test_data )
 add_test( NAME basop_sanity_test    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_data COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basop_test Test_type=0 )
 add_test( NAME basop_precision_vectors WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test_data COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/basop_test Test_type=1 )
 
-# List all reference files and compare each of them
+# List all reference files and compare each of them (CRLF-tolerant)
 file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/test/test_ref/*.csv")
 foreach(file ${files})
 
   # Extract basename
   get_filename_component( basename ${file} NAME )
 
-  # Perform diff
-  add_test( basop_precision_test_${basename}
-    ${CMAKE_COMMAND} -E compare_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/test_ref/${basename}
-    ${CMAKE_CURRENT_SOURCE_DIR}/test_data/${basename}
+  # Perform diff (line-ending tolerant)
+  add_test( NAME basop_precision_test_${basename}
+    COMMAND ${CMAKE_COMMAND}
+      -DGOT=${CMAKE_CURRENT_SOURCE_DIR}/test_data/${basename}
+      -DEXPECTED=${CMAKE_CURRENT_SOURCE_DIR}/test/test_ref/${basename}
+      -DLABEL=basop_${basename}
+      -P ${CMAKE_CURRENT_SOURCE_DIR}/compare_basop_csv.cmake
   )
 
 endforeach()

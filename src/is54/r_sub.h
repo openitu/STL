@@ -40,31 +40,24 @@ extern FTYPE RS00, RS11, RS22;
 /* Function declarations ...  */
 
 /*	from filters.c*/
-void I_DIR ();
-/*FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len*/
-void DIR ();
-/*FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len*/
+void I_DIR (FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len);
+void DIR (FTYPE *inPtr, FTYPE *oPtr, FTYPE *stPtr, FTYPE *coefPtr, int len);
 
 /*	from p_ex.c*/
-void P_EX ();
-/*FTYPE *oPtr, FTYPE *psPtr, int lag*/
+void P_EX (FTYPE *oPtr, FTYPE *psPtr, int lag);
 
 /*	from b_con.c*/
-void B_CON ();
-/*int codeWord, int numBits, FTYPE *bitArray*/
+void B_CON (int codeWord, int numBits, FTYPE *bitArray);
 
 /*	from v_con.c*/
-void V_CON ();
-/*FTYPE *basisPtr, FTYPE *bitArray, int numBasis, FTYPE *oPtr*/
+void V_CON (FTYPE *basisPtr, FTYPE *bitArray, int numBasis, FTYPE *oPtr);
 
 /*	from rs_rr.c*/
-FTYPE RS_RR ();
-/*FTYPE *vecPtr, FTYPE rs*/
+FTYPE RS_RR (FTYPE *vecPtr, FTYPE rs);
 
 /*	from excite.c*/
-FTYPE EXCITE ();
-/*int gsp0, int lag, FTYPE rs00, FTYPE rs11, FTYPE rs22,
+FTYPE EXCITE (int gsp0, int lag, FTYPE rs00, FTYPE rs11, FTYPE rs22,
 		FTYPE *pVecPtr, FTYPE *x1VecPtr, FTYPE *x2VecPtr,
-		FTYPE *oPtr*/
+		FTYPE *oPtr);
 
 /* ......................... End of file r_sub.h ........................... */

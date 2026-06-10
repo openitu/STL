@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 {
     MNRU_state      state;
     FILE            *In, *Out;
-    char            dcFilterMode ;
+    char            dcFilterMode = 0;
     short           B_Len, BuffLen;
     long            lFileLen = 0;
     int             i, B_Max;

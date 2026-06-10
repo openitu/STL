@@ -54,6 +54,7 @@ float get_SNR (int mode, short *a, short *b, long N, long N2, SNR_state * s) {
       s->tot_smpno = 0;
       s->total_err = 0;
       s->total_sqr = 0;
+      s->total_snr_dB = 0;
     }
 
 

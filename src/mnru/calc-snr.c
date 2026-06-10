@@ -51,6 +51,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "wav_io.h"
 
 #if defined(VMS)
 #include <stat.h>
@@ -136,7 +137,8 @@ int main (int argc, char *argv[]) {
   char out_is_file = NO, oper;
   int i, k, l, K;
   char File1[MAX_STRLEN], File2[MAX_STRLEN];
-  FILE *F1, *F2, *Fo = stdout;
+  AUDIO_FILE *F1, *F2;
+  FILE *Fo = stdout;
 #ifdef VMS
   char mrs[15] = "mrs=";
 #endif
@@ -224,24 +226,23 @@ int main (int argc, char *argv[]) {
     out_is_file = YES;
   }
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-    stat (File1, &st);
-    N2 = st.st_size / (N * sizeof (short));
-  }
+  /* N2 will be computed after opening files */
 
   /* Open input files */
-  if ((F1 = fopen (File1, RB)) == NULL)
+  if ((F1 = audio_open_read (File1, 0, 0, 16)) == NULL)
     KILL (File1, 2);
-  if ((F2 = fopen (File2, RB)) == NULL)
+  if ((F2 = audio_open_read (File2, 0, 0, 16)) == NULL)
     KILL (File2, 3);
+
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0)
+    N2 = audio_get_data_size (F1) / (N * sizeof (short));
 
   /* Positions file to the starting of block N1 */
   N1--;                         /* for the 1st block is not 1 but 0! */
-  if (fseek (F1, N1 * N * sizeof (short), 0) != 0l)
+  if (audio_seek (F1, N1 * N * sizeof (short)) != 0l)
     KILL (File1, 5);
-  if (fseek (F2, N1 * N * sizeof (short), 0) != 0l)
+  if (audio_seek (F2, N1 * N * sizeof (short)) != 0l)
     KILL (File2, 6);
 
   /* Allocate memory for SNR vector */
@@ -266,7 +267,7 @@ int main (int argc, char *argv[]) {
 
   /* Down to work */
   for (i = 0; i < N2; i++) {
-    if ((l = fread (a, sizeof (short), N, F1)) > 0 && (k = fread (b, sizeof (short), N, F2)) > 0) {
+    if ((l = audio_read (F1, a, N)) > 0 && (k = audio_read (F2, b, N)) > 0) {
       oper = i == 0 ? SNR_RESET : (i == N2 - 1 ? SNR_STOP : SNR_MEASURE);
       total_snr_dB = get_SNR (oper, a, b, N, N2, &state);
     } else {
@@ -315,8 +316,8 @@ int main (int argc, char *argv[]) {
   }
 
   /* Closing... */
-  fclose (F1);
-  fclose (F2);
+  audio_close (F1);
+  audio_close (F2);
   if (out_is_file)
     fclose (Fo);
 #ifndef VMS

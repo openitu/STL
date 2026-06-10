@@ -111,6 +111,7 @@ void g728fp_decinit (G728FpDecData * d) {
   d->ferased = 0;
   d->fecount = 0;
   d->ofecount = 0;
+  d->ogaindb = 0;
   d->tap = 0;
   g728fp_zerof (d->etpast, KPMAX);
   d->feframesz = 4;             /* 10. msec */
@@ -137,7 +138,7 @@ void g728fp_decode (Short * speech,     /* output speech */
   Float *aptr;                  /* For attenuating a or atmp */
   Float gptmp[LPCLG];
   Gain gain;
-  Float gaindb;
+  Float gaindb = 0;
   Statelpc et;
   Float multfac;
   Float rc;

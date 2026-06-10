@@ -96,6 +96,7 @@
 #include <string.h>             /* for memset() */
 #include <ctype.h>
 #include "ugstdemo.h"
+#include "wav_io.h"
 
 /* ... Includes for O.S. specific headers ... */
 #if defined(MSDOS)
@@ -224,7 +225,7 @@ double divide (double x, double y) {
   Operate over short int files
   -------------------------------------------------------------------------
  */
-long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, int fh3, long N, long N1, long N2, double A, double B, double C, double (*oper_f) (), char trim_by, double round) {
+long operate_shorts (char *File1, char *File2, char *File3, AUDIO_FILE *af1, AUDIO_FILE *af2, AUDIO_FILE *afr, long N, long N1, long N2, double A, double B, double C, double (*oper_f) (), char trim_by, double round) {
   long i, j, l, k, saved = 0;
   short *a, *b;
   register double tmp;
@@ -243,7 +244,7 @@ long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, in
     memset (a, 0, N * sizeof (short));
     memset (b, 0, N * sizeof (short));
 
-    if ((l = read (fh1, a, sizeof (short) * N) / sizeof (short)) >= 0 && (k = read (fh2, b, sizeof (short) * N) / sizeof (short)) >= 0)
+    if ((l = audio_read (af1, a, N)) >= 0 && (k = audio_read (af2, b, N)) >= 0)
       while (j < l && j < k) {
         tmp = oper_f (A * (double) a[j], B * (double) b[j]) + C + round;
         b[j] = (short) (tmp > 32767 ? 32767 : (tmp < -32768 ? -32768 : tmp));
@@ -267,7 +268,7 @@ long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, in
         b[j] = (short) (tmp > 32767 ? 32767 : (tmp < -32768 ? -32768 : tmp));
       }
 
-    saved += write (fh3, b, sizeof (short) * j) / sizeof (short);
+    saved += audio_write (afr, b, j);
   }
   return (saved);
 }
@@ -278,7 +279,6 @@ long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, in
 
 int main (int argc, char *argv[]) {
   char c[1], Oper;
-  int fh1, fh2, fhr;
 
   long N, N1, N2, Prcd = 0;
   long delay = 0, start_byte1, start_byte2, samplesize;
@@ -287,7 +287,7 @@ int main (int argc, char *argv[]) {
   char better_seed = USE_IT, trim_by = 0;
   static char *trim_str[4] = { "shortest", "first", "second", "longest" };
   double A = 0, B = 0, C = 0, (*oper_f) (), round = 0.5;
-  FILE *f1, *f2, *fr;
+  AUDIO_FILE *f1, *f2, *fr;
 #ifdef VMS
   char mrs[15] = "mrs=";
 #endif
@@ -479,36 +479,7 @@ int main (int argc, char *argv[]) {
     start_byte2 *= (N1 * N - delay);
   }
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-    long k, l;
-
-    /* ... find the size of the 2 files and the number of blks from it */
-    /* ... hey, need to skip the delayed samples! ... */
-    stat (File1, &st);
-    k = (st.st_size - start_byte1) / (N * samplesize);
-    stat (File2, &st);
-    l = (st.st_size - start_byte2) / (N * samplesize);
-
-    if (trim_by == 1)
-      N2 = k;
-    else if (trim_by == 2)
-      N2 = l;
-    else if (trim_by == 3) {
-      /* Trim by the size of the longest file */
-      N2 = k > l ? k : l;
-
-      /* Convert the trim flag to the equivalent of trimming by the size of file 1 or file 2, the longest of them; this eases implementation */
-      trim_by = (k > l) ? 1 : 2;
-    } else {
-      /* Trim by the size of the shortest file */
-      N2 = k < l ? k : l;
-    }
-
-    if (k != l)
-      fprintf (stderr, "WARNING: Files have different sizes!\n");
-  }
+  /* N2 will be computed after opening files if processing the whole file */
 
   /* Opening test file; abort if there's any problem */
 #ifdef VMS
@@ -516,15 +487,32 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Open input files */
-  if ((f1 = fopen (File1, RB)) == NULL)
+  if ((f1 = audio_open_read (File1, 0, 0, 16)) == NULL)
     KILL (File1, 3);
-  if ((f2 = fopen (File2, RB)) == NULL)
+  if ((f2 = audio_open_read (File2, 0, 0, 16)) == NULL)
     KILL (File2, 4);
-  if ((fr = fopen (RFile, WB)) == NULL)
+
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0) {
+    long k, l;
+    k = (audio_get_data_size (f1) - start_byte1) / (N * samplesize);
+    l = (audio_get_data_size (f2) - start_byte2) / (N * samplesize);
+    if (trim_by == 1)
+      N2 = k;
+    else if (trim_by == 2)
+      N2 = l;
+    else if (trim_by == 3) {
+      N2 = k > l ? k : l;
+      trim_by = (k > l) ? 1 : 2;
+    } else {
+      N2 = k < l ? k : l;
+    }
+    if (k != l)
+      fprintf (stderr, "WARNING: Files have different sizes!\n");
+  }
+
+  if ((fr = audio_open_write (RFile, audio_get_sample_rate (f1), 1, 16)) == NULL)
     KILL (RFile, 5);
-  fh1 = fileno (f1);
-  fh2 = fileno (f2);
-  fhr = fileno (fr);
 
   /* If samples of the primary files are to be skipped, dump them into the output file */
   if (delay > 0) {
@@ -532,23 +520,23 @@ int main (int argc, char *argv[]) {
     short *a = (short *) calloc (sizeof (short), delay);
     double register tmp;
 
-    if (lseek (fh1, dump * samplesize, 0l) < 0l)
+    if (audio_seek (f1, dump * samplesize) < 0l)
       KILL (File1, 3);
 
-    if (read (fh1, a, delay * samplesize) != samplesize * delay)
+    if (audio_read (f1, a, delay) != delay)
       KILL (File1, 6);
     for (i = 0; i < delay; i++) {
       tmp = (A * (double) a[i] + C + round);
       a[i] = (short) (tmp > 32767 ? 32767 : (tmp < -32768 ? -32768 : tmp));
     }
-    write (fhr, a, delay * samplesize);
+    audio_write (fr, a, delay);
     free (a);
   }
 
   /* Move pointer to 1st block of interest */
-  if (lseek (fh1, start_byte1, 0l) < 0l)
+  if (audio_seek (f1, start_byte1) < 0l)
     KILL (File1, 3);
-  if (lseek (fh2, start_byte2, 0l) < 0l)
+  if (audio_seek (f2, start_byte2) < 0l)
     KILL (File2, 4);
 
   /* Some preliminaries */
@@ -557,7 +545,7 @@ int main (int argc, char *argv[]) {
   /* Operates on the file to the screen */
   switch (TypeOfData) {
   case 'I':                    /* short data */
-    Prcd = operate_shorts (File1, File2, RFile, fh1, fh2, fhr, N, N1, N2, A, B, C, oper_f, trim_by, round);
+    Prcd = operate_shorts (File1, File2, RFile, f1, f2, fr, N, N1, N2, A, B, C, oper_f, trim_by, round);
     break;
 
 #ifdef DATA_TYPE_DEFINED
@@ -577,8 +565,9 @@ int main (int argc, char *argv[]) {
 
 
   /* Finalizations */
-  close (fh1);
-  close (fh2);
+  audio_close (f1);
+  audio_close (f2);
+  audio_close (fr);
 #ifndef VMS
   return (0);
 #endif

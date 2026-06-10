@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------------
 */
 
-reverse_endian_short (unsigned short *a, unsigned short *b, long n) {
+void reverse_endian_short (unsigned short *a, unsigned short *b, long n) {
   long i;
   unsigned short register tmp;
   for (i = 0; i < n; i++) {
@@ -26,7 +26,7 @@ reverse_endian_short (unsigned short *a, unsigned short *b, long n) {
   06.Oct.97  v1.0 Created <simao.campos@comsat.com>
   ---------------------------------------------------------------------------
 */
-reverse_endian_long (unsigned long *a, unsigned long *b, long n) {
+void reverse_endian_long (unsigned long *a, unsigned long *b, long n) {
   long i;
   union {
     unsigned long tmp;
@@ -52,7 +52,7 @@ int is_little_endian () {
 }
 
 void test_s () {
-  short a, b;
+  unsigned short a, b;
   while (1) {
     fread (&a, 1, sizeof (short), stdin);
     if (feof (stdin))
@@ -63,7 +63,7 @@ void test_s () {
 }
 
 void test_l () {
-  long a, b;
+  unsigned long a, b;
   while (1) {
     fread (&a, 1, sizeof (long), stdin);
     if (feof (stdin))

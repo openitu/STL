@@ -1008,27 +1008,27 @@ The variables used in the operators are signed integer in 2's complements repres
 \subsection{Operators with complexity weight of 1}
 
 %........................................................
-\NewOperator{CL\_shr(CL\_var1, var2)}
+\NewOperator{CL\_shr(CL\_var1, L\_var2)}
 
-Arithmetically shifts right the real and imaginary parts of the 32-bit complex number CL\_var1 by var2 positions.\\
-If var2 is negative, real and imaginary parts of CL\_var1 are shifted to the most significant bits by (-var2) positions with 32-bit saturation control.\\
-If var2 is positive, real and imaginary parts of CL\_var1 are shifted to the least significant bits by (var2) positions with sign extension.\\
+Arithmetically shifts right the real and imaginary parts of the 32-bit complex number CL\_var1 by L\_var2 positions.\\
+If L\_var2 is negative, real and imaginary parts of CL\_var1 are shifted to the most significant bits by (-L\_var2) positions with 32-bit saturation control.\\
+If L\_var2 is positive, real and imaginary parts of CL\_var1 are shifted to the least significant bits by (L\_var2) positions with sign extension.\\
 The following code snippet describes the operations performed on real \& imaginary part of a complex number:
 
-{\tt \rulex{5mm}CL\_result.re = L\_shr(CL\_var1.re, L\_shift\_val);\\
-\rulex{5mm}CL\_result.im = L\_shr(CL\_var1.im, L\_shift\_val);\\
+{\tt \rulex{5mm}CL\_result.re = L\_shr(CL\_var1.re, L\_var2);\\
+\rulex{5mm}CL\_result.im = L\_shr(CL\_var1.im, L\_var2);\\
 }
 
 %........................................................
-\NewOperator{CL\_shl(CL\_var1, var2)}
+\NewOperator{CL\_shl(CL\_var1, L\_var2)}
 
-Arithmetically shifts left the real and imaginary parts of the 32-bit complex number CL\_var1 by L\_shift\_val positions.\\
-If var2 is negative, real and imaginary parts of CL\_var1 are shifted to the least significant bits by ( -var2 ) positions with sign extension.\\
-If var2 is positive, real and imaginary parts of CL\_var1 are shifted to the most significant bits by (var2) positions with 32-bit saturation control.\\
+Arithmetically shifts left the real and imaginary parts of the 32-bit complex number CL\_var1 by L\_var2 positions.\\
+If L\_var2 is negative, real and imaginary parts of CL\_var1 are shifted to the least significant bits by ( -L\_var2 ) positions with sign extension.\\
+If L\_var2 is positive, real and imaginary parts of CL\_var1 are shifted to the most significant bits by (L\_var2) positions with 32-bit saturation control.\\
 The following code snippet describes the operations performed on real \& imaginary part of a complex number:
 
-{\tt \rulex{5mm} CL\_result.re = L\_shl(CL\_var1.re, L\_shift\_val);\\
-\rulex{5mm} CL\_result.im = L\_shl(CL\_var1.im, L\_shift\_val);
+{\tt \rulex{5mm} CL\_result.re = L\_shl(CL\_var1.re, L\_var2);\\
+\rulex{5mm} CL\_result.im = L\_shl(CL\_var1.im, L\_var2);
 }
 
 %........................................................
@@ -1503,7 +1503,7 @@ Multiplies 16-bit var1 by 16-bit var2, sign extends to 64 bits; adds this 64 bit
 Multiplies 16-bit var1 by 16-bit var2, sign extends to 64 bits; subtracts this 64 bit value from the 64 bit W\_acc without saturation control, and returns a 64 bit result.
 
 %........................................................
-\NewOperator{W\_mult\_16\_16(W\_acc, var1, var2)}
+\NewOperator{W\_mult\_16\_16(var1, var2)}
 
 \textbf{ This operator is SIMD and VLIW friendly}
 
@@ -1542,29 +1542,29 @@ Deposits the 32 bit L\_var1 into the 32 LS bits of the 64-bit output. The 32 MS 
 Deposits the 32-bit L\_var1 into the 32 MS bits of the 64-bit output. The 32 LS bits of the output are zeroed.
 
 %........................................................
-\NewOperator{W\_sat\_l(W\_v1)}
+\NewOperator{W\_sat\_l(W\_var1)}
 
-Saturates the 64-bit variable W\_v1 to 32-bit value and returns the lower 32 bits.\\
+Saturates the 64-bit variable W\_var1 to 32-bit value and returns the lower 32 bits.\\
 For example, a 64-bit wide accumulator is helpful in accumulating 16*16 multiplies without checking for saturation.
 However, at the end of the multiply-and-accumulate loop, we need to return only the 32-bit value after checking for saturation.\\
-If W\_v1 is in 33Q31 format, then the result returned will be saturated to 1Q31 format.
+If W\_var1 is in 33Q31 format, then the result returned will be saturated to 1Q31 format.
 
 %........................................................
-\NewOperator{W\_sat\_m(W\_v1)}
+\NewOperator{W\_sat\_m(W\_var1)}
 
-Arithmetically shifts right the 64-bit variable W\_v1 by 16 bits; saturates the 64-bit value to 32-bit value and returns the lower 32 bits.\\
+Arithmetically shifts right the 64-bit variable W\_var1 by 16 bits; saturates the 64-bit value to 32-bit value and returns the lower 32 bits.\\
 For example, a 64-bit wide accumulator is helpful in accumulating 32\*16 multiplies without checking for saturation.
 A 32\*16 multiply gives a 48-bit product; at the end of the multiply-and-accumulate loop, the result is in the lower 48 bits of the 64-bit accumulator.
 Now an arithmetic right shift by 16 bits will drop the LSB 16 bits.
 Now we should check for saturation and return the lower 32 bits.\\
-If W\_var is in 17Q47 format, then the result returned will be saturated to 1Q31 format.
+If W\_var1 is in 17Q47 format, then the result returned will be saturated to 1Q31 format.
 
 %........................................................
-\NewOperator{W\_shl\_sat\_l(W\_1, var1)}
+\NewOperator{W\_shl\_sat\_l(W\_var1, L\_var2)}
 
-Arithmetically shifts left the 64-bit W\_v1 by v1 positions with lower 32-bit saturation and returns the 32 LSB of 64-bit result.\\
-If v1 is negative, the result is shifted to right by (-var1) positions and sign extended.
-After shift operation, returns the 32 MSB of 64-bit result.
+Arithmetically shifts left the 64-bit W\_var1 by L\_var2 positions with lower 32-bit saturation and returns the 32 LSB of 64-bit result.\\
+If L\_var2 is negative, the result is shifted to right by (-L\_var2) positions and sign extended.
+After shift operation, returns the 32 LSB of 64-bit result.
 
 %........................................................
 \NewOperator{W\_extract\_l(W\_var1)}
@@ -1611,7 +1611,7 @@ Sets overflow flag. Returns 64-bit result.
 %........................................................
 \NewOperator{W\_neg(W\_var1)}
 
-Negates a 64-bit variables W\_var1 with 64-bit saturation control.
+Negates the 64-bit variable W\_var1 with 64-bit saturation control.
 Set overflow flag. Returns 64-bit result.
 
 %........................................................
@@ -1713,7 +1713,7 @@ Shifts the product left by 1 with 64-bit saturation control;
 Returns the 32 MSB of the 64-bit result after truncating of the lower 32 bits.
 The operation is performed in fractional mode.
 
-For example, if L\_var1 is in 1Q31 format and var2 is in 1Q31 format, then the product is produced in 1Q63 format which is then truncated, saturated, and returned in 1Q31 format.
+For example, if L\_var1 is in 1Q31 format and L\_var2 is in 1Q31 format, then the product is produced in 1Q63 format which is then truncated, saturated, and returned in 1Q31 format.
 
 The following code snippet describes the operations performed:
 

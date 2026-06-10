@@ -33,6 +33,10 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--wmc_auto_dir', metavar='wmc_auto_dir', type=str, dest='wmc_auto_dir', help='copy wmc_auto.[h|c] to a user-specified directory')
     args = parser.parse_args()
 
+    # Debug: print received arguments
+    print("DEBUG test_wmc_tool.py: sys.argv =", sys.argv, file=sys.stderr)
+    print("DEBUG test_wmc_tool.py: file_list =", args.file_list, file=sys.stderr)
+
     # create temporary directory
     # tmp_dir = tempfile.mkdtemp()
     # tmp_dir = './tmp'
@@ -106,6 +110,12 @@ if __name__ == '__main__':
         cmdline.append(args.wmc_auto_dir)
     for file in args.file_list:
         cmdline.append(file)
+    
+    # Debug: print command and working directory
+    print("DEBUG test_wmc_tool.py: cwd =", os.getcwd(), file=sys.stderr)
+    print("DEBUG test_wmc_tool.py: cmdline =", cmdline, file=sys.stderr)
+    print("DEBUG test_wmc_tool.py: out dir exists =", os.path.isdir(args.outdir), file=sys.stderr)
+    print("DEBUG test_wmc_tool.py: out contents =", os.listdir(args.outdir) if os.path.isdir(args.outdir) else "N/A", file=sys.stderr)
     
     # print(' '.join(cmdline))
     # sys.exit(0)

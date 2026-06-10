@@ -3,10 +3,10 @@ include_directories(../eid)
 include_directories(../g711)
 include_directories(../utl)
 
-add_executable(vbr-g726 vbr-g726.c g726.c ../g711/g711.c)
+add_executable(vbr-g726 vbr-g726.c g726.c ../g711/g711.c ../utl/wav_io.c)
 target_link_libraries(vbr-g726 ${M_LIBRARY})
 
-add_executable(g726demo g726demo.c g726.c)
+add_executable(g726demo g726demo.c g726.c ../utl/wav_io.c)
 target_link_libraries(g726demo ${M_LIBRARY})
 
 #Verification: g726demo
@@ -72,13 +72,13 @@ target_link_libraries(g726demo ${M_LIBRARY})
 
 #Verification: vbr-g726
 add_test(g726-vbr1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vbr-g726 -q -law A -rate 16-24-32-40-32-24 test_data/voice.src test_data/voicvbra.tst)
-add_test(g726-vbr1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/voicvbra.tst test_data/voicevbr.arf)
+add_test(g726-vbr1-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/voicvbra.tst test_data/voicevbr.arf)
 
 add_test(g726-vbr2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vbr-g726 -q -law l -rate 16-24-32-40-32-24 test_data/voice.src test_data/voicvbrl.tst)
 add_test(g726-vbr2-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/voicvbrl.tst test_data/voicevbr.lrf)
 
 add_test(g726-vbr3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vbr-g726 -q -law u -rate 16-24-32-40-32-24 test_data/voice.src test_data/voicvbru.tst)
-add_test(g726-vbr3-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/voicvbru.tst test_data/voicevbr.urf)
+add_test(g726-vbr3-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/voicvbru.tst test_data/voicevbr.urf)
 
 add_test(g726-vbr5 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vbr-g726 -q -law a -enc -rate 16 test_data/nrm.a test_data/nrm.a16 16 1 1024)
 add_test(g726-vbr5-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cf -q test_data/rn16fa.i test_data/nrm.a16 256 1 64)

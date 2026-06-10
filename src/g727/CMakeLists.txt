@@ -6,7 +6,7 @@ include_directories(../utl)
 add_executable(discard discard.c)
 target_link_libraries(discard ${M_LIBRARY})
 
-add_executable(g727demo g727demo.c g727.c ../g711/g711.c)
+add_executable(g727demo g727demo.c g727.c ../g711/g711.c ../utl/wav_io.c)
 target_link_libraries(g727demo ${M_LIBRARY})
 
 add_test(g727-1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/g727demo -q -core 4 -enh 0 -enc -law A test_data/speech.a-s   test_data/speech44.iad)

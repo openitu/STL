@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 3.1)
-project(STL2023 VERSION 2023)
-add_definitions( -DVERSION_STL="${CMAKE_PROJECT_NAME}" )
+cmake_minimum_required(VERSION 3.10...3.31)
+project(STL2026 VERSION 2026)
+
+add_definitions( -DVERSION_STL="${CMAKE_PROJECT_NAME}" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -24,6 +25,7 @@ add_subdirectory(src/eid)
 add_subdirectory(src/esdru)
 add_subdirectory(src/fir)
 add_subdirectory(src/freqresp)
+add_subdirectory(src/gain_chk)
 add_subdirectory(src/g711)
 add_subdirectory(src/g711iplc)
 add_subdirectory(src/g722)

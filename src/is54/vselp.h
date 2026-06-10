@@ -39,73 +39,55 @@ Motorola Inc.
 /*-------------------------------------------------------------------------*/
 /* Function declarations ...  */
 /* ... from getParams.c */
-void getParams ();
-/*FILE *fpget */
+void getParams (FILE *fpget);
 
 /* ... from calcParams.c */
-void calcParams ();
+void calcParams (void);
 
 /* ... from initTables.c */
-void initTables ();
+void initTables (void);
 
 /* ... from filt4.c */
-void FILT4 ();
-/*FTYPE *inPtr, int len */
+void FILT4 (FTYPE *inPtr, int len);
 
 /* ... from flatv.c */
-void FLATV ();
-FTYPE lookup ();
-/*int i */
+void FLATV (void);
+FTYPE lookup (int i);
 
 /* ... from paramConv.c */
-int ATORC ();
-/*FTYPE *a, FTYPE *k */
-int RCTOA ();
-/*FTYPE *k, FTYPE *a */
+int ATORC (FTYPE *a, FTYPE *k);
+int RCTOA (FTYPE *k, FTYPE *a);
 
 /* ... from interpolate.c */
-int INTERPOLATE ();
-/*struct coefSet defCoefs,
-		int numSets,
-		struct coefSet oCoefs,
-		int i,
-		FTYPE rq0 */
+int INTERPOLATE (struct coefSet defCoefs, int numSets,
+		struct coefSet oCoefs, int i, FTYPE rq0);
 
-void I_MOV ();
-/*struct coefSet defSet,
-	  int numSets,
-	  FTYPE	rq0 */
+void I_MOV (struct coefSet defSet, int numSets, FTYPE rq0);
 
-FTYPE RES_ENG ();
-/*FTYPE rq0, FTYPE *k */
+FTYPE RES_ENG (FTYPE rq0, FTYPE *k);
 
 /* ... from t_sub.c */
-void T_SUB ();
-/*int sfIndex */
+void T_SUB (int sfIndex);
 
 /* ... from putCodesEtc.c */
-long putCodesHex ();
-long putCodesBin ();
-/*int *paramP */
-long getCodesHex ();
-long getCodesBin ();
-/*int *codePtr */
-void putCodesLog ();
+long putCodesHex (FILE *fpstream, int *paramP);
+long putCodesBin (FILE *fpstream, int *paramP);
+long getCodesHex (FILE *fpcode, int *codePtr);
+long getCodesBin (FILE *fpcode, int *codePtr);
+void putCodesLog (void);
 
 /* ... from makeCoefs.c */
-void widen ();
-/*FTYPE lambda, char side */
-void A_SST ();
-/*FTYPE *wCoefPtr, FTYPE *ssCoefPtr */
+void widen (FTYPE lambda, char side);
+void A_SST (FTYPE *wCoefPtr, FTYPE *ssCoefPtr);
 
 /* ... from r_sub.c */
-void R_SUB ();
+void R_SUB (void);
 
 /* ... from weightedSnr.c */
-void printSnr ();
+void printSnr (FILE *fplog);
 
 /* ... from freeSpace.c */
-void freeSpace ();
+void freeSpace (void);
 
 /* external definitions */
 #include "edef.i"
