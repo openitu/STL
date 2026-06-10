@@ -50,7 +50,7 @@ int LAG_SEARCH () {
   FTYPE Cl;                     /* Holds the cross correlation between bl and P, the */
   /* weighted speech, for lag l */
   FTYPE Gl;                     /* Holds the energy in bl */
-  FTYPE E;                      /* Holds the partial energy of bl for lags greater */
+  FTYPE E = 0.0;                /* Holds the partial energy of bl for lags greater */
   /* than S_LEN */
   FTYPE ClBest = 0.0;           /* Holds the value of Cl for the current best */
   /* Cl**2 / Gl */

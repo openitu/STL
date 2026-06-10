@@ -137,7 +137,7 @@ void g728fp_decode (Short * speech,     /* output speech */
   Float *aptr;                  /* For attenuating a or atmp */
   Float gptmp[LPCLG];
   Gain gain;
-  Float gaindb;
+  Float gaindb = 0;
   Statelpc et;
   Float multfac;
   Float rc;

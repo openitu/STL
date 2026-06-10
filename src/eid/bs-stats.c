@@ -213,7 +213,7 @@ int main (int argc, char *argv[]) {
   /* Command line parameters */
   char bs_format = g192;        /* Generic Speech bitstream format */
   char ibs_file[MAX_STRLEN];    /* Input bitstream file */
-  char out_file[MAX_STRLEN];    /* Output ASCII file */
+  char out_file[MAX_STRLEN] = "-"; /* Output ASCII file */
   char log = 1;                 /* Flag for en/dis-abling output file */
   long fr_len = 0;              /* Frame length in bits */
   long bs_len;                  /* BS frame length, with headers */

@@ -805,7 +805,8 @@ static TOOL_ERROR Allocate_Insertion( Insert_Tbl_def *InsertTbl_ptr )
         /* Calculate Bigger Size */
         size = InsertTbl_ptr->MaxSize + INSERT_TBL_MEM_INCREMENT;
         /* Allocate Memory */
-        if ( ( ptr = (Insert_Rec_def *) malloc( nbytes = INSERT_REC_SIZE * size ) ) == NULL )
+        nbytes = INSERT_REC_SIZE * size;
+        if ( ( ptr = (Insert_Rec_def *) calloc( size, INSERT_REC_SIZE ) ) == NULL )
         {
             ErrCode = ERR_MEM_PARSING;
             Error( ERROR_MSG_MEM_PARSING, ErrCode, itos( temp, nbytes ) );
