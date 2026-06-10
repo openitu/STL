@@ -39,18 +39,18 @@ Motorola Inc.
 static FTYPE corr (FTYPE *vec1Ptr, FTYPE *vec2Ptr);
 
 int G_QUANT (int lag, FTYPE rs00, FTYPE rs11, FTYPE rs22) {
-  FTYPE Rpc0;                   /* correlation between the weighted speech and the */
+  FTYPE Rpc0 = 0.0;             /* correlation between the weighted speech and the */
   /* weighted pitch excitation vector */
   FTYPE Rpc1;                   /* correlation between the weighted speech and the */
   /* weighted 1st codebook excitation vector */
   FTYPE Rpc2;                   /* correlation between the weighted speech and the */
   /* weighted 2nd codebook excitation vector */
-  FTYPE Rcc00;                  /* Rcc(mn) -- correlation between excitation vector */
+  FTYPE Rcc00 = 0.0;            /* Rcc(mn) -- correlation between excitation vector */
   /* m and n, where vector 0 is the pitch excitation, */
   /* vector 1 is the 1st codebook excitation, and */
   /* vector 2 is the 2nd codebook excitation */
-  FTYPE Rcc01;                  /* */
-  FTYPE Rcc02;                  /* */
+  FTYPE Rcc01 = 0.0;            /* */
+  FTYPE Rcc02 = 0.0;            /* */
   FTYPE Rcc11;                  /* */
   FTYPE Rcc12;                  /* */
   FTYPE Rcc22;                  /* */
@@ -63,7 +63,7 @@ int G_QUANT (int lag, FTYPE rs00, FTYPE rs11, FTYPE rs22) {
   FTYPE maxVal;                 /* the current best (maximum) error value */
   int code;                     /* the best GSP0 centroid, returned to T_SUB() */
 
-  FTYPE *savePtr, *tmpPtr, *tmpPtr2, *endPtr, *endPtr2;
+  FTYPE *savePtr = NULL, *tmpPtr, *tmpPtr2, *endPtr, *endPtr2;
 
   errCoefs = (FTYPE *) malloc (GSP0_TERMS * sizeof (FTYPE));
 

@@ -805,7 +805,8 @@ static TOOL_ERROR Allocate_Insertion( Insert_Tbl_def *InsertTbl_ptr )
         /* Calculate Bigger Size */
         size = InsertTbl_ptr->MaxSize + INSERT_TBL_MEM_INCREMENT;
         /* Allocate Memory */
-        if ( ( ptr = (Insert_Rec_def *) malloc( nbytes = INSERT_REC_SIZE * size ) ) == NULL )
+        nbytes = INSERT_REC_SIZE * size;
+        if ( ( ptr = (Insert_Rec_def *) calloc( size, INSERT_REC_SIZE ) ) == NULL )
         {
             ErrCode = ERR_MEM_PARSING;
             Error( ERROR_MSG_MEM_PARSING, ErrCode, itos( temp, nbytes ) );
@@ -882,6 +883,7 @@ static TOOL_ERROR Add_Insertion(
                 }
                 InsertRec_ptr = InsertTbl_ptr->Data + InsertTbl_ptr->Size;
                 /* Fill Record */
+                memset(InsertRec_ptr, 0, sizeof(*InsertRec_ptr));
                 InsertRec_ptr->Ptr = (char *)ptr;
                 /* Reset # of Chars Stored */
                 nChars = 0;
@@ -5440,6 +5442,7 @@ static TOOL_ERROR Instrument_Operators(
 
     /* Initialize (No Memory Allocated by Default) */
     OperInsTbl.MaxSize = 0;
+    OperInsTbl.Data = NULL;
 
     /* Get Parse Table Address (for clarity) */
     ParseTbl_ptr = &ParseCtx_ptr->ParseTbl;

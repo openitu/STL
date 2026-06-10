@@ -88,13 +88,13 @@ void initTables () {
   FILE *fptmp;
   char *line;
 
-  line = (char *) malloc (MAXLINE * sizeof (char));
+  line = (char *) calloc (MAXLINE, sizeof (char));
 
   /* allocate input speech buffer, interpolated coef buffer, and residual */
   /* energy estimate buffer */
-  inBuf = (FTYPE *) malloc (INBUFSIZ * sizeof (FTYPE));
-  I_CBUFF = (FTYPE *) malloc ((NP * 3 * N_SUB) * sizeof (FTYPE));
-  RS_BUFF = (FTYPE *) malloc ((2 * N_SUB) * sizeof (FTYPE));
+  inBuf = (FTYPE *) calloc (INBUFSIZ, sizeof (FTYPE));
+  I_CBUFF = (FTYPE *) calloc (NP * 3 * N_SUB, sizeof (FTYPE));
+  RS_BUFF = (FTYPE *) calloc (2 * N_SUB, sizeof (FTYPE));
 
   /* initialize codes to zero (in case 1st denominator in FLAT is zero) */
   codeBuf = (int *) calloc (numCodes, sizeof (int));
@@ -109,29 +109,29 @@ void initTables () {
   /* (1<<(K_BITS_8+1))-1 + (1<<(K_BITS_9+1))-1 + */
   /* (1<<(K_BITS_10+1))-1; */
   numDecisionVals = 445;
-  *r0kAddr = (FTYPE *) malloc (numDecisionVals * sizeof (FTYPE));
-  sst = (FTYPE *) malloc ((NP + 1) * sizeof (FTYPE));
+  *r0kAddr = (FTYPE *) calloc (numDecisionVals, sizeof (FTYPE));
+  sst = (FTYPE *) calloc ((NP + 1), sizeof (FTYPE));
 
   /* T_SUB() and R_SUB() allocations */
-  T_STATE = (FTYPE *) malloc (NP * sizeof (FTYPE));
-  T_VEC = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
-  P = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
-  P_VEC = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
-  W_P_VEC = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
-  BASIS = (FTYPE *) malloc (S_LEN * C_BITS * sizeof (FTYPE));
-  BASIS_A = (FTYPE *) malloc (S_LEN * C_BITS_A * sizeof (FTYPE));
-  W_BASIS = (FTYPE *) malloc (S_LEN * C_BITS * sizeof (FTYPE));
-  BITS = (FTYPE *) malloc (C_BITS * sizeof (FTYPE));
-  X_VEC = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
-  W_X_VEC = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
-  X_A_VEC = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
-  W_X_A_VEC = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
+  T_STATE = (FTYPE *) calloc (NP, sizeof (FTYPE));
+  T_VEC = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
+  P = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
+  P_VEC = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
+  W_P_VEC = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
+  BASIS = (FTYPE *) calloc (S_LEN * C_BITS, sizeof (FTYPE));
+  BASIS_A = (FTYPE *) calloc (S_LEN * C_BITS_A, sizeof (FTYPE));
+  W_BASIS = (FTYPE *) calloc (S_LEN * C_BITS, sizeof (FTYPE));
+  BITS = (FTYPE *) calloc (C_BITS, sizeof (FTYPE));
+  X_VEC = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
+  W_X_VEC = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
+  X_A_VEC = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
+  W_X_A_VEC = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
   T_P_STATE = (FTYPE *) calloc (LMAX, sizeof (FTYPE));
   xmtExPtr = T_P_STATE + LMAX - S_LEN;
-  TABLE = (int *) malloc (((1 << C_BITS) - 2) * sizeof (int));
-  GSP0_TABLE = (FTYPE *) malloc (GSP0_TERMS * GSP0_NUM * sizeof (FTYPE));
+  TABLE = (int *) calloc (((1 << C_BITS) - 2), sizeof (int));
+  GSP0_TABLE = (FTYPE *) calloc (GSP0_TERMS * GSP0_NUM, sizeof (FTYPE));
   R_P_STATE = (FTYPE *) calloc (LMAX, sizeof (FTYPE));
-  outBuf = (FTYPE *) malloc (S_LEN * sizeof (FTYPE));
+  outBuf = (FTYPE *) calloc (S_LEN, sizeof (FTYPE));
 
   /* fill r0 quantization table */
   temp = sqrt ((double) S_LEN); /* sqrt (S_LEN * max amplitude squared) */
@@ -229,7 +229,7 @@ void initTables () {
 #include "gray.i"               /* gray-code table */
 
   /* store SST bandwidth widening factors for A_SST() */
-  P_SST = (FTYPE *) malloc ((NP + 1) * sizeof (FTYPE));
+  P_SST = (FTYPE *) calloc ((NP + 1), sizeof (FTYPE));
 
   nb = log (0.5) / (2.0 * log (cos ((4.0 * atan (1.0) * POST_BEQ_N) / (2.0 * SRATE))));
   temp = 1.0;

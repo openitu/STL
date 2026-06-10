@@ -111,6 +111,7 @@ void g728fp_decinit (G728FpDecData * d) {
   d->ferased = 0;
   d->fecount = 0;
   d->ofecount = 0;
+  d->ogaindb = 0;
   d->tap = 0;
   g728fp_zerof (d->etpast, KPMAX);
   d->feframesz = 4;             /* 10. msec */

@@ -1161,11 +1161,7 @@ int main( int argc, char *argv[] )
     TOOL_ERROR ErrCode = NO_ERR;
 
     /* Initialization */
-    ParseContext.File.MaxSize = 0;
-    ParseContext.ParseTbl.MaxSize = 0;
-    ParseContext.InsertTbl.MaxSize = 0;
-    ParseContext.FctCallTbl.MaxSize = 0;
-    ParseContext.PointerTbl.MaxSize = 0;
+    memset(&ParseContext, 0, sizeof(ParseContext));
     ParseContext.PROMOpsWeightsSet = 1;     /* Set PROM Ops Weighting Set in Context (0 = Std, 1 = STL 2009) */
 
     /* Skip the Executable's Name */
