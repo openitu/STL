@@ -94,6 +94,14 @@ The functions included are as follows:
 | `shq_down_3_to_1_init` | initialize 3:1 SHQ down-sampling filter. |
 | `hp50_32khz_init` | initialize 50-Hz high-pass filter (32-kHz sampling). |
 | `hp50_48khz_init` | initialize 50-Hz high-pass filter (48-kHz sampling). |
+| `p863_up_1_to_2_init` | initialize P.863/P.863.2 resampling 1:2 up-sampling filter (256 taps). |
+| `p863_down_2_to_1_init` | initialize P.863/P.863.2 resampling 2:1 down-sampling filter (256 taps). |
+| `p863_up_1_to_3_init` | initialize P.863/P.863.2 resampling 1:3 up-sampling filter (384 taps). |
+| `p863_down_3_to_1_init` | initialize P.863/P.863.2 resampling 3:1 down-sampling filter (384 taps). |
+| `p863_up_1_to_4_init` | initialize P.863/P.863.2 resampling 1:4 up-sampling filter (512 taps). |
+| `p863_down_4_to_1_init` | initialize P.863/P.863.2 resampling 4:1 down-sampling filter (512 taps). |
+| `p863_up_1_to_6_init` | initialize P.863/P.863.2 resampling 1:6 up-sampling filter (768 taps). |
+| `p863_down_6_to_1_init` | initialize P.863/P.863.2 resampling 6:1 down-sampling filter (768 taps). |
 | `hq_kernel` | FIR filtering function. |
 | `hq_reset` | clear state variables. |
 | `hq_free` | deallocate FIR-filter memory. |

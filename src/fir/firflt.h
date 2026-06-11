@@ -93,6 +93,14 @@ SCD_FIR *shq_down_2_to_1_init ARGS ((void));
 SCD_FIR *shq_down_3_to_1_init ARGS ((void));
 SCD_FIR *hp50_32khz_init ARGS ((void));
 SCD_FIR *hp50_48khz_init ARGS ((void));
+SCD_FIR *p863_up_1_to_2_init ARGS ((void));
+SCD_FIR *p863_down_2_to_1_init ARGS ((void));
+SCD_FIR *p863_up_1_to_3_init ARGS ((void));
+SCD_FIR *p863_down_3_to_1_init ARGS ((void));
+SCD_FIR *p863_up_1_to_4_init ARGS ((void));
+SCD_FIR *p863_down_4_to_1_init ARGS ((void));
+SCD_FIR *p863_up_1_to_6_init ARGS ((void));
+SCD_FIR *p863_down_6_to_1_init ARGS ((void));
 void hq_free ARGS ((SCD_FIR * fir_ptr));
 void hq_reset ARGS ((SCD_FIR * fir_ptr));
 
