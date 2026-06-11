@@ -16,7 +16,7 @@
 
 /* ......... Smart prototypes .......... */
 #ifndef ARGS
-#if (defined(__STDC__) || defined(VMS) || defined(__DECC)  || defined(MSDOS) || defined(__MSDOS__))
+#if (defined(__STDC__) || defined(VMS) || defined(__DECC)  || defined(MSDOS) || defined(__MSDOS__) || defined(_MSC_VER))
 #define ARGS(x) x
 #else
 #define ARGS(x) ()
