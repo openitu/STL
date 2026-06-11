@@ -87,6 +87,12 @@ SCD_FIR *LP20_48kHz_init ARGS ((void));
 // FILTER_12k48k_HW
 SCD_FIR *LP12_48kHz_init ARGS ((void));
 // FILTER_12k48k_HW
+SCD_FIR *shq_up_1_to_2_init ARGS ((void));
+SCD_FIR *shq_up_1_to_3_init ARGS ((void));
+SCD_FIR *shq_down_2_to_1_init ARGS ((void));
+SCD_FIR *shq_down_3_to_1_init ARGS ((void));
+SCD_FIR *hp50_32khz_init ARGS ((void));
+SCD_FIR *hp50_48khz_init ARGS ((void));
 void hq_free ARGS ((SCD_FIR * fir_ptr));
 void hq_reset ARGS ((SCD_FIR * fir_ptr));
 
