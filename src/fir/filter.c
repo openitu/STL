@@ -209,7 +209,11 @@ int valid_filter (char *F_type, char modified_IRS) {
 // FILTER_12k48k_HW
       || strncmp (F_type, "LP12", 4) == 0 || strncmp (F_type, "lp12", 4) == 0
 // FILTER_12k48k_HW
-      || strncmp (F_type, "LP14", 4) == 0 || strncmp (F_type, "lp14", 4) == 0 || strncmp (F_type, "LP20", 4) == 0 || strncmp (F_type, "lp20", 4) == 0 || strncmp (F_type, "hp50_32khz", 10) == 0 || strncmp (F_type, "HP50_32KHZ", 10) == 0 || strncmp (F_type, "hp50_48khz", 10) == 0 || strncmp (F_type, "HP50_48KHZ", 10) == 0)
+      || strncmp (F_type, "LP14", 4) == 0 || strncmp (F_type, "lp14", 4) == 0 || strncmp (F_type, "LP20", 4) == 0 || strncmp (F_type, "lp20", 4) == 0 || strncmp (F_type, "hp50_32khz", 10) == 0 || strncmp (F_type, "HP50_32KHZ", 10) == 0 || strncmp (F_type, "hp50_48khz", 10) == 0 || strncmp (F_type, "HP50_48KHZ", 10) == 0
+      || strncmp (F_type, "p863_2", 6) == 0 || strncmp (F_type, "P863_2", 6) == 0
+      || strncmp (F_type, "p863_3", 6) == 0 || strncmp (F_type, "P863_3", 6) == 0
+      || strncmp (F_type, "p863_4", 6) == 0 || strncmp (F_type, "P863_4", 6) == 0
+      || strncmp (F_type, "p863_6", 6) == 0 || strncmp (F_type, "P863_6", 6) == 0)
     valid = 1;
 
   /* No MOD-IRS filter at 8 kHz */
@@ -297,7 +301,11 @@ void display_usage () {
   printf ("   HP50_32KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=32kHz, 1119 coefs\n");
   printf ("   HP50_48KHZ 50 Hz highpass FIR filter w/ factor 1:1 at sf=48kHz, 1679 coefs\n");
   printf ("   SHQ2       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:2 (up) or 2:1(down)\n");
-  printf ("   SHQ3       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:3 (up) or 3:1(down)\n\n");
+  printf ("   SHQ3       FIR (Super High quality : 729 coefs, -80dB) low-pass for factor 1:3 (up) or 3:1(down)\n");
+  printf ("   P863_2     P.863/P.863.2 resampling filter for factor 1:2 (up) or 2:1 (down)\n");
+  printf ("   P863_3     P.863/P.863.2 resampling filter for factor 1:3 (up) or 3:1 (down)\n");
+  printf ("   P863_4     P.863/P.863.2 resampling filter for factor 1:4 (up) or 4:1 (down)\n");
+  printf ("   P863_6     P.863/P.863.2 resampling filter for factor 1:6 (up) or 6:1 (down)\n\n");
 
   /* Quit program */
   exit (-128);
@@ -683,6 +691,34 @@ int main (int argc, char *argv[]) {
    */
   else if (strncmp (F_type, "hp50_48khz", 10) == 0 || strncmp (F_type, "HP50_48KHZ", 10) == 0) {
     fir_state = hp50_48khz_init ();
+  }
+
+  /*
+   * Filter type: P863 - P.863/P.863.2 resampling filters
+   *              P863_2: factor 1:2 (up) or 2:1 (down)
+   *              P863_3: factor 1:3 (up) or 3:1 (down)
+   *              P863_4: factor 1:4 (up) or 4:1 (down)
+   *              P863_6: factor 1:6 (up) or 6:1 (down)
+   */
+  else if (strncmp (F_type, "p863_", 5) == 0 || strncmp (F_type, "P863_", 5) == 0) {
+    int f = atoi (&F_type[5]);
+    if (upsample) {
+      switch (f) {
+      case 2: fir_state = p863_up_1_to_2_init (); break;
+      case 3: fir_state = p863_up_1_to_3_init (); break;
+      case 4: fir_state = p863_up_1_to_4_init (); break;
+      case 6: fir_state = p863_up_1_to_6_init (); break;
+      default: error_terminate ("P863: factor must be 2, 3, 4, or 6\n", 15);
+      }
+    } else {
+      switch (f) {
+      case 2: fir_state = p863_down_2_to_1_init (); break;
+      case 3: fir_state = p863_down_3_to_1_init (); break;
+      case 4: fir_state = p863_down_4_to_1_init (); break;
+      case 6: fir_state = p863_down_6_to_1_init (); break;
+      default: error_terminate ("P863: factor must be 2, 3, 4, or 6\n", 15);
+      }
+    }
   }
 
   /* 
