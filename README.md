@@ -18,6 +18,8 @@ To build the STL tools, you need:
 
 Not so recent C compilers might also work (not tested).
 
+## Linux / macOS
+
 ```shell
 #Download source code
 git clone https://github.com/openitu/STL
@@ -26,15 +28,39 @@ git clone https://github.com/openitu/STL
 cd STL
 
 #Generate platform dependent build scripts using CMake
-#For using a specific generator see CMake parameter "-G"
 cmake .
 
-##Build STL tools
+#Build STL tools
 cmake --build .
 
-##Run tests (optional)
+#Run tests (optional)
 ctest
 ```
+
+## Windows
+
+Prerequisites:
+* Visual Studio with the **"Desktop development with C++"** workload installed
+* CMake (included with Visual Studio, or install separately)
+
+```powershell
+#Download source code
+git clone https://github.com/openitu/STL
+
+#Enter directory
+cd STL
+
+#Generate Visual Studio project files (adjust version as needed)
+cmake -G "Visual Studio 18 2026" .
+
+#Build STL tools
+cmake --build . --config Release
+
+#Run tests (optional)
+ctest -C Release
+```
+
+> **Note:** On Windows, you must specify a configuration (`Release` or `Debug`) for both the build and test steps.
 
 # Licenses
 The STL, and all of its derivations, is subject to the "ITU-T General Public License", which is a modified version of the GPL1.

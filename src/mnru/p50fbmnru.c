@@ -14,8 +14,12 @@
 #define random_MNRU new_random_MNRU
 
 /* Defines minimum and maximum value for a short int. */
+#ifndef SHRT_MIN
 #define SHRT_MIN -32768
+#endif
+#ifndef SHRT_MAX
 #define SHRT_MAX +32767
+#endif
 
 void show_use(void)
 {
