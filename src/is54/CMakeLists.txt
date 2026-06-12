@@ -20,3 +20,5 @@ add_test(uvselp-decode4 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/uvselp -q -dec -pf -bi
 add_test(uvselp-both1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/uvselp -q -nolog test_data/voice.src test_data/voice.rek)
 add_test(uvselp-both2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/uvselp -q -nolog -pf test_data/voice.src test_data/voice-pf.rek)
 
+
+

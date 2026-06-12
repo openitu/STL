@@ -103,3 +103,45 @@ add_test(eid-xor ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/eid-xor -fer -bs bit -ep g192
 add_test(eid-xor ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/eid-xor -fer -bs bit -ep byte test_data/zero.src test_data/epf05g10.byt test_data/z_f05g10.bby)
 add_test(eid-xor ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/eid-xor -fer -bs bit -ep bit  test_data/zero.src test_data/epf05g10.bit test_data/z_f05g10.bbi)
 
+
+#--- dlyerr_2_errpat: delay/error profile to frame-erasure pattern (from 3GPP S4-121077)
+add_executable(dlyerr_2_errpat dlyerr_2_errpat.c softbit.c)
+target_link_libraries(dlyerr_2_errpat ${M_LIBRARY})
+
+# default text format, constant delay
+add_test(dlyerr_2_errpat1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat
+    -i test_data/profile.dat -o test_data/t1_text.proc -L 30 -d 40)
+add_test(dlyerr_2_errpat1-verify ${CMAKE_COMMAND} -E compare_files --ignore-eol
+    test_data/t1_text.ref test_data/t1_text.proc)
+
+# LF text format
+add_test(dlyerr_2_errpat2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat
+    -i test_data/profile.dat -o test_data/t2_lf.proc -L 30 -d 40 -c)
+add_test(dlyerr_2_errpat2-verify ${CMAKE_COMMAND} -E compare_files --ignore-eol
+    test_data/t2_lf.ref test_data/t2_lf.proc)
+
+# word G.192 format with frame aggregation
+add_test(dlyerr_2_errpat3 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat
+    -i test_data/profile.dat -o test_data/t3_word.proc -L 30 -d 40 -w -f 2)
+add_test(dlyerr_2_errpat3-verify ${CMAKE_COMMAND} -E compare_files
+    test_data/t3_word.ref test_data/t3_word.proc)
+
+# late-loss-rate driven threshold
+add_test(dlyerr_2_errpat4 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlyerr_2_errpat
+    -i test_data/profile.dat -o test_data/t4_lateloss.proc -L 30 -l 5.0)
+add_test(dlyerr_2_errpat4-verify ${CMAKE_COMMAND} -E compare_files --ignore-eol
+    test_data/t4_lateloss.ref test_data/t4_lateloss.proc)
+
+#--- eid-amr: EID for 3GPP AMR codec (from 3GPP S4-120998)
+add_executable(eid-amr eid-amr.c softbit.c)
+target_link_libraries(eid-amr ${M_LIBRARY})
+
+add_test(eid-amr1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/eid-amr
+    test_data/bst475.amr test_data/bf03.g192 test_data/bst475_bf03.tst)
+add_test(eid-amr1-verify ${CMAKE_COMMAND} -E compare_files
+    test_data/bst475_bf03.amr test_data/bst475_bf03.tst)
+
+add_test(eid-amr2 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/eid-amr
+    test_data/bst122.amr test_data/bf06.g192 test_data/bst122_bf06.tst)
+add_test(eid-amr2-verify ${CMAKE_COMMAND} -E compare_files
+    test_data/bst122_bf06.amr test_data/bst122_bf06.tst)

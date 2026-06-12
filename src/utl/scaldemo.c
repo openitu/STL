@@ -86,6 +86,7 @@
 
 #include "ugstdemo.h"
 #include "ugst-utl.h"
+#include "wav_io.h"
 
 #ifdef VMS
 #include <stat.h>
@@ -163,7 +164,7 @@ int main (int argc, char *argv[]) {
   char use_dB = 0, quiet = 0, pre_mask = 0;
 
   /* File variables */
-  FILE *Fi, *Fo;
+  AUDIO_FILE *Fi, *Fo;
   char FileIn[MAX_STRLEN], FileOut[MAX_STRLEN];
 #ifdef VMS
   char mrs[15];
@@ -307,14 +308,7 @@ int main (int argc, char *argv[]) {
   start_byte = --N1;
   start_byte *= N * sizeof (short);
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-
-    /* ... find the input file size ... */
-    stat (FileIn, &st);
-    N2 = ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
-  }
+  /* N2 will be computed after opening file if processing the whole file */
 
   /* Allocate memory for data buffers */
   if ((s_buf = (short *) calloc (sizeof (short), N)) == NULL)
@@ -334,15 +328,19 @@ int main (int argc, char *argv[]) {
 #ifdef VMS
   sprintf (mrs, "mrs=%d", 2 * N);
 #endif
-  if ((Fi = fopen (FileIn, RB)) == NULL)
+  if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
     KILL (FileIn, 2);
 
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0)
+    N2 = ceil ((audio_get_data_size (Fi) - start_byte) / (double) (N * sizeof (short)));
+
   /* Creates output file */
-  if ((Fo = fopen (FileOut, WB)) == NULL)
+  if ((Fo = audio_open_write (FileOut, audio_get_sample_rate (Fi), 1, 16)) == NULL)
     KILL (FileOut, 3);
 
   /* Move pointer to 1st desired block */
-  if (fseek (Fi, start_byte, 0) < 0l)
+  if (audio_seek (Fi, start_byte) < 0l)
     KILL (FileIn, 4);
 
   /* Get data of interest, equalize and de-normalize */
@@ -352,7 +350,7 @@ int main (int argc, char *argv[]) {
       printf ("%c\r", funny[blk_count % 5]);
 
     /* Read block of data */
-    if ((nsam = fread (s_buf, sizeof (short), N, Fi)) > 0) {
+    if ((nsam = audio_read (Fi, s_buf, N)) > 0) {
       /* convert samples to float */
       sh2fl ((long) nsam, s_buf, f_buf, pre_mask ? bitno : 16, 1);
 
@@ -363,7 +361,7 @@ int main (int argc, char *argv[]) {
       NrSat += fl2sh ((long) nsam, f_buf, s_buf, h, mask[16 - bitno]);
 
       /* write equalized, de-normalized and hard-clipped samples to file */
-      if ((nsam = fwrite (s_buf, sizeof (short), nsam, Fo)) < 0)
+      if ((nsam = audio_write (Fo, s_buf, nsam)) < 0)
         KILL (FileOut, 6);
 
       /* Update total number of samples in file */
@@ -382,8 +380,8 @@ int main (int argc, char *argv[]) {
     printf ("---> DONE    \n");
 
   /* Close files, free memory */
-  fclose (Fi);
-  fclose (Fo);
+  audio_close (Fi);
+  audio_close (Fo);
   free (f_buf);
   free (s_buf);
 

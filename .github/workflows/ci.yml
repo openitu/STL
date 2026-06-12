@@ -4,7 +4,7 @@ on:
   push:
     branches: [dev, main, STL_2026_itu_submission]
   pull_request:
-    branches: [dev, main]
+    branches: [dev, main, STL_2026_itu_submission]
 
 jobs:
   build-and-test:
@@ -58,7 +58,7 @@ jobs:
         run: |
           # Exclude build directory from Windows Defender to avoid scan delays
           powershell -Command "Add-MpPreference -ExclusionPath '${{ github.workspace }}'"
-          cmake .
+          cmake . -DCMAKE_C_FLAGS="/we4700"
 
       - name: Build (Unix)
         if: runner.os != 'Windows'

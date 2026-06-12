@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "wav_io.h"
 
 #define BLOCK_SIZE                19200      /* 400 ms in 48000 Hz sample rate */
 #define STEP_SIZE                 4800       /* 100 ms in 48000 Hz sample rate (75% overlap of 400 ms gating blocks) */   
@@ -387,8 +388,8 @@ long parse_conf(      /*  o: 0:success, -1:fail   */
 
 int main(int argc, char **argv )
 {
-    FILE* f_input;
-    FILE* f_output;
+    AUDIO_FILE* f_input;
+    AUDIO_FILE* f_output;
     char *input_filename;
     char *output_filename;
     double *input;
@@ -477,7 +478,7 @@ int main(int argc, char **argv )
     }
 
     input_filename = argv[i++];
-    if( (f_input = fopen( input_filename, "rb" )) == NULL )
+    if( (f_input = audio_open_read (input_filename, 48000, 0, 16)) == NULL )
     {
         fprintf( stderr, "*** Could not open input file %s, exiting..\n\n", input_filename );
         usage();
@@ -489,7 +490,7 @@ int main(int argc, char **argv )
     else
     {
         output_filename = argv[i];
-        if( (f_output = fopen( output_filename, "wb" )) == NULL )
+        if( (f_output = audio_open_write( output_filename, audio_get_sample_rate (f_input), 1, 16 )) == NULL )
         {
             fprintf( stderr, "*** Could not open output file %s, exiting..\n\n", output_filename );
             usage();
@@ -541,9 +542,8 @@ int main(int argc, char **argv )
     fprintf( stdout, "nchan:            %ld\n", nchan );
 
     /* Find length of input file */
-    fseek( f_input, 0L, SEEK_END );
-    length_total = ftell( f_input ) / (2*nchan); /* 2 bytes per sample (16 bits), nchan channels */
-    if( (ftell( f_input ) % (2 * nchan)) != 0 )
+    length_total = audio_get_data_size( f_input ) / (2*nchan); /* 2 bytes per sample (16 bits), nchan channels */
+    if( (audio_get_data_size( f_input ) % (2 * nchan)) != 0 )
     {
         fprintf( stderr, "*** Number of samples not divisible into number of channels, exiting..\n" );
         exit( -1 );
@@ -553,7 +553,7 @@ int main(int argc, char **argv )
         fprintf( stderr, "*** Input file must be longer than 400 ms to use bs1770demo, exiting..\n" );
         exit( -1 );
     }
-    rewind( f_input );
+    audio_seek( f_input, 0L );
     n_gating_blocks = 4 * (length_total - BLOCK_SIZE) / (BLOCK_SIZE);
 
     /* Allocate input buffers */
@@ -572,7 +572,7 @@ int main(int argc, char **argv )
     for( n = 0, j = -3; j < n_gating_blocks; n++, j++ )
     {
         /* Read next sub-block */
-        fread( input_short, sizeof( short ), STEP_SIZE * nchan, f_input );
+        fread( input_short, sizeof( short ), STEP_SIZE * nchan, f_input->fp );
 
         deinterleave_short2double( input_short, input, STEP_SIZE * nchan, nchan );
 
@@ -610,16 +610,16 @@ int main(int argc, char **argv )
             fac = find_scaling_factor( gating_block_energy, n_gating_blocks, lev_target, rms_flag, &lev_input, &lev_obtained );
 
             /* Apply scaling */
-            rewind( f_input ); 
+            audio_seek( f_input, 0L ); 
             length_total = 0;
             clip = 0;
-            while( (length = (long)fread( input_short, sizeof( short ), STEP_SIZE * nchan, f_input ) ) )
+            while( (length = (long)fread( input_short, sizeof( short ), STEP_SIZE * nchan, f_input->fp ) ) )
             {
                 deinterleave_short2double( input_short, input, STEP_SIZE * nchan, nchan );
                 scale(input, fac, input, STEP_SIZE * nchan );
                 clip += interleave_double2short( input, input_short, STEP_SIZE * nchan, nchan );
                 length_total += length / nchan;
-                fwrite( input_short, sizeof( short ), length, f_output );
+                fwrite( input_short, sizeof( short ), length, f_output->fp );
             }
 
             fprintf( stdout, "Input level:      %.6f\n", lev_input );
@@ -633,7 +633,7 @@ int main(int argc, char **argv )
                 fprintf( stderr, "*** Warning: %ld samples clipped\n", clip );
             }
 
-            fclose( f_output );
+            audio_close( f_output );
         }
         else
         {
@@ -666,7 +666,7 @@ int main(int argc, char **argv )
     }
 
     /* Close files */
-    fclose( f_input );
+    audio_close( f_input );
 
     /* Deallocate memory */
     free( input );

@@ -223,21 +223,23 @@ double bin_interp (double upcount, double lwcount, double upthr, double lwthr, d
 #define M        15.9           /* in [dB] */
 #define THRES_NO 15             /* number of thresholds in the speech voltmeter */
 
-void init_speech_voltmeter (SVP56_state * state, double sampl_freq) {
+void init_speech_voltmeter (SVP56_state * state, double sampl_freq, int bitno) {
   double x;
   long I, j;
 
 
   /* First initializations */
   state->f = sampl_freq;
+  state->bitno = bitno;
+  state->thres_no = bitno - 1;
   I = floor (H * state->f + 0.5);
 
-  /* Inicialization of threshold vector */
-  for (x = 0.5, j = 1; j <= THRES_NO; j++, x /= 2.0)
-    state->c[THRES_NO - j] = x;
+  /* Inicialization of threshold vector: geometric progression from 0.5 down to 2^-(bitno-1) */
+  for (x = 0.5, j = 1; j <= state->thres_no; j++, x /= 2.0)
+    state->c[state->thres_no - j] = x;
 
   /* Inicialization of activity and hangover count vectors */
-  for (j = 0; j < THRES_NO; j++) {
+  for (j = 0; j < state->thres_no; j++) {
     state->a[j] = 0;
     state->hang[j] = I;
   }
@@ -247,8 +249,8 @@ void init_speech_voltmeter (SVP56_state * state, double sampl_freq) {
 
   /* Inicialization of other quantities referring to state variables */
   state->max = 0;
-  state->maxP = -32768.;
-  state->maxN = 32767.;
+  state->maxP = -pow(2.0, (double)(bitno - 1));
+  state->maxN = pow(2.0, (double)(bitno - 1)) - 1.0;
 
   /* Defining the 0 dB reference level in terms of normalized values */
   state->refdB = 0 /* dBov */ ;
@@ -350,7 +352,7 @@ double speech_voltmeter (float *buffer, long smpno, SVP56_state * state) {
   int I, j;
   long k;
   double g, x, AdB, CdB, AmdB, CmdB, ActiveSpeechLevel;
-  double LongTermLevel, Delta[15];
+  double LongTermLevel, Delta[SVP56_MAX_THRESHOLDS];
 
 
   /* Some initializations */
@@ -380,7 +382,7 @@ double speech_voltmeter (float *buffer, long smpno, SVP56_state * state) {
     state->q = g * (state->q) + (1 - g) * (state->p);
 
     /* Applies threshold to the envelope q */
-    for (j = 0; j < THRES_NO; j++) {
+    for (j = 0; j < state->thres_no; j++) {
       if ((state->q) >= state->c[j]) {
         state->a[j]++;
         state->hang[j] = 0;
@@ -412,7 +414,7 @@ double speech_voltmeter (float *buffer, long smpno, SVP56_state * state) {
     return (ActiveSpeechLevel);
 
   /* Proceed serially for steps 2 and up -- this is the most common case */
-  for (j = 1; j < THRES_NO; j++) {
+  for (j = 1; j < state->thres_no; j++) {
     if (state->a[j] != 0) {
       AdB = 10 * log10 (((state->sq) / state->a[j]) + MIN_LOG_OFFSET);
       CdB = 20 * log10 (((double) state->c[j]) + MIN_LOG_OFFSET);

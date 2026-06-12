@@ -1,0 +1,228 @@
+%=============================================================================
+% THIS IS chapter{Gain amplification verification tool}
+%
+% May 2026 - created for STL integration
+%=============================================================================
+\chapter{Gain amplification verification tool}
+\label{ch:gain_chk}
+%=============================================================================
+
+\section{Introduction}
+\label{sec:gain_chk-intro}
+
+The \texttt{gain\_chk} tool compares a reference signal and a processed
+signal and reports short-time gain differences per frequency band. The
+tool is intended for objective verification of spectral gain behavior in
+speech and audio processing chains.
+
+Both inputs are raw 16-bit PCM files. The processing is frame-based with
+20 ms frames and supports sampling frequencies 8, 16, 32 and 48 kHz.
+Optionally, a VAD file can be provided to separate statistics for active
+and inactive frames.
+
+\section{Description of the algorithm}
+\label{sec:gain_chk-algorithm}
+
+\subsection{Frame and spectrum analysis}
+
+Let $x_1[n]$ be the reference frame and $x_2[n]$ be the processed frame,
+with frame length $L=\frac{F_s}{50}$ samples (20 ms). Each frame is
+windowed with a Hamming window
+\begin{equation}
+w[n] = 0.54 - 0.46\cos\left(\frac{2\pi n}{L-1}\right), \quad n=0,\ldots,L-1.
+\end{equation}
+
+The tool computes the real FFT of each windowed frame after zero-padding
+to the next power-of-two length. For each frequency bin $k$, the spectral
+energy is
+\begin{equation}
+P_i[k] = \Re\{X_i[k]\}^2 + \Im\{X_i[k]\}^2, \quad i \in \{1,2\}.
+\end{equation}
+
+\subsection{Band energy accumulation}
+
+The analysis bands are defined by upper frequency limits in the
+\texttt{bands[]} table. Values in $(0,1]$ are interpreted as normalized
+fractions of Nyquist ($F_s/2$). For each band $b$, the tool accumulates
+average bin energy:
+\begin{equation}
+E_i^{(b)} = \frac{1}{N_b}\sum_{k \in \mathcal{B}_b} P_i[k],
+\end{equation}
+where $\mathcal{B}_b$ is the set of bins inside the band and $N_b$ its
+number of bins.
+
+For each frame class (all/active/inactive), band energies are accumulated
+across frames:
+\begin{equation}
+\bar{E}_i^{(b)} = \sum_{\mbox{\scriptsize frames}} E_i^{(b)}.
+\end{equation}
+
+\subsection{Reported gain measures}
+
+For each band, the gain ratio is
+\begin{equation}
+R^{(b)} = \frac{\bar{E}_2^{(b)} + E_{\min}}{\bar{E}_1^{(b)} + E_{\min}},
+\end{equation}
+where $E_{\min}$ is a small offset used for numerical robustness.
+
+The reported outputs are:
+\begin{equation}
+G_{\mathrm{dB}}^{(b)} = 10\log_{10}\left(R^{(b)}\right),
+\end{equation}
+\begin{equation}
+G_{\%}^{(b)} = \left(R^{(b)} - 1\right)\cdot 100.
+\end{equation}
+
+The same ratio is also computed on the total energy over all bands.
+
+\subsection{VAD-conditioned processing}
+
+When a VAD file is present (\texttt{-v}), one 16-bit flag is read per
+frame. Frames with non-zero VAD are treated as active. Frames with zero
+VAD are treated as inactive.
+
+For inactive frames, a low-energy gate is applied on the reference frame:
+if mean time-domain energy is below a fixed threshold, that frame is not
+included in spectral statistics. This avoids unstable ratios in near-silent
+segments.
+
+\subsection{Threshold check mode}
+
+When threshold options are enabled, two checks are available:
+\begin{itemize}
+\item \texttt{-a}: maximum allowed positive gain (amplification) in dB for active frames;
+\item \texttt{-s}: maximum allowed attenuation in dB for inactive frames (requires VAD).
+\end{itemize}
+
+The tool returns a numeric code intended for automation scripts:
+\begin{itemize}
+\item 1: active fail and inactive fail;
+\item 2: active pass and inactive fail;
+\item 3: active fail and inactive pass;
+\item 4: active pass and inactive pass.
+\end{itemize}
+
+\section{Implementation}
+\label{sec:gain_chk-impl}
+
+\subsection{Data and file format}
+
+The tool expects 16-bit PCM input files in native host byte order,
+consistent with other STL command-line tools.
+
+Mandatory input/output arguments:
+\begin{itemize}
+\item \texttt{-i} reference PCM file;
+\item \texttt{-o} processed PCM file;
+\item \texttt{-t} output text file;
+\item \texttt{-r} sampling frequency in Hz.
+\end{itemize}
+
+Optional arguments:
+\begin{itemize}
+\item \texttt{-v} VAD file (one 16-bit flag per frame);
+\item \texttt{-a} active-frame amplification threshold (dB);
+\item \texttt{-s} inactive-frame attenuation threshold (dB).
+\end{itemize}
+
+\subsection{Output file format}
+
+The results text file (\texttt{-t}) is opened in append mode. For each
+invocation, the tool writes:
+
+\begin{enumerate}
+\item The command line used.
+\item A header line indicating the frame class (\texttt{For all Frames},
+      \texttt{For Active Frames}, or \texttt{For Inactive Frames}).
+\item One line per frequency band:
+\begin{verbatim}
+Ener Ratio (Out/In) for critical band <b> (<f_lo> Hz - <f_hi> Hz) = <G_dB> dB  ( <G_%>%)
+\end{verbatim}
+\item A full-spectrum summary line covering band $0$--$F_s/2$.
+\item A separator line of dashes.
+\end{enumerate}
+
+\noindent When a VAD file is provided, the above block is repeated
+separately for active and inactive frame classes.
+
+\subsection{Command line syntax}
+
+{\tt {\small
+\begin{tabular}{llll}
+gain\_chk & -i ref.pcm & -o proc.pcm & -t results.txt \\
+          & -r Fs      & [-v vad.bin] & [-a A\_dB] [-s S\_dB] \\
+\end{tabular}
+}}
+
+\subsection{Processing flow}
+
+Pseudo code:
+{\tt\small
+\begin{verbatim}
+Read and validate command line
+Initialize frame length, bands, and Hamming window
+for each complete 20 ms frame in both input files:
+    read reference and processed PCM frame
+    read VAD flag if provided (else active by default)
+    optionally skip low-energy inactive frame
+    apply Hamming window and zero padding
+    compute FFT of both frames
+    for each frequency band:
+        accumulate average spectral energy in reference/processed
+After loop:
+    print per-band and total gain in dB and percent
+    optionally evaluate thresholds and return status code
+\end{verbatim}
+}
+
+\section{Tests and portability}
+\label{sec:gain_chk-tests}
+
+The STL CMake integration defines regression tests for \texttt{gain\_chk}
+using bundled PCM material. Tests run at 48 kHz and compare expected tool
+output against reference files.
+
+The implementation is ANSI C style and uses standard C library calls plus
+math functions (\texttt{log}, \texttt{log10}, \texttt{cos}). It is portable
+across common Unix-like and Windows toolchains supported by STL.
+
+\section{Example code}
+\label{sec:gain_chk-example}
+
+The demonstration program is \texttt{gain\_chk.c}. It implements command
+line parsing, frame-based spectral analysis, optional VAD-conditioned
+statistics, report generation, and threshold-based return codes.
+
+A typical invocation comparing a reference and processed file at 48~kHz:
+
+{\tt {\small
+\begin{verbatim}
+$ gain_chk -i ref.pcm -o processed.pcm -t results.txt -r 48000
+\end{verbatim}
+}}
+
+\noindent Sample output written to \texttt{results.txt}:
+
+{\tt {\small
+\begin{verbatim}
+For all Frames
+Ener Ratio (Out/In) for critical band  0 (    0 Hz -  4000 Hz) =  -1.49 dB  ( -29.02%)
+Ener Ratio (Out/In) for critical band  1 ( 4000 Hz -  8000 Hz) =  -6.58 dB  ( -78.00%)
+Ener Ratio (Out/In) for critical band  2 ( 8000 Hz - 16000 Hz) = -35.58 dB  ( -99.97%)
+Ener Ratio (Out/In) for critical band  3 (16000 Hz - 20000 Hz) = -16.10 dB  ( -97.55%)
+Ener Ratio (Out/In) for the Full Spectrum(    0 Hz - 20000 Hz) =  -1.55 dB  ( -30.02%)
+\end{verbatim}
+}}
+
+\noindent With threshold checking enabled for scripted pass/fail:
+
+{\tt {\small
+\begin{verbatim}
+$ gain_chk -i ref.pcm -o processed.pcm -t results.txt -r 48000 \
+           -v vad.bin -a 3.0 -s 6.0
+$ echo $?
+4
+\end{verbatim}
+}}
+
+\noindent Exit code~4 indicates both active and inactive thresholds passed.

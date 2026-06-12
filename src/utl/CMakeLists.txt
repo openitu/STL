@@ -1,10 +1,18 @@
 add_executable(spdemo spdemo.c ugst-utl.c)
 target_link_libraries(spdemo ${M_LIBRARY})
 
-add_executable(scaldemo scaldemo.c ugst-utl.c)
+add_executable(scaldemo scaldemo.c ugst-utl.c wav_io.c)
 target_link_libraries(scaldemo ${M_LIBRARY})
 
-add_executable(signal-diff signal-diff.c)
+add_executable(signal-diff signal-diff.c wav_io.c)
+
+add_executable(test_wav_io test_wav_io.c wav_io.c)
+add_test(wav_io ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_wav_io)
+
+add_executable(mkwav mkwav.c wav_io.c)
+add_executable(test_wav_io_validate test_wav_io_validate.c wav_io.c)
+
+include(test_wav_integration.cmake)
 
 #TODO Input file is not _yet_ there.
 add_test(scaldemo1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scaldemo -q -trunc ../is54/test_data/voice.src test_data/voice.tru 256 1 0 0.5941352)

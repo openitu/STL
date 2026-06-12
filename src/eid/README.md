@@ -20,6 +20,8 @@ The "Error Insertion Device" (EID) module is built of the following files:
     
     eid-int.c: .... Interpolates error patterns from a master EP
     eid-xor.c: .... Disturbs bits or erases frames based on error patterns
+    eid-amr.c: .... EID for 3GPP AMR codec (frame erasures via G.192 patterns)
+    dlyerr_2_errpat.c: Delay/error profile to frame-erasure pattern converter
     ep-stats.c: ... Assesses and prints statistics about an error pattern file
     gen-patt.c: ... Generates error pattern files
     softbit.c: .... Library with softbit file I/O and format check
@@ -261,6 +263,69 @@ little-endian computers (PC/VAX/Alpha) are:
 ## Testing the error pattern histogram program
 
 Has not been implemented yet.
+
+
+<<<<<<< HEAD
+
+## dlyerr_2_errpat: Delay/error profile to frame-erasure pattern
+
+Converts a delay-and-error profile (one integer per line: network delay in ms,
+or -1 for network loss) into a frame-erasure error pattern for use with
+`eid-xor`. Supports two jitter buffer management emulation modes.
+
+Usage:
+
+    dlyerr_2_errpat [options]
+
+    -i <inputfile>       delay/error profile (required)
+    -o <outputfile>      error pattern output (required)
+    -d <delay_ms>        constant-JBM-delay mode (milliseconds)
+    -l <rate_percent>    bounded-loss-rate mode (percent)
+    -L <frames>          output length in frames (default: 7500)
+    -s <offset>          skip offset frames into the profile
+    -f <1|2>             frames per packet (default: 1)
+    -w                   word-oriented G.192 output
+    -b                   byte-oriented G.192 output
+    -c                   text mode with LF (one entry per line)
+
+Exactly one of `-d` or `-l` must be supplied.
+
+Input format: one integer per line. Values 0--1999 represent network delay in
+milliseconds; -1 indicates network loss (packet never arrived). If the input
+file is shorter than `-L` frames, it wraps around.
+
+Output: `0` = good frame, `1` = lost frame (text mode); or G.192 binary
+equivalent with `-w` or `-b` flags.
+
+Example (fixed JBM delay of 200ms, word G.192 output):
+
+    dlyerr_2_errpat -d 200 -f 1 -w -s 100 -i profile.dat -o ep.g192
+    eid-xor -fer -ep g192 bitstream.g192 ep.g192 output.g192
+
+Originally provided by Fraunhofer IIS via 3GPP Tdoc S4-121077
+(TSGS4#70, Chicago, 13--17 Aug 2012), in support of the EVS codec
+processing plan.
+
+## EID-AMR: Error Insertion Device for 3GPP AMR codec
+
+The `eid-amr` tool provides frame erasure simulation for 3GPP AMR bitstreams
+using G.192 error patterns. The `eid-xor` tool is not directly applicable to
+AMR because the AMR bitstream follows the ETSI/3GPP format (TS 26.073 §6.3),
+which is not compliant with ITU-T G.192.
+
+Derived from the EID-3G tool (Nobuhiko Naka, NTT DOCOMO). Differences:
+- No position parameter (consistent with `eid-xor` usage).
+- Only frame erasures (no bit errors).
+- All data bits in an erased frame are forced to zero.
+- Lost frames signalled with frame type NO\_DATA (0x03).
+- Statistics reported to stderr.
+
+Usage:
+
+    eid-amr <AMR_bitstream_in> <G.192_FER_pattern> <AMR_bitstream_out>
+
+Originally submitted to 3GPP in Tdoc S4-120998 (Aug. 2012).
+Authors: Balazs Kovesi, Stephane Ragot (Orange SA).
 
 
 Good luck!

@@ -6,72 +6,73 @@
        CODING STANDARDS".
        =============================================================
 
-The UGST P.56 speech voltmeter module, version 3.1 (21/Aug/95), needs the
-following files:
+# UGST P.56 Speech Voltmeter
 
-# C program code
-```
-sv-p56.c ........ the speech voltmeter (SV) module itself; needs the
-                  prototypes in sv-p56.h
-sv-p56.h ........ prototypes and definitions needed by the SV module.
-```
+Measures and equalizes active speech levels according to ITU-T Recommendation
+P.56. Includes `sv56demo` (measure + equalize) and `actlev` (measure only).
 
-# Additional modules needed (see directory ../utl):
-```
-ugst-utl.c ...... UGST utilities' module: conversion between float and short
-                  data formats functions/macros and gain/loss function.
-ugst-utl.h ...... prototypes and definitions needed by the UGST utilities'
-                  module.
-ugstdemo.h ...... prototypes and definitions needed by UGST demo programs.
-```
+# WAV file support
 
-# Demo
-```
-sv56demo.c ...... Demonstration program for the SV module; needs the files
-                  sv-p56.c, ugst-utl.c, ugst-utl.h, and ugstdemo.h in the
-                  current directory.
-actlevel.c ...... Demo program that only measures the level/min/max/etc for
-                  all the files given in the command line. In MSDOS, needs
-                  wildargs.obj when using Borland compilers, in order to
-                  be able to automatically process commands like
-                    actlev *.src
-                  This is not a concern in Unix because wildcard expansion
-                  is included in the shell. Wildcard expansion is *not*
-                  implemented in VMS (sorry). Please mind that the -q option
-                  gives a more compact listing of the file statistics.
-```
+`sv56demo` transparently supports WAV files (8/16/24/32-bit PCM and 32-bit
+IEEE float). The format is auto-detected from the RIFF header; raw PCM files
+continue to work as before (assumed 16-bit, native byte order).
 
-# Makefiles
+When a WAV file is detected:
+- Bit depth and sample rate are read from the header
+- The `-bits` flag overrides the A/D resolution used by the P.56 algorithm
+  (must be ≤ file bit depth), simulating a lower-resolution ADC/DAC
+- Output format matches the input (WAV output if filename ends in `.wav`)
 
-Makefiles have been provided for automatic build-up of the executable program
-and to process a test file.
-```
-makefile.djc: ... make file for MSDOS port of gcc
-makefile.tcc .... DOS make file, for tcc
-makefile.unx .... make file for Unix machines. Set up for gcc, may be tailored
-```
+## Benefits of higher bit depths
 
-# Test file
+The P.56 speech voltmeter's ability to detect and measure speech depends on
+the signal being above the quantization noise floor. Higher bit depths
+provide more dynamic range:
 
-The file `voice.src`, also used for testing the IS54 VSELP, is needed
-for testing the sv-p56 demo programs. A reference, normalized file,
-is available in the ZIP-compatible archive sv56-tst.zip. [pk]unzip is
-necessary to extract the reference processed file. The contents of this
-archive file is, as reported by unzip:
+| Bit depth | Dynamic range | Noise floor |
+|-----------|--------------|-------------|
+| 16-bit    | ~96 dB       | -96 dBov   |
+| 24-bit    | ~144 dB      | -144 dBov  |
+| 32-bit    | ~192 dB      | -192 dBov  |
+
+### Test results: very quiet speech (-91 dBov)
+
+| Resolution | Active level | Activity | Result |
+|------------|-------------|----------|--------|
+| 32-bit     | -91.029 dBov | 90.2%   | Speech correctly detected and measured |
+| 16-bit ADC | —           | 0%       | **Signal below noise floor — undetectable** |
+
+With 32-bit resolution, the speech voltmeter correctly measures a signal at
+-91 dBov with 90% activity. With a 16-bit ADC simulation (`-bits 16`), the
+same signal falls below the quantization threshold and the algorithm reports
+zero activity — it cannot distinguish speech from silence.
+
+For signals at normal levels (-26 dBov), all bit depths produce identical
+measurements, confirming full backward compatibility.
+
+# Source files
+
 ```
- Length  Method   Size  Ratio   Date    Time   CRC-32     Name
- ------  ------   ----  -----   ----    ----   ------     ----
- 105472  Deflate  79982  24%  01-12-95  10:23  66211f99   voice.nrm
- 105472  Deflate  80086  24%  08-21-95  12:25  8d3c67bf   voice.ltl
- ------          ------  ---                              -------
- 210944          160068  24%                              2      
+sv-p56.c ........ P.56 speech voltmeter module
+sv-p56.h ........ prototypes and definitions for the SV module
+sv56demo.c ...... demo program: measure active level and equalize
+actlevel.c ...... demo program: measure level/min/max for multiple files
 ```
 
-NOTE! This file is in the big-endian (high-byte first) format. Therefore,
-      before using under MSDOS or VAX/VMS, the files need to be byte-swapped.
-      See unsupported program sb in the ../unsup directory. If testing is
-      done using the provided makefiles, they will attempt to carry out
-      the necessary byte-swapping for voice.nrm. For this, a version of
-      the utility awk (gawk is preferred) must be available in the path.
+# Dependencies (from ../utl)
 
--- <simao@ctd.comsat.com> --
+```
+ugst-utl.c ...... float/short conversion and gain/loss functions
+ugst-utl.h ...... prototypes for UGST utilities
+ugstdemo.h ...... macros for UGST demo programs
+wav_io.c ........ WAV file I/O (auto-detect, read, write)
+wav_io.h ........ WAV I/O prototypes
+```
+
+# Test data
+
+The `test_data/` directory contains:
+- `voice.src` — raw 16-bit PCM test signal
+- `voice.nrm`, `voice.ltl` — reference outputs for regression tests
+- `speech_*.wav` — WAV test files at various bit depths and levels
+- `*.ref`, `*.log.ref` — reference outputs for binary and text comparison

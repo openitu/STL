@@ -39,6 +39,7 @@
 
 /* UGST modules */
 #include "ugstdemo.h"
+#include "wav_io.h"
 
 #include "reverb-lib.h"
 
@@ -68,8 +69,8 @@ static void display_usage () {
 
 int main (int argc, char *argv[]) {
   /* File variables */
-  FILE *ptr_fileIn;
-  FILE *ptr_fileOut;
+  AUDIO_FILE *ptr_fileIn;
+  AUDIO_FILE *ptr_fileOut;
   FILE *ptr_fileIR;
   char FileIn[MAX_STRLEN];
   char FileIR[MAX_STRLEN];
@@ -149,14 +150,14 @@ int main (int argc, char *argv[]) {
   fclose (ptr_fileIR);
 
   /* open the input file */
-  ptr_fileIn = fopen (FileIn, "rb");
+  ptr_fileIn = audio_open_read (FileIn, 0, 0, 16);
   if (ptr_fileIn == NULL) {
     fprintf (stderr, "\nUnable to open Input file\n");
     exit (-1);
   }
 
   /* open the output file */
-  ptr_fileOut = fopen (FileOut, "wb");
+  ptr_fileOut = audio_open_write (FileOut, audio_get_sample_rate (ptr_fileIn), 1, 16);
   if (ptr_fileOut == NULL) {
     fprintf (stderr, "\nUnable to open Output file\n");
     exit (-1);
@@ -178,15 +179,15 @@ int main (int argc, char *argv[]) {
   /* .......FILTERING OPERATION ........ */
 
   /* Filter the sound File */
-  while (!feof (ptr_fileIn)) {
-    count = (long) fread (buffIn + N - 1, sizeof (short), N, ptr_fileIn);       /* read a block of the input file */
+  while (!feof (ptr_fileIn->fp)) {
+    count = (long) fread (buffIn + N - 1, sizeof (short), N, ptr_fileIn->fp);       /* read a block of the input file */
 
     local_sat_pos = conv (IR, buffIn, buffRvb, alignFact, N, count);    /* convolves a block of the input file with the impulse response */
     if (local_sat_pos >= 0) {
       fprintf (stderr, "\nWarning warning!! Saturation(s) in output file.  In  sample %ld\n", local_sat_pos + global_count);
     }
     global_count += count;
-    fwrite (buffRvb, sizeof (short), count, ptr_fileOut);       /* output the processed block */
+    fwrite (buffRvb, sizeof (short), count, ptr_fileOut->fp);       /* output the processed block */
     shift (buffIn, N);          /* shift a part of the input buffer (to keep the N-1 last samples of the input file for the next processing) */
   }
 
@@ -201,8 +202,8 @@ int main (int argc, char *argv[]) {
   free (buffRvb);
   free (IR);
   /* close the opened files */
-  fclose (ptr_fileIn);
-  fclose (ptr_fileOut);
+  audio_close (ptr_fileIn);
+  audio_close (ptr_fileOut);
 
 
   return (0);

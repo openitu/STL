@@ -9,6 +9,7 @@
 #include <math.h>
 #include <string.h>
 #include "ugst-utl.h"           /* for ran16_32c */
+#include "wav_io.h"
 
 #define LOCAL_PI       3.14159265358979323846
 
@@ -271,8 +272,8 @@ void apply_spatial_dist(
 
 int main(int argc, char **argv )
 {
-    FILE* f_input;
-    FILE* f_output;
+    AUDIO_FILE* f_input;
+    AUDIO_FILE* f_output;
     FILE* f_energy;
     char *input_filename;
     char *output_filename;
@@ -286,6 +287,7 @@ int main(int argc, char **argv )
     long step;
     long length;
     long fs;
+    int fs_given = 0;
     long clip;
     long i;
     short energy_input;
@@ -315,6 +317,7 @@ int main(int argc, char **argv )
                 fprintf(stderr, "Invalid sampling frequency %s, exiting..\n", argv[i + 1] );
                 usage();
             }
+            fs_given = 1;
             i += 2;
         }
         else if( strcmp( argv[i], "-e_step" ) == 0 )
@@ -398,12 +401,14 @@ int main(int argc, char **argv )
     }
     input_filename = argv[i++];
     output_filename = argv[i];
-    if( (f_input = fopen( input_filename, "rb" )) == NULL )
+    if( (f_input = audio_open_read (input_filename, fs_given ? fs : 0, 0, 16)) == NULL )
     {
         fprintf( stderr, "Could not open input file %s, exiting..\n\n", input_filename );
         usage();
     }
-    if( (f_output = fopen( output_filename, "wb" )) == NULL )
+    if (audio_get_sample_rate (f_input) > 0)
+        fs = audio_get_sample_rate (f_input);
+    if( (f_output = audio_open_write( output_filename, fs, 1, 16 )) == NULL )
     {
         fprintf( stderr, "Could not open output file %s, exiting..\n\n", output_filename );
         usage();
@@ -421,13 +426,12 @@ int main(int argc, char **argv )
     fseed = (float) intseed;
 
     /* Load input file */
-    fseek( f_input, 0L, SEEK_END );
-    length = ftell( f_input ) / 4; /* 2 bytes per sample, 2 channels */
-    rewind( f_input );
+    length = audio_get_data_size( f_input ) / 4; /* 2 bytes per sample, 2 channels */
+    audio_seek( f_input, 0L );
     input = malloc(sizeof(double) * length * 2);
     input_short = malloc( sizeof( short ) * length * 2 );
     m = malloc( sizeof( double ) * length );
-    fread( input_short, sizeof(short), length * 2, f_input);
+    fread( input_short, sizeof(short), length * 2, f_input->fp);
     convert_short2double( input_short, input, length * 2);
 
     step = (long) (1.5 * fs / 50.0);
@@ -437,7 +441,7 @@ int main(int argc, char **argv )
 
     clip = convert_double2short(input, input_short, length * 2);
 
-    fwrite( input_short, sizeof( short ), length * 2, f_output );
+    fwrite( input_short, sizeof( short ), length * 2, f_output->fp );
 
     fprintf( stdout, "--> Done processing %ld samples\n", length );
     if (clip > 0)
@@ -449,8 +453,8 @@ int main(int argc, char **argv )
     {
         fclose( f_energy );
     }
-    fclose( f_input );
-    fclose( f_output );
+    audio_close( f_input );
+    audio_close( f_output );
     free( input );
     free( input_short );
     free( m );

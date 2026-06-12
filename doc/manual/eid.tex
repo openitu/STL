@@ -7,6 +7,7 @@
 % Apr.96 - Peter Kroon
 % Feb.2000 - Convergence towards STL2000
 % Oct.2009 - EID-EV Jonas Svedberg, Yusuke Hiwasaki
+% May.2026 - EID-AMR Balazs Kövesi, Stéphane Ragot
 %=============================================================================
 
 %=============================================================================
@@ -1341,3 +1342,190 @@ are hit by layer errors in the individual error application mode.}
 	\label{fig:G192outputFrameLayer034ErrorIndividual}
   \end{center}
 \end{figure}
+
+%--------------------------------------
+\section {Delay/error profile to erasure pattern (dlyerr\_2\_errpat)} \label{DLYERR}
+
+
+\subsection{Description}
+
+The {\tt dlyerr\_2\_errpat} tool converts a delay-and-error profile into a
+frame-erasure error pattern suitable for use with {\tt eid-xor}. This enables
+simulation of jitter buffer management (JBM) behavior: packets that arrive
+too late for playout are treated as lost, in addition to packets lost in
+the network.
+
+The input profile contains one integer per line representing either:
+\begin{itemize}
+\item A network delay in milliseconds (0--1999), or
+\item The value $-1$, indicating the packet was lost in the network.
+\end{itemize}
+
+Two JBM emulation modes are supported:
+\begin{itemize}
+\item {\bf Constant-delay mode} ({\tt -d}): a fixed JBM delay in milliseconds.
+      Any packet with delay exceeding this threshold is marked as lost.
+\item {\bf Bounded-loss-rate mode} ({\tt -l}): the tool automatically selects
+      the minimum JBM delay such that the combined late-loss rate stays
+      below the specified percentage.
+\end{itemize}
+
+\subsection{Algorithm}
+
+Processing is performed in two passes over the input profile:
+
+\begin{enumerate}
+\item {\bf Histogram pass}: reads the profile and builds a delay histogram
+      (counts per millisecond bin). In bounded-loss-rate mode, this histogram
+      is used to determine the JBM delay threshold by accumulating from the
+      highest delay downward until the target late-loss rate is exceeded.
+
+\item {\bf Output pass}: re-reads the profile and classifies each packet:
+      \begin{itemize}
+      \item delay $= -1$ (network loss) $\rightarrow$ frame erased
+      \item delay $>$ JBM threshold $\rightarrow$ frame erased (late loss)
+      \item otherwise $\rightarrow$ frame received (good)
+      \end{itemize}
+\end{enumerate}
+
+If the profile is shorter than the requested output length ({\tt -L}), the
+file is rewound and reused from the beginning.
+
+When {\tt -f~2} is specified, each packet decision produces two consecutive
+frame-erasure flags in the output (for codecs sending two frames per packet).
+
+\subsection{Usage}
+
+{\tt\small
+\begin{verbatim}
+dlyerr_2_errpat [options]
+
+  -i <inputfile>       delay/error profile (required)
+  -o <outputfile>      error pattern output (required)
+  -d <delay_ms>        constant-JBM-delay mode
+  -l <rate_percent>    bounded-loss-rate mode
+  -L <frames>          output length (default: 7500)
+  -s <offset>          skip initial frames in profile
+  -f <1|2>             frames per packet (default: 1)
+  -w                   word-oriented G.192 output
+  -b                   byte-oriented G.192 output
+  -c                   text with LF (one entry per line)
+\end{verbatim}
+}
+
+Exactly one of {\tt -d} or {\tt -l} must be supplied.
+
+\subsection{Output formats}
+
+\begin{itemize}
+\item {\bf Default text}: concatenated ASCII {\tt 0} (good) / {\tt 1} (erased)
+\item {\bf Text with LF} ({\tt -c}): one digit per line
+\item {\bf Byte G.192} ({\tt -b}): binary bytes 0x21 (good) / 0x20 (erased)
+\item {\bf Word G.192} ({\tt -w}): binary 16-bit words 0x6B21 / 0x6B20
+\end{itemize}
+
+\subsection{Example}
+
+Apply MTSI delay/error profile with a fixed 200\,ms JBM delay, word-oriented
+G.192 output, random offset into the profile:
+
+{\tt\small
+\begin{verbatim}
+dlyerr_2_errpat -d 200 -f 1 -w -s 1234 \
+    -i dly_err_profile_1.dat -o ep1.g192
+eid-xor -fer -ep g192 bitstream.g192 ep1.g192 output.g192
+\end{verbatim}
+}
+
+Bounded loss rate of 1\%, two frames per packet:
+
+{\tt\small
+\begin{verbatim}
+dlyerr_2_errpat -l 1 -f 2 -w -i dly_err_profile_5.dat -o ep5.g192
+\end{verbatim}
+}
+
+\subsection{Origin}
+
+Provided by Fraunhofer IIS via 3GPP Tdoc S4-121077 (TSGS4\#70, Chicago,
+13--17 Aug 2012), in support of the EVS reference codec processing plan.
+
+%--------------------------------------
+\section {Adaptation for 3GPP AMR codec (EID-AMR)} \label{EID-AMR2}
+%--------------------------------------
+
+\subsection{Description}
+
+The {\tt eid-xor} tool operates on bitstreams conforming to the ITU-T G.192
+serial bitstream format. However, the 3GPP AMR narrowband codec uses a
+different serial bitstream format, defined in Clause~6.3 of 3GPP TS~26.073.
+In this format, each frame is a fixed-size block of 250 16-bit words
+({\tt SERIAL\_FRAMESIZE} = 1 + 244 + 5), where:
+\begin{itemize}
+\item Word 0: frame type indicator (e.g.\ 0x00--0x07 for AMR modes, 0x03 = NO\_DATA)
+\item Words 1--244: serial speech bits ({\tt MAX\_SERIAL} = 244)
+\item Words 245--249: auxiliary/padding
+\end{itemize}
+
+Since this format is not compliant with ITU-T G.192, a dedicated tool
+called {\tt eid-amr} is provided to apply frame erasure patterns to AMR
+bitstreams.
+
+\subsection{Algorithm}
+
+The {\tt eid-amr} tool reads an AMR bitstream and a G.192 frame erasure
+pattern file. For each AMR frame, one erasure flag is consumed from the
+error pattern:
+\begin{itemize}
+\item If the flag is {\tt G192\_SYNC} (0x6B21, good frame): the AMR frame
+      is written to the output unchanged.
+\item If the flag is {\tt G192\_FER} (0x6B20, erased frame): the frame type
+      is set to NO\_DATA (0x03), all 244 serial data bits are forced to zero,
+      and the modified frame is written to the output.
+\end{itemize}
+
+If the error pattern file is shorter than the AMR bitstream, the error
+pattern is rewound and reused from the beginning (same behavior as
+{\tt eid-xor}).
+
+Note that {\tt eid-amr} handles only frame erasures; bit errors are not
+supported.
+
+
+\subsection{Usage}
+
+{\tt\small
+\begin{verbatim}
+eid-amr <AMR_bitstream_in> <G.192_FER_pattern> <AMR_bitstream_out>
+\end{verbatim}
+}
+
+Where:
+\begin{itemize}
+\item {\tt AMR\_bitstream\_in}: input AMR serial bitstream (ETSI/3GPP format)
+\item {\tt G.192\_FER\_pattern}: G.192 word-oriented frame erasure pattern
+      (as generated by {\tt gen-patt} with {\tt -g192 -fer})
+\item {\tt AMR\_bitstream\_out}: output AMR bitstream with erasures applied
+\end{itemize}
+
+Statistics are reported to {\tt stderr} upon completion: number of processed
+frames, distorted frames, frame erasure rate, and number of error pattern
+wraps.
+
+\subsection{Example}
+
+Generate a 3\% burst frame erasure pattern and apply it to an AMR bitstream
+encoded at 4.75~kbit/s:
+
+{\tt\small
+\begin{verbatim}
+gen-patt -g192 ep.g192 f 500 1 state.ser 0.03
+eid-amr input_475.amr ep.g192 output_475_fer.amr
+\end{verbatim}
+}
+
+\subsection{Origin}
+
+This tool is derived from the EID-3G tool (Nobuhiko Naka, NTT DOCOMO) and
+was originally submitted to 3GPP in Tdoc S4-120998 (TSGS4\#70, Chicago,
+13--17 Aug 2012). Authors: Balazs K\"ovesi, St\'ephane Ragot (Orange SA).

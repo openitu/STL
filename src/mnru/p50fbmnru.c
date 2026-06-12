@@ -14,8 +14,12 @@
 #define random_MNRU new_random_MNRU
 
 /* Defines minimum and maximum value for a short int. */
+#ifndef SHRT_MIN
 #define SHRT_MIN -32768
+#endif
+#ifndef SHRT_MAX
 #define SHRT_MAX +32767
+#endif
 
 void show_use(void)
 {
@@ -45,7 +49,7 @@ int main(int argc, char *argv[])
 {
     MNRU_state      state;
     FILE            *In, *Out;
-    char            dcFilterMode ;
+    char            dcFilterMode = 0;
     short           B_Len, BuffLen;
     long            lFileLen = 0;
     int             i, B_Max;

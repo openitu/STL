@@ -84,6 +84,7 @@ History:
 #include "g722.h"
 #include "ugstdemo.h"
 #include "g722_com.h"
+#include "wav_io.h"
 
 #include "stl.h"
 
@@ -131,7 +132,8 @@ int main (int argc, char *argv[]) {
 
   /* File variables */
   char FileIn[MAX_STR], FileOut[MAX_STR];
-  FILE *F_inp, *F_cod;
+  AUDIO_FILE *F_inp;
+  FILE *F_cod;
   long iter = 0;
   long frames = 1;              /* number of processed frames */
 
@@ -240,7 +242,7 @@ int main (int argc, char *argv[]) {
   }
 
   /* Open input file */
-  if ((F_inp = fopen (FileIn, RB)) == NULL) {
+  if ((F_inp = audio_open_read (FileIn, 16000, 0, 16)) == NULL) {
     fprintf (stderr, "Could not open %s\n", FileIn);
     KILL (FileIn, -2);
   }
@@ -262,7 +264,7 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Read one frame of samples from input file and process */
-  while ((fread ((char *) incode, sizeof (short), N, F_inp)) == (size_t) N) {
+  while ((audio_read (F_inp, incode, N)) == (size_t) N) {
 #ifdef WMOPS
     setCounter (spe1Id);
     fwc ();
@@ -370,7 +372,7 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Close input and output files */
-  fclose (F_inp);
+  audio_close (F_inp);
   fclose (F_cod);
 
   /* Exit with success for non-vms systems */

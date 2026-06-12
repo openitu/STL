@@ -1,0 +1,5 @@
+# Binary test data files - prevent CRLF corruption
+src/unsup/test_data/cftest1.dat binary
+
+# Shell scripts must use LF
+*.sh text eol=lf

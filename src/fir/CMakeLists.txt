@@ -2,13 +2,13 @@ include_directories(../iir)
 include_directories(../utl)
 
 
-add_executable(filter filter.c fir-dsm.c fir-flat.c fir-irs.c fir-lib.c fir-pso.c fir-tia.c fir-hirs.c fir-wb.c fir-msin.c fir-LP.c ../iir/iir-lib.c ../iir/iir-g712.c ../iir/iir-dir.c ../iir/iir-flat.c ../utl/ugst-utl.c)
+add_executable(filter filter.c fir-dsm.c fir-flat.c fir-irs.c fir-lib.c fir-pso.c fir-tia.c fir-hirs.c fir-wb.c fir-msin.c fir-LP.c fir-resamp.c ../iir/iir-lib.c ../iir/iir-g712.c ../iir/iir-dir.c ../iir/iir-flat.c ../utl/ugst-utl.c ../utl/wav_io.c)
 target_link_libraries(filter ${M_LIBRARY})
 
-add_executable(flt fltresp.c fir-dsm.c fir-flat.c fir-irs.c fir-lib.c fir-pso.c fir-tia.c fir-hirs.c fir-wb.c fir-msin.c fir-LP.c ../iir/iir-lib.c ../iir/iir-g712.c ../iir/iir-dir.c ../iir/iir-flat.c)
+add_executable(flt fltresp.c fir-dsm.c fir-flat.c fir-irs.c fir-lib.c fir-pso.c fir-tia.c fir-hirs.c fir-wb.c fir-msin.c fir-LP.c fir-resamp.c ../iir/iir-lib.c ../iir/iir-g712.c ../iir/iir-dir.c ../iir/iir-flat.c)
 target_link_libraries(flt ${M_LIBRARY})
 
-add_executable(firdemo firdemo.c fir-dsm.c fir-flat.c fir-irs.c fir-lib.c fir-pso.c fir-tia.c fir-hirs.c fir-wb.c fir-msin.c fir-LP.c ../iir/iir-lib.c ../iir/iir-g712.c ../iir/iir-dir.c ../iir/iir-flat.c ../utl/ugst-utl.c)
+add_executable(firdemo firdemo.c fir-dsm.c fir-flat.c fir-irs.c fir-lib.c fir-pso.c fir-tia.c fir-hirs.c fir-wb.c fir-msin.c fir-LP.c fir-resamp.c ../iir/iir-lib.c ../iir/iir-g712.c ../iir/iir-dir.c ../iir/iir-flat.c ../utl/ugst-utl.c ../utl/wav_io.c)
 target_link_libraries(firdemo ${M_LIBRARY})
 
 #Test: FIR
@@ -146,10 +146,10 @@ add_test(filter20 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q PCM1 test_data/tes
 add_test(filter20-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/pcm1.flt    test_data/testpcm1.ref)
 
 add_test(filter21 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -up iflat test_data/test.src test_data/test-cas.flt)
-add_test(filter21-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test-cas.flt test_data/test-cas.ref)
+add_test(filter21-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-cas.flt test_data/test-cas.ref)
 
 add_test(filter22 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -async iflat test_data/test.src test_data/test-asy.flt)
-add_test(filter22-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test-asy.flt test_data/test-asy.ref)
+add_test(filter22-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-asy.flt test_data/test-asy.ref)
 
 add_test(filter23 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -async -delay 37 iflat test_data/test.src test_data/tst-asyd.flt)
 add_test(filter23-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -delay 37 test_data/tst-asyd.flt test_data/test-asy.flt)
@@ -158,10 +158,79 @@ add_test(filter24 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -async -delay -37 
 add_test(filter24-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -delay -37 test_data/tst-asys.flt test_data/test-asy.flt)
 
 add_test(filter25 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -down iflat test_data/test.src test_data/test-sac.flt)
-add_test(filter25-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test-sac.flt test_data/test-sac.ref)
+add_test(filter25-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-sac.flt test_data/test-sac.ref)
 
 add_test(filter26 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q p341 test_data/test.src test_data/testp341.flt)
-add_test(filter26-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/testp341.flt test_data/testp341.ref)
+add_test(filter26-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/testp341.flt test_data/testp341.ref)
 
 add_test(filter27 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q 5kbp test_data/test.src test_data/test5kbp.flt)
-add_test(filter27-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q test_data/test5kbp.flt test_data/test5kbp.ref)
+add_test(filter27-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test5kbp.flt test_data/test5kbp.ref)
+
+add_test(filter28 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -up SHQ2 test_data/test.src test_data/test-shq2.flt)
+add_test(filter28-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-shq2.flt test_data/tst-shq2.ref)
+
+add_test(filter29 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q SHQ3 test_data/test.src test_data/test-shq3.flt)
+add_test(filter29-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-shq3.flt test_data/tst-shq3.ref)
+
+add_test(filter30 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q HP50_32KHZ test_data/test.src test_data/test-hp50-32khz.flt)
+add_test(filter30-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-hp50-32khz.flt test_data/test-hp50-32khz.ref)
+
+add_test(filter31 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q HP50_48KHZ test_data/test.src test_data/test-hp50-48khz.flt)
+add_test(filter31-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/test-hp50-48khz.flt test_data/test-hp50-48khz.ref)
+
+#Test: P863 resampling filters (raw PCM)
+add_test(filter-p863-48to16 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -down P863_3 test_data/p863_48k_in.raw test_data/p863_48k_to_16k.tst)
+add_test(filter-p863-48to16-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_48k_to_16k.tst test_data/p863_48k_to_16k.raw)
+
+add_test(filter-p863-48to8 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -down P863_6 test_data/p863_48k_in.raw test_data/p863_48k_to_8k.tst)
+add_test(filter-p863-48to8-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_48k_to_8k.tst test_data/p863_48k_to_8k.raw)
+
+add_test(filter-p863-8to16 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -up P863_2 test_data/p863_8k_in.raw test_data/p863_8k_to_16k.tst)
+add_test(filter-p863-8to16-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_8k_to_16k.tst test_data/p863_8k_to_16k.raw)
+
+add_test(filter-p863-8to48 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -up P863_6 test_data/p863_8k_in.raw test_data/p863_8k_to_48k.tst)
+add_test(filter-p863-8to48-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_8k_to_48k.tst test_data/p863_8k_to_48k.raw)
+
+#Test: P863 resampling filters (WAV)
+add_test(filter-p863-48to16-wav ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -down P863_3 test_data/p863_48k_in.wav test_data/p863_48k_to_16k_tst.wav)
+add_test(filter-p863-48to16-wav-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_48k_to_16k_tst.wav test_data/p863_48k_to_16k.wav)
+
+add_test(filter-p863-48to8-wav ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -down P863_6 test_data/p863_48k_in.wav test_data/p863_48k_to_8k_tst.wav)
+add_test(filter-p863-48to8-wav-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_48k_to_8k_tst.wav test_data/p863_48k_to_8k.wav)
+
+add_test(filter-p863-8to16-wav ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -up P863_2 test_data/p863_8k_in.wav test_data/p863_8k_to_16k_tst.wav)
+add_test(filter-p863-8to16-wav-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_8k_to_16k_tst.wav test_data/p863_8k_to_16k.wav)
+
+add_test(filter-p863-8to48-wav ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/filter -q -up P863_6 test_data/p863_8k_in.wav test_data/p863_8k_to_48k_tst.wav)
+add_test(filter-p863-8to48-wav-verify ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_8k_to_48k_tst.wav test_data/p863_8k_to_48k.wav)
+
+set_tests_properties(
+  filter-p863-48to16 filter-p863-48to16-verify
+  filter-p863-48to8 filter-p863-48to8-verify
+  filter-p863-8to16 filter-p863-8to16-verify
+  filter-p863-8to48 filter-p863-8to48-verify
+  filter-p863-48to16-wav filter-p863-48to16-wav-verify
+  filter-p863-48to8-wav filter-p863-48to8-wav-verify
+  filter-p863-8to16-wav filter-p863-8to16-wav-verify
+  filter-p863-8to48-wav filter-p863-8to48-wav-verify
+  PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+#Test: P863 cross-validation (raw output vs WAV reference, WAV output vs raw reference)
+add_test(filter-p863-48to16-cross-raw2wav ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_48k_to_16k.tst test_data/p863_48k_to_16k.wav)
+add_test(filter-p863-48to16-cross-wav2raw ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_48k_to_16k_tst.wav test_data/p863_48k_to_16k.raw)
+
+add_test(filter-p863-48to8-cross-raw2wav ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_48k_to_8k.tst test_data/p863_48k_to_8k.wav)
+add_test(filter-p863-48to8-cross-wav2raw ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_48k_to_8k_tst.wav test_data/p863_48k_to_8k.raw)
+
+add_test(filter-p863-8to16-cross-raw2wav ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_8k_to_16k.tst test_data/p863_8k_to_16k.wav)
+add_test(filter-p863-8to16-cross-wav2raw ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_8k_to_16k_tst.wav test_data/p863_8k_to_16k.raw)
+
+add_test(filter-p863-8to48-cross-raw2wav ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_8k_to_48k.tst test_data/p863_8k_to_48k.wav)
+add_test(filter-p863-8to48-cross-wav2raw ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/signal-diff -q -equiv 1 test_data/p863_8k_to_48k_tst.wav test_data/p863_8k_to_48k.raw)
+
+set_tests_properties(
+  filter-p863-48to16-cross-raw2wav filter-p863-48to16-cross-wav2raw
+  filter-p863-48to8-cross-raw2wav filter-p863-48to8-cross-wav2raw
+  filter-p863-8to16-cross-raw2wav filter-p863-8to16-cross-wav2raw
+  filter-p863-8to48-cross-raw2wav filter-p863-8to48-cross-wav2raw
+  PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
