@@ -43,6 +43,7 @@ The following programs are examples of the use of the modules:
 | `dlyerr_2_errpat.c`  | on the use of the delay/error profile to frame-erasure pattern conversion tool for jitter buffer emulation. |
 | `eid-amr.c`          | on the use of the EID for 3GPP AMR codec frame erasure simulation using G.192 error patterns. |
 | `random.c`           | on the use of the pseudo-random selection tool for deterministic item selection or range drawing. |
+| `gain_chk.c`         | on the use of the per-band gain verification tool for codec and speech-processing validation. |
 || 
 
 
@@ -744,5 +745,34 @@ Applies G.192 frame erasure patterns to 3GPP AMR bitstreams. The standard `eid-x
 Name: `random.c`
 
 Provides deterministic pseudo-random selection of items from a list or drawing of integers from a numeric range. Uses the EID linear congruential generator for cross-platform reproducibility. Supports configurable seed, dummy pre-runs, and multi-item selection.
+
+## x) WAV file I/O module
+
+Name: `wav_io.c`
+
+Associated header file: `wav_io.h`
+
+Shared library providing transparent WAV and raw PCM file I/O for all audio-processing tools. Supports 8/16/24/32-bit integer PCM and 32-bit IEEE float WAV files. When a file has a `.wav` extension, the header is parsed automatically; raw PCM files continue to work as before.
+
+The functions included are as follows.
+
+|||
+|---------------------|-----------------------------------------------------------|
+| `audio_open_read` | open a file for reading; auto-detects WAV or raw PCM format. |
+| `audio_open_write` | open a file for writing in WAV or raw PCM format. |
+| `audio_read` | read samples from an open audio file. |
+| `audio_write` | write samples to an open audio file. |
+| `audio_close` | close an audio file and finalize the WAV header if applicable. |
+| `audio_is_wav` | query whether an open file is WAV format. |
+| `audio_get_sample_rate` | return the sample rate of a WAV file. |
+| `audio_get_channels` | return the number of channels. |
+| `audio_seek` | seek to a sample offset within the file. |
+| `audio_get_data_size` | return the total data size in bytes. |
+
+## y) Per-band gain verification tool
+
+Name: `gain_chk.c`
+
+Compares a reference and processed 16-bit PCM (or WAV) stream by computing per-band gain differences across up to 25 frequency bands. Reports per-frame gain amplification for active and inactive frames. Intended for verifying that codecs and processing tools do not introduce excessive gain in any frequency band.
 
 -=Pagebreak=-
