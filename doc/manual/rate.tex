@@ -550,6 +550,8 @@ MUSHRA anchors, there is no rate-change routine from 16 to 32 kHz.
 
 High-pass filters with 50 Hz cutoff frequency (3\,dB point) for the 32 and 48 kHz sampling rates (HP50\_32K with 1119 coefficients and HP50\_48K with 1679 coefficients) are also provided. Their frequency response is given in figure \ref{hp50}.
 
+Resampling filters as used in ITU-T Rec.\ P.863 (POLQA) and ITU-T Rec.\ P.863.2 (PAMD), also published in ETSI TR~103~138, are provided for rate-change factors 2, 3, 4 and~6 (with 256, 384, 512 and 768 taps, respectively). These filters use a normalized cutoff frequency of~0.475 and are intended for standardized resampling of speech signals between sampling rates of 8, 16 and~48~kHz.
+
 Since the digital filters have memory, state variables are needed. In
 this version of the STL, a type {\tt SCD\_FIR} is defined, containing the past
 sample memory, as well as filter coefficients and other control
@@ -1245,6 +1247,14 @@ SCD\_FIR *LP10\_48kHz\_init (void);\\
 SCD\_FIR *LP12\_48kHz\_init (void);\\
 SCD\_FIR *LP14\_48kHz\_init (void);\\
 SCD\_FIR *L20\_48kHz\_init (void);\\
+SCD\_FIR *p863\_up\_1\_to\_2\_init (void);\\
+SCD\_FIR *p863\_down\_2\_to\_1\_init (void);\\
+SCD\_FIR *p863\_up\_1\_to\_3\_init (void);\\
+SCD\_FIR *p863\_down\_3\_to\_1\_init (void);\\
+SCD\_FIR *p863\_up\_1\_to\_4\_init (void);\\
+SCD\_FIR *p863\_down\_4\_to\_1\_init (void);\\
+SCD\_FIR *p863\_up\_1\_to\_6\_init (void);\\
+SCD\_FIR *p863\_down\_6\_to\_1\_init (void);\\
 }
 
 
@@ -1462,6 +1472,46 @@ function. Its frequency response is shown in figure \ref{LP20-frq}
 and its impulse response is shown in figure \ref{LP20-ir}. The -3 dB
 point for this filter is located at approximately 20000 Hz. Code is
 in file {\tt fir-LP.c}.
+
+{\tt p863\_up\_1\_to\_2\_init} is the initialization routine for the
+P.863/P.863.2 resampling FIR up-sampling filter by a factor of~2
+(256~taps, normalized cutoff frequency 0.475). Code is in file {\tt
+fir-resamp.c}.
+
+{\tt p863\_down\_2\_to\_1\_init} is the initialization routine for the
+P.863/P.863.2 resampling FIR down-sampling filter by a factor of~2
+(256~taps, normalized cutoff frequency 0.475). Code is in file {\tt
+fir-resamp.c}.
+
+{\tt p863\_up\_1\_to\_3\_init} is the initialization routine for the
+P.863/P.863.2 resampling FIR up-sampling filter by a factor of~3
+(384~taps, normalized cutoff frequency 0.475). Code is in file {\tt
+fir-resamp.c}.
+
+{\tt p863\_down\_3\_to\_1\_init} is the initialization routine for the
+P.863/P.863.2 resampling FIR down-sampling filter by a factor of~3
+(384~taps, normalized cutoff frequency 0.475). Code is in file {\tt
+fir-resamp.c}.
+
+{\tt p863\_up\_1\_to\_4\_init} is the initialization routine for the
+P.863/P.863.2 resampling FIR up-sampling filter by a factor of~4
+(512~taps, normalized cutoff frequency 0.475). Code is in file {\tt
+fir-resamp.c}.
+
+{\tt p863\_down\_4\_to\_1\_init} is the initialization routine for the
+P.863/P.863.2 resampling FIR down-sampling filter by a factor of~4
+(512~taps, normalized cutoff frequency 0.475). Code is in file {\tt
+fir-resamp.c}.
+
+{\tt p863\_up\_1\_to\_6\_init} is the initialization routine for the
+P.863/P.863.2 resampling FIR up-sampling filter by a factor of~6
+(768~taps, normalized cutoff frequency 0.475). Code is in file {\tt
+fir-resamp.c}.
+
+{\tt p863\_down\_6\_to\_1\_init} is the initialization routine for the
+P.863/P.863.2 resampling FIR down-sampling filter by a factor of~6
+(768~taps, normalized cutoff frequency 0.475). Code is in file {\tt
+fir-resamp.c}.
 
 
 \rulex{1mm}
