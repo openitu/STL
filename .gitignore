@@ -8,7 +8,7 @@
 *.tmp
 [Bb]in/
 
-# Generated test files
+# Generated test output files
 *05g10.*
 *.[am]16
 *.[am]24
