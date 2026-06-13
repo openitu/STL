@@ -723,7 +723,7 @@ double *P50_MNRU_process(char operation, MNRU_state *s, double* input, double* o
       return (NULL);
 
     /* Seed for random number generation (NO LONGER USED) */
-    s->seed = NULL;
+    s->seed = 0;
 
     /* Gain for signal path */
     if (mode == MOD_NOISE)

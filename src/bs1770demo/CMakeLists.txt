@@ -1,4 +1,6 @@
-add_executable(bs1770demo bs1770demo.c)
+include_directories(../utl)
+
+add_executable(bs1770demo bs1770demo.c ../utl/wav_io.c)
 target_link_libraries(bs1770demo ${M_LIBRARY})
 
 

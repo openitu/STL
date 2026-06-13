@@ -3,7 +3,7 @@ include_directories(../utl)
 add_executable(asc2bin asc2bin.c)
 target_link_libraries(asc2bin ${M_LIBRARY})
 
-add_executable(astrip astrip.c)
+add_executable(astrip astrip.c ../utl/wav_io.c)
 target_link_libraries(astrip ${M_LIBRARY})
 
 add_executable(bin2asc bin2asc.c)
@@ -19,18 +19,18 @@ target_link_libraries(df ${M_LIBRARY})
 
 add_executable(endian endian.c)
 
-add_executable(fdelay fdelay.c)
+add_executable(fdelay fdelay.c ../utl/wav_io.c)
 target_link_libraries(fdelay ${M_LIBRARY})
 
-add_executable(measure measure.c)
+add_executable(measure measure.c ../utl/wav_io.c)
 target_link_libraries(measure ${M_LIBRARY})
 
-add_executable(oper oper.c)
+add_executable(oper oper.c ../utl/wav_io.c)
 target_link_libraries(oper ${M_LIBRARY})
 
 add_executable(sb sb.c)
 
-add_executable(sine sine.c)
+add_executable(sine sine.c ../utl/wav_io.c)
 target_link_libraries(sine ${M_LIBRARY})
 
 add_executable(chr2sh chr2sh.c)

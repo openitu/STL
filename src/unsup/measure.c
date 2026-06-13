@@ -49,6 +49,7 @@
 #include <string.h>
 #include <math.h>
 #include "ugstdemo.h"
+#include "wav_io.h"
 
 
 /* Generic defines */
@@ -358,7 +359,7 @@ int main (int argc, char *argv[]) {
 
   double avg_x, rms_x, stddev_x, max_x, min_x;
 
-  FILE *Fi;
+  AUDIO_FILE *Fi;
 
 
   /* DEFAULT OPTIONS AND INITIAL VALUES */
@@ -418,13 +419,18 @@ int main (int argc, char *argv[]) {
     crc_x = init_crc_x;
 
     /* Open files */
-    if (strcmp (inpfil, "-") == 0)
-      Fi = stdin;
-    else if ((Fi = fopen (inpfil, RB)) == NULL)
+    if (strcmp (inpfil, "-") == 0) {
+      /* stdin: wrap in a minimal AUDIO_FILE struct */
+      static AUDIO_FILE stdin_af;
+      stdin_af.fp = stdin;
+      stdin_af.is_wav = 0;
+      stdin_af.write_mode = 0;
+      Fi = &stdin_af;
+    } else if ((Fi = audio_open_read (inpfil, 0, 0, 16)) == NULL)
       KILL (inpfil, 2);
 
     /* Move onto start */
-    fseek (Fi, skip * blk * sizeof (short), 0);
+    audio_seek (Fi, skip * blk * sizeof (short));
 
     /* Allocate memory */
     samples = (short *) calloc (blk, sizeof (short));
@@ -432,7 +438,7 @@ int main (int argc, char *argv[]) {
       error_terminate ("Cannot allocate memory - aborted\n", 1);
 
     /* Find statistics */
-    while ((count = fread (samples, sizeof (short), blk, Fi)) != 0) {
+    while ((count = audio_read (Fi, samples, blk)) != 0) {
       /* Update statistics */
       avg_x += get_sum (samples, count);
       rms_x += get_square (samples, count);
@@ -478,7 +484,8 @@ int main (int argc, char *argv[]) {
     printf ("\t%s\n", inpfil);
 
     /* Close file */
-    fclose (Fi);
+    if (strcmp (inpfil, "-") != 0)
+      audio_close (Fi);
   }
 
   /* EXITING */

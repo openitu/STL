@@ -207,6 +207,7 @@
 #include "ugstdemo.h"           /* private defines for user interface */
 #include "ugst-utl.h"           /* conversion from float -> short */
 #include "firflt.h"             /* definitions for high quality filter */
+#include "wav_io.h"             /* WAV file I/O support */
 
 
 /* Specific Includes */
@@ -332,8 +333,7 @@ int main (int argc, char *argv[]) {
 
   /* ......... File related variables ......... */
   char inpfil[MAX_STRLEN], outfil[MAX_STRLEN];
-  FILE *inpfilptr, *outfilptr;
-  int inp, out;
+  AUDIO_FILE *inpfilptr, *outfilptr;
 #if defined(VMS)
   char mrs[15];
 #endif
@@ -416,14 +416,12 @@ int main (int argc, char *argv[]) {
 #endif
 
   GET_PAR_S (1, "_BIN-File to be filtered: ................ ", inpfil);
-  if ((inpfilptr = fopen (inpfil, RB)) == NULL)
+  if ((inpfilptr = audio_open_read (inpfil, 0, 0, 16)) == NULL)
     error_terminate ("Error opening input file\n", 1);
-  inp = fileno (inpfilptr);
 
   GET_PAR_S (2, "_BIN-Output File: ........................ ", outfil);
-  if ((outfilptr = fopen (outfil, WB)) == NULL)
+  if ((outfilptr = audio_open_write (outfil, audio_get_sample_rate (inpfilptr), 1, 16)) == NULL)
     error_terminate ("Error opening output file\n", 1);
-  out = fileno (outfilptr);
 
   GET_PAR_L (3, "_IRS Filter       (0, 8, 16, 48): ........ ", irs);
   if ((irs != 0) && (irs != 8) && (irs != 16) && (irs != 48))
@@ -613,7 +611,7 @@ int main (int argc, char *argv[]) {
   lsegx = lseg;
   while (lsegx == lseg) {
     /* Read data from file in a short array ... */
-    lsegx = fread (sh_buff, sizeof (short), lseg, inpfilptr);
+    lsegx = audio_read (inpfilptr, sh_buff, lseg);
 
     /* ... and convert short to float, normalizing */
     sh2fl_16bit (lsegx, sh_buff, fl_buff, 1);
@@ -744,7 +742,7 @@ int main (int argc, char *argv[]) {
 /*
   * ......... WRITE SAMPLES TO OUTPUT FILE .........
   */
-    nsam += fwrite (sh_buff, sizeof (short), lsegdown2, outfilptr);
+    nsam += audio_write (outfilptr, sh_buff, lsegdown2);
   }
 
 
@@ -790,8 +788,8 @@ int main (int argc, char *argv[]) {
   free (sh_buff);
 
   /* Close files */
-  fclose (outfilptr);
-  fclose (inpfilptr);
+  audio_close (outfilptr);
+  audio_close (inpfilptr);
 
 #ifndef VMS
   return (0);

@@ -1,12 +1,12 @@
 include_directories(../utl)
 
-add_executable(mnrudemo mnrudemo.c mnru.c ../utl/ugst-utl.c filtering_routines.c)
+add_executable(mnrudemo mnrudemo.c mnru.c ../utl/ugst-utl.c filtering_routines.c ../utl/wav_io.c)
 target_link_libraries(mnrudemo ${M_LIBRARY})
 
 add_executable(p50fbmnru p50fbmnru.c mnru.c ../utl/ugst-utl.c filtering_routines.c )
 target_link_libraries(p50fbmnru ${M_LIBRARY})
 
-add_executable(snr calc-snr.c)
+add_executable(snr calc-snr.c ../utl/wav_io.c)
 target_link_libraries(snr ${M_LIBRARY})
 
 #TEST: MNRU

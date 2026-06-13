@@ -81,6 +81,7 @@
 /* G.722- and UGST-specific prototypes */
 #include "g722.h"
 #include "ugstdemo.h"
+#include "wav_io.h"
 
 /* Local definitions */
 #define DFT_BLK 1024
@@ -161,7 +162,7 @@ int main (int argc, char *argv[]) {
 
   /* File variables */
   char FileIn[80], FileOut[80];
-  FILE *inp, *out;
+  AUDIO_FILE *inp, *out;
   int read1;
   long iter = 0;
   long N = DFT_BLK, N1 = 1, N2 = 0, smpno = 0;
@@ -252,11 +253,8 @@ int main (int argc, char *argv[]) {
 
   /* Check if is to process the whole file */
   if (N2 == 0) {
-    struct stat st;
-
-    /* ... find the input file size ... */
-    stat (FileIn, &st);
-    N2 = (long) ceil ((st.st_size - start_byte) / (double) (N * sizeof (short)));
+    /* N2 will be computed after opening file */
+    N2 = 0;
   }
 
   /* Protect mode, if misgiven */
@@ -264,11 +262,15 @@ int main (int argc, char *argv[]) {
     error_terminate ("Bad mode specified; aborting\n", 2);
 
   /* Open input file */
-  if ((inp = fopen (FileIn, RB)) == NULL)
+  if ((inp = audio_open_read (FileIn, 16000, 0, 16)) == NULL)
     KILL (FileIn, -2);
 
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0)
+    N2 = (long) ceil ((audio_get_data_size (inp) - start_byte) / (double) (N * sizeof (short)));
+
   /* Open output file */
-  if ((out = fopen (FileOut, WB)) == NULL)
+  if ((out = audio_open_write (FileOut, audio_get_sample_rate (inp), 1, 16)) == NULL)
     KILL (FileOut, -2);
 
 #ifndef STATIC_ALLOCATION
@@ -327,7 +329,7 @@ int main (int argc, char *argv[]) {
     N /= 2;
 
   /* *** Read samples from input file and decode *** NOTE: Number of output samples: - if encoder + decoder, #inp samples = #out samples - if encoder only, #out samples = half of # of input samples - if decoder only, #out samples = double the # of input bitstream samples *** */
-  while ((read1 = fread (incode, sizeof (short), N, inp)) != 0) {
+  while ((read1 = audio_read (inp, incode, N)) != 0) {
     /* print progress flag */
     if (!quiet)
       fprintf (stderr, "%c\r", funny[(iter / read1) % 8]);
@@ -360,7 +362,7 @@ int main (int argc, char *argv[]) {
     iter += smpno;
 
     /* Save bitstream or decoded samples */
-    if (fwrite (out_buf, sizeof (Word16), read1, out) != (size_t) read1)
+    if (audio_write (out, out_buf, read1) != (size_t) read1)
       KILL (FileOut, -4);
   }
 
@@ -382,8 +384,8 @@ int main (int argc, char *argv[]) {
 #endif
 
   /* Close input and output files */
-  fclose (out);
-  fclose (inp);
+  audio_close (out);
+  audio_close (inp);
 
   /* Exit with success for non-vms systems */
 #ifndef VMS

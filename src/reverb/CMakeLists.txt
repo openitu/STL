@@ -1,6 +1,6 @@
 include_directories(../utl)
 
-add_executable(reverb reverb.c reverb-lib.c)
+add_executable(reverb reverb.c reverb-lib.c ../utl/wav_io.c)
 target_link_libraries(reverb ${M_LIBRARY})
 
 #NOTE: Test depends on endianess!

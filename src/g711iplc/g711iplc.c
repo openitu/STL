@@ -47,6 +47,7 @@
 #include <string.h>
 #include "plcferio.h"
 #include "lowcfe.h"
+#include "wav_io.h"
 
 char usage[] = "\
 G711IPLC Version 1.0 of 24/May/2005\n\
@@ -72,8 +73,8 @@ int main (int argc, char *argv[]) {
   int nframes;                  /* processed frame count */
   int nerased;                  /* erased frame count */
   char *arg;
-  FILE *fi;                     /* input file */
-  FILE *fo;                     /* output file */
+  AUDIO_FILE *fi;                     /* input file */
+  AUDIO_FILE *fo;                     /* output file */
   LowcFE_c lc;                  /* PLC simulation data */
   readplcmask mask;             /* error pattern file reader */
   short in[FRAMESZ];            /* i/o buffer */
@@ -98,17 +99,17 @@ int main (int argc, char *argv[]) {
     exit (EXIT_FAILURE);
   }
   readplcmask_open (&mask, argv[0]);    /* PLC pattern file */
-  if ((fi = fopen (argv[1], "rb")) == NULL) {   /* input file */
+  if ((fi = audio_open_read (argv[1], 8000, 0, 16)) == NULL) {   /* input file */
     fprintf (stderr, "Can't open input file: %s", argv[1]);
     exit (EXIT_FAILURE);
   }
-  if ((fo = fopen (argv[2], "wb")) == NULL) {   /* output file */
+  if ((fo = audio_open_write (argv[2], audio_get_sample_rate (fi), 1, 16)) == NULL) {   /* output file */
     fprintf (stderr, "Can't open output file: %s", argv[2]);
     exit (EXIT_FAILURE);
   }
   nframes = nerased = 0;
   g711plc_construct (&lc);
-  while (fread (in, sizeof (short), FRAMESZ, fi) == FRAMESZ) {
+  while (audio_read (fi, in, FRAMESZ) == FRAMESZ) {
     nframes++;
     if (readplcmask_erased (&mask)) {
       nerased++;                /* frame is erased */
@@ -127,9 +128,9 @@ int main (int argc, char *argv[]) {
      * file is time-aligned with the input file.
      */
     if (nframes == 1)
-      fwrite (&in[POVERLAPMAX], sizeof (short), FRAMESZ - POVERLAPMAX, fo);
+      audio_write (fo, &in[POVERLAPMAX], FRAMESZ - POVERLAPMAX);
     else
-      fwrite (in, sizeof (short), FRAMESZ, fo);
+      audio_write (fo, in, FRAMESZ);
   }
   /* 
    * the following code outputs the delayed speech in the history buffer
@@ -140,13 +141,13 @@ int main (int argc, char *argv[]) {
     for (i = 0; i < FRAMESZ; i++)
       in[i] = 0;
     g711plc_addtohistory (&lc, in);
-    fwrite (in, sizeof (short), POVERLAPMAX, fo);
+    audio_write (fo, in, POVERLAPMAX);
   }
   if (dostats && nframes)
     printf ("%d of %d frames concealed = %.2f%%\n", nerased, nframes, (double) nerased / nframes * 100.);
   /* cleanup */
-  fclose (fo);
-  fclose (fi);
+  audio_close (fo);
+  audio_close (fi);
   readplcmask_close (&mask);
   return 0;
 }

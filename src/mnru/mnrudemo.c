@@ -75,6 +75,7 @@
 
 /* ... Include of utilities ... */
 #include "ugst-utl.h"
+#include "wav_io.h"
 
 
 /*
@@ -138,8 +139,7 @@ int main (int argc, char *argv[]) {
 
 /* File variables */
   char FileIn[80], FileOut[80];
-  FILE *Fi, *Fo;
-  int fhi, fho;
+  AUDIO_FILE *Fi, *Fo;
 #ifdef VMS
   char mrs[15];
 #endif
@@ -261,14 +261,7 @@ int main (int argc, char *argv[]) {
   /* Find starting byte in file */
   start_byte = sizeof (short) * (long) (--N1) * (long) N;
 
-  /* Check if is to process the whole file */
-  if (N2 == 0) {
-    struct stat st;
-
-    /* ... find the input file size ... */
-    stat (FileIn, &st);
-    N2 = (st.st_size - start_byte) / (N * sizeof (short));
-  }
+  /* N2 will be computed after opening file if processing the whole file */
 
   /* Allocate memory for data vectors */
   if ((inp = (float *) calloc (N, sizeof (float))) == NULL)
@@ -280,17 +273,19 @@ int main (int argc, char *argv[]) {
 #ifdef VMS
   sprintf (mrs, "mrs=%d", 2 * N);
 #endif
-  if ((Fi = fopen (FileIn, RB)) == NULL)
+  if ((Fi = audio_open_read (FileIn, 0, 0, 16)) == NULL)
     KILL (FileIn, 2);
-  fhi = fileno (Fi);
+
+  /* Compute number of blocks if processing the whole file */
+  if (N2 == 0)
+    N2 = audio_get_data_size (Fi) / (N * sizeof (short));
 
   /* Creates output file */
-  if ((Fo = fopen (FileOut, WB)) == NULL)
+  if ((Fo = audio_open_write (FileOut, audio_get_sample_rate (Fi), 1, 16)) == NULL)
     KILL (FileOut, 3);
-  fho = fileno (Fo);
 
   /* Move pointer to 1st block of interest */
-  if (fseek (Fi, start_byte, 0) < 0l)
+  if (audio_seek (Fi, start_byte) < 0l)
     KILL (FileIn, 4);
 
   /* INSERTION OF MODULATED NOISE ACCORDING TO P.810 */
@@ -305,7 +300,7 @@ int main (int argc, char *argv[]) {
   /* Read samples ... */
   for (cur_frame = 0; cur_frame < N2; cur_frame++) {
     /* Read samples ... */
-    if ((l = fread (Buf, sizeof (short), N, Fi)) < 0)
+    if ((l = audio_read (Fi, Buf, N)) < 0)
       KILL (FileIn, 5);
 
     /* Information on processing phase */
@@ -330,7 +325,7 @@ int main (int argc, char *argv[]) {
     over += fl2sh_16bit ((long) l, out, Buf, 1);
 
     /* Save data to file */
-    if ((l = fwrite (Buf, sizeof (short), l, Fo)) <= 0)
+    if ((l = audio_write (Fo, Buf, l)) <= 0)
       KILL (FileOut, 4);
   }
 
@@ -341,8 +336,8 @@ int main (int argc, char *argv[]) {
   fprintf (stderr, "\nOverflow samples: %ld", over);
   fprintf (stderr, "\nClipped noise samples: %ld", state.clip);
   fprintf (stderr, "\n");
-  fclose (Fi);
-  fclose (Fo);
+  audio_close (Fi);
+  audio_close (Fo);
 #ifndef VMS
   return (0);
 #endif

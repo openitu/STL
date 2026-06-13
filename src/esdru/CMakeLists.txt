@@ -1,6 +1,6 @@
 include_directories(../utl)
 
-add_executable(esdru esdru.c ../utl/ugst-utl.c)
+add_executable(esdru esdru.c ../utl/ugst-utl.c ../utl/wav_io.c)
 target_link_libraries(esdru ${M_LIBRARY})
 
 

@@ -85,6 +85,7 @@ History:
 #include "g722.h"
 #include "ugstdemo.h"
 #include "g722_com.h"
+#include "wav_io.h"
 
 #include "stl.h"
 
@@ -221,7 +222,8 @@ int main (int argc, char *argv[]) {
 
   /* File variables */
   char FileIn[MAX_STR], FileOut[MAX_STR];
-  FILE *F_cod, *F_out;
+  FILE *F_cod;
+  AUDIO_FILE *F_out;
   long iter = 0;
   short N = DEF_FR_SIZE, N2 = 0, smpno = 0;
   long i = 0;
@@ -354,7 +356,7 @@ int main (int argc, char *argv[]) {
     KILL (FileIn, -2);
   }
   /* Open output file */
-  if ((F_out = fopen (FileOut, WB)) == NULL) {
+  if ((F_out = audio_open_write (FileOut, 16000, 1, 16)) == NULL) {
     KILL (FileOut, -2);
   }
 
@@ -556,7 +558,7 @@ int main (int argc, char *argv[]) {
       /* Update sample counter */
       iter += smpno;
       /* Save a frame of decoded speech samples */
-      if ((short) fwrite ((char *) outcode, sizeof (Word16), N, F_out) != N) {
+      if ((short) audio_write (F_out, outcode, N) != N) {
         KILL (FileOut, -4);
       }
       if (debug) {
@@ -595,7 +597,7 @@ int main (int argc, char *argv[]) {
       iter += smpno;
 
       /* Save decoded samples */
-      if ((short) fwrite ((char *) outcode, sizeof (Word16), N, F_out) != N) {
+      if ((short) audio_write (F_out, outcode, N) != N) {
         KILL (FileOut, -4);
       }
       if (debug) {
@@ -609,7 +611,7 @@ int main (int argc, char *argv[]) {
   }
 
   /* Close input and output files */
-  fclose (F_out);
+  audio_close (F_out);
   fclose (F_cod);
 
   /* Exit with success for non-vms systems */

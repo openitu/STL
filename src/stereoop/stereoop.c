@@ -25,6 +25,7 @@ v1.03 Feb  2, 2010:
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>             /* memset, strcmp */
+#include "wav_io.h"
 
 /* ..... Definitions used by the program ..... */
 #define VERSION        "stereoop.c 1.03 Feb 2, 2010"
@@ -98,8 +99,8 @@ short n_infiles[N_MODES] = { 2, 1, 1, 1, 1, 1 };
 short n_outfiles[N_MODES] = { 1, 2, 1, 1, 1, 1 };
 
 int main (int argc, char *argv[]) {
-  FILE *Fif[MAX_IFILES];        /* Pointer to input files */
-  FILE *Fof[MAX_OFILES];        /* Pointer to output files */
+  AUDIO_FILE *Fif[MAX_IFILES];   /* Pointer to input files */
+  AUDIO_FILE *Fof[MAX_OFILES];   /* Pointer to output files */
   char ifname[MAX_IFILES][MAX_STRLEN];  /* Input file names */
   char ofname[MAX_OFILES][MAX_STRLEN];  /* Output file names */
   char tmp_str[MAX_STR];
@@ -180,13 +181,13 @@ int main (int argc, char *argv[]) {
 
   /* Open files */
   for (i = 0; i < n_infiles[mode]; i++) {
-    if ((Fif[i] = fopen (ifname[i], RB)) == NULL) {
+    if ((Fif[i] = audio_open_read (ifname[i], 0, 0, 16)) == NULL) {
       sprintf (tmp_str, "Could not open input file %d,(%s)\n", i + 1, ifname[i]);
       error_terminate (tmp_str, 1);
     }
   }
   for (i = 0; i < n_outfiles[mode]; i++) {
-    if ((Fof[i] = fopen (ofname[i], WB)) == NULL) {
+    if ((Fof[i] = audio_open_write (ofname[i], audio_get_sample_rate (Fif[0]), 1, 16)) == NULL) {
       sprintf (tmp_str, "Could not create output file %d,(%s)\n", i + 1, ofname[i]);
       error_terminate (tmp_str, 1);
     }
@@ -195,11 +196,11 @@ int main (int argc, char *argv[]) {
   /* start of actual operation */
   memset (tmp_short, 0, sizeof (short) * 2);
   if (mode == INTER) {          /* read two mono file samples */
-    while ((n_in = fread (tmp_short, sizeof (short), 1, Fif[0])) == 1) {
-      if ((n_in = fread (&tmp_short[1], sizeof (short), 1, Fif[1])) != 1) {
+    while ((n_in = audio_read (Fif[0], tmp_short, 1)) == 1) {
+      if ((n_in = audio_read (Fif[1], &tmp_short[1], 1)) != 1) {
         error_terminate ("Error, 1ch input file 2(right), shorter than 1ch input file 1(Left)\n", 1);
       }
-      if ((n_out = fwrite (tmp_short, sizeof (short), 2, Fof[0])) != 2) {
+      if ((n_out = audio_write (Fof[0], tmp_short, 2)) != 2) {
         error_terminate ("Error, could not write to 2ch output stereo file \n", 1);
       }
       cnt_samples++;
@@ -207,18 +208,18 @@ int main (int argc, char *argv[]) {
     }                           /* while (1ch,1ch)->2ch */
 
     /* check if samples are still available in right channel */
-    if ((n_in = fread (&tmp_short[1], sizeof (short), 1, Fif[1])) != 0) {
+    if ((n_in = audio_read (Fif[1], &tmp_short[1], 1)) != 0) {
       error_terminate ("Error, 1ch input file 1(Left), shorter than 1ch input file 2(right)!\n", 1);
     }
   } else {
     /* reading of 2ch stereo file input samples */
-    while ((n_in = fread (tmp_short, sizeof (short), 2, Fif[0])) == 2) {
+    while ((n_in = audio_read (Fif[0], tmp_short, 2)) == 2) {
 
       if (mode == SPLIT) {
-        if ((n_out = fwrite (tmp_short, sizeof (short), 1, Fof[0])) != 1) {
+        if ((n_out = audio_write (Fof[0], tmp_short, 1)) != 1) {
           error_terminate ("Error, could not write to 1ch output file 1 (Left)\n", 1);
         }
-        if ((n_out = fwrite (&tmp_short[1], sizeof (short), 1, Fof[1])) != 1) {
+        if ((n_out = audio_write (Fof[1], &tmp_short[1], 1)) != 1) {
           error_terminate ("Error, could not write to 1ch output file 2 (Right)\n", 1);
         }
       } else {                  /* all 2ch to 1ch options */
@@ -253,7 +254,7 @@ int main (int argc, char *argv[]) {
           error_terminate ("Error, illegal mode option\n", 1);
           break;
         }
-        if ((n_out = fwrite (tmp_short_1ch, sizeof (short), 1, Fof[0])) != 1) {
+        if ((n_out = audio_write (Fof[0], tmp_short_1ch, 1)) != 1) {
           error_terminate ("Error, could not write to 1ch output file 1\n", 1);
         }
       }
@@ -273,10 +274,10 @@ int main (int argc, char *argv[]) {
     fprintf (stdout, "(Total %ld samples processed)\n\n", cnt_samples);
   }
   for (i = 0; i < n_infiles[mode]; i++) {
-    fclose (Fif[i]);
+    audio_close (Fif[i]);
   }
   for (i = 0; i < n_outfiles[mode]; i++) {
-    fclose (Fof[i]);
+    audio_close (Fof[i]);
   }
   return 0;
 }

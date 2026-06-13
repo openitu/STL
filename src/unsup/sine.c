@@ -75,6 +75,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "wav_io.h"
 
 /* includes for OS specific directives */
 #if defined(MSDOS)              /* ... DOS ... */
@@ -182,7 +183,7 @@ int main (int argc, char *argv[]) {
   double refdB = 0;
 #endif
 
-  FILE *Fo;
+  AUDIO_FILE *Fo;
   static char FileOut[150];
   int N = 256, blk_no = 0, DClevel = 0, AD_resolution = 16;
 #ifdef STATIC_ALLOCATION
@@ -338,7 +339,7 @@ int main (int argc, char *argv[]) {
 #ifdef VMS
   sprintf (&mrs[4], "%d", 2 * N);
 #endif
-  if ((Fo = fopen (FileOut, WB)) == NULL)
+  if ((Fo = audio_open_write (FileOut, (long) fs, 1, 16)) == NULL)
     KILL (FileOut, 1);
 
   /* Report of what is happening ... */
@@ -388,12 +389,12 @@ int main (int argc, char *argv[]) {
     }
 
     /* Saving the sine; aborts program on failure */
-    if (fwrite (data, sizeof (short), N, Fo) != N)
+    if (audio_write (Fo, data, N) != N)
       KILL (FileOut, 2);
   }
 
   /* Finalizations */
-  fclose (Fo);
+  audio_close (Fo);
 #ifndef VMS
   return (0);
 #endif
