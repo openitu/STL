@@ -1,0 +1,70 @@
+/*---------------------------------------------------------------------------*
+ * Gain Amplification Verification tool                                      *
+ * ------------------------------------                                      *
+ *                                                                           *
+ * Version: 3.0                                                              *
+ * Revision Date: October 17, 2012	                                         *
+ *---------------------------------------------------------------------------*/
+
+
+Changes from V2.0 to V3.0
+=========================
+
+1) #define OUTPUT_VALUES
+   This activates the output of values to the screen, printed without headers.
+   They are printed as is (either 4 or 8 values if VAD file is used).
+
+2) #define THRESHOLD_CHECK
+   This introduces the two new switches "-a XX" "-s YY".
+   The switch -a specifies active signal max amplification XX in dB.
+   The switch -i specifies incatve (silence) signal max attenuation YY
+   in dB. The results from the gain gain calculation are compared against 
+   the specified thresholds XX and YY.
+	
+   When defined, the tool returns one of the follwoing codes:
+   0: Error During Processing
+   1: Active Signal Amp above Threshold, Inactive Signal Att below Threshold (Both Fail)
+   2: Inactive Signal Att below Threshold           (Inactive Sig Fail, Active Sig Pass)
+   3: Active Signal Amp above Threshold             (Inactive Sig Pass, Active Sig Fail)
+   4: Active Signal Amp below Threshold, Inactive Signal Att above Threshold (Both Pass)	
+	
+	
+Both changes simplifies a handling of results inside the gain check script.	
+	
+
+Changes from V1.0 to V2.0
+=========================
+
+1) Better Protection of 'Division by' 0 and 'Log of 0'.
+   Now all this checking is done in the 'print_bands()' function.
+
+2) Bands can now be Specified as a Fraction of Fs/2.
+
+3) Energy Calculations and Printout are Seperated when using the VAD Flag File.
+   In the previous version, frames with VAD=0 were skipped.
+   In this version, the energy ratio (in % and dB) of all Bands Specified will be
+   calculated for Active and Inactive Frames. The results will be printed for each.
+
+4) Printout of the Bands Energy is now in the 'print_bands()' function.
+
+5) Better Checking of the Frequency Bands Validity.
+   The previous version had a bug that caused it to crash
+   with some combinations of Freq Bands.
+
+6) Removed the 'E_MIN' addition in the energy calculation
+   (for Both the Original and Processed Files).
+   This addition was not necessary; the check for Energy < E_MIN is now done
+   only once now in the 'print_bands()' function.
+
+7) An energy threshold has been added.
+   When the VAD file is used and a frame is Inactive (VAD=0)
+   The energy of the original is calculted to see if it is meaningful
+   to include the frame in the frequency energy calculation.
+   The threshold is set that if the energy is lower than the
+   energy of a sine wave of 2 in amplitude, the frame is skipped.
+   The amplitude of 2 means that the sine wave varies between -2 to +2
+   if quantized by a 16 bits short.
+
+8) Total Energy (Full Spectrum) will be printed for both Active and Inactive frames.
+   The corresponds to the Band 0-Fs/2.
+   

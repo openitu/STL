@@ -1,0 +1,3 @@
+Warning: stopped after 1000 complete frame(s): inputs do not both extend by another full frame
+         (last fread: 0 samples from -i, 0 from -o; need 960 per frame).
+   -0.66    -2.12    -1.42   -14.96    -0.68 
