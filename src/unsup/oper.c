@@ -100,7 +100,6 @@
 /* ... Includes for O.S. specific headers ... */
 #if defined(MSDOS)
 #include <fcntl.h>
-#include <io.h>
 #include <sys\stat.h>
 #elif defined(VMS)
 #include <perror.h>
@@ -108,7 +107,7 @@
 #include <stat.h>
 #else /* Unix */
 #include <sys/stat.h>
-#include <unistd.h>             /* Specific for read/write/lseek */
+#include <unistd.h>             /* For sleep() */
 #endif
 
 /* Define specific function call */
@@ -224,7 +223,7 @@ double divide (double x, double y) {
   Operate over short int files
   -------------------------------------------------------------------------
  */
-long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, int fh3, long N, long N1, long N2, double A, double B, double C, double (*oper_f) (), char trim_by, double round) {
+long operate_shorts (char *File1, char *File2, char *File3, FILE *f1, FILE *f2, FILE *f3, long N, long N1, long N2, double A, double B, double C, double (*oper_f) (), char trim_by, double round) {
   long i, j, l, k, saved = 0;
   short *a, *b;
   register double tmp;
@@ -243,7 +242,7 @@ long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, in
     memset (a, 0, N * sizeof (short));
     memset (b, 0, N * sizeof (short));
 
-    if ((l = read (fh1, a, sizeof (short) * N) / sizeof (short)) >= 0 && (k = read (fh2, b, sizeof (short) * N) / sizeof (short)) >= 0)
+    if ((l = fread (a, sizeof (short), N, f1)) >= 0 && (k = fread (b, sizeof (short), N, f2)) >= 0)
       while (j < l && j < k) {
         tmp = oper_f (A * (double) a[j], B * (double) b[j]) + C + round;
         b[j] = (short) (tmp > 32767 ? 32767 : (tmp < -32768 ? -32768 : tmp));
@@ -267,7 +266,7 @@ long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, in
         b[j] = (short) (tmp > 32767 ? 32767 : (tmp < -32768 ? -32768 : tmp));
       }
 
-    saved += write (fh3, b, sizeof (short) * j) / sizeof (short);
+    saved += fwrite (b, sizeof (short), j, f3);
   }
   return (saved);
 }
@@ -278,7 +277,6 @@ long operate_shorts (char *File1, char *File2, char *File3, int fh1, int fh2, in
 
 int main (int argc, char *argv[]) {
   char c[1], Oper;
-  int fh1, fh2, fhr;
 
   long N, N1, N2, Prcd = 0;
   long delay = 0, start_byte1, start_byte2, samplesize;
@@ -522,9 +520,6 @@ int main (int argc, char *argv[]) {
     KILL (File2, 4);
   if ((fr = fopen (RFile, WB)) == NULL)
     KILL (RFile, 5);
-  fh1 = fileno (f1);
-  fh2 = fileno (f2);
-  fhr = fileno (fr);
 
   /* If samples of the primary files are to be skipped, dump them into the output file */
   if (delay > 0) {
@@ -532,23 +527,23 @@ int main (int argc, char *argv[]) {
     short *a = (short *) calloc (sizeof (short), delay);
     double register tmp;
 
-    if (lseek (fh1, dump * samplesize, 0l) < 0l)
+    if (fseek (f1, dump * samplesize, SEEK_SET) != 0)
       KILL (File1, 3);
 
-    if (read (fh1, a, delay * samplesize) != samplesize * delay)
+    if ((long)fread (a, samplesize, delay, f1) != delay)
       KILL (File1, 6);
     for (i = 0; i < delay; i++) {
       tmp = (A * (double) a[i] + C + round);
       a[i] = (short) (tmp > 32767 ? 32767 : (tmp < -32768 ? -32768 : tmp));
     }
-    write (fhr, a, delay * samplesize);
+    fwrite (a, samplesize, delay, fr);
     free (a);
   }
 
   /* Move pointer to 1st block of interest */
-  if (lseek (fh1, start_byte1, 0l) < 0l)
+  if (fseek (f1, start_byte1, SEEK_SET) != 0)
     KILL (File1, 3);
-  if (lseek (fh2, start_byte2, 0l) < 0l)
+  if (fseek (f2, start_byte2, SEEK_SET) != 0)
     KILL (File2, 4);
 
   /* Some preliminaries */
@@ -557,7 +552,7 @@ int main (int argc, char *argv[]) {
   /* Operates on the file to the screen */
   switch (TypeOfData) {
   case 'I':                    /* short data */
-    Prcd = operate_shorts (File1, File2, RFile, fh1, fh2, fhr, N, N1, N2, A, B, C, oper_f, trim_by, round);
+    Prcd = operate_shorts (File1, File2, RFile, f1, f2, fr, N, N1, N2, A, B, C, oper_f, trim_by, round);
     break;
 
 #ifdef DATA_TYPE_DEFINED
@@ -577,8 +572,9 @@ int main (int argc, char *argv[]) {
 
 
   /* Finalizations */
-  close (fh1);
-  close (fh2);
+  fclose (f1);
+  fclose (f2);
+  fclose (fr);
 #ifndef VMS
   return (0);
 #endif

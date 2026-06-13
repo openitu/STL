@@ -59,19 +59,18 @@
 /* includes for DOS specific directives */
 #if defined (MSDOS)
 #include <fcntl.h>
-#include <io.h>                 /* For read(), write(), lseek() */
+#include <io.h>                 /* For isatty() */
 #include <sys\stat.h>
 
 /* includes for VMS specific directives */
 #elif defined (VMS)
 #include <perror.h>
 #include <file.h>
-#include <unixio.h>             /* For read(), write(), lseek() */
 char mrs[15] = "mrs=512";
 
 /* Other O.S. */
 #else
-#include <unistd.h>             /* For read(), write(), lseek() */
+#include <unistd.h>             /* For isatty() */
 #include <sys/stat.h>
 #endif
 
@@ -106,7 +105,6 @@ int main (int argc, char *argv[]) {
   int i, j, k, l, K;
 
   char File1[50], File2[50];
-  int fh1, fh2, fho;
   FILE *F1, *F2, *Fo;
 
   long int N, N1, N2, NrDiffs = 0, NrEquivs = 0;
@@ -160,10 +158,8 @@ int main (int argc, char *argv[]) {
   if (argc > 6) {
     if ((Fo = fopen (argv[6], WB)) == NULL)
       KILL (argv[6], 4);
-    fho = fileno (Fo);
     out_is_file = YES;
-  } else
-    fho = fileno (stdout);
+  }
 
   /* Define 1st sample to compare */
   N1--;
@@ -197,14 +193,12 @@ int main (int argc, char *argv[]) {
     KILL (File1, 2);
   if ((F2 = fopen (File2, RB)) == NULL)
     KILL (File2, 3);
-  fh1 = fileno (F1);
-  fh2 = fileno (F2);
 
   /* Positions file to the starting of block N1 */
   N1--;                         /* for the 1st block is not 1 but 0! */
-  if (lseek (fh1, start_byte1, 0) < 0l)
+  if (fseek (F1, start_byte1, SEEK_SET) != 0)
     KILL (File1, 5);
-  if (lseek (fh2, start_byte2, 0) < 0l)
+  if (fseek (F2, start_byte2, SEEK_SET) != 0)
     KILL (File2, 6);
 
   /* Print dump information */
@@ -217,7 +211,7 @@ int main (int argc, char *argv[]) {
 
   /* Dumps the file to the output (file or screen) */
   for (NrDiffs = i = j = 0; i < N2; i++, j = 0) {
-    if ((l = read (fh1, a, 2 * N) / 2) > 0 && (k = read (fh2, b, 2 * N) / 2) > 0) {
+    if ((l = fread (a, 2, N, F1)) > 0 && (k = fread (b, 2, N, F2)) > 0) {
       if (out_is_file) {
         if (isatty (fileno (stderr)) && !quiet)
           fprintf (stderr, "Now processing block %d\t\t\r", i + 1);
@@ -233,7 +227,7 @@ int main (int argc, char *argv[]) {
           if (ABS (b[j]) <= equiv && b[j] != 0)
             NrEquivs++;
         }
-        if ((K = write (fho, b, 2 * N)) != 2 * l)
+        if ((K = fwrite (b, 2, N, Fo)) != l)
           KILL (argv[6], 9);
       } else
         for (j = 0; j < l && j < k; j++) {
