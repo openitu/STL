@@ -1,0 +1,19 @@
+ -------------------------------------------------------
+  Input file: ................... test_data/speech_quiet_32bit_float.wav, 32 bits, fs=16000 Hz
+  Block Length: .................     256 [samples]
+  Starting Block: ...............       1 []
+  Number of Blocks: .............     412 []
+  dBov desired for output: ...... -26.000 [dBov]
+  Norm factor desired is: .......  44.876 [times]
+  Max norm WITHOUT saturation: .. -24.872 [dBov]
+ -------------------------------------------------------
+  DC level: .....................       0 [PCM]
+  Maximum positive value: .......       0 [PCM]
+  Maximum negative value: .......      -0 [PCM]
+ -------------------------------------------------------
+  Long term energy (rms): ....... -59.478 [dBov]
+  Active speech level: .......... -59.040 [dBov]
+  RMS peak-factor found: ........  25.310 [dB]
+  Active peak factor found: .....  24.872 [dB]
+  Activity factor: ..............  90.403 [%]
+ -------------------------------------------------------

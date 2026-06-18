@@ -220,13 +220,15 @@ samples. Measurements are cummulative, therefore state variables are
 needed in this approach.  These state variables have been arranged as
 fields of a structure whose name is {\tt SVP56\_state}. The fields of
 the structure are\footnote{\SF All the fields are \double, except the
-\float\ $f$ and the {\tt unsigned long} {\em a[]}, {\em hang[]}, and
-{\em n}.}:
+\float\ $f$, the {\tt int} {\em thres\_no} and {\em bitno}, and the
+{\tt unsigned long} {\em a[]}, {\em hang[]}, and {\em n}.}:
 \begin{quote} \normalsize
  {\em f}        \hfill \parbox{100mm}{\SF Sampling frequency, in Hz }\\
- {\em a[15]}    \hfill \parbox{100mm}{\SF Activity count }\\
- {\em c[15]}    \hfill \parbox{100mm}{\SF Threshold level }\\
- {\em hang[15]} \hfill \parbox{100mm}{\SF Hangover count }\\
+ {\em a[]}      \hfill \parbox{100mm}{\SF Activity count (size: {\em thres\_no}) }\\
+ {\em c[]}      \hfill \parbox{100mm}{\SF Threshold level (size: {\em thres\_no}) }\\
+ {\em hang[]}   \hfill \parbox{100mm}{\SF Hangover count (size: {\em thres\_no}) }\\
+ {\em thres\_no} \hfill \parbox{100mm}{\SF Number of thresholds in use ($= bitno - 1$) }\\
+ {\em bitno}    \hfill \parbox{100mm}{\SF Bit depth of input signal (1--32, default 16) }\\
  {\em n}        \hfill \parbox{100mm}{\SF Number of samples read since last  
                                           reset }\\
  {\em s}        \hfill \parbox{100mm}{\SF Sum of all samples since last   
@@ -270,7 +272,7 @@ presented in the next two sections.
 \#include "sv-p56.h"\\
 void init\_speech\_voltmeter
          \pbox{110mm}{
-            (SVP56\_state {\em *state}, double {\em f});
+            (SVP56\_state {\em *state}, double {\em f}, int {\em bitno});
          }
 }
 
@@ -280,13 +282,21 @@ void init\_speech\_voltmeter
 
 {\tt init\_speech\_voltmeter} performs the initialization of the
 speech voltmeter state variables in the structure pointed by {\em
-state} to the appropriate initial values. The only value required from
-the user is the sampling rate $f$ (in Hz) of the signal that the speech
-voltmeter is supposed to measure. Note that when measuring new
+state} to the appropriate initial values. The user must specify the
+sampling rate $f$ (in Hz) and the bit depth {\em bitno} of the signal
+that the speech voltmeter is supposed to measure. The bit depth
+determines the number of thresholds used ($B-1$) and must be in the
+range 1 to 32. Note that when measuring new
 speech material, the state variable shall be re-initialized, otherwise
 accumulation of previous measurements will happen and wrong measurements 
 will be reported.
 
+The header file {\tt sv-p56.h} defines two constants that control the
+maximum bit depth supported:
+\begin{quote} \normalsize
+ {\tt SVP56\_MAX\_NO\_BITS} \hfill \parbox{100mm}{\SF Maximum bit depth supported (default: 32). }\\
+ {\tt SVP56\_MAX\_THRESHOLDS} \hfill \parbox{100mm}{\SF Maximum number of thresholds ($=$ SVP56\_MAX\_NO\_BITS $-$ 1). }
+\end{quote}
 
 
 {\bf Variables: }
@@ -298,6 +308,12 @@ will be reported.
                Is the sampling rate (in Hz) of the signal to be measured in
                the next calls of {\tt speech\_voltmeter}. If zero or 
                negative, the sampling rate is initialized to 16000 Hz.
+
+\item[\pbox{20mm}{\em bitno}] %\rulex{1mm}\\
+               Is the bit depth (resolution) of the input signal, in the
+               range 1 to 32. This determines the number of threshold levels
+               used by the algorithm ($B-1$ thresholds). For standard
+               telephony, use 16.
 \end{Descr}
         
 {\bf Return value: }      
@@ -435,25 +451,30 @@ only program {\tt sv56demo.c} carry out the level-equalization of the
 input file, which is saved in an aoutput file. Levels are reported in
 dBov.
 
-In general, input files are in integer representation, 16-bit words,
-2's complement (i.e., {\tt short} data). In UGST convention, this
-data must be left-adjusted, {\em rather} than right-adjusted. Since
-the speech voltmeter uses {\tt float} input data, it is necessary to
-convert from {\tt short} (in the mentioned format) to {\tt float};
-this is carried out by the function {\tt sh2fl()}. In addition, the
-option to `normalize' the input data to the range -1..+1 is selected.
+The example programs support variable bit-width input files from 8 to
+32 bits per sample (controlled by the {\em bitno} parameter). Supported
+storage widths are 8-bit (1 byte/sample), 16-bit (2 bytes/sample),
+24-bit (3 bytes/sample), and 32-bit (4 bytes/sample). For bit depths
+between 12 and 15, samples are stored in 2 bytes with the least
+significant bits masked to zero. Files use native byte order.
+
+Since the speech voltmeter uses {\tt float} input data normalized to
+the range --1.0..+1.0, the helper functions in {\tt sv56-util.h} handle
+the conversion between raw integer samples and normalized floats:
+{\tt sv56\_raw2fl()} reads raw bytes and normalizes by dividing by
+$2^{bitno-1}$, and {\tt sv56\_fl2raw()} performs the inverse operation
+with truncation and hard-clipping.
 After the equalization factor is found, results are reported on the
 screen, which varies according to the program used and some of the
-command-line options. 
+command-line options.
 
 While program {\tt actlevel.c} stops at this point, program {\tt
 sv56demo.c} proceeds calling the function {\tt scale()} to carry out
 the (amplitude) equalization using single (rather than double) float
 precision. After equalization, the samples are converted back to
-integer (short, right-justified) with the routine {\tt fl2sh()} using
-truncation, no zero-padding of the least significant bits,
-left-justification of data, and hard-clipping of data above the
-overload point. After that, data is saved to the user-specified file .
+raw integer format with {\tt sv56\_fl2raw()} using
+truncation and hard-clipping of data above the
+overload point. After that, data is saved to the user-specified file.
 
 
 %-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
@@ -471,7 +492,7 @@ options of  {\tt actlevel.c}.
 #include <math.h>
 #include "ugstdemo.h"           /* ... UGST demonstration program defs ... */
 #include "sv-p56.h"             /* ... SV-P56 prototypes & defs ... */
-#include "ugst-utl.h"           /* ... UGST utilities ... */
+#include "sv56-util.h"          /* ... SV56 I/O utilities ... */
 #define BLK_LEN 256
 
 void main(argc, argv)
@@ -482,7 +503,8 @@ void main(argc, argv)
   char            FileIn[180];  /* input file name */
   FILE           *Fi;           /* input file pointers */
   long            N=BLK_LEN, l;
-  short           bitno, buffer[BLK_LEN];
+  int             bitno, bps;
+  unsigned char   raw_buf[BLK_LEN * 4];
   float           Buf[BLK_LEN];
   double          ActiveLeveldB, sf, satur;
 
@@ -493,20 +515,21 @@ void main(argc, argv)
   FIND_PAR_D(2, "_Sampling Frequency: .. ", sf, 16000);
   FIND_PAR_L(3, "_A/D resolution: ...... ", bitno, 16);
 
-  /* Calculate overload point in the non-normalized range */
+  /* Calculate bytes per sample and overload point */
+  bps = sv56_bytes_per_sample(bitno);
   satur = pow ((double)2.0, (double)(bitno - 1));
 
   /* Reset- variables for speech level measurements */
-  init_speech_voltmeter(&state, sf);
+  init_speech_voltmeter(&state, sf, bitno);
 
   /* Opening input file */
   Fi = fopen(FileIn, RB);
 
   /* Read samples ... */
-  while ((l = fread(buffer, N, sizeof(short), Fi)) > 0)
+  while ((l = fread(raw_buf, bps, N, Fi)) > 0)
   {
-    /* ... Convert samples to float, normalizing to +1..-1 */
-    sh2fl((long) l, buffer, Buf, (long) state.bitno, 1);
+    /* ... Convert raw samples to float, normalizing to +1..-1 */
+    sv56_raw2fl((long) l, raw_buf, Buf, bitno);
 
     /* ... Get the active level */
     ActiveLeveldB = speech_voltmeter(Buf, (long) l, &state);
@@ -524,7 +547,7 @@ void main(argc, argv)
     printf("\n  Maximum negative value: .. %7.0f [PCM]", 
            SVP56_get_neg_max(state) * satur);
     printf("\n  Long-term energy (rms): .. %7.3f [dBov]", 
-           SVP56_get_rms_dB(state);
+           SVP56_get_rms_dB(state));
     printf("\n  Active speech level: ..... %7.3f [dBov]", ActiveLeveldB);
     printf("\n  Activity factor: ......... %7.3f [%%]",
            SVP56_get_activity(state));

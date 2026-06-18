@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.10)
+
 project(STL2023 VERSION 2023)
-add_definitions( -DVERSION_STL="${CMAKE_PROJECT_NAME}" )
+
+add_definitions( -DVERSION_STL="${CMAKE_PROJECT_NAME}" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

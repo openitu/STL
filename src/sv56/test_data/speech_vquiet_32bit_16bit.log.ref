@@ -1,0 +1,18 @@
+ -------------------------------------------------------
+  Input file: ................... test_data/speech_vquiet_32bit.wav, 16 bits, fs=16000 Hz
+  Block Length: .................     256 [samples]
+  Starting Block: ...............       1 []
+  Number of Blocks: .............     412 []
+  dBov desired for output: ...... -26.000 [dBov]
+  Activity factor is ZERO -- the file is silence or idle noise
+ -------------------------------------------------------
+  DC level: .....................     299 [PCM]
+  Maximum positive value: ....... 1055232 [PCM]
+  Maximum negative value: ....... -659712 [PCM]
+ -------------------------------------------------------
+  Noise/silence energy (rms): ... -91.478 [dB]
+ -------------------------------------------------------
+%SV-W-SAT, the dB level chosen causes SATURATION: old max=1055232; new max=5288688069
+%SV-I-MAXLEVDB, the maximum norm factor to PREVENT clipping is -33.828dB; 
+ -------------------------------------------------------
+  Number of clippings: ..........      81 []
