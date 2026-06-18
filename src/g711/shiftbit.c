@@ -97,7 +97,7 @@ int main (int argc, char *argv[]) {
 
   fprintf (stderr, "%s: Reading, ", inp);
   for (k = 0; k < l; k += 256)
-    if (fread (&buf[k],1, 512, fi) < 0)
+    if (fread (&buf[k],1, 512, Fi) < 0)
       KILL (inp, 5);
 
   fprintf (stderr, "shifting, ");
