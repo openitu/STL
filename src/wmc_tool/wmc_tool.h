@@ -19,7 +19,7 @@
  * Switches
  *-------------------------------------------------------------------*/
 
-#define WMC_TOOL_VERSION_NO  "1.5"          /* Current version */
+#define WMC_TOOL_VERSION_NO  "1.8"          /* Current version */
 /*#define DEBUG_PRINT*/                     /* For debugging purposes */
 
 /*-------------------------------------------------------------------*

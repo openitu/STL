@@ -54,10 +54,11 @@
 #define DESINSTRUMENT_ONLY   0x001
 #define REMOVE_MANUAL_INSTR  0x002
 #define VERBOSE              0x004
+#define SKIP_CMPLX_INSTRUM   0x010
 #define NO_BACKUP            0x020
 #define INSTR_INFO_ONLY      0x040
-#define OUTPUT_WMOPS_FILES   0x080
 #define INSTRUMENT_ROM       0x100
+#define OUTPUT_WMOPS_FILES   0x200
 
 /* Other Constants */
 #define BACKUP_SUFFIX        ".bak"
@@ -77,6 +78,7 @@ static void usage()
           "Options:\n"
           "     -h [--help]: print help\n"
           "     -v [--verbose]: print warnings and other information messages\n"
+          "     -s [--skip-cmplx-instrumentation]: skip complexity instrumentation\n"
           "     -i [--info-only]: only print instrumentation information\n"
           "     -d [--desinstrument]: desintrument only\n"
           "     -m filename [--rom filename]: add statistics about ROM and RAM consumption\n"
@@ -191,6 +193,10 @@ static TOOL_ERROR Parse_Command_Line(
         {
             *Operation |= INSTR_INFO_ONLY;
         }
+        else if (_stricmp(arg_name, "s") == 0 || _stricmp(arg_name, "skip-cmplx-instrumentation") == 0)
+        {
+            *Operation |= SKIP_CMPLX_INSTRUM;
+        }
         else if (_stricmp(arg_name, "c") == 0 || _stricmp(arg_name, "generate-wmc-files") == 0)
         {
             /* get the next argument - must be an existing direectory */
@@ -231,11 +237,18 @@ static TOOL_ERROR Parse_Command_Line(
             i++;
 
             /* get the value */
-            if ((*frames_per_sec = strtof(args[i], NULL)) <= 0.0 )
+            if ((*frames_per_sec = strtof(args[i], NULL)) <= 0.0)
             {
                 fprintf(stderr, "Incorrect number of frames per second specified: %s!\n\n", args[i]);
                 return ERR_CMD_LINE;
             }
+        }
+        else
+        {
+            /* unknown command-line option */
+            usage();
+            fprintf(stderr, "Unknown command-line option: %s!\n\n", args[i]);
+            return ERR_CMD_LINE;
         }
 
         /* Move to the next argument */
@@ -989,11 +1002,18 @@ static TOOL_ERROR Process_File(
         return ErrCode;
     }
 
+    /* DesInstrument Const_Data_Size_XXX Functions */
+    if ( ( ErrCode = DesInstrument_ROM( ParseCtx_ptr ) ) != NO_ERR )
+    {
+        fprintf(stdout, "\n");
+        return ErrCode;
+    }
+
     /* Instrument */
     if ( !( Operation & DESINSTRUMENT_ONLY ) )
     { /* Yes */
         /* Instrument */
-        if ((ErrCode = Instrument(ParseCtx_ptr, (Operation & INSTRUMENT_ROM) != 0)) != NO_ERR)
+        if ((ErrCode = Instrument(ParseCtx_ptr, (Operation & INSTRUMENT_ROM) != 0, (Operation & SKIP_CMPLX_INSTRUM) != 0)) != NO_ERR)
         {
             fprintf(stdout, "\n");
             return ErrCode;
@@ -1154,6 +1174,7 @@ int main( int argc, char *argv[] )
     char Const_Data_PROM_File[MAX_PATH] = "";
     char wmops_output_dir[MAX_PATH];
     float frames_per_sec;
+    bool Const_Data_PROM_File_already_reinstrumented = 0;
     T_FILE_BOOK file_book[MAX_RECORDS];
     struct stat s;
     Parse_Context_def ParseContext;
@@ -1238,7 +1259,14 @@ int main( int argc, char *argv[] )
 
         if (!(Operation & DESINSTRUMENT_ONLY))
         {
-            fprintf(stdout, "- instrumenting all functions and table (const) data memory\n");
+            if (Operation & SKIP_CMPLX_INSTRUM)
+            {
+                fprintf(stdout, "- skipping instrumentation of functions\n");
+            }
+            else
+            {
+                fprintf(stdout, "- instrumenting all functions and table (const) data memory\n");
+            }
         }
 
         if (Operation & OUTPUT_WMOPS_FILES)
@@ -1421,6 +1449,12 @@ int main( int argc, char *argv[] )
             /* Process File */
             ErrCode = Process_File(LongFileName, Operation, &ParseContext, MaxFnLength, (Operation & NO_BACKUP) == 0, j * 100.0f / file_book[i].nFiles);
 
+            /* Check if the processed file is the same as */
+            if (strcmp(LongFileName, Const_Data_PROM_File) == 0)
+            {
+                Const_Data_PROM_File_already_reinstrumented = 1;
+            }
+
             /* Update # of Bytes Processed */
             nBytesProcessed += ParseContext.File.Size;
 
@@ -1513,10 +1547,13 @@ int main( int argc, char *argv[] )
             goto ret;
         }
 
-        /* DesInstrument Const_Data_Size_XXX Functions */
-        if ((ErrCode = DesInstrument_ROM(&ParseContext)) != NO_ERR)
+        /* DesInstrument Const_Data_PROM_Table[] */
+        if (!Const_Data_PROM_File_already_reinstrumented)
         {
-            goto ret;
+            if ((ErrCode = DesInstrument_ROM(&ParseContext)) != NO_ERR)
+            {
+                goto ret;
+            }
         }
 
         /* Check, if "wmc_auto.h" is included */

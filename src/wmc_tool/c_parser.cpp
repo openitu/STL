@@ -142,17 +142,38 @@
     "_round round round_f roundf "                           \
     "set_min set_max "        
 
+/* Note: the following set of intrinsic BASOP operators has been extracted with */
+/* ctags - x --c - kinds = f move.h control.h control.c complex_basop.h complex_basop.c basop32.h basop32.c enh32.h enh32.c enh40.h enh40.c
+   enh64.h enh64.c enh1632.h enh1632.c enhUL32.h enhUL32.c math_32.h */
 #define BASOP_FUNCTS_STRING      \
-    "add sub abs_s shl shr extract_h extract_l mult L_mult negate round " \
-    "L_mac L_msu L_macNs L_msuNs L_add L_sub L_add_c L_sub_c L_negate L_shl L_shr " \
-    "mult_r shr_r mac_r msu_r L_deposit_h L_deposit_l L_shr_r L_abs L_sat norm_s div_s " \
-    "norm_l move16 move32 Logic16 Logic32 Test s_max s_min L_max L_min L40_max " \
-    "L40_min shl_r L_shl_r L40_shr_r L40_shl_r norm_L40 L40_shl L40_shr L40_negate " \
-    "L40_add L40_sub L40_abs L40_mult L40_mac mac_r40 L40_msu msu_r40 Mpy_32_16_ss " \
-    "Mpy_32_32_ss L_mult0 L_mac0 L_msu0 lshl lshr L_lshl L_lshr L40_lshl L40_lshr " \
-    "s_and s_or s_xor L_and L_or L_xor rotl rotr L_rotl L_rotr L40_set L40_deposit_h " \
-    "L40_deposit_l L40_deposit32 Extract40_H Extract40_L L_Extract40 L40_round " \
-    "L_saturate40 round40 If Goto Break Switch For While Continue L_mls div_l i_mult "
+"Break CL_Extract_imag CL_Extract_imag CL_Extract_real CL_Extract_real CL_add CL_add CL_conjugate CL_conjugate CL_dscale CL_dscale CL_dscale_32 CL_dscale_32" \
+"CL_form CL_form CL_mac_j CL_mac_j CL_move CL_move CL_msu_j CL_msu_j CL_mul_j CL_mul_j CL_multr_32x16 CL_multr_32x16 CL_multr_32x32 CL_multr_32x32 CL_negate" \
+"CL_negate CL_round32_16 CL_round32_16 CL_scale CL_scale CL_scale_32 CL_scale_32 CL_shl CL_shl CL_shr CL_shr CL_sub CL_sub CL_swap_real_imag CL_swap_real_imag" \
+"C_Extract_imag C_Extract_imag C_Extract_real C_Extract_real C_add C_add C_conjugate C_conjugate C_form C_form C_mac_r C_mac_r C_msu_r C_msu_r C_mul_j C_mul_j" \
+"C_multr C_multr C_negate C_negate C_scale C_scale C_shl C_shl C_shr C_shr C_sub C_sub Continue EQ_16 EQ_32 EQ_64 Extract40_H Extract40_L For GE_16 GE_16 GE_32" \
+"GE_32 GE_64 GE_64 GT_16 GT_16 GT_32 GT_32 GT_64 GT_64 Goto If L40_abs L40_abs L40_add L40_add L40_add_o L40_deposit32 L40_deposit32 L40_deposit_h L40_deposit_h" \
+"L40_deposit_l L40_deposit_l L40_lshl L40_lshl L40_lshr L40_lshr L40_mac L40_mac L40_max L40_max L40_min L40_min L40_msu L40_msu L40_mult L40_mult L40_negate" \
+"L40_negate L40_round L40_round L40_set L40_set L40_shl L40_shl L40_shl_o L40_shl_r L40_shl_r L40_shr L40_shr L40_shr_r L40_shr_r L40_sub L40_sub L40_sub_o" \
+"LE_16 LE_16 LE_32 LE_32 LE_64 LE_64 LT_16 LT_16 LT_32 LT_32 LT_64 LT_64 L_Extract40 L_abs L_abs L_add L_add L_add_c L_add_c L_add_co L_add_o L_add_sat L_and" \
+"L_and L_deposit_h L_deposit_h L_deposit_l L_deposit_l L_lshl L_lshl L_lshr L_lshr L_mac L_mac L_mac0 L_mac0 L_mac0_o L_mac0_sat L_macNs L_macNs L_macNs_co" \
+"L_macNs_sat L_mac_o L_mac_sat L_max L_max L_min L_min L_mls L_mls L_mls_o L_mls_sat L_msu L_msu L_msu0 L_msu0 L_msu0_o L_msu0_sat L_msuNs L_msuNs L_msuNs_co" \
+"L_msuNs_sat L_msu_o L_msu_sat L_mult L_mult L_mult0 L_mult0 L_mult_o L_mult_sat L_negate L_negate L_or L_or L_rotl L_rotl L_rotr L_rotr L_sat L_sat L_sat_co" \
+"L_saturate40 L_saturate40 L_saturate40_o L_shl L_shl L_shl_o L_shl_r L_shl_r L_shl_sat L_shr L_shr L_shr_o L_shr_r L_shr_r L_shr_r_sat L_shr_ro L_shr_sat L_sub" \
+"L_sub L_sub_c L_sub_c L_sub_co L_sub_o L_sub_sat L_xor L_xor Logic16 Logic32 Madd_32_16 Madd_32_16 Madd_32_16_r Madd_32_16_r Madd_32_32 Madd_32_32 Madd_32_32_r" \
+"Madd_32_32_r Mpy_32_16_1 Mpy_32_16_1 Mpy_32_16_r Mpy_32_16_r Mpy_32_16_ss Mpy_32_16_ss Mpy_32_16_uu Mpy_32_16_uu Mpy_32_32 Mpy_32_32 Mpy_32_32_r Mpy_32_32_r" \
+"Mpy_32_32_ss Mpy_32_32_ss Mpy_32_32_uu Mpy_32_32_uu Msub_32_16 Msub_32_16 Msub_32_16_r Msub_32_16_r Msub_32_32 Msub_32_32 Msub_32_32_r Msub_32_32_r NE_16 NE_16" \
+"NE_32 NE_32 NE_64 NE_64 Switch Test UL_Mpy_32_32 UL_Mpy_32_32 UL_addNs UL_addNs UL_addNsD UL_and UL_deposit_h UL_deposit_l UL_deposit_l UL_lshl UL_lshr UL_or" \
+"UL_subNs UL_subNs UL_subNsD UL_xor W_abs W_abs W_abs_o W_add W_add W_add_nosat W_add_nosat W_add_o W_deposit32_h W_deposit32_h W_deposit32_l W_deposit32_l" \
+"W_extract_h W_extract_h W_extract_l W_extract_l W_lshl W_lshl W_lshr W_lshr W_mac0_16_16 W_mac0_16_16 W_mac_16_16 W_mac_16_16 W_mac_32_16 W_mac_32_16" \
+"W_mac_32_32 W_msu0_16_16 W_msu0_16_16 W_msu_16_16 W_msu_16_16 W_msu_32_16 W_msu_32_16 W_mult0_16_16 W_mult0_16_16 W_mult0_32_32 W_mult0_32_32 W_mult_16_16" \
+"W_mult_16_16 W_mult_32_16 W_mult_32_16 W_mult_32_32 W_mult_32_32 W_mult_32_32_o W_neg W_neg W_neg_o W_norm W_norm W_round32_s W_round32_s W_round32_s_o" \
+"W_round48_L W_round48_L W_round48_L_o W_round64_L W_round64_L W_sat_l W_sat_l W_sat_m W_sat_m W_shl W_shl W_shl_nosat W_shl_nosat W_shl_o W_shl_sat_l" \
+"W_shl_sat_l W_shr W_shr W_shr_nosat W_shr_nosat W_sub W_sub W_sub_nosat W_sub_nosat W_sub_o While abs_s abs_s add add add_o add_sat div_l div_l div_s div_s" \
+"extract_h extract_h extract_l extract_l get_carry i_mult i_mult i_mult_o i_mult_sat logic16 logic32 lshl lshr mac_r mac_r40 mac_r_sat mac_ro move16 move16" \
+"move32 move32 move64 move64 msu_r msu_r msu_r40 msu_r40 msu_r_sat msu_ro mult mult mult_o mult_r mult_r mult_r_sat mult_ro mult_sat negate negate norm_L40" \
+"norm_L40 norm_l norm_l norm_s norm_s norm_ul_float rotl rotl rotr rotr round round40 round40 round_fx round_fx_o round_fx_sat s_and s_and s_max s_max s_min" \
+"s_min s_or s_or s_xor s_xor saturate saturate_o set_carry set_overflow shl shl shl_o shl_r shl_r shl_ro shl_sat shr shr shr_o shr_r shr_r shr_r_sat shr_ro" \
+"shr_sat sub sub sub_o sub_sat test u_extract_h u_extract_l unset_carry unset_overflow"
 
 #define WMOPS_LIB_INCLUDE_STRING \
     "wmc_auto.h"
@@ -179,13 +200,6 @@
  *****************************************/
 
 #define FUNC_START_STRING FUNC_COUNTING_MACRO_STRING "start" WORD_INSTRUMENT_STRING
-
-/*****************************************
- * Function Exit
- *****************************************/
-
-#define RETURN_KW_STRING "return"
-
 
 /*-------------------------------------------------------------------*
  * Local Typedefs
@@ -250,7 +264,7 @@ static const struct
     { "break", false, NUL_CHAR, ITEM_KEYWORD_BREAK, 0 },
     { "continue", false, NUL_CHAR, ITEM_KEYWORD_CONTINUE | ITEM_WARNING, 0 },
     /* 'return' now Instrumented for enter/leave function Mechanism */
-    { RETURN_KW_STRING, false, NUL_CHAR, ITEM_KEYWORD_RETURN | ITEM_RETURN }
+    { "return", false, NUL_CHAR, ITEM_KEYWORD_RETURN | ITEM_RETURN }
 };
 
 static const char * const Conditionnal_Directives[] = { "ifdef", "ifndef", "if", "else", "elif", "endif", NULL };
@@ -1657,7 +1671,7 @@ static bool Is_Constant(
     UpperChar = Total = 0;
     do
     {
-        if ( IS_UPPER_CHAR( *ptr ) )
+        if ( !IS_LOWER_CHAR( *ptr ) )
             UpperChar += 100;
         Total++;
         ptr++;
@@ -2584,6 +2598,7 @@ static TOOL_ERROR Find_Keywords(
                 }
                 /* Reset Parameter End */
                 pe = NULL;
+
                 /* Reset Delimiter Position */
                 dp = NULL;
                 /* Keyword has an Argument? */
@@ -3549,6 +3564,46 @@ static TOOL_ERROR Find_Preproc_Instrumentation(
         }
     }
 
+    /* Mark all lines preceded by AddedByWMC_Tool as Instrumentation */
+    
+    /* Start at Beginning */
+    ptr = ParseCtx_ptr->File.Data;
+
+    /* Search for AddedBy_WMC_Tool string which has not been marked as instrumentation yet */
+    while ((ptr = Find_Identifier(ptr, ADDED_TOOL_INFO_STRING, ParseTbl_ptr, ITEM_COMMENT, ITEM_INSTRUMENTATION, &idx)) != NULL)
+    {
+        /* Get Record */
+        ParseRec_ptr = &ParseTbl_ptr->Data[idx];
+
+        /* Mark as Instrumentation */
+        ParseRec_ptr->item_type |= ITEM_INSTRUMENTATION;
+
+        ptr = ParseRec_ptr->item_end;
+
+        /* check, if is followed by #ifdef or #endif statement */
+        if ((idx = Find_Region(ptr, ParseTbl_ptr, ITEM_PREPROC_CMD | ITEM_PREPROC_COND)) > 0)
+        {
+            /* Get Record */
+            ParseRec_ptr = &ParseTbl_ptr->Data[idx];
+
+            /* Mark as Instrumentation */
+            ParseRec_ptr->item_type |= ITEM_INSTRUMENTATION;
+
+            if (memwordcmp(ptr, "#if #ifdef #ifndef #elif") != NULL)
+            {
+                /* Get the next record - should be Preprocessor Directive Arguments */
+                ParseRec_ptr = &ParseTbl_ptr->Data[idx + 1];
+
+                /* Mark as Instrumentation */
+                ParseRec_ptr->item_type |= ITEM_INSTRUMENTATION;
+            }
+
+            /* Advance pointer to the end of Preprocessor Arguments (Skip Spaces and Comments Only) */
+            ptr = Skip_Chars(ParseRec_ptr->item_end, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_COMMENT);
+        }
+    }
+
+
     return ErrCode;
 }
 
@@ -4323,8 +4378,7 @@ static TOOL_ERROR Find_Calls(
                 if ( item_type != ITEM_NONE )
                 {
                     /* Add Function Call Name Region */
-                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, item_type | ITEM_CALL,
-                                                 ns, ne + 1 ) ) != NO_ERR )
+                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, item_type | ITEM_CALL, ns, ne + 1 ) ) != NO_ERR )
                     {
                         goto ret;
                     }
@@ -4334,12 +4388,14 @@ static TOOL_ERROR Find_Calls(
                         ErrCode = Parentheses_Error( ps, ')' );
                         goto ret;
                     }
+
                     /* Add Function Arguments Region (Arguments are never Marked as Instrumented) */
-                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, ( item_type | ITEM_CALL_ARGS ) & ~ITEM_INSTRUMENTED,
-                                                 ps, pe + 1 ) ) != NO_ERR )
+                    //if ((ErrCode = Add_Region(ParseTbl_ptr, (item_type | ITEM_CALL_ARGS) & ~ITEM_INSTRUMENTED, ps, pe + 1)) != NO_ERR)
+                    if ( ( ErrCode = Add_Region( ParseTbl_ptr, ( item_type | ITEM_CALL_ARGS ) & ~ITEM_INSTRUMENTED & ~ITEM_INSTRUMENTATION_OFF, ps, pe + 1 ) ) != NO_ERR )
                     {
                         goto ret;
                     }
+
                     /* Counting Macro, Couting Function or BASOP Function? */
                     if ( item_type & ( ITEM_FUNC_COUNTERS | ITEM_FUNC_COUNT_LIB | ITEM_FUNC_BASOP ) )
                     { /* Yes */
@@ -4349,7 +4405,8 @@ static TOOL_ERROR Find_Calls(
                            not Preprocessor Lines
                         */
                         /* Skip Blanks to the Right (this cannot fail) */
-                        ps = Skip_Chars( pe + 1, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_COMMENT );
+                        //ps = Skip_Chars( pe + 1, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_COMMENT );
+
                         /* It is the End of Statement? */
                         if ( *ps == ';' )
                         { /* Yes */
@@ -4667,7 +4724,8 @@ ret:
  * Instrument_Keywords
  *-------------------------------------------------------------------*/
 static TOOL_ERROR Instrument_Keywords(
-    Parse_Context_def *ParseCtx_ptr )
+    Parse_Context_def *ParseCtx_ptr,
+    bool skip_cmplx_instrum)
 {
     TOOL_ERROR ErrCode = NO_ERR;
 
@@ -4696,88 +4754,104 @@ static TOOL_ERROR Instrument_Keywords(
         item_type = ParseRec_ptr->item_type;
 
         /* Skipped? */
-        unless( item_type & ITEM_SKIPPED )
+        if( !(item_type & ITEM_SKIPPED) )
         { /* No */
-            /* In Skipped or Non-Instrumented Region? */
-            if ( Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED | ITEM_INSTRUMENTATION_OFF ) < 0
-                 /* 'return' always gets Instrumented (even in Manual Regions) */
-                 || ( item_type == ITEM_KEYWORD_RETURN
-                      /* 'return not' Instrumented in Skipped Regions */
-                      && Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED ) < 0
-                      && Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK ) < 0 && Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_MATH ) < 0 && Find_Region( ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_SYSTEM ) < 0 ) )
-            { /* No */
-                /* Instrument After (by default) */
-                ptr = ParseRec_ptr->item_end;
 
-                /* Is it a 'while' that is part of a 'do' Block? */
-                /* Insert Instrumentation Character */
-                if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr, WORD_INSTRUMENT_STRING ) ) != NO_ERR )
-                {
-                    goto ret;
-                }
+            /* Skip the instrumentation if the user specified so on the command-line */
+            /* with the exception of the 'return' keywords */
+            if (!skip_cmplx_instrum || item_type == ITEM_KEYWORD_RETURN)
+            {
+                /* In Skipped or Non-Instrumented Region? */
+                if (Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED | ITEM_INSTRUMENTATION_OFF) < 0
+                    /* 'return' always gets Instrumented (even in Manual Regions) */
+                    || (item_type == ITEM_KEYWORD_RETURN
+                        /* 'return not' Instrumented in Skipped Regions */
+                        && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED) < 0
+                        && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK) < 0
+                        && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_MATH) < 0
+                        && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_FUNC_BLOCK | ITEM_FUNC_SYSTEM) < 0))
+                { /* No */
 
-                /* Is it a 'while'?
-                   Auto Instrumentation Macro for 'while' in a 'do' Block
-                   can handle multiple Condition. */
-                if ( item_type == ITEM_KEYWORD_WHILE
-                      /* 'while' from 'do/while' now Needs Extra () for Multiple Condition*/
-                     || item_type == ITEM_KEYWORD_WHILE2
-                )
-                { /* Yes */
-                    /* Advance to Parameters Record */
-                    ParseRec_ptr++;
-                    /* More than one Condition? */
-                    if ( Count_Args( ParseRec_ptr->item_start,
-                                     ParseRec_ptr->item_end - 1,
-                                     ParseTbl_ptr ) > 1 )
-                    { /* Yes */
-                        /* Must Add Extra () */
-                        if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl,
-                                                        ParseRec_ptr->item_start,
-                                                        "(" ) ) != NO_ERR )
-                        {
-                            goto ret;
-                        }
+                    //if (skip_cmplx_instrum && item_type != ITEM_KEYWORD_RETURN)
+                    //{
+                    //    /* skip the instrumentation if the user specified so on the command-line */
+                    //    /* with the exception of the 'return' keywords */
+                    //    continue;
+                    //}
 
-                        if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl,
-                                                        ParseRec_ptr->item_end,
-                                                        ")" ) ) != NO_ERR )
-                        {
-                            goto ret;
-                        }
+                    /* Instrument After (by default) */
+                    ptr = ParseRec_ptr->item_end;
 
-                        /* Add Warning */
-                        ParseRec_ptr->item_type |= ITEM_WARNING;
-                    }
-                }
-                /* Is it a switch? */
-                else if ( item_type == ITEM_KEYWORD_SWITCH )
-                { /* Yes */
-                    if ( ( ErrCode = Instrument_Switch( ParseCtx_ptr, idx,
-                                                        &ParseCtx_ptr->PROMSize,
-                                                        prom_ops_weights_ptr ) ) != NO_ERR )
+                    /* Insert Instrumentation Character '_' */
+                    if ((ErrCode = Add_Insertion(&ParseCtx_ptr->InsertTbl, ptr, WORD_INSTRUMENT_STRING)) != NO_ERR)
                     {
                         goto ret;
                     }
-                }
 
-                /* Count Program Memory */
-                //if ( item_type == ITEM_KEYWORD_FOR )
-                //    loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
-                //else if ( item_type == ITEM_KEYWORD_WHILE )
-                //    whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
-                //else if ( item_type & ( ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP ) )
-                //    jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
+                    /* Is it a 'while'?
+                       Auto Instrumentation Macro for 'while' in a 'do' Block
+                       can handle multiple Condition. */
+                    if (item_type == ITEM_KEYWORD_WHILE
+                        /* 'while' from 'do/while' now Needs Extra () for Multiple Condition*/
+                        || item_type == ITEM_KEYWORD_WHILE2)
+                    { /* Yes */
+                        /* Advance to Parameters Record */
+                        ParseRec_ptr++;
+                        /* More than one Condition? */
+                        if (Count_Args(ParseRec_ptr->item_start,
+                            ParseRec_ptr->item_end - 1,
+                            ParseTbl_ptr) > 1)
+                        { /* Yes */
+                            /* Must Add Extra () */
+                            if ((ErrCode = Add_Insertion(&ParseCtx_ptr->InsertTbl,
+                                ParseRec_ptr->item_start,
+                                "(")) != NO_ERR)
+                            {
+                                goto ret;
+                            }
+
+                            if ((ErrCode = Add_Insertion(&ParseCtx_ptr->InsertTbl,
+                                ParseRec_ptr->item_end,
+                                ")")) != NO_ERR)
+                            {
+                                goto ret;
+                            }
+
+                            /* Add Warning */
+                            ParseRec_ptr->item_type |= ITEM_WARNING;
+                        }
+                    }
+                    /* Is it a switch? */
+                    else if (item_type == ITEM_KEYWORD_SWITCH)
+                    { /* Yes */
+                        if ((ErrCode = Instrument_Switch(ParseCtx_ptr, idx,
+                            &ParseCtx_ptr->PROMSize,
+                            prom_ops_weights_ptr)) != NO_ERR)
+                        {
+                            goto ret;
+                        }
+                    }
+
+                    ///* Count Program Memory */
+                    //if ( item_type == ITEM_KEYWORD_FOR )
+                    //    loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
+                    //else if ( item_type == ITEM_KEYWORD_WHILE )
+                    //    whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
+                    //else if ( item_type & ( ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP ) )
+                    //    jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
+                }
             }
 
             /* Count Program Memory */   /* !!! VM: Moved to this place to count PROM size even for non-instrumented keywords */
-            if ( Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED) < 0 )
+            //if ( Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED) < 0 )
+            if (!IS_RESERVED_CHAR(*(ParseRec_ptr->item_start)))
             {
-                if (item_type == ITEM_KEYWORD_FOR)
+                /* Note, that the construct (item_type & ~ITEM_INSTRUMENTATION_OFF) has been added to be able to use == instead of &*/
+                if ((item_type & ~ITEM_INSTRUMENTATION_OFF) == ITEM_KEYWORD_FOR)
                     loops++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->loop;
-                else if (item_type == ITEM_KEYWORD_WHILE)
+                else if ((item_type & ~ITEM_INSTRUMENTATION_OFF) == ITEM_KEYWORD_WHILE)
                     whiles++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch * 2;
-                else if (item_type & (ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP))
+                else if ((item_type & ~ITEM_INSTRUMENTATION_OFF) & (ITEM_KEYWORD_CONTROL | ITEM_KEYWORD_IS_JUMP))
                     jumps++, ParseCtx_ptr->PROMSize += prom_ops_weights_ptr->branch;
             }
         }
@@ -5889,7 +5963,7 @@ static TOOL_ERROR Instrument_Calls(
                 }
                 /* System Allocation Function */
                 /* !! VM: Added && Find_Region(.) to avoid instrumentation of malloc() calls within WMC_TOOL_SKIP segments */
-                if ( (item_type & ITEM_FUNC_SYSTEM) && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED | ITEM_INSTRUMENTATION_OFF) < 0 )
+                if ((item_type & ITEM_FUNC_SYSTEM) && Find_Region(ParseRec_ptr->item_start, ParseTbl_ptr, ITEM_SKIPPED) < 0)
                 { /* Yes */
                     /* Insert Instrumentation */
                     if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, end, WORD_INSTRUMENT_STRING ) ) != NO_ERR )
@@ -6454,13 +6528,46 @@ TOOL_ERROR Setup_Regions(
                                       ITEM_PREPROC_ARGS | ITEM_PREPROC_UNDEF, ITEM_ENCLOSED, &idx ) ) == NULL )
         { /* No */
             
-            /* Error - #undef WMC_TOOL_SKIP missing ! */
-            ErrCode = ERR_EXPECTED_EOS;
-            Error("Unable to find matching #undef %s!", ErrCode, WMC_TOOL_SKIP_STRING);
-            goto ret;
+            ///* Error - #undef WMC_TOOL_SKIP missing ! */
+            //ErrCode = ERR_EXPECTED_EOS;
+            //Error("Unable to find matching #undef %s!", ErrCode, WMC_TOOL_SKIP_STRING);
+            //goto ret;
 
-            /* Skipped Region will End at EOF */
-            //end = file_ptr->Data + file_ptr->Size;
+            /* Go to EOF */
+            end = file_ptr->Data + file_ptr->Size;
+
+            /* Go back by skipping all lines preceded by AddedByWMC_Tool */
+
+             /* Go back to the beginning of the line */
+            end = Skip_Chars(end, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, BACKWARDS);
+            end = Goto_Chars(end, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, BACKWARDS);
+            end++;
+
+            /* Check, if line starts with "AddedByWMC_Tool */
+            while (strncmp(end, ADDED_TOOL_INFO_STRING, strlen(ADDED_TOOL_INFO_STRING)) == 0)
+            {
+                /* Go back to the beginning of the previous line */
+                end = Skip_Chars(end - 1, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, BACKWARDS);
+                end = Goto_Chars(end, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, BACKWARDS);
+                end++;
+            }
+
+            /* Go to the end of the current line */
+            end = Goto_Chars(end, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, FORWARD);
+
+            if (end == NULL)
+            {
+                /* reached the end of file */
+                end = file_ptr->Data + file_ptr->Size;
+            }
+            else if (IS_EOL_SEQ(end))
+            {
+                end += 2;
+            }
+            else
+            {
+                end++;
+            }
         }
         else
         { /* Yes */
@@ -6475,7 +6582,7 @@ TOOL_ERROR Setup_Regions(
         }
 
         /* Add Non-Instrumented Region */
-        if ( ( ErrCode = Add_Region( ParseTbl_ptr, ITEM_INSTRUMENTATION_OFF, ptr, end ) ) != NO_ERR )
+        if ( ( ErrCode = Add_Region( ParseTbl_ptr, ITEM_SKIPPED | ITEM_INSTRUMENTATION_OFF, ptr, end ) ) != NO_ERR )
         {
             goto ret;
         }
@@ -7335,13 +7442,13 @@ ret:
 }
 
 
-
 /*-------------------------------------------------------------------*
  * DesInstrument_ROM
  *-------------------------------------------------------------------*/
 
 TOOL_ERROR DesInstrument_ROM(
-    Parse_Context_def* ParseCtx_ptr)
+    Parse_Context_def* ParseCtx_ptr
+)
 {
     TOOL_ERROR ErrCode = NO_ERR;
 
@@ -7352,13 +7459,6 @@ TOOL_ERROR DesInstrument_ROM(
 
     start_const_data_prom_table = NULL;
     end_const_data_prom_table = NULL;
-
-    /* Check Previous State */
-    if (ParseCtx_ptr->State != SETUP_OK)
-    {
-        ErrCode = Internal_Error(__FUNCTION__);
-        goto ret;
-    }
 
     /* Set State Failure (by default) */
     ParseCtx_ptr->State = DI_FAILED;
@@ -7386,31 +7486,103 @@ TOOL_ERROR DesInstrument_ROM(
                 Delete(start, tmp);
             }
         }
-
-        /* 'Const_Data_PROM_Table' Declaration? */
+        /* Data Declaration? */
         else if (ParseRec_ptr->item_type & ITEM_DATA_DECL)
         { /* Yes */
 
-            /* Check if this ROM_Size_Lookup_Table declaration */
+            /* Check if this is ROM_Size_Lookup_Table declaration */
             if (strnistr(start, "ROM_Size_Lookup_Table", strlen("ROM_Size_Lookup_Table")) != NULL)
             {
-                /* Save the pointers - will be used later to check, if it was enclosed in #ifdef WMOPS .. #endif pair */
-                start_const_data_prom_table = start;
-                end_const_data_prom_table = tmp;
+                /* Go back to the beginning of the line */
+                start = Goto_Chars(start, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, BACKWARDS);
+                start++;
+
+                /* Check, if line starts with "AddedByWMC_Tool */
+                while (strncmp(start, ADDED_TOOL_INFO_STRING, strlen(ADDED_TOOL_INFO_STRING)) == 0)
+                {
+                    /* check, if line continues with "#ifdef WMOPS" */
+                    if (strncmp(start + strlen(ADDED_TOOL_INFO_STRING), "#ifdef WMOPS", strlen("#ifdef WMOPS")) == 0)
+                    {
+                        start_const_data_prom_table = start;
+                        break;
+                    }
+                    else
+                    {
+                        /* Go back to the beginning of the previous line */
+                        start = Skip_Chars(start - 1, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, BACKWARDS);
+                        start = Goto_Chars(start, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, BACKWARDS);
+                        start++;
+                    }
+                }
+
+                if (!IS_EOL_CHAR(PREV_CHAR(tmp)))
+                {
+                    /* Go to the beginning of the next line */
+                    tmp = Goto_Chars(tmp, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, FORWARD);
+                    tmp = Skip_Chars(tmp, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, FORWARD);
+                }
+
+                /* Check, if line starts with "AddedByWMC_Tool */
+                while (strncmp(tmp, ADDED_TOOL_INFO_STRING, strlen(ADDED_TOOL_INFO_STRING)) == 0)
+                {
+                    /* check, if line continues with "#endif" */
+                    if (strncmp(tmp + strlen(ADDED_TOOL_INFO_STRING), "#endif", strlen("#endif")) == 0)
+                    {
+                        /* Go to the end this line */
+                        tmp = Goto_Chars(tmp, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, FORWARD);
+
+                        /* Go past the EOL */
+                        if (IS_EOL_SEQ(tmp))
+                        {
+                            /* One Extra step, if it's CR+LF */
+                            tmp++;
+                        }
+                        tmp++;
+
+                        end_const_data_prom_table = tmp;
+                        break;
+                    }
+                    else
+                    {
+                        /* Go to the beginning of the next line */
+                        tmp = Goto_Chars(tmp, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, FORWARD);
+                        tmp = Skip_Chars(tmp, EOL_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, FORWARD);
+                    }
+                }
+
+                if (start_const_data_prom_table != NULL && end_const_data_prom_table != NULL)
+                {
+                    /* Delete the whole segment */
+                    Delete(start, tmp);
+                }
+
+                /* Item is no Longer a Declaration */
+                ParseRec_ptr->item_type ^= ITEM_DATA_DECL;
+
+                /* Item is no Longer Instrumentation */
+                ParseRec_ptr->item_type ^= ITEM_INSTRUMENTATION;
             }
-
-            /* Delete it */
-            Delete(start, tmp);
-
         }
-
-        /* One of the ROM counting functions, e.g. 'Const_Data_Size_Func(...)'? */
+        /* One of the 'Const_Data_Size_Func(...)' counting functions? */
         else if (ParseRec_ptr->item_type & ITEM_FUNC_DEF)
         { /* Yes */
             /* Is function prototype or block followed by some blank chars? -> delete them as well */
             if (ParseRec_ptr->item_type & (ITEM_FUNC_PROTO | ITEM_FUNC_BLOCK))
             {
-                tmp = Skip_Chars(tmp, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_COMMENT, FORWARD);
+                /* Skip all SPACE chars, if any */
+                tmp = Skip_Chars(tmp, SPACE_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_COMMENT, FORWARD);
+
+                /* Go past the EOL, if present */
+                if (IS_EOL_SEQ(tmp))
+                {
+                    /* Two chars, in case of CR+LF */
+                    tmp += 2;
+                }
+                else if (IS_EOL_CHAR(*tmp))
+                {
+                    /* One char, if only LF */
+                    tmp++;
+                }
             }
 
             /* Delete it */
@@ -7436,62 +7608,11 @@ TOOL_ERROR DesInstrument_ROM(
 
             /* Item is no Longer a Function Name/Proto/Block */
             ParseRec_ptr->item_type &= ~ITEM_FUNC_DEF;
+
+            /* Item is no Longer Instrumentation */
+            ParseRec_ptr->item_type ^= ITEM_INSTRUMENTATION;
         }
 
-        /* Item is no Longer Instrumentation */
-        ParseRec_ptr->item_type ^= ITEM_INSTRUMENTATION;
-    }
-
-    /* Check, if Const_Data_PROM_Table[] was enclosed in #ifdef WMOPS .. #endif pair */
-    if (start_const_data_prom_table != NULL && end_const_data_prom_table != NULL)
-    {
-        /* Go back to the first word preceding Const_Data_PROM_Table[] */
-        start = Skip_Chars(start_const_data_prom_table - 1, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE, BACKWARDS);
-
-        /* Proceed to the beginning of the line */
-        while (!IS_EOL_CHAR(PREV_CHAR(start)))
-        {
-            start--;
-        }
-
-        /* Check if line contains "#ifdef WMOPS" */
-        if ( (tmp = stristr(memstr(start, start_const_data_prom_table), "#ifdef")) != NULL)
-        {
-            tmp = Skip_Identifier(tmp, FORWARD);
-            tmp = Skip_Chars(tmp + 1, SPACE_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE);
-            if (strncmp(tmp, "WMOPS", strlen("WMOPS")) == 0)
-            {
-                /* Delete the whole line */
-                Delete(start, start_const_data_prom_table);
-            }
-        }
-
-        /* Go to the first word after Const_Data_PROM_Table[]  */
-        end = Skip_Chars(end_const_data_prom_table, BLANK_CHARS, ParseTbl_ptr, ITEM_ANY, ITEM_NONE);
-
-        /* Check if line contains "#endif" */
-        while (!IS_EOL_CHAR(NEXT_CHAR(end)))
-        {
-            if (*end == '#')
-            {
-                /* Found '#' */
-                if (strncmp(end, "#endif", strlen("#endif")) == 0)
-                {
-                    /* Go to EOL */
-                    while (*end != LF_CHAR)
-                    {
-                        end++;
-                    }
-
-                    /* Delete the whole line */
-                    Delete(end_const_data_prom_table, end);
-
-                    break;
-                }
-            }
-
-            end++;
-        }
     }
 
     /* Find the print_mem() function */
@@ -7521,7 +7642,7 @@ TOOL_ERROR DesInstrument_ROM(
     /* Set State Success */
     ParseCtx_ptr->State = DESINSTRUMENTED;
 
-ret:
+//ret:
     return ErrCode;
 }
 
@@ -8112,7 +8233,9 @@ TOOL_ERROR Include_Header(
 
 TOOL_ERROR Instrument(
     Parse_Context_def *ParseCtx_ptr,
-    bool instrument_ROM )
+    bool instrument_ROM, 
+    bool skip_cmplx_instrum
+)
 {
     TOOL_ERROR ErrCode = NO_ERR;
 
@@ -8122,6 +8245,7 @@ TOOL_ERROR Instrument(
         ErrCode = Internal_Error( __FUNCTION__ );
         goto ret;
     }
+
     /* Set State Failure (by default) */
     ParseCtx_ptr->State = INS_FAILED;
 
@@ -8149,7 +8273,7 @@ TOOL_ERROR Instrument(
     /* Erase Function Call Table */
     ParseCtx_ptr->FctCallTbl.Size = 0;
 
-    if ( ( ErrCode = Instrument_Calls( ParseCtx_ptr ) ) != NO_ERR )
+    if ((ErrCode = Instrument_Calls(ParseCtx_ptr)) != NO_ERR)
     {
         goto ret;
     }
@@ -8170,7 +8294,7 @@ TOOL_ERROR Instrument(
     }
 
     is_function_present = 0;
-    if (idx > 0)
+    if ( idx > 0 )
     {
         is_function_present = 1;
     }
@@ -8263,17 +8387,20 @@ TOOL_ERROR Instrument(
         /*                     $(...) inserted on same Line as #pragma message for Skipped Region */
     }
 
-    if ( ( ErrCode = Instrument_Operators( ParseCtx_ptr ) ) != NO_ERR )
+    if (!skip_cmplx_instrum)
+    {
+        if ((ErrCode = Instrument_Operators(ParseCtx_ptr)) != NO_ERR)
+        {
+            goto ret;
+        }
+    }
+
+    if ((ErrCode = Instrument_Keywords(ParseCtx_ptr, skip_cmplx_instrum)) != NO_ERR)
     {
         goto ret;
     }
 
-    if ( ( ErrCode = Instrument_Keywords( ParseCtx_ptr ) ) != NO_ERR )
-    {
-        goto ret;
-    }
-
-    if ( instrument_ROM && is_cnst_data_present)
+    if ( instrument_ROM && is_cnst_data_present )
     {
         if ( ( ErrCode = Instrument_ROM( ParseCtx_ptr) ) != NO_ERR )
         {
@@ -8389,7 +8516,6 @@ TOOL_ERROR Instrument(
     }
 
     /* Insert PROM_Size_Func() function */
-    //if (is_function_present)
     if (ParseCtx_ptr->PROMSize > 0)
     {
         if ((ErrCode = Instrument_PROM(ParseCtx_ptr)) != NO_ERR)
@@ -8432,7 +8558,7 @@ TOOL_ERROR Instrument(
         }
         ptr3 = NULL;
         /* Find Last 'return' keyword in this Function (this is used for the Function Leave Mechanism) */
-        while ( ( ptr = Find_String( memstr( ptr, ptr2 ), RETURN_KW_STRING, ParseTbl_ptr, ITEM_KEYWORD_RETURN ) ) != NULL )
+        while ( ( ptr = Find_String( memstr( ptr, ptr2 ), "return", ParseTbl_ptr, ITEM_KEYWORD_RETURN ) ) != NULL )
         {
             /* Copy and Advance */
             ptr3 = ptr++;
@@ -8548,7 +8674,7 @@ TOOL_ERROR Instrument(
             }
 
             /* Add 'return' keyword */
-            if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr, RETURN_KW_STRING WORD_INSTRUMENT_STRING ADDED_TOOL_INFO_STRING ";" ) ) != NO_ERR )
+            if ( ( ErrCode = Add_Insertion( &ParseCtx_ptr->InsertTbl, ptr, "return_" ADDED_TOOL_INFO_STRING ";" ) ) != NO_ERR )
             {
                 goto ret;
             }

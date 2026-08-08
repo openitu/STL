@@ -31,7 +31,7 @@ void Free_Pointer_Table_Memory( Pointer_Tbl_def *PointerTable_ptr );
 TOOL_ERROR Setup_Regions( Parse_Context_def *ParseContext_ptr, bool verbose );
 TOOL_ERROR DesInstrument( Parse_Context_def *ParseContext_ptr, bool keep_manual );
 TOOL_ERROR DesInstrument_ROM(Parse_Context_def* ParseCtx_ptr);
-TOOL_ERROR Instrument(Parse_Context_def* ParseContext_ptr, bool instr_const);
+TOOL_ERROR Instrument(Parse_Context_def* ParseContext_ptr, bool instr_const, bool skip_cmplx_instrum);
 TOOL_ERROR Instrument_Const_Data_PROM_Table( Parse_Context_def *ParseContext_ptr, T_FILE_BOOK file_book[], int nRecords );
 TOOL_ERROR Finalize( Parse_Context_def *ParseContext_ptr );
 TOOL_ERROR Include_Header(Parse_Context_def* ParseContext_ptr, char** ptr_end_preproc_block );
