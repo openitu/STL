@@ -163,7 +163,11 @@ Word64 W_sub_nosat (Word64 L64_var1, Word64 L64_var2) {
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
 |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word64 W_shl_o (Word64 L64_var1, Word16 var2, Flag* Overflow) {
+#else /* BASOP_NOGLOB */
 Word64 W_shl (Word64 L64_var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
  
   Word64 L64_var_out = 0LL;
  
@@ -176,13 +180,21 @@ Word64 W_shl (Word64 L64_var1, Word16 var2) {
   else { 
     for (; var2 > 0; var2--) { 
       if (L64_var1 > (Word64) 0X3fffffffffffffffLL) { 
+#ifdef BASOP_NOGLOB
+        set_flag(Overflow);
+#else /* BASOP_NOGLOB */
         Overflow = 1; 
+#endif /* BASOP_NOGLOB */
         L64_var_out = (Word64) 0X7fffffffffffffffLL; 
         break; 
       } 
       else { 
         if (L64_var1 < (Word64) 0xc000000000000000LL) { 
+#ifdef BASOP_NOGLOB
+          set_flag(Overflow);
+#else /* BASOP_NOGLOB */
           Overflow = 1; 
+#endif /* BASOP_NOGLOB */
           L64_var_out = (Word64)0x8000000000000000LL; 
           break; 
         } 
@@ -199,6 +211,12 @@ Word64 W_shl (Word64 L64_var1, Word16 var2) {
  
   return (L64_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word64 W_shl (Word64 L64_var1, Word16 var2) {
+  return W_shl_o(L64_var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1088,7 +1106,11 @@ Word32 W_shl_sat_l (Word64 L64_var, Word32 n) {
 |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.                     |
 |__________________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 W_round48_L_o (Word64 L64_var1, Flag* Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 W_round48_L (Word64 L64_var1) { 
+#endif /* BASOP_NOGLOB */
   Word64 L64_var_out; 
   Word32 L_result;
  
@@ -1103,7 +1125,11 @@ Word32 W_round48_L (Word64 L64_var1) {
   if ( ( (L64_var1 ^ L64_var2) & L64_MIN) == 0) { 
     if ( (L64_var_out ^ L64_var1) & L64_MIN) { 
       L64_var_out = (L64_var1 < 0) ? L64_MIN : L64_MAX; 
+#ifdef BASOP_NOGLOB
+      set_flag(Overflow);
+#else /* BASOP_NOGLOB */
       Overflow = 1; 
+#endif /* BASOP_NOGLOB */
     } 
   }
   L_result = W_extract_h (L64_var_out);
@@ -1115,6 +1141,12 @@ Word32 W_round48_L (Word64 L64_var1) {
  
   return (L_result);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 W_round48_L (Word64 L64_var1) {
+  return W_round48_L_o(L64_var1, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 /*__________________________________________________________________________________
 |                                                                                  |
@@ -1143,7 +1175,11 @@ Word32 W_round48_L (Word64 L64_var1) {
 |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                       |
 |__________________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 W_round32_s_o (Word64 L64_var1, Flag* Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 W_round32_s (Word64 L64_var1) { 
+#endif /* BASOP_NOGLOB */
   Word64 L64_var_out; 
   Word32 L_var; 
   Word16 var_out;
@@ -1159,7 +1195,11 @@ Word16 W_round32_s (Word64 L64_var1) {
   if (((L64_var1 ^ L64_var2) & L64_MIN) == 0) { 
     if ((L64_var_out ^ L64_var1) & L64_MIN) { 
       L64_var_out = (L64_var1 < 0) ? L64_MIN : L64_MAX; 
+#ifdef BASOP_NOGLOB
+      set_flag(Overflow);
+#else /* BASOP_NOGLOB */
       Overflow = 1; 
+#endif /* BASOP_NOGLOB */
     } 
   } 
   L_var = W_extract_h (L64_var_out); 
@@ -1173,6 +1213,13 @@ Word16 W_round32_s (Word64 L64_var1) {
  
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 W_round32_s (Word64 L64_var1) {
+  return W_round32_s_o(L64_var1, NULL);
+}
+#endif /* BASOP_NOGLOB */
+
 /*___________________________________________________________________________
 |                                                                           |
 |   Function Name : W_norm                                                  |
@@ -1258,7 +1305,11 @@ Word16 W_norm (Word64 L64_var1) {
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.     |
 |_______________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word64 W_add_o (Word64 L64_var1, Word64 L64_var2, Flag* Overflow) {
+#else /* BASOP_NOGLOB */
 Word64 W_add (Word64 L64_var1, Word64 L64_var2) { 
+#endif /* BASOP_NOGLOB */
   Word64 L64_var_out;
  
   L64_var_out = L64_var1 + L64_var2;
@@ -1266,7 +1317,11 @@ Word64 W_add (Word64 L64_var1, Word64 L64_var2) {
     if (((L64_var1 ^ L64_var2) & MIN_64) == 0) {
         if ((L64_var_out ^ L64_var1) & MIN_64) {
             L64_var_out = (L64_var1 < 0) ? MIN_64 : MAX_64;
+#ifdef BASOP_NOGLOB
+            set_flag(Overflow);
+#else /* BASOP_NOGLOB */
             Overflow = 1;
+#endif /* BASOP_NOGLOB */
         }
     }
 
@@ -1275,6 +1330,12 @@ Word64 W_add (Word64 L64_var1, Word64 L64_var2) {
 #endif 
   return L64_var_out;
 }
+
+#ifdef BASOP_NOGLOB
+Word64 W_add (Word64 L64_var1, Word64 L64_var2) {
+  return W_add_o(L64_var1, L64_var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 /*______________________________________________________________________________
 |                                                                               |
@@ -1307,7 +1368,11 @@ Word64 W_add (Word64 L64_var1, Word64 L64_var2) {
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.     |
 |_______________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word64 W_sub_o (Word64 L64_var1, Word64 L64_var2, Flag* Overflow) {
+#else /* BASOP_NOGLOB */
 Word64 W_sub (Word64 L64_var1, Word64 L64_var2) { 
+#endif /* BASOP_NOGLOB */
   Word64 L64_var_out;
  
   L64_var_out = L64_var1 - L64_var2;
@@ -1315,7 +1380,11 @@ Word64 W_sub (Word64 L64_var1, Word64 L64_var2) {
     if (((L64_var1 ^ L64_var2) & MIN_64) != 0) {
         if ((L64_var_out ^ L64_var1) & MIN_64) {
             L64_var_out = (L64_var1 < 0) ? MIN_64 : MAX_64;
+#ifdef BASOP_NOGLOB
+            set_flag(Overflow);
+#else /* BASOP_NOGLOB */
             Overflow = 1;
+#endif /* BASOP_NOGLOB */
         }
     }
 
@@ -1324,6 +1393,12 @@ Word64 W_sub (Word64 L64_var1, Word64 L64_var2) {
 #endif 
   return L64_var_out;
 }
+
+#ifdef BASOP_NOGLOB
+Word64 W_sub (Word64 L64_var1, Word64 L64_var2) {
+  return W_sub_o(L64_var1, L64_var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*______________________________________________________________________________
@@ -1353,12 +1428,20 @@ Word64 W_sub (Word64 L64_var1, Word64 L64_var2) {
 |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL.     |
 |_______________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word64 W_neg_o (Word64 L64_var1, Flag* Overflow) {
+#else /* BASOP_NOGLOB */
 Word64 W_neg (Word64 L64_var1) {
+#endif /* BASOP_NOGLOB */
     Word64 L64_var_out;
      
   if (L64_var1 == MIN_64) { 
     L64_var_out = MAX_64;
+#ifdef BASOP_NOGLOB
+        set_flag(Overflow);
+#else /* BASOP_NOGLOB */
         Overflow = 1; 
+#endif /* BASOP_NOGLOB */
   } 
   else { 
     L64_var_out = -L64_var1; 
@@ -1371,6 +1454,12 @@ Word64 W_neg (Word64 L64_var1) {
     return (L64_var_out);
 
 }
+
+#ifdef BASOP_NOGLOB
+Word64 W_neg (Word64 L64_var1) {
+  return W_neg_o(L64_var1, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1400,12 +1489,20 @@ Word64 W_neg (Word64 L64_var1) {
  |       range : 0x80000000 00000000LL <= L64_var1 <= 0x7fffffff ffffffffLL. |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word64 W_abs_o (Word64 L64_var1, Flag* Overflow) {
+#else /* BASOP_NOGLOB */
 Word64 W_abs (Word64 L64_var1) {
+#endif /* BASOP_NOGLOB */
     Word64 L64_var_out;
 
     if (L64_var1 == MIN_64) {
         L64_var_out = MAX_64; 
+#ifdef BASOP_NOGLOB
+    set_flag(Overflow);
+#else /* BASOP_NOGLOB */
     Overflow = 1;
+#endif /* BASOP_NOGLOB */
     }
     else {
         if (L64_var1 < 0) {
@@ -1422,6 +1519,12 @@ Word64 W_abs (Word64 L64_var1) {
 
     return (L64_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word64 W_abs (Word64 L64_var1) {
+  return W_abs_o(L64_var1, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 /*_________________________________________________________________________________________________
 |                                                                                                 |
@@ -1455,12 +1558,20 @@ Word64 W_abs (Word64 L64_var1) {
 |             range : 0x80000000 00000000LL <= L64_var_out <= 0x7fffffff ffffffffLL.              |
 |_________________________________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word64 W_mult_32_32_o(Word32 L_var1, Word32 L_var2, Flag* Overflow) {
+#else /* BASOP_NOGLOB */
 Word64 W_mult_32_32(Word32 L_var1, Word32 L_var2) { 
+#endif /* BASOP_NOGLOB */
   Word64  L64_var_out; 
    
   if ((L_var1 == MIN_32) && (L_var2 == MIN_32)) { 
     L64_var_out = MAX_64; 
+#ifdef BASOP_NOGLOB
+    set_flag(Overflow);
+#else /* BASOP_NOGLOB */
     Overflow = 1; 
+#endif /* BASOP_NOGLOB */
   } 
   else { 
     L64_var_out = ((Word64 )L_var1*L_var2) << 1; 
@@ -1471,6 +1582,12 @@ Word64 W_mult_32_32(Word32 L_var1, Word32 L_var2) {
 #endif /* if WMOPS */ 
   return L64_var_out;
 }
+
+#ifdef BASOP_NOGLOB
+Word64 W_mult_32_32(Word32 L_var1, Word32 L_var2) {
+  return W_mult_32_32_o(L_var1, L_var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 /*_________________________________________________________________________________________________
 |                                                                                                 |

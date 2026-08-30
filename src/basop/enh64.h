@@ -63,6 +63,20 @@ UWord64 W_lshl (UWord64 L64_var1, Word16 var2);
 UWord64 W_lshr (UWord64 L64_var1, Word16 var2);
 Word32 W_round64_L (Word64 L64_var1) ;
 
+#ifdef BASOP_NOGLOB
+/*
+ * Overflowing operators
+ */
+Word64 W_shl_o (Word64 L64_var1, Word16 var2, Flag* Overflow);
+Word32 W_round48_L_o (Word64 L64_var1, Flag* Overflow);
+Word16 W_round32_s_o (Word64 L64_var1, Flag* Overflow);
+Word64 W_add_o (Word64 L64_var1, Word64 L64_var2, Flag* Overflow);
+Word64 W_sub_o (Word64 L64_var1, Word64 L64_var2, Flag* Overflow);
+Word64 W_neg_o (Word64 L64_var1, Flag* Overflow);
+Word64 W_abs_o (Word64 L64_var1, Flag* Overflow);
+Word64 W_mult_32_32_o(Word32 L_var1, Word32 L_var2, Flag* Overflow);
+#endif /* BASOP_NOGLOB */
+
 #endif /* #ifdef ENH_64_BIT_OPERATOR */
 
 #endif /*_ENH64_H*/

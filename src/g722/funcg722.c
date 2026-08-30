@@ -1227,6 +1227,9 @@ Word16 scaleh (Word16 nbph) {
 */
 void uppol1 (Word16 al[], Word16 plt[]) {
   Word16 sg0, sg1, wd1, wd2, wd3, apl1;
+#ifdef BASOP_NOGLOB
+  Flag Overflow;
+#endif /* BASOP_NOGLOB */
 
   sg0 = shr (plt[0], 15);
   sg1 = shr (plt[1], 15);
@@ -1243,14 +1246,22 @@ void uppol1 (Word16 al[], Word16 plt[]) {
   wd2 = mult (al[1], 32640);
   apl1 = add (wd1, wd2);
   wd3 = sub (15360, al[2]);
+#ifdef BASOP_NOGLOB
+  if (sub_o (apl1, wd3, &Overflow) > 0) {
+#else /* BASOP_NOGLOB */
   if (sub (apl1, wd3) > 0) {
+#endif /* BASOP_NOGLOB */
     apl1 = wd3;
 #ifdef WMOPS
     move16 ();
 #endif
   }
   ELSE {
+#ifdef BASOP_NOGLOB
+    if (add_o (apl1, wd3, &Overflow) < 0) {
+#else /* BASOP_NOGLOB */
     if (add (apl1, wd3) < 0) {
+#endif /* BASOP_NOGLOB */
       apl1 = negate (wd3);
     }
   }
@@ -1291,14 +1302,25 @@ void uppol1 (Word16 al[], Word16 plt[]) {
 */
 void uppol2 (Word16 al[], Word16 plt[]) {
   Word16 sg0, sg1, sg2, wd1, wd2, wd3, wd4, wd5, apl2;
+#ifdef BASOP_NOGLOB
+  Flag Overflow;
+#endif /* BASOP_NOGLOB */
 
   sg0 = shr (plt[0], 15);
   sg1 = shr (plt[1], 15);
   sg2 = shr (plt[2], 15);
+#ifdef BASOP_NOGLOB
+  wd1 = shl_o (al[1], 2, &Overflow);
+#else /* BASOP_NOGLOB */
   wd1 = shl (al[1], 2);
+#endif /* BASOP_NOGLOB */
   wd2 = add (0, wd1);
   if (sub (sg0, sg1) == 0) {
+#ifdef BASOP_NOGLOB
+    wd2 = sub_o (0, wd1, &Overflow);
+#else /* BASOP_NOGLOB */
     wd2 = sub (0, wd1);
+#endif /* BASOP_NOGLOB */
   }
   wd2 = shr (wd2, 7);
   wd3 = -128;

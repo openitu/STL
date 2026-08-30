@@ -124,6 +124,9 @@ HISTORY:
 #include <stdio.h>
 #include <stdlib.h>
 #include "stl.h"
+#ifdef BASOP_NOGLOB
+#include <assert.h>
+#endif /* BASOP_NOGLOB */
 
 
 #if (WMOPS)
@@ -137,6 +140,9 @@ extern int currCounter;
  |   Local Functions                                                         |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+static Word16 saturate_o (Word32 L_var1, Flag * Overflow);
+#endif /* BASOP_NOGLOB */
 static Word16 saturate (Word32 L_var1);
 
 
@@ -145,8 +151,15 @@ static Word16 saturate (Word32 L_var1);
  |   Constants and Globals                                                   |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+/*
+Flag BASOP_Overflow = 0;
+Flag BASOP_Carry = 0;
+*/
+#else /* BASOP_NOGLOB */
 Flag Overflow = 0;
 Flag Carry = 0;
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -181,14 +194,26 @@ Flag Carry = 0;
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+static Word16 saturate_o (Word32 L_var1, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 static Word16 saturate (Word32 L_var1) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
 
   if (L_var1 > 0X00007fffL) {
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+#else /* BASOP_NOGLOB */
     Overflow = 1;
+#endif /* BASOP_NOGLOB */
     var_out = MAX_16;
   } else if (L_var1 < (Word32) 0xffff8000L) {
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+#else /* BASOP_NOGLOB */
     Overflow = 1;
+#endif /* BASOP_NOGLOB */
     var_out = MIN_16;
   } else {
     var_out = extract_l (L_var1);
@@ -199,6 +224,12 @@ static Word16 saturate (Word32 L_var1) {
 
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+static Word16 saturate (Word32 L_var1) {
+  return saturate_o (L_var1, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -234,18 +265,32 @@ static Word16 saturate (Word32 L_var1) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 add_o (Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 add (Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
   Word32 L_sum;
 
   L_sum = (Word32) var1 + var2;
+#ifdef BASOP_NOGLOB
+  var_out = saturate_o (L_sum, Overflow);
+#else /* BASOP_NOGLOB */
   var_out = saturate (L_sum);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].add++;
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 add (Word16 var1, Word16 var2) {
+  return add_o (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -281,18 +326,32 @@ Word16 add (Word16 var1, Word16 var2) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 sub_o (Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 sub (Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
   Word32 L_diff;
 
   L_diff = (Word32) var1 - var2;
+#ifdef BASOP_NOGLOB
+  var_out = saturate_o (L_diff, Overflow);
+#else /* BASOP_NOGLOB */
   var_out = saturate (L_diff);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].sub++;
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 sub (Word16 var1, Word16 var2) {
+  return sub_o (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -376,7 +435,11 @@ Word16 abs_s (Word16 var1) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 shl_o (Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 shl (Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
   Word32 result;
 
@@ -393,7 +456,11 @@ Word16 shl (Word16 var1, Word16 var2) {
     result = (Word32) var1 *((Word32) 1 << var2);
 
     if ((var2 > 15 && var1 != 0) || (result != (Word32) ((Word16) result))) {
+#ifdef BASOP_NOGLOB
+      set_flag (Overflow);
+#else /* BASOP_NOGLOB */
       Overflow = 1;
+#endif /* BASOP_NOGLOB */
       var_out = (var1 > 0) ? MAX_16 : MIN_16;
     } else {
       var_out = extract_l (result);
@@ -409,6 +476,13 @@ Word16 shl (Word16 var1, Word16 var2) {
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 shl (Word16 var1, Word16 var2) {
+  return shl_o (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
+
 
 
 /*___________________________________________________________________________
@@ -445,14 +519,22 @@ Word16 shl (Word16 var1, Word16 var2) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 shr_o (Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 shr (Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
 
   if (var2 < 0) {
     if (var2 < -16)
       var2 = -16;
     var2 = -var2;
+#ifdef BASOP_NOGLOB
+    var_out = shl_o (var1, var2, Overflow);
+#else /* BASOP_NOGLOB */
     var_out = shl (var1, var2);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
     multiCounter[currCounter].shl--;
@@ -474,6 +556,12 @@ Word16 shr (Word16 var1, Word16 var2) {
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 shr (Word16 var1, Word16 var2) {
+  return shr_o (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -510,7 +598,11 @@ Word16 shr (Word16 var1, Word16 var2) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 mult_o (Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 mult (Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
   Word32 L_product;
 
@@ -521,13 +613,23 @@ Word16 mult (Word16 var1, Word16 var2) {
   if (L_product & (Word32) 0x00010000L)
     L_product = L_product | (Word32) 0xffff0000L;
 
+#ifdef BASOP_NOGLOB
+  var_out = saturate_o (L_product, Overflow);
+#else /* BASOP_NOGLOB */
   var_out = saturate (L_product);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].mult++;
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 mult (Word16 var1, Word16 var2) {
+  return mult_o (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -564,7 +666,11 @@ Word16 mult (Word16 var1, Word16 var2) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_mult_o (Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_mult (Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
 
   L_var_out = (Word32) var1 *(Word32) var2;
@@ -572,7 +678,11 @@ Word32 L_mult (Word16 var1, Word16 var2) {
   if (L_var_out != (Word32) 0x40000000L) {
     L_var_out *= 2;
   } else {
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+#else /* BASOP_NOGLOB */
     Overflow = 1;
+#endif /* BASOP_NOGLOB */
     L_var_out = MAX_32;
   }
 
@@ -581,6 +691,12 @@ Word32 L_mult (Word16 var1, Word16 var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_mult (Word16 var1, Word16 var2) {
+  return L_mult_o (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -731,11 +847,19 @@ Word16 extract_l (Word32 L_var1) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 round_fx_o (Word32 L_var1, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 round_fx (Word32 L_var1) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
   Word32 L_rounded;
 
+#ifdef BASOP_NOGLOB
+  L_rounded = L_add_o (L_var1, (Word32) 0x00008000L, Overflow);
+#else /* BASOP_NOGLOB */
   L_rounded = L_add (L_var1, (Word32) 0x00008000L);
+#endif /* BASOP_NOGLOB */
   var_out = extract_h (L_rounded);
 
 #if (WMOPS)
@@ -745,6 +869,12 @@ Word16 round_fx (Word32 L_var1) {
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 round_fx (Word32 L_var1) {
+  return round_fx_o (L_var1, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -783,12 +913,21 @@ Word16 round_fx (Word32 L_var1) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_mac_o (Word32 L_var3, Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_mac (Word32 L_var3, Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
   Word32 L_product;
 
+#ifdef BASOP_NOGLOB
+  L_product = L_mult_o (var1, var2, Overflow);
+  L_var_out = L_add_o (L_var3, L_product, Overflow);
+#else /* BASOP_NOGLOB */
   L_product = L_mult (var1, var2);
   L_var_out = L_add (L_var3, L_product);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].L_mult--;
@@ -797,6 +936,12 @@ Word32 L_mac (Word32 L_var3, Word16 var1, Word16 var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_mac (Word32 L_var3, Word16 var1, Word16 var2) {
+  return L_mac_o (L_var3, var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -835,12 +980,21 @@ Word32 L_mac (Word32 L_var3, Word16 var1, Word16 var2) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_msu_o (Word32 L_var3, Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_msu (Word32 L_var3, Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
   Word32 L_product;
 
+#ifdef BASOP_NOGLOB
+  L_product = L_mult_o (var1, var2, Overflow);
+  L_var_out = L_sub_o (L_var3, L_product, Overflow);
+#else /* BASOP_NOGLOB */
   L_product = L_mult (var1, var2);
   L_var_out = L_sub (L_var3, L_product);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].L_mult--;
@@ -849,6 +1003,12 @@ Word32 L_msu (Word32 L_var3, Word16 var1, Word16 var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_msu (Word32 L_var3, Word16 var1, Word16 var2) {
+  return L_msu_o (L_var3, var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -889,15 +1049,27 @@ Word32 L_msu (Word32 L_var3, Word16 var1, Word16 var2) {
  |                                                                           |
  |   Caution :                                                               |
  |                                                                           |
+#ifdef BASOP_NOGLOB
+ |    In some cases the BASOP_Carry flag has to be cleared or set before using     |
+#else
  |    In some cases the Carry flag has to be cleared or set before using     |
+#endif
  |    operators which take into account its value.                           |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_macNs_co (Word32 L_var3, Word16 var1, Word16 var2, Flag *Carry, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_macNs (Word32 L_var3, Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
 
   L_var_out = L_mult (var1, var2);
+#ifdef BASOP_NOGLOB
+  L_var_out = L_add_co (L_var3, L_var_out, Carry, Overflow);
+#else /* BASOP_NOGLOB */
   L_var_out = L_add_c (L_var3, L_var_out);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].L_mult--;
@@ -907,6 +1079,11 @@ Word32 L_macNs (Word32 L_var3, Word16 var1, Word16 var2) {
   return (L_var_out);
 }
 
+#ifdef BASOP_NOGLOB
+Word32 L_macNs (Word32 L_var3, Word16 var1, Word16 var2) {
+  return L_macNs_co (L_var3, var1, var2, NULL, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -946,15 +1123,27 @@ Word32 L_macNs (Word32 L_var3, Word16 var1, Word16 var2) {
  |                                                                           |
  |   Caution :                                                               |
  |                                                                           |
+#ifdef BASOP_NOGLOB
+ |    In some cases the BASOP_Carry flag has to be cleared or set before using     |
+#else
  |    In some cases the Carry flag has to be cleared or set before using     |
+#endif
  |    operators which take into account its value.                           |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_msuNs_co (Word32 L_var3, Word16 var1, Word16 var2, Flag *Carry, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_msuNs (Word32 L_var3, Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
 
   L_var_out = L_mult (var1, var2);
+#ifdef BASOP_NOGLOB
+  L_var_out = L_sub_co (L_var3, L_var_out, Carry, Overflow);
+#else /* BASOP_NOGLOB */
   L_var_out = L_sub_c (L_var3, L_var_out);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].L_mult--;
@@ -964,6 +1153,12 @@ Word32 L_msuNs (Word32 L_var3, Word16 var1, Word16 var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_msuNs (Word32 L_var3, Word16 var1, Word16 var2) {
+  return L_msuNs_co (L_var3, var1, var2, NULL, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -997,7 +1192,11 @@ Word32 L_msuNs (Word32 L_var3, Word16 var1, Word16 var2) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_add_o (Word32 L_var1, Word32 L_var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_add (Word32 L_var1, Word32 L_var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
 
   L_var_out = L_var1 + L_var2;
@@ -1005,7 +1204,11 @@ Word32 L_add (Word32 L_var1, Word32 L_var2) {
   if (((L_var1 ^ L_var2) & MIN_32) == 0) {
     if ((L_var_out ^ L_var1) & MIN_32) {
       L_var_out = (L_var1 < 0) ? MIN_32 : MAX_32;
+#ifdef BASOP_NOGLOB
+      set_flag (Overflow);
+#else /* BASOP_NOGLOB */
       Overflow = 1;
+#endif /* BASOP_NOGLOB */
     }
   }
 #if (WMOPS)
@@ -1013,6 +1216,12 @@ Word32 L_add (Word32 L_var1, Word32 L_var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_add (Word32 L_var1, Word32 L_var2) {
+  return L_add_o (L_var1, L_var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1046,7 +1255,11 @@ Word32 L_add (Word32 L_var1, Word32 L_var2) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_sub_o (Word32 L_var1, Word32 L_var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_sub (Word32 L_var1, Word32 L_var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
 
   L_var_out = L_var1 - L_var2;
@@ -1054,7 +1267,11 @@ Word32 L_sub (Word32 L_var1, Word32 L_var2) {
   if (((L_var1 ^ L_var2) & MIN_32) != 0) {
     if ((L_var_out ^ L_var1) & MIN_32) {
       L_var_out = (L_var1 < 0L) ? MIN_32 : MAX_32;
+#ifdef BASOP_NOGLOB
+      set_flag (Overflow);
+#else /* BASOP_NOGLOB */
       Overflow = 1;
+#endif /* BASOP_NOGLOB */
     }
   }
 #if (WMOPS)
@@ -1062,6 +1279,12 @@ Word32 L_sub (Word32 L_var1, Word32 L_var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_sub (Word32 L_var1, Word32 L_var2) {
+  return L_sub_o (L_var1, L_var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1071,7 +1294,11 @@ Word32 L_sub (Word32 L_var1, Word32 L_var2) {
  |   Purpose :                                                               |
  |                                                                           |
  |   Performs 32 bits addition of the two 32 bits variables (L_var1+L_var2+C)|
+#ifdef BASOP_NOGLOB
+ |   with carry. No saturation. Generate carry and BASOP_Overflow values. The car- |
+#else
  |   with carry. No saturation. Generate carry and Overflow values. The car- |
+#endif
  |   ry and overflow values are binary variables which can be tested and as- |
  |   signed values.                                                          |
  |                                                                           |
@@ -1097,55 +1324,108 @@ Word32 L_sub (Word32 L_var1, Word32 L_var2) {
  |                                                                           |
  |   Caution :                                                               |
  |                                                                           |
+#ifdef BASOP_NOGLOB
+ |    In some cases the BASOP_Carry flag has to be cleared or set before using     |
+#else
  |    In some cases the Carry flag has to be cleared or set before using     |
+#endif
  |    operators which take into account its value.                           |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_add_co (Word32 L_var1, Word32 L_var2, Flag *Carry, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_add_c (Word32 L_var1, Word32 L_var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
   Word32 L_test;
   Flag carry_int = 0;
 
+#ifdef BASOP_NOGLOB
+  L_var_out = L_var1 + L_var2 + get_flag (Carry);
+#else /* BASOP_NOGLOB */
   L_var_out = L_var1 + L_var2 + Carry;
+#endif /* BASOP_NOGLOB */
 
   L_test = L_var1 + L_var2;
 
   if ((L_var1 > 0) && (L_var2 > 0) && (L_test < 0)) {
+#ifdef BASOP_NOGLOB
+    set_flag (Overflow);
+#else /* BASOP_NOGLOB */
     Overflow = 1;
+#endif /* BASOP_NOGLOB */
     carry_int = 0;
   } else {
     if ((L_var1 < 0) && (L_var2 < 0)) {
       if (L_test >= 0) {
+#ifdef BASOP_NOGLOB
+        set_flag (Overflow);
+#else /* BASOP_NOGLOB */
         Overflow = 1;
+#endif /* BASOP_NOGLOB */
         carry_int = 1;
       } else {
+#ifdef BASOP_NOGLOB
+        unset_flag (Overflow);
+#else /* BASOP_NOGLOB */
         Overflow = 0;
+#endif /* BASOP_NOGLOB */
         carry_int = 1;
       }
     } else {
       if (((L_var1 ^ L_var2) < 0) && (L_test >= 0)) {
+#ifdef BASOP_NOGLOB
+        unset_flag (Overflow);
+#else /* BASOP_NOGLOB */
         Overflow = 0;
+#endif /* BASOP_NOGLOB */
         carry_int = 1;
       } else {
+#ifdef BASOP_NOGLOB
+        unset_flag (Overflow);
+#else /* BASOP_NOGLOB */
         Overflow = 0;
+#endif /* BASOP_NOGLOB */
         carry_int = 0;
       }
     }
   }
 
+#ifdef BASOP_NOGLOB
+  if (get_flag (Carry)) {
+#else /* BASOP_NOGLOB */
   if (Carry) {
+#endif /* BASOP_NOGLOB */
     if (L_test == MAX_32) {
+#ifdef BASOP_NOGLOB
+      set_flag (Overflow);
+      carry_int ? set_flag (Carry) : unset_flag (Carry);
+#else /* BASOP_NOGLOB */
       Overflow = 1;
       Carry = carry_int;
+#endif /* BASOP_NOGLOB */
     } else {
       if (L_test == (Word32) 0xFFFFFFFFL) {
+#ifdef BASOP_NOGLOB
+        set_flag (Carry);
+#else /* BASOP_NOGLOB */
         Carry = 1;
+#endif /* BASOP_NOGLOB */
       } else {
+#ifdef BASOP_NOGLOB
+        carry_int ? set_flag (Carry) : unset_flag (Carry);
+#else /* BASOP_NOGLOB */
         Carry = carry_int;
+#endif /* BASOP_NOGLOB */
       }
     }
   } else {
+#ifdef BASOP_NOGLOB
+    carry_int ? set_flag (Carry) : unset_flag (Carry);
+#else /* BASOP_NOGLOB */
     Carry = carry_int;
+#endif /* BASOP_NOGLOB */
   }
 
 #if (WMOPS)
@@ -1153,6 +1433,12 @@ Word32 L_add_c (Word32 L_var1, Word32 L_var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_add_c (Word32 L_var1, Word32 L_var2) {
+  return L_add_co (L_var1, L_var2, NULL, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1162,7 +1448,11 @@ Word32 L_add_c (Word32 L_var1, Word32 L_var2) {
  |   Purpose :                                                               |
  |                                                                           |
  |   Performs 32 bits subtraction of the two 32 bits variables with carry    |
+ #ifdef BASOP_NOGLOB
+ |   (borrow) : L_var1-L_var2-C. No saturation. Generate carry and BASOP_Overflow  |
+#else
  |   (borrow) : L_var1-L_var2-C. No saturation. Generate carry and Overflow  |
+#endif
  |   values. The carry and overflow values are binary variables which can    |
  |   be tested and assigned values.                                          |
  |                                                                           |
@@ -1188,27 +1478,48 @@ Word32 L_add_c (Word32 L_var1, Word32 L_var2) {
  |                                                                           |
  |   Caution :                                                               |
  |                                                                           |
+ #ifdef BASOP_NOGLOB
+ |    In some cases the BASOP_Carry flag has to be cleared or set before using     |
+#else
  |    In some cases the Carry flag has to be cleared or set before using     |
+#endif
  |    operators which take into account its value.                           |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_sub_co (Word32 L_var1, Word32 L_var2, Flag *Carry, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_sub_c (Word32 L_var1, Word32 L_var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
   Word32 L_test;
   Flag carry_int = 0;
 
+#ifdef BASOP_NOGLOB
+  if (get_flag (Carry)) {
+    unset_flag (Carry);
+#else /* BASOP_NOGLOB */
   if (Carry) {
     Carry = 0;
+#endif /* BASOP_NOGLOB */
     if (L_var2 != MIN_32) {
+#ifdef BASOP_NOGLOB
+      L_var_out = L_add_co (L_var1, -L_var2, Carry, Overflow);
+#else /* BASOP_NOGLOB */
       L_var_out = L_add_c (L_var1, -L_var2);
+#endif /* BASOP_NOGLOB */
 #if (WMOPS)
       multiCounter[currCounter].L_add_c--;
 #endif
     } else {
       L_var_out = L_var1 - L_var2;
       if (L_var1 > 0L) {
+#ifdef BASOP_NOGLOB
+        unset_flag (Carry);
+#else /* BASOP_NOGLOB */
         Overflow = 1;
         Carry = 0;
+#endif /* BASOP_NOGLOB */
       }
     }
   } else {
@@ -1216,20 +1527,34 @@ Word32 L_sub_c (Word32 L_var1, Word32 L_var2) {
     L_test = L_var1 - L_var2;
 
     if ((L_test < 0) && (L_var1 > 0) && (L_var2 < 0)) {
+#ifndef BASOP_NOGLOB
       Overflow = 1;
+#endif /* BASOP_NOGLOB */
       carry_int = 0;
     } else if ((L_test > 0) && (L_var1 < 0) && (L_var2 > 0)) {
+#ifndef BASOP_NOGLOB
       Overflow = 1;
+#endif /* BASOP_NOGLOB */
       carry_int = 1;
     } else if ((L_test > 0) && ((L_var1 ^ L_var2) > 0)) {
+#ifndef BASOP_NOGLOB
       Overflow = 0;
+#endif /* BASOP_NOGLOB */
       carry_int = 1;
     }
     if (L_test == MIN_32) {
+#ifdef BASOP_NOGLOB
+      carry_int ? set_flag (Carry) : unset_flag (Carry);
+#else /* BASOP_NOGLOB */
       Overflow = 1;
       Carry = carry_int;
+#endif /* BASOP_NOGLOB */
     } else {
+#ifdef BASOP_NOGLOB
+      carry_int ? set_flag (Carry) : unset_flag (Carry);
+#else /* BASOP_NOGLOB */
       Carry = carry_int;
+#endif /* BASOP_NOGLOB */
     }
   }
 
@@ -1238,6 +1563,12 @@ Word32 L_sub_c (Word32 L_var1, Word32 L_var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_sub_c (Word32 L_var1, Word32 L_var2) {
+  return L_sub_co (L_var1, L_var2, NULL, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1312,7 +1643,11 @@ Word32 L_negate (Word32 L_var1) {
  |             range : 0x8000 <= var_out <= 0x7fff.                          |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 mult_ro (Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 mult_r (Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
   Word32 L_product_arr;
 
@@ -1324,13 +1659,23 @@ Word16 mult_r (Word16 var1, Word16 var2) {
   if (L_product_arr & (Word32) 0x00010000L) {   /* sign extend when necessary */
     L_product_arr |= (Word32) 0xffff0000L;
   }
+#ifdef BASOP_NOGLOB
+  var_out = saturate_o (L_product_arr, Overflow);
+#else /* BASOP_NOGLOB */
   var_out = saturate (L_product_arr);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].mult_r++;
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 mult_r (Word16 var1, Word16 var2) {
+  return mult_ro (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1366,7 +1711,11 @@ Word16 mult_r (Word16 var1, Word16 var2) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_shl_o (Word32 L_var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_shl (Word32 L_var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
 
   Word32 L_var_out = 0L;
 
@@ -1381,12 +1730,20 @@ Word32 L_shl (Word32 L_var1, Word16 var2) {
   } else {
     for (; var2 > 0; var2--) {
       if (L_var1 > (Word32) 0X3fffffffL) {
+#ifdef BASOP_NOGLOB
+        set_flag (Overflow);
+#else /* BASOP_NOGLOB */
         Overflow = 1;
+#endif /* BASOP_NOGLOB */
         L_var_out = MAX_32;
         break;
       } else {
         if (L_var1 < (Word32) 0xc0000000L) {
+#ifdef BASOP_NOGLOB
+          set_flag (Overflow);
+#else /* BASOP_NOGLOB */
           Overflow = 1;
+#endif /* BASOP_NOGLOB */
           L_var_out = MIN_32;
           break;
         }
@@ -1400,6 +1757,12 @@ Word32 L_shl (Word32 L_var1, Word16 var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_shl (Word32 L_var1, Word16 var2) {
+  return L_shl_o (L_var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1435,14 +1798,22 @@ Word32 L_shl (Word32 L_var1, Word16 var2) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_shr_o (Word32 L_var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_shr (Word32 L_var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
 
   if (var2 < 0) {
     if (var2 < -32)
       var2 = -32;
     var2 = -var2;
+#ifdef BASOP_NOGLOB
+    L_var_out = L_shl_o (L_var1, var2, Overflow);
+#else /* BASOP_NOGLOB */
     L_var_out = L_shl (L_var1, var2);
+#endif /* BASOP_NOGLOB */
 #if (WMOPS)
     multiCounter[currCounter].L_shl--;
 #endif
@@ -1462,6 +1833,12 @@ Word32 L_shr (Word32 L_var1, Word16 var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_shr (Word32 L_var1, Word16 var2) {
+  return L_shr_o (L_var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1505,7 +1882,11 @@ Word32 L_shr (Word32 L_var1, Word16 var2) {
  |             range : 0xffff 8000 <= var_out <= 0x0000 7fff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 shr_ro (Word16 var1, Word16 var2, Flag *Overflow) {
+#else
 Word16 shr_r (Word16 var1, Word16 var2) {
+#endif
   Word16 var_out;
 
   if (var2 > 15) {
@@ -1530,6 +1911,11 @@ Word16 shr_r (Word16 var1, Word16 var2) {
   return (var_out);
 }
 
+#ifdef BASOP_NOGLOB
+Word16 shr_r (Word16 var1, Word16 var2) {
+  return shr_ro (var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -1569,11 +1955,20 @@ Word16 shr_r (Word16 var1, Word16 var2) {
  |             range : 0x0000 8000 <= L_var_out <= 0x0000 7fff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 mac_ro (Word32 L_var3, Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 mac_r (Word32 L_var3, Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
 
+#ifdef BASOP_NOGLOB
+  L_var3 = L_mac_o (L_var3, var1, var2, Overflow);
+  L_var3 = L_add_o (L_var3, (Word32) 0x00008000L, Overflow);
+#else /* BASOP_NOGLOB */
   L_var3 = L_mac (L_var3, var1, var2);
   L_var3 = L_add (L_var3, (Word32) 0x00008000L);
+#endif /* BASOP_NOGLOB */
   var_out = extract_h (L_var3);
 
 #if (WMOPS)
@@ -1584,6 +1979,12 @@ Word16 mac_r (Word32 L_var3, Word16 var1, Word16 var2) {
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 mac_r (Word32 L_var3, Word16 var1, Word16 var2) {
+  return mac_ro (L_var3, var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1624,11 +2025,20 @@ Word16 mac_r (Word32 L_var3, Word16 var1, Word16 var2) {
  |             range : 0x0000 8000 <= L_var_out <= 0x0000 7fff.              |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word16 msu_ro (Word32 L_var3, Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word16 msu_r (Word32 L_var3, Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word16 var_out;
 
+#ifdef BASOP_NOGLOB
+  L_var3 = L_msu_o (L_var3, var1, var2, Overflow);
+  L_var3 = L_add_o (L_var3, (Word32) 0x00008000L, Overflow);
+#else /* BASOP_NOGLOB */
   L_var3 = L_msu (L_var3, var1, var2);
   L_var3 = L_add (L_var3, (Word32) 0x00008000L);
+#endif /* BASOP_NOGLOB */
   var_out = extract_h (L_var3);
 
 #if (WMOPS)
@@ -1639,6 +2049,12 @@ Word16 msu_r (Word32 L_var3, Word16 var1, Word16 var2) {
 #endif
   return (var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word16 msu_r (Word32 L_var3, Word16 var1, Word16 var2) {
+  return msu_ro (L_var3, var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*___________________________________________________________________________
@@ -1865,7 +2281,11 @@ Word32 L_abs (Word32 L_var1) {
  |             range : 0x8000 0000 <= var_out <= 0x7fff ffff.                |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_sat_co (Word32 L_var1, Flag Carry, Flag Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_sat (Word32 L_var1) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
 
   L_var_out = L_var1;
@@ -1878,8 +2298,10 @@ Word32 L_sat (Word32 L_var1) {
       L_var_out = MAX_32;
     }
 
+#ifndef BASOP_NOGLOB
     Carry = 0;
     Overflow = 0;
+#endif /* BASOP_NOGLOB */
   }
 #if (WMOPS)
   multiCounter[currCounter].L_sat++;
@@ -1887,6 +2309,12 @@ Word32 L_sat (Word32 L_var1) {
   return (L_var_out);
 }
 
+#ifdef BASOP_NOGLOB
+Word32 L_sat (Word32 L_var1) {
+  assert (0);                   /* Overflow and Carry are no longer global, must be passed as parameters */
+  return L_sat_co (L_var1, 0, 0);
+}
+#endif /* BASOP_NOGLOB */
 
 /*___________________________________________________________________________
  |                                                                           |
@@ -2134,13 +2562,21 @@ Word16 norm_l (Word32 L_var1) {
  |                                                                           |
  |___________________________________________________________________________|
 */
+#ifdef BASOP_NOGLOB
+Word32 L_mls_o (Word32 Lv, Word16 v, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_mls (Word32 Lv, Word16 v) {
+#endif /* BASOP_NOGLOB */
   Word32 Temp;
 
   Temp = Lv & (Word32) 0x0000ffff;
   Temp = Temp * (Word32) v;
   Temp = L_shr (Temp, (Word16) 15);
+#ifdef BASOP_NOGLOB
+  Temp = L_mac_o (Temp, v, extract_h (Lv), Overflow);
+#else /* BASOP_NOGLOB */
   Temp = L_mac (Temp, v, extract_h (Lv));
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].L_shr--;
@@ -2151,6 +2587,12 @@ Word32 L_mls (Word32 Lv, Word16 v) {
 
   return Temp;
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_mls (Word32 Lv, Word16 v) {
+  return L_mls_o (Lv, v, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /*__________________________________________________________________________
@@ -2202,12 +2644,20 @@ Word16 div_l (Word32 L_num, Word16 den) {
 
   if (den == (Word16) 0) {
     printf ("Division by 0 in div_l, Fatal error \n");
+#ifdef BASOP_NOGLOB
+    abort ();
+#else /* BASOP_NOGLOB */
     exit (0);
+#endif /* BASOP_NOGLOB */
   }
 
   if ((L_num < (Word32) 0) || (den < (Word16) 0)) {
     printf ("Division Error in div_l, Fatal error \n");
+#ifdef BASOP_NOGLOB
+    abort ();
+#else /* BASOP_NOGLOB */
     exit (0);
+#endif /* BASOP_NOGLOB */
   }
 
   L_den = L_deposit_h (den);
@@ -2364,12 +2814,21 @@ Word32 L_mult0 (Word16 var1, Word16 var2) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  |___________________________________________________________________________
 */
+#ifdef BASOP_NOGLOB
+Word32 L_mac0_o (Word32 L_var3, Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_mac0 (Word32 L_var3, Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
+
   Word32 L_var_out;
   Word32 L_product;
 
   L_product = L_mult0 (var1, var2);
+#ifdef BASOP_NOGLOB
+  L_var_out = L_add_o (L_var3, L_product, Overflow);
+#else /* BASOP_NOGLOB */
   L_var_out = L_add (L_var3, L_product);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].L_mac0++;
@@ -2378,6 +2837,13 @@ Word32 L_mac0 (Word32 L_var3, Word16 var1, Word16 var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_mac0 (Word32 L_var3, Word16 var1, Word16 var2) {
+  return L_mac0_o (L_var3, var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
+
 
 
 /*___________________________________________________________________________
@@ -2410,12 +2876,20 @@ Word32 L_mac0 (Word32 L_var3, Word16 var1, Word16 var2) {
  |             range : 0x8000 0000 <= L_var_out <= 0x7fff ffff.
  |___________________________________________________________________________
 */
+#ifdef BASOP_NOGLOB
+Word32 L_msu0_o (Word32 L_var3, Word16 var1, Word16 var2, Flag *Overflow) {
+#else /* BASOP_NOGLOB */
 Word32 L_msu0 (Word32 L_var3, Word16 var1, Word16 var2) {
+#endif /* BASOP_NOGLOB */
   Word32 L_var_out;
   Word32 L_product;
 
   L_product = L_mult0 (var1, var2);
+#ifdef BASOP_NOGLOB
+  L_var_out = L_sub_o (L_var3, L_product, Overflow);
+#else /* BASOP_NOGLOB */
   L_var_out = L_sub (L_var3, L_product);
+#endif /* BASOP_NOGLOB */
 
 #if (WMOPS)
   multiCounter[currCounter].L_msu0++;
@@ -2424,6 +2898,12 @@ Word32 L_msu0 (Word32 L_var3, Word16 var1, Word16 var2) {
 #endif
   return (L_var_out);
 }
+
+#ifdef BASOP_NOGLOB
+Word32 L_msu0 (Word32 L_var3, Word16 var1, Word16 var2) {
+  return L_msu0_o (L_var3, var1, var2, NULL);
+}
+#endif /* BASOP_NOGLOB */
 
 
 /* end of file */
